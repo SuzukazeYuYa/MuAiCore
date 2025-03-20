@@ -194,7 +194,9 @@ core.ForceUpdate = function()
         local targetFilePath = localPath .. "\\" .. relativePath
         -- 仅对解压后的文件进行对比和复制
         if not io.open(targetFilePath) or areFilesDifferent(file, targetFilePath) then
-            d("[MuAiCore]更新文件: " .. targetFilePath)
+            if file:match("%.lua$") or file:match("%.png$") then
+                d("[MuAiCore]更新文件: " .. targetFilePath)
+            end
             copyFile(file, targetFilePath)
         end
     end
