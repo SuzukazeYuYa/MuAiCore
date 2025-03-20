@@ -14,7 +14,7 @@ core.Info = {
 core.Data = {}
 core.Override = {}
 core.InitMuAiGuide = function()
-    MuAiGuideRoot = GetStartupPath() .. "\\LuaMods\\MuAiCore\\LuaFiles\\"
+    MuAiGuideRoot = GetLuaModsPath() .. "\\MuAiCore\\LuaFiles\\"
     MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
     local configsLoader = FileLoad(MuAiGuideRoot .. "FruOneKeyConfigs.lua")
     configsLoader(MuAiGuide)
@@ -42,7 +42,7 @@ core.DrawFriConfigUI = function()
 end
 
 core.Initialize = function()
-    local Icon = GetStartupPath() .. "\\LuaMods\\MuAiCore\\Image\\MainIcon.png"
+    local Icon = GetLuaModsPath() .. "\\MuAiCore\\Image\\MainIcon.png"
     local tooltip = "暮霭指路核心功能"
     ml_gui.ui_mgr:AddMember({ id = "MuAiCore", name = "MuAiGuide", onClick = function() 
         MuAiGuide.UI.open = not MuAiGuide.UI.open
@@ -79,8 +79,8 @@ core.Draw = function()
 end
 
 local gitZipUrl = "https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/main"
-local tempPath = GetStartupPath() .. "\\LuaMods\\MuAiCore\\Temp\\Download"
-local localPath = GetStartupPath() .. "\\LuaMods"
+local tempPath = GetLuaModsPath() .. "\\MuAiCore\\Temp\\Download"
+local localPath = GetLuaModsPath()
 local zipFilePath = tempPath .. "\\repository.zip"
 local extractPath = tempPath .. "\\Extracted"
 
@@ -202,7 +202,7 @@ core.ForceUpdate = function()
     -- 清理临时目录
     deletePath(tempPath)
     print("任务完成！")
-    MuAiGuide.Info("以强制同步最新文件，请进行Reload操作<se.1>。")
+    MuAiGuide.Info("已同步最新文件，请进行Reload操作<se.1>。")
 end
 
 RegisterEventHandler("Module.Initalize", core.Initialize, AddonName)

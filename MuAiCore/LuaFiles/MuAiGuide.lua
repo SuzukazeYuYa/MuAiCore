@@ -174,37 +174,6 @@ M.GetPartyPlayers = function()
     return members
 end
 
---- 读取设置信息
-M.LoadConfig = function()
-    local path = GetLuaModsPath()
-    local savePath = path .. "\\MuAiGuide"
-    local saveFile = savePath .. "\\MuAiGuideConfig.lua"
-    if (not FolderExists(savePath)) then
-        FolderCreate(savePath)
-    end
-    local config = FileLoad(saveFile)
-    local defaultCfg = M.CreateDefaultCfg();
-    if config ~= nil then
-        local function syncNestedFields(saveData, defaultData)
-            for key, value in pairs(defaultData) do
-                if type(value) == "table" then
-                    if type(saveData[key]) == "table" then
-                        syncNestedFields(saveData[key], value)
-                    else
-                        saveData[key] = value
-                    end
-                else
-                    if saveData[key] == nil then
-                        saveData[key] = value
-                    end
-                end
-            end
-        end
-        syncNestedFields(config, defaultCfg)
-        return config
-    end
-    return defaultCfg;
-end
 
 --- 创建默认配置
 M.CreateDefaultCfg = function()
@@ -372,10 +341,42 @@ M.CreateFruDefaultCfg = function()
     }
 end
 
+--- 读取设置信息
+M.LoadConfig = function()
+    local path = GetLuaModsPath()
+    local savePath = path .. "\\MuAiCore\\Configs\\FruGuide"
+    local saveFile = savePath .. "\\MuAiGuideConfig.lua"
+    if (not FolderExists(savePath)) then
+        FolderCreate(savePath)
+    end
+    local config = FileLoad(saveFile)
+    local defaultCfg = M.CreateDefaultCfg();
+    if config ~= nil then
+        local function syncNestedFields(saveData, defaultData)
+            for key, value in pairs(defaultData) do
+                if type(value) == "table" then
+                    if type(saveData[key]) == "table" then
+                        syncNestedFields(saveData[key], value)
+                    else
+                        saveData[key] = value
+                    end
+                else
+                    if saveData[key] == nil then
+                        saveData[key] = value
+                    end
+                end
+            end
+        end
+        syncNestedFields(config, defaultCfg)
+        return config
+    end
+    return defaultCfg;
+end
+
 M.SaveConfig = function()
     if not table.deepcompare(M.Config, M.PreviousSave) then
         local path = GetLuaModsPath()
-        local savePath = path .. "\\MuAiGuide"
+        local savePath = path .. "\\MuAiCore\\Configs\\FruGuide"
         local saveFile = savePath .. "\\MuAiGuideConfig.lua"
         if (not FolderExists(savePath)) then
             FolderCreate(savePath)
@@ -394,7 +395,10 @@ M.NewFileName = ""
 M.LoadConfigs = function()
     local files = { "None" }
     local path = GetLuaModsPath()
-    local savePath = path .. "\\MuAiGuide"
+    local savePath = path .. "\\MuAiCore\\Configs\\FruGuide"
+    if (not FolderExists(savePath)) then
+        FolderCreate(savePath)
+    end
     local items = FolderList(savePath)
     for i = 1, #items do
         if items[i] ~= "MuAiGuideConfig.lua" then
@@ -407,7 +411,7 @@ end
 --- 将表格序列化到文件
 M.SaveFileConfig = function(fileName, table)
     local path = GetLuaModsPath()
-    local savePath = path .. "\\MuAiGuide"
+    local savePath = path .. "\\MuAiCore\\Configs\\FruGuide"
     local saveFile = savePath .. "\\" .. fileName .. ".lua"
     if (not FolderExists(savePath)) then
         FolderCreate(savePath)
@@ -419,12 +423,32 @@ end
 --- 读取序列化的表格文件
 M.LoadFileConfig = function(fileName)
     local path = GetLuaModsPath()
-    local savePath = path .. "\\MuAiGuide"
+    local savePath = path .. "\\MuAiCore\\Configs\\FruGuide"
     local saveFile = savePath .. "\\" .. fileName .. ".lua"
     if (not FolderExists(savePath)) then
         FolderCreate(savePath)
     end
     local config = FileLoad(saveFile)
+    local defFruConfig = M.CreateFruDefaultCfg()
+    if config ~= nil then
+        local function syncNestedFields(saveData, defaultData)
+            for key, value in pairs(defaultData) do
+                if type(value) == "table" then
+                    if type(saveData[key]) == "table" then
+                        syncNestedFields(saveData[key], value)
+                    else
+                        saveData[key] = value
+                    end
+                else
+                    if saveData[key] == nil then
+                        saveData[key] = value
+                    end
+                end
+            end
+        end
+        syncNestedFields(config, defFruConfig)
+        return config
+    end
     M.Info("读取文件" .. fileName .. "成功！")
     return config
 end

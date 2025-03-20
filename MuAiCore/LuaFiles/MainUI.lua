@@ -1,3 +1,4 @@
+local VERSION = 173
 local DrawMainUI = function(M)
     if M.ConfigUI == nil then
         M.ConfigUI = {}
@@ -298,9 +299,9 @@ local DrawMainUI = function(M)
             io.popen("start https://github.com/SuzukazeYuYa/MuAiCore")
         end
         GUI:AlignFirstTextHeightToWidgets()
-        GUI:Text("                        ver.173  ")
+        GUI:Text("                         ver.".. VERSION .. " ")
         GUI:SameLine(0, 0)
-        GUI:Button("检查更新", 100, 20)
+        GUI:Button("更新", 100, 20)
         if GUI:IsItemClicked(0) then
             MuAiGuide.UI.open = false
             MuAiGuide.FruConfigUI.open = false
