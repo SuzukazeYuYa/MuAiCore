@@ -4,13 +4,6 @@ local core = MuAiCore
 local autoPopMap = { 1238, 1122 }
 local lastMap
 
-core.Info = {
-    Creator = "MuAi",
-    Version = "0.0.0",
-    StartDate = "20/03/2025",
-    LastUpdate = "20/03/2025",
-    ChangeLog = { }
-}
 core.Data = {}
 core.Override = {}
 core.InitMuAiGuide = function()
@@ -44,7 +37,7 @@ end
 core.Initialize = function()
     local Icon = GetLuaModsPath() .. "MuAiCore\\Image\\MainIcon.png"
     local tooltip = "暮霭指路核心功能"
-    ml_gui.ui_mgr:AddMember({ id = "MuAiCore", name = "MuAiGuide", onClick = function() 
+    ml_gui.ui_mgr:AddMember({ id = "MuAiCore", name = "MuAiGuide", onClick = function()
         MuAiGuide.UI.open = not MuAiGuide.UI.open
     end, tooltip = tooltip, texture = Icon }, "FFXIVMINION##MENU_HEADER")
 end
@@ -78,6 +71,11 @@ core.Draw = function()
     end
 end
 
+RegisterEventHandler("Module.Initalize", core.Initialize, AddonName)
+RegisterEventHandler("Gameloop.Update", core.Update, AddonName)
+RegisterEventHandler("Gameloop.Draw", core.Draw, AddonName)
+
+--------------------------------------------------- 更新逻辑 -------------------------------------------------
 local gitZipUrl = "https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/main"
 local tempPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
 local localPath = GetLuaModsPath()
@@ -182,7 +180,7 @@ core.ForceUpdate = function()
     -- 获取解压后的第一级文件夹
     local firstLevelFolder = getFirstLevelFolder(extractPath)
     if not firstLevelFolder then
-        d("解压失败，未找到任何文件。")
+        d("[MuAiCore]解压失败，未找到任何文件。")
         return
     end
     local extractedFilesPath = extractPath .. "\\" .. firstLevelFolder
@@ -190,31 +188,25 @@ core.ForceUpdate = function()
     -- 获取解压后的文件列表
     local extractedFiles = getFileList(extractedFilesPath)
     if #extractedFiles == 0 then
-        d("解压失败，未找到任何文件。")
+        d("[MuAiCore]解压失败，未找到任何文件。")
         return
     end
 
     -- 遍历解压目录文件，与目标路径对比
-    print("正在对比并复制文件...")
+    d("[MuAiCore]正在对比并复制文件...")
     for _, file in ipairs(extractedFiles) do
         local relativePath = file:sub(#extractedFilesPath + 2) -- 移除解压目录的顶层文件夹
         local targetFilePath = localPath .. "\\" .. relativePath
         -- 仅对解压后的文件进行对比和复制
         if not io.open(targetFilePath) or areFilesDifferent(file, targetFilePath) then
-            if file:match("%.lua$") or file:match("%.png$") then
-                d("[MuAiCore]更新文件: " .. targetFilePath)
-            end
+            d("[MuAiCore]更新文件: " .. targetFilePath)
             copyFile(file, targetFilePath)
         end
     end
 
     -- 清理临时目录
     deletePath(tempPath)
-    print("任务完成！")
     MuAiGuide.Info("已同步最新文件，请进行Reload操作<se.1>。")
 end
 
-RegisterEventHandler("Module.Initalize", core.Initialize, AddonName)
-RegisterEventHandler("Gameloop.Update", core.Update, AddonName)
-RegisterEventHandler("Gameloop.Draw", core.Draw, AddonName)
-d("[MuAiGuide] Loaded!")
+d("[MuAiCore]加载成功!")
