@@ -14,7 +14,7 @@ core.Info = {
 core.Data = {}
 core.Override = {}
 core.InitMuAiGuide = function()
-    MuAiGuideRoot = GetLuaModsPath() .. "\\MuAiCore\\LuaFiles\\"
+    MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
     MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
     local configsLoader = FileLoad(MuAiGuideRoot .. "FruOneKeyConfigs.lua")
     configsLoader(MuAiGuide)
@@ -42,7 +42,7 @@ core.DrawFriConfigUI = function()
 end
 
 core.Initialize = function()
-    local Icon = GetLuaModsPath() .. "\\MuAiCore\\Image\\MainIcon.png"
+    local Icon = GetLuaModsPath() .. "MuAiCore\\Image\\MainIcon.png"
     local tooltip = "暮霭指路核心功能"
     ml_gui.ui_mgr:AddMember({ id = "MuAiCore", name = "MuAiGuide", onClick = function() 
         MuAiGuide.UI.open = not MuAiGuide.UI.open
@@ -79,10 +79,10 @@ core.Draw = function()
 end
 
 local gitZipUrl = "https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/main"
-local tempPath = GetLuaModsPath() .. "\\MuAiCore\\Temp\\Download"
+local tempPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
 local localPath = GetLuaModsPath()
-local zipFilePath = tempPath .. "\\repository.zip"
-local extractPath = tempPath .. "\\Extracted"
+local zipFilePath = tempPath .. "repository.zip"
+local extractPath = tempPath .. "Extracted"
 
 -- 执行系统命令的函数
 local function runCommand(cmd)
