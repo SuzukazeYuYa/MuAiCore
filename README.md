@@ -18,7 +18,7 @@
 <br>![image](https://github.com/user-attachments/assets/a817bf0b-e0f6-4bb7-ac60-3bae417ea936)
 <br>$${\color{red}如果你想使用游戏内更新，请勿随意更改文件路径}$$
 # 关于存档
-好抱歉的说一句，旧存档将不被支持，如果你依然想挽回你的配置文件，请按照如下内容操作
+很抱歉的说一句，旧存档将不被支持，如果你依然想挽回你的配置文件，请按照如下流程操作：
 <br>1.新存档位置为：\LuaMods\MuAiCore\Configs\FruGuide，如果你安装插件后没有这个文件夹请逐级建好，或者进入游戏后随便进行一个修改，让他自己生成出来。
 <br>2.将旧版存档文件 \LuaMods\MuAiGuide文件夹中所有lua文件 放入到新存档文件夹内即可。
 <br>3.旧版存档文件夹 \LuaMods\MuAiGuide可以删了，随便你处理，可以删除也保留。
