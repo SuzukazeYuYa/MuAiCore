@@ -19,7 +19,6 @@ core.InitMuAiGuide = function()
     MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
     local configsLoader = FileLoad(MuAiGuideRoot .. "FruOneKeyConfigs.lua")
     configsLoader(MuAiGuide)
-    MuAiGuide.ForceUpdate()
 end
 core.InitMuAiGuide()
 
@@ -78,38 +77,9 @@ core.Draw = function()
     end
 end
 
-function core.Updater(k, v)
-    if core.Data.UpdateTick == nil then
-        if k == "reactions" and v == "check" then
-            io.popen([[start /b powershell -Command "-Force; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12, [Net.SecurityProtocolType]::Tls11; $json = (Invoke-WebRequest -Uri https://api.github.com/repos/QwertOfficial/Healer-reactions/releases -UseBasicParsing | ConvertFrom-Json); Set-Content -Path ']] .. LuaPath .. [[\QwertCore\Data\RVersion.txt' -Value $json[0].tag_name; stop-process -Id $PID"]]):close()
-            core.Data.UpdateTick = true
-            core.Data.LastCheckVerR = Now()
-            core.Data.CheckVerR = true
-        end
-        if k == "reactions" and v == "update" then
-            io.popen([[start /b powershell -Command "Compress-Archive -Path ']] .. LuaPath .. [[TensorReactions\GeneralReactions', ']] .. LuaPath .. [[TensorReactions\TimelineReactions' -DestinationPath ]] .. LuaPath .. [[\TensorReactions\GeneralReactions\Qwert\TensorReactions_$((Get-Date).ToString('MM_dd_HHmm')).zip -Force; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12, [Net.SecurityProtocolType]::Tls11; $tag = (Invoke-WebRequest -Uri https://api.github.com/repos/QwertOfficial/Healer-reactions/releases -UseBasicParsing | ConvertFrom-Json)[0].tag_name; Invoke-WebRequest https://github.com/QwertOfficial/Healer-reactions/releases/download/$tag/TensorReactions.zip -Out ']] .. LuaPath .. [[\TensorReactions\TensorReactions.zip'; Expand-Archive ']] .. LuaPath .. [[\TensorReactions\TensorReactions.zip' -DestinationPath ]] .. LuaPath .. [[ -Force; Remove-Item ']] .. LuaPath .. [[\TensorReactions\TensorReactions.zip' -Force; stop-process -Id $PID"]]):close()
-            io.popen([[start /b powershell -Command "Set-Content -Path ']] .. LuaPath .. [[\QwertCore\Data\RStatus.txt' -Value 'Done'; stop-process -Id $PID"]]):close()
-            core.Data.UpdateTick = true
-            core.Data.UpdateVerR = true
-        end
-        if k == "core" and v == "check" then
-            io.popen([[start /b powershell -Command "-Force; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12, [Net.SecurityProtocolType]::Tls11; $json = (Invoke-WebRequest -Uri https://api.github.com/repos/QwertOfficial/QwertCore/releases -UseBasicParsing | ConvertFrom-Json); Set-Content -Path ']] .. LuaPath .. [[\QwertCore\Data\CVersion.txt' -Value $json[0].tag_name; stop-process -Id $PID"]]):close()
-            core.Data.UpdateTick = true
-            core.Data.LastCheckVerC = Now()
-            core.Data.CheckVerC = true
-        end
-        if k == "core" and v == "update" then
-            io.popen([[start /b powershell -Command "-Force; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12, [Net.SecurityProtocolType]::Tls11; $tag = (Invoke-WebRequest -Uri https://api.github.com/repos/QwertOfficial/QwertCore/releases -UseBasicParsing | ConvertFrom-Json)[0].tag_name; Invoke-WebRequest https://github.com/QwertOfficial/QwertCore/releases/download/$tag/QwertCore.zip -Out ']] .. LuaPath .. [[\QwertCore\QwertCore.zip'; Expand-Archive ']] .. LuaPath .. [[\QwertCore\QwertCore.zip' -DestinationPath ]] .. LuaPath .. [[ -Force; Remove-Item ']] .. LuaPath .. [[\QwertCore\QwertCore.zip' -Force; stop-process -Id $PID"]]):close()
-            io.popen([[start /b powershell -Command "Set-Content -Path ']] .. LuaPath .. [[\QwertCore\Data\CStatus.txt' -Value 'Done'; stop-process -Id $PID"]]):close()
-            core.Data.UpdateTick = true
-            core.Data.UpdateVerC = true
-        end
-    end
-end
-
 local gitZipUrl = "https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/main"
 local tempPath = GetStartupPath() .. "\\LuaMods\\MuAiCore\\Temp\\Download"
-local localPath = GetStartupPath() .. "\\LuaMods\\MuAiCore"
+local localPath = GetStartupPath() .. "\\LuaMods"
 local zipFilePath = tempPath .. "\\repository.zip"
 local extractPath = tempPath .. "\\Extracted"
 
@@ -144,11 +114,11 @@ local function extractZip(zipPath, destination)
 end
 
 -- 对比文件内容
-local function areFilesDifferent(file1, file2)
-    local cmd = 'fc /b "' .. file1 .. '" "' .. file2 .. '"'
-    local result = runCommand(cmd)
-    return not result:find("没有差异", 1, true) -- Windows "fc /b" 的输出包含“没有差异”表示文件相同
-end
+--local function areFilesDifferent(file1, file2)
+--    local cmd = 'fc /b "' .. file1 .. '" "' .. file2 .. '"'
+--    local result = runCommand(cmd)
+--    return not result:find("没有差异", 1, true) -- Windows "fc /b" 的输出包含“没有差异”表示文件相同
+--end
 
 -- 遍历目录并返回文件列表
 local function getFileList(path)
@@ -168,41 +138,77 @@ local function copyFile(source, destination)
     runCommand('copy /y "' .. source .. '" "' .. destination .. '"')
 end
 
--- 主流程 
-function core.ForceUpdate()
+local function getFirstLevelFolder(path)
+    local cmd = 'dir /b /ad "' .. path .. '"'
+    local output = runCommand(cmd)
+    return output:match("[^\r\n]+") -- 获取第一行，即顶层文件夹名
+end
+
+local function getFileMD5(filePath)
+    local cmd = 'certutil -hashfile "' .. filePath .. '" MD5'
+    local output = runCommand(cmd)
+    return output:match("([a-fA-F0-9]+)") -- 提取 MD5 值
+end
+
+-- 对比文件内容（MD5 对比）
+local function areFilesDifferent(file1, file2)
+    local md5File1 = getFileMD5(file1)
+    local md5File2 = getFileMD5(file2)
+    if not md5File1 or not md5File2 then
+        return true -- 如果无法计算 MD5 值，则认为文件不同
+    end
+    return md5File1 ~= md5File2
+end
+
+core.ForceUpdate = function()
     -- 清理并创建临时目录
     deletePath(tempPath)
     createDirectory(tempPath)
 
-    d("[MuAiCore]开下下载文件。")
+    -- 下载 Zip 文件
     downloadFile(gitZipUrl, zipFilePath)
 
-    d("[MuAiCore]开始解压文件。")
+    -- 检查下载是否成功
+    if not io.open(zipFilePath) then
+        print("下载失败，无法找到 Zip 文件。")
+        return
+    end
+
+    -- 解压 Zip 文件
     deletePath(extractPath)
     extractZip(zipFilePath, extractPath)
 
-    -- 获取解压后的文件路径
-    local extractedFilesPath = getFileList(extractPath)[1]
-    if not extractedFilesPath then
-        d("[MuAiCore]解压后的文件目录不存在，任务终止。")
+    -- 获取解压后的第一级文件夹
+    local firstLevelFolder = getFirstLevelFolder(extractPath)
+    if not firstLevelFolder then
+        print("解压失败，未找到任何文件。")
+        return
+    end
+    local extractedFilesPath = extractPath .. "\\" .. firstLevelFolder
+
+    -- 获取解压后的文件列表
+    local extractedFiles = getFileList(extractedFilesPath)
+    if #extractedFiles == 0 then
+        print("解压失败，未找到任何文件。")
         return
     end
 
     -- 遍历解压目录文件，与目标路径对比
-    MuAiGuide.Info("正在进行文件比对。")
-    for _, file in ipairs(getFileList(extractedFilesPath)) do
-        local relativePath = file:sub(#extractedFilesPath + 2) -- 获取相对路径
+    print("正在对比并复制文件...")
+    for _, file in ipairs(extractedFiles) do
+        local relativePath = file:sub(#extractedFilesPath + 2) -- 移除解压目录的顶层文件夹
         local targetFilePath = localPath .. "\\" .. relativePath
+        -- 仅对解压后的文件进行对比和复制
         if not io.open(targetFilePath) or areFilesDifferent(file, targetFilePath) then
-            d("[MuAiCore]复制文件: " .. relativePath)
+            d("[MuAiCore]更新文件: " .. relativePath)
             copyFile(file, targetFilePath)
         end
     end
 
     -- 清理临时目录
     deletePath(tempPath)
-    MuAiGuide.Info("更新完成，请进行Reload操作<se.1>。")
-    --core.InitMuAiGuide()
+    print("任务完成！")
+    MuAiGuide.Info("以强制同步最新文件，请进行Reload操作<se.1>。")
 end
 
 RegisterEventHandler("Module.Initalize", core.Initialize, AddonName)
