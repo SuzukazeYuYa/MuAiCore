@@ -82,7 +82,7 @@ FF14 Minion TensorReactions用指路轴
 ### 3、P3 2运 $${\color{red}这里可能是各类攻略不同出问题的重灾区，请检查好你使用的攻略和设置是否匹配！}$$
    （1）、这里有个选项 只有T玩家需要填写，其他人填不填都行！<br>
 ![image](https://github.com/user-attachments/assets/315df902-93e7-4788-9394-960c2eda035e)
-<br> （2）、日基地火做了新老2个版本!<br>
+<br> （2）、日基地火做了新老2个版本! 国服目前请选择 预站位 => 车头法 or 人群基准<br>
 ![image](https://github.com/user-attachments/assets/85d47019-e769-4c62-967b-f0b19ae16d14)
 <br>  （3）、车头法在 【预站位】这个选项下面
 
