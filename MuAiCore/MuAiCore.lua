@@ -57,6 +57,8 @@ core.Update = function()
                 MuAiGuide.UI.open = true
             end
             MuAiGuide.LoadParty()
+        else
+            MuAiGuide.UI.open = false
         end
         lastMap = Player.localmapid
     end
