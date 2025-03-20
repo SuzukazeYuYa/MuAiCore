@@ -447,7 +447,6 @@ M.LoadFileConfig = function(fileName)
             end
         end
         syncNestedFields(config, defFruConfig)
-        return config
     end
     M.Info("读取文件" .. fileName .. "成功！")
     return config
