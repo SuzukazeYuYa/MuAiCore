@@ -1,0 +1,6 @@
+[Module]
+Name=MuAiCore
+Dependencies=minionlib,TensorCore
+Version=1
+Files=MuAiCore.lua
+Enabled= 1
