@@ -276,7 +276,7 @@ local DrawMainUI = function(M)
             end
         end
         if GUI:CollapsingHeader("支持一下") then
-            local path = MuAiGuideRoot .. "qrcode.png"
+            local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\QRCode.png"
             GUI:Text("        ")
             GUI:SameLine()
             GUI:Image(path, 200, 200)
