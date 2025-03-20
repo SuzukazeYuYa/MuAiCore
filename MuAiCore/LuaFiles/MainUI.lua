@@ -305,6 +305,7 @@ local DrawMainUI = function(M)
             MuAiGuide.UI.open = false
             MuAiGuide.FruConfigUI.open = false
             MuAiGuide.Info("更新过程中会短暂卡屏，属于正常现象，请耐心等待<se.1>。")
+            MuAiGuide.ForceUpdate()
         end
     end
     M.SaveConfig()
