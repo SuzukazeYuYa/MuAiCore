@@ -3,7 +3,7 @@
 <br>由于Reactions逻辑限制（比如代码量，行数等），有很多东西没法实现，虽然之前做好了，但是也大幅度提高炸游戏或者其他问题概率（虽然新版可能有同样问题，但是经过测试有所缓解）。
 <br>基于上述原因在跟DC群友讨论之后和学习相关知识后，决定将本指路工具正式修改为插件形式实现，所以MuAiCore诞生了。
 <br>当然，用开源插件的复杂程度是比直接用轴高的，但是这是没办法的事，所以请仔细阅读下面说明！
-<br>$${\color{red}由于【Ctrl+X】 与系统剪切功能冲突，修改快捷键为 【Ctrl+F】}$$
+<br>$${\color{red}由于【ctrl+f】 与系统剪切功能冲突，修改快捷键为 【Ctrl+F】}$$
 # 安装
 1.下载本仓库内容，将2个文件夹MuAiCore和TensorReactions放入 \Minionapp\Bots\FFXIVMinion64\LuaMods 中覆盖即可。
 <br>2.进入游戏并注入之后，在profiler中添加 MuAiCore<br>![image](https://github.com/user-attachments/assets/3b6e7b7c-1365-47fa-b066-383b4a7b4e3f)<br>重新加载后会得到如下<br>![image](https://github.com/user-attachments/assets/df23e701-311c-496b-b3fb-3a42b542d89f)，当然这与使用快捷键打开时一样的，如果你没有proflier跳过此步骤
@@ -37,7 +37,7 @@ FF14 Minion TensorReactions用指路轴
 <br>4、针对P5做了部分绘制补充：左右刀&远近死刑范围、分摊范围、挡枪当前目标以及范围。地火范围（搬运自DC,作者megaminx）
 
 ## UI说明
- 1、进入副本后UI会自动弹出，如果不小心关了，可以按下ctrl+x打开、如果你需要在副本外进行设置也可以按下ctrl+x打开。
+ 1、进入副本后UI会自动弹出，如果不小心关了，可以按下ctrl+f打开、如果你需要在副本外进行设置也可以按下ctrl+f打开。
 <br>$${\color{red}请务必在进本后调整小队列表，且所有人位置均正确！否则不能保证指路逻辑的正确性！！!}$$
 <br>$${\color{red}如果需要修改副本设置，请尽量在开始战斗之前设置好，最好是进本之前就调好。}$$
 ## 主UI细节说明
