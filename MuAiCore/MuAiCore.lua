@@ -196,7 +196,7 @@ core.ForceUpdate = function()
     d("[MuAiCore]正在对比并复制文件...")
     for _, file in ipairs(extractedFiles) do
         local relativePath = file:sub(#extractedFilesPath + 2) -- 移除解压目录的顶层文件夹
-        local targetFilePath = localPath .. "\\" .. relativePath
+        local targetFilePath = localPath .. relativePath
         -- 仅对解压后的文件进行对比和复制
         if not io.open(targetFilePath) or areFilesDifferent(file, targetFilePath) then
             d("[MuAiCore]更新文件: " .. targetFilePath)
