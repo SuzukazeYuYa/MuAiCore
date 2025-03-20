@@ -104,13 +104,20 @@ end
 
 -- 下载文件
 local function downloadFile(url, destination)
-    d("正在下载文件...")
-    runCommand('powershell -Command "Invoke-WebRequest -Uri \'' .. url .. '\' -OutFile \'' .. destination .. '\'"')
+    d("[MuAiCore]正在下载文件...")
+    local cmd = 'curl -L -o "' .. destination .. '" "' .. url .. '"'
+    local result = runCommand(cmd)
+
+    -- 检查下载是否成功
+    if not io.open(destination, "rb") then
+        error("下载失败: " .. url)
+    end
+    d("[MuAiCore]文件下载完成: " .. destination)
 end
 
 -- 解压文件
 local function extractZip(zipPath, destination)
-    d("正在解压文件...")
+    d("[MuAiCore]正在解压文件...")
     runCommand('powershell -Command "Expand-Archive -Path \'' .. zipPath .. '\' -DestinationPath \'' .. destination .. '\'"')
 end
 
@@ -149,7 +156,7 @@ local function areFilesDifferent(file1, file2)
     local md5File1 = getFileMD5(file1)
     local md5File2 = getFileMD5(file2)
     if not md5File1 or not md5File2 then
-        return true -- 如果无法计算 MD5 值，则认为文件不同
+        return true
     end
     return md5File1 ~= md5File2
 end
@@ -164,7 +171,7 @@ core.ForceUpdate = function()
 
     -- 检查下载是否成功
     if not io.open(zipFilePath) then
-        print("下载失败，无法找到 Zip 文件。")
+        d("下载失败，无法找到 Zip 文件。")
         return
     end
 
@@ -175,7 +182,7 @@ core.ForceUpdate = function()
     -- 获取解压后的第一级文件夹
     local firstLevelFolder = getFirstLevelFolder(extractPath)
     if not firstLevelFolder then
-        print("解压失败，未找到任何文件。")
+        d("解压失败，未找到任何文件。")
         return
     end
     local extractedFilesPath = extractPath .. "\\" .. firstLevelFolder
@@ -183,7 +190,7 @@ core.ForceUpdate = function()
     -- 获取解压后的文件列表
     local extractedFiles = getFileList(extractedFilesPath)
     if #extractedFiles == 0 then
-        print("解压失败，未找到任何文件。")
+        d("解压失败，未找到任何文件。")
         return
     end
 
