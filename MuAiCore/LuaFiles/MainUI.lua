@@ -293,11 +293,19 @@ local DrawMainUI = function(M)
         GUI:Text("添加QQ2437365584，备注BUG反馈")
         GUI:Dummy(10, 1)
         GUI:BulletText("说明书、下载地址、更新日志：")
-        GUI:Button("https://github.com/SuzukazeYuYa/MuAiGuide", 330, 20)
+        GUI:Button("https://github.com/SuzukazeYuYa/MuAiCore", 330, 20)
         if GUI:IsItemClicked(0) then
-            io.popen("start https://github.com/SuzukazeYuYa/MuAiGuide")
+            io.popen("start https://github.com/SuzukazeYuYa/MuAiCore")
         end
-        GUI:Text("                                        ver.173")
+        GUI:AlignFirstTextHeightToWidgets()
+        GUI:Text("                        ver.173  ")
+        GUI:SameLine(0, 0)
+        GUI:Button("检查更新", 100, 20)
+        if GUI:IsItemClicked(0) then
+            MuAiGuide.UI.open = false
+            MuAiGuide.FruConfigUI.open = false
+            MuAiGuide.Info("更新过程中会短暂卡屏，属于正常现象，请耐心等待<se.1>。")
+        end
     end
     M.SaveConfig()
     local winPosx, winPosy = GUI:GetWindowPos();

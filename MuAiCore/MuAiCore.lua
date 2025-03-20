@@ -12,13 +12,15 @@ core.Info = {
     ChangeLog = { }
 }
 core.Data = {}
-local LuaPath = GetStartupPath() .. "\\LuaMods\\"
 core.Override = {}
 core.InitMuAiGuide = function()
     MuAiGuideRoot = GetStartupPath() .. "\\LuaMods\\MuAiCore\\LuaFiles\\"
     MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
     local configsLoader = FileLoad(MuAiGuideRoot .. "FruOneKeyConfigs.lua")
     configsLoader(MuAiGuide)
+    MuAiGuide.ForceUpdate = function()
+        core.ForceUpdate()
+    end
 end
 core.InitMuAiGuide()
 
@@ -42,9 +44,8 @@ end
 core.Initialize = function()
     local Icon = GetStartupPath() .. "\\LuaMods\\MuAiCore\\Image\\MainIcon.png"
     local tooltip = "暮霭指路核心功能"
-    ml_gui.ui_mgr:AddMember({ id = "MuAiCore", name = "MuAiGuide", onClick = function()
-        --- MuAiGuide.UI.open = not MuAiGuide.UI.open
-        core.ForceUpdate()
+    ml_gui.ui_mgr:AddMember({ id = "MuAiCore", name = "MuAiGuide", onClick = function() 
+        MuAiGuide.UI.open = not MuAiGuide.UI.open
     end, tooltip = tooltip, texture = Icon }, "FFXIVMINION##MENU_HEADER")
 end
 
@@ -52,7 +53,7 @@ core.Update = function()
     if MuAiGuide == nil then
         core.InitMuAiGuide()
     end
-    if GUI:IsKeyPressed(88) and GUI:IsKeyDown(17) then
+    if GUI:IsKeyPressed(70) and GUI:IsKeyDown(17) then
         MuAiGuide.UI.open = not MuAiGuide.UI.open
     end
     if lastMap ~= Player.localmapid then
@@ -112,13 +113,6 @@ local function extractZip(zipPath, destination)
     d("正在解压文件...")
     runCommand('powershell -Command "Expand-Archive -Path \'' .. zipPath .. '\' -DestinationPath \'' .. destination .. '\'"')
 end
-
--- 对比文件内容
---local function areFilesDifferent(file1, file2)
---    local cmd = 'fc /b "' .. file1 .. '" "' .. file2 .. '"'
---    local result = runCommand(cmd)
---    return not result:find("没有差异", 1, true) -- Windows "fc /b" 的输出包含“没有差异”表示文件相同
---end
 
 -- 遍历目录并返回文件列表
 local function getFileList(path)
@@ -200,7 +194,7 @@ core.ForceUpdate = function()
         local targetFilePath = localPath .. "\\" .. relativePath
         -- 仅对解压后的文件进行对比和复制
         if not io.open(targetFilePath) or areFilesDifferent(file, targetFilePath) then
-            d("[MuAiCore]更新文件: " .. relativePath)
+            d("[MuAiCore]更新文件: " .. targetFilePath)
             copyFile(file, targetFilePath)
         end
     end
