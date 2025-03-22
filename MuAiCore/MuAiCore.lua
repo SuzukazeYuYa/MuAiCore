@@ -5,6 +5,7 @@ local autoPopMap = { 1238, 1122 }
 local mainDrawer, fruConfigDrawer, fruMitigationDrawer
 local lastMap, lastJob, updateTime
 local updateNeedReLoad = false
+local lastVersion
 
 core.InitMuAiGuide = function(checkUpdate)
     MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
@@ -45,6 +46,7 @@ end
 
 core.Initialize = function()
     core.InitMuAiGuide(true)
+    lastVersion = MuAiGuide.VERSION
     local Icon = GetLuaModsPath() .. "MuAiCore\\Image\\MainIcon.png"
     local tooltip = "暮霭指路核心功能"
     ml_gui.ui_mgr:AddMember({ id = "MuAiCore", name = "MuAiGuide", onClick = function()
@@ -88,8 +90,13 @@ core.Update = function()
                 mainDrawer = FileLoad(MuAiGuideRoot .. "MainUI.lua")
                 fruConfigDrawer = FileLoad(MuAiGuideRoot .. "FruConfigUI.lua")
                 fruMitigationDrawer = FileLoad(MuAiGuideRoot .. "FruMitigationUI.lua")
+
             end
             core.InitMuAiGuide()
+            if lastVersion ~= MuAiGuide.VERSION then
+                lastVersion = MuAiGuide.VERSION
+                MuAiGuide.Info("MuAiCore已更新，当前版本：ver." .. MuAiGuide.VERSION)
+            end
         end
     end
 end
