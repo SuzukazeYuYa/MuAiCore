@@ -79,6 +79,14 @@ core.Update = function()
     if updateNeedReLoad and updateTime then
         if TimeSince(updateTime) > 2000 then
             updateNeedReLoad = false
+            if MuAiGuide.UI.open then
+                MuAiGuide.UI.open = false
+                MuAiGuide.FruConfigUI.open = false
+                MuAiGuide.FruMitigationUI.open = false
+                mainDrawer = FileLoad(MuAiGuideRoot .. "MainUI.lua")
+                fruConfigDrawer = FileLoad(MuAiGuideRoot .. "FruConfigUI.lua")
+                fruMitigationDrawer = FileLoad(MuAiGuideRoot .. "FruMitigationUI.lua")
+            end
             core.InitMuAiGuide()
         end
     end
