@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 178
+M.VERSION = 179
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -372,14 +372,17 @@ end
 --- 读取序列化的表格文件
 M.LoadFileConfig = function(path, fileName, defConfig)
     local saveFile = path .. "\\" .. fileName .. ".lua"
+
     if (not FolderExists(path)) then
         FolderCreate(path)
     end
     local config = FileLoad(saveFile)
     if config ~= nil then
-        M.SyncNestedFields(defConfig, config)
+        M.SyncNestedFields(config, defConfig)
+        M.Info("加载配置[" .. fileName .. "]成功！")
+        return config
     end
-    M.Info("加载配置[" .. fileName .. "]成功！")
+    M.Info("加载配置[" .. fileName .. "]失败！")
     return defConfig
 end
 
@@ -405,7 +408,8 @@ M.LoadConfig = function(path, fileName, defaultCfg)
     local saveFile = path .. "\\" .. fileName
     local config = FileLoad(saveFile)
     if config ~= nil then
-        M.SyncNestedFields(defaultCfg, config)
+        M.SyncNestedFields(config, defaultCfg)
+        return config
     end
     return defaultCfg;
 end
@@ -433,7 +437,7 @@ end
 --- 初始化设置信息
 M.InitConfig = function()
     M.Config = {}
-    M.Config.MainPath = GetLuaModsPath() .. "\\MuAiCore\\Configs"
+    M.Config.MainPath = GetLuaModsPath() .. "MuAiCore\\Configs"
     M.Config.MainFile = "MainConfig.lua"
     M.Config.FruGuidePath = M.Config.MainPath .. "\\FruGuide"
     M.Config.FruGuideFile = "GuideConfig.lua"
@@ -445,9 +449,6 @@ M.InitConfig = function()
         table.insert(M.Config.Key2, string.char(i))
     end
     table.insert(M.Config.Key2, "~")
-    for i = 186, 222 do
-     
-    end
     --- 旧存档修正
     if FolderExists(M.Config.FruGuidePath) and FileExists(M.Config.FruGuidePath .. "\\MuAiGuideConfig.lua") then
         local mainSave, fruSave

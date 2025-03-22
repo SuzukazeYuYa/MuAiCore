@@ -84,7 +84,7 @@ local DrawFruConfigUI = function(M)
                         end
                     else
                         GUI:PushItemWidth(300)
-                        local configIndex, configIndexChange = GUI:Combo("##configIndex", M.Config.FruCustomListIndex, M.Config.FruCustomList, 4)
+                        local configIndex, configIndexChange = GUI:Combo("##configIndex", M.Config.FruCustomListIndex, M.Config.FruCustomList, 30)
                         if configIndexChange then
                             M.Config.FruCustomListIndex = configIndex
                             M.FruConfigUI.NewFileName = M.Config.FruCustomList[M.Config.FruCustomListIndex]
