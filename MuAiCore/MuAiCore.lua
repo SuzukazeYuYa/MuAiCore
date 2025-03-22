@@ -6,7 +6,7 @@ local mainDrawer, fruConfigDrawer, fruMitigationDrawer
 local lastMap, lastJob, updateTime
 local updateNeedReLoad = false
 
-core.InitMuAiGuide = function()
+core.InitMuAiGuide = function(checkUpdate)
     MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
     MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
     local configDef = FileLoad(MuAiGuideRoot .. "FruOneKeyConfigs.lua")
@@ -14,7 +14,7 @@ core.InitMuAiGuide = function()
     local mitigationDef = FileLoad(MuAiGuideRoot .. "FruMitigation.lua")
     mitigationDef(MuAiGuide)
     MuAiGuide.InitConfig()
-    if MuAiGuide.Config.Main.AutoUpdate then
+    if checkUpdate and MuAiGuide.Config.Main.AutoUpdate then
         core.ForceUpdate()
     end
 end
@@ -41,7 +41,7 @@ core.DrawFruMitigationUI = function()
 end
 
 core.Initialize = function()
-    core.InitMuAiGuide()
+    core.InitMuAiGuide(true)
     local Icon = GetLuaModsPath() .. "MuAiCore\\Image\\MainIcon.png"
     local tooltip = "暮霭指路核心功能"
     ml_gui.ui_mgr:AddMember({ id = "MuAiCore", name = "MuAiGuide", onClick = function()
@@ -237,7 +237,7 @@ core.ForceUpdate = function()
 
     -- 清理临时目录
     deletePath(tempPath)
-    MuAiGuide.Info("已同步最新文件，请进行Reload操作<se.1>。")
+    --MuAiGuide.Info("已同步最新文件，请进行Reload操作<se.1>。")
     updateTime = Now()
     updateNeedReLoad = true
 end
