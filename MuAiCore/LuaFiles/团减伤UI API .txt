@@ -1,0 +1,60 @@
+-- T 减伤API
+MuAiGuide.Config.FruMitigation.Tank. + 字段名 == 数字
+
+MuAiGuide.Config.FruMitigation.Tank.P1_Death1 == 1
+MuAiGuide.Config.FruMitigation.Tank.P1_Death2 == 1
+
+MuAiGuide.Config.FruMitigation.Tank.P2_Open == 1
+
+MuAiGuide.Config.FruMitigation.Tank.P3_BlackRing == 1
+MuAiGuide.Config.FruMitigation.Tank.P3_DarkestDance == 1
+
+MuAiGuide.Config.FruMitigation.Tank.P4_DarkestDance == 1
+MuAiGuide.Config.FruMitigation.Tank.P4_AkhMorn1 == 1
+MuAiGuide.Config.FruMitigation.Tank.P4_AkhMorn2 == 1
+
+MuAiGuide.Config.FruMitigation.Tank.P5_Death1 == 1
+MuAiGuide.Config.FruMitigation.Tank.P5_Death2 == 1
+
+-- 团减API
+{ key = "SinsMite", p = 1, name = "罪雷/罪焰", macroInfo = "开场" },
+{ key = "BurnishedGlory1", p = 1, name = "光焰圆光1", macroInfo = "光焰圆光1" },
+{ key = "BurnishedGlory2", p = 1, name = "光焰圆光2", macroInfo = "光焰圆光2" },
+--- P2
+{ key = "DiamondDust", p = 2, name = "钻石星尘", macroInfo = "DD AOE" },
+{ key = "SinBound", p = 2, name = "罪神圣", macroInfo = "DD跑圈" },
+{ key = "HallowedRay", p = 2, name = "神圣射线", macroInfo = "激光" },
+{ key = "LightRampant", p = 2, name = "光之失控", macroInfo = "光暴" },
+{ key = "HouseOfLight", p = 2, name = "光之海啸", macroInfo = "最后踩塔" },
+{ key = "AbsoluteZero", p = 2, name = "绝对零度", macroInfo = "狂暴读条" },
+--- P3
+{ key = "Relativity", p = 3, name = "时间压缩", macroInfo = "1运AOE" },
+{ key = "ShockwavePulsar", p = 3, name = "罪熔毁", macroInfo = "1运中间" },
+{ key = "ShellCrusher", p = 3, name = "破盾一击", macroInfo = "1运后AOE" },
+{ key = "DarkWater", p = 3, name = "黑暗狂水", macroInfo = "击退分摊" },
+{ key = "MemorySEnd", p = 3, name = "记忆终结", macroInfo = "狂暴读条" },
+--- P4
+{ key = "DarkLitDragonSong", p = 4, name = "光暗龙诗", macroInfo = "1运AOE" },
+{ key = "MornAfah1", p = 4, name = "无尽顿悟1", macroInfo = "无尽顿悟1" },
+{ key = "CrystallizeTime", p = 4, name = "时间结晶", macroInfo = "二运AOE" },
+{ key = "HallowedWings", p = 4, name = "神圣之翼", macroInfo = "击退" },
+{ key = "MornAfah2", p = 4, name = "无尽顿悟2", macroInfo = "无尽顿悟2" },
+--- P5
+{ key = "FulgentBlade1", p = 5, name = "光尘之剑1", macroInfo = "1地火" },
+{ key = "AkhMorn1", p = 5, name = "死亡轮回1", macroInfo = "1分摊" },
+{ key = "Polarizing1", p = 5, name = "星辰之剑1", macroInfo = "1挡枪" },
+{ key = "FulgentBlade2", p = 5, name = "光尘之剑2", macroInfo = "2地火" },
+{ key = "AkhMorn2", p = 5, name = "死亡轮回2", macroInfo = "2分摊" },
+{ key = "Polarizing2", p = 5, name = "星辰之剑2", macroInfo = "2挡枪" },
+{ key = "FulgentBlade3", p = 5, name = "光尘之剑3", macroInfo = "3地火" },
+{ key = "AkhMorn3", p = 5, name = "死亡轮回3", macroInfo = "3分摊" },
+
+MuAiGuide.Config.FruMitigation. + key + . + .Target / .Field 格式
+Target 代表第一列技能，通常为目标减，也有特殊的，比如诗人的大地神
+Field 代表第二列技能，通常为场地减
+
+例如：
+
+MuAiGuide.Config.FruMitigation.SinsMite.Target == true
+MuAiGuide.Config.FruMitigation.SinsMite.Field == true
+

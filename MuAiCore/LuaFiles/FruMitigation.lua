@@ -22,7 +22,7 @@
         { key = "DarkLitDragonSong", p = 4, name = "光暗龙诗", macroInfo = "1运AOE" },
         { key = "MornAfah1", p = 4, name = "无尽顿悟1", macroInfo = "无尽顿悟1" },
         { key = "CrystallizeTime", p = 4, name = "时间结晶", macroInfo = "二运AOE" },
-        { key = "HallowedWings", p = 4, name = "圣神之翼", macroInfo = "击退" },
+        { key = "HallowedWings", p = 4, name = "神圣之翼", macroInfo = "击退" },
         { key = "MornAfah2", p = 4, name = "无尽顿悟2", macroInfo = "无尽顿悟2" },
         --- P5
         { key = "FulgentBlade1", p = 5, name = "光尘之剑1", macroInfo = "1地火" },
@@ -45,19 +45,19 @@
         [20] = { "牵制", "真言" },
         [22] = { "牵制" },
         [30] = { "牵制" },
-        [39] = { "牵制" },
+        [39] = { "牵制", "神秘纹" },
         [41] = { "牵制" },
         --- Range
         [31] = { "扳手", "策动", },
-        [23] = { nil, "行吟", },
-        [38] = { nil, "桑巴" },
+        [23] = { "行吟", "大地神", },
+        [38] = { "桑巴" },
         --- Magic
         [27] = { "混乱" },
         [42] = { "混乱", "画盾" },
         [25] = { "混乱", },
         [35] = { "混乱", "抗死" },
     }
-    M.FruMitigation.LoadDefault = function()
+    local LoadDefault = function()
         local ConfigValue = {
             --- P1
             SinsMite = { p = 1, Target = true, Field = true },
@@ -94,32 +94,31 @@
         }
         return ConfigValue
     end
-    M.FruMitigation.Config = M.FruMitigation.LoadDefault()
-    M.FruMitigation.Load = function(fileName)
-        local path = GetLuaModsPath()
-        local savePath = path .. "\\MuAiCore\\Configs\\TeamMitigation"
-        local saveFile = savePath .. "\\" .. fileName .. ".lua"
-        if (not FolderExists(savePath)) then
-            FolderCreate(savePath)
-        end
-        local config = FileLoad(saveFile)
-        if config ~= nil then
-            M.SyncNestedFields(M.FruMitigation.Config, config)
-            M.Info("读取文件" .. fileName .. "成功！")
-        end
-    end
-    M.FruMitigation.Save = function(fileName, table)
-        local path = GetLuaModsPath()
-        local savePath = path .. "\\MuAiCore\\Configs\\TeamMitigation"
-        local saveFile = savePath .. "\\" .. fileName .. ".lua"
-        if (not FolderExists(savePath)) then
-            FolderCreate(savePath)
-        end
-        FileSave(saveFile, table)
-        M.Info("已将当前设置保存到文件" .. fileName .. "。")
+    local createTankDef = function()
+        local table = {
+            P1_Death1 = 1,
+            P1_Death2 = 1,
+            P2_Open = 1,
+            P3_BlackRing = 1,
+            P3_DarkestDance = 1,
+            P4_DarkestDance = 1,
+            P4_AkhMorn1 = 1,
+            P4_AkhMorn2 = 1,
+            P5_Death1 = 1,
+            P5_Death2 = 1,
+        }
+        return table
     end
     M.FruMitigation.ChangeJob = function()
-        
+        local defConfig = LoadDefault()
+        if M.IsTank(Player.job) then
+            defConfig.Tank = createTankDef()
+        end
+        M.Config.FruMitigation = M.LoadConfig(M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job), M.Config.FruMitigationFile, defConfig)
+        M.Config.FruMitigationPrevious = table.deepcopy(M.Config.FruMitigation)
+        M.Config.FruMitigationCustomList = M.LoadFileList(M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job), { M.Config.FruMitigationFile })
+        M.Config.FruMitigationCustomListIndex = 1
+
     end
 end
 return MitigationDef

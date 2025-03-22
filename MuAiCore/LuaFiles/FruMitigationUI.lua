@@ -8,33 +8,33 @@
 local function AddCheckBox(index, M)
     local key = M.FruMitigation.AoeNames[index].key
     local skillName = M.FruMitigation.JobMap[Player.job]
-    if (M.FruMitigation.Config[key].Target == nil or skillName[1] == nil) and
-            (M.FruMitigation.Config[key].Field == nil or skillName[2] == nil)
+    if (M.Config.FruMitigation[key].Target == nil or skillName[1] == nil) and
+            (M.Config.FruMitigation[key].Field == nil or skillName[2] == nil)
     then
         return
     end
-    GUI:Columns(3, "TableExample", true)
+    GUI:Columns(3, "TableExample", false)
     GUI:Dummy(10, 10)
     GUI:SameLine(0, 0)
     GUI:AlignFirstTextHeightToWidgets()
     GUI:BulletText(M.FruMitigation.AoeNames[index].name)
     GUI:NextColumn()
-    if M.FruMitigation.Config[key].Target ~= nil and skillName[1] ~= nil then
+    if M.Config.FruMitigation[key].Target ~= nil and skillName[1] ~= nil then
         GUI:Dummy(12, 10)
         GUI:SameLine(0, 0)
         GUI:AlignFirstTextHeightToWidgets()
         GUI:Text(skillName[1])
         GUI:SameLine(0, 10)
-        M.FruMitigation.Config[key].Target = GUI:Checkbox("##Target" .. key, M.FruMitigation.Config[key].Target)
+        M.Config.FruMitigation[key].Target = GUI:Checkbox("##Target" .. key, M.Config.FruMitigation[key].Target)
     end
     GUI:NextColumn()
-    if M.FruMitigation.Config[key].Field ~= nil and skillName[2] ~= nil then
+    if M.Config.FruMitigation[key].Field ~= nil and skillName[2] ~= nil then
         GUI:Dummy(10, 10)
         GUI:SameLine(0, 0)
         GUI:AlignFirstTextHeightToWidgets()
         GUI:Text(skillName[2])
         GUI:SameLine(0, 10)
-        M.FruMitigation.Config[key].Field = GUI:Checkbox("##Field" .. key, M.FruMitigation.Config[key].Field)
+        M.Config.FruMitigation[key].Field = GUI:Checkbox("##Field" .. key, M.Config.FruMitigation[key].Field)
     end
     GUI:Columns(1)
 end
@@ -46,24 +46,276 @@ local DrawUI = function(M)
             return
         end
         GUI:SetNextWindowSize(300, 0, GUI.SetCond_Appearing)
-        GUI:SetNextWindowPos(M.FruConfigUI.x, M.FruConfigUI.y, GUI.SetCond_Appearing)
+        GUI:SetNextWindowPos(M.FruMitigationUI.x, M.FruMitigationUI.y, GUI.SetCond_Appearing)
         M.FruMitigationUI.visible, M.FruMitigationUI.open = GUI:Begin("Fru Mitigation Setting", M.FruMitigationUI.open)
         if M.FruMitigationUI.visible then
-            local lastP = 0
-            for i = 1, #M.FruMitigation.AoeNames do
-                local curP = M.FruMitigation.AoeNames[i].p
-                if lastP ~= curP then
-                    GUI:Separator()
-                    GUI:BulletText("P" .. M.FruMitigation.AoeNames[i].p .. ". " .. titles[curP])
-                    GUI:Separator()
-                    lastP = curP
+            if M.IsTank(Player.job) then
+                if GUI:CollapsingHeader("1.团队减伤设置") then
+                    local lastP = 0
+                    for i = 1, #M.FruMitigation.AoeNames do
+                        local curP = M.FruMitigation.AoeNames[i].p
+                        if lastP ~= curP then
+                            GUI:Separator()
+                            GUI:BulletText("P" .. M.FruMitigation.AoeNames[i].p .. ". " .. titles[curP])
+                            GUI:Separator()
+                            lastP = curP
+                        end
+                        AddCheckBox(i, M)
+                    end
                 end
-                AddCheckBox(i, M)
+                if GUI:CollapsingHeader("2.坦克死刑") then
+                    local table2 = { "全减", "无敌" }
+                    local table3 = { "无敌", "搭档无敌" }
+                    local table4 = { "全减", "无敌", "搭档减伤", "搭档无敌" }
+                    local table5 = { "全减", "无敌", "搭档无敌" }
+                    local table6 = { "自己减伤", "搭档减伤", "不单吃" }
+                    GUI:BulletText("P1." .. titles[1])
+                    GUI:Separator()
+                    GUI:Columns(2, "##Tank1", false)
+                    GUI:Dummy(10, 10)
+                    GUI:SameLine(0, 0)
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:BulletText("第一次死刑:")
+                    GUI:NextColumn()
+                    GUI:PushItemWidth(100)
+                    local P1_Death1, P1_Death1Change = GUI:Combo("##P1_Death1", M.Config.FruMitigation.Tank.P1_Death1, table4, 4)
+                    if P1_Death1Change then
+                        M.Config.FruMitigation.Tank.P1_Death1 = P1_Death1
+                    end
+                    GUI:Columns(1)
+                    GUI:Columns(2, "##Tank2", false)
+                    GUI:Dummy(10, 10)
+                    GUI:SameLine(0, 0)
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:BulletText("第二次死刑:")
+                    GUI:NextColumn()
+                    GUI:PushItemWidth(100)
+                    local P1_Death2, P1_Death2Change = GUI:Combo("##P1_Death2", M.Config.FruMitigation.Tank.P1_Death2, table4, 4)
+                    if P1_Death2Change then
+                        M.Config.FruMitigation.Tank.P1_Death2 = P1_Death2
+                    end
+                    GUI:Columns(1)
+                    GUI:Separator()
+                    GUI:BulletText("P2." .. titles[2])
+                    GUI:Separator()
+                    GUI:Columns(2, "##Tank3", false)
+                    GUI:Dummy(10, 10)
+                    GUI:SameLine(0, 0)
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:BulletText("开场死刑:")
+                    GUI:NextColumn()
+                    GUI:PushItemWidth(100)
+                    local P2_Open, P2_OpenChange = GUI:Combo("##P2_Open", M.Config.FruMitigation.Tank.P2_Open, table3, 4)
+                    if P2_OpenChange then
+                        M.Config.FruMitigation.Tank.P2_Open = P2_Open
+                    end
+                    GUI:Columns(1)
+                    GUI:Separator()
+                    GUI:BulletText("P3." .. titles[3])
+                    GUI:Separator()
+                    GUI:Columns(2, "##Tank4", false)
+                    GUI:Dummy(10, 10)
+                    GUI:SameLine(0, 0)
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:BulletText("黑色光环:")
+                    GUI:NextColumn()
+                    GUI:PushItemWidth(100)
+                    local P3_BlackRing, P3_BlackRingChange = GUI:Combo("##P3_BlackRing", M.Config.FruMitigation.Tank.P3_BlackRing, table4, 4)
+                    if P3_BlackRingChange then
+                        M.Config.FruMitigation.Tank.P3_BlackRing = P3_BlackRing
+                    end
+                    GUI:Columns(1)
+                    GUI:Columns(2, "##Tank5", false)
+                    GUI:Dummy(10, 10)
+                    GUI:SameLine(0, 0)
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:BulletText("暗夜舞蹈:")
+                    GUI:NextColumn()
+                    GUI:PushItemWidth(100)
+                    local P3_DarkestDance, P3_DarkestDanceChange = GUI:Combo("##P3_DarkestDance", M.Config.FruMitigation.Tank.P3_DarkestDance, table5, 4)
+                    if P3_DarkestDanceChange then
+                        M.Config.FruMitigation.Tank.P3_DarkestDance = P3_DarkestDance
+                    end
+                    GUI:Columns(1)
+                    GUI:Separator()
+                    GUI:BulletText("P4." .. titles[4])
+                    GUI:Separator()
+                    GUI:Columns(2, "##Tank6", false)
+                    GUI:Dummy(10, 10)
+                    GUI:SameLine(0, 0)
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:BulletText("暗夜舞蹈:")
+                    GUI:NextColumn()
+                    GUI:PushItemWidth(100)
+                    local P4_DarkestDance, P4_DarkestDanceChange = GUI:Combo("##P4_DarkestDance", M.Config.FruMitigation.Tank.P4_DarkestDance, table5, 4)
+                    if P4_DarkestDanceChange then
+                        M.Config.FruMitigation.Tank.P4_DarkestDance = P4_DarkestDance
+                    end
+                    GUI:Columns(1)
+                    GUI:Columns(2, "##Tank7", false)
+                    GUI:Dummy(10, 10)
+                    GUI:SameLine(0, 0)
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:BulletText("死亡轮回1:")
+                    GUI:NextColumn()
+                    GUI:PushItemWidth(100)
+                    local P4_AkhMorn1, P4_AkhMorn1DanceChange = GUI:Combo("##P4_AkhMorn1", M.Config.FruMitigation.Tank.P4_AkhMorn1, table6, 4)
+                    if P4_AkhMorn1DanceChange then
+                        M.Config.FruMitigation.Tank.P4_AkhMorn1 = P4_AkhMorn1
+                    end
+                    GUI:Columns(1)
+                    GUI:Columns(2, "##Tank8", false)
+                    GUI:Dummy(10, 10)
+                    GUI:SameLine(0, 0)
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:BulletText("死亡轮回2:")
+                    GUI:NextColumn()
+                    GUI:PushItemWidth(100)
+                    local P4_AkhMorn2, P4_AkhMorn2DanceChange = GUI:Combo("##P4_AkhMorn2", M.Config.FruMitigation.Tank.P4_AkhMorn2, table6, 4)
+                    if P4_AkhMorn2DanceChange then
+                        M.Config.FruMitigation.Tank.P4_AkhMorn2 = P4_AkhMorn2
+                    end
+                    GUI:Columns(1)
+                    GUI:Separator()
+                    GUI:BulletText("P5." .. titles[5])
+                    GUI:Separator()
+                    GUI:Columns(2, "##Tank9", false)
+                    GUI:Dummy(10, 10)
+                    GUI:SameLine(0, 0)
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:BulletText("第一波死刑:")
+                    GUI:NextColumn()
+                    GUI:PushItemWidth(100)
+                    local P5_Death1, P5_Death1RingChange = GUI:Combo("##P5_Death1", M.Config.FruMitigation.Tank.P5_Death1, table2, 4)
+                    if P5_Death1RingChange then
+                        M.Config.FruMitigation.Tank.P5_Death1 = P5_Death1
+                    end
+                    GUI:Columns(1)
+                    GUI:Columns(2, "##Tank10", false)
+                    GUI:Dummy(10, 10)
+                    GUI:SameLine(0, 0)
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:BulletText("第二波死刑:")
+                    GUI:NextColumn()
+                    GUI:PushItemWidth(100)
+                    local P5_Death2, P5_Death2Change = GUI:Combo("##P5_Death2", M.Config.FruMitigation.Tank.P5_Death2, table2, 4)
+                    if P5_Death2Change then
+                        M.Config.FruMitigation.Tank.P5_Death2 = P5_Death2
+                    end
+                    GUI:Columns(1)
+                end
+            else
+                local lastP = 0
+                for i = 1, #M.FruMitigation.AoeNames do
+                    local curP = M.FruMitigation.AoeNames[i].p
+                    if lastP ~= curP then
+                        GUI:Separator()
+                        GUI:BulletText("P" .. M.FruMitigation.AoeNames[i].p .. ". " .. titles[curP])
+                        GUI:Separator()
+                        lastP = curP
+                    end
+                    AddCheckBox(i, M)
+                end
             end
             GUI:Separator()
-            GUI:Button("发送当前减伤情况到小队频道", 335, 20)
+            GUI:BulletText("配置文件工具：")
+            if M.FruMitigationUI.NewMode then
+                GUI:Dummy(10, 20)
+                GUI:SameLine()
+                M.AddLabel("新配置名：", true)
+                GUI:PushItemWidth(200)
+                local havaSame = false
+                local NewFileName, NewFileNameChanged = GUI:InputText("##NewFileName", M.FruMitigationUI.NewFileName, GUI.InputTextFlags_CharsNoBlank)
+                if NewFileNameChanged then
+                    if M.ContainsIgnoreCase(M.Config.FruMitigationCustomList, NewFileName)
+                            or string.lower(NewFileName) == "frumitigation"
+                            or NewFileName == "" or #NewFileName == 0
+                    then
+                        GUI:TextColored(1, 0, 0, 1, "已存在该名称文件或者名称不合法,无法创建!")
+                        havaSame = true
+                    else
+                        M.FruMitigationUI.NewFileName = NewFileName
+                    end
+                end
+                GUI:PopItemWidth()
+                GUI:Dummy(10, 20)
+                GUI:SameLine()
+                GUI:Button("确认", 100, 20)
+                if GUI:IsItemClicked(0) then
+                    if not havaSame and M.FruMitigationUI.NewFileName ~= nil and #M.FruMitigationUI.NewFileName > 0 then
+                        local path = M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job)
+                        M.SaveFileConfig(path, M.FruMitigationUI.NewFileName, M.Config.FruMitigation)
+                        M.FruMitigationUI.NewMode = false
+                        if M.FruMitigationUI.NewFileName ~= M.Config.FruMitigationCustomList[M.Config.FruMitigationCustomListIndex] then
+                            table.insert(M.Config.FruMitigationCustomList, M.FruMitigationUI.NewFileName)
+                        end
+                    else
+                        M.Info("已存在该名称文件或者名称不合法,无法创建!")
+                    end
+                end
+                GUI:SameLine()
+                GUI:Button("取消", 100, 20)
+                if GUI:IsItemClicked(0) then
+                    M.FruMitigationUI.NewFileName = M.Config.FruMitigationCustomList[M.Config.FruMitigationCustomListIndex]
+                    M.FruMitigationUI.NewMode = false
+                end
+            else
+                GUI:Dummy(10, 20)
+                GUI:SameLine()
+                GUI:PushItemWidth(300)
+                local configIndex, configIndexChange = GUI:Combo("##configIndex", M.Config.FruMitigationCustomListIndex, M.Config.FruMitigationCustomList, 4)
+                if configIndexChange then
+                    M.Config.FruMitigationCustomListIndex = configIndex
+                    M.FruMitigationUI.NewFileName = M.Config.FruMitigationCustomList[M.Config.FruMitigationCustomListIndex]
+                end
+                GUI:PopItemWidth()
+                GUI:Dummy(10, 20)
+                GUI:SameLine()
+                if M.Config.FruMitigationCustomListIndex == 1 then
+                    GUI:Button("新建配置", 90, 20)
+                    if GUI:IsItemClicked(0) then
+                        M.FruMitigationUI.NewFileName = ""
+                        M.FruMitigationUI.NewMode = true
+                    end
+                else
+                    GUI:Button("加载此配置", 90, 20)
+                    if GUI:IsItemClicked(0) then
+                        local path = M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job)
+                        local fileName = M.Config.FruMitigationCustomList[M.Config.FruMitigationCustomListIndex]
+                        local curConfig = M.FruMitigation.LoadDefault()
+                        d(fileName)
+                        M.Config.FruMitigation = M.LoadFileConfig(path, fileName, curConfig)
+                    end
+                    GUI:SameLine()
+                    GUI:Button("新建配置", 90, 20)
+                    if GUI:IsItemClicked(0) then
+                        M.FruMitigationUI.NewFileName = ""
+                        M.FruMitigationUI.NewMode = true
+                    end
+                    GUI:SameLine()
+                    GUI:Button("保存到此配置", 100, 20)
+                    if GUI:IsItemClicked(0) then
+                        local path = M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job)
+                        M.SaveFileConfig(path, M.FruMitigationUI.NewFileName, M.Config.FruMitigation)
+                    end
+                end
+            end
+
+            GUI:Separator()
+            GUI:TextColored(1, 0, 0, 1, "※请谨慎使用，慎防挂友认亲！")
+            GUI:TextColored(1, 0, 0, 1, "※默语默认打钩，此状态下发送到默语言，可以复制出去做宏。")
+            GUI:TextColored(1, 0, 0, 1, "※默语取消打钩，则直接发送到小队频道！！！")
+            local mark
+            if M.FruMitigationUI.SendParty then
+                mark = "/e"
+            else
+                mark = "/p"
+            end
+            GUI:Button("发送当前减伤情况", 270, 20)
+
             if GUI:IsItemClicked(0) then
-                SendTextCommand("/e 个人团减汇报：")
+                d(" 个人团减汇报：")
+                SendTextCommand(mark .. " 个人团减汇报：")
                 local skillName = M.FruMitigation.JobMap[Player.job]
                 local lastPSend = 1
                 local pMark = "P1: "
@@ -74,41 +326,44 @@ local DrawUI = function(M)
                     local key = M.FruMitigation.AoeNames[i].key
                     if lastPSend ~= curInfo .p then
                         if #targetInfo == 0 then
-                            SendTextCommand("/e " .. pMark .. fieldInfo)
+                            SendTextCommand(mark .. " " .. pMark .. fieldInfo)
                         elseif #fieldInfo == 0 then
-                            SendTextCommand("/e " .. pMark .. targetInfo)
+                            SendTextCommand(mark .. " " .. pMark .. targetInfo)
                         else
-                            SendTextCommand("/e " .. pMark .. skillName[1] .. ":" .. targetInfo .."   ".. skillName[2] .. ": " .. fieldInfo)
+                            SendTextCommand(mark .. " " .. pMark .. skillName[1] .. ":" .. targetInfo .. "   " .. skillName[2] .. ": " .. fieldInfo)
                         end
                         pMark = "P" .. curInfo .p .. ": "
                         lastPSend = curInfo .p
                         targetInfo = ""
                         fieldInfo = ""
                     end
-                    if M.FruMitigation.Config[key].Target and skillName[1] then
+                    if M.Config.FruMitigation[key].Target and skillName[1] then
                         if #targetInfo == 0 then
-                            targetInfo = curInfo.macroInfo.. "、"
+                            targetInfo = curInfo.macroInfo .. "、"
                         else
                             targetInfo = targetInfo .. curInfo.macroInfo .. "、"
                         end
                     end
-                    if M.FruMitigation.Config[key].Field and skillName[2] then
+                    if M.Config.FruMitigation[key].Field and skillName[2] then
                         if #fieldInfo == 0 then
-                            fieldInfo = curInfo.macroInfo.. "、"
+                            fieldInfo = curInfo.macroInfo .. "、"
                         else
                             fieldInfo = fieldInfo .. curInfo.macroInfo .. "、"
                         end
                     end
                 end
                 if #targetInfo == 0 then
-                    SendTextCommand("/e " .. pMark .. fieldInfo)
+                    SendTextCommand(mark .. " " .. pMark .. fieldInfo)
                 elseif #fieldInfo == 0 then
-                    SendTextCommand("/e " .. pMark .. targetInfo)
+                    SendTextCommand(mark .. " " .. pMark .. targetInfo)
                 else
-                    SendTextCommand("/e " .. pMark .. skillName[1] .. ":" .. targetInfo .."   ".. skillName[2] .. ": " .. fieldInfo)
+                    SendTextCommand(mark .. " " .. pMark .. skillName[1] .. ":" .. targetInfo .. "   " .. skillName[2] .. ": " .. fieldInfo)
                 end
-                SendTextCommand("/e 如果哪里需要改，请及时提出，谢谢！~<se.3>")
+                SendTextCommand(mark .. " 如果哪里需要改，请及时提出，谢谢！~<se.3>")
             end
+            GUI:SameLine()
+            M.FruMitigationUI.SendParty = GUI:Checkbox("默语", M.FruMitigationUI.SendParty)
+            M.SaveConfig(M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job), M.Config.FruMitigationFile, "FruMitigation")
         end
         GUI:SetWindowSize(350, 0)
         GUI:End()

@@ -17,6 +17,7 @@ M.FruConfigUI = {
 --- 减伤轴UI
 M.FruMitigationUI = {
     NewMode = false,
+    SendParty = true,
     NewFileName = ""
 }
 ------------------------------- 工具方法 -------------------------------
@@ -436,13 +437,14 @@ M.InitConfig = function()
     M.Config.MainFile = "MainConfig.lua"
     M.Config.FruGuidePath = M.Config.MainPath .. "\\FruGuide"
     M.Config.FruGuideFile = "GuideConfig.lua"
-
+    M.Config.FruMitigationPath = M.Config.MainPath .. "\\FruMitigation"
+    M.Config.FruMitigationFile = "FruMitigation.lua"
     M.Config.Key1 = {"Shift", "Ctrl", "Alt"}
     M.Config.Key2 = {}
     for i = 65, 90 do
         table.insert(M.Config.Key2, string.char(i))
     end
-    
+    --- 旧存档修正
     if FolderExists(M.Config.FruGuidePath) and FileExists(M.Config.FruGuidePath .. "\\MuAiGuideConfig.lua") then
         local mainSave, fruSave
         local config = FileLoad(M.Config.FruGuidePath .. "\\MuAiGuideConfig.lua")

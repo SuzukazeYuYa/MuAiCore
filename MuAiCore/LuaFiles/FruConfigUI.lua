@@ -54,8 +54,8 @@ local DrawFruConfigUI = function(M)
                         if NewFileNameChanged then
                             local fileName = NewFileName
                             if M.ContainsIgnoreCase(M.Config.FruCustomList, fileName)
-                                    or string.lower(fileName) == "muaiguideconfig"
-                                    or M.FruConfigUI.NewFileName ~= ""
+                                    or string.lower(fileName) == "guideconfig"
+                                    or NewFileName == "" or #NewFileName == 0
                             then
                                 GUI:TextColored(1, 0, 0, 1, "已存在该名称文件或者名称不合法,无法创建!")
                                 havaSame = true
@@ -67,7 +67,7 @@ local DrawFruConfigUI = function(M)
                         GUI:Button("确认", 100, 20)
                         if GUI:IsItemClicked(0) then
                             if not havaSame and M.FruConfigUI.NewFileName ~= nil and #M.FruConfigUI.NewFileName > 0 then
-                                M.SaveFileConfig(M.FruConfigUI.NewFileName, M.Config.FruCfg)
+                                M.SaveFileConfig(M.Config.FruGuidePath, M.FruConfigUI.NewFileName, M.Config.FruCfg)
                                 M.FruConfigUI.NewMode = false
                                 if M.FruConfigUI.NewFileName ~= M.Config.FruCustomList[M.Config.FruCustomListIndex] then
                                     table.insert(M.Config.FruCustomList, M.FruConfigUI.NewFileName)

@@ -20,6 +20,7 @@ core.InitMuAiGuide = function(checkUpdate)
     local mitigationDef = FileLoad(MuAiGuideRoot .. "FruMitigation.lua")
     mitigationDef(MuAiGuide)
     MuAiGuide.InitConfig()
+    MuAiGuide.FruMitigation.ChangeJob()
     MuAiGuide.ForceUpdate = function()
         core.ForceUpdate()
     end
@@ -63,7 +64,7 @@ core.Update = function()
     if MuAiGuide == nil then
         core.InitMuAiGuide()
     end
-    if MuAiGuide and GUI:IsKeyDown(MuAiGuide.Config.Main.KeyBindFirst) and GUI:IsKeyPressed(MuAiGuide.Config.Main.KeyBindSecond) then
+    if MuAiGuide and MuAiGuide.Config and GUI:IsKeyDown(MuAiGuide.Config.Main.KeyBindFirst) and GUI:IsKeyPressed(MuAiGuide.Config.Main.KeyBindSecond) then
         MuAiGuide.UI.open = not MuAiGuide.UI.open
     end
     if lastMap ~= Player.localmapid then
