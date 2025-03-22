@@ -26,7 +26,6 @@ M.Info = function(msg, ttsOn)
     if not M.Config.Main.LogToEchoMsg then
         return
     end
-    d(1)
     local info = "/e [信息]" .. msg
     SendTextCommand(info)
     if ttsOn and M.Config.TTS == true then

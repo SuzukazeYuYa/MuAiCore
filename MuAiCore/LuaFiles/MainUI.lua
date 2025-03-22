@@ -45,12 +45,15 @@ local DrawMainUI = function(M)
             M.Config.Main.LogToEchoMsg = GUI:Checkbox("聊天栏提示信息", M.Config.Main.LogToEchoMsg)
             GUI:SameLine(0, 36)
             M.Config.Main.TTS = GUI:Checkbox("开启TTS播报", M.Config.Main.TTS)
+            M.Config.Main.AutoUpdate = GUI:Checkbox("开启自动更新", M.Config.Main.AutoUpdate)  
+            GUI:SameLine()
+            GUI:TextColored(0, 255, 0, 1, "※每次加载mini后会自动同步文件")
             GUI:Dummy(1, 1)
             GUI:Text(" ")
             GUI:SameLine()
             GUI:Button("恢复默认设置")
             if GUI:IsItemClicked(0) then
-                M.LoadDefaultMain()
+                M.Config.Main = M.CreateDefMainCfg
             end
         end
 
