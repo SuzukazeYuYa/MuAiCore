@@ -2,39 +2,47 @@ local MuAiCore = {}
 local AddonName = "MuAiCore"
 local core = MuAiCore
 local autoPopMap = { 1238, 1122 }
+local mainDrawer, fruConfigDrawer, fruMitigationDrawer
 local lastMap
+local lastJob
+local updateTime
+local updateNeedReLoad = false
 
-core.Data = {}
-core.Override = {}
 core.InitMuAiGuide = function()
     MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
     MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
     local configsLoader = FileLoad(MuAiGuideRoot .. "FruOneKeyConfigs.lua")
     configsLoader(MuAiGuide)
+    local mitigationLoader = FileLoad(MuAiGuideRoot .. "FruMitigation.lua")
+    mitigationLoader(MuAiGuide)
     MuAiGuide.ForceUpdate = function()
         core.ForceUpdate()
     end
 end
-core.InitMuAiGuide()
 
-local mainDrawer, fruConfigDrawer = nil, nil
 core.DrawMainUI = function()
     if mainDrawer == nil or MuAiGuide.DevelopMode then
-        local path = MuAiGuideRoot .. "MainUI.lua"
-        mainDrawer = FileLoad(path)
+        mainDrawer = FileLoad(MuAiGuideRoot .. "MainUI.lua")
     end
     mainDrawer(MuAiGuide)
 end
 
 core.DrawFriConfigUI = function()
     if fruConfigDrawer == nil or MuAiGuide.DevelopMode then
-        local path = MuAiGuideRoot .. "FruConfigUI.lua"
-        fruConfigDrawer = FileLoad(path)
+        fruConfigDrawer = FileLoad(MuAiGuideRoot .. "FruConfigUI.lua")
     end
     fruConfigDrawer(MuAiGuide)
 end
 
+core.DrawFruMitigationUI = function()
+    if fruMitigationDrawer == nil or MuAiGuide.DevelopMode then
+        fruMitigationDrawer = FileLoad(MuAiGuideRoot .. "FruMitigationUI.lua")
+    end
+    fruMitigationDrawer(MuAiGuide)
+end
+
 core.Initialize = function()
+    core.InitMuAiGuide()
     local Icon = GetLuaModsPath() .. "MuAiCore\\Image\\MainIcon.png"
     local tooltip = "暮霭指路核心功能"
     ml_gui.ui_mgr:AddMember({ id = "MuAiCore", name = "MuAiGuide", onClick = function()
@@ -62,14 +70,32 @@ core.Update = function()
         end
         lastMap = Player.localmapid
     end
+    if lastJob ~= Player.job then
+        if MuAiGuide and MuAiGuide.FruMitigation then
+            MuAiGuide.FruMitigation.ChangeJob()
+        end
+        lastJob = Player.job
+    end    
+    if updateNeedReLoad and updateTime then
+        if TimeSince(updateTime) > 2000 then
+            updateNeedReLoad = false
+            core.InitMuAiGuide()
+        end
+    end
 end
 
 core.Draw = function()
-    if MuAiGuide and MuAiGuide.UI.open then
+    if not MuAiGuide then
+        return
+    end
+    if MuAiGuide.UI.open then
         core.DrawMainUI()
     end
-    if MuAiGuide and MuAiGuide.FruConfigUI.open then
+    if MuAiGuide.FruConfigUI.open then
         core.DrawFriConfigUI()
+    end
+    if MuAiGuide.FruMitigationUI.open and not MuAiGuide.IsHealer(Player.job) then
+        core.DrawFruMitigationUI()
     end
 end
 
@@ -162,6 +188,8 @@ local function areFilesDifferent(file1, file2)
 end
 
 core.ForceUpdate = function()
+    updateTime = nil
+    updateNeedReLoad = false
     -- 清理并创建临时目录
     deletePath(tempPath)
     createDirectory(tempPath)
@@ -209,6 +237,8 @@ core.ForceUpdate = function()
     -- 清理临时目录
     deletePath(tempPath)
     MuAiGuide.Info("已同步最新文件，请进行Reload操作<se.1>。")
+    updateTime = Now()
+    updateNeedReLoad = true
 end
 
 d("[MuAiCore]加载成功!")

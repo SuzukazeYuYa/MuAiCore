@@ -4,73 +4,22 @@ M.DebugMode = false
 --- 测试模式玩家职能
 M.DebugPos = "MT"
 M.DevelopMode = false
-local TankJobs = { 19, 21, 32, 37 }
-local HealerJobs = { 24, 28, 33, 40 }
-local MeleeJob = { 20, 22, 30, 34, 39, 41 }
-local RangeJob = { 31, 23, 38 }
-local MagicJob = { 25, 27, 35, 42 }
-local JobIds = {
-    19, 21, 32, 37,
-    24, 33, 40, 28,
-    34, 20, 22, 30, 39, 41,
-    31, 23, 38,
-    27, 42, 25, 35
-}
-
-local JobName = {
-    "骑士", "战士", "黑骑", "绝枪",
-    "白魔", "占星", "贤者", "学者",
-    "武士", "武僧", "龙骑", "忍者", "钐镰", "蝰蛇",
-    "机工", "诗人", "舞者",
-    "召唤", "绘灵", "黑魔", "赤魔"
-}
-local specialMaps = { 875 }
-
-M.JobPosName = { "MT", "ST", "H1", "H2", "D1", "D2", "D3", "D4" }
 --- UI定义
 M.UI = {}
+
+--- 绝伊甸UI用字段
 M.FruConfigUI = {
-    NewMode = false
+    NewMode = false,
+    NewFileName = ""
 }
 
-M.IsTank = function(job)
-    return table.contains(TankJobs, job)
-end
+--- 减伤轴UI
+M.FruMitigationUI = {
+    NewMode = false,
+    NewFileName = ""
+}
 
-M.IsHealer = function(job)
-    return table.contains(HealerJobs, job)
-end
-
-M.IsMelee = function(job)
-    return table.contains(MeleeJob, job)
-end
-
-M.IsRange = function(job)
-    return table.contains(RangeJob, job)
-end
-
-M.IsMagic = function(job)
-    return table.contains(MagicJob, job)
-end
-
-M.IsDps = function(job)
-    return table.contains(MeleeJob, job)
-            or table.contains(RangeJob, job)
-            or table.contains(MagicJob, job)
-end
-
-M.IsPlayer = function(entity)
-    if not entity
-            or not entity.job
-            or entity.type ~= 1
-            or not table.contains(JobIds, entity.job)
-    then
-        return false
-    end
-
-    return true
-end
-
+--------------------------------------------- 工具方法 start ---------------------------------------------
 --- 输出消息到聊天栏
 --- @param msg string
 M.Info = function(msg, ttsOn)
@@ -89,16 +38,6 @@ end
 M.Debug = function(msg)
     local info = "[MuAiGuide]" .. msg
     d(info)
-end
-
---- 获取职业名称
---- @param job number 职业ID
-M.GetJobNameById = function(job)
-    for i = 1, #JobIds, 1 do
-        if JobIds[i] == job then
-            return JobName[i]
-        end
-    end
 end
 
 --- 计算索引位置
@@ -151,29 +90,86 @@ M.Append = function(tblA, tblB)
     end
     return tbl
 end
---- 读取小队列表
-M.GetPartyPlayers = function()
-    local curPt = TensorCore.getEntityGroupList("Party")
-    local members = {}
-    local checker = {}
-    -- 回放模式或者其他情况
-    if #curPt == 1 then
-        table.insert(members, curPt[1])
-        table.insert(checker, curPt[1].id)
-        curPt = TensorCore.entityList("Party")
+
+--- 计算2个弧度之间的夹角（0~π）
+M.GetAngleRadian = function(r1, r2)
+    local diff = math.abs(r2 - r1)
+    if diff > math.pi then
+        diff = 2 * math.pi - diff
     end
-    for _, ent in pairs(curPt) do
-        if M.IsPlayer(ent)
-                and ent.type == 1
-                and not table.contains(checker, ent.id)
-                and ent.name ~= nil and ent.name ~= ""
-        then
-            table.insert(members, ent)
-        end
-    end
-    return members
+    return diff
 end
 
+--- 判断2个数是否相等
+--- @return boolean is same
+M.IsSame = function(n1, n2)
+    if n1 == nil or n2 == nil then
+        return n1 == nil and n2 == nil
+    end
+    if n1 == n2 then
+        return true
+    end
+    local diff = math.abs(n1 - n2)
+    if diff < 0.05 then
+        return true
+    end
+    return false
+end
+
+--- 将给定弧度调整到0~2π
+M.SetHeading2Pi = function(heading)
+    if M.IsSame(heading, 0) or M.IsSame(heading, 2 * math.pi) then
+        return 0
+    end
+    if heading > math.pi * 2 then
+        local result = heading - math.pi * 2
+        if M.IsSame(endH, 0) then
+            return 0
+        end
+        return result
+    end
+    if heading < 0 then
+        return heading + math.pi * 2
+    end
+    return heading
+end
+
+--- 判断点A到B的顺逆
+--- @return boolean true 顺时针，false 逆时针
+M.GetClock = function(posA, posB)
+    local OA = { x = posA.x - 100, z = posA.z - 100 }
+    local OB = { x = posB.x - 100, z = posB.z - 100 }
+    local crossProduct = OA.x * OB.z - OA.z * OB.x
+    -- 非标准坐标系，叉乘结果要反着来
+    if crossProduct > 0 then
+        return true
+    elseif crossProduct < 0 then
+        return false
+    end
+end
+
+--- 移除文件扩展名
+M.RemoveExtension = function(filename)
+    local dotIndex = filename:match(".*()%.")
+    if dotIndex then
+        return filename:sub(1, dotIndex - 1)
+    else
+        return filename
+    end
+end
+
+--- 不区分大小写方式判断表格存在元素
+M.ContainsIgnoreCase = function(tbl, target)
+    if type(tbl) ~= "table" or type(target) ~= "string" then
+        return false
+    end
+    for _, value in ipairs(tbl) do
+        if type(value) == "string" and string.lower(value) == string.lower(target) then
+            return true
+        end
+    end
+    return false
+end
 
 --- 创建默认配置
 M.CreateDefaultCfg = function()
@@ -191,7 +187,7 @@ M.CreateDefaultCfg = function()
         TTS = false
     }
 end
-
+--- 加载主配置
 M.LoadDefaultMain = function()
     M.Config.GuideColor = { r = 0, g = 1, b = 1, a = 0.5 }
     M.Config.GuidePairColor = { r = 0, g = 0, b = 1, a = 0.5 }
@@ -200,10 +196,7 @@ M.LoadDefaultMain = function()
     M.Config.TTS = false
 end
 
-M.LoadDefaultFre = function()
-    M.Config.FruCfg = M.CreateFruDefaultCfg()
-end
-
+--- 创建绝伊甸默认配置
 M.CreateFruDefaultCfg = function()
     return {
         --- 标点
@@ -286,7 +279,7 @@ M.CreateFruDefaultCfg = function()
         --- 暗夜舞蹈谁引导 1 MT 2 ST
         P4DarkestDanceTaker = 1,
         --- 时间结晶优先级
-        CrystallizeTimePriority = { "H1", "H2", "MT", "ST","D1", "D2", "D3", "D4" },
+        CrystallizeTimePriority = { "H1", "H2", "MT", "ST", "D1", "D2", "D3", "D4" },
         --- Buff 处理方式， 1，基本，2，日基
         CrystallizeTimeBuffType = 1,
         --- 时间结晶处理方式：1:固定吃，2:标点，3:自动摇号
@@ -328,10 +321,10 @@ M.CreateFruDefaultCfg = function()
             Right = { "D1", "D2" },
         },
         drawWinPolarizingOrder = {
-            {"MT", "ST"},
-            {"D1", "D2"},
-            {"D3", "D4"},
-            {"H1", "H2"},
+            { "MT", "ST" },
+            { "D1", "D2" },
+            { "D3", "D4" },
+            { "H1", "H2" },
         },
         --- 绘图开关
         drawAknMorn = true,
@@ -339,6 +332,23 @@ M.CreateFruDefaultCfg = function()
         drawWinLight = true,
         drawWinPolarizing = true,
     }
+end
+
+--- 同步配置字段
+M.SyncNestedFields = function(saveData, defaultData)
+    for key, value in pairs(defaultData) do
+        if type(value) == "table" then
+            if type(saveData[key]) == "table" then
+                M.SyncNestedFields(saveData[key], value)
+            else
+                saveData[key] = value
+            end
+        else
+            if saveData[key] == nil then
+                saveData[key] = value
+            end
+        end
+    end
 end
 
 --- 读取设置信息
@@ -352,27 +362,13 @@ M.LoadConfig = function()
     local config = FileLoad(saveFile)
     local defaultCfg = M.CreateDefaultCfg();
     if config ~= nil then
-        local function syncNestedFields(saveData, defaultData)
-            for key, value in pairs(defaultData) do
-                if type(value) == "table" then
-                    if type(saveData[key]) == "table" then
-                        syncNestedFields(saveData[key], value)
-                    else
-                        saveData[key] = value
-                    end
-                else
-                    if saveData[key] == nil then
-                        saveData[key] = value
-                    end
-                end
-            end
-        end
-        syncNestedFields(config, defaultCfg)
+        M.SyncNestedFields(config, defaultCfg)
         return config
     end
     return defaultCfg;
 end
 
+--- 保存存档
 M.SaveConfig = function()
     if not table.deepcompare(M.Config, M.PreviousSave) then
         local path = GetLuaModsPath()
@@ -387,15 +383,11 @@ M.SaveConfig = function()
     end
 end
 
-M.Config = M.LoadConfig()
-M.PreviousSave = M.LoadConfig()
-M.NewFileName = ""
-
 --- 读取存档名称
-M.LoadConfigs = function()
+M.LoadConfigs = function(filePath)
     local files = { "None" }
     local path = GetLuaModsPath()
-    local savePath = path .. "\\MuAiCore\\Configs\\FruGuide"
+    local savePath = path .. filePath
     if (not FolderExists(savePath)) then
         FolderCreate(savePath)
     end
@@ -406,6 +398,23 @@ M.LoadConfigs = function()
         end
     end
     return files
+end
+
+--- 读取序列化的表格文件
+M.LoadFileConfig = function(fileName)
+    local path = GetLuaModsPath()
+    local savePath = path .. "\\MuAiCore\\Configs\\FruGuide"
+    local saveFile = savePath .. "\\" .. fileName .. ".lua"
+    if (not FolderExists(savePath)) then
+        FolderCreate(savePath)
+    end
+    local config = FileLoad(saveFile)
+    local defFruConfig = M.CreateFruDefaultCfg()
+    if config ~= nil then
+        M.SyncNestedFields(config, defFruConfig)
+    end
+    M.Info("读取文件" .. fileName .. "成功！")
+    return config
 end
 
 --- 将表格序列化到文件
@@ -420,63 +429,109 @@ M.SaveFileConfig = function(fileName, table)
     M.Info("已将当前设置保存到文件" .. fileName .. "。")
 end
 
---- 读取序列化的表格文件
-M.LoadFileConfig = function(fileName)
-    local path = GetLuaModsPath()
-    local savePath = path .. "\\MuAiCore\\Configs\\FruGuide"
-    local saveFile = savePath .. "\\" .. fileName .. ".lua"
-    if (not FolderExists(savePath)) then
-        FolderCreate(savePath)
-    end
-    local config = FileLoad(saveFile)
-    local defFruConfig = M.CreateFruDefaultCfg()
-    if config ~= nil then
-        local function syncNestedFields(saveData, defaultData)
-            for key, value in pairs(defaultData) do
-                if type(value) == "table" then
-                    if type(saveData[key]) == "table" then
-                        syncNestedFields(saveData[key], value)
-                    else
-                        saveData[key] = value
-                    end
-                else
-                    if saveData[key] == nil then
-                        saveData[key] = value
-                    end
-                end
-            end
-        end
-        syncNestedFields(config, defFruConfig)
-    end
-    M.Info("读取文件" .. fileName .. "成功！")
-    return config
+-- 初始化同时读取
+M.Config = M.LoadConfig()
+M.PreviousSave = M.LoadConfig()
+M.FruConfigTable = M.LoadConfigs("\\MuAiCore\\Configs\\FruGuide")
+M.FruConfigTableIndex = 1
+
+--------------------------------------------- 工具方法 end ---------------------------------------------
+
+--------------------------------------------- 游戏逻辑 start ---------------------------------------------
+local TankJobs = { 19, 21, 32, 37 }
+local HealerJobs = { 24, 28, 33, 40 }
+local MeleeJob = { 20, 22, 30, 34, 39, 41 }
+local RangeJob = { 31, 23, 38 }
+local MagicJob = { 25, 27, 35, 42 }
+local JobIds = {
+    19, 21, 32, 37,
+    24, 33, 40, 28,
+    34, 20, 22, 30, 39, 41,
+    31, 23, 38,
+    27, 42, 25, 35
+}
+
+local JobName = {
+    "骑士", "战士", "黑骑", "绝枪",
+    "白魔", "占星", "贤者", "学者",
+    "武士", "武僧", "龙骑", "忍者", "钐镰", "蝰蛇",
+    "机工", "诗人", "舞者",
+    "召唤", "绘灵", "黑魔", "赤魔"
+}
+
+M.JobPosName = { "MT", "ST", "H1", "H2", "D1", "D2", "D3", "D4" }
+
+--- 当前职业ID是否是坦克
+M.IsTank = function(job)
+    return table.contains(TankJobs, job)
+end
+--- 当前职业ID是否是治疗
+M.IsHealer = function(job)
+    return table.contains(HealerJobs, job)
+end
+--- 当前职业ID是否是近战
+M.IsMelee = function(job)
+    return table.contains(MeleeJob, job)
+end
+--- 当前职业ID是否是远敏
+M.IsRange = function(job)
+    return table.contains(RangeJob, job)
+end
+--- 当前职业ID是否是法师职业
+M.IsMagic = function(job)
+    return table.contains(MagicJob, job)
+end
+--- 当前职业ID是否是DPS职业
+M.IsDps = function(job)
+    return table.contains(MeleeJob, job)
+            or table.contains(RangeJob, job)
+            or table.contains(MagicJob, job)
 end
 
---- 移除文件扩展名
-function M.RemoveExtension(filename)
-    local dotIndex = filename:match(".*()%.")
-    if dotIndex then
-        return filename:sub(1, dotIndex - 1)
-    else
-        return filename
-    end
-end
-
---- 不区分大小写方式判断表格存在元素
-function M.ContainsIgnoreCase(tbl, target)
-    if type(tbl) ~= "table" or type(target) ~= "string" then
+--- 当前物体是否是玩家
+M.IsPlayer = function(entity)
+    if not entity
+            or not entity.job
+            or entity.type ~= 1
+            or not table.contains(JobIds, entity.job)
+    then
         return false
     end
-    for _, value in ipairs(tbl) do
-        if type(value) == "string" and string.lower(value) == string.lower(target) then
-            return true
-        end
-    end
-    return false
+    return true
 end
 
-M.ConfigTable = M.LoadConfigs()
-M.ConfigTableIndex = 1
+--- 获取职业名称
+--- @param job number 职业ID
+M.GetJobNameById = function(job)
+    for i = 1, #JobIds, 1 do
+        if JobIds[i] == job then
+            return JobName[i]
+        end
+    end
+end
+
+--- 读取小队列表
+M.GetPartyPlayers = function()
+    local curPt = TensorCore.getEntityGroupList("Party")
+    local members = {}
+    local checker = {}
+    -- 回放模式或者其他情况
+    if #curPt == 1 then
+        table.insert(members, curPt[1])
+        table.insert(checker, curPt[1].id)
+        curPt = TensorCore.entityList("Party")
+    end
+    for _, ent in pairs(curPt) do
+        if M.IsPlayer(ent)
+                and ent.type == 1
+                and not table.contains(checker, ent.id)
+                and ent.name ~= nil and ent.name ~= ""
+        then
+            table.insert(members, ent)
+        end
+    end
+    return members
+end
 
 --- 读取小队信息（初始化模块）
 M.LoadParty = function()
@@ -690,63 +745,6 @@ M.GetPointAtDistance = function(startPos, endPos, distance)
     return TensorCore.getPosInDirection(startPos, heading, distance)
 end
 
---- 计算2个弧度之间的夹角（0~π）
-M.GetAngleRadian = function(r1, r2)
-    local diff = math.abs(r2 - r1)
-    if diff > math.pi then
-        diff = 2 * math.pi - diff
-    end
-    return diff
-end
-
---- 判断2个数是否相等
---- @return boolean is same
-M.IsSame = function(n1, n2)
-    if n1 == nil or n2 == nil then
-        return n1 == nil and n2 == nil
-    end
-    if n1 == n2 then
-        return true
-    end
-    local diff = math.abs(n1 - n2)
-    if diff < 0.05 then
-        return true
-    end
-    return false
-end
-
---- 将给定弧度调整到0~2π
-M.SetHeading2Pi = function(heading)
-    if M.IsSame(heading, 0) or M.IsSame(heading, 2 * math.pi) then
-        return 0
-    end
-    if heading > math.pi * 2 then
-        local result = heading - math.pi * 2
-        if M.IsSame(endH, 0) then
-            return 0
-        end
-        return result
-    end
-    if heading < 0 then
-        return heading + math.pi * 2
-    end
-    return heading
-end
-
---- 判断点A到B的顺逆
---- @return boolean true 顺时针，false 逆时针
-M.GetClock = function(posA, posB)
-    local OA = { x = posA.x - 100, z = posA.z - 100 }
-    local OB = { x = posB.x - 100, z = posB.z - 100 }
-    local crossProduct = OA.x * OB.z - OA.z * OB.x
-    -- 非标准坐标系，叉乘结果要反着来
-    if crossProduct > 0 then
-        return true
-    elseif crossProduct < 0 then
-        return false
-    end
-end
-
 --- 计算基础搭档
 M.GetBasePartner = function(config)
     if config ~= nil then
@@ -809,10 +807,11 @@ M.GetRMPartner = function()
     return partner
 end
 
+--- 暂不支持
 M.MarkParty = function(marker, id)
 end
 
-------------------------------- 全局绘制 -------------------------------
+------------------------------- 绘图工具封装 -------------------------------
 M.NotDelayGuides = {}
 
 --- 取消已注册的所有指路
@@ -970,6 +969,10 @@ M.DirectToEnt = function(id, time, size)
     return drawIds
 end
 
+--- 帧指路OnFrame用
+--- @param x number 指路位置x
+--- @param z number 指路位置z
+--- @param size number 圆圈大小
 M.FrameDirect = function(x, z, size)
     size = size or 0.5
     local playerPos = TensorCore.mGetEntity(M.GetPlayer().id).pos
@@ -1002,11 +1005,11 @@ M.FrameDirect = function(x, z, size)
     newDraw3:addCircle(x, playerPos.y, z, 0.03, true)
 end
 
---- 绘制一个圆（废弃）
+--- 绘制一个圆（已废弃仿报错用）
 M.DrawCircleUI = function(x, z, time, size, r, g, b, a, delay)
 end
 
---- 绘制一个地面圆（废弃）
+--- 绘制一个地面圆（已废弃仿报错用）
 M.DrawCircleFloor = function(x, z, time, size, r, g, b, a, delay)
 end
 

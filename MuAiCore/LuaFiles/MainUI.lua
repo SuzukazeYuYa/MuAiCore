@@ -1,5 +1,20 @@
 local VERSION = 173
 local DrawMainUI = function(M)
+    if M.AddLabel == nil then
+        M.AddLabel = function(label, normal, space)
+            GUI:AlignFirstTextHeightToWidgets()
+            if normal then
+                GUI:Text(label)
+            else
+                GUI:BulletText(label)
+            end
+            if space ~= nil then
+                GUI:SameLine(space, 0)
+            else
+                GUI:SameLine(0, 0)
+            end
+        end
+    end
     if M.ConfigUI == nil then
         M.ConfigUI = {}
         M.ConfigUI.GuideColorChange = false
@@ -216,15 +231,21 @@ local DrawMainUI = function(M)
         if GUI:CollapsingHeader("副本设置", GUI.TreeNodeFlags_SDefaultOpen) then
             GUI:Text(" ")
             GUI:SameLine()
-            GUI:Button("绝伊甸设置", 150, 30)
+            GUI:Button("绝伊甸指路设置", 150, 30)
             if GUI:IsItemClicked(0) then
                 M.ConfigFruInit = false
                 M.FruConfigUI.open = not M.FruConfigUI.open
+                M.FruMitigationUI.open = false
             end
             GUI:SameLine()
-            GUI:Button("预留位置", 150, 30)
+            GUI:Button("绝伊甸减伤设置", 150, 30)
             if GUI:IsItemClicked(0) then
-                M.Info("敬请期待..")
+                if MuAiGuide.IsHealer(Player.job) then
+                    M.Info("不支持治疗职业<se.1>")
+                else
+                    M.FruMitigationUI.open = not M.FruMitigationUI.open
+                    M.FruConfigUI.open = false
+                end
             end
         end
         if GUI:CollapsingHeader("调试工具") then
@@ -299,7 +320,7 @@ local DrawMainUI = function(M)
             io.popen("start https://github.com/SuzukazeYuYa/MuAiCore")
         end
         GUI:AlignFirstTextHeightToWidgets()
-        GUI:Text("                         ver.".. VERSION .. " ")
+        GUI:Text("                         ver." .. VERSION .. " ")
         GUI:SameLine(0, 0)
         GUI:Button("更新", 100, 20)
         if GUI:IsItemClicked(0) then
