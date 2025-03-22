@@ -50,7 +50,13 @@ local DrawMainUI = function(M)
             M.Config.Main.LogToEchoMsg = GUI:Checkbox("聊天栏提示信息", M.Config.Main.LogToEchoMsg)
             GUI:SameLine(0, 36)
             M.Config.Main.TTS = GUI:Checkbox("开启TTS播报", M.Config.Main.TTS)
-           
+            GUI:AlignFirstTextHeightToWidgets()
+            --local newKey, keyName, keySettingChanged = GUI:Keybind("测试文本", M.Config.Main.KeyBind, 100)
+            --if keySettingChanged then
+            --    M.Config.Main.KeyBind = newKey
+            --    d(newKey)
+            --    d(keyName)
+            --end
             GUI:Dummy(1, 1)
             GUI:Text(" ")
             GUI:SameLine()

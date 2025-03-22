@@ -185,7 +185,8 @@ M.CreateDefMainCfg = function()
         --- 开启TTS
         TTS = false,
         --- 是否自动更新
-        AutoUpdate = false
+        AutoUpdate = false,
+        KeyBind = 88
     }
     return mainCfg
 end
@@ -863,7 +864,7 @@ end
 --- @param size? number 圈大小（默认0.5）
 --- @param delay? number 延迟执行（毫秒）
 M.DirectTo = function(x, z, time, size, delay)
-    local color = M.Config.GuideColor
+    local color = M.Config.Main.GuideColor
     size = size or 0.5
     delay = delay or 0
     if delay < 1 then
@@ -954,7 +955,7 @@ end
 M.DirectToEnt = function(id, time, size)
     local drawIds = {}
     size = size or 0.2
-    local color = M.Config.GuidePairColor
+    local color = M.Config.Main.GuidePairColor
 
     local newDraw = Argus2.ShapeDrawer:new(
             (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)),
@@ -1008,7 +1009,7 @@ end
 M.FrameDirect = function(x, z, size)
     size = size or 0.5
     local playerPos = TensorCore.mGetEntity(M.GetPlayer().id).pos
-    local color = M.Config.GuideColor
+    local color = M.Config.Main.GuideColor
     local newDraw = Argus2.ShapeDrawer:new(
             (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)),
             (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)),
