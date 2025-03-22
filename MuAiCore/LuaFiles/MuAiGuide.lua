@@ -444,6 +444,10 @@ M.InitConfig = function()
     for i = 65, 90 do
         table.insert(M.Config.Key2, string.char(i))
     end
+    table.insert(M.Config.Key2, "~")
+    for i = 186, 222 do
+     
+    end
     --- 旧存档修正
     if FolderExists(M.Config.FruGuidePath) and FileExists(M.Config.FruGuidePath .. "\\MuAiGuideConfig.lua") then
         local mainSave, fruSave

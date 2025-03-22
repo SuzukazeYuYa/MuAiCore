@@ -66,10 +66,20 @@ local DrawMainUI = function(M)
             GUI:Text("+")
             GUI:SameLine()
             GUI:PushItemWidth(40)
-            local curKeyIndex2 = M.Config.Main.KeyBindSecond - 64
-            local newIndex2, keyBind1Change2 = GUI:Combo("##KEYBNIN2", curKeyIndex2, M.Config.Key2, 26)
+            local curKeyIndex2
+            if M.Config.Main.KeyBindSecond <= 90  then
+                curKeyIndex2 =  M.Config.Main.KeyBindSecond - 64
+            else
+                curKeyIndex2 =  M.Config.Main.KeyBindSecond - 165
+            end
+            local newIndex2, keyBind1Change2 = GUI:Combo("##KEYBNIN2", curKeyIndex2, M.Config.Key2, 27)
             if keyBind1Change2 then
-                M.Config.Main.KeyBindSecond = newIndex2 + 15
+                if newIndex2 <= 26 then
+                    M.Config.Main.KeyBindSecond = newIndex2 + 64
+                else
+                    M.Config.Main.KeyBindSecond = newIndex2 +  165
+                end
+              
             end
             GUI:PopItemWidth()
             GUI:Text(" ")
