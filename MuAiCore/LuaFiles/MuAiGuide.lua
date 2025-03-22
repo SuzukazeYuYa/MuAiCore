@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 174
+M.VERSION = 175
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能

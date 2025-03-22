@@ -14,6 +14,9 @@ core.InitMuAiGuide = function(checkUpdate)
     local mitigationDef = FileLoad(MuAiGuideRoot .. "FruMitigation.lua")
     mitigationDef(MuAiGuide)
     MuAiGuide.InitConfig()
+    MuAiGuide.ForceUpdate = function()
+        core.ForceUpdate()
+    end
     if checkUpdate and MuAiGuide.Config.Main.AutoUpdate then
         core.ForceUpdate()
     end
