@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 175
+M.VERSION = 176
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -186,14 +186,10 @@ M.CreateDefMainCfg = function()
         TTS = false,
         --- 是否自动更新
         AutoUpdate = false,
-        KeyBind = 88
+        KeyBindFirst = 17,
+        KeyBindSecond = 70
     }
     return mainCfg
-end
-
---- 加载主配置
-M.LoadDefaultMain = function()
-    M.Config = M.CreateDefMainCfg()
 end
 
 --- 创建绝伊甸默认配置
@@ -380,12 +376,10 @@ M.LoadFileConfig = function(path, fileName, defConfig)
     end
     local config = FileLoad(saveFile)
     if config ~= nil then
-        M.SyncNestedFields(config, defConfig)
-    else
-        config = defConfig
+        M.SyncNestedFields(defConfig, config)
     end
     M.Info("加载配置[" .. fileName .. "]成功！")
-    return config
+    return defConfig
 end
 
 --- 将表格序列化到文件
@@ -410,8 +404,7 @@ M.LoadConfig = function(path, fileName, defaultCfg)
     local saveFile = path .. "\\" .. fileName
     local config = FileLoad(saveFile)
     if config ~= nil then
-        M.SyncNestedFields(config, defaultCfg)
-        return config
+        M.SyncNestedFields(defaultCfg, config)
     end
     return defaultCfg;
 end
@@ -443,6 +436,13 @@ M.InitConfig = function()
     M.Config.MainFile = "MainConfig.lua"
     M.Config.FruGuidePath = M.Config.MainPath .. "\\FruGuide"
     M.Config.FruGuideFile = "GuideConfig.lua"
+
+    M.Config.Key1 = {"Shift", "Ctrl", "Alt"}
+    M.Config.Key2 = {}
+    for i = 65, 90 do
+        table.insert(M.Config.Key2, string.char(i))
+    end
+    
     if FolderExists(M.Config.FruGuidePath) and FileExists(M.Config.FruGuidePath .. "\\MuAiGuideConfig.lua") then
         local mainSave, fruSave
         local config = FileLoad(M.Config.FruGuidePath .. "\\MuAiGuideConfig.lua")

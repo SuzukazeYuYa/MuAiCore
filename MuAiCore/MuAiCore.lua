@@ -7,6 +7,11 @@ local lastMap, lastJob, updateTime
 local updateNeedReLoad = false
 local lastVersion
 
+ReloadMuAiGuide = function()
+    MuAiGuide = nil
+    core.InitMuAiGuide()
+end
+
 core.InitMuAiGuide = function(checkUpdate)
     MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
     MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
@@ -58,7 +63,7 @@ core.Update = function()
     if MuAiGuide == nil then
         core.InitMuAiGuide()
     end
-    if GUI:IsKeyPressed(70) and GUI:IsKeyDown(17) then
+    if MuAiGuide and GUI:IsKeyDown(MuAiGuide.Config.Main.KeyBindFirst) and GUI:IsKeyPressed(MuAiGuide.Config.Main.KeyBindSecond) then
         MuAiGuide.UI.open = not MuAiGuide.UI.open
     end
     if lastMap ~= Player.localmapid then

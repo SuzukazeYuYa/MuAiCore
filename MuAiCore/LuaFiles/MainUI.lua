@@ -50,17 +50,31 @@ local DrawMainUI = function(M)
             M.Config.Main.LogToEchoMsg = GUI:Checkbox("聊天栏提示信息", M.Config.Main.LogToEchoMsg)
             GUI:SameLine(0, 36)
             M.Config.Main.TTS = GUI:Checkbox("开启TTS播报", M.Config.Main.TTS)
-            GUI:AlignFirstTextHeightToWidgets()
-            --local newKey, keyName, keySettingChanged = GUI:Keybind("测试文本", M.Config.Main.KeyBind, 100)
-            --if keySettingChanged then
-            --    M.Config.Main.KeyBind = newKey
-            --    d(newKey)
-            --    d(keyName)
-            --end
-            GUI:Dummy(1, 1)
             GUI:Text(" ")
             GUI:SameLine()
-            GUI:Button("恢复默认设置")
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:BulletText("快捷键设置：")
+            GUI:SameLine(0, 50)
+            GUI:PushItemWidth(60)
+            local curKeyIndex = M.Config.Main.KeyBindFirst - 15
+            local newIndex, keyBind1Change = GUI:Combo("##KEYBNIN1", curKeyIndex, M.Config.Key1, 4)
+            if keyBind1Change then
+                M.Config.Main.KeyBindFirst = newIndex + 15
+            end
+            GUI:PopItemWidth()
+            GUI:SameLine()
+            GUI:Text("+")
+            GUI:SameLine()
+            GUI:PushItemWidth(40)
+            local curKeyIndex2 = M.Config.Main.KeyBindSecond - 64
+            local newIndex2, keyBind1Change2 = GUI:Combo("##KEYBNIN2", curKeyIndex2, M.Config.Key2, 26)
+            if keyBind1Change2 then
+                M.Config.Main.KeyBindSecond = newIndex2 + 15
+            end
+            GUI:PopItemWidth()
+            GUI:Text(" ")
+            GUI:SameLine()
+            GUI:Button("恢复默认设置", 300, 20)
             if GUI:IsItemClicked(0) then
                 M.Config.Main = M.CreateDefMainCfg()
             end
@@ -258,7 +272,7 @@ local DrawMainUI = function(M)
                 GUI:Text(" ")
                 GUI:SameLine()
                 local index = M.IndexOf(M.JobPosName, M.DebugPos)
-                local debugJob, debugJobChange = GUI:Combo("作为第一视角", index, M.JobPosName, 4)
+                local debugJob, debugJobChange = GUI:Combo("作为第一视角", index, M.JobPosName, 10)
                 if debugJobChange then
                     M.DebugPos = M.JobPosName[debugJob]
                 end
@@ -289,12 +303,12 @@ local DrawMainUI = function(M)
             GUI:Text(" ")
             GUI:SameLine()
             MuAiGuide.DevelopMode = GUI:Checkbox("UI开发模式", MuAiGuide.DevelopMode)
-            GUI:SameLine(0, 80)
+            GUI:SameLine(0, 81)
             GUI:Button("重载MuAiGuide", 120, 20)
             if GUI:IsItemClicked(0) then
                 MuAiGuide.UI.open = false
                 MuAiGuide.FruConfigUI.open = false
-                MuAiGuide = nil
+                ReloadMuAiGuide()
             end
         end
         if GUI:CollapsingHeader("支持一下") then
