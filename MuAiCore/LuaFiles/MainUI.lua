@@ -1,4 +1,3 @@
-local VERSION = 173
 local DrawMainUI = function(M)
     if M.AddLabel == nil then
         M.AddLabel = function(label, normal, space)
@@ -15,47 +14,37 @@ local DrawMainUI = function(M)
             end
         end
     end
-    if M.ConfigUI == nil then
-        M.ConfigUI = {}
-        M.ConfigUI.GuideColorChange = false
-        M.ConfigUI.GuideColorPChange = false
-        M.ConfigUI.DebugPos = M.Config.DebugPos
-        M.ConfigUI.DebugPosChange = false
-        M.ConfigUI.DebugMode = false
-    end
     GUI:SetNextWindowSize(200, 0, GUI.SetCond_Appearing)
     M.UI.visible, M.UI.open = GUI:Begin("MuAiGuide Setting", M.UI.open)
     if M.UI.visible then
         if GUI:CollapsingHeader("基础设置") then
             GUI:Text(" ")
             GUI:SameLine()
-            M.Config.AnyOneReactionOn = GUI:Checkbox("是否启用了Anyone", M.Config.AnyOneReactionOn)
+            M.Config.Main.AnyOneReactionOn = GUI:Checkbox("是否启用了Anyone", M.Config.Main.AnyOneReactionOn)
             GUI:SameLine()
             GUI:TextColored(0, 255, 0, 1, "※如果不用A轴请取消勾选")
             GUI:Text(" ")
             GUI:SameLine()
-            M.Config.GuideColor.r, M.Config.GuideColor.g, M.Config.GuideColor.b, M.Config.GuideColor.a, M.ConfigUI.GuideColorChange = GUI:ColorEdit4("指路工具颜色",
-                    M.Config.GuideColor.r,
-                    M.Config.GuideColor.g,
-                    M.Config.GuideColor.b,
-                    M.Config.GuideColor.a,
+            local colorChange1, colorChange2
+            M.Config.Main.GuideColor.r, M.Config.Main.GuideColor.g, M.Config.Main.GuideColor.b, M.Config.Main.GuideColor.a, colorChange1 = GUI:ColorEdit4("指路工具颜色",
+                    M.Config.Main.GuideColor.r,
+                    M.Config.Main.GuideColor.g,
+                    M.Config.Main.GuideColor.b,
+                    M.Config.Main.GuideColor.a,
                     GUI.ColorEditMode_NoInputs)
 
             GUI:SameLine(0, 50)
-            M.Config.GuidePairColor.r, M.Config.GuidePairColor.g, M.Config.GuidePairColor.b, M.Config.GuidePairColor.a, M.ConfigUI.GuideColorPChange = GUI:ColorEdit4("分摊连线颜色",
-                    M.Config.GuidePairColor.r,
-                    M.Config.GuidePairColor.g,
-                    M.Config.GuidePairColor.b,
-                    M.Config.GuidePairColor.a,
+            M.Config.Main.GuidePairColor.r, M.Config.Main.GuidePairColor.g, M.Config.Main.GuidePairColor.b, M.Config.Main.GuidePairColor.a, colorChange2 = GUI:ColorEdit4("分摊连线颜色",
+                    M.Config.Main.GuidePairColor.r,
+                    M.Config.Main.GuidePairColor.g,
+                    M.Config.Main.GuidePairColor.b,
+                    M.Config.Main.GuidePairColor.a,
                     GUI.ColorEditMode_NoInputs)
-            if M.ConfigUI.GuideColorChange or M.ConfigUI.GuideColorPChange then
-                M.SaveConfig()
-            end
             GUI:Text(" ")
             GUI:SameLine()
-            M.Config.LogToEchoMsg = GUI:Checkbox("聊天栏提示信息", M.Config.LogToEchoMsg)
+            M.Config.Main.LogToEchoMsg = GUI:Checkbox("聊天栏提示信息", M.Config.Main.LogToEchoMsg)
             GUI:SameLine(0, 36)
-            M.Config.TTS = GUI:Checkbox("开启TTS播报", M.Config.TTS)
+            M.Config.Main.TTS = GUI:Checkbox("开启TTS播报", M.Config.Main.TTS)
             GUI:Dummy(1, 1)
             GUI:Text(" ")
             GUI:SameLine()
@@ -320,7 +309,7 @@ local DrawMainUI = function(M)
             io.popen("start https://github.com/SuzukazeYuYa/MuAiCore")
         end
         GUI:AlignFirstTextHeightToWidgets()
-        GUI:Text("                         ver." .. VERSION .. " ")
+        GUI:Text("                         ver." .. M.VERSION .. " ")
         GUI:SameLine(0, 0)
         GUI:Button("更新", 100, 20)
         if GUI:IsItemClicked(0) then
@@ -329,8 +318,8 @@ local DrawMainUI = function(M)
             MuAiGuide.Info("更新过程中会短暂卡屏，属于正常现象，请耐心等待<se.1>。")
             MuAiGuide.ForceUpdate()
         end
+        M.SaveConfig(M.Config.MainPath, M.Config.MainFile, "Main")
     end
-    M.SaveConfig()
     local winPosx, winPosy = GUI:GetWindowPos();
     M.FruConfigUI.x = winPosx + 350
     M.FruConfigUI.y = winPosy

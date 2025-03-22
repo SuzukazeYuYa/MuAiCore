@@ -1,31 +1,32 @@
 ﻿local M = {}
+M.VERSION = 174
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
 M.DebugPos = "MT"
+--- 是否开了UI开发模式
 M.DevelopMode = false
+------------------------------- UI -------------------------------
 --- UI定义
 M.UI = {}
-
 --- 绝伊甸UI用字段
 M.FruConfigUI = {
     NewMode = false,
     NewFileName = ""
 }
-
 --- 减伤轴UI
 M.FruMitigationUI = {
     NewMode = false,
     NewFileName = ""
 }
-
---------------------------------------------- 工具方法 start ---------------------------------------------
+------------------------------- 工具方法 -------------------------------
 --- 输出消息到聊天栏
 --- @param msg string
 M.Info = function(msg, ttsOn)
-    if not M.Config.LogToEchoMsg then
+    if not M.Config.Main.LogToEchoMsg then
         return
     end
+    d(1)
     local info = "/e [信息]" .. msg
     SendTextCommand(info)
     if ttsOn and M.Config.TTS == true then
@@ -172,28 +173,27 @@ M.ContainsIgnoreCase = function(tbl, target)
 end
 
 --- 创建默认配置
-M.CreateDefaultCfg = function()
-    return {
+M.CreateDefMainCfg = function()
+    local mainCfg = {
         --- 指路工具颜色
         GuideColor = { r = 0, g = 1, b = 1, a = 0.5 },
+        --- 指路工具颜色（分摊）
         GuidePairColor = { r = 0, g = 0, b = 1, a = 0.5 },
         --- 是否启用了Anyone
         AnyOneReactionOn = true,
         --- 是否输出提示信息到消息栏
         LogToEchoMsg = true,
-        --- 绝伊甸设置
-        FruCfg = M.CreateFruDefaultCfg(),
         --- 开启TTS
-        TTS = false
+        TTS = false,
+        --- 是否自动更新
+        AutoUpdate = false
     }
+    return mainCfg
 end
+
 --- 加载主配置
 M.LoadDefaultMain = function()
-    M.Config.GuideColor = { r = 0, g = 1, b = 1, a = 0.5 }
-    M.Config.GuidePairColor = { r = 0, g = 0, b = 1, a = 0.5 }
-    M.Config.AnyOneReactionOn = true
-    M.Config.LogToEchoMsg = true
-    M.Config.TTS = false
+    M.Config = M.CreateDefMainCfg()
 end
 
 --- 创建绝伊甸默认配置
@@ -203,7 +203,6 @@ M.CreateFruDefaultCfg = function()
         PosInfo = { "C", "3", "B", "2", "A", "1", "D", "4" },
         --- 基础8方位置
         JobPos = { "H2", "D2", "ST", "D4", "MT", "D3", "H1", "D1" },
-
         ----------------------------- P1 -----------------------------
         ProteanType = 1,
         --- 雾龙8方站位 C逆
@@ -351,16 +350,65 @@ M.SyncNestedFields = function(saveData, defaultData)
     end
 end
 
---- 读取设置信息
-M.LoadConfig = function()
-    local path = GetLuaModsPath()
-    local savePath = path .. "\\MuAiCore\\Configs\\FruGuide"
-    local saveFile = savePath .. "\\MuAiGuideConfig.lua"
+--- 读取存档名称
+M.LoadFileList = function(path, except)
+    local files = { "None" }
+    if (not FolderExists(path)) then
+        FolderCreate(path)
+    end
+    local items = FolderList(path)
+    if except ~= nil then
+        for i = 1, #items do
+            if not table.contains(except, items[i]) then
+                table.insert(files, M.RemoveExtension(items[i]))
+            end
+        end
+    else
+        for i = 1, #items do
+            table.insert(files, M.RemoveExtension(items[i]))
+        end
+    end
+
+    return files
+end
+
+--- 读取序列化的表格文件
+M.LoadFileConfig = function(path, fileName, defConfig)
+    local saveFile = path .. "\\" .. fileName .. ".lua"
+    if (not FolderExists(path)) then
+        FolderCreate(path)
+    end
+    local config = FileLoad(saveFile)
+    if config ~= nil then
+        M.SyncNestedFields(config, defConfig)
+    else
+        config = defConfig
+    end
+    M.Info("加载配置[" .. fileName .. "]成功！")
+    return config
+end
+
+--- 将表格序列化到文件
+M.SaveFileConfig = function(path, fileName, table)
+    local saveFile = path .. "\\" .. fileName .. ".lua"
     if (not FolderExists(savePath)) then
         FolderCreate(savePath)
     end
+    FileSave(saveFile, table)
+    M.Info("已将当前设置保存到配置[" .. fileName .. "]。")
+end
+
+--- 读取设置信息
+--- @param path string 路径(最后不带\\)
+--- @param fileName string 文件名
+--- @param defaultCfg table 默认配置
+--- @return table 读取到或者生成的存档
+M.LoadConfig = function(path, fileName, defaultCfg)
+    if (not FolderExists(path)) then
+        FolderCreate(path)
+    end
+    local saveFile = path .. "\\" .. fileName
     local config = FileLoad(saveFile)
-    local defaultCfg = M.CreateDefaultCfg();
     if config ~= nil then
         M.SyncNestedFields(config, defaultCfg)
         return config
@@ -368,76 +416,61 @@ M.LoadConfig = function()
     return defaultCfg;
 end
 
---- 保存存档
-M.SaveConfig = function()
-    if not table.deepcompare(M.Config, M.PreviousSave) then
-        local path = GetLuaModsPath()
-        local savePath = path .. "\\MuAiCore\\Configs\\FruGuide"
-        local saveFile = savePath .. "\\MuAiGuideConfig.lua"
-        if (not FolderExists(savePath)) then
-            FolderCreate(savePath)
+--- 保存设置
+--- @param path string 路径(最后不带\\)
+--- @param fileName string 文件名
+--- @param configName string 配置ID
+M.SaveConfig = function(path, fileName, configName)
+    local curConfig = M.Config[configName]
+    local preConfig = M.Config[configName .. "Previous"]
+    if curConfig == nil or preConfig == nil then
+        return
+    end
+    if not table.deepcompare(curConfig, preConfig) then
+        local saveFile = path .. "\\" .. fileName
+        if (not FolderExists(path)) then
+            FolderCreate(path)
         end
-        FileSave(saveFile, M.Config)
-        M.Debug("已更新存档")
-        M.PreviousSave = table.deepcopy(M.Config)
+        FileSave(saveFile, curConfig)
+        M.Config[configName .. "Previous"] = table.deepcopy(curConfig)
+        --d("[MuAiCore]存档" .. fileName .. "已更新")
     end
 end
-
---- 读取存档名称
-M.LoadConfigs = function(filePath)
-    local files = { "None" }
-    local path = GetLuaModsPath()
-    local savePath = path .. filePath
-    if (not FolderExists(savePath)) then
-        FolderCreate(savePath)
+--- 初始化设置信息
+M.InitConfig = function()
+    M.Config = {}
+    M.Config.MainPath = GetLuaModsPath() .. "\\MuAiCore\\Configs"
+    M.Config.MainFile = "MainConfig.lua"
+    M.Config.FruGuidePath = M.Config.MainPath .. "\\FruGuide"
+    M.Config.FruGuideFile = "GuideConfig.lua"
+    if FolderExists(M.Config.FruGuidePath) and FileExists(M.Config.FruGuidePath .. "\\MuAiGuideConfig.lua") then
+        local mainSave, fruSave
+        local config = FileLoad(M.Config.FruGuidePath .. "\\MuAiGuideConfig.lua")
+        fruSave = table.deepcopy(config.FruCfg)
+        config.FruCfg = nil
+        mainSave = table.deepcopy(config)
+        FileDelete(M.Config.FruGuidePath .. "\\MuAiGuideConfig.lua")
+        M.Config.Main = mainSave
+        M.Config.MainPrevious = mainSave
+        M.Config.FruCfg = fruSave
+        M.Config.FruCfgPrevious = fruSave
+        FileSave(M.Config.MainPath .. "\\" .. M.Config.MainFile, mainSave)
+        FileSave(M.Config.FruGuidePath .. "\\" .. M.Config.FruGuideFile, fruSave)
+    else
+        --- 读取主存档
+        local defMainCfg = M.CreateDefMainCfg()
+        M.Config.Main = M.LoadConfig(M.Config.MainPath,  M.Config.MainFile, defMainCfg)
+        M.Config.MainPrevious = table.deepcopy(M.Config.Main)
+        --- 读取绝伊甸存档
+        local defFruCfg = M.CreateFruDefaultCfg(M.Config.FruGuidePath)
+        M.Config.FruCfg = M.LoadConfig(M.Config.MainPath,  M.Config.FruGuideFile, defFruCfg)
+        M.Config.FruCfgPrevious = table.deepcopy(M.Config.FruCfg)
     end
-    local items = FolderList(savePath)
-    for i = 1, #items do
-        if items[i] ~= "MuAiGuideConfig.lua" then
-            table.insert(files, M.RemoveExtension(items[i]))
-        end
-    end
-    return files
+    M.Config.FruCustomList = M.LoadFileList(M.Config.FruGuidePath, { "GuideConfig.lua" })
+    M.Config.FruCustomListIndex = 1
 end
 
---- 读取序列化的表格文件
-M.LoadFileConfig = function(fileName)
-    local path = GetLuaModsPath()
-    local savePath = path .. "\\MuAiCore\\Configs\\FruGuide"
-    local saveFile = savePath .. "\\" .. fileName .. ".lua"
-    if (not FolderExists(savePath)) then
-        FolderCreate(savePath)
-    end
-    local config = FileLoad(saveFile)
-    local defFruConfig = M.CreateFruDefaultCfg()
-    if config ~= nil then
-        M.SyncNestedFields(config, defFruConfig)
-    end
-    M.Info("读取文件" .. fileName .. "成功！")
-    return config
-end
-
---- 将表格序列化到文件
-M.SaveFileConfig = function(fileName, table)
-    local path = GetLuaModsPath()
-    local savePath = path .. "\\MuAiCore\\Configs\\FruGuide"
-    local saveFile = savePath .. "\\" .. fileName .. ".lua"
-    if (not FolderExists(savePath)) then
-        FolderCreate(savePath)
-    end
-    FileSave(saveFile, table)
-    M.Info("已将当前设置保存到文件" .. fileName .. "。")
-end
-
--- 初始化同时读取
-M.Config = M.LoadConfig()
-M.PreviousSave = M.LoadConfig()
-M.FruConfigTable = M.LoadConfigs("\\MuAiCore\\Configs\\FruGuide")
-M.FruConfigTableIndex = 1
-
---------------------------------------------- 工具方法 end ---------------------------------------------
-
---------------------------------------------- 游戏逻辑 start ---------------------------------------------
+------------------------------- 游戏逻辑 -------------------------------
 local TankJobs = { 19, 21, 32, 37 }
 local HealerJobs = { 24, 28, 33, 40 }
 local MeleeJob = { 20, 22, 30, 34, 39, 41 }
@@ -811,7 +844,7 @@ end
 M.MarkParty = function(marker, id)
 end
 
-------------------------------- 绘图工具封装 -------------------------------
+------------------------------- 绘图工具 -------------------------------
 M.NotDelayGuides = {}
 
 --- 取消已注册的所有指路

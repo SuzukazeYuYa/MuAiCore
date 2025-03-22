@@ -3,19 +3,18 @@ local AddonName = "MuAiCore"
 local core = MuAiCore
 local autoPopMap = { 1238, 1122 }
 local mainDrawer, fruConfigDrawer, fruMitigationDrawer
-local lastMap
-local lastJob
-local updateTime
+local lastMap, lastJob, updateTime
 local updateNeedReLoad = false
 
 core.InitMuAiGuide = function()
     MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
     MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
-    local configsLoader = FileLoad(MuAiGuideRoot .. "FruOneKeyConfigs.lua")
-    configsLoader(MuAiGuide)
-    local mitigationLoader = FileLoad(MuAiGuideRoot .. "FruMitigation.lua")
-    mitigationLoader(MuAiGuide)
-    MuAiGuide.ForceUpdate = function()
+    local configDef = FileLoad(MuAiGuideRoot .. "FruOneKeyConfigs.lua")
+    configDef(MuAiGuide)
+    local mitigationDef = FileLoad(MuAiGuideRoot .. "FruMitigation.lua")
+    mitigationDef(MuAiGuide)
+    MuAiGuide.InitConfig()
+    if MuAiGuide.Config.Main.AutoUpdate then
         core.ForceUpdate()
     end
 end
@@ -75,7 +74,7 @@ core.Update = function()
             MuAiGuide.FruMitigation.ChangeJob()
         end
         lastJob = Player.job
-    end    
+    end
     if updateNeedReLoad and updateTime then
         if TimeSince(updateTime) > 2000 then
             updateNeedReLoad = false
@@ -93,109 +92,103 @@ core.Update = function()
 end
 
 core.Draw = function()
-    if not MuAiGuide then
-        return
+    if MuAiGuide then
+        if MuAiGuide.UI.open then
+            core.DrawMainUI()
+        end
+        if MuAiGuide.FruConfigUI.open then
+            core.DrawFriConfigUI()
+        end
+        if MuAiGuide.FruMitigationUI.open and not MuAiGuide.IsHealer(Player.job) then
+            core.DrawFruMitigationUI()
+        end
     end
-    if MuAiGuide.UI.open then
-        core.DrawMainUI()
-    end
-    if MuAiGuide.FruConfigUI.open then
-        core.DrawFriConfigUI()
-    end
-    if MuAiGuide.FruMitigationUI.open and not MuAiGuide.IsHealer(Player.job) then
-        core.DrawFruMitigationUI()
-    end
-end
-
-RegisterEventHandler("Module.Initalize", core.Initialize, AddonName)
-RegisterEventHandler("Gameloop.Update", core.Update, AddonName)
-RegisterEventHandler("Gameloop.Draw", core.Draw, AddonName)
-
---------------------------------------------------- 更新逻辑 -------------------------------------------------
-local gitZipUrl = "https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/main"
-local tempPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
-local localPath = GetLuaModsPath()
-local zipFilePath = tempPath .. "repository.zip"
-local extractPath = tempPath .. "Extracted"
-
--- 执行系统命令的函数
-local function runCommand(cmd)
-    local handle = io.popen(cmd)
-    local result = handle:read("*a")
-    handle:close()
-    return result
-end
-
--- 创建目录
-local function createDirectory(path)
-    runCommand('mkdir "' .. path .. '"')
-end
-
--- 删除目录或文件
-local function deletePath(path)
-    runCommand('rmdir /s /q "' .. path .. '"')
-end
-
--- 下载文件
-local function downloadFile(url, destination)
-    d("[MuAiCore]正在下载文件...")
-    local cmd = 'curl -L -o "' .. destination .. '" "' .. url .. '"'
-    local result = runCommand(cmd)
-
-    -- 检查下载是否成功
-    if not io.open(destination, "rb") then
-        error("下载失败: " .. url)
-    end
-    d("[MuAiCore]文件下载完成: " .. destination)
-end
-
--- 解压文件
-local function extractZip(zipPath, destination)
-    d("[MuAiCore]正在解压文件...")
-    runCommand('powershell -Command "Expand-Archive -Path \'' .. zipPath .. '\' -DestinationPath \'' .. destination .. '\'"')
-end
-
--- 遍历目录并返回文件列表
-local function getFileList(path)
-    local cmd = 'dir /b /s "' .. path .. '"'
-    local output = runCommand(cmd)
-    local files = {}
-    for line in output:gmatch("[^\r\n]+") do
-        table.insert(files, line)
-    end
-    return files
-end
-
--- 复制文件
-local function copyFile(source, destination)
-    local destinationDir = destination:match("^(.*)\\")
-    runCommand('mkdir "' .. destinationDir .. '" 2>nul')
-    runCommand('copy /y "' .. source .. '" "' .. destination .. '"')
-end
-
-local function getFirstLevelFolder(path)
-    local cmd = 'dir /b /ad "' .. path .. '"'
-    local output = runCommand(cmd)
-    return output:match("[^\r\n]+") -- 获取第一行，即顶层文件夹名
-end
-
-local function getFileMD5(filePath)
-    local cmd = 'certutil -hashfile "' .. filePath .. '" MD5'
-    local output = runCommand(cmd)
-    return output:match("([a-fA-F0-9]+)") -- 提取 MD5 值
-end
-
--- 对比文件内容（MD5 对比）
-local function areFilesDifferent(file1, file2)
-    local md5File1 = getFileMD5(file1)
-    local md5File2 = getFileMD5(file2)
-    if not md5File1 or not md5File2 then
-        return true
-    end
-    return md5File1 ~= md5File2
 end
 
 core.ForceUpdate = function()
+    local gitZipUrl = "https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/main"
+    local tempPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
+    local localPath = GetLuaModsPath()
+    local zipFilePath = tempPath .. "repository.zip"
+    local extractPath = tempPath .. "Extracted"
+
+    -- 执行系统命令的函数
+    local function runCommand(cmd)
+        local handle = io.popen(cmd)
+        local result = handle:read("*a")
+        handle:close()
+        return result
+    end
+
+    -- 创建目录
+    local function createDirectory(path)
+        runCommand('mkdir "' .. path .. '"')
+    end
+
+    -- 删除目录或文件
+    local function deletePath(path)
+        runCommand('rmdir /s /q "' .. path .. '"')
+    end
+
+    -- 下载文件
+    local function downloadFile(url, destination)
+        d("[MuAiCore]正在下载文件...")
+        local cmd = 'curl -L -o "' .. destination .. '" "' .. url .. '"'
+        local result = runCommand(cmd)
+
+        -- 检查下载是否成功
+        if not io.open(destination, "rb") then
+            error("下载失败: " .. url)
+        end
+        d("[MuAiCore]文件下载完成: " .. destination)
+    end
+
+    -- 解压文件
+    local function extractZip(zipPath, destination)
+        d("[MuAiCore]正在解压文件...")
+        runCommand('powershell -Command "Expand-Archive -Path \'' .. zipPath .. '\' -DestinationPath \'' .. destination .. '\'"')
+    end
+
+    -- 遍历目录并返回文件列表
+    local function getFileList(path)
+        local cmd = 'dir /b /s "' .. path .. '"'
+        local output = runCommand(cmd)
+        local files = {}
+        for line in output:gmatch("[^\r\n]+") do
+            table.insert(files, line)
+        end
+        return files
+    end
+
+    -- 复制文件
+    local function copyFile(source, destination)
+        local destinationDir = destination:match("^(.*)\\")
+        runCommand('mkdir "' .. destinationDir .. '" 2>nul')
+        runCommand('copy /y "' .. source .. '" "' .. destination .. '"')
+    end
+
+    local function getFirstLevelFolder(path)
+        local cmd = 'dir /b /ad "' .. path .. '"'
+        local output = runCommand(cmd)
+        return output:match("[^\r\n]+") -- 获取第一行，即顶层文件夹名
+    end
+
+    local function getFileMD5(filePath)
+        local cmd = 'certutil -hashfile "' .. filePath .. '" MD5'
+        local output = runCommand(cmd)
+        return output:match("([a-fA-F0-9]+)") -- 提取 MD5 值
+    end
+
+    -- 对比文件内容（MD5 对比）
+    local function areFilesDifferent(file1, file2)
+        local md5File1 = getFileMD5(file1)
+        local md5File2 = getFileMD5(file2)
+        if not md5File1 or not md5File2 then
+            return true
+        end
+        return md5File1 ~= md5File2
+    end
+
     updateTime = nil
     updateNeedReLoad = false
     -- 清理并创建临时目录
@@ -249,4 +242,7 @@ core.ForceUpdate = function()
     updateNeedReLoad = true
 end
 
+RegisterEventHandler("Module.Initalize", core.Initialize, AddonName)
+RegisterEventHandler("Gameloop.Update", core.Update, AddonName)
+RegisterEventHandler("Gameloop.Draw", core.Draw, AddonName)
 d("[MuAiCore]加载成功!")

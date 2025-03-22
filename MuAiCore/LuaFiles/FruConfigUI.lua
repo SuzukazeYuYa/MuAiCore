@@ -53,7 +53,7 @@ local DrawFruConfigUI = function(M)
                         local NewFileName, NewFileNameChanged = GUI:InputText("##NewFileName", M.FruConfigUI.NewFileName, GUI.InputTextFlags_CharsNoBlank)
                         if NewFileNameChanged then
                             local fileName = NewFileName
-                            if M.ContainsIgnoreCase(M.FruConfigTable, fileName)
+                            if M.ContainsIgnoreCase(M.Config.FruCustomList, fileName)
                                     or string.lower(fileName) == "muaiguideconfig"
                                     or M.FruConfigUI.NewFileName ~= ""
                             then
@@ -69,8 +69,8 @@ local DrawFruConfigUI = function(M)
                             if not havaSame and M.FruConfigUI.NewFileName ~= nil and #M.FruConfigUI.NewFileName > 0 then
                                 M.SaveFileConfig(M.FruConfigUI.NewFileName, M.Config.FruCfg)
                                 M.FruConfigUI.NewMode = false
-                                if M.FruConfigUI.NewFileName ~= M.FruConfigTable[M.FruConfigTableIndex] then
-                                    table.insert(M.FruConfigTable, M.FruConfigUI.NewFileName)
+                                if M.FruConfigUI.NewFileName ~= M.Config.FruCustomList[M.Config.FruCustomListIndex] then
+                                    table.insert(M.Config.FruCustomList, M.FruConfigUI.NewFileName)
                                 end
                             else
                                 M.Info("已存在该名称文件或者名称不合法,无法创建!")
@@ -79,18 +79,18 @@ local DrawFruConfigUI = function(M)
                         GUI:SameLine()
                         GUI:Button("取消", 100, 20)
                         if GUI:IsItemClicked(0) then
-                            M.FruConfigUI.NewFileName = M.FruConfigTable[M.FruConfigTableIndex]
+                            M.FruConfigUI.NewFileName = M.Config.FruCustomList[M.Config.FruCustomListIndex]
                             M.FruConfigUI.NewMode = false
                         end
                     else
                         GUI:PushItemWidth(300)
-                        local configIndex, configIndexChange = GUI:Combo("##configIndex", M.FruConfigTableIndex, M.FruConfigTable, 4)
+                        local configIndex, configIndexChange = GUI:Combo("##configIndex", M.Config.FruCustomListIndex, M.Config.FruCustomList, 4)
                         if configIndexChange then
-                            M.FruConfigTableIndex = configIndex
-                            M.FruConfigUI.NewFileName = M.FruConfigTable[M.FruConfigTableIndex]
+                            M.Config.FruCustomListIndex = configIndex
+                            M.FruConfigUI.NewFileName = M.Config.FruCustomList[M.Config.FruCustomListIndex]
                         end
                         GUI:PopItemWidth()
-                        if M.FruConfigTableIndex == 1 then
+                        if M.Config.FruCustomListIndex == 1 then
                             GUI:Button("新建配置", 90, 20)
                             if GUI:IsItemClicked(0) then
                                 M.FruConfigUI.NewFileName = ""
@@ -99,8 +99,9 @@ local DrawFruConfigUI = function(M)
                         else
                             GUI:Button("加载此配置", 90, 20)
                             if GUI:IsItemClicked(0) then
-                                local fileName = M.FruConfigTable[M.FruConfigTableIndex]
-                                M.Config.FruCfg = M.LoadFileConfig(fileName)
+                                local fileName = M.Config.FruCustomList[M.Config.FruCustomListIndex]
+                                local defCfg = M.CreateFruDefaultCfg()
+                                M.Config.FruCfg = M.LoadFileConfig(M.Config.FruGuidePath, fileName, defCfg)
                             end
                             GUI:SameLine()
                             GUI:Button("新建配置", 90, 20)
@@ -111,7 +112,7 @@ local DrawFruConfigUI = function(M)
                             GUI:SameLine()
                             GUI:Button("保存到此配置", 100, 20)
                             if GUI:IsItemClicked(0) then
-                                M.SaveFileConfig(M.FruConfigUI.NewFileName, M.Config.FruCfg)
+                                M.SaveFileConfig(M.Config.FruGuidePath , M.FruConfigUI.NewFileName, M.Config.FruCfg)
                             end
                         end
                     end
@@ -714,7 +715,7 @@ local DrawFruConfigUI = function(M)
                 if GUI:TreeNode("2.挡枪：") then
                     M.AddLabel("第1挡：", true)
                     GUI:PushItemWidth(50)
-                    local drawWinPolarizing1, drawWinPolarizing1Changed = GUI:InputText("##drawWinPolarizing1", M.StringJoin( M.Config.FruCfg.drawWinPolarizingOrder[1], ","), GUI.InputTextFlags_CharsNoBlank)
+                    local drawWinPolarizing1, drawWinPolarizing1Changed = GUI:InputText("##drawWinPolarizing1", M.StringJoin(M.Config.FruCfg.drawWinPolarizingOrder[1], ","), GUI.InputTextFlags_CharsNoBlank)
                     if drawWinPolarizing1Changed then
                         M.Config.FruCfg.drawWinPolarizingOrder[1] = M.StringSplit(drawWinPolarizing1, ",")
                     end
@@ -722,14 +723,14 @@ local DrawFruConfigUI = function(M)
                     GUI:SameLine(0, 50)
                     M.AddLabel("第2挡：", true)
                     GUI:PushItemWidth(50)
-                    local drawWinPolarizing2, drawWinPolarizing2Changed = GUI:InputText("##drawWinPolarizing2", M.StringJoin( M.Config.FruCfg.drawWinPolarizingOrder[2], ","), GUI.InputTextFlags_CharsNoBlank)
+                    local drawWinPolarizing2, drawWinPolarizing2Changed = GUI:InputText("##drawWinPolarizing2", M.StringJoin(M.Config.FruCfg.drawWinPolarizingOrder[2], ","), GUI.InputTextFlags_CharsNoBlank)
                     if drawWinPolarizing2Changed then
                         M.Config.FruCfg.drawWinPolarizingOrder[2] = M.StringSplit(drawWinPolarizing2, ",")
                     end
                     GUI:PopItemWidth()
                     M.AddLabel("第3挡：", true)
                     GUI:PushItemWidth(50)
-                    local drawWinPolarizing3, drawWinPolarizing3Changed = GUI:InputText("##drawWinPolarizing3", M.StringJoin( M.Config.FruCfg.drawWinPolarizingOrder[3], ","), GUI.InputTextFlags_CharsNoBlank)
+                    local drawWinPolarizing3, drawWinPolarizing3Changed = GUI:InputText("##drawWinPolarizing3", M.StringJoin(M.Config.FruCfg.drawWinPolarizingOrder[3], ","), GUI.InputTextFlags_CharsNoBlank)
                     if drawWinPolarizing3Changed then
                         M.Config.FruCfg.drawWinPolarizingOrder[3] = M.StringSplit(drawWinPolarizing3, ",")
                     end
@@ -737,12 +738,12 @@ local DrawFruConfigUI = function(M)
                     GUI:PopItemWidth()
                     M.AddLabel("第4挡：", true)
                     GUI:PushItemWidth(50)
-                    local drawWinPolarizing4, drawWinPolarizing4Changed = GUI:InputText("##drawWinPolarizing4", M.StringJoin( M.Config.FruCfg.drawWinPolarizingOrder[4], ","), GUI.InputTextFlags_CharsNoBlank)
+                    local drawWinPolarizing4, drawWinPolarizing4Changed = GUI:InputText("##drawWinPolarizing4", M.StringJoin(M.Config.FruCfg.drawWinPolarizingOrder[4], ","), GUI.InputTextFlags_CharsNoBlank)
                     if drawWinPolarizing4Changed then
                         M.Config.FruCfg.drawWinPolarizingOrder[4] = M.StringSplit(drawWinPolarizing4, ",")
                     end
                     GUI:PopItemWidth()
-                    
+
                     GUI:TreePop()
                 end
                 GUI:Separator()
@@ -773,7 +774,7 @@ local DrawFruConfigUI = function(M)
                 GUI:Text("各大挂群群友、DC群友")
             end
         end
-        M.SaveConfig()
+        M.SaveConfig(M.Config.FruGuidePath, M.Config.FruGuideFile, "FruCfg")
         GUI:SetWindowSize(350, 0)
         GUI:End()
     end
