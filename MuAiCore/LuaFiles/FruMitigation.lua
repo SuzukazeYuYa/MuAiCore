@@ -57,7 +57,23 @@
         [25] = { "混乱", },
         [35] = { "混乱", "抗死" },
     }
-    local LoadDefault = function()
+    local createTankDef = function()
+        local table = {
+            P1_Death1 = 1,
+            P1_Death2 = 1,
+            P2_Open = 1,
+            P3_BlackRing = 1,
+            P3_DarkestDance = 1,
+            P4_DarkestDance = 1,
+            P4_AkhMorn1 = 1,
+            P4_AkhMorn2 = 1,
+            P5_Death1 = 1,
+            P5_Death2 = 1,
+        }
+        return table
+    end
+
+    M.FruMitigation.LoadDefault = function()
         local ConfigValue = {
             --- P1
             SinsMite = { p = 1, Target = true, Field = true },
@@ -92,28 +108,14 @@
             FulgentBlade3 = { p = 5, Target = true, Field = false },
             AkhMorn3 = { p = 5, Target = false, Field = false },
         }
+        if M.IsTank(Player.job) then
+            ConfigValue.Tank = createTankDef()
+        end
         return ConfigValue
     end
-    local createTankDef = function()
-        local table = {
-            P1_Death1 = 1,
-            P1_Death2 = 1,
-            P2_Open = 1,
-            P3_BlackRing = 1,
-            P3_DarkestDance = 1,
-            P4_DarkestDance = 1,
-            P4_AkhMorn1 = 1,
-            P4_AkhMorn2 = 1,
-            P5_Death1 = 1,
-            P5_Death2 = 1,
-        }
-        return table
-    end
+    
     M.FruMitigation.ChangeJob = function()
-        local defConfig = LoadDefault()
-        if M.IsTank(Player.job) then
-            defConfig.Tank = createTankDef()
-        end
+        local defConfig = M.FruMitigation.LoadDefault()
         M.Config.FruMitigation = M.LoadConfig(M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job), M.Config.FruMitigationFile, defConfig)
         M.Config.FruMitigationPrevious = table.deepcopy(M.Config.FruMitigation)
         M.Config.FruMitigationCustomList = M.LoadFileList(M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job), { M.Config.FruMitigationFile })

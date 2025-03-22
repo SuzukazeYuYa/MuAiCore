@@ -46,7 +46,7 @@ local DrawUI = function(M)
             return
         end
         GUI:SetNextWindowSize(300, 0, GUI.SetCond_Appearing)
-        GUI:SetNextWindowPos(M.FruMitigationUI.x, M.FruMitigationUI.y, GUI.SetCond_Appearing)
+        GUI:SetNextWindowPos(M.FruConfigUI.x, M.FruConfigUI.y, GUI.SetCond_Appearing)
         M.FruMitigationUI.visible, M.FruMitigationUI.open = GUI:Begin("Fru Mitigation Setting", M.FruMitigationUI.open)
         if M.FruMitigationUI.visible then
             if M.IsTank(Player.job) then
@@ -283,7 +283,6 @@ local DrawUI = function(M)
                         local path = M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job)
                         local fileName = M.Config.FruMitigationCustomList[M.Config.FruMitigationCustomListIndex]
                         local curConfig = M.FruMitigation.LoadDefault()
-                        d(fileName)
                         M.Config.FruMitigation = M.LoadFileConfig(path, fileName, curConfig)
                     end
                     GUI:SameLine()
