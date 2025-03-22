@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 177
+M.VERSION = 178
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -29,7 +29,7 @@ M.Info = function(msg, ttsOn)
     end
     local info = "/e [信息]" .. msg
     SendTextCommand(info)
-    if ttsOn and M.Config.TTS == true then
+    if ttsOn and M.Config.Main.TTS == true then
         TensorCore.addAlertText(0, msg, 1, 2, true)
     end
 end
