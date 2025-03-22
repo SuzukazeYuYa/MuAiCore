@@ -56,7 +56,7 @@ local DrawMainUI = function(M)
             GUI:SameLine()
             GUI:Button("恢复默认设置")
             if GUI:IsItemClicked(0) then
-                M.Config.Main = M.CreateDefMainCfg
+                M.Config.Main = M.CreateDefMainCfg()
             end
         end
 
