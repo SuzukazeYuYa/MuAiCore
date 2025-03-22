@@ -11,6 +11,7 @@
 <br>$${\color{red}如果你使用了老版本，全局中不要再继承MuAiGuideGeneral}$$
 <br>4.之前欠考虑没有添加文件夹，导致部分用户觉得Timeline较为混乱，所以新版将FRU和TOP的TIMELine文件放到了\Minionapp\Bots\FFXIVMinion64\LuaMods\TensorReactions\TimelineReactions\MuAi
 <br>5.老用户请在安装后，删除老版本的MuAiGuideGeneral、MuAiGuideFru、MuAiGuideTop、\GeneralReactions\MuAiGuideData文件夹等内容，并删除MuAiGuideFru继承再重新添加TimeLine继承 MuAi\MuAiGuideFru(绝伊甸)  MuAi\MuAiGuideTop(绝欧) 
+<br>$${\color{red}6.删除anyone中添加的订阅}$$
 # 更新
 由于已经改为插件形式，所以不能再Anyone进行更新，这意味着不在支持自动更新，所以现在给出更新的替代方案
 <br>1.纯覆盖式重装，下载本仓库内容覆盖即可。
