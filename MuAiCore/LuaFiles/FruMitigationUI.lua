@@ -64,9 +64,10 @@ local DrawUI = function(M)
                     end
                 end
                 if GUI:CollapsingHeader("2.坦克死刑") then
-                    local table2 = { "自己全减", "自己无敌" }
-                    local table3 = { "自己无敌", "搭档无敌" }
+                    local table2 = { "自己减伤", "自己无敌" }
+                    local table3 = { "自己减伤", "搭档无敌" }
                     local table4 = { "自己减伤", "自己无敌", "搭档减伤", "搭档无敌" }
+                    local table5 = { "自己减伤", "自己无敌", "搭档无敌" }
                     local table6 = { "自己减伤", "搭档减伤", "不单吃" }
                     GUI:BulletText("P1." .. titles[1])
                     GUI:Separator()
@@ -146,7 +147,7 @@ local DrawUI = function(M)
                     GUI:BulletText("暗夜舞蹈:")
                     GUI:NextColumn()
                     GUI:PushItemWidth(100)
-                    local P4_DarkestDance, P4_DarkestDanceChange = GUI:Combo("##P4_DarkestDance", M.Config.FruMitigation.Tank.P4_DarkestDance, table4, 4)
+                    local P4_DarkestDance, P4_DarkestDanceChange = GUI:Combo("##P4_DarkestDance", M.Config.FruMitigation.Tank.P4_DarkestDance, table5, 4)
                     if P4_DarkestDanceChange then
                         M.Config.FruMitigation.Tank.P4_DarkestDance = P4_DarkestDance
                     end
