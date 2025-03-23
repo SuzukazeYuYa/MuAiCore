@@ -86,7 +86,6 @@
             CrystallizeTimeBuffType = 1,
             --- 时间结晶处理方式：1:固定吃，2:标点，3:自动摇号
             CrystallizeTimeType = 3,
-            CrystallizeTimeActType = 1,
             --- 时间结晶击退处理方式：1 Y字， 2：角落
             CrystallizeTimeKnockBack = 2,
             CrystallizeTimeKnockCType = 2,
@@ -222,7 +221,6 @@
             CrystallizeTimeBuffType = 2,
             --- 时间结晶处理方式：1:固定吃，2:标点，3:自动摇号
             CrystallizeTimeType = 3,
-            CrystallizeTimeActType = 1,
             --- 时间结晶击退处理方式：1 Y字， 2：角落
             CrystallizeTimeKnockBack = 1,
             CrystallizeTimeKnockCType = 1,
@@ -361,7 +359,6 @@
             --- 时间结晶处理方式：1:固定吃，2:标点，3:自动摇号
             CrystallizeTimeType = 2,
 
-            CrystallizeTimeActType = 2,
             --- 时间结晶击退处理方式：1 Y字， 2：角落
             CrystallizeTimeKnockBack = 2,
             

@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 179
+M.VERSION = 180
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -280,8 +280,6 @@ M.CreateFruDefaultCfg = function()
         CrystallizeTimeBuffType = 1,
         --- 时间结晶处理方式：1:固定吃，2:标点，3:自动摇号
         CrystallizeTimeType = 3,
-        --- 科技类型
-        CrystallizeTimeActType = 1,
         --- 时间结晶击退处理方式：1 Y字， 2：角落
         CrystallizeTimeKnockBack = 1,
         --- 标点类型
@@ -469,8 +467,8 @@ M.InitConfig = function()
         M.Config.Main = M.LoadConfig(M.Config.MainPath,  M.Config.MainFile, defMainCfg)
         M.Config.MainPrevious = table.deepcopy(M.Config.Main)
         --- 读取绝伊甸存档
-        local defFruCfg = M.CreateFruDefaultCfg(M.Config.FruGuidePath)
-        M.Config.FruCfg = M.LoadConfig(M.Config.MainPath,  M.Config.FruGuideFile, defFruCfg)
+        local defFruCfg = M.CreateFruDefaultCfg()
+        M.Config.FruCfg = M.LoadConfig(M.Config.FruGuidePath,  M.Config.FruGuideFile, defFruCfg)
         M.Config.FruCfgPrevious = table.deepcopy(M.Config.FruCfg)
     end
     M.Config.FruCustomList = M.LoadFileList(M.Config.FruGuidePath, { "GuideConfig.lua" })
@@ -500,6 +498,29 @@ local JobName = {
 }
 
 M.JobPosName = { "MT", "ST", "H1", "H2", "D1", "D2", "D3", "D4" }
+
+--- 标记
+M.HeadMark = {
+    Attack1 = 1, Attack2 = 2, Attack3 = 3, Attack4 = 4, Attack5 = 5, 
+    Attack6 = 15, Attack7 = 16, Attack8 = 17,
+    Bind1 = 6, Bind2 = 7, Bind3 = 8,
+    Stop1 = 9, Stop2 = 10,
+    Square = 11, Circle = 12, Cross = 13, Triangle = 14,
+}
+
+M.GetHeadMarkCN = function(mark)
+    local markType
+    if mark < 5 or mark >= 15 and mark <= 17 then
+        markType = "攻击" .. mark
+    elseif mark < 9 then
+        markType = "锁链" .. mark
+    elseif mark < 11 then
+        markType = "禁止" .. mark
+    else
+        markType = "其他"
+    end
+    return markType
+end
 
 --- 当前职业ID是否是坦克
 M.IsTank = function(job)

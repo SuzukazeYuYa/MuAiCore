@@ -534,16 +534,12 @@ local DrawFruConfigUI = function(M)
                         M.Config.FruCfg.CrystallizeTimeType = CrystallizeTimeType
                     end
                     if M.Config.FruCfg.CrystallizeTimeType == 2 then
-                        GUI:TextColored(255, 0, 0, 1, "※目前科技种类繁杂，为做到兼容适配，你要问下")
-                        GUI:TextColored(255, 0, 0, 1, "开那个人锁链和禁止代表的意义。当然也可以选择")
-                        GUI:TextColored(255, 0, 0, 1, "【无视禁止和锁链】，并确认好【优先级】！")
-                        M.AddLabel("科技类型：", false, 162)
-                        GUI:PushItemWidth(140)
-                        local CrystallizeTimeActType, CrystallizeTimeActTypeCG = GUI:Combo("##CrystallizeTimeActType", M.Config.FruCfg.CrystallizeTimeActType, { "红冰锁链|红风禁止", "红冰禁止|红风锁链", "无视锁链和禁止" }, 4)
-                        if CrystallizeTimeActTypeCG then
-                            M.Config.FruCfg.CrystallizeTimeActType = CrystallizeTimeActType
-                        end
-                        GUI:PopItemWidth()
+                        GUI:TextColored(1, 1, 0, 1, "※科技算法已更新，兼容所有科技，无需额外设置。")
+                        GUI:TextColored(1, 1, 0, 1, "1.仅攻击1-4，仍需保证优先级正确。")
+                        GUI:TextColored(1, 1, 0, 1, "2.三种标记，会先看BUFF，再1左2右，不必优先级正确。")
+                    elseif M.Config.FruCfg.CrystallizeTimeType == 3 then
+                        GUI:TextColored(1, 1, 0, 1, "※蓝BUFF自动给自己标攻击1~4，根据标记指路。")
+                        GUI:TextColored(1, 1, 0, 1, "※红BUFF根据优先级分左右，请保证优先级正确！")
                     end
                     GUI:PopItemWidth()
                     GUI:Text("--------------------------------------")

@@ -27,10 +27,10 @@
         --- P5
         { key = "FulgentBlade1", p = 5, name = "光尘之剑1", macroInfo = "1地火" },
         { key = "AkhMorn1", p = 5, name = "死亡轮回1", macroInfo = "1分摊" },
-        { key = "Polarizing1", p = 5, name = "星辰之剑1", macroInfo = "1挡枪" },
+        { key = "Polarizing1", p = 5, name = "星灵之剑1", macroInfo = "1挡枪" },
         { key = "FulgentBlade2", p = 5, name = "光尘之剑2", macroInfo = "2地火" },
         { key = "AkhMorn2", p = 5, name = "死亡轮回2", macroInfo = "2分摊" },
-        { key = "Polarizing2", p = 5, name = "星辰之剑2", macroInfo = "2挡枪" },
+        { key = "Polarizing2", p = 5, name = "星灵之剑2", macroInfo = "2挡枪" },
         { key = "FulgentBlade3", p = 5, name = "光尘之剑3", macroInfo = "3地火" },
         { key = "AkhMorn3", p = 5, name = "死亡轮回3", macroInfo = "3分摊" },
     }
