@@ -674,8 +674,8 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "return MuAiGuide.Config.FruMitigation.ShockwavePulsar.Target == true",
-							name = "ShockwavePulsar.Target",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.ShellCrusher.Field == true",
+							name = "ShellCrusher.Field",
 							uuid = "4bc5708a-e048-c66a-bea9-24a4e55f7fbb",
 							version = 2,
 						},
