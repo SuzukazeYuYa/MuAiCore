@@ -207,6 +207,7 @@ local DrawUI = function(M)
                 end
                 
             else
+                GUI:TextColored(1, 0, 0, 1, "※请勿盲目勾选，需要根据技能CD情况合理设置。")
                 local lastP = 0
                 for i = 1, #M.FruMitigation.AoeNames do
                     local curP = M.FruMitigation.AoeNames[i].p
