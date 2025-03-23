@@ -51,6 +51,7 @@ local DrawUI = function(M)
         if M.FruMitigationUI.visible then
             if M.IsTank(Player.job) then
                 if GUI:CollapsingHeader("1.团队减伤设置") then
+                    GUI:TextColored(1, 0, 0, 1, "※请勿盲目勾选，需要根据技能CD情况合理设置。")
                     local lastP = 0
                     for i = 1, #M.FruMitigation.AoeNames do
                         local curP = M.FruMitigation.AoeNames[i].p
@@ -65,7 +66,7 @@ local DrawUI = function(M)
                 end
                 if GUI:CollapsingHeader("2.坦克死刑") then
                     local table2 = { "自己减伤", "自己无敌" }
-                    local table3 = { "自己减伤", "搭档无敌" }
+                    local table3 = { "自己无敌", "搭档无敌" }
                     local table4 = { "自己减伤", "自己无敌", "搭档减伤", "搭档无敌" }
                     local table5 = { "自己减伤", "自己无敌", "搭档无敌" }
                     local table6 = { "自己减伤", "搭档减伤", "不单吃" }
@@ -204,6 +205,7 @@ local DrawUI = function(M)
                     end
                     GUI:Columns(1)
                 end
+                
             else
                 local lastP = 0
                 for i = 1, #M.FruMitigation.AoeNames do
@@ -216,6 +218,20 @@ local DrawUI = function(M)
                     end
                     AddCheckBox(i, M)
                 end
+            end
+            if GUI:CollapsingHeader("快捷减伤开发人员") then
+                GUI:BulletText("构思&方案：")
+                GUI:SameLine()
+                GUI:Text("Jackpot、CatZ")
+                GUI:BulletText("IU：")
+                GUI:SameLine()
+                GUI:Text("MuAi")
+                GUI:BulletText("坦克减伤：")
+                GUI:SameLine()
+                GUI:Text("Jackpot")
+                GUI:BulletText("DPS减伤：")
+                GUI:SameLine()
+                GUI:Text("MuAi")
             end
             GUI:Separator()
             GUI:BulletText("配置文件工具：")

@@ -49,8 +49,8 @@
         [41] = { "牵制" },
         --- Range
         [31] = { "扳手", "策动", },
-        [23] = { "行吟", "大地神", },
-        [38] = { "桑巴" },
+        [23] = { "大地神", "行吟", },
+        [38] = { nil, "桑巴" },
         --- Magic
         [27] = { "混乱" },
         [42] = { "混乱", "画盾" },
@@ -113,7 +113,7 @@
         end
         return ConfigValue
     end
-    
+
     M.FruMitigation.ChangeJob = function()
         local defConfig = M.FruMitigation.LoadDefault()
         M.Config.FruMitigation = M.LoadConfig(M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job), M.Config.FruMitigationFile, defConfig)
