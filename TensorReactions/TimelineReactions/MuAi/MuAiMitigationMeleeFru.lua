@@ -876,6 +876,7 @@ local tbl =
 							uuid = "3f434f17-a6c0-52cb-b4b6-905b8962a6a9",
 							version = 2.1,
 						},
+						inheritedIndex = 1,
 					},
 				},
 				conditions = 
