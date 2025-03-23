@@ -1956,44 +1956,6 @@ local tbl =
 			{
 				actions = 
 				{
-				},
-				conditions = 
-				{
-				},
-				enabled = false,
-				mechanicTime = 145.6,
-				name = "---------------",
-				timelineIndex = 35,
-				uuid = "fe78e2c1-768a-2343-a7bf-051d6b19ece9",
-				version = 2,
-			},
-			inheritedIndex = 1,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-				},
-				conditions = 
-				{
-				},
-				enabled = false,
-				mechanicTime = 145.6,
-				name = "--自己无敌吃--",
-				timelineIndex = 35,
-				uuid = "31d1016e-52e8-c7ec-a1ae-0635991cd6c8",
-				version = 2,
-			},
-			inheritedIndex = 2,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
 					
 					{
 						data = 
@@ -2020,7 +1982,7 @@ local tbl =
 				uuid = "a5bfa8fc-8d70-86c6-b6be-4e2ed559a191",
 				version = 2,
 			},
-			inheritedIndex = 5,
+			inheritedIndex = 1,
 		},
 		
 		{
@@ -2071,7 +2033,45 @@ local tbl =
 				uuid = "e9bea946-3705-a497-9696-11fd1c124467",
 				version = 2,
 			},
-			inheritedIndex = 6,
+			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				enabled = false,
+				mechanicTime = 145.6,
+				name = "---------------",
+				timelineIndex = 35,
+				uuid = "fe78e2c1-768a-2343-a7bf-051d6b19ece9",
+				version = 2,
+			},
+			inheritedIndex = 3,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				enabled = false,
+				mechanicTime = 145.6,
+				name = "--自己无敌吃--",
+				timelineIndex = 35,
+				uuid = "31d1016e-52e8-c7ec-a1ae-0635991cd6c8",
+				version = 2,
+			},
+			inheritedIndex = 4,
 		},
 		
 		{
@@ -2091,6 +2091,11 @@ local tbl =
 								
 								{
 									"4654df9b-ce44-60cb-bd46-54492328a1e9",
+									true,
+								},
+								
+								{
+									"524a71ba-2e64-19b6-ab4c-8a570e19bf04",
 									true,
 								},
 							},
@@ -2116,6 +2121,18 @@ local tbl =
 							version = 2,
 						},
 					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Tank.P1_Death2 == 2 or MuAiGuide.Config.FruMitigation.Tank.P1_Death2 == 3 or MuAiGuide.Config.FruMitigation.Tank.P1_Death2 == 4",
+							name = "p1-2非全减",
+							uuid = "524a71ba-2e64-19b6-ab4c-8a570e19bf04",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
 				},
 				mechanicTime = 145.6,
 				name = "【DRK】暗影墙",
@@ -2125,7 +2142,7 @@ local tbl =
 				uuid = "5917a16d-cb8c-e2d4-bddf-d37f91614f16",
 				version = 2,
 			},
-			inheritedIndex = 7,
+			inheritedIndex = 5,
 		},
 		
 		{
@@ -2469,7 +2486,7 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = " return MuAiGuide.Config.FruMitigation.Tank.P2_Open == 1\n",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Tank.P2_Open == 1\n",
 							name = "p2无敌",
 							uuid = "5350cf08-979a-90ac-b637-3ae4ccd095e4",
 							version = 2,
@@ -5504,6 +5521,25 @@ local tbl =
 			{
 				actions = 
 				{
+				},
+				conditions = 
+				{
+				},
+				enabled = false,
+				mechanicTime = 760.4,
+				name = "--自己无敌吃--",
+				timelineIndex = 172,
+				uuid = "b4f99772-0122-0c88-812c-a17b22f720cd",
+				version = 2,
+			},
+			inheritedIndex = 9,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
 					
 					{
 						data = 
@@ -5563,25 +5599,6 @@ local tbl =
 				timelineIndex = 172,
 				timerStartOffset = -5,
 				uuid = "b991feb3-ac4a-0609-b901-726d0d1b2af6",
-				version = 2,
-			},
-			inheritedIndex = 9,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-				},
-				conditions = 
-				{
-				},
-				enabled = false,
-				mechanicTime = 760.4,
-				name = "--自己无敌吃--",
-				timelineIndex = 172,
-				uuid = "b4f99772-0122-0c88-812c-a17b22f720cd",
 				version = 2,
 			},
 			inheritedIndex = 10,
@@ -5652,137 +5669,6 @@ local tbl =
 			{
 				actions = 
 				{
-				},
-				conditions = 
-				{
-				},
-				enabled = false,
-				mechanicTime = 773.5,
-				name = "--搭档减伤吃--",
-				timelineIndex = 175,
-				uuid = "968b844d-ea64-6561-80eb-c48d5e08aa31",
-				version = 2,
-			},
-			inheritedIndex = 3,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-				},
-				conditions = 
-				{
-				},
-				enabled = false,
-				mechanicTime = 773.5,
-				name = "---------------",
-				timelineIndex = 175,
-				uuid = "fc1e4300-2a60-564f-9698-ba173bf67098",
-				version = 2,
-			},
-			inheritedIndex = 4,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							actionID = 7533,
-							atomicPriority = true,
-							conditions = 
-							{
-								
-								{
-									"2411cfc1-3dbf-b4ff-82d2-f9809ecef3f6",
-									true,
-								},
-								
-								{
-									"9e2b6d3f-96aa-0f2d-b35b-8b494302f297",
-									true,
-								},
-							},
-							endIfUsed = true,
-							gVar = "ACR_RikuDRK3_Hotbar_Provoke",
-							targetContentID = 9832,
-							targetName = "9832",
-							targetType = "ContentID",
-							uuid = "046e6a61-25ce-5483-9dd1-393356f54509",
-							variableTogglesType = 2,
-							version = 2.1,
-						},
-						inheritedIndex = 1,
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							buffID = 743,
-							category = "Self",
-							name = "深恶痛绝",
-							uuid = "2411cfc1-3dbf-b4ff-82d2-f9809ecef3f6",
-							version = 2,
-						},
-						inheritedIndex = 2,
-					},
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "return _G[\"ACR_\"..gACRSelectedProfiles[TensorCore.mGetPlayer().job]..\"_TankStance\"] == \"ot\"",
-							name = "isOT",
-							uuid = "9e2b6d3f-96aa-0f2d-b35b-8b494302f297",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-				},
-				mechanicTime = 773.5,
-				name = "  挑衅",
-				timeRange = true,
-				timelineIndex = 175,
-				timerStartOffset = -5,
-				uuid = "d71b7b07-3a9f-fde9-9230-e440e9310d66",
-				version = 2,
-			},
-			inheritedIndex = 15,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-				},
-				conditions = 
-				{
-				},
-				enabled = false,
-				mechanicTime = 773.5,
-				name = "---------------",
-				timelineIndex = 175,
-				uuid = "bc2b8f00-f3b4-c4ba-99c8-4ef0c547b66e",
-				version = 2,
-			},
-			inheritedIndex = 6,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
 					
 					{
 						data = 
@@ -5843,7 +5729,7 @@ local tbl =
 				uuid = "3870dadf-93b5-6b36-ab95-a930b44fbd92",
 				version = 2,
 			},
-			inheritedIndex = 7,
+			inheritedIndex = 3,
 		},
 		
 		{
@@ -5914,7 +5800,7 @@ local tbl =
 				uuid = "82dc5291-67a6-29b6-8460-749b88a607f9",
 				version = 2,
 			},
-			inheritedIndex = 8,
+			inheritedIndex = 4,
 		},
 		
 		{
@@ -6001,7 +5887,45 @@ local tbl =
 				uuid = "7af363f3-af9e-f5f2-b8f2-beac6dbafe12",
 				version = 2,
 			},
-			inheritedIndex = 9,
+			inheritedIndex = 5,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				enabled = false,
+				mechanicTime = 773.5,
+				name = "---------------",
+				timelineIndex = 175,
+				uuid = "fc1e4300-2a60-564f-9698-ba173bf67098",
+				version = 2,
+			},
+			inheritedIndex = 6,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				enabled = false,
+				mechanicTime = 773.5,
+				name = "--搭档减伤吃--",
+				timelineIndex = 175,
+				uuid = "968b844d-ea64-6561-80eb-c48d5e08aa31",
+				version = 2,
+			},
+			inheritedIndex = 7,
 		},
 		
 		{
@@ -6088,7 +6012,26 @@ local tbl =
 				uuid = "81febb46-9c5b-460b-a64b-714aea6b5869",
 				version = 2,
 			},
-			inheritedIndex = 10,
+			inheritedIndex = 8,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				enabled = false,
+				mechanicTime = 773.5,
+				name = "---------------",
+				timelineIndex = 175,
+				uuid = "bc2b8f00-f3b4-c4ba-99c8-4ef0c547b66e",
+				version = 2,
+			},
+			inheritedIndex = 9,
 		},
 		
 		{
@@ -6164,9 +6107,168 @@ local tbl =
 			},
 			inheritedIndex = 15,
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7533,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"2411cfc1-3dbf-b4ff-82d2-f9809ecef3f6",
+									true,
+								},
+								
+								{
+									"9e2b6d3f-96aa-0f2d-b35b-8b494302f297",
+									true,
+								},
+							},
+							endIfUsed = true,
+							gVar = "ACR_RikuDRK3_Hotbar_Provoke",
+							targetContentID = 9832,
+							targetName = "9832",
+							targetType = "ContentID",
+							uuid = "046e6a61-25ce-5483-9dd1-393356f54509",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							buffID = 743,
+							category = "Self",
+							name = "深恶痛绝",
+							uuid = "2411cfc1-3dbf-b4ff-82d2-f9809ecef3f6",
+							version = 2,
+						},
+						inheritedIndex = 2,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return _G[\"ACR_\"..gACRSelectedProfiles[TensorCore.mGetPlayer().job]..\"_TankStance\"] == \"ot\"",
+							name = "isOT",
+							uuid = "9e2b6d3f-96aa-0f2d-b35b-8b494302f297",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+				},
+				mechanicTime = 773.5,
+				name = "  挑衅",
+				timeRange = true,
+				timelineIndex = 175,
+				timerStartOffset = -5,
+				uuid = "d71b7b07-3a9f-fde9-9230-e440e9310d66",
+				version = 2,
+			},
+			inheritedIndex = 11,
+		},
 	},
 	[198] = 
 	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							endIfUsed = true,
+							gVar = "ACR_RikuDRK3_Tankbar_OblationSelf",
+							uuid = "829b27b1-9a80-12c7-907a-6d825971e4f8",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 845.7,
+				name = "【DRK】献奉",
+				timeRange = true,
+				timelineIndex = 198,
+				timerOffset = -7,
+				timerStartOffset = -9,
+				uuid = "ed552dca-b23a-31df-9322-4f6e1ae35372",
+				version = 2,
+			},
+			inheritedIndex = 1,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"4654df9b-ce44-60cb-bd46-54492328a1e9",
+									true,
+								},
+							},
+							gVar = "ACR_RikuDRK3_Tankbar_ShadowedVigil",
+							uuid = "01a644ff-a749-e4ec-a6f4-e57ab482dc1c",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3636,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "4654df9b-ce44-60cb-bd46-54492328a1e9",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 845.7,
+				name = "【DRK】暗影墙",
+				timeRange = true,
+				timelineIndex = 198,
+				timerStartOffset = -14,
+				uuid = "a8f3570f-7fa9-c63f-8735-39a491a6ebc1",
+				version = 2,
+			},
+			inheritedIndex = 2,
+		},
 		
 		{
 			data = 
@@ -6233,41 +6335,7 @@ local tbl =
 				uuid = "42e31c97-bd21-6ffe-8c28-46dd5481e448",
 				version = 2,
 			},
-			inheritedIndex = 7,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							aType = "ACR",
-							endIfUsed = true,
-							gVar = "ACR_RikuDRK3_Tankbar_OblationSelf",
-							uuid = "829b27b1-9a80-12c7-907a-6d825971e4f8",
-							variableTogglesType = 3,
-							version = 2.1,
-						},
-						inheritedIndex = 1,
-					},
-				},
-				conditions = 
-				{
-				},
-				mechanicTime = 845.7,
-				name = "【DRK】献奉",
-				timeRange = true,
-				timelineIndex = 198,
-				timerOffset = -7,
-				timerStartOffset = -9,
-				uuid = "ed552dca-b23a-31df-9322-4f6e1ae35372",
-				version = 2,
-			},
-			inheritedIndex = 2,
+			inheritedIndex = 3,
 		},
 		
 		{
@@ -6334,59 +6402,8 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 198,
 				timerOffset = -5,
-				timerStartOffset = -5,
+				timerStartOffset = -8,
 				uuid = "51d5fd92-d0cf-b2c8-a377-621d4c75392b",
-				version = 2,
-			},
-			inheritedIndex = 8,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							aType = "ACR",
-							conditions = 
-							{
-								
-								{
-									"4654df9b-ce44-60cb-bd46-54492328a1e9",
-									true,
-								},
-							},
-							gVar = "ACR_RikuDRK3_Tankbar_ShadowedVigil",
-							uuid = "01a644ff-a749-e4ec-a6f4-e57ab482dc1c",
-							variableTogglesType = 3,
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							actionID = 3636,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							uuid = "4654df9b-ce44-60cb-bd46-54492328a1e9",
-							version = 2,
-						},
-					},
-				},
-				mechanicTime = 845.7,
-				name = "【DRK】暗影墙",
-				timeRange = true,
-				timelineIndex = 198,
-				timerStartOffset = -14,
-				uuid = "a8f3570f-7fa9-c63f-8735-39a491a6ebc1",
 				version = 2,
 			},
 			inheritedIndex = 4,
@@ -6438,37 +6455,67 @@ local tbl =
 			{
 				actions = 
 				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"60f82eab-d231-ccb5-ae30-728b5bfb2f64",
+									true,
+								},
+								
+								{
+									"e5fd62f9-481f-0b2d-a27d-1d29197b3789",
+									true,
+								},
+							},
+							gVar = "ACR_RikuDRK3_Tankbar_Rampart",
+							uuid = "5fcea86b-e3a3-02e0-b002-c36ff52d5a87",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
 				},
 				conditions = 
 				{
+					
+					{
+						data = 
+						{
+							actionID = 7531,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "60f82eab-d231-ccb5-ae30-728b5bfb2f64",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Tank.P4_AkhMorn2 == 1",
+							name = "p4",
+							uuid = "e5fd62f9-481f-0b2d-a27d-1d29197b3789",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
 				},
-				enabled = false,
 				mechanicTime = 854.9,
-				name = "--搭档减伤吃--",
+				name = "【DRK】铁壁",
+				timeRange = true,
 				timelineIndex = 202,
-				uuid = "5605171a-f497-fa33-8957-c48e9822003e",
+				timerStartOffset = -12,
+				uuid = "8d350fca-874a-9ded-8d21-b7ccf62be84d",
 				version = 2,
 			},
 			inheritedIndex = 3,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-				},
-				conditions = 
-				{
-				},
-				enabled = false,
-				mechanicTime = 854.9,
-				name = "---------------",
-				timelineIndex = 202,
-				uuid = "4ef5ae87-1003-63e6-91cd-d24f9c3f2c0b",
-				version = 2,
-			},
-			inheritedIndex = 4,
 		},
 		
 		{
@@ -6555,94 +6602,7 @@ local tbl =
 				uuid = "7f73f6ad-d317-50c3-aad8-f8b33054a537",
 				version = 2,
 			},
-			inheritedIndex = 5,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-				},
-				conditions = 
-				{
-				},
-				enabled = false,
-				mechanicTime = 854.9,
-				name = "---------------",
-				timelineIndex = 202,
-				uuid = "9aed0e96-7a48-c95e-a2b7-65fa75492c95",
-				version = 2,
-			},
-			inheritedIndex = 6,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							aType = "ACR",
-							conditions = 
-							{
-								
-								{
-									"60f82eab-d231-ccb5-ae30-728b5bfb2f64",
-									true,
-								},
-								
-								{
-									"e5fd62f9-481f-0b2d-a27d-1d29197b3789",
-									true,
-								},
-							},
-							gVar = "ACR_RikuDRK3_Tankbar_Rampart",
-							uuid = "5fcea86b-e3a3-02e0-b002-c36ff52d5a87",
-							variableTogglesType = 3,
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							actionID = 7531,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							uuid = "60f82eab-d231-ccb5-ae30-728b5bfb2f64",
-							version = 2,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "return MuAiGuide.Config.FruMitigation.Tank.P4_AkhMorn2 == 1",
-							name = "p4",
-							uuid = "e5fd62f9-481f-0b2d-a27d-1d29197b3789",
-							version = 2,
-						},
-						inheritedIndex = 1,
-					},
-				},
-				mechanicTime = 854.9,
-				name = "【DRK】铁壁",
-				timeRange = true,
-				timelineIndex = 202,
-				timerStartOffset = -12,
-				uuid = "8d350fca-874a-9ded-8d21-b7ccf62be84d",
-				version = 2,
-			},
-			inheritedIndex = 7,
+			inheritedIndex = 4,
 		},
 		
 		{
@@ -6711,6 +6671,63 @@ local tbl =
 				timerOffset = -5,
 				timerStartOffset = -5,
 				uuid = "b563e172-0bdb-d2d4-8189-ce6bfce3aa4a",
+				version = 2,
+			},
+			inheritedIndex = 5,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				enabled = false,
+				mechanicTime = 854.9,
+				name = "---------------",
+				timelineIndex = 202,
+				uuid = "9aed0e96-7a48-c95e-a2b7-65fa75492c95",
+				version = 2,
+			},
+			inheritedIndex = 6,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				enabled = false,
+				mechanicTime = 854.9,
+				name = "--搭档减伤吃--",
+				timelineIndex = 202,
+				uuid = "5605171a-f497-fa33-8957-c48e9822003e",
+				version = 2,
+			},
+			inheritedIndex = 7,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				enabled = false,
+				mechanicTime = 854.9,
+				name = "---------------",
+				timelineIndex = 202,
+				uuid = "4ef5ae87-1003-63e6-91cd-d24f9c3f2c0b",
 				version = 2,
 			},
 			inheritedIndex = 8,
@@ -7650,6 +7667,25 @@ local tbl =
 			{
 				actions = 
 				{
+				},
+				conditions = 
+				{
+				},
+				enabled = false,
+				mechanicTime = 1033.6,
+				name = "--自己无敌吃--",
+				timelineIndex = 222,
+				uuid = "8e0bbb77-6612-957d-b08d-e44e6f0f01ec",
+				version = 2,
+			},
+			inheritedIndex = 9,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
 					
 					{
 						data = 
@@ -7708,25 +7744,6 @@ local tbl =
 				timelineIndex = 222,
 				timerStartOffset = -8,
 				uuid = "f53647f4-83aa-34e0-90d2-4b1e55aa73f6",
-				version = 2,
-			},
-			inheritedIndex = 9,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-				},
-				conditions = 
-				{
-				},
-				enabled = false,
-				mechanicTime = 1033.6,
-				name = "--自己无敌吃--",
-				timelineIndex = 222,
-				uuid = "8e0bbb77-6612-957d-b08d-e44e6f0f01ec",
 				version = 2,
 			},
 			inheritedIndex = 10,

@@ -135,7 +135,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -177,6 +176,75 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+				},
+				mechanicTime = 24.2,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 7,
+				timerStartOffset = -14,
+				uuid = "ccd4b07b-06b2-cbad-9edc-fef7f46318f2",
+				version = 2,
+			},
 		},
 	},
 	[22] = 
@@ -315,7 +383,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -357,6 +424,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"45b5a263-1078-0c09-a0a3-484e600e9107",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.BurnishedGlory1.Field == true\n",
+							name = "光焰圆光1",
+							uuid = "45b5a263-1078-0c09-a0a3-484e600e9107",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 85.9,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 22,
+				timerStartOffset = -14,
+				uuid = "b521b43b-568a-ecbc-80d6-f8c804ca8312",
+				version = 2,
+			},
 		},
 	},
 	[29] = 
@@ -495,7 +648,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -520,7 +672,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return MuAiGuide.Config.FruMitigation.BurnishedGlory2.Field == true\n",
-							name = "光焰圆光1",
+							name = "光焰圆光2",
 							uuid = "31ab76f4-7187-621e-a662-ed4ce9c463e0",
 							version = 2,
 						},
@@ -537,6 +689,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"45e642b8-ea86-a5ac-b8ae-2c3e17b11633",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.BurnishedGlory2.Field == true\n",
+							name = "光焰圆光2",
+							uuid = "45e642b8-ea86-a5ac-b8ae-2c3e17b11633",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 121.1,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 29,
+				timerStartOffset = -7,
+				uuid = "2fe904be-996a-2e45-944a-3874672035c6",
+				version = 2,
+			},
 		},
 	},
 	[44] = 
@@ -675,7 +913,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -699,7 +936,7 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "return MuAiGuide.Config.FruMitigation.DiamondDust.Target == true",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DiamondDust.Field == true",
 							name = "钻石星尘",
 							uuid = "5445b3a1-a843-d27d-9994-c41c0d85fcab",
 							version = 2,
@@ -716,7 +953,93 @@ local tbl =
 				uuid = "70152a4a-af3f-b936-8bd8-f8394fa9959b",
 				version = 2,
 			},
-			inheritedIndex = 11,
+			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"902e6218-616f-c4ba-bf9f-cf77d14ff1c3",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DiamondDust.Field == true",
+							name = "钻石星尘",
+							uuid = "902e6218-616f-c4ba-bf9f-cf77d14ff1c3",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 235.3,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 44,
+				timerStartOffset = -14,
+				uuid = "e2918abe-3b27-ce66-9632-ec260c6933c3",
+				version = 2,
+			},
 		},
 	},
 	[57] = 
@@ -768,7 +1091,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -810,6 +1132,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"e7311729-96d4-eb5d-b5a2-fff96ff5ec9a",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.SinBound.Field == true",
+							name = "罪神圣",
+							uuid = "e7311729-96d4-eb5d-b5a2-fff96ff5ec9a",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 259.9,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 57,
+				timerStartOffset = -10,
+				uuid = "c449219e-80c3-a55e-a348-f8356a79ae8b",
+				version = 2,
+			},
 		},
 	},
 	[65] = 
@@ -893,7 +1301,7 @@ local tbl =
 					},
 				},
 				mechanicTime = 283.4,
-				name = "【DRK】暗黑布道",
+				name = "【TANK】雪仇",
 				timeRange = true,
 				timelineIndex = 65,
 				timerStartOffset = -14.5,
@@ -949,7 +1357,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -991,6 +1398,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"c18e702d-a50a-80b7-8b32-501fe59f2712",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HallowedRay.Field == true\n",
+							name = "神圣射线",
+							uuid = "c18e702d-a50a-80b7-8b32-501fe59f2712",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 283.4,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 65,
+				timerStartOffset = -14,
+				uuid = "df200670-7bf4-364b-8115-03b85faf33ab",
+				version = 2,
+			},
 		},
 	},
 	[80] = 
@@ -1129,7 +1622,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -1171,6 +1663,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"5f47df17-1f0b-1b44-9a09-12e3fd82f603",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.LightRampant.Field == true\n",
+							name = "光之失控",
+							uuid = "5f47df17-1f0b-1b44-9a09-12e3fd82f603",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 331.8,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 80,
+				timerStartOffset = -8,
+				uuid = "34566028-3eda-50fd-b492-5b1ba4574f46",
+				version = 2,
+			},
 		},
 	},
 	[95] = 
@@ -1309,7 +1887,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -1351,6 +1928,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"f1b1bdfc-b1f1-73fe-be94-dd76a24fecbc",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HouseOfLight.Field == true\n",
+							name = "光之海啸",
+							uuid = "f1b1bdfc-b1f1-73fe-be94-dd76a24fecbc",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 368.8,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 95,
+				timerStartOffset = -14,
+				uuid = "c90594e9-d459-fe15-9302-3376faddad66",
+				version = 2,
+			},
 		},
 	},
 	[100] = 
@@ -1489,7 +2152,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -1531,6 +2193,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"fcf77b20-face-8b32-94a6-fd507f3c9b3c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AbsoluteZero.Field == true\n",
+							name = "绝对零度",
+							uuid = "fcf77b20-face-8b32-94a6-fd507f3c9b3c",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 388.7,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 100,
+				timerStartOffset = -14,
+				uuid = "e3af70a5-8890-4e11-8432-37fa6dbb0c60",
+				version = 2,
+			},
 		},
 	},
 	[123] = 
@@ -1669,7 +2417,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -1711,6 +2458,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"accedc80-6959-8004-8469-7b7584a8f2b2",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Relativity.Field == true\n",
+							name = "时间压缩",
+							uuid = "accedc80-6959-8004-8469-7b7584a8f2b2",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 532.4,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 123,
+				timerStartOffset = -14,
+				uuid = "98e01c00-ded2-370a-969d-60e4420bc852",
+				version = 2,
+			},
 		},
 	},
 	[134] = 
@@ -1762,7 +2595,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -1804,6 +2636,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"e87ac20e-b2d7-9976-b786-8c1384952b4e",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.ShockwavePulsar.Field == true\n",
+							name = "罪熔毁",
+							uuid = "e87ac20e-b2d7-9976-b786-8c1384952b4e",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 569.3,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 134,
+				timerStartOffset = -14,
+				uuid = "1df63513-3e98-9f1e-800d-9357be7ced6b",
+				version = 2,
+			},
 		},
 	},
 	[139] = 
@@ -1942,11 +2860,10 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
-						inheritedIndex = 2,
+						inheritedIndex = 1,
 					},
 					
 					{
@@ -1984,6 +2901,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"12ed8c93-3b50-5150-b29a-d437c235be86",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.ShellCrusher.Field == true\n",
+							name = "破盾一击",
+							uuid = "12ed8c93-3b50-5150-b29a-d437c235be86",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 587.1,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 139,
+				timerStartOffset = -8,
+				uuid = "486f85c9-72f4-ff06-ab55-fa672318f950",
+				version = 2,
+			},
 		},
 	},
 	[152] = 
@@ -2122,7 +3125,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -2164,6 +3166,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"33bf1be9-d5b7-cfca-b76e-54380c883af3",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DarkWater.Field == true\n",
+							name = "黑暗狂水",
+							uuid = "33bf1be9-d5b7-cfca-b76e-54380c883af3",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 651.2,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 152,
+				timerStartOffset = -14,
+				uuid = "03d0f2b1-168c-023d-8cea-8a1475072553",
+				version = 2,
+			},
 		},
 	},
 	[154] = 
@@ -2303,7 +3391,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -2345,6 +3432,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"9397fd33-56b6-2e9c-8dd1-a55dd604e766",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MemorySEnd.Field == true\n",
+							name = "记忆终结",
+							uuid = "9397fd33-56b6-2e9c-8dd1-a55dd604e766",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 670.1,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 154,
+				timerStartOffset = -10,
+				uuid = "dba46259-9187-292a-9b40-9de77498e4c4",
+				version = 2,
+			},
 		},
 	},
 	[166] = 
@@ -2483,7 +3656,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -2525,6 +3697,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"054e09fc-8358-fc67-8a91-771185eb8032",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DarkLitDragonSong.Field == true\n",
+							name = "光暗龙诗",
+							uuid = "054e09fc-8358-fc67-8a91-771185eb8032",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 738.2,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 166,
+				timerStartOffset = -14,
+				uuid = "53ba21b6-6a5f-8ba9-a6bf-2d431ca2ba59",
+				version = 2,
+			},
 		},
 	},
 	[176] = 
@@ -2663,7 +3921,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -2705,6 +3962,93 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"1d36c999-cf6a-7c13-bb54-860a7bc4d40d",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MornAfah1.Field == true\n",
+							name = "无尽顿悟1",
+							uuid = "1d36c999-cf6a-7c13-bb54-860a7bc4d40d",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 783.4,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 176,
+				timerStartOffset = -10,
+				uuid = "497c5de8-fc9c-170e-a2f6-f13e44aada1f",
+				version = 2,
+			},
 		},
 	},
 	[179] = 
@@ -2843,7 +4187,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -2885,6 +4228,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"378a3730-2ab0-f79b-9af3-34cffa9a9e00",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.CrystallizeTime.Field == true\n",
+							name = "时间结晶",
+							uuid = "378a3730-2ab0-f79b-9af3-34cffa9a9e00",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 798.9,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 179,
+				timerStartOffset = -10,
+				uuid = "0e73a0e7-1503-a7a3-b68e-9e1516354d4c",
+				version = 2,
+			},
 		},
 	},
 	[198] = 
@@ -2936,11 +4365,10 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
-						inheritedIndex = 2,
+						inheritedIndex = 1,
 					},
 					
 					{
@@ -2977,7 +4405,93 @@ local tbl =
 				uuid = "23166388-b53b-20ae-8e36-da69339ce1bc",
 				version = 2,
 			},
-			inheritedIndex = 11,
+			inheritedIndex = 1,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"bda91556-8a86-b554-b47a-d1c7402daf1a",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HallowedWings.Field == true\n",
+							name = "神圣之翼",
+							uuid = "bda91556-8a86-b554-b47a-d1c7402daf1a",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 845.7,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 198,
+				timerStartOffset = -14,
+				uuid = "7d1fe195-beb3-598b-83d0-eb5d381c9ca6",
+				version = 2,
+			},
 		},
 	},
 	[204] = 
@@ -3116,7 +4630,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -3158,6 +4671,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"9274dc85-a176-8e61-a160-050ac7c9f10a",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MornAfah2.Field == true\n",
+							name = "无尽顿悟2",
+							uuid = "9274dc85-a176-8e61-a160-050ac7c9f10a",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 864.8,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 204,
+				timerStartOffset = -10,
+				uuid = "d6789e6a-1d6b-a491-b138-7914e002c783",
+				version = 2,
+			},
 		},
 	},
 	[209] = 
@@ -3296,7 +4895,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -3338,6 +4936,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"96c17c75-d5a0-d303-af50-bcdbe411bc37",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.FulgentBlade1.Field == true\n",
+							name = "光尘之剑1",
+							uuid = "96c17c75-d5a0-d303-af50-bcdbe411bc37",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 984.8,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 209,
+				timerStartOffset = -14,
+				uuid = "a8b531f0-0c40-f3fe-b1aa-0fbb93970951",
+				version = 2,
+			},
 		},
 	},
 	[215] = 
@@ -3476,7 +5160,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -3518,6 +5201,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"9f9f4d22-b26e-8e5e-a56c-2f3ee298113d",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn1.Field == true\n",
+							name = "死亡轮回1",
+							uuid = "9f9f4d22-b26e-8e5e-a56c-2f3ee298113d",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 1011.4,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 215,
+				timerStartOffset = -14,
+				uuid = "37f70896-875f-7a61-b323-0cced0e989a0",
+				version = 2,
+			},
 		},
 	},
 	[232] = 
@@ -3656,7 +5425,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -3698,6 +5466,93 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"9296c250-ae1a-3a05-aa72-2c26eaafd67a",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Polarizing1.Field == true\n",
+							name = "星灵之剑1",
+							uuid = "9296c250-ae1a-3a05-aa72-2c26eaafd67a",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 1065,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 232,
+				timerStartOffset = -10,
+				uuid = "2b21f948-20cc-5668-86d0-082e7fc1a4ff",
+				version = 2,
+			},
 		},
 	},
 	[237] = 
@@ -3836,7 +5691,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -3878,6 +5732,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"cd6e3cac-1c6f-fff1-8823-c87a098fed13",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.FulgentBlade2.Field == true\n",
+							name = "光尘之剑2",
+							uuid = "cd6e3cac-1c6f-fff1-8823-c87a098fed13",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 1097.4,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 237,
+				timerStartOffset = -14,
+				uuid = "33291dab-c1be-89fd-8dc0-83dd2c6897d0",
+				version = 2,
+			},
 		},
 	},
 	[243] = 
@@ -4016,7 +5956,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -4058,6 +5997,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"1613864a-4a55-75e4-a4cd-ced8c75d43b3",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn2.Field == true\n",
+							name = "死亡轮回2",
+							uuid = "1613864a-4a55-75e4-a4cd-ced8c75d43b3",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 1124,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 243,
+				timerStartOffset = -14,
+				uuid = "a43469fc-1a16-ec45-a8e6-f39516557416",
+				version = 2,
+			},
 		},
 	},
 	[259] = 
@@ -4196,7 +6221,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -4238,6 +6262,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"68a7f790-e200-0d15-af23-7fa16b73db03",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Polarizing2.Field == true\n",
+							name = "星灵之剑2",
+							uuid = "68a7f790-e200-0d15-af23-7fa16b73db03",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 1176.4,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 259,
+				timerStartOffset = -14,
+				uuid = "953b4bf9-525b-d16f-84e5-4f68d400e982",
+				version = 2,
+			},
 		},
 	},
 	[262] = 
@@ -4376,11 +6486,10 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
-						inheritedIndex = 2,
+						inheritedIndex = 1,
 					},
 					
 					{
@@ -4418,6 +6527,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 11,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"aebb499f-5305-1e3e-85e7-de8579008d37",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.FulgentBlade3.Field == true\n",
+							name = "光尘之剑3",
+							uuid = "aebb499f-5305-1e3e-85e7-de8579008d37",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 1187.6,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 262,
+				timerStartOffset = -14,
+				uuid = "b59cae34-beef-210a-b6e9-033146460d1e",
+				version = 2,
+			},
 		},
 	},
 	[268] = 
@@ -4556,7 +6751,6 @@ local tbl =
 							category = "Self",
 							comparator = 2,
 							conditionType = 4,
-							dequeueIfLuaFalse = true,
 							uuid = "d1b1510b-e792-c9df-98ad-bb62d8761229",
 							version = 2,
 						},
@@ -4598,6 +6792,92 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"687ccafe-29f4-f64b-80b8-7a242dd89425",
+									true,
+								},
+								
+								{
+									"c779840e-159b-5b27-babb-26c78c46bc88",
+									true,
+								},
+								
+								{
+									"1f08e0f9-35fa-6ad5-bf47-3c05b4bb87a2",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_DivineVeil",
+							uuid = "75b69e30-61bd-f6b3-a5cb-d82d7c4b9170",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 3540,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "687ccafe-29f4-f64b-80b8-7a242dd89425",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							name = "is PLD",
+							uuid = "c779840e-159b-5b27-babb-26c78c46bc88",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn3.Field == true",
+							name = "死亡轮回3",
+							uuid = "1f08e0f9-35fa-6ad5-bf47-3c05b4bb87a2",
+							version = 2,
+						},
+						inheritedIndex = 7,
+					},
+				},
+				mechanicTime = 1214.2,
+				name = "【PLD】圣光幕帘",
+				timeRange = true,
+				timelineIndex = 268,
+				timerStartOffset = -14,
+				uuid = "3390aa7a-6695-999e-ac08-6207fa6dc041",
+				version = 2,
+			},
 		},
 	},
 	inheritedProfiles = 
