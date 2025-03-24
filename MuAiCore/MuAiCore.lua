@@ -128,8 +128,9 @@ core.ForceUpdate = function()
     --local replacePath = "D:\\LuaMods"
     local zipFilePath = tempPath .. "repository.zip"
     local extractPath = tempPath .. "Extracted"
-    if FileExists(replacePath .. "\\TimelineReactions\\Jackpot") then
-        FileDelete(replacePath .. "\\TimelineReactions\\Jackpot")
+    -- 擦屁股代码
+    if FileExists(replacePath .. "\\TensorReactions\\TimelineReactions\\Jackpot") then
+        FileDelete(replacePath .. "\\TensorReactions\\TimelineReactions\\Jackpot")
     end
     -- 执行系统命令的函数
     local function runCommand(cmd)
@@ -212,15 +213,13 @@ core.ForceUpdate = function()
                         -- 比较文件大小和内容
                         local srcFileSize = FileSize(srcFile)
                         local destFileSize = FileSize(destFile)
-
-                        -- 如果文件大小不同或者文件内容不同，复制文件
                         if srcFileSize ~= destFileSize then
-                            FileDelete(destFile)  -- 删除目标文件
-                            FileWrite(destFile, FileLoad(srcFile))  -- 复制文件内容
-                            d("[MuAiCore]替换：" .. destFile)
+                            --d("[MuAiCore]替换：from" .. srcFile .. "\nto" .. destFile  )
+                            string.format('xcopy /Y "%s" "%s"', srcFile, destFile)
+                            d("[MuAiCore]更新：" .. destFile)
                         end
                     else
-                        FileWrite(destFile, FileLoad(srcFile))
+                        string.format('xcopy /Y "%s" "%s"', srcFile, destFile)
                         d("[MuAiCore]新增：" .. destFile)
                     end
                 end
