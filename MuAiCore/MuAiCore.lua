@@ -215,11 +215,11 @@ core.ForceUpdate = function()
                         local destFileSize = FileSize(destFile)
                         if srcFileSize ~= destFileSize then
                             --d("[MuAiCore]替换：from" .. srcFile .. "\nto" .. destFile  )
-                            string.format('xcopy /Y "%s" "%s"', srcFile, destFile)
+                            os.execute( string.format('xcopy /Y "%s" "%s"', srcFile, destFile))
                             d("[MuAiCore]更新：" .. destFile)
                         end
                     else
-                        string.format('xcopy /Y "%s" "%s"', srcFile, destFile)
+                        os.execute( string.format('xcopy /Y "%s" "%s"', srcFile, destFile))
                         d("[MuAiCore]新增：" .. destFile)
                     end
                 end
