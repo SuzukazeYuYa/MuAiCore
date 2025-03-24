@@ -744,17 +744,24 @@ local DrawFruConfigUI = function(M)
                 end
                 GUI:Separator()
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
-                if GUI:TreeNode("绘图设置：") then
+                if GUI:TreeNode("3.绘图设置：") then
                     GUI:TextColored(0, 1, 1, 1, "※补充一些绘制")
                     M.Config.FruCfg.drawShit = GUI:Checkbox("地火", M.Config.FruCfg.drawShit)
                     GUI:SameLine(0, 120)
                     M.Config.FruCfg.drawAknMorn = GUI:Checkbox("分摊", M.Config.FruCfg.drawAknMorn)
-                    --GUI:SameLine(0,0)
-                    --GUI:TextColored(1, 0, 0, 1, " ※仅支持44或17")
                     M.Config.FruCfg.drawWinLight = GUI:Checkbox("左右刀&远近", M.Config.FruCfg.drawWinLight)
                     GUI:SameLine(0, 75)
                     M.Config.FruCfg.drawWinPolarizing = GUI:Checkbox("挡枪", M.Config.FruCfg.drawWinPolarizing)
                     GUI:TreePop()
+                    GUI:TextColored(1, 0, 0, 1, "※重要提示(防瞎眼)※")
+                    GUI:TextColored(1, 1, 0, 1, "一、如果你用A轴绘制")
+                    GUI:TextColored(1, 1, 0, 1, " 1.如果你开启本工具[地火]，则需要关闭A轴中984.8、")
+                    GUI:TextColored(1, 1, 0, 1, " 1097.4、1187.6中带有[Draw]内容")
+                    GUI:TextColored(1, 1, 0, 1, " 2.如果你开启本工具[左右刀]，则需要关闭A轴中1029.9、")
+                    GUI:TextColored(1, 1, 0, 1, " 1033.6、1147.4、 1150.3 中带有[Draw]内容")
+                    GUI:TextColored(1, 1, 0, 1, " 3.如果你开启本工具[挡枪]且[非A+]，则需要关闭A轴中、")
+                    GUI:TextColored(1, 1, 0, 1, " 1051.2~1065.6、1162.6~1177中带有[Draw]全部内容")
+                    GUI:TextColored(0, 1, 1, 1, "二、如果你用NyaDraw, 地火和左右刀有重复，请酌情关闭。")
                 end
             end
             if GUI:CollapsingHeader("特别鸣谢") then
