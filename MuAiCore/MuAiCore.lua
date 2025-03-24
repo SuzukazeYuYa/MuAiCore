@@ -121,150 +121,16 @@ core.Draw = function()
     end
 end
 
---core.ForceUpdate = function()
---    local gitZipUrl = "https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/main"
---    local tempPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
---    local localPath = GetLuaModsPath()
---    local zipFilePath = tempPath .. "repository.zip"
---    local extractPath = tempPath .. "Extracted"
---
---    -- 执行系统命令的函数
---    local function runCommand(cmd)
---        local handle = io.popen(cmd)
---        local result = handle:read("*a")
---        handle:close()
---        return result
---    end
---
---    -- 创建目录
---    local function createDirectory(path)
---        runCommand('mkdir "' .. path .. '"')
---    end
---
---    -- 删除目录或文件
---    local function deletePath(path)
---        runCommand('rmdir /s /q "' .. path .. '"')
---    end
---
---    -- 下载文件
---    local function downloadFile(url, destination)
---        d("[MuAiCore]正在下载文件...")
---        local cmd = 'curl -L -o "' .. destination .. '" "' .. url .. '"'
---        local result = runCommand(cmd)
---
---        -- 检查下载是否成功
---        if not io.open(destination, "rb") then
---            error("下载失败: " .. url)
---        end
---        d("[MuAiCore]文件下载完成: " .. destination)
---    end
---
---    -- 解压文件
---    local function extractZip(zipPath, destination)
---        d("[MuAiCore]正在解压文件...")
---        runCommand('powershell -Command "Expand-Archive -Path \'' .. zipPath .. '\' -DestinationPath \'' .. destination .. '\'"')
---    end
---
---    -- 遍历目录并返回文件列表
---    local function getFileList(path)
---        local cmd = 'dir /b /s "' .. path .. '"'
---        local output = runCommand(cmd)
---        local files = {}
---        for line in output:gmatch("[^\r\n]+") do
---            table.insert(files, line)
---        end
---        return files
---    end
---
---    -- 复制文件
---    local function copyFile(source, destination)
---        local destinationDir = destination:match("^(.*)\\")
---        runCommand('mkdir "' .. destinationDir .. '" 2>nul')
---        runCommand('copy /y "' .. source .. '" "' .. destination .. '"')
---    end
---
---    local function getFirstLevelFolder(path)
---        local cmd = 'dir /b /ad "' .. path .. '"'
---        local output = runCommand(cmd)
---        return output:match("[^\r\n]+") -- 获取第一行，即顶层文件夹名
---    end
---
---    local function getFileMD5(filePath)
---        local cmd = 'certutil -hashfile "' .. filePath .. '" MD5'
---        local output = runCommand(cmd)
---        return output:match("([a-fA-F0-9]+)") -- 提取 MD5 值
---    end
---
---    -- 对比文件内容（MD5 对比）
---    local function areFilesDifferent(file1, file2)
---        local md5File1 = getFileMD5(file1)
---        local md5File2 = getFileMD5(file2)
---        if not md5File1 or not md5File2 then
---            return true
---        end
---        return md5File1 ~= md5File2
---    end
---
---    updateTime = nil
---    updateNeedReLoad = false
---    -- 清理并创建临时目录
---    deletePath(tempPath)
---    createDirectory(tempPath)
---
---    -- 下载 Zip 文件
---    downloadFile(gitZipUrl, zipFilePath)
---
---    -- 检查下载是否成功
---    if not io.open(zipFilePath) then
---        d("下载失败，无法找到 Zip 文件。")
---        return
---    end
---
---    -- 解压 Zip 文件
---    deletePath(extractPath)
---    extractZip(zipFilePath, extractPath)
---
---    -- 获取解压后的第一级文件夹
---    local firstLevelFolder = getFirstLevelFolder(extractPath)
---    if not firstLevelFolder then
---        d("[MuAiCore]解压失败，未找到任何文件。")
---        return
---    end
---    local extractedFilesPath = extractPath .. "\\" .. firstLevelFolder
---
---    -- 获取解压后的文件列表
---    local extractedFiles = getFileList(extractedFilesPath)
---    if #extractedFiles == 0 then
---        d("[MuAiCore]解压失败，未找到任何文件。")
---        return
---    end
---
---    -- 遍历解压目录文件，与目标路径对比
---    d("[MuAiCore]正在对比并复制文件...")
---    for _, file in ipairs(extractedFiles) do
---        local relativePath = file:sub(#extractedFilesPath + 2) -- 移除解压目录的顶层文件夹
---        local targetFilePath = localPath .. relativePath
---        -- 仅对解压后的文件进行对比和复制
---        if not io.open(targetFilePath) or areFilesDifferent(file, targetFilePath) then
---            d("[MuAiCore]更新文件: " .. targetFilePath)
---            copyFile(file, targetFilePath)
---        end
---    end
---
---    -- 清理临时目录
---    deletePath(tempPath)
---    --MuAiGuide.Info("已同步最新文件，请进行Reload操作<se.1>。")
---    updateTime = Now()
---    updateNeedReLoad = true
---end
-
 core.ForceUpdate = function()
     local gitZipUrl = "https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/main"
     local tempPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
-    local localPath = GetLuaModsPath()
+    local replacePath = GetStartupPath() .."\\LuaMods"
+    --local replacePath = "D:\\LuaMods"
     local zipFilePath = tempPath .. "repository.zip"
     local extractPath = tempPath .. "Extracted"
-
+    if FileExists("D:\\LuaMods\\TensorReactions\\TimelineReactions\\Jackpot") then
+        FileDelete("D:\\LuaMods\\TensorReactions\\TimelineReactions\\Jackpot")
+    end
     -- 执行系统命令的函数
     local function runCommand(cmd)
         local handle = io.popen(cmd)
@@ -273,141 +139,100 @@ core.ForceUpdate = function()
         return result
     end
 
-    -- 创建目录
-    local function createDirectory(path)
-        runCommand('mkdir "' .. path .. '" 2>nul')
-    end
-
-    -- 删除目录或文件
-    local function deletePath(path)
-        runCommand('rmdir /s /q "' .. path .. '" 2>nul')
-        runCommand('del /f /q "' .. path .. '" 2>nul')
-    end
-
-    -- 判断路径是否是文件
-    local function isFile(path)
-        local cmd = 'if exist "' .. path .. '" (echo file)'
-        local output = runCommand(cmd)
-        return output:find("file") ~= nil
-    end
-
-    -- 删除冲突的文件
-    local function cleanConflictingFiles(basePath)
-        d("[MuAiCore] 检查并删除可能导致冲突的文件...")
-        local cmd = 'dir /b /s "' .. basePath .. '"'
-        local output = runCommand(cmd)
-        for line in output:gmatch("[^\r\n]+") do
-            if isFile(line) then
-                -- 检查文件是否与目录名称冲突
-                local correspondingDir = line:gsub("%.[^%.]+$", "") -- 移除文件扩展名
-                local cmdCheckDir = 'if exist "' .. correspondingDir .. '\\*" (echo dir)'
-                if runCommand(cmdCheckDir):find("dir") then
-                    d("[MuAiCore] 删除冲突文件: " .. line)
-                    deletePath(line)
-                end
-            end
-        end
-    end
-
     -- 下载文件
     local function downloadFile(url, destination)
         d("[MuAiCore]正在下载文件...")
         local cmd = 'curl -L -o "' .. destination .. '" "' .. url .. '"'
-        local result = runCommand(cmd)
-
-        -- 检查下载是否成功
-        if not io.open(destination, "rb") then
-            error("[MuAiCore] 下载失败: " .. url)
-        end
-        d("[MuAiCore] 文件下载完成: " .. destination)
+        runCommand(cmd)
+        d("[MuAiCore]文件下载完成: " .. destination)
     end
-
-    -- 解压文件
-    local function extractZip(zipPath, destination)
-        d("[MuAiCore]正在解压文件...")
-        runCommand('powershell -Command "Expand-Archive -Path \'' .. zipPath .. '\' -DestinationPath \'' .. destination .. '\' -Force"')
-    end
-
-    -- 遍历目录并返回文件列表
-    local function getFileList(path)
-        local cmd = 'dir /b /s "' .. path .. '"'
-        local output = runCommand(cmd)
-        local files = {}
-        for line in output:gmatch("[^\r\n]+") do
-            table.insert(files, line)
-        end
-        return files
-    end
-
-    -- 复制文件
-    local function copyFile(source, destination)
-        if isFile(source) then
-            local destinationDir = destination:match("^(.*)\\")
-            createDirectory(destinationDir)
-            runCommand('copy /y "' .. source .. '" "' .. destination .. '" >nul')
-        end
-    end
-
-    -- 处理更新
-    d("[MuAiCore] 开始更新流程...")
     updateTime = nil
     updateNeedReLoad = false
-
-    -- 清理冲突文件
-    cleanConflictingFiles(localPath)
-
     -- 清理并创建临时目录
-    deletePath(tempPath)
-    createDirectory(tempPath)
+    FolderDelete(tempPath)
+    FolderCreate(tempPath)
 
-    -- 下载压缩包
+    -- 下载 Zip 文件
     downloadFile(gitZipUrl, zipFilePath)
 
     -- 检查下载是否成功
-    if not io.open(zipFilePath, "rb") then
-        d("[MuAiCore] 下载失败，无法找到 Zip 文件。")
+    if not io.open(zipFilePath) then
+        d("下载失败，无法找到 Zip 文件。")
         return
     end
 
-    -- 解压文件
-    deletePath(extractPath)
-    extractZip(zipFilePath, extractPath)
-
-    -- 获取解压后的顶层目录
-    local cmd = 'dir /b /ad "' .. extractPath .. '"'
-    local topFolder = runCommand(cmd):match("[^\r\n]+")
-    if not topFolder then
-        d("[MuAiCore] 解压失败，未找到顶层目录。")
-        return
-    end
-    local extractedFilesPath = extractPath .. "\\" .. topFolder
-
-    -- 获取解压后的文件列表
-    local extractedFiles = getFileList(extractedFilesPath)
-    if #extractedFiles == 0 then
-        d("[MuAiCore] 解压失败，未找到任何文件。")
-        return
+    -- 解压 Zip 文件
+    runCommand('powershell -Command "Expand-Archive -Path \'' .. zipFilePath .. '\' -DestinationPath \'' .. extractPath .. '\'"')
+    d("[MuAiCore]解压完成，开始替换更新文件...")
+    local exPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\Extracted\\MuAiCore-main"
+    local excludeFiles = {
+        ".gitignore",
+        "README.md"
+    }
+    -- 检查文件名是否需要排除
+    function isExcluded(fileName)
+        for _, excluded in ipairs(excludeFiles) do
+            if fileName == excluded then
+                return true
+            end
+        end
+        return false
     end
 
-    -- 对比并复制文件
-    d("[MuAiCore] 正在对比并更新文件...")
-    for _, file in ipairs(extractedFiles) do
-        local relativePath = file:sub(#extractedFilesPath + 2) -- 移除解压目录的顶层文件夹
-        local targetFilePath = localPath .. relativePath
-        if not io.open(targetFilePath, "rb") or isFile(file) then
-            copyFile(file, targetFilePath)
+    function copyFiles(srcFolder, destFolder)
+        -- 列出源文件夹中的所有文件和子文件夹
+        local filesInSrc = FolderList(srcFolder, [[.*]], true)
+        -- 遍历文件列表
+        for _, fileName in ipairs(filesInSrc) do
+            -- 如果当前文件需要排除，则跳过
+            if not isExcluded(fileName) then
+                -- 获取源文件的完整路径
+                local srcFile = srcFolder .. "\\" .. fileName
+                local destFile = destFolder .. "\\" .. fileName
+
+                -- 如果是文件夹
+                if FolderExists(srcFile) then
+                    -- 如果目标文件夹不存在，创建它
+                    if not FolderExists(destFile) then
+                        FolderCreate(destFile)
+                    end
+
+                    -- 递归复制该子文件夹中的内容
+                    copyFiles(srcFile, destFile)  -- 递归调用
+                    -- 如果是文件
+                elseif FileExists(srcFile) then
+                    -- 确保目标文件夹存在
+                    local destFolderPath = string.match(destFile, "^(.*[\\/])")  -- 获取文件夹路径
+                    if not FolderExists(destFolderPath) then
+                        FolderCreate(destFolderPath)
+                    end
+
+                    -- 如果目标文件存在，比较文件内容
+                    if FileExists(destFile) then
+                        -- 比较文件大小和内容
+                        local srcFileSize = FileSize(srcFile)
+                        local destFileSize = FileSize(destFile)
+
+                        -- 如果文件大小不同或者文件内容不同，复制文件
+                        if srcFileSize ~= destFileSize then
+                            FileDelete(destFile)  -- 删除目标文件
+                            FileWrite(destFile, FileLoad(srcFile))  -- 复制文件内容
+                            d("[MuAiCore]替换：" .. destFile)
+                        end
+                    else
+                        FileWrite(destFile, FileLoad(srcFile))
+                        d("[MuAiCore]新增：" .. destFile)
+                    end
+                end
+            end
         end
     end
-
+    copyFiles(exPath, replacePath)
     -- 清理临时目录
-    deletePath(tempPath)
-
-    -- 更新完成标志
+    FolderDelete(tempPath)
     updateTime = Now()
     updateNeedReLoad = true
-    d("[MuAiCore] 更新完成!")
 end
-
 
 RegisterEventHandler("Module.Initalize", core.Initialize, AddonName)
 RegisterEventHandler("Gameloop.Update", core.Update, AddonName)
