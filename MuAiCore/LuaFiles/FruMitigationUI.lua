@@ -58,9 +58,9 @@ local DrawUI = function(M)
                 --     19, 21, 32, 37,
                 --     "骑士", "战士", "黑骑", "绝枪",
                 if Player.job == 32 then
-                    GUI:TextColored(1, 1, 0, 1, " 时间轴：\n   1.Jackpot\\fru-Tank-Self-Drk\n   2.Jackpot\\fru-Tank-Team.lua")
+                    GUI:TextColored(1, 1, 0, 1, " 请继承时间轴：\n   1.Jackpot\\fru-Tank-Self-Drk\n   2.Jackpot\\fru-Tank-Team")
                 else
-                    GUI:TextColored(1, 1, 0, 1, " 时间轴：\n   1.死刑轴开发中，暂不支持\n   2.Jackpot\\fru-Tank-Team.lua")
+                    GUI:TextColored(1, 1, 0, 1, " 请继承时间轴：\n   1.死刑轴开发中，暂不支持\n   2.Jackpot\\fru-Tank-Team")
                 end
             end
             if M.IsMelee(Player.job) then
