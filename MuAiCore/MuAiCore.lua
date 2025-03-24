@@ -128,8 +128,8 @@ core.ForceUpdate = function()
     --local replacePath = "D:\\LuaMods"
     local zipFilePath = tempPath .. "repository.zip"
     local extractPath = tempPath .. "Extracted"
-    if FileExists("D:\\LuaMods\\TensorReactions\\TimelineReactions\\Jackpot") then
-        FileDelete("D:\\LuaMods\\TensorReactions\\TimelineReactions\\Jackpot")
+    if FileExists(replacePath .. "\\TimelineReactions\\Jackpot") then
+        FileDelete(replacePath .. "\\TimelineReactions\\Jackpot")
     end
     -- 执行系统命令的函数
     local function runCommand(cmd)
@@ -229,7 +229,6 @@ core.ForceUpdate = function()
     end
     copyFiles(exPath, replacePath)
     -- 清理临时目录
-    FolderDelete(tempPath)
     updateTime = Now()
     updateNeedReLoad = true
 end

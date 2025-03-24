@@ -88,6 +88,11 @@ local DrawMainUI = function(M)
             if GUI:IsItemClicked(0) then
                 M.Config.Main = M.CreateDefMainCfg()
             end
+            GUI:Button("恢复默认设置", 300, 20)
+            if GUI:IsItemClicked(0) then
+                local tempPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
+                FolderDelete(tempPath)
+            end
         end
 
         GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing | GUI.SetCond_Once)
