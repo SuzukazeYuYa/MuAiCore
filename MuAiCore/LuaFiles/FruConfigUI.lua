@@ -112,7 +112,7 @@ local DrawFruConfigUI = function(M)
                             GUI:SameLine()
                             GUI:Button("保存到此配置", 100, 20)
                             if GUI:IsItemClicked(0) then
-                                M.SaveFileConfig(M.Config.FruGuidePath , M.FruConfigUI.NewFileName, M.Config.FruCfg)
+                                M.SaveFileConfig(M.Config.FruGuidePath, M.FruConfigUI.NewFileName, M.Config.FruCfg)
                             end
                         end
                     end
@@ -663,28 +663,42 @@ local DrawFruConfigUI = function(M)
             if GUI:CollapsingHeader("P5.潘多拉·米特隆") then
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("1.踩塔：") then
-                    GUI:TextColored(255, 0, 0, 1, "※仅支持MT1塔对面站位方案")
                     M.AddLabel("基本方案：")
                     GUI:PushItemWidth(80)
-                    local DarkLightWingsTakeTowerType, DarkLightWingsTakeTowerTypeCg = GUI:Combo("##DarkLightWingsTakeTowerType", M.Config.FruCfg.DarkLightWingsTakeTowerType, { "固定踩塔", "顺序踩塔" }, 4)
-                    if DarkLightWingsTakeTowerTypeCg then
-                        M.Config.FruCfg.DarkLightWingsTakeTowerType = DarkLightWingsTakeTowerType
+                    local DarkLightWingsType, DarkLightWingsTypeChange = GUI:Combo("##DarkLightWingsType", M.Config.FruCfg.DarkLightWingsType, { "MT无脑", "人群无脑" }, 4)
+                    if DarkLightWingsTypeChange then
+                        M.Config.FruCfg.DarkLightWingsType = DarkLightWingsType
                     end
                     GUI:PopItemWidth()
-                    GUI:BulletText("位置分配： ")
+                    if M.Config.FruCfg.DarkLightWingsType == 1 then
+                        GUI:TextColored(0, 1, 1, 1, "  ※MT无脑去1塔对面，人群看左右刀")
+                        M.AddLabel("踩塔方案：")
+                        GUI:PushItemWidth(80)
+                        local DarkLightWingsTakeTowerType, DarkLightWingsTakeTowerTypeCg = GUI:Combo("##DarkLightWingsTakeTowerType", M.Config.FruCfg.DarkLightWingsTakeTowerType, { "固定踩塔", "顺序踩塔" }, 4)
+                        if DarkLightWingsTakeTowerTypeCg then
+                            M.Config.FruCfg.DarkLightWingsTakeTowerType = DarkLightWingsTakeTowerType
+                        end
+                        GUI:PopItemWidth()
+                    else
+                        GUI:TextColored(0, 1, 1, 1, "  ※人群无脑下塔左边，坦克拉左右刀使下半场安全")
+                        M.Config.FruCfg.DarkLightWingsTakeTowerType = 1
+                    end
+                    GUI:BulletText("踩塔位置： ")
                     GUI:PushItemWidth(45)
                     if M.Config.FruCfg.DarkLightWingsTakeTowerType == 1 then
-                        local inputDown, inputDownChanged = GUI:InputText("去下，", M.StringJoin(M.Config.FruCfg.DarkLightWings.Down, ","), GUI.InputTextFlags_CharsNoBlank)
+                        M.AddLabel("   下塔（一塔）：", true)
+                        local inputDown, inputDownChanged = GUI:InputText("##DarkLightWings.Down", M.StringJoin(M.Config.FruCfg.DarkLightWings.Down, ","), GUI.InputTextFlags_CharsNoBlank)
                         if inputDownChanged then
                             M.Config.FruCfg.DarkLightWings.Down = M.StringSplit(inputDown, ",")
                         end
-                        GUI:SameLine()
-                        local inputLeft, inputLeftChanged = GUI:InputText("去左上，", M.StringJoin(M.Config.FruCfg.DarkLightWings.Left, ","), GUI.InputTextFlags_CharsNoBlank)
+                        M.AddLabel("   左上塔：", true)
+                        local inputLeft, inputLeftChanged = GUI:InputText("##DarkLightWings.Left", M.StringJoin(M.Config.FruCfg.DarkLightWings.Left, ","), GUI.InputTextFlags_CharsNoBlank)
                         if inputLeftChanged then
                             M.Config.FruCfg.DarkLightWings.Left = M.StringSplit(inputLeft, ",")
                         end
-                        GUI:SameLine()
-                        local inputRight, inputRightChanged = GUI:InputText("去右上", M.StringJoin(M.Config.FruCfg.DarkLightWings.Right, ","), GUI.InputTextFlags_CharsNoBlank)
+                        GUI:SameLine(0, 52)
+                        M.AddLabel("右上塔：", true)
+                        local inputRight, inputRightChanged = GUI:InputText("##DarkLightWings.Right", M.StringJoin(M.Config.FruCfg.DarkLightWings.Right, ","), GUI.InputTextFlags_CharsNoBlank)
                         if inputRightChanged then
                             M.Config.FruCfg.DarkLightWings.Right = M.StringSplit(inputRight, ",")
                         end
@@ -709,7 +723,7 @@ local DrawFruConfigUI = function(M)
                 end
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("2.挡枪：") then
-                    M.AddLabel("第1挡：", true)
+                    M.AddLabel("   第1挡：", true)
                     GUI:PushItemWidth(50)
                     local drawWinPolarizing1, drawWinPolarizing1Changed = GUI:InputText("##drawWinPolarizing1", M.StringJoin(M.Config.FruCfg.drawWinPolarizingOrder[1], ","), GUI.InputTextFlags_CharsNoBlank)
                     if drawWinPolarizing1Changed then
@@ -724,7 +738,7 @@ local DrawFruConfigUI = function(M)
                         M.Config.FruCfg.drawWinPolarizingOrder[2] = M.StringSplit(drawWinPolarizing2, ",")
                     end
                     GUI:PopItemWidth()
-                    M.AddLabel("第3挡：", true)
+                    M.AddLabel("   第3挡：", true)
                     GUI:PushItemWidth(50)
                     local drawWinPolarizing3, drawWinPolarizing3Changed = GUI:InputText("##drawWinPolarizing3", M.StringJoin(M.Config.FruCfg.drawWinPolarizingOrder[3], ","), GUI.InputTextFlags_CharsNoBlank)
                     if drawWinPolarizing3Changed then

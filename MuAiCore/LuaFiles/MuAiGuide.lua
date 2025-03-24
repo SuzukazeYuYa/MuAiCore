@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 185
+M.VERSION = 186
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -299,7 +299,9 @@ M.CreateFruDefaultCfg = function()
             ["4"] = 3
         },
 
-        ----------------------------- P4 -----------------------------
+        ----------------------------- P5 -----------------------------
+        --- 处理方式 1:MT 一塔对面，2 人群无脑去
+        DarkLightWingsType = 1,
         --- 踩塔类型： 1.固定踩塔 ，2.顺序踩塔
         DarkLightWingsTakeTowerType = 1,
         --- 固定塔站位
