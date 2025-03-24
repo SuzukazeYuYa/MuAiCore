@@ -98,52 +98,61 @@ local DrawUI = function(M)
                 GUI:Button("发送团队减伤", 270, 20)
 
                 if GUI:IsItemClicked(0) then
-                    d(" 个人团减汇报：")
-                    SendTextCommand(mark .. " 个人团减汇报：")
                     local skillName = M.FruMitigation.JobMap[Player.job]
                     local lastPSend = 1
                     local pMark = "P1: "
                     local targetInfo = ""
                     local fieldInfo = ""
+                    local msgSkill1 = {}
+                    local msgSkill2 = {}
                     for i = 1, #M.FruMitigation.AoeNames do
                         local curInfo = M.FruMitigation.AoeNames[i]
                         local key = M.FruMitigation.AoeNames[i].key
-                        if lastPSend ~= curInfo .p then
-                            if #targetInfo == 0 then
-                                SendTextCommand(mark .. " " .. pMark .. fieldInfo)
-                            elseif #fieldInfo == 0 then
-                                SendTextCommand(mark .. " " .. pMark .. targetInfo)
-                            else
-                                SendTextCommand(mark .. " " .. pMark .. skillName[1] .. ":" .. targetInfo .. "   " .. skillName[2] .. ": " .. fieldInfo)
+                        if lastPSend ~= curInfo.p then
+                            if #targetInfo ~= 0 then
+                                table.insert(msgSkill1, pMark .. targetInfo)
+                            end
+                            if #fieldInfo ~= 0 then
+                                table.insert(msgSkill2, pMark .. fieldInfo)
                             end
                             pMark = "P" .. curInfo .p .. ": "
-                            lastPSend = curInfo .p
+                            lastPSend = curInfo.p
                             targetInfo = ""
                             fieldInfo = ""
                         end
                         if M.Config.FruMitigation[key].Target and skillName[1] then
                             if #targetInfo == 0 then
-                                targetInfo = curInfo.macroInfo .. "、"
+                                targetInfo = curInfo.macroInfo .. "  "
                             else
-                                targetInfo = targetInfo .. curInfo.macroInfo .. "、"
+                                targetInfo = targetInfo .. curInfo.macroInfo .. "  "
                             end
                         end
                         if M.Config.FruMitigation[key].Field and skillName[2] then
                             if #fieldInfo == 0 then
-                                fieldInfo = curInfo.macroInfo .. "、"
+                                fieldInfo = curInfo.macroInfo .. "  "
                             else
-                                fieldInfo = fieldInfo .. curInfo.macroInfo .. "、"
+                                fieldInfo = fieldInfo .. curInfo.macroInfo .. " "
                             end
                         end
                     end
-                    if #targetInfo == 0 then
-                        SendTextCommand(mark .. " " .. pMark .. fieldInfo)
-                    elseif #fieldInfo == 0 then
-                        SendTextCommand(mark .. " " .. pMark .. targetInfo)
-                    else
-                        SendTextCommand(mark .. " " .. pMark .. skillName[1] .. ":" .. targetInfo .. "   " .. skillName[2] .. ": " .. fieldInfo)
+                    if #targetInfo ~= 0 then
+                        table.insert(msgSkill1, pMark .. targetInfo)
                     end
-                    SendTextCommand(mark .. " 如果哪里需要改，请及时提出，谢谢！~<se.3>")
+                    if #fieldInfo ~= 0 then
+                        table.insert(msgSkill2, pMark .. fieldInfo)
+                    end
+                    if  #msgSkill1 > 0 then
+                        SendTextCommand(mark .. " " .. skillName[1])
+                        for i = 1, #msgSkill1 do
+                            SendTextCommand(mark .. " " .. msgSkill1[i])
+                        end
+                    end
+                    if  #msgSkill2 > 0 then
+                        SendTextCommand(mark .. " " .. skillName[2])
+                        for i = 1, #msgSkill2 do
+                            SendTextCommand(mark .. " " .. msgSkill2[i])
+                        end
+                    end
                 end
                 GUI:SameLine()
                 M.FruMitigationUI.SendParty = GUI:Checkbox("默语", M.FruMitigationUI.SendParty)
@@ -388,7 +397,6 @@ local DrawUI = function(M)
                 end
             end
 
-            
             M.SaveConfig(M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job), M.Config.FruMitigationFile, "FruMitigation")
         end
         GUI:SetWindowSize(350, 0)
