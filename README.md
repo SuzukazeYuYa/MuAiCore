@@ -8,10 +8,12 @@
 1.下载本仓库内容，将2个文件夹MuAiCore和TensorReactions放入 \Minionapp\Bots\FFXIVMinion64\LuaMods 中覆盖即可。
 <br>2.进入游戏并注入之后，在profiler中添加 MuAiCore<br>![image](https://github.com/user-attachments/assets/3b6e7b7c-1365-47fa-b066-383b4a7b4e3f)<br>重新加载后会得到如下<br>![image](https://github.com/user-attachments/assets/df23e701-311c-496b-b3fb-3a42b542d89f)，当然这与使用快捷键打开时一样的，如果你没有proflier跳过此步骤
 <br>3.由于核心工具代码和UI等都迁移到插件中，所以不需要再继承全局轴！！
-<br>$${\color{red}如果你使用了老版本，全局中不要再继承MuAiGuideGeneral}$$
+<br>$${\color{red}如果你使用了老版本，全局中不要再继承MuAiGuideGeneral，请移除，请移除，请移除！}$$
 <br>4.之前欠考虑没有添加文件夹，导致部分用户觉得Timeline较为混乱，所以新版将FRU和TOP的TIMELine文件放到了\Minionapp\Bots\FFXIVMinion64\LuaMods\TensorReactions\TimelineReactions\MuAi
-<br>5.老用户请在安装后，删除老版本的MuAiGuideGeneral、MuAiGuideFru、MuAiGuideTop、\GeneralReactions\MuAiGuideData文件夹等内容，并删除MuAiGuideFru继承再重新添加TimeLine继承 MuAi\MuAiGuideFru(绝伊甸)  MuAi\MuAiGuideTop(绝欧) 
-<br>$${\color{red}6.删除anyone中添加的订阅}$$
+<br>5.（新用户无视）老用户请在安装后，删除老版本的MuAiGuideGeneral、MuAiGuideFru、MuAiGuideTop、\GeneralReactions\MuAiGuideData文件夹等内容（非必须，但是强烈建议删除），并删除MuAiGuideFru继承再重新添加继承 MuAi\MuAiGuideFru(绝伊甸)  MuAi\MuAiGuideTop(绝欧) 
+$${\color{red}，如果你添加了旧版本的订阅，请删除他}$$
+<br>$${\color{red}6.MuAi\MuAiGuideFru(绝伊甸)  MuAi\MuAiGuideTop(绝欧)  为副本时间轴，其他Timeline文件为减伤工具使用，请勿错误使用！}$$
+<br>$${\color{red}7.请严格检查继承关系，观察时间节点是否有重复内容，出现重复将导致大量指路BUG!}$$
 # 更新
 由于已经改为插件形式，所以不能再Anyone进行更新，这意味着不在支持自动更新，所以现在给出更新的替代方案
 <br>1.纯覆盖式重装，下载本仓库内容覆盖即可。
@@ -20,6 +22,7 @@
 <br>$${\color{red}如果你想使用游戏内更新，请勿随意更改文件路径}$$
 <br>$${\color{red}更新过程会短暂卡屏，属于正常现象，如果无法更新，请手动覆盖}$$
 <br>$${\color{red}本仓库提交记录即为更新日志，查看方式为点右上角小时钟}$$
+<br>$${\color{red}3.勾选自动更新（注意此功能对网络要求比较严格，github下载速度慢的慎用），勾选后会在mini注入时候自动检查并更新。}$$
 # 关于存档
 很抱歉的说一句，旧存档将不被支持，如果你依然想挽回你的配置文件，请按照如下流程操作：
 <br>1.新存档位置为：\LuaMods\MuAiCore\Configs\FruGuide，如果你安装插件后没有这个文件夹请逐级建好，或者进入游戏后随便进行一个修改，让他自己生成出来。
