@@ -64,13 +64,13 @@ local DrawUI = function(M)
                 end
             end
             if M.IsMelee(Player.job) then
-                GUI:TextColored(1, 1, 0, 1, " 时间轴：MuAi\\MuAiMitigationMeleeFru")
+                GUI:TextColored(1, 1, 0, 1, " 请继承时间轴：MuAi\\MuAiMitigationMeleeFru")
             end
             if M.IsRange(Player.job) then
-                GUI:TextColored(1, 1, 0, 1, " 时间轴：MuAi\\MuAiMitigationRangeFru")
+                GUI:TextColored(1, 1, 0, 1, " 请继承时间轴：MuAi\\MuAiMitigationRangeFru")
             end
             if M.IsMagic(Player.job) then
-                GUI:TextColored(1, 1, 0, 1, " 时间轴：MuAi\\MuAiMitigationMagicFru")
+                GUI:TextColored(1, 1, 0, 1, " 请继承时间轴：MuAi\\MuAiMitigationMagicFru")
             end
             GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing | GUI.SetCond_Once)
             if GUI:CollapsingHeader("团队减伤") then
