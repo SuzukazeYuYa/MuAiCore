@@ -124,7 +124,7 @@ end
 core.ForceUpdate = function()
     local gitZipUrl = "https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/main"
     local tempPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
-    local replacePath = GetStartupPath() .."\\LuaMods"
+    local replacePath = GetStartupPath() .. "\\LuaMods"
     --local replacePath = "D:\\LuaMods"
     local zipFilePath = tempPath .. "repository.zip"
     local extractPath = tempPath .. "Extracted"
@@ -214,12 +214,11 @@ core.ForceUpdate = function()
                         local srcFileSize = FileSize(srcFile)
                         local destFileSize = FileSize(destFile)
                         if srcFileSize ~= destFileSize then
-                            --d("[MuAiCore]替换：from" .. srcFile .. "\nto" .. destFile  )
-                            os.execute( string.format('xcopy /Y "%s" "%s"', srcFile, destFile))
+                            runCommand("copy /Y " .. srcFile .. " " .. destFile)
                             d("[MuAiCore]更新：" .. destFile)
                         end
                     else
-                        os.execute( string.format('xcopy /Y "%s" "%s"', srcFile, destFile))
+                        runCommand("copy /Y " .. srcFile .. " " .. destFile)
                         d("[MuAiCore]新增：" .. destFile)
                     end
                 end
