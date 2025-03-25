@@ -70,6 +70,143 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.SinsMite.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 16.4,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 4,
+				timerOffset = -14,
+				uuid = "fdd76df6-64ed-7178-a4e6-8c32ea94f828",
+				version = 2,
+			},
+		},
 	},
 	[22] = 
 	{
@@ -139,6 +276,143 @@ local tbl =
 				timerOffset = -14.5,
 				timerStartOffset = -14.5,
 				uuid = "058a8b47-4f5a-bbf6-bafb-867385e1a7de",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.BurnishedGlory1.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 85.9,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 22,
+				timerOffset = -14,
+				uuid = "09239e0f-391c-f353-9472-f57a0045457b",
 				version = 2,
 			},
 		},
@@ -212,6 +486,143 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.BurnishedGlory2.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 121.1,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 29,
+				timerOffset = -14,
+				uuid = "b2c214f3-bcd7-d389-98ed-2102b39047d3",
+				version = 2,
+			},
+		},
 	},
 	[44] = 
 	{
@@ -282,6 +693,283 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DiamondDust.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 235.3,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 44,
+				timerOffset = -14,
+				uuid = "0ec1b572-552a-3230-80d3-66abe1152941",
+				version = 2,
+			},
+		},
+	},
+	[57] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.SinBound.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 259.9,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 57,
+				timerOffset = -14,
+				uuid = "8a4b1017-8359-f4ce-8db7-852ec77a0e1e",
+				version = 2,
+			},
+		},
 	},
 	[64] = 
 	{
@@ -349,6 +1037,143 @@ local tbl =
 				timelineIndex = 64,
 				timerOffset = -5,
 				uuid = "20622ab0-8ad9-474d-a1a0-1c4630e51940",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HallowedRay.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 283,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 64,
+				timerOffset = -14,
+				uuid = "7e7b6274-9b78-3fb0-ac10-cadb816a077e",
 				version = 2,
 			},
 		},
@@ -423,6 +1248,143 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.LightRampant.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 322.5,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 77,
+				timerOffset = -14,
+				uuid = "41717184-00b2-5657-ac1f-0996b18b7419",
+				version = 2,
+			},
+		},
 	},
 	[92] = 
 	{
@@ -490,6 +1452,143 @@ local tbl =
 				timelineIndex = 92,
 				timerOffset = -5,
 				uuid = "25575fd0-39de-a283-814e-386e87b99c29",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HouseOfLight.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 360.8,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 92,
+				timerOffset = -14,
+				uuid = "0f68ab8a-b0d6-7bda-8d52-35728c7e114e",
 				version = 2,
 			},
 		},
@@ -564,6 +1663,283 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HouseOfLight.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 388.7,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 100,
+				timerOffset = -14,
+				uuid = "f81f7574-bc40-89b9-8908-d468910855c4",
+				version = 2,
+			},
+		},
+	},
+	[121] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HpOne.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 518.3,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 121,
+				timerOffset = -14,
+				uuid = "0ef12259-e8cb-c315-8c8b-7967400e7a20",
+				version = 2,
+			},
+		},
 	},
 	[123] = 
 	{
@@ -631,6 +2007,284 @@ local tbl =
 				timelineIndex = 123,
 				timerOffset = -14,
 				uuid = "df206d1c-872f-a842-85b3-0602ddcc6e8f",
+				version = 2,
+			},
+			inheritedIndex = 1,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Relativity.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 532.4,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 123,
+				timerOffset = -14,
+				uuid = "ece98333-6d8f-2714-b900-73d9caa52e84",
+				version = 2,
+			},
+		},
+	},
+	[134] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.ShockwavePulsar.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 569.3,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 134,
+				timerOffset = -14,
+				uuid = "5108ab28-4a42-011b-9d09-714c533386c7",
 				version = 2,
 			},
 		},
@@ -704,6 +2358,143 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.ShockwavePulsar.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 587.1,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 139,
+				timerOffset = -14,
+				uuid = "f48b6d5c-dd3e-76d1-bb85-cc159f67fd13",
+				version = 2,
+			},
+		},
 	},
 	[152] = 
 	{
@@ -774,6 +2565,283 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DarkWater.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 651.2,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 152,
+				timerOffset = -14,
+				uuid = "06be0272-ae1a-b827-a867-2b2420ab26a5",
+				version = 2,
+			},
+		},
+	},
+	[153] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DarkWater.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 656.4,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 153,
+				timerOffset = -14,
+				uuid = "94fd2584-6157-d32d-84e6-fb2d3e51bc43",
+				version = 2,
+			},
+		},
 	},
 	[154] = 
 	{
@@ -841,6 +2909,143 @@ local tbl =
 				timelineIndex = 154,
 				timerOffset = -14,
 				uuid = "9247eb55-7c9a-b471-877f-9ccfe6765cfb",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DarkWater.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 670.1,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 154,
+				timerOffset = -14,
+				uuid = "12aadebd-0163-b91e-a69c-6425ccb5485d",
 				version = 2,
 			},
 		},
@@ -917,6 +3122,283 @@ local tbl =
 			},
 			inheritedIndex = 1,
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DarkLitDragonSong.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 738.2,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 166,
+				timerOffset = -14,
+				uuid = "3054689c-9ed3-c3ec-a258-100dc3c86644",
+				version = 2,
+			},
+		},
+	},
+	[176] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.CrystallizeTime.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 783.4,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 176,
+				timerOffset = -14,
+				uuid = "86e23bee-903b-8c68-b87c-918b3e4bd846",
+				version = 2,
+			},
+		},
 	},
 	[179] = 
 	{
@@ -988,6 +3470,285 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 1,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.CrystallizeTime.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 798.9,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 179,
+				timerOffset = -1,
+				uuid = "6ea4cd68-68bf-9e6a-8fec-5890d6addcc3",
+				version = 2,
+			},
+			inheritedIndex = 2,
+		},
+	},
+	[198] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HallowedWings.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 845.7,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 198,
+				timerOffset = -1,
+				uuid = "0a734533-c02d-e88d-951e-b4823f696939",
+				version = 2,
+			},
+			inheritedIndex = 2,
 		},
 	},
 	[209] = 
@@ -1061,6 +3822,143 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HallowedWings.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 984.8,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 209,
+				timerOffset = -14,
+				uuid = "bf26e623-b92c-8316-a578-78590dd255a9",
+				version = 2,
+			},
+		},
 	},
 	[215] = 
 	{
@@ -1128,6 +4026,143 @@ local tbl =
 				timelineIndex = 215,
 				timerOffset = -14,
 				uuid = "f10be465-56cf-7697-877b-6de33ec55906",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn1.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1011.4,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 215,
+				timerOffset = -14,
+				uuid = "592b40c8-5556-faa5-96b8-460391a80ab2",
 				version = 2,
 			},
 		},
@@ -1201,6 +4236,284 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Polarizing1.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1065.6,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 233,
+				timerOffset = -14,
+				uuid = "bf0a49be-1b32-64eb-8bb0-c1bfcd036890",
+				version = 2,
+			},
+		},
+	},
+	[236] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.PandoraBox.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1085.2,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 236,
+				timerOffset = -10,
+				uuid = "b92efb1b-2876-3b5b-b2ae-fe6fb5820d13",
+				version = 2,
+			},
+			inheritedIndex = 2,
+		},
 	},
 	[237] = 
 	{
@@ -1268,6 +4581,143 @@ local tbl =
 				timelineIndex = 237,
 				timerOffset = -14,
 				uuid = "3be07b8b-33b5-2a20-86ff-96a4225e7375",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Polarizing1.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1097.4,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 237,
+				timerOffset = -14,
+				uuid = "a9590dcd-6289-b182-ae92-2ec656221e67",
 				version = 2,
 			},
 		},
@@ -1341,6 +4791,143 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn2.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1124,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 243,
+				timerOffset = -14,
+				uuid = "0df74273-f11f-ae5a-8dda-aad0f76d1567",
+				version = 2,
+			},
+		},
 	},
 	[260] = 
 	{
@@ -1408,6 +4995,143 @@ local tbl =
 				timelineIndex = 260,
 				timerOffset = -14,
 				uuid = "cf443ed8-ce9a-65f9-ab39-d5287d7d9962",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Polarizing2.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1177,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 260,
+				timerOffset = -14,
+				uuid = "ed71d4a0-cac0-f124-8967-affd1139dfac",
 				version = 2,
 			},
 		},
@@ -1481,9 +5205,284 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.FulgentBlade3.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1187.6,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 262,
+				timerOffset = -14,
+				uuid = "b0fbe296-90c7-1011-997c-f73b24f79b91",
+				version = 2,
+			},
+		},
 	},
 	[268] = 
 	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+									true,
+								},
+								
+								{
+									"ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+									true,
+								},
+							},
+							gVar = "ACR_RikuMNK3_CD",
+							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							conditions = 
+							{
+								
+								{
+									"5651b981-09d5-5339-94ad-d8b91d4054bd",
+									true,
+								},
+								
+								{
+									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+									true,
+								},
+								
+								{
+									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+									true,
+								},
+							},
+							gVar = "ACR_TensorReaper3_CD",
+							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn3.Field == true",
+							name = "检查设置",
+							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "MONK",
+							name = "武僧",
+							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REAPER",
+							name = "钐镰客",
+							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
+							version = 2,
+						},
+						inheritedIndex = 3,
+					},
+					
+					{
+						data = 
+						{
+							actionID = 65,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "真言CD",
+							uuid = "ebf6124d-10b2-73b6-bafd-ff9b759b2af7",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 24404,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "神秘纹CD",
+							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1214.2,
+				name = "[MuAiNelee]近战特色减",
+				timelineIndex = 268,
+				timerOffset = -14,
+				uuid = "197e3250-27a2-37a1-a4ef-8d19b65d0f4b",
+				version = 2,
+			},
+			inheritedIndex = 1,
+		},
 		
 		{
 			data = 

@@ -16,45 +16,141 @@ MuAiGuide.Config.FruMitigation.Tank.P4_AkhMorn2 == 1
 MuAiGuide.Config.FruMitigation.Tank.P5_Death1 == 1
 MuAiGuide.Config.FruMitigation.Tank.P5_Death2 == 1
 
--- 团减API
-{ key = "SinsMite", p = 1, name = "罪雷/罪焰", macroInfo = "开场" },
-{ key = "BurnishedGlory1", p = 1, name = "光焰圆光1", macroInfo = "光焰圆光1" },
-{ key = "BurnishedGlory2", p = 1, name = "光焰圆光2", macroInfo = "光焰圆光2" },
---- P2
-{ key = "DiamondDust", p = 2, name = "钻石星尘", macroInfo = "DD AOE" },
-{ key = "SinBound", p = 2, name = "罪神圣", macroInfo = "DD跑圈" },
-{ key = "HallowedRay", p = 2, name = "神圣射线", macroInfo = "激光" },
-{ key = "LightRampant", p = 2, name = "光之失控", macroInfo = "光暴" },
-{ key = "HouseOfLight", p = 2, name = "光之海啸", macroInfo = "最后踩塔" },
-{ key = "AbsoluteZero", p = 2, name = "绝对零度", macroInfo = "狂暴读条" },
---- P3
-{ key = "Relativity", p = 3, name = "时间压缩", macroInfo = "1运AOE" },
-{ key = "ShockwavePulsar", p = 3, name = "罪熔毁", macroInfo = "1运中间" },
-{ key = "ShellCrusher", p = 3, name = "破盾一击", macroInfo = "1运后AOE" },
-{ key = "DarkWater", p = 3, name = "黑暗狂水", macroInfo = "击退分摊" },
-{ key = "MemorySEnd", p = 3, name = "记忆终结", macroInfo = "狂暴读条" },
---- P4
-{ key = "DarkLitDragonSong", p = 4, name = "光暗龙诗", macroInfo = "1运AOE" },
-{ key = "MornAfah1", p = 4, name = "无尽顿悟1", macroInfo = "无尽顿悟1" },
-{ key = "CrystallizeTime", p = 4, name = "时间结晶", macroInfo = "二运AOE" },
-{ key = "HallowedWings", p = 4, name = "神圣之翼", macroInfo = "击退" },
-{ key = "MornAfah2", p = 4, name = "无尽顿悟2", macroInfo = "无尽顿悟2" },
---- P5
-{ key = "FulgentBlade1", p = 5, name = "光尘之剑1", macroInfo = "1地火" },
-{ key = "AkhMorn1", p = 5, name = "死亡轮回1", macroInfo = "1分摊" },
-{ key = "Polarizing1", p = 5, name = "星辰之剑1", macroInfo = "1挡枪" },
-{ key = "FulgentBlade2", p = 5, name = "光尘之剑2", macroInfo = "2地火" },
-{ key = "AkhMorn2", p = 5, name = "死亡轮回2", macroInfo = "2分摊" },
-{ key = "Polarizing2", p = 5, name = "星辰之剑2", macroInfo = "2挡枪" },
-{ key = "FulgentBlade3", p = 5, name = "光尘之剑3", macroInfo = "3地火" },
-{ key = "AkhMorn3", p = 5, name = "死亡轮回3", macroInfo = "3分摊" },
+M.FruMitigation.AoeNames = {
+    --- P1
+    { key = "SinsMite", p = 1, name = "罪雷/罪焰", macroInfo = "开场" },
+    { key = "BurnishedGlory1", p = 1, name = "光焰圆光1", macroInfo = "光焰圆光1" },
+    { key = "BurnishedGlory2", p = 1, name = "光焰圆光2", macroInfo = "光焰圆光2" },
+    --- P2
+    { key = "DiamondDust", p = 2, name = "钻石星尘", macroInfo = "DD AOE" },
+    { key = "SinBound", p = 2, name = "罪神圣", macroInfo = "DD跑圈" },
+    { key = "HallowedRay", p = 2, name = "神圣射线", macroInfo = "激光" },
+    { key = "LightRampant", p = 2, name = "光之失控", macroInfo = "光暴" },
+    { key = "HouseOfLight", p = 2, name = "光之海啸", macroInfo = "最后踩塔" },
+    { key = "AbsoluteZero", p = 2, name = "绝对零度", macroInfo = "狂暴读条" },
+    --- P3
+    { key = "HpOne", p = 3, name = "清1血", macroInfo = "清1血" },
+    { key = "Relativity", p = 3, name = "时间压缩", macroInfo = "1运AOE" },
+    { key = "ShockwavePulsar", p = 3, name = "罪熔毁", macroInfo = "1运中间" },
+    { key = "ShellCrusher", p = 3, name = "脉冲星辰波1", macroInfo = "1运后AOE" },
+    { key = "DarkWater", p = 3, name = "黑暗狂水", macroInfo = "击退分摊" },
+    { key = "ShockwavePulsar2", p = 3, name = "脉冲星辰波2", macroInfo = "狂暴前AOE" },
+    { key = "MemorySEnd", p = 3, name = "记忆终结", macroInfo = "狂暴读条" },
+    --- P4
+    { key = "DarkLitDragonSong", p = 4, name = "光暗龙诗", macroInfo = "1运AOE" },
+    { key = "MornAfah1", p = 4, name = "无尽顿悟1", macroInfo = "无尽顿悟1" },
+    { key = "CrystallizeTime", p = 4, name = "时间结晶", macroInfo = "二运AOE" },
+    { key = "HallowedWings", p = 4, name = "神圣之翼", macroInfo = "击退" },
+    { key = "MornAfah2", p = 4, name = "无尽顿悟2", macroInfo = "无尽顿悟2" },
+    --- P5
+    { key = "FulgentBlade1", p = 5, name = "光尘之剑1", macroInfo = "1地火" },
+    { key = "AkhMorn1", p = 5, name = "死亡轮回1", macroInfo = "1分摊" },
+    { key = "Polarizing1", p = 5, name = "星灵之剑1", macroInfo = "1挡枪" },
+    { key = "PandoraBox", p = 5, name = "潘多拉盒子", macroInfo = "潘多拉" },
+    { key = "FulgentBlade2", p = 5, name = "光尘之剑2", macroInfo = "2地火" },
+    { key = "AkhMorn2", p = 5, name = "死亡轮回2", macroInfo = "2分摊" },
+    { key = "Polarizing2", p = 5, name = "星灵之剑2", macroInfo = "2挡枪" },
+    { key = "FulgentBlade3", p = 5, name = "光尘之剑3", macroInfo = "3地火" },
+    { key = "AkhMorn3", p = 5, name = "死亡轮回3", macroInfo = "3分摊" },
+}
 
-MuAiGuide.Config.FruMitigation. + key + . + .Target / .Field 格式
+--[[ MuAiGuide.Config.FruMitigation. + key + . + .Target / .Field 格式
 Target 代表第一列技能，通常为目标减，也有特殊的，比如诗人的大地神
-Field 代表第二列技能，通常为场地减
+Field 代表第二列技能，通常为场地减]]
 
-例如：
+-- P1
+return MuAiGuide.Config.FruMitigation.SinsMite.Target == true
+return MuAiGuide.Config.FruMitigation.SinsMite.Field == true
 
-MuAiGuide.Config.FruMitigation.SinsMite.Target == true
-MuAiGuide.Config.FruMitigation.SinsMite.Field == true
+return MuAiGuide.Config.FruMitigation.BurnishedGlory1.Target == true
+return MuAiGuide.Config.FruMitigation.BurnishedGlory1.Field == true
+
+return MuAiGuide.Config.FruMitigation.BurnishedGlory2.Target == true
+return MuAiGuide.Config.FruMitigation.BurnishedGlory2.Field == true
+
+-- P2
+return MuAiGuide.Config.FruMitigation.DiamondDust.Target == true
+return MuAiGuide.Config.FruMitigation.DiamondDust.Field == true
+
+return MuAiGuide.Config.FruMitigation.SinBound.Target == true
+return MuAiGuide.Config.FruMitigation.SinBound.Field == true
+
+return MuAiGuide.Config.FruMitigation.HallowedRay.Target == true
+return MuAiGuide.Config.FruMitigation.HallowedRay.Field == true
+
+return MuAiGuide.Config.FruMitigation.LightRampant.Target == true
+return MuAiGuide.Config.FruMitigation.LightRampant.Field == true
+
+return MuAiGuide.Config.FruMitigation.HouseOfLight.Target == true
+return MuAiGuide.Config.FruMitigation.HouseOfLight.Field == true
+
+return MuAiGuide.Config.FruMitigation.AbsoluteZero.Target == true
+return MuAiGuide.Config.FruMitigation.AbsoluteZero.Field == true
+
+-- P3
+return MuAiGuide.Config.FruMitigation.HpOne.Target == true
+return MuAiGuide.Config.FruMitigation.HpOne.Field == true
+
+return MuAiGuide.Config.FruMitigation.Relativity.Target == true
+return MuAiGuide.Config.FruMitigation.Relativity.Field == true
+
+return MuAiGuide.Config.FruMitigation.ShockwavePulsar.Target == true
+return MuAiGuide.Config.FruMitigation.ShockwavePulsar.Field == true
+
+return MuAiGuide.Config.FruMitigation.ShellCrusher.Target == true
+return MuAiGuide.Config.FruMitigation.ShellCrusher.Field == true
+
+return MuAiGuide.Config.FruMitigation.DarkWater.Target == true
+return MuAiGuide.Config.FruMitigation.DarkWater.Field == true
+
+return MuAiGuide.Config.FruMitigation.ShockwavePulsar2.Target == true
+return MuAiGuide.Config.FruMitigation.ShockwavePulsar2.Field == true
+
+return MuAiGuide.Config.FruMitigation.MemorySEnd.Target == true
+return MuAiGuide.Config.FruMitigation.MemorySEnd.Field == true
+
+-- P4
+return MuAiGuide.Config.FruMitigation.DarkLitDragonSong.Target == true
+return MuAiGuide.Config.FruMitigation.DarkLitDragonSong.Field == true
+
+return MuAiGuide.Config.FruMitigation.MornAfah1.Target == true
+return MuAiGuide.Config.FruMitigation.MornAfah1.Field == true
+
+return MuAiGuide.Config.FruMitigation.CrystallizeTime.Target == true
+return MuAiGuide.Config.FruMitigation.CrystallizeTime.Field == true
+
+return MuAiGuide.Config.FruMitigation.HallowedWings.Target == true
+return MuAiGuide.Config.FruMitigation.HallowedWings.Field == true
+
+return MuAiGuide.Config.FruMitigation.MornAfah2.Target == true
+return MuAiGuide.Config.FruMitigation.MornAfah2.Field == true
+
+-- P5
+return MuAiGuide.Config.FruMitigation.FulgentBlade1.Target == true
+return MuAiGuide.Config.FruMitigation.FulgentBlade1.Field == true
+
+return MuAiGuide.Config.FruMitigation.AkhMorn1.Target == true
+return MuAiGuide.Config.FruMitigation.AkhMorn1.Field == true
+
+return MuAiGuide.Config.FruMitigation.Polarizing1.Target == true
+return MuAiGuide.Config.FruMitigation.Polarizing1.Field == true
+
+return MuAiGuide.Config.FruMitigation.PandoraBox.Target == true
+return MuAiGuide.Config.FruMitigation.PandoraBox.Field == true
+
+return MuAiGuide.Config.FruMitigation.FulgentBlade2.Target == true
+return MuAiGuide.Config.FruMitigation.FulgentBlade2.Field == true
+
+return MuAiGuide.Config.FruMitigation.AkhMorn2.Target == true
+return MuAiGuide.Config.FruMitigation.AkhMorn2.Field == true
+
+return MuAiGuide.Config.FruMitigation.Polarizing2.Target == true
+return MuAiGuide.Config.FruMitigation.Polarizing2.Field == true
+
+return MuAiGuide.Config.FruMitigation.FulgentBlade3.Target == true
+return MuAiGuide.Config.FruMitigation.FulgentBlade3.Field == true
+
+return MuAiGuide.Config.FruMitigation.AkhMorn3.Target == true
+return MuAiGuide.Config.FruMitigation.AkhMorn3.Field == true
+
 
