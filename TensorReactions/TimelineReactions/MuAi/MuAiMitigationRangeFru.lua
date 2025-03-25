@@ -338,7 +338,7 @@ local tbl =
 				mechanicTime = 16.4,
 				name = "[MuAiRdps]远敏特色减",
 				timelineIndex = 4,
-				timerOffset = -10,
+				timerOffset = -9.5,
 				uuid = "f32ba396-5fcc-eae5-932a-f4fc4bb43f4c",
 				version = 2,
 			},
@@ -677,7 +677,7 @@ local tbl =
 				mechanicTime = 85.9,
 				name = "[MuAiRdps]远敏特色减",
 				timelineIndex = 22,
-				timerOffset = -10,
+				timerOffset = -9.5,
 				uuid = "c0736061-8b89-4947-8f82-491dc41819d8",
 				version = 2,
 			},
@@ -1015,7 +1015,7 @@ local tbl =
 				mechanicTime = 121.1,
 				name = "[MuAiRdps]远敏特色减",
 				timelineIndex = 29,
-				timerOffset = -10,
+				timerOffset = -9.5,
 				uuid = "7e39a6e6-3e9f-7a9a-a00d-752104f81d57",
 				version = 2,
 			},
@@ -1353,7 +1353,7 @@ local tbl =
 				mechanicTime = 235.3,
 				name = "[MuAiRdps]远敏特色减",
 				timelineIndex = 44,
-				timerOffset = -10,
+				timerOffset = -9.5,
 				uuid = "056e0cc3-bf76-cb77-9d5e-4aac63ae6e93",
 				version = 2,
 			},
@@ -2229,7 +2229,7 @@ local tbl =
 				mechanicTime = 322.5,
 				name = "[MuAiRdps]远敏特色减",
 				timelineIndex = 77,
-				timerOffset = -4,
+				timerOffset = -1,
 				uuid = "20d13361-11ef-3a32-89c9-03ffb3c400d6",
 				version = 2,
 			},
@@ -2907,11 +2907,98 @@ local tbl =
 				mechanicTime = 388.7,
 				name = "[MuAiRdps]远敏特色减",
 				timelineIndex = 100,
-				timerOffset = -14,
+				timerOffset = -9.5,
 				uuid = "401bf7e3-fe74-5c5d-95fb-30193d960144",
 				version = 2,
 			},
 			inheritedIndex = 2,
+		},
+	},
+	[121] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7408,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"b2e9f059-d619-667f-a2a3-bca253ea857b",
+									true,
+								},
+								
+								{
+									"d61f2545-5ba1-ec93-88f9-15abd67e9af4",
+									true,
+								},
+								
+								{
+									"1b107493-3bf9-bd29-903a-307c614d8435",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_CD",
+							uuid = "3f434f17-a6c0-52cb-b4b6-905b8962a6a9",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HpOne.Target == true",
+							name = "HpOne.Target ",
+							uuid = "b2e9f059-d619-667f-a2a3-bca253ea857b",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "吟游诗人",
+							uuid = "d61f2545-5ba1-ec93-88f9-15abd67e9af4",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 7408,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "大地神CD",
+							uuid = "1b107493-3bf9-bd29-903a-307c614d8435",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 518.3,
+				name = "[MuAiRdps]大地神",
+				timelineIndex = 121,
+				timerOffset = -1,
+				uuid = "11657134-fe9f-80a9-8b75-75613a3a360b",
+				version = 2,
+			},
 		},
 	},
 	[123] = 
@@ -3245,7 +3332,7 @@ local tbl =
 				mechanicTime = 532.4,
 				name = "[MuAiRdps]远敏特色减",
 				timelineIndex = 123,
-				timerOffset = -14.5,
+				timerOffset = -9.5,
 				uuid = "2283bf46-171b-a718-a19a-4ddc62b874a7",
 				version = 2,
 			},
@@ -3583,7 +3670,7 @@ local tbl =
 				mechanicTime = 569.3,
 				name = "[MuAiRdps]远敏特色减",
 				timelineIndex = 134,
-				timerOffset = -14.5,
+				timerOffset = -9.5,
 				uuid = "f9e27080-1bee-9465-83b9-3f0f3ed09d12",
 				version = 2,
 			},
@@ -3921,7 +4008,7 @@ local tbl =
 				mechanicTime = 587.1,
 				name = "[MuAiRdps]远敏特色减",
 				timelineIndex = 139,
-				timerOffset = -14.5,
+				timerOffset = -9.5,
 				uuid = "671963b5-73c3-5388-bced-863bfa236fc4",
 				version = 2,
 			},
@@ -4259,8 +4346,151 @@ local tbl =
 				mechanicTime = 651.2,
 				name = "[MuAiRdps]远敏特色减",
 				timelineIndex = 152,
-				timerOffset = -14.5,
+				timerOffset = -9.5,
 				uuid = "a3f058ca-b9c9-f93d-aa1c-1c4e09e75be2",
+				version = 2,
+			},
+		},
+	},
+	[153] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 2887,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"b2e9f059-d619-667f-a2a3-bca253ea857b",
+									true,
+								},
+								
+								{
+									"902adaeb-66ba-9e87-90a8-ea6729ec5d01",
+									true,
+								},
+								
+								{
+									"13e198bc-e494-b0d7-8829-937255c149ee",
+									true,
+								},
+							},
+							gVar = "ACR_TensorRequiem3_CD",
+							targetType = "Current Target",
+							uuid = "64a36cca-0c7f-8488-a6b2-0302877d2770",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 7408,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"b2e9f059-d619-667f-a2a3-bca253ea857b",
+									true,
+								},
+								
+								{
+									"d61f2545-5ba1-ec93-88f9-15abd67e9af4",
+									true,
+								},
+								
+								{
+									"1b107493-3bf9-bd29-903a-307c614d8435",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_CD",
+							uuid = "3f434f17-a6c0-52cb-b4b6-905b8962a6a9",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.ShellCrusher2.Target == true",
+							name = "ShockwavePulsar2.Target",
+							uuid = "b2e9f059-d619-667f-a2a3-bca253ea857b",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "吟游诗人",
+							uuid = "d61f2545-5ba1-ec93-88f9-15abd67e9af4",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "机工士",
+							uuid = "902adaeb-66ba-9e87-90a8-ea6729ec5d01",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 2887,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "扳手CD",
+							uuid = "13e198bc-e494-b0d7-8829-937255c149ee",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 7408,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "大地神CD",
+							uuid = "1b107493-3bf9-bd29-903a-307c614d8435",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 656.4,
+				name = "[MuAiRdps]远敏特色减",
+				timelineIndex = 153,
+				timerOffset = -9.5,
+				uuid = "063b43d4-c8ee-4510-8c50-5bdcd25275c9",
 				version = 2,
 			},
 		},
@@ -4600,7 +4830,7 @@ local tbl =
 				mechanicTime = 670.1,
 				name = "[MuAiRdps]远敏特色减",
 				timelineIndex = 154,
-				timerOffset = -14.5,
+				timerOffset = -9.5,
 				uuid = "435fda2d-a6e6-d599-8713-7c7f705222bd",
 				version = 2,
 			},
@@ -4938,7 +5168,7 @@ local tbl =
 				mechanicTime = 738.2,
 				name = "[MuAiRdps]远敏特色减",
 				timelineIndex = 166,
-				timerOffset = -14.5,
+				timerOffset = -9.5,
 				uuid = "a5f44017-04fd-4b55-ac62-c505855d62d9",
 				version = 2,
 			},
@@ -5423,7 +5653,7 @@ local tbl =
 				mechanicTime = 798.9,
 				name = "[MuAiRdps]远敏特色减 - 机工",
 				timelineIndex = 179,
-				timerOffset = -14.5,
+				timerOffset = -9.5,
 				uuid = "93df229b-24f1-37da-b72f-9ef51329acac",
 				version = 2,
 			},
@@ -6248,7 +6478,7 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 209,
 				timerOffset = -13,
-				timerStartOffset = -14,
+				timerStartOffset = -9.5,
 				uuid = "d078ff04-493d-45a1-a371-d394f99b7f86",
 				version = 2,
 			},
@@ -6590,7 +6820,7 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 215,
 				timerOffset = -13,
-				timerStartOffset = -14,
+				timerStartOffset = -9.5,
 				uuid = "cd563c1f-0b96-27ab-b797-671ce1db45e1",
 				version = 2,
 			},
@@ -6932,8 +7162,154 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 233,
 				timerOffset = -13,
-				timerStartOffset = -14,
+				timerStartOffset = -9.5,
 				uuid = "233a7fa4-e0f3-55f9-9d39-ac7904ea009e",
+				version = 2,
+			},
+			inheritedIndex = 2,
+		},
+	},
+	[236] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 2887,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"b2e9f059-d619-667f-a2a3-bca253ea857b",
+									true,
+								},
+								
+								{
+									"902adaeb-66ba-9e87-90a8-ea6729ec5d01",
+									true,
+								},
+								
+								{
+									"13e198bc-e494-b0d7-8829-937255c149ee",
+									true,
+								},
+							},
+							gVar = "ACR_TensorRequiem3_CD",
+							targetType = "Current Target",
+							uuid = "64a36cca-0c7f-8488-a6b2-0302877d2770",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 7408,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"b2e9f059-d619-667f-a2a3-bca253ea857b",
+									true,
+								},
+								
+								{
+									"d61f2545-5ba1-ec93-88f9-15abd67e9af4",
+									true,
+								},
+								
+								{
+									"1b107493-3bf9-bd29-903a-307c614d8435",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_CD",
+							uuid = "3f434f17-a6c0-52cb-b4b6-905b8962a6a9",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.PandoraBox.Target == true",
+							name = "PandoraBox.Targe",
+							uuid = "b2e9f059-d619-667f-a2a3-bca253ea857b",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "吟游诗人",
+							uuid = "d61f2545-5ba1-ec93-88f9-15abd67e9af4",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "机工士",
+							uuid = "902adaeb-66ba-9e87-90a8-ea6729ec5d01",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 2887,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "扳手CD",
+							uuid = "13e198bc-e494-b0d7-8829-937255c149ee",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 7408,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "大地神CD",
+							uuid = "1b107493-3bf9-bd29-903a-307c614d8435",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1085.2,
+				name = "[MuAiRdps]远敏特色减",
+				timeRange = true,
+				timelineIndex = 236,
+				timerOffset = -13,
+				timerStartOffset = -9.5,
+				uuid = "5467a56e-af06-7da6-a13c-094cbe572672",
 				version = 2,
 			},
 			inheritedIndex = 2,
@@ -7274,7 +7650,7 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 237,
 				timerOffset = -13,
-				timerStartOffset = -14,
+				timerStartOffset = -9.5,
 				uuid = "4602b08d-c996-fe11-be56-e04485342312",
 				version = 2,
 			},
@@ -7614,7 +7990,7 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 243,
 				timerOffset = -13,
-				timerStartOffset = -14,
+				timerStartOffset = -9.5,
 				uuid = "24dcc247-a4d7-3a87-940c-ce722e2bf71a",
 				version = 2,
 			},
@@ -7954,7 +8330,7 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 260,
 				timerOffset = -13,
-				timerStartOffset = -14,
+				timerStartOffset = -9.5,
 				uuid = "1d548511-2620-2f04-982a-f9af9739aa96",
 				version = 2,
 			},
@@ -8294,7 +8670,7 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 262,
 				timerOffset = -13,
-				timerStartOffset = -14,
+				timerStartOffset = -9.5,
 				uuid = "3996dd3f-9a6e-ede8-9f59-ed29872637a8",
 				version = 2,
 			},
@@ -8635,7 +9011,7 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 268,
 				timerOffset = -13,
-				timerStartOffset = -14,
+				timerStartOffset = -9.5,
 				uuid = "8b0aae37-88d3-f81c-a0a4-9aa351d33d72",
 				version = 2,
 			},
