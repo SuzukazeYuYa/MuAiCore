@@ -13,10 +13,12 @@
         { key = "HouseOfLight", p = 2, name = "光之海啸", macroInfo = "最后踩塔" },
         { key = "AbsoluteZero", p = 2, name = "绝对零度", macroInfo = "狂暴读条" },
         --- P3
+        { key = "HpOne", p = 3, name = "清1血", macroInfo = "清1血" },
         { key = "Relativity", p = 3, name = "时间压缩", macroInfo = "1运AOE" },
         { key = "ShockwavePulsar", p = 3, name = "罪熔毁", macroInfo = "1运中间" },
-        { key = "ShellCrusher", p = 3, name = "破盾一击", macroInfo = "1运后AOE" },
+        { key = "ShellCrusher", p = 3, name = "脉冲星辰波1", macroInfo = "1运后AOE" },
         { key = "DarkWater", p = 3, name = "黑暗狂水", macroInfo = "击退分摊" },
+        { key = "ShockwavePulsar2", p = 3, name = "脉冲星辰波2", macroInfo = "狂暴前AOE" },
         { key = "MemorySEnd", p = 3, name = "记忆终结", macroInfo = "狂暴读条" },
         --- P4
         { key = "DarkLitDragonSong", p = 4, name = "光暗龙诗", macroInfo = "1运AOE" },
@@ -28,6 +30,7 @@
         { key = "FulgentBlade1", p = 5, name = "光尘之剑1", macroInfo = "1地火" },
         { key = "AkhMorn1", p = 5, name = "死亡轮回1", macroInfo = "1分摊" },
         { key = "Polarizing1", p = 5, name = "星灵之剑1", macroInfo = "1挡枪" },
+        { key = "PandoraBox", p = 5, name = "潘多拉盒子", macroInfo = "潘多拉" },
         { key = "FulgentBlade2", p = 5, name = "光尘之剑2", macroInfo = "2地火" },
         { key = "AkhMorn2", p = 5, name = "死亡轮回2", macroInfo = "2分摊" },
         { key = "Polarizing2", p = 5, name = "星灵之剑2", macroInfo = "2挡枪" },
@@ -76,36 +79,39 @@
     M.FruMitigation.LoadDefault = function()
         local ConfigValue = {
             --- P1
-            SinsMite = { p = 1, Target = true, Field = true },
-            BurnishedGlory1 = { p = 1, Target = true, Field = false },
+            SinsMite = { p = 1, Target = false, Field = false },
+            BurnishedGlory1 = { p = 1, Target = false, Field = false },
             BurnishedGlory2 = { p = 1, Target = false, Field = false },
             --- P2
-            DiamondDust = { p = 2, Target = true, Field = false },
+            DiamondDust = { p = 2, Target = false, Field = false },
             SinBound = { p = 2, Target = nil, Field = false },
             HallowedRay = { p = 2, Target = false, Field = false },
-            LightRampant = { p = 2, Target = true, Field = true },
-            HouseOfLight = { p = 2, Target = false, Field = true },
-            AbsoluteZero = { p = 2, Target = true, Field = false },
+            LightRampant = { p = 2, Target = false, Field = false },
+            HouseOfLight = { p = 2, Target = false, Field = false },
+            AbsoluteZero = { p = 2, Target = false, Field = false },
             --- P3
-            Relativity = { p = 3, Target = true, Field = false },
-            ShockwavePulsar = { p = 3, Target = nil, Field = true },
+            HpOne = { p = 3, Target = false, Field = false },
+            Relativity = { p = 3, Target = false, Field = false },
+            ShockwavePulsar = { p = 3, Target = false, Field = false },
             ShellCrusher = { p = 3, Target = false, Field = false },
-            DarkWater = { p = 3, Target = true, Field = false },
+            DarkWater = { p = 3, Target = false, Field = false },
+            ShockwavePulsar2 = { p = 3, Target = false, Field = false },
             MemorySEnd = { p = 3, Target = false, Field = false },
             --- P4
-            DarkLitDragonSong = { p = 4, Target = true, Field = false },
-            MornAfah1 = { p = 4, Target = false, Field = true },
-            CrystallizeTime = { p = 4, Target = true, Field = false },
+            DarkLitDragonSong = { p = 4, Target = false, Field = false },
+            MornAfah1 = { p = 4, Target = false, Field = false },
+            CrystallizeTime = { p = 4, Target = false, Field = false },
             HallowedWings = { p = 4, Target = nil, Field = false },
-            MornAfah2 = { p = 4, Target = true, Field = false },
+            MornAfah2 = { p = 4, Target = false, Field = false },
             --- P5
-            FulgentBlade1 = { p = 5, Target = true, Field = false },
+            FulgentBlade1 = { p = 5, Target = false, Field = false },
             AkhMorn1 = { p = 5, Target = false, Field = false },
-            Polarizing1 = { p = 5, Target = true, Field = true },
+            Polarizing1 = { p = 5, Target = false, Field = false },
+            PandoraBox = { p = 5, Target = false, Field = false },
             FulgentBlade2 = { p = 5, Target = false, Field = false },
-            AkhMorn2 = { p = 5, Target = true, Field = false },
-            Polarizing2 = { p = 5, Target = false, Field = true },
-            FulgentBlade3 = { p = 5, Target = true, Field = false },
+            AkhMorn2 = { p = 5, Target = false, Field = false },
+            Polarizing2 = { p = 5, Target = false, Field = false },
+            FulgentBlade3 = { p = 5, Target = false, Field = false },
             AkhMorn3 = { p = 5, Target = false, Field = false },
         }
         if M.IsTank(Player.job) then
@@ -121,6 +127,33 @@
         M.Config.FruMitigationCustomList = M.LoadFileList(M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job), { M.Config.FruMitigationFile })
         M.Config.FruMitigationCustomListIndex = 1
 
+    end
+    M.FruMitigation.LoadDefaultByName = function(fileName)
+        local defConfig = M.FruMitigation.LoadDefault()
+        local path = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\MitigationDefault"
+        if not FolderExists(path) then
+            M.Info("读取默认配置失败，已关闭全部开关。")
+            M.Config.FruMitigation = defConfig
+            return
+        else
+            M.Config.FruMitigation = M.LoadConfig(path, fileName, defConfig)
+        end
+    end
+
+    --- 补充读取
+    M.FruMitigation.LoadDefaultByNameEx = function(fileName, isTarget)
+        local defConfig = M.FruMitigation.LoadDefault()
+        local path = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\MitigationDefault"
+        local config = M.LoadConfig(path, fileName, defConfig)
+        d(config)
+        for i = 1, #M.FruMitigation.AoeNames do
+            local key = M.FruMitigation.AoeNames[i].key
+            if isTarget then
+                M.Config.FruMitigation[key].Target = config[key].Target
+            else
+                M.Config.FruMitigation[key].Field = config[key].Field
+            end
+        end
     end
 end
 return MitigationDef

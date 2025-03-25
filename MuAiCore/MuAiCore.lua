@@ -132,6 +132,9 @@ core.ForceUpdate = function()
     if FileExists(replacePath .. "\\TensorReactions\\TimelineReactions\\Jackpot") then
         FileDelete(replacePath .. "\\TensorReactions\\TimelineReactions\\Jackpot")
     end
+    if FileExists(replacePath .. "\\MuAiCore\\LuaFiles\\MitigationDefault") then
+        FileDelete(replacePath .. "\\MuAiCore\\LuaFiles\\MitigationDefault")
+    end
     -- 执行系统命令的函数
     local function runCommand(cmd)
         local handle = io.popen(cmd)

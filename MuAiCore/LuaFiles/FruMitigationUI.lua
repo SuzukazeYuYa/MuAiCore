@@ -59,8 +59,10 @@ local DrawUI = function(M)
                 --     "骑士", "战士", "黑骑", "绝枪",
                 if Player.job == 32 then
                     GUI:TextColored(1, 1, 0, 1, " 请继承时间轴：\n   1.Jackpot\\fru-Tank-Self-Drk\n   2.Jackpot\\fru-Tank-Team")
+                elseif Player.job == 19 then
+                    GUI:TextColored(1, 1, 0, 1, " 请继承时间轴：\n   1.Jackpot\\fru-Tank-Self-Pld\n   2.Jackpot\\fru-Tank-Team")
                 else
-                    GUI:TextColored(1, 1, 0, 1, " 请继承时间轴：\n   1.死刑轴开发中，暂不支持\n   2.Jackpot\\fru-Tank-Team")
+                    GUI:TextColored(1, 1, 0, 1, " 请继承时间轴：\n   暂不支持，有能力请自行开发")
                 end
             end
             if M.IsMelee(Player.job) then
@@ -141,13 +143,13 @@ local DrawUI = function(M)
                     if #fieldInfo ~= 0 then
                         table.insert(msgSkill2, pMark .. fieldInfo)
                     end
-                    if  #msgSkill1 > 0 then
+                    if #msgSkill1 > 0 then
                         SendTextCommand(mark .. " " .. skillName[1])
                         for i = 1, #msgSkill1 do
                             SendTextCommand(mark .. " " .. msgSkill1[i])
                         end
                     end
-                    if  #msgSkill2 > 0 then
+                    if #msgSkill2 > 0 then
                         SendTextCommand(mark .. " " .. skillName[2])
                         for i = 1, #msgSkill2 do
                             SendTextCommand(mark .. " " .. msgSkill2[i])
@@ -315,6 +317,76 @@ local DrawUI = function(M)
                 GUI:Text("MuAi")
             end
             GUI:Separator()
+            GUI:BulletText("使用默认配置：")
+            GUI:Dummy(10, 20)
+            GUI:SameLine()
+            GUI:Button("清空选择", 90, 20)
+            if GUI:IsItemClicked(0) then
+                M.Config.FruMitigation = M.FruMitigation.LoadDefault()
+            end
+            if M.IsTank(Player.job) then
+                GUI:SameLine(0, 10)
+                GUI:Button("读取MT默认", 90, 20)
+                if GUI:IsItemClicked(0) then
+                    M.FruMitigation.LoadDefaultByName("tank_mt_default.lua")
+                end
+                GUI:SameLine(0, 10)
+                GUI:Button("读取ST默认", 90, 20)
+                if GUI:IsItemClicked(0) then
+                    M.FruMitigation.LoadDefaultByName("tank_st_default.lua")
+                end
+            elseif M.IsMelee(Player.job) then
+                GUI:SameLine(0, 10)
+                GUI:Button("读取D1默认", 90, 20)
+                if GUI:IsItemClicked(0) then
+                    M.FruMitigation.LoadDefaultByName("melee_d1_default.lua")
+                    if Player.job == 20 then
+                 
+                        M.FruMitigation.LoadDefaultByNameEx("melee_monkEx.lua", false)
+                    elseif Player.job == 39 then
+                        M.FruMitigation.LoadDefaultByNameEx("melee_reaperEx.lua", false)
+                    end
+                end
+                GUI:SameLine(0, 10)
+                GUI:Button("读取D2默认", 90, 20)
+                if GUI:IsItemClicked(0) then
+                    M.FruMitigation.LoadDefaultByName("melee_d2_default.lua")
+                    if Player.job == 20 then
+                        M.FruMitigation.LoadDefaultByNameEx("melee_monkEx.lua", false)
+                    elseif Player.job == 39 then
+                        M.FruMitigation.LoadDefaultByNameEx("melee_reaperEx.lua", false)
+                    end
+                end
+            elseif M.IsRange(Player.job) then
+                GUI:SameLine(0, 10)
+                GUI:Button("读取默认", 90, 20)
+                if GUI:IsItemClicked(0) then
+                    if Player.job == 31 then
+                        M.FruMitigation.LoadDefaultByName("rdps_default_mch.lua")
+                    elseif Player.job == 23 then
+                        M.FruMitigation.LoadDefaultByName("rdps_default_brd.lua")
+                    else
+                        M.FruMitigation.LoadDefaultByName("rdps_default_dnc.lua")
+                    end
+                end
+            elseif M.IsMagic(Player.job) then
+                GUI:SameLine(0, 10)
+                GUI:Button("读取D2默认", 90, 20)
+                if GUI:IsItemClicked(0) then
+                    M.FruMitigation.LoadDefaultByName("magic_d2_default.lua")
+                    if Player.job == 35 then
+                        M.FruMitigation.LoadDefaultByNameEx("magic_redmEx.lua", false)
+                    elseif Player.job == 42 then
+                        M.FruMitigation.LoadDefaultByNameEx("magic_pcmEx.lua", false)
+                    end
+                end
+                GUI:SameLine(0, 10)
+                GUI:Button("读取D4默认", 90, 20)
+                if GUI:IsItemClicked(0) then
+                    M.FruMitigation.LoadDefaultByName("magic_d2_default.lua")
+                end
+            end
+
             GUI:BulletText("配置文件工具：")
             if M.FruMitigationUI.NewMode then
                 GUI:Dummy(10, 20)
