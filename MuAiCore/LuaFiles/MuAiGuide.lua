@@ -443,7 +443,7 @@ M.InitConfig = function()
     M.Config.FruGuideFile = "GuideConfig.lua"
     M.Config.FruMitigationPath = M.Config.MainPath .. "\\FruMitigation"
     M.Config.FruMitigationFile = "FruMitigation.lua"
-    M.Config.Key1 = {"Shift", "Ctrl", "Alt"}
+    M.Config.Key1 = { "Shift", "Ctrl", "Alt" }
     M.Config.Key2 = {}
     for i = 65, 90 do
         table.insert(M.Config.Key2, string.char(i))
@@ -466,11 +466,11 @@ M.InitConfig = function()
     else
         --- 读取主存档
         local defMainCfg = M.CreateDefMainCfg()
-        M.Config.Main = M.LoadConfig(M.Config.MainPath,  M.Config.MainFile, defMainCfg)
+        M.Config.Main = M.LoadConfig(M.Config.MainPath, M.Config.MainFile, defMainCfg)
         M.Config.MainPrevious = table.deepcopy(M.Config.Main)
         --- 读取绝伊甸存档
         local defFruCfg = M.CreateFruDefaultCfg()
-        M.Config.FruCfg = M.LoadConfig(M.Config.FruGuidePath,  M.Config.FruGuideFile, defFruCfg)
+        M.Config.FruCfg = M.LoadConfig(M.Config.FruGuidePath, M.Config.FruGuideFile, defFruCfg)
         M.Config.FruCfgPrevious = table.deepcopy(M.Config.FruCfg)
     end
     M.Config.FruCustomList = M.LoadFileList(M.Config.FruGuidePath, { "GuideConfig.lua" })
@@ -503,7 +503,7 @@ M.JobPosName = { "MT", "ST", "H1", "H2", "D1", "D2", "D3", "D4" }
 
 --- 标记
 M.HeadMark = {
-    Attack1 = 1, Attack2 = 2, Attack3 = 3, Attack4 = 4, Attack5 = 5, 
+    Attack1 = 1, Attack2 = 2, Attack3 = 3, Attack4 = 4, Attack5 = 5,
     Attack6 = 15, Attack7 = 16, Attack8 = 17,
     Bind1 = 6, Bind2 = 7, Bind3 = 8,
     Stop1 = 9, Stop2 = 10,
@@ -513,13 +513,23 @@ M.HeadMark = {
 M.GetHeadMarkCN = function(mark)
     local markType
     if mark < 5 or mark >= 15 and mark <= 17 then
-        markType = "攻击" .. mark
+        if mark <= 5 then
+            markType = "攻击" .. mark
+        else
+            markType = "攻击" .. (mark - 9)
+        end
     elseif mark < 9 then
-        markType = "锁链" .. mark
+        markType = "锁链" .. (mark - 5)
     elseif mark < 11 then
-        markType = "禁止" .. mark
-    else
-        markType = "其他"
+        markType = "禁止" .. (mark - 8)
+    elseif mark == 11 then
+        markType = "方块"
+    elseif mark == 12 then
+        markType = "圆圈"
+    elseif mark == 13 then
+        markType = "十字"
+    elseif mark == 14 then
+        markType = "三角"
     end
     return markType
 end
