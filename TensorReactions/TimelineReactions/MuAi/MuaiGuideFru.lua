@@ -3223,7 +3223,6 @@ local tbl =
 						data = 
 						{
 							actionID = 3,
-							allowInterrupt = true,
 							atomicPriority = true,
 							gVar = "ACR_TensorRequiem3_CD",
 							ignoreWeaveRules = true,
