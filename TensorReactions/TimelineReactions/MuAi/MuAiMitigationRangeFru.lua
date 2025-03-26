@@ -7838,8 +7838,8 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "return MuAiGuide.Config.FruMitigation.Polarizing2.Field == true",
-							name = "Polarizing2.Field",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn2.Field == true",
+							name = "AkhMorn2.Field",
 							uuid = "108206fe-0c0a-90a3-94f1-2914a41fb3d7",
 							version = 2,
 						},

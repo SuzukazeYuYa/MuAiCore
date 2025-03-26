@@ -4912,34 +4912,6 @@ local tbl =
 				version = 2,
 			},
 		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							aType = "Lua",
-							actionLua = "d(data.MuAiGd_P5_SelfFront)\nself.used =true",
-							gVar = "ACR_TensorRequiem3_CD",
-							uuid = "08c1e3d1-c970-f80d-b3f5-4db1cb2e00d2",
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-				},
-				mechanicTime = 1124,
-				name = "123",
-				timelineIndex = 243,
-				uuid = "c1d3fda2-a99b-573e-a7e6-a9e771b7b2e0",
-				version = 2,
-			},
-		},
 	},
 	[247] = 
 	{
