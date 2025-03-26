@@ -69,25 +69,6 @@ local tbl =
 				},
 				enabled = false,
 				mechanicTime = 24.2,
-				name = "----暗黑骑士----",
-				timelineIndex = 7,
-				uuid = "c4bdc077-60e7-fc46-9c41-b5043314a394",
-				version = 2,
-			},
-			inheritedIndex = 1,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-				},
-				conditions = 
-				{
-				},
-				enabled = false,
-				mechanicTime = 24.2,
 				name = "--自己全减吃--",
 				timelineIndex = 7,
 				uuid = "54105594-ef0a-3c63-806c-cebd023fd378",
@@ -7175,7 +7156,6 @@ local tbl =
 				name = " 挑衅",
 				timeRange = true,
 				timelineIndex = 218,
-				timerEndOffset = 2,
 				timerStartOffset = -5,
 				uuid = "819ac9de-7cf7-e4fd-90c0-81973c7756d9",
 				version = 2,
@@ -7245,7 +7225,6 @@ local tbl =
 				randomOffset = 11,
 				timeRange = true,
 				timelineIndex = 218,
-				timerEndOffset = 3,
 				timerStartOffset = -5,
 				uuid = "326a1a37-85d5-272a-be29-d234c524ad60",
 				version = 2,
@@ -7918,7 +7897,6 @@ local tbl =
 				randomOffset = 11,
 				timeRange = true,
 				timelineIndex = 222,
-				timerEndOffset = 3,
 				timerStartOffset = -5,
 				uuid = "7ddaca6c-7ded-3945-a07c-33b71c0bad96",
 				version = 2,
@@ -8211,7 +8189,6 @@ local tbl =
 				name = " 挑衅",
 				timeRange = true,
 				timelineIndex = 247,
-				timerEndOffset = 2,
 				timerStartOffset = -5,
 				uuid = "eb474362-0fc5-5a70-91b2-4a7ea1880a72",
 				version = 2,
@@ -8280,7 +8257,6 @@ local tbl =
 				randomOffset = 11,
 				timeRange = true,
 				timelineIndex = 247,
-				timerEndOffset = 3,
 				timerStartOffset = -5,
 				uuid = "c541b02d-86d7-3212-b388-b31956fd2928",
 				version = 2,
@@ -9028,8 +9004,7 @@ local tbl =
 				randomOffset = 11,
 				timeRange = true,
 				timelineIndex = 251,
-				timerEndOffset = 3,
-				timerStartOffset = -5,
+				timerEndOffset = 5,
 				uuid = "d490c3d5-5e75-496e-8684-36437166e7bc",
 				version = 2,
 			},

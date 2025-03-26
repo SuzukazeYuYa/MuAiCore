@@ -5555,6 +5555,60 @@ local tbl =
 			},
 		},
 	},
+	[236] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"8fbb5c87-8e9b-c439-b5e8-be9af950ef40",
+									true,
+								},
+							},
+							endIfUsed = true,
+							gVar = "ACR_RikuPLD3_Hotbar_LimitBreak",
+							uuid = "c5b99dda-36f8-8926-87d4-957700f4a778",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return TensorCore.getLBGauge() == 30000",
+							uuid = "8fbb5c87-8e9b-c439-b5e8-be9af950ef40",
+							version = 2,
+						},
+					},
+				},
+				enabled = false,
+				mechanicTime = 1085.2,
+				name = "TLB",
+				timeRange = true,
+				timelineIndex = 236,
+				timerStartOffset = -6,
+				uuid = "527d4c55-898f-484f-9983-7c095b6d7f3d",
+				version = 2,
+			},
+			inheritedIndex = 1,
+		},
+	},
 	[237] = 
 	{
 		

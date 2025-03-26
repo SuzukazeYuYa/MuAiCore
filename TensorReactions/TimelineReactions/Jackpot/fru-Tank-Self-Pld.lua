@@ -2358,7 +2358,7 @@ local tbl =
 				randomOffset = 5,
 				timeRange = true,
 				timelineIndex = 40,
-				timerEndOffset = 5,
+				timerStartOffset = -5,
 				uuid = "8401db39-e38a-97c7-a895-f1d29278c9ad",
 				version = 2,
 			},
@@ -2465,7 +2465,6 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 41,
 				timerEndOffset = 6,
-				timerStartOffset = 2,
 				uuid = "0333adbf-ab42-dc2d-87c2-e4a46cc9ee08",
 				version = 2,
 			},
@@ -2754,6 +2753,33 @@ local tbl =
 			},
 			inheritedIndex = 11,
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							gVar = "ACR_RikuPLD3_Gauge",
+							uuid = "c2d7ec11-858b-b2d9-892c-70981602d1db",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 292.6,
+				name = "开职业量谱",
+				timelineIndex = 68,
+				uuid = "2ef01331-2c03-9dd6-b5be-6daf8ea27bef",
+				version = 2,
+			},
+		},
 	},
 	[71] = 
 	{
@@ -2826,6 +2852,37 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 20,
+		},
+	},
+	[80] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							gVar = "ACR_RikuPLD3_Gauge",
+							gVarValue = 2,
+							uuid = "6be0b4b0-2c3c-4e5e-a0f2-4f29d2165a85",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 331.8,
+				name = "关职业量谱",
+				timelineIndex = 80,
+				uuid = "62c86ed9-825b-be0b-938e-eb004897b113",
+				version = 2,
+			},
 		},
 	},
 	[119] = 
@@ -4325,7 +4382,7 @@ local tbl =
 				uuid = "be41d0f4-8840-9d64-82cd-8a06056f73b9",
 				version = 2,
 			},
-			inheritedIndex = 6,
+			inheritedIndex = 1,
 		},
 	},
 	[162] = 
@@ -4837,151 +4894,6 @@ local tbl =
 			{
 				actions = 
 				{
-					
-					{
-						data = 
-						{
-							actionID = 7533,
-							atomicPriority = true,
-							conditions = 
-							{
-								
-								{
-									"c8ea8aef-c2a7-b604-9137-c3b050d20198",
-									true,
-								},
-								
-								{
-									"27b05503-5beb-5898-bf22-873f010cb6aa",
-									true,
-								},
-							},
-							endIfUsed = true,
-							gVar = "ACR_RikuDRK3_Hotbar_Provoke",
-							targetContentID = 12809,
-							targetName = "9832",
-							targetType = "ContentID",
-							uuid = "877f22cc-bc3e-d5f8-8323-c03bec73892a",
-							variableTogglesType = 2,
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							buffID = 79,
-							category = "Self",
-							name = "钢铁信念",
-							uuid = "c8ea8aef-c2a7-b604-9137-c3b050d20198",
-							version = 2,
-						},
-						inheritedIndex = 1,
-					},
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "return _G[\"ACR_\"..gACRSelectedProfiles[TensorCore.mGetPlayer().job]..\"_TankStance\"] == \"mt\"",
-							name = "isMT",
-							uuid = "27b05503-5beb-5898-bf22-873f010cb6aa",
-							version = 2,
-						},
-					},
-				},
-				mechanicTime = 773.5,
-				name = "  挑衅",
-				timeRange = true,
-				timelineIndex = 175,
-				timerEndOffset = 5,
-				uuid = "30ac7f5a-6137-891e-8687-e746fc484f55",
-				version = 2,
-			},
-			inheritedIndex = 10,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							actionID = 7533,
-							atomicPriority = true,
-							conditions = 
-							{
-								
-								{
-									"c8ea8aef-c2a7-b604-9137-c3b050d20198",
-									true,
-								},
-								
-								{
-									"4d3a5c91-f542-1289-b1ec-c4bb2ed8c254",
-									true,
-								},
-							},
-							endIfUsed = true,
-							gVar = "ACR_RikuDRK3_Hotbar_Provoke",
-							targetContentID = 9832,
-							targetName = "9832",
-							targetType = "ContentID",
-							uuid = "2aa44800-4ef2-7792-ab90-5629f5d46d8d",
-							variableTogglesType = 2,
-							version = 2.1,
-						},
-						inheritedIndex = 1,
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							buffID = 79,
-							category = "Self",
-							name = "钢铁信念",
-							uuid = "c8ea8aef-c2a7-b604-9137-c3b050d20198",
-							version = 2,
-						},
-						inheritedIndex = 1,
-					},
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "return _G[\"ACR_\"..gACRSelectedProfiles[TensorCore.mGetPlayer().job]..\"_TankStance\"] == \"ot\"",
-							name = "isOT",
-							uuid = "4d3a5c91-f542-1289-b1ec-c4bb2ed8c254",
-							version = 2,
-						},
-					},
-				},
-				mechanicTime = 773.5,
-				name = "  挑衅",
-				timeRange = true,
-				timelineIndex = 175,
-				timerEndOffset = 5,
-				uuid = "8d6a857a-c464-3e75-b231-bc296dc8d56f",
-				version = 2,
-			},
-			inheritedIndex = 11,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
 				},
 				conditions = 
 				{
@@ -5330,6 +5242,151 @@ local tbl =
 				uuid = "79bd8d86-c7b3-e55c-8c56-222d9d1c18a5",
 				version = 2,
 			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7533,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"c8ea8aef-c2a7-b604-9137-c3b050d20198",
+									true,
+								},
+								
+								{
+									"27b05503-5beb-5898-bf22-873f010cb6aa",
+									true,
+								},
+							},
+							endIfUsed = true,
+							gVar = "ACR_RikuDRK3_Hotbar_Provoke",
+							targetContentID = 12809,
+							targetName = "9832",
+							targetType = "ContentID",
+							uuid = "877f22cc-bc3e-d5f8-8323-c03bec73892a",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							buffID = 79,
+							category = "Self",
+							name = "钢铁信念",
+							uuid = "c8ea8aef-c2a7-b604-9137-c3b050d20198",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return _G[\"ACR_\"..gACRSelectedProfiles[TensorCore.mGetPlayer().job]..\"_TankStance\"] == \"mt\"",
+							name = "isMT",
+							uuid = "27b05503-5beb-5898-bf22-873f010cb6aa",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 773.5,
+				name = "  挑衅",
+				timeRange = true,
+				timelineIndex = 175,
+				timerEndOffset = 5,
+				uuid = "30ac7f5a-6137-891e-8687-e746fc484f55",
+				version = 2,
+			},
+			inheritedIndex = 10,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7533,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"c8ea8aef-c2a7-b604-9137-c3b050d20198",
+									true,
+								},
+								
+								{
+									"4d3a5c91-f542-1289-b1ec-c4bb2ed8c254",
+									true,
+								},
+							},
+							endIfUsed = true,
+							gVar = "ACR_RikuDRK3_Hotbar_Provoke",
+							targetContentID = 9832,
+							targetName = "9832",
+							targetType = "ContentID",
+							uuid = "2aa44800-4ef2-7792-ab90-5629f5d46d8d",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							buffID = 79,
+							category = "Self",
+							name = "钢铁信念",
+							uuid = "c8ea8aef-c2a7-b604-9137-c3b050d20198",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return _G[\"ACR_\"..gACRSelectedProfiles[TensorCore.mGetPlayer().job]..\"_TankStance\"] == \"ot\"",
+							name = "isOT",
+							uuid = "4d3a5c91-f542-1289-b1ec-c4bb2ed8c254",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 773.5,
+				name = "  挑衅",
+				timeRange = true,
+				timelineIndex = 175,
+				timerEndOffset = 5,
+				uuid = "8d6a857a-c464-3e75-b231-bc296dc8d56f",
+				version = 2,
+			},
+			inheritedIndex = 11,
 		},
 	},
 	[198] = 
@@ -5943,78 +6000,6 @@ local tbl =
 								},
 								
 								{
-									"27b05503-5beb-5898-bf22-873f010cb6aa",
-									true,
-								},
-							},
-							endIfUsed = true,
-							gVar = "ACR_RikuDRK3_Hotbar_Provoke",
-							targetContentID = 12809,
-							targetName = "9832",
-							targetType = "ContentID",
-							uuid = "877f22cc-bc3e-d5f8-8323-c03bec73892a",
-							variableTogglesType = 2,
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							buffID = 79,
-							category = "Self",
-							name = "钢铁信念",
-							uuid = "c8ea8aef-c2a7-b604-9137-c3b050d20198",
-							version = 2,
-						},
-						inheritedIndex = 1,
-					},
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "return _G[\"ACR_\"..gACRSelectedProfiles[TensorCore.mGetPlayer().job]..\"_TankStance\"] == \"mt\"",
-							name = "isMT",
-							uuid = "27b05503-5beb-5898-bf22-873f010cb6aa",
-							version = 2,
-						},
-					},
-				},
-				mechanicTime = 854.9,
-				name = "  挑衅",
-				timeRange = true,
-				timelineIndex = 202,
-				timerEndOffset = 5,
-				uuid = "9a5b981c-ebe7-cae6-9041-711ba825d573",
-				version = 2,
-			},
-			inheritedIndex = 21,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							actionID = 7533,
-							atomicPriority = true,
-							conditions = 
-							{
-								
-								{
-									"c8ea8aef-c2a7-b604-9137-c3b050d20198",
-									true,
-								},
-								
-								{
 									"4d3a5c91-f542-1289-b1ec-c4bb2ed8c254",
 									true,
 								},
@@ -6066,6 +6051,78 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 22,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7533,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"c8ea8aef-c2a7-b604-9137-c3b050d20198",
+									true,
+								},
+								
+								{
+									"27b05503-5beb-5898-bf22-873f010cb6aa",
+									true,
+								},
+							},
+							endIfUsed = true,
+							gVar = "ACR_RikuDRK3_Hotbar_Provoke",
+							targetContentID = 12809,
+							targetName = "9832",
+							targetType = "ContentID",
+							uuid = "877f22cc-bc3e-d5f8-8323-c03bec73892a",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							buffID = 79,
+							category = "Self",
+							name = "钢铁信念",
+							uuid = "c8ea8aef-c2a7-b604-9137-c3b050d20198",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return _G[\"ACR_\"..gACRSelectedProfiles[TensorCore.mGetPlayer().job]..\"_TankStance\"] == \"mt\"",
+							name = "isMT",
+							uuid = "27b05503-5beb-5898-bf22-873f010cb6aa",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 854.9,
+				name = "  挑衅",
+				timeRange = true,
+				timelineIndex = 202,
+				timerEndOffset = 5,
+				uuid = "9a5b981c-ebe7-cae6-9041-711ba825d573",
+				version = 2,
+			},
+			inheritedIndex = 11,
 		},
 	},
 	[209] = 
@@ -6236,7 +6293,7 @@ local tbl =
 									true,
 								},
 							},
-							gVar = "ACR_RikuDRK3_Hotbar_Provoke",
+							gVar = "ACR_RikuPLD3_Hotbar_Provoke",
 							uuid = "3eb02a61-5e36-8dd2-861a-1526ea25f2b3",
 							variableTogglesType = 2,
 							version = 2.1,
@@ -6273,7 +6330,6 @@ local tbl =
 				name = " 挑衅",
 				timeRange = true,
 				timelineIndex = 218,
-				timerEndOffset = 2,
 				timerStartOffset = -5,
 				uuid = "0936ace8-aace-bab0-84b0-d31307c5635a",
 				version = 2,
@@ -6340,7 +6396,6 @@ local tbl =
 				randomOffset = 11,
 				timeRange = true,
 				timelineIndex = 218,
-				timerEndOffset = 3,
 				timerStartOffset = -5,
 				uuid = "4c2c2f1c-2c29-2af0-afc9-ff979f8131a9",
 				version = 2,
@@ -6694,7 +6749,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 30,
+							allowInterrupt = true,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -6709,6 +6766,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuPLD3_Tankbar_HallowedGround",
+							ignoreWeaveRules = true,
 							uuid = "79eb3402-396f-be4b-93c9-e249e8996732",
 							variableTogglesType = 3,
 							version = 2.1,
@@ -6746,7 +6804,7 @@ local tbl =
 				name = "【PLD】神圣领域",
 				timeRange = true,
 				timelineIndex = 222,
-				timerStartOffset = -5,
+				timerStartOffset = -8,
 				uuid = "9c2e4be1-ac1c-a4b4-93f4-f45e674a7fb5",
 				version = 2,
 			},
@@ -6867,7 +6925,7 @@ local tbl =
 									true,
 								},
 							},
-							gVar = "ACR_RikuDRK3_Hotbar_Provoke",
+							gVar = "ACR_RikuPLD3_Hotbar_Provoke",
 							uuid = "3eb02a61-5e36-8dd2-861a-1526ea25f2b3",
 							variableTogglesType = 2,
 							version = 2.1,
@@ -6904,8 +6962,7 @@ local tbl =
 				name = "  挑衅",
 				timeRange = true,
 				timelineIndex = 222,
-				timerEndOffset = 2,
-				timerStartOffset = -5,
+				timerEndOffset = 5,
 				uuid = "00b50a0b-9347-c75e-9ab8-561192e8b459",
 				version = 2,
 			},
@@ -6972,8 +7029,7 @@ local tbl =
 				randomOffset = 11,
 				timeRange = true,
 				timelineIndex = 222,
-				timerEndOffset = 3,
-				timerStartOffset = -5,
+				timerEndOffset = 5,
 				uuid = "4f044ef9-dc07-a4aa-90bb-ed7a25c37f29",
 				version = 2,
 			},
@@ -7080,7 +7136,7 @@ local tbl =
 									true,
 								},
 							},
-							gVar = "ACR_RikuDRK3_Hotbar_Provoke",
+							gVar = "ACR_RikuPLD3_Hotbar_Provoke",
 							uuid = "3eb02a61-5e36-8dd2-861a-1526ea25f2b3",
 							variableTogglesType = 2,
 							version = 2.1,
@@ -7117,7 +7173,6 @@ local tbl =
 				name = " 挑衅",
 				timeRange = true,
 				timelineIndex = 247,
-				timerEndOffset = 2,
 				timerStartOffset = -5,
 				uuid = "afad9868-8fbc-fc5f-9018-237d92b07b30",
 				version = 2,
@@ -7184,7 +7239,6 @@ local tbl =
 				randomOffset = 11,
 				timeRange = true,
 				timelineIndex = 247,
-				timerEndOffset = 3,
 				timerStartOffset = -5,
 				uuid = "bfd181b8-40b0-57a6-b158-4e2ffe71fedb",
 				version = 2,
@@ -7539,7 +7593,9 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 30,
+							allowInterrupt = true,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -7554,6 +7610,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuPLD3_Tankbar_HallowedGround",
+							ignoreWeaveRules = true,
 							uuid = "79eb3402-396f-be4b-93c9-e249e8996732",
 							variableTogglesType = 3,
 							version = 2.1,
@@ -7591,7 +7648,7 @@ local tbl =
 				name = "【PLD】神圣领域",
 				timeRange = true,
 				timelineIndex = 251,
-				timerStartOffset = -5,
+				timerStartOffset = -8,
 				uuid = "1b0af0d2-bd79-0379-a77e-f7e2291fc3a4",
 				version = 2,
 			},
@@ -7712,7 +7769,7 @@ local tbl =
 									true,
 								},
 							},
-							gVar = "ACR_RikuDRK3_Hotbar_Provoke",
+							gVar = "ACR_RikuPLD3_Hotbar_Provoke",
 							uuid = "3eb02a61-5e36-8dd2-861a-1526ea25f2b3",
 							variableTogglesType = 2,
 							version = 2.1,
@@ -7749,8 +7806,7 @@ local tbl =
 				name = "  挑衅",
 				timeRange = true,
 				timelineIndex = 251,
-				timerEndOffset = 2,
-				timerStartOffset = -5,
+				timerEndOffset = 5,
 				uuid = "ce21b37a-d5b3-5ba8-ba02-bde464f6103a",
 				version = 2,
 			},
@@ -7817,8 +7873,7 @@ local tbl =
 				randomOffset = 11,
 				timeRange = true,
 				timelineIndex = 251,
-				timerEndOffset = 3,
-				timerStartOffset = -5,
+				timerEndOffset = 5,
 				uuid = "8dbf9827-ee96-da4a-b858-226af2741f69",
 				version = 2,
 			},
