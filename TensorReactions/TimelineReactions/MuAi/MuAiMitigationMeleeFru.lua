@@ -153,6 +153,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -165,6 +166,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -362,6 +364,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -374,6 +377,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -406,6 +410,7 @@ local tbl =
 							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
 							version = 2,
 						},
+						inheritedIndex = 5,
 					},
 				},
 				mechanicTime = 85.9,
@@ -569,6 +574,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -581,6 +587,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -776,6 +783,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -788,6 +796,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -844,6 +853,7 @@ local tbl =
 						data = 
 						{
 							actionID = 65,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -873,6 +883,8 @@ local tbl =
 						data = 
 						{
 							actionID = 24404,
+							allowInterrupt = true,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -892,6 +904,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorReaper3_CD",
+							ignoreWeaveRules = true,
 							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
 							version = 2.1,
 						},
@@ -916,6 +929,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -928,6 +942,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -964,8 +979,10 @@ local tbl =
 				},
 				mechanicTime = 259.9,
 				name = "[MuAiNelee]近战特色减",
+				timeRange = true,
 				timelineIndex = 57,
 				timerOffset = -14,
+				timerStartOffset = -14,
 				uuid = "8a4b1017-8359-f4ce-8db7-852ec77a0e1e",
 				version = 2,
 			},
@@ -1123,6 +1140,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -1135,6 +1153,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -1331,6 +1350,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -1343,6 +1363,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -1538,6 +1559,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -1550,6 +1572,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -1746,6 +1769,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -1758,6 +1782,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -1886,6 +1911,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -1898,6 +1924,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -1934,9 +1961,540 @@ local tbl =
 				},
 				mechanicTime = 518.3,
 				name = "[MuAiNelee]近战特色减",
+				timeRange = true,
 				timelineIndex = 121,
 				timerOffset = -14,
+				timerStartOffset = -5,
 				uuid = "0ef12259-e8cb-c315-8c8b-7967400e7a20",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 4243,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "NINJA",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
+							name = "自动极限技",
+							uuid = "f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				loop = true,
+				mechanicTime = 518.3,
+				name = "自动极限技-忍者",
+				timeRange = true,
+				timelineIndex = 121,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -15,
+				uuid = "fb1fc3af-02d9-adba-adbc-8acbc2dfdb12",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 202,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"182d14da-c06d-402b-aee5-06d15adc7575",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MONK",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
+							name = "自动极限技",
+							uuid = "182d14da-c06d-402b-aee5-06d15adc7575",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				loop = true,
+				mechanicTime = 518.3,
+				name = "自动极限技-武僧",
+				timeRange = true,
+				timelineIndex = 121,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -15,
+				uuid = "06c32529-9a94-d2cb-a1e5-cec05fd8628d",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 4242,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"182d14da-c06d-402b-aee5-06d15adc7575",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DRAGOON",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
+							name = "自动极限技",
+							uuid = "182d14da-c06d-402b-aee5-06d15adc7575",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				loop = true,
+				mechanicTime = 518.3,
+				name = "自动极限技-龙骑",
+				timeRange = true,
+				timelineIndex = 121,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -15,
+				uuid = "41735302-0ba0-bb67-9dc1-f38bcedaf1cd",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 24858,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"182d14da-c06d-402b-aee5-06d15adc7575",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "REAPER",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
+							name = "自动极限技",
+							uuid = "182d14da-c06d-402b-aee5-06d15adc7575",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				loop = true,
+				mechanicTime = 518.3,
+				name = "自动极限技-镰刀",
+				timeRange = true,
+				timelineIndex = 121,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -15,
+				uuid = "d97a56fb-4191-653f-8708-c459b1a29622",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34866,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "VIPER",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
+							name = "自动极限技",
+							uuid = "f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				loop = true,
+				mechanicTime = 518.3,
+				name = "自动极限技-蝰蛇",
+				timeRange = true,
+				timelineIndex = 121,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -15,
+				uuid = "303e0e48-7663-6b51-94ab-f0e40ad29cb5",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7861,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+									true,
+								},
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "SAMURAI",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
+							name = "自动极限技",
+							uuid = "f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				loop = true,
+				mechanicTime = 518.3,
+				name = "自动极限技-武士",
+				timeRange = true,
+				timelineIndex = 121,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -15,
+				uuid = "cfd33ced-817f-daee-8ad6-258fc668d884",
 				version = 2,
 			},
 		},
@@ -2094,6 +2652,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -2106,6 +2665,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -2234,6 +2794,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -2246,6 +2807,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -2441,6 +3003,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -2453,6 +3016,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -2648,6 +3212,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -2660,6 +3225,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -2716,6 +3282,7 @@ local tbl =
 						data = 
 						{
 							actionID = 65,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -2788,6 +3355,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -2800,6 +3368,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -2836,8 +3405,10 @@ local tbl =
 				},
 				mechanicTime = 656.4,
 				name = "[MuAiNelee]近战特色减",
+				timeRange = true,
 				timelineIndex = 153,
 				timerOffset = -14,
+				timerStartOffset = -14,
 				uuid = "94fd2584-6157-d32d-84e6-fb2d3e51bc43",
 				version = 2,
 			},
@@ -2995,6 +3566,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -3007,6 +3579,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -3205,6 +3778,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -3217,6 +3791,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -3333,7 +3908,7 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "return MuAiGuide.Config.FruMitigation.CrystallizeTime.Field == true",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MornAfah1.Field == true",
 							name = "检查设置",
 							uuid = "5651b981-09d5-5339-94ad-d8b91d4054bd",
 							version = 2,
@@ -3345,6 +3920,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -3357,6 +3933,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -3482,6 +4059,7 @@ local tbl =
 						data = 
 						{
 							actionID = 65,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -3554,6 +4132,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -3566,6 +4145,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -3603,7 +4183,7 @@ local tbl =
 				mechanicTime = 798.9,
 				name = "[MuAiNelee]近战特色减",
 				timelineIndex = 179,
-				timerOffset = -1,
+				timerOffset = -2,
 				uuid = "6ea4cd68-68bf-9e6a-8fec-5890d6addcc3",
 				version = 2,
 			},
@@ -3695,6 +4275,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -3707,6 +4288,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -3905,6 +4487,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -4112,6 +4695,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -4124,6 +4708,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -4319,6 +4904,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -4331,6 +4917,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -4387,6 +4974,7 @@ local tbl =
 						data = 
 						{
 							actionID = 65,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -4459,6 +5047,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -4471,6 +5060,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -4667,6 +5257,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -4679,6 +5270,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -4874,6 +5466,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -4886,6 +5479,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -5081,6 +5675,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -5093,6 +5688,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -5288,6 +5884,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -5300,6 +5897,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -5345,6 +5943,73 @@ local tbl =
 	},
 	[268] = 
 	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7549,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"1071cd63-8dc9-a8b4-892b-1388f14795dd",
+									true,
+								},
+								
+								{
+									"ec961e6f-5b53-212d-a118-bcb117389089",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_CD",
+							targetType = "Current Target",
+							uuid = "3f434f17-a6c0-52cb-b4b6-905b8962a6a9",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn3.Target == true",
+							name = "AkhMorn3.Target",
+							uuid = "1071cd63-8dc9-a8b4-892b-1388f14795dd",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 7549,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "牵制CD",
+							uuid = "ec961e6f-5b53-212d-a118-bcb117389089",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1214.2,
+				name = "[MuAiMelee]牵制",
+				timelineIndex = 268,
+				timerOffset = -14,
+				uuid = "23b47bf2-b1bc-e871-8e9f-8520f362373c",
+				version = 2,
+			},
+		},
 		
 		{
 			data = 
@@ -5428,6 +6093,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "MONK",
 							name = "武僧",
 							uuid = "1f4ff2cd-6bb3-0fd5-afce-5fd00f56f67c",
@@ -5440,6 +6106,7 @@ local tbl =
 						{
 							category = "Self",
 							conditionType = 13,
+							dequeueIfLuaFalse = true,
 							jobValue = "REAPER",
 							name = "钐镰客",
 							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
@@ -5481,7 +6148,101 @@ local tbl =
 				uuid = "197e3250-27a2-37a1-a4ef-8d19b65d0f4b",
 				version = 2,
 			},
-			inheritedIndex = 1,
+			inheritedIndex = 2,
+		},
+	},
+	[272] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 4243,
+							allowInterrupt = true,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							ignoreWeaveRules = true,
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "NINJA",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB2 == true",
+							name = "自动极限技",
+							uuid = "f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				loop = true,
+				mechanicTime = 1243.9,
+				name = "自动极限技-忍者",
+				timeRange = true,
+				timelineIndex = 272,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -15,
+				uuid = "d2cb66ef-9625-7d99-af12-5e450ed4d389",
+				version = 2,
+			},
 		},
 		
 		{
@@ -5493,26 +6254,35 @@ local tbl =
 					{
 						data = 
 						{
-							actionID = 7549,
+							actionID = 202,
+							allowInterrupt = true,
 							atomicPriority = true,
 							conditions = 
 							{
 								
 								{
-									"1071cd63-8dc9-a8b4-892b-1388f14795dd",
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
 									true,
 								},
 								
 								{
-									"ec961e6f-5b53-212d-a118-bcb117389089",
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"182d14da-c06d-402b-aee5-06d15adc7575",
 									true,
 								},
 							},
-							gVar = "ACR_RikuNIN3_CD",
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							ignoreWeaveRules = true,
 							targetType = "Current Target",
-							uuid = "3f434f17-a6c0-52cb-b4b6-905b8962a6a9",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
 							version = 2.1,
 						},
+						inheritedIndex = 1,
 					},
 				},
 				conditions = 
@@ -5522,9 +6292,9 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn3.Target == true",
-							name = "AkhMorn3.Target",
-							uuid = "1071cd63-8dc9-a8b4-892b-1388f14795dd",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
 							version = 2,
 						},
 					},
@@ -5532,21 +6302,404 @@ local tbl =
 					{
 						data = 
 						{
-							actionID = 7549,
 							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "牵制CD",
-							uuid = "ec961e6f-5b53-212d-a118-bcb117389089",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MONK",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB2 == true",
+							name = "自动极限技",
+							uuid = "182d14da-c06d-402b-aee5-06d15adc7575",
 							version = 2,
 						},
 					},
 				},
-				mechanicTime = 1214.2,
-				name = "[MuAiMelee]牵制",
-				timelineIndex = 268,
-				timerOffset = -14,
-				uuid = "23b47bf2-b1bc-e871-8e9f-8520f362373c",
+				eventType = 3,
+				loop = true,
+				mechanicTime = 1243.9,
+				name = "自动极限技-武僧",
+				timeRange = true,
+				timelineIndex = 272,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -15,
+				uuid = "9b2fefe6-7060-7b16-9948-2c09f2daa11d",
+				version = 2,
+			},
+			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 4242,
+							allowInterrupt = true,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"182d14da-c06d-402b-aee5-06d15adc7575",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							ignoreWeaveRules = true,
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DRAGOON",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB2 == true",
+							name = "自动极限技",
+							uuid = "182d14da-c06d-402b-aee5-06d15adc7575",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				loop = true,
+				mechanicTime = 1243.9,
+				name = "自动极限技-龙骑",
+				timeRange = true,
+				timelineIndex = 272,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -15,
+				uuid = "23b4fedd-d5b8-5699-9391-adc507ae5817",
+				version = 2,
+			},
+			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 24858,
+							allowInterrupt = true,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"182d14da-c06d-402b-aee5-06d15adc7575",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							ignoreWeaveRules = true,
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "REAPER",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB2 == true",
+							name = "自动极限技",
+							uuid = "182d14da-c06d-402b-aee5-06d15adc7575",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				loop = true,
+				mechanicTime = 1243.9,
+				name = "自动极限技-镰刀",
+				timeRange = true,
+				timelineIndex = 272,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -15,
+				uuid = "ebbccee0-a767-54ba-b783-33713ec9c81b",
+				version = 2,
+			},
+			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34866,
+							allowInterrupt = true,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							ignoreWeaveRules = true,
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "VIPER",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+						inheritedIndex = 2,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB2 == true",
+							name = "自动极限技",
+							uuid = "f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				loop = true,
+				mechanicTime = 1243.9,
+				name = "自动极限技-蝰蛇",
+				timeRange = true,
+				timelineIndex = 272,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -15,
+				uuid = "6d4532a6-ff4c-59c9-b6c9-b99e56ac5aea",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7861,
+							allowInterrupt = true,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+									true,
+								},
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							ignoreWeaveRules = true,
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "SAMURAI",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB2 == true",
+							name = "自动极限技",
+							uuid = "f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				loop = true,
+				mechanicTime = 1243.9,
+				name = "自动极限技-武士",
+				timeRange = true,
+				timelineIndex = 272,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -15,
+				uuid = "84d691f8-3e7d-e23c-8402-d39aed66881b",
 				version = 2,
 			},
 		},

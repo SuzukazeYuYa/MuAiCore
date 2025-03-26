@@ -3479,7 +3479,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local player = TensorCore.mGetEntity(MuAiGuide.GetPlayer().id)\nif eventArgs.spellID == 40228 then\n    MuAiGuide.DirectTo(91, player.pos.z, 5000)\nelse\n    MuAiGuide.DirectTo(109, player.pos.z, 5000)\nend\nself.used = true\n",
+							actionLua = "local player = TensorCore.mGetEntity(MuAiGuide.GetPlayer().id)\nif eventArgs.spellID == 40228 then\n    MuAiGuide.DirectTo(94, player.pos.z, 5000)\nelse\n    MuAiGuide.DirectTo(106, player.pos.z, 5000)\nend\nself.used = true\n",
 							conditions = 
 							{
 								

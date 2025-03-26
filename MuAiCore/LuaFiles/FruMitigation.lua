@@ -113,6 +113,8 @@
             Polarizing2 = { p = 5, Target = false, Field = false },
             FulgentBlade3 = { p = 5, Target = false, Field = false },
             AkhMorn3 = { p = 5, Target = false, Field = false },
+            AutoLB1 = false,
+            AutoLB2 = false,
         }
         if M.IsTank(Player.job) then
             ConfigValue.Tank = createTankDef()
@@ -126,7 +128,6 @@
         M.Config.FruMitigationPrevious = table.deepcopy(M.Config.FruMitigation)
         M.Config.FruMitigationCustomList = M.LoadFileList(M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job), { M.Config.FruMitigationFile })
         M.Config.FruMitigationCustomListIndex = 1
-
     end
     M.FruMitigation.LoadDefaultByName = function(fileName)
         local defConfig = M.FruMitigation.LoadDefault()

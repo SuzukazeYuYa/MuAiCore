@@ -87,6 +87,18 @@ local DrawUI = function(M)
                     end
                     AddCheckBox(i, M)
                 end
+                if M.IsMelee(Player.job) then
+                    GUI:Separator()
+                    GUI:BulletText("自动极限技")
+                    GUI:Dummy(20, 10)
+                    GUI:SameLine()
+                    
+                    M.AddLabel("自动P3极限技", true, 120)
+                    M.Config.FruMitigation.AutoLB1 = GUI:Checkbox("##AutoLB1",  M.Config.FruMitigation.AutoLB1)
+                    GUI:SameLine(0, 50)
+                    M.AddLabel("自动P5极限技", true,273)
+                    M.Config.FruMitigation.AutoLB2 = GUI:Checkbox("##AutoLB2",  M.Config.FruMitigation.AutoLB2)
+                end
                 GUI:Separator()
                 GUI:TextColored(1, 0, 0, 1, "※请谨慎使用，慎防挂友认亲！")
                 GUI:TextColored(1, 0, 0, 1, "※默语默认打钩，此状态下发送到默语，可以复制出去做宏。")
