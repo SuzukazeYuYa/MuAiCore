@@ -81,6 +81,7 @@ local tbl =
 						data = 
 						{
 							actionID = 65,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -104,34 +105,6 @@ local tbl =
 							version = 2.1,
 						},
 						inheritedIndex = 1,
-					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
 					},
 				},
 				conditions = 
@@ -164,20 +137,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -187,22 +146,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 16.4,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 4,
 				timerOffset = -14,
 				uuid = "fdd76df6-64ed-7178-a4e6-8c32ea94f828",
@@ -292,6 +238,7 @@ local tbl =
 						data = 
 						{
 							actionID = 65,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -311,38 +258,11 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuMNK3_CD",
+							ignoreWeaveRules = true,
 							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
 							version = 2.1,
 						},
 						inheritedIndex = 1,
-					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
 					},
 				},
 				conditions = 
@@ -375,20 +295,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -398,23 +304,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-						inheritedIndex = 5,
-					},
 				},
 				mechanicTime = 85.9,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 22,
 				timerOffset = -14,
 				uuid = "09239e0f-391c-f353-9472-f57a0045457b",
@@ -502,6 +394,7 @@ local tbl =
 						data = 
 						{
 							actionID = 65,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -525,34 +418,6 @@ local tbl =
 							version = 2.1,
 						},
 						inheritedIndex = 1,
-					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
 					},
 				},
 				conditions = 
@@ -585,20 +450,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -608,22 +459,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 121.1,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 29,
 				timerOffset = -14,
 				uuid = "b2c214f3-bcd7-d389-98ed-2102b39047d3",
@@ -711,6 +549,7 @@ local tbl =
 						data = 
 						{
 							actionID = 65,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -734,34 +573,6 @@ local tbl =
 							version = 2.1,
 						},
 						inheritedIndex = 1,
-					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
 					},
 				},
 				conditions = 
@@ -794,20 +605,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -817,22 +614,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 235.3,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 44,
 				timerOffset = -14,
 				uuid = "0ec1b572-552a-3230-80d3-66abe1152941",
@@ -873,41 +657,11 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuMNK3_CD",
+							ignoreWeaveRules = true,
 							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
 							version = 2.1,
 						},
 						inheritedIndex = 1,
-					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							allowInterrupt = true,
-							atomicPriority = true,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							ignoreWeaveRules = true,
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
 					},
 				},
 				conditions = 
@@ -940,20 +694,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -963,22 +703,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 259.9,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timeRange = true,
 				timelineIndex = 57,
 				timerOffset = -14,
@@ -986,6 +713,7 @@ local tbl =
 				uuid = "8a4b1017-8359-f4ce-8db7-852ec77a0e1e",
 				version = 2,
 			},
+			inheritedIndex = 1,
 		},
 	},
 	[64] = 
@@ -1092,34 +820,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -1151,20 +851,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -1174,22 +860,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 283,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 64,
 				timerOffset = -14,
 				uuid = "7e7b6274-9b78-3fb0-ac10-cadb816a077e",
@@ -1266,6 +939,7 @@ local tbl =
 				uuid = "674f1fec-1aed-6c0b-845a-4924ca41a8c7",
 				version = 2,
 			},
+			inheritedIndex = 1,
 		},
 		
 		{
@@ -1278,6 +952,7 @@ local tbl =
 						data = 
 						{
 							actionID = 65,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -1297,38 +972,11 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuMNK3_CD",
+							ignoreWeaveRules = true,
 							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
 							version = 2.1,
 						},
 						inheritedIndex = 1,
-					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
 					},
 				},
 				conditions = 
@@ -1361,20 +1009,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -1384,22 +1018,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 322.5,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 77,
 				timerOffset = -14,
 				uuid = "41717184-00b2-5657-ac1f-0996b18b7419",
@@ -1487,6 +1108,7 @@ local tbl =
 						data = 
 						{
 							actionID = 65,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -1506,38 +1128,11 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuMNK3_CD",
+							ignoreWeaveRules = true,
 							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
 							version = 2.1,
 						},
 						inheritedIndex = 1,
-					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
 					},
 				},
 				conditions = 
@@ -1570,20 +1165,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -1593,22 +1174,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 360.8,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 92,
 				timerOffset = -14,
 				uuid = "0f68ab8a-b0d6-7bda-8d52-35728c7e114e",
@@ -1697,6 +1265,7 @@ local tbl =
 						data = 
 						{
 							actionID = 65,
+							atomicPriority = true,
 							conditions = 
 							{
 								
@@ -1720,34 +1289,6 @@ local tbl =
 							version = 2.1,
 						},
 						inheritedIndex = 1,
-					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
 					},
 				},
 				conditions = 
@@ -1780,20 +1321,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -1803,22 +1330,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 388.7,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 100,
 				timerOffset = -14,
 				uuid = "f81f7574-bc40-89b9-8908-d468910855c4",
@@ -1863,34 +1377,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -1922,20 +1408,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -1945,556 +1417,14 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 518.3,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timeRange = true,
 				timelineIndex = 121,
 				timerOffset = -14,
 				timerStartOffset = -5,
 				uuid = "0ef12259-e8cb-c315-8c8b-7967400e7a20",
-				version = 2,
-			},
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							actionID = 4243,
-							atomicPriority = true,
-							conditions = 
-							{
-								
-								{
-									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
-									true,
-								},
-								
-								{
-									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
-									true,
-								},
-								
-								{
-									"f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
-									true,
-								},
-							},
-							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
-							targetType = "Current Target",
-							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
-							variableTogglesType = 2,
-							version = 2.1,
-						},
-						inheritedIndex = 1,
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
-							name = "LB已满",
-							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
-							version = 2,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "NINJA",
-							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
-							version = 2,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
-							name = "自动极限技",
-							uuid = "f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
-							version = 2,
-						},
-					},
-				},
-				eventType = 3,
-				loop = true,
-				mechanicTime = 518.3,
-				name = "自动极限技-忍者",
-				timeRange = true,
-				timelineIndex = 121,
-				timerEndOffset = 15,
-				timerOffset = -10,
-				timerStartOffset = -15,
-				uuid = "fb1fc3af-02d9-adba-adbc-8acbc2dfdb12",
-				version = 2,
-			},
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							actionID = 202,
-							atomicPriority = true,
-							conditions = 
-							{
-								
-								{
-									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
-									true,
-								},
-								
-								{
-									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
-									true,
-								},
-								
-								{
-									"182d14da-c06d-402b-aee5-06d15adc7575",
-									true,
-								},
-							},
-							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
-							targetType = "Current Target",
-							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
-							variableTogglesType = 2,
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
-							name = "LB已满",
-							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
-							version = 2,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "MONK",
-							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
-							version = 2,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
-							name = "自动极限技",
-							uuid = "182d14da-c06d-402b-aee5-06d15adc7575",
-							version = 2,
-						},
-					},
-				},
-				eventType = 3,
-				loop = true,
-				mechanicTime = 518.3,
-				name = "自动极限技-武僧",
-				timeRange = true,
-				timelineIndex = 121,
-				timerEndOffset = 15,
-				timerOffset = -10,
-				timerStartOffset = -15,
-				uuid = "06c32529-9a94-d2cb-a1e5-cec05fd8628d",
-				version = 2,
-			},
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							actionID = 4242,
-							atomicPriority = true,
-							conditions = 
-							{
-								
-								{
-									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
-									true,
-								},
-								
-								{
-									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
-									true,
-								},
-								
-								{
-									"182d14da-c06d-402b-aee5-06d15adc7575",
-									true,
-								},
-							},
-							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
-							targetType = "Current Target",
-							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
-							variableTogglesType = 2,
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
-							name = "LB已满",
-							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
-							version = 2,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "DRAGOON",
-							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
-							version = 2,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
-							name = "自动极限技",
-							uuid = "182d14da-c06d-402b-aee5-06d15adc7575",
-							version = 2,
-						},
-					},
-				},
-				eventType = 3,
-				loop = true,
-				mechanicTime = 518.3,
-				name = "自动极限技-龙骑",
-				timeRange = true,
-				timelineIndex = 121,
-				timerEndOffset = 15,
-				timerOffset = -10,
-				timerStartOffset = -15,
-				uuid = "41735302-0ba0-bb67-9dc1-f38bcedaf1cd",
-				version = 2,
-			},
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							actionID = 24858,
-							atomicPriority = true,
-							conditions = 
-							{
-								
-								{
-									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
-									true,
-								},
-								
-								{
-									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
-									true,
-								},
-								
-								{
-									"182d14da-c06d-402b-aee5-06d15adc7575",
-									true,
-								},
-							},
-							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
-							targetType = "Current Target",
-							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
-							variableTogglesType = 2,
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
-							name = "LB已满",
-							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
-							version = 2,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
-							version = 2,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
-							name = "自动极限技",
-							uuid = "182d14da-c06d-402b-aee5-06d15adc7575",
-							version = 2,
-						},
-					},
-				},
-				eventType = 3,
-				loop = true,
-				mechanicTime = 518.3,
-				name = "自动极限技-镰刀",
-				timeRange = true,
-				timelineIndex = 121,
-				timerEndOffset = 15,
-				timerOffset = -10,
-				timerStartOffset = -15,
-				uuid = "d97a56fb-4191-653f-8708-c459b1a29622",
-				version = 2,
-			},
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							actionID = 34866,
-							atomicPriority = true,
-							conditions = 
-							{
-								
-								{
-									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
-									true,
-								},
-								
-								{
-									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
-									true,
-								},
-								
-								{
-									"f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
-									true,
-								},
-							},
-							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
-							targetType = "Current Target",
-							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
-							variableTogglesType = 2,
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
-							name = "LB已满",
-							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
-							version = 2,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "VIPER",
-							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
-							version = 2,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
-							name = "自动极限技",
-							uuid = "f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
-							version = 2,
-						},
-					},
-				},
-				eventType = 3,
-				loop = true,
-				mechanicTime = 518.3,
-				name = "自动极限技-蝰蛇",
-				timeRange = true,
-				timelineIndex = 121,
-				timerEndOffset = 15,
-				timerOffset = -10,
-				timerStartOffset = -15,
-				uuid = "303e0e48-7663-6b51-94ab-f0e40ad29cb5",
-				version = 2,
-			},
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							actionID = 7861,
-							atomicPriority = true,
-							conditions = 
-							{
-								
-								{
-									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
-									true,
-								},
-								
-								{
-									"f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
-									true,
-								},
-								
-								{
-									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
-									true,
-								},
-							},
-							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
-							targetType = "Current Target",
-							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
-							variableTogglesType = 2,
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
-							name = "LB已满",
-							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
-							version = 2,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "SAMURAI",
-							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
-							version = 2,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
-							name = "自动极限技",
-							uuid = "f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
-							version = 2,
-						},
-					},
-				},
-				eventType = 3,
-				loop = true,
-				mechanicTime = 518.3,
-				name = "自动极限技-武士",
-				timeRange = true,
-				timelineIndex = 121,
-				timerEndOffset = 15,
-				timerOffset = -10,
-				timerStartOffset = -15,
-				uuid = "cfd33ced-817f-daee-8ad6-258fc668d884",
 				version = 2,
 			},
 		},
@@ -2604,34 +1534,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -2663,20 +1565,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -2686,27 +1574,540 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 532.4,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 123,
 				timerOffset = -14,
 				uuid = "ece98333-6d8f-2714-b900-73d9caa52e84",
 				version = 2,
 			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 4243,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "NINJA",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
+							name = "自动极限技",
+							uuid = "f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				mechanicTime = 532.4,
+				name = "自动极限技-忍者",
+				timeRange = true,
+				timelineIndex = 123,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -13,
+				uuid = "e267d212-bc5b-5d79-a6ee-43451b80dc40",
+				version = 2,
+			},
+			inheritedIndex = 3,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 202,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"182d14da-c06d-402b-aee5-06d15adc7575",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MONK",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
+							name = "自动极限技",
+							uuid = "182d14da-c06d-402b-aee5-06d15adc7575",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				mechanicTime = 532.4,
+				name = "自动极限技-武僧",
+				timeRange = true,
+				timelineIndex = 123,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -13,
+				uuid = "e34b40df-6f59-e9cd-b288-2ace1f2aff49",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 4242,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"182d14da-c06d-402b-aee5-06d15adc7575",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DRAGOON",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
+							name = "自动极限技",
+							uuid = "182d14da-c06d-402b-aee5-06d15adc7575",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				mechanicTime = 532.4,
+				name = "自动极限技-龙骑",
+				timeRange = true,
+				timelineIndex = 123,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -13,
+				uuid = "003daf9a-37ac-a2e0-9618-ce6e6ad5bbab",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 24858,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"182d14da-c06d-402b-aee5-06d15adc7575",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "REAPER",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
+							name = "自动极限技",
+							uuid = "182d14da-c06d-402b-aee5-06d15adc7575",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				mechanicTime = 532.4,
+				name = "自动极限技-镰刀",
+				timeRange = true,
+				timelineIndex = 123,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -13,
+				uuid = "e1ba3d13-6a47-b5bc-87a8-dc9809b8cd19",
+				version = 2,
+			},
+			inheritedIndex = 6,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34866,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "VIPER",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
+							name = "自动极限技",
+							uuid = "f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				mechanicTime = 532.4,
+				name = "自动极限技-蝰蛇",
+				timeRange = true,
+				timelineIndex = 123,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -13,
+				uuid = "b3b62e93-48b8-805d-aa37-c557a3928c1c",
+				version = 2,
+			},
+			inheritedIndex = 7,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7861,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+									true,
+								},
+								
+								{
+									"f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+									true,
+								},
+								
+								{
+									"73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_Hotbar_LimitBreak",
+							targetType = "Current Target",
+							uuid = "a89e102e-8e99-af11-b97a-e7cb511dec72",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local clb,mlb = TensorCore.getLBGauge()\nreturn clb >= 30000",
+							name = "LB已满",
+							uuid = "73bb0f5f-076b-85ad-b172-7a6c18a41f61",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "SAMURAI",
+							uuid = "f3d5e820-9518-e76d-b615-05eaef8f0c2d",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AutoLB1 == true",
+							name = "自动极限技",
+							uuid = "f4ed3d0c-4be9-01ad-b5af-132da7a8f631",
+							version = 2,
+						},
+					},
+				},
+				eventType = 3,
+				mechanicTime = 532.4,
+				name = "自动极限技-武士",
+				timeRange = true,
+				timelineIndex = 123,
+				timerEndOffset = 15,
+				timerOffset = -10,
+				timerStartOffset = -13,
+				uuid = "fb0f01ca-5e0f-3635-8475-687d9766e023",
+				version = 2,
+			},
+			inheritedIndex = 8,
 		},
 	},
 	[134] = 
@@ -2746,34 +2147,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -2805,20 +2178,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -2828,22 +2187,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 569.3,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 134,
 				timerOffset = -14,
 				uuid = "5108ab28-4a42-011b-9d09-714c533386c7",
@@ -2955,34 +2301,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -3014,20 +2332,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -3037,22 +2341,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 587.1,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 139,
 				timerOffset = -14,
 				uuid = "f48b6d5c-dd3e-76d1-bb85-cc159f67fd13",
@@ -3164,34 +2455,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -3223,20 +2486,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -3246,22 +2495,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 651.2,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 152,
 				timerOffset = -14,
 				uuid = "06be0272-ae1a-b827-a867-2b2420ab26a5",
@@ -3307,34 +2543,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -3366,20 +2574,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -3389,22 +2583,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 656.4,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timeRange = true,
 				timelineIndex = 153,
 				timerOffset = -14,
@@ -3518,34 +2699,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -3577,20 +2730,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -3600,22 +2739,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 670.1,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 154,
 				timerOffset = -14,
 				uuid = "12aadebd-0163-b91e-a69c-6425ccb5485d",
@@ -3730,34 +2856,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -3789,20 +2887,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -3812,22 +2896,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 738.2,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 166,
 				timerOffset = -14,
 				uuid = "3054689c-9ed3-c3ec-a258-100dc3c86644",
@@ -3872,34 +2943,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -3931,20 +2974,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -3954,22 +2983,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 783.4,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 176,
 				timerOffset = -14,
 				uuid = "86e23bee-903b-8c68-b87c-918b3e4bd846",
@@ -4084,34 +3100,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -4143,20 +3131,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -4166,22 +3140,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 798.9,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 179,
 				timerOffset = -2,
 				uuid = "6ea4cd68-68bf-9e6a-8fec-5890d6addcc3",
@@ -4227,34 +3188,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -4286,20 +3219,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -4309,22 +3228,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 845.7,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 198,
 				timerOffset = -1,
 				uuid = "0a734533-c02d-e88d-951e-b4823f696939",
@@ -4439,34 +3345,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -4498,19 +3376,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -4520,22 +3385,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 984.8,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 209,
 				timerOffset = -14,
 				uuid = "bf26e623-b92c-8316-a578-78590dd255a9",
@@ -4647,34 +3499,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -4706,20 +3530,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -4729,22 +3539,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 1011.4,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 215,
 				timerOffset = -14,
 				uuid = "592b40c8-5556-faa5-96b8-460391a80ab2",
@@ -4856,34 +3653,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -4915,20 +3684,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -4938,22 +3693,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 1065.6,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 233,
 				timerOffset = -14,
 				uuid = "bf0a49be-1b32-64eb-8bb0-c1bfcd036890",
@@ -4999,34 +3741,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -5058,20 +3772,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -5081,22 +3781,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 1085.2,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 236,
 				timerOffset = -10,
 				uuid = "b92efb1b-2876-3b5b-b2ae-fe6fb5820d13",
@@ -5207,35 +3894,7 @@ local tbl =
 							uuid = "273c7be2-b1f2-ddd9-8df9-c2363fa58a49",
 							version = 2.1,
 						},
-						inheritedIndex = 1,
-					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
+						inheritedIndex = 2,
 					},
 				},
 				conditions = 
@@ -5268,20 +3927,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -5291,22 +3936,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 1097.4,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 237,
 				timerOffset = -14,
 				uuid = "a9590dcd-6289-b182-ae92-2ec656221e67",
@@ -5418,34 +4050,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -5477,20 +4081,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -5500,22 +4090,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 1124,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 243,
 				timerOffset = -14,
 				uuid = "0df74273-f11f-ae5a-8dda-aad0f76d1567",
@@ -5627,34 +4204,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -5686,20 +4235,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -5709,22 +4244,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 1177,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 260,
 				timerOffset = -14,
 				uuid = "ed71d4a0-cac0-f124-8967-affd1139dfac",
@@ -5836,34 +4358,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -5895,20 +4389,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -5918,22 +4398,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 1187.6,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 262,
 				timerOffset = -14,
 				uuid = "b0fbe296-90c7-1011-997c-f73b24f79b91",
@@ -6045,34 +4512,6 @@ local tbl =
 						},
 						inheritedIndex = 1,
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							conditions = 
-							{
-								
-								{
-									"5651b981-09d5-5339-94ad-d8b91d4054bd",
-									true,
-								},
-								
-								{
-									"f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-									true,
-								},
-								
-								{
-									"b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-									true,
-								},
-							},
-							gVar = "ACR_TensorReaper3_CD",
-							uuid = "eb697f20-a695-be2e-8e7f-f753c61491c6",
-							version = 2.1,
-						},
-					},
 				},
 				conditions = 
 				{
@@ -6104,20 +4543,6 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Self",
-							conditionType = 13,
-							dequeueIfLuaFalse = true,
-							jobValue = "REAPER",
-							name = "钐镰客",
-							uuid = "f4f0df97-05cd-4ef1-9721-6f622c3b2e1d",
-							version = 2,
-						},
-						inheritedIndex = 3,
-					},
-					
-					{
-						data = 
-						{
 							actionID = 65,
 							category = "Self",
 							comparator = 2,
@@ -6127,22 +4552,9 @@ local tbl =
 							version = 2,
 						},
 					},
-					
-					{
-						data = 
-						{
-							actionID = 24404,
-							category = "Self",
-							comparator = 2,
-							conditionType = 4,
-							name = "神秘纹CD",
-							uuid = "b4dbe45b-7627-c59b-bf20-d16cbc918fe2",
-							version = 2,
-						},
-					},
 				},
 				mechanicTime = 1214.2,
-				name = "[MuAiNelee]近战特色减",
+				name = "[MuAiNelee]真言",
 				timelineIndex = 268,
 				timerOffset = -14,
 				uuid = "197e3250-27a2-37a1-a4ef-8d19b65d0f4b",

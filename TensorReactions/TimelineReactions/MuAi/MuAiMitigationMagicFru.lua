@@ -69,6 +69,224 @@ local tbl =
 				uuid = "c9d33fea-30c0-dec1-8960-b9dc5a722005",
 				version = 2,
 			},
+			inheritedIndex = 1,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.SinsMite.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 16.4,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 4,
+				timerOffset = -9,
+				uuid = "6586f59e-d7bb-ced1-aab2-21e7157e40e9",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.SinsMite.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+						inheritedIndex = 2,
+					},
+				},
+				mechanicTime = 16.4,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 4,
+				timerOffset = -8,
+				uuid = "cc23f699-96e8-50da-b860-739b79ac1732",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.SinsMite.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 16.4,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 4,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "5405712c-ea67-d923-abff-bef31ba3bd21",
+				version = 2,
+			},
 		},
 	},
 	[22] = 
@@ -143,6 +361,223 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"20715484-8aef-55d6-9d3f-a7882f3ee3e4",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.BurnishedGlory1.Field == true",
+							name = "检查设置",
+							uuid = "20715484-8aef-55d6-9d3f-a7882f3ee3e4",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 85.9,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 22,
+				timerOffset = -9,
+				uuid = "6a167f83-613d-30cb-94cc-9708ee4cbb97",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.BurnishedGlory1.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 85.9,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 22,
+				timerOffset = -6,
+				uuid = "40b95bfd-ff3e-e19c-92d9-e5ca5d80f842",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.BurnishedGlory1.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 85.9,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 22,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "1b45a6cb-92df-a7ea-886a-6352ea9e44d9",
+				version = 2,
+			},
+		},
 	},
 	[29] = 
 	{
@@ -211,6 +646,223 @@ local tbl =
 				timelineIndex = 29,
 				timerOffset = -14,
 				uuid = "b09d849f-5c07-9a24-a565-e5d4e122d654",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"e7527478-152b-a69d-9bdf-eb1d5f353aba",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.BurnishedGlory2.Field == true",
+							name = "检查设置",
+							uuid = "e7527478-152b-a69d-9bdf-eb1d5f353aba",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 121.1,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 29,
+				timerOffset = -9,
+				uuid = "916dfd00-8523-549e-a58e-9bcc5d8c3b2d",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.BurnishedGlory2.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 121.1,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 29,
+				timerOffset = -6,
+				uuid = "648b8f30-0458-904e-991e-ed9acff7a1dd",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.BurnishedGlory2.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 121.1,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 29,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "a2c7c70a-f35c-9ed5-ba09-4e6283939673",
 				version = 2,
 			},
 		},
@@ -284,6 +936,444 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"5ced99c2-64d4-f93f-9955-5de17c82aa93",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DiamondDust.Field == true",
+							name = "检查设置",
+							uuid = "5ced99c2-64d4-f93f-9955-5de17c82aa93",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 235.3,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 44,
+				timerOffset = -9,
+				uuid = "6dfc4862-e924-398a-80e5-e9f28ec29e9d",
+				version = 2,
+			},
+			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DiamondDust.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 235.3,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 44,
+				timerOffset = -8,
+				uuid = "f6636b15-d718-28ac-9493-d3999de45426",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DiamondDust.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 235.3,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 44,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "e8854e9c-f8db-d0da-ace4-0a43cf9969b9",
+				version = 2,
+			},
+		},
+	},
+	[57] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.SinBound.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 259.9,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 57,
+				timerOffset = -9.5,
+				uuid = "6e293ab2-c0d5-8d61-945e-65319fdd953b",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.SinBound.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 259.9,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 57,
+				timerOffset = -8,
+				uuid = "a2502a31-079c-abdd-a630-aa400bff9e5c",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.SinBound.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 259.9,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 57,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "39881a9c-a54b-f60d-8bbc-0ee5992e9d03",
+				version = 2,
+			},
+		},
 	},
 	[64] = 
 	{
@@ -354,6 +1444,224 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HallowedRay.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 283,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 64,
+				timerOffset = -9.5,
+				uuid = "57f0994e-48ef-55ab-a7ef-a8960030c682",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HallowedRay.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 283,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 64,
+				timerOffset = -8,
+				uuid = "a1393aba-bc44-badd-b1af-dceb600cd563",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HallowedRay.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 283,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 64,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "6c9d2cd9-339c-45dd-a46f-e8376bab76d9",
+				version = 2,
+			},
+			inheritedIndex = 4,
+		},
 	},
 	[77] = 
 	{
@@ -421,6 +1729,226 @@ local tbl =
 				timelineIndex = 77,
 				timerOffset = -4,
 				uuid = "674f1fec-1aed-6c0b-845a-4924ca41a8c7",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.LightRampant.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 322.5,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 77,
+				timerOffset = -0.5,
+				uuid = "18a56f31-e417-12f1-bca6-6041887e2df4",
+				version = 2,
+			},
+		},
+	},
+	[80] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.LightRampant.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 331.8,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 80,
+				timerOffset = -7,
+				uuid = "5ad59c37-c973-c95a-a9b5-b1d524a77ef3",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.LightRampant.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 331.8,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 80,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "5a0afd0e-4a98-c69f-afa9-b232213967cb",
 				version = 2,
 			},
 		},
@@ -495,6 +2023,226 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HouseOfLight.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 360.8,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 92,
+				timerOffset = -9.5,
+				uuid = "e8edf6a5-b86a-efba-8688-42c6ea64e8af",
+				version = 2,
+			},
+		},
+	},
+	[95] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HouseOfLight.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 368.8,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 95,
+				timerOffset = -7,
+				uuid = "69ae00f0-32c6-d1be-8eba-66bc0e2e5e69",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HouseOfLight.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 368.8,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 95,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "a25f2cab-7162-5b94-8466-79e90307146d",
+				version = 2,
+			},
+		},
 	},
 	[100] = 
 	{
@@ -562,6 +2310,223 @@ local tbl =
 				timelineIndex = 100,
 				timerOffset = -14,
 				uuid = "bba159b2-b652-fcec-9fe2-c5288f868789",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AbsoluteZero.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 388.7,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 100,
+				timerOffset = -9.5,
+				uuid = "f6e5d0b9-8c7a-34b2-b441-a2b8c94d2905",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AbsoluteZero.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 388.7,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 100,
+				timerOffset = -8,
+				uuid = "14f480a8-c01d-2da4-97b7-23351ab8af37",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AbsoluteZero.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 388.7,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 100,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "90236463-8f96-080e-b96d-44ee7f9557c3",
 				version = 2,
 			},
 		},
@@ -635,6 +2600,224 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Relativity.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 532.4,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 123,
+				timerOffset = -9.5,
+				uuid = "469bc343-56bc-3d45-ada0-8e38262f7bc3",
+				version = 2,
+			},
+			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Relativity.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 532.4,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 123,
+				timerOffset = -8,
+				uuid = "03d13ce1-b2b4-0dce-8e9e-97fc007fd89c",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Relativity.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 532.4,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 123,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "8bc7ad69-538f-aa31-a2d9-e74816ae73c3",
+				version = 2,
+			},
+		},
 	},
 	[139] = 
 	{
@@ -702,6 +2885,224 @@ local tbl =
 				timelineIndex = 139,
 				timerOffset = -14,
 				uuid = "f6c088e9-cca9-766f-92f5-9072f7bf7115",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "return MuAiGuide.Config.FruMitigation.ShellCrusher.Field == true",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.SinBound.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 587.1,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 139,
+				timerOffset = -9.5,
+				uuid = "b90403c1-0bc1-922f-9316-b0921a626f8f",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.ShellCrusher.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 587.1,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 139,
+				timerOffset = -5,
+				uuid = "df5069d1-45eb-6842-b808-ca3a1c0fc721",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.ShellCrusher.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 587.1,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 139,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "00906818-8b69-b7ec-9035-e87763f912ad",
 				version = 2,
 			},
 		},
@@ -775,6 +3176,444 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DarkWater.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 651.2,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 152,
+				timerOffset = -9.5,
+				uuid = "2c7bdfb2-b139-9509-b536-2ea1cd9e15d9",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DarkWater.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 651.2,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 152,
+				timerOffset = -5,
+				uuid = "fd8231a2-3b00-370f-91a0-74258047c9c4",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DarkWater.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 651.2,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 152,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "fcef3d43-1f95-cdd3-ba57-9021601a7c27",
+				version = 2,
+			},
+		},
+	},
+	[153] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.ShockwavePulsar2.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+						inheritedIndex = 2,
+					},
+				},
+				mechanicTime = 656.4,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 153,
+				timerOffset = -9.5,
+				uuid = "7c890bc6-459a-d597-86cc-9d2c8186aa35",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.ShockwavePulsar2.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 656.4,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 153,
+				timerOffset = -4,
+				uuid = "4d20c9be-efa6-af8e-ac32-84b88f359fab",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.ShockwavePulsar2.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 656.4,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 153,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "38d6fd84-504c-b0eb-ab0c-ddc11cd9685f",
+				version = 2,
+			},
+		},
 	},
 	[154] = 
 	{
@@ -842,6 +3681,223 @@ local tbl =
 				timelineIndex = 154,
 				timerOffset = -14,
 				uuid = "9247eb55-7c9a-b471-877f-9ccfe6765cfb",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MemorySEnd.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 670.1,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 154,
+				timerOffset = -9.5,
+				uuid = "608fc429-2fcf-5ea9-8c63-7966da018a57",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MemorySEnd.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 670.1,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 154,
+				timerOffset = -3,
+				uuid = "b090a3ba-72a2-9fb7-99c9-b4e7a47fd2aa",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MemorySEnd.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 670.1,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 154,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "7577aa8f-7b99-0a50-b92b-d4504d23edb6",
 				version = 2,
 			},
 		},
@@ -918,6 +3974,444 @@ local tbl =
 			},
 			inheritedIndex = 1,
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DarkLitDragonSong.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 738.2,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 166,
+				timerOffset = -9.5,
+				uuid = "54de5909-40b6-b5a4-9944-9cda655b932c",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DarkLitDragonSong.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 738.2,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 166,
+				timerOffset = -8,
+				uuid = "9abfb019-06b5-2075-aebe-da2049742876",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.DarkLitDragonSong.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 738.2,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 166,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "18fc8d78-8781-fc67-b236-c660fb0db001",
+				version = 2,
+			},
+		},
+	},
+	[176] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MornAfah1.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 783.4,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 176,
+				timerOffset = -9.8999996185303,
+				uuid = "c69a9129-4639-b14a-90b7-2ac900613136",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MornAfah1.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 783.4,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 176,
+				timerOffset = -5,
+				uuid = "8a6d412b-527f-7ae1-88b5-bf8e4c811bab",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MornAfah1.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 783.4,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 176,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "980a87b5-518a-0a77-b91b-8ec2f659003e",
+				version = 2,
+			},
+			inheritedIndex = 3,
+		},
 	},
 	[179] = 
 	{
@@ -990,6 +4484,598 @@ local tbl =
 			},
 			inheritedIndex = 1,
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.CrystallizeTime.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 798.9,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 179,
+				timerOffset = -9,
+				uuid = "a5f44308-92dc-0f32-9a71-8552f1d3e2d2",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.CrystallizeTime.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 798.9,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 179,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "56d5fc09-0f38-8742-8352-c4d13f415601",
+				version = 2,
+			},
+		},
+	},
+	[198] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HallowedWings.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 845.7,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 198,
+				timerOffset = -9,
+				uuid = "3cef538c-9528-e597-adef-e0aa0638c6a1",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HallowedWings.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 845.7,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 198,
+				timerOffset = -8,
+				uuid = "109effc4-4e8e-c21f-a208-5ecd10b9bb05",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							ignoreWeaveRules = true,
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.HallowedWings.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 845.7,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 198,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "c5453fc8-db28-2663-aa9b-868ee69ec4ed",
+				version = 2,
+			},
+		},
+	},
+	[204] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MornAfah2.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 864.8,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 204,
+				timerOffset = -9.8999996185303,
+				uuid = "9af554d7-519a-802d-be2d-fb086a60bf66",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MornAfah2.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 864.8,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 204,
+				timerOffset = -5,
+				uuid = "127fd08f-926e-b9ae-9e6c-96b0ba4ce6d6",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MornAfah2.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 864.8,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 204,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "1b7651b4-63d7-2d2c-9d2b-1eabd7f2e45f",
+				version = 2,
+			},
+		},
 	},
 	[209] = 
 	{
@@ -1053,6 +5139,223 @@ local tbl =
 				timelineIndex = 209,
 				timerOffset = -13,
 				uuid = "33f4b4d2-9d1a-62c5-850d-0fb8833a60b1",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.FulgentBlade1.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 984.8,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 209,
+				timerOffset = -9.8999996185303,
+				uuid = "e68affc2-1c89-42e2-8830-afb8e0cf70b6",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.FulgentBlade1.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 984.8,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 209,
+				timerOffset = -8,
+				uuid = "e9ab5061-764b-11ca-be19-94f0358feafc",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.FulgentBlade1.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 984.8,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 209,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "2826878e-41f1-4462-bfa5-5b72f07c7e3f",
 				version = 2,
 			},
 		},
@@ -1126,6 +5429,223 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn1.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1011.4,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 215,
+				timerOffset = -9.8999996185303,
+				uuid = "183413fb-ee78-1275-82a9-15e2807dacb0",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn1.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1011.4,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 215,
+				timerOffset = -8,
+				uuid = "3f1ae2c2-0cdf-9039-9372-07b511c0b60f",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn1.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1011.4,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 215,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "13b2757e-3485-321b-808a-d2595b3801b3",
+				version = 2,
+			},
+		},
 	},
 	[233] = 
 	{
@@ -1193,6 +5713,444 @@ local tbl =
 				timelineIndex = 233,
 				timerOffset = -14,
 				uuid = "1f6ed51b-d638-2fb5-b453-ace43b8e57eb",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Polarizing1.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1065.6,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 233,
+				timerOffset = -9.8999996185303,
+				uuid = "cc5bec75-3b30-5b39-8065-5288978d977d",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Polarizing1.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1065.6,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 233,
+				timerOffset = -8,
+				uuid = "28e768f0-4624-762b-b332-28b43ce31170",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Polarizing1.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1065.6,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 233,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "866eb8ca-a297-6fcf-b74d-aa9f5b3b978c",
+				version = 2,
+			},
+		},
+	},
+	[236] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.PandoraBox.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1085.2,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 236,
+				timerOffset = -9.8999996185303,
+				uuid = "a04f6dc5-7631-5fd8-aab1-b406b6b74d63",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.PandoraBox.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1085.2,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 236,
+				timerOffset = -8,
+				uuid = "7e3e1f34-b2df-ba1a-bf18-4f300049416a",
+				version = 2,
+			},
+			inheritedIndex = 2,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.PandoraBox.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1085.2,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 236,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "5c2a7ea5-c1c0-5391-b3ec-cbdd089cb78d",
 				version = 2,
 			},
 		},
@@ -1266,6 +6224,223 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.FulgentBlade2.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1097.4,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 237,
+				timerOffset = -9.8999996185303,
+				uuid = "15b50330-8a5c-cfb9-8d67-4ad1bc2d0952",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.FulgentBlade2.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1097.4,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 237,
+				timerOffset = -8,
+				uuid = "02fecaf5-1bcb-0a89-a91d-c37ca64b2b21",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.FulgentBlade2.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1097.4,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 237,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "9b69179c-6c1d-74a2-a034-5405a9509a31",
+				version = 2,
+			},
+		},
 	},
 	[243] = 
 	{
@@ -1333,6 +6508,223 @@ local tbl =
 				timelineIndex = 243,
 				timerOffset = -14,
 				uuid = "14e04509-02fb-d603-adbe-3505fe67afbb",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn2.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1124,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 243,
+				timerOffset = -9.8999996185303,
+				uuid = "f1f31b13-7799-4483-b0cf-5d84d76e9b74",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn2.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1124,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 243,
+				timerOffset = -8,
+				uuid = "a6da1a6d-4fb7-a12d-a3e4-7df9bdd21148",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn2.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1124,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 243,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "53916818-759d-0336-8aa3-96fd1d26e9ad",
 				version = 2,
 			},
 		},
@@ -1406,6 +6798,223 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Polarizing2.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1177,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 260,
+				timerOffset = -9.8999996185303,
+				uuid = "cdea1b59-4a54-1c18-ab7c-b9cef625d628",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Polarizing2.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1177,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 260,
+				timerOffset = -8,
+				uuid = "c0fb8913-b853-4ba2-8da7-c86da6b6ad18",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Polarizing2.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1177,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 260,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "94bd777e-c012-72cc-8f5f-aba3ded3da1e",
+				version = 2,
+			},
+		},
 	},
 	[262] = 
 	{
@@ -1469,12 +7078,230 @@ local tbl =
 					},
 				},
 				mechanicTime = 1187.6,
-				name = "混乱",
+				name = "[MuAiMagic]混乱",
 				timelineIndex = 262,
 				timerOffset = -14,
 				uuid = "da2a1f15-85d6-3338-8cfb-42f8c0eac65a",
 				version = 2,
 			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.FulgentBlade3.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1187.6,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 262,
+				timerOffset = -9.8999996185303,
+				uuid = "dddbf30d-08a5-9196-acb4-dfcd07e92934",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.FulgentBlade3.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1187.6,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 262,
+				timerOffset = -8,
+				uuid = "3ee86a7c-6dd9-ae7f-89cd-b421cee30045",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.FulgentBlade3.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1187.6,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 262,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "40465361-b238-8249-9f46-5b3613ce1b20",
+				version = 2,
+			},
+			inheritedIndex = 4,
 		},
 	},
 	[268] = 
@@ -1545,6 +7372,224 @@ local tbl =
 				uuid = "23b47bf2-b1bc-e871-8e9f-8520f362373c",
 				version = 2,
 			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "REDMAGE",
+							name = "赤魔法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn3.Field == true",
+							name = "检查设置",
+							uuid = "6e502bac-eb02-9fa5-84f9-f2e4683bf49c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1214.2,
+				name = "[MuAiMagic]抗死",
+				timelineIndex = 268,
+				timerOffset = -9.8999996185303,
+				uuid = "2d729439-da38-b48b-a911-aab5b4379cd0",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 34686,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPCT3_Hotbar_TemperaCoat",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn3.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1214.2,
+				name = "[MuAiMagic]画盾自身",
+				timelineIndex = 268,
+				timerOffset = -8,
+				uuid = "9524dd97-aa66-3a43-83b4-65dba97ed7ac",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34686,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ad6702b7-e474-0f2e-92e5-707f67652101",
+									true,
+								},
+								
+								{
+									"883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+									true,
+								},
+								
+								{
+									"3c87cdcd-8630-4901-8f86-fecac1abfe10",
+									true,
+								},
+							},
+							gVar = "ACR_RikuRDM3_Hotbar_MagickBarrier",
+							uuid = "83242cd5-69ca-0914-9b91-8f9477e13c14",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PICTOMANCER",
+							name = "绘灵法师",
+							uuid = "ad6702b7-e474-0f2e-92e5-707f67652101",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.AkhMorn3.Field == true",
+							name = "检查设置",
+							uuid = "883d0cc0-9e17-8fae-9784-d1cc6cd7735c",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffID = 3686,
+							category = "Self",
+							name = "有盾",
+							uuid = "3c87cdcd-8630-4901-8f86-fecac1abfe10",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 1214.2,
+				name = "[MuAiMagic]画盾展开",
+				timeRange = true,
+				timelineIndex = 268,
+				timerEndOffset = -1,
+				timerOffset = -8,
+				timerStartOffset = -10,
+				uuid = "91e0ae01-099a-c32f-90ba-acf8e262e7a9",
+				version = 2,
+			},
+			inheritedIndex = 4,
 		},
 	},
 	inheritedProfiles = 

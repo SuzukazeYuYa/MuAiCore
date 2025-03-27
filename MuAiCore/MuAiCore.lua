@@ -210,20 +210,13 @@ core.ForceUpdate = function()
                     if not FolderExists(destFolderPath) then
                         FolderCreate(destFolderPath)
                     end
-
                     -- 如果目标文件存在，比较文件内容
                     if FileExists(destFile) then
-                        -- 比较文件大小和内容
-                        local srcFileSize = FileSize(srcFile)
-                        local destFileSize = FileSize(destFile)
-                        if srcFileSize ~= destFileSize then
-                            runCommand("copy /Y " .. srcFile .. " " .. destFile)
-                            d("[MuAiCore]更新：" .. destFile)
-                        end
+                        d("[MuAiCore]更新：" .. destFile)
                     else
-                        runCommand("copy /Y " .. srcFile .. " " .. destFile)
                         d("[MuAiCore]新增：" .. destFile)
                     end
+                    runCommand("copy /Y " .. srcFile .. " " .. destFile)
                 end
             end
         end
