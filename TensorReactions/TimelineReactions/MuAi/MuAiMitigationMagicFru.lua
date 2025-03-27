@@ -4204,6 +4204,76 @@ local tbl =
 					{
 						data = 
 						{
+							actionID = 7560,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"d3141496-a33d-6a4b-beb1-3646ba79deee",
+									true,
+								},
+								
+								{
+									"7858a36a-6dd4-3b42-ad55-45d27a6cb982",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_CD",
+							targetContentID = 12809,
+							targetType = "ContentID",
+							uuid = "3f434f17-a6c0-52cb-b4b6-905b8962a6a9",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MornAfah1.Target == true",
+							name = "MornAfah1.Target",
+							uuid = "d3141496-a33d-6a4b-beb1-3646ba79deee",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 7560,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "混乱CD",
+							uuid = "7858a36a-6dd4-3b42-ad55-45d27a6cb982",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 783.4,
+				name = "[MuAiMagic]混乱-琳",
+				timelineIndex = 176,
+				timerOffset = -14,
+				uuid = "8b84e4c0-d053-19a7-9cc6-32122ed0bb34",
+				version = 2,
+			},
+			inheritedIndex = 1,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
 							aType = "ACR",
 							conditions = 
 							{
@@ -4410,7 +4480,7 @@ local tbl =
 				uuid = "980a87b5-518a-0a77-b91b-8ec2f659003e",
 				version = 2,
 			},
-			inheritedIndex = 3,
+			inheritedIndex = 4,
 		},
 	},
 	[179] = 
@@ -4859,6 +4929,76 @@ local tbl =
 	},
 	[204] = 
 	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7560,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"d3141496-a33d-6a4b-beb1-3646ba79deee",
+									true,
+								},
+								
+								{
+									"7858a36a-6dd4-3b42-ad55-45d27a6cb982",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_CD",
+							targetContentID = 12809,
+							targetType = "ContentID",
+							uuid = "3f434f17-a6c0-52cb-b4b6-905b8962a6a9",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MornAfah2.Target == true",
+							name = "MornAfah2.Target",
+							uuid = "d3141496-a33d-6a4b-beb1-3646ba79deee",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 7560,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "混乱CD",
+							uuid = "7858a36a-6dd4-3b42-ad55-45d27a6cb982",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 864.8,
+				name = "[MuAiMagic]混乱-琳",
+				timelineIndex = 204,
+				timerOffset = -14,
+				uuid = "4c77f1fd-8d06-a0c4-8f6a-bde6e28961d4",
+				version = 2,
+			},
+			inheritedIndex = 1,
+		},
 		
 		{
 			data = 

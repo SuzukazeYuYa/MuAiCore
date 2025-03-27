@@ -2995,6 +2995,76 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7549,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"d3141496-a33d-6a4b-beb1-3646ba79deee",
+									true,
+								},
+								
+								{
+									"334ffba9-a204-4c3f-85bc-81eef561f508",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_CD",
+							targetContentID = 12809,
+							targetType = "ContentID",
+							uuid = "3f434f17-a6c0-52cb-b4b6-905b8962a6a9",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MornAfah1.Target == true",
+							name = "MornAfah1.Target",
+							uuid = "d3141496-a33d-6a4b-beb1-3646ba79deee",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 7549,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "牵制CD",
+							uuid = "334ffba9-a204-4c3f-85bc-81eef561f508",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 783.4,
+				name = "[MuAiMelee]牵制-琳",
+				timelineIndex = 176,
+				timerOffset = -14,
+				uuid = "3496d33a-fa73-c3ce-a02d-e88558a232f1",
+				version = 2,
+			},
+			inheritedIndex = 1,
+		},
 	},
 	[179] = 
 	{
@@ -3240,6 +3310,79 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 2,
+		},
+	},
+	[204] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7549,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"d3141496-a33d-6a4b-beb1-3646ba79deee",
+									true,
+								},
+								
+								{
+									"334ffba9-a204-4c3f-85bc-81eef561f508",
+									true,
+								},
+							},
+							gVar = "ACR_RikuNIN3_CD",
+							targetContentID = 12809,
+							targetType = "ContentID",
+							uuid = "3f434f17-a6c0-52cb-b4b6-905b8962a6a9",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.MornAfah2.Target == true",
+							name = "MornAfah2.Target",
+							uuid = "d3141496-a33d-6a4b-beb1-3646ba79deee",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 7549,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							name = "牵制CD",
+							uuid = "334ffba9-a204-4c3f-85bc-81eef561f508",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 864.8,
+				name = "[MuAiMelee]牵制-琳",
+				timelineIndex = 204,
+				timerOffset = -14,
+				uuid = "0916bb3f-fb4a-8e48-a857-64ab06821536",
+				version = 2,
+			},
+			inheritedIndex = 1,
 		},
 	},
 	[209] = 
