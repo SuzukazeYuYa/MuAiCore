@@ -5575,10 +5575,40 @@ local tbl =
 									"8fbb5c87-8e9b-c439-b5e8-be9af950ef40",
 									true,
 								},
+								
+								{
+									"1d009305-ccaa-3601-9455-7b242ab3ec69",
+									true,
+								},
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuPLD3_Hotbar_LimitBreak",
 							uuid = "c5b99dda-36f8-8926-87d4-957700f4a778",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"8fbb5c87-8e9b-c439-b5e8-be9af950ef40",
+									true,
+								},
+								
+								{
+									"bc411f08-1c31-3441-939e-0a9dbe803945",
+									true,
+								},
+							},
+							endIfUsed = true,
+							gVar = "ACR_RikuDRK3_Hotbar_LimitBreak",
+							uuid = "aae4ec7b-9450-5942-b141-236a8e97f476",
 							variableTogglesType = 2,
 							version = 2.1,
 						},
@@ -5593,6 +5623,28 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return TensorCore.getLBGauge() == 30000",
 							uuid = "8fbb5c87-8e9b-c439-b5e8-be9af950ef40",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "PALADIN",
+							uuid = "1d009305-ccaa-3601-9455-7b242ab3ec69",
+							version = 2,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "DARKKNIGHT",
+							uuid = "bc411f08-1c31-3441-939e-0a9dbe803945",
 							version = 2,
 						},
 					},

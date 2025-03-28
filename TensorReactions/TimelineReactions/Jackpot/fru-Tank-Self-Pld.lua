@@ -524,7 +524,7 @@ local tbl =
 				uuid = "30d3630d-0828-b037-ab2f-f5cfb9c78ebe",
 				version = 2,
 			},
-			inheritedIndex = 26,
+			inheritedIndex = 11,
 		},
 		
 		{
@@ -604,7 +604,6 @@ local tbl =
 				name = " 挑衅",
 				timeRange = true,
 				timelineIndex = 7,
-				timerEndOffset = 5,
 				timerStartOffset = -4,
 				uuid = "e24b7563-3312-690a-ab7d-ac7f75d74923",
 				version = 2,
@@ -657,7 +656,7 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 7,
 				timerEndOffset = 5,
-				timerStartOffset = -2,
+				timerStartOffset = -1,
 				uuid = "ced38a9a-45e8-dfd1-80b3-8dbb86ea5e03",
 				version = 2,
 			},
@@ -675,6 +674,7 @@ local tbl =
 					{
 						data = 
 						{
+							aType = "ACR",
 							actionID = 7531,
 							atomicPriority = true,
 							conditions = 
@@ -685,7 +685,7 @@ local tbl =
 									true,
 								},
 							},
-							gVar = "ACR_RikuDRK3_Tankbar_Rampart",
+							gVar = "ACR_RikuPLD3_Tankbar_Rampart",
 							ignoreWeaveRules = true,
 							uuid = "b1de83ea-1aad-0697-8c97-5dcf7f941e3e",
 							variableTogglesType = 3,
@@ -713,10 +713,64 @@ local tbl =
 				name = "【PLD】铁壁",
 				timeRange = true,
 				timelineIndex = 11,
-				timerStartOffset = -19.5,
+				timerStartOffset = -15,
 				uuid = "2906b1df-8c99-7299-8334-bed7c136c7d9",
 				version = 2,
 			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 36927,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"ae002791-bc5f-3a5a-9c64-e7a5bf65f464",
+									true,
+								},
+							},
+							gVar = "ACR_RikuPLD3_Tankbar_Bulwark",
+							ignoreWeaveRules = true,
+							uuid = "689f1902-a012-d42a-8f2b-521b41d3452c",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 22,
+							category = "Self",
+							comparator = 2,
+							conditionType = 4,
+							uuid = "ae002791-bc5f-3a5a-9c64-e7a5bf65f464",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 40.3,
+				name = "【PLD】壁垒",
+				timeRange = true,
+				timelineIndex = 11,
+				timerStartOffset = -5,
+				uuid = "fa4a9866-5df8-f054-be0e-a3ad7c80b254",
+				version = 2,
+			},
+			inheritedIndex = 2,
 		},
 		
 		{
@@ -2079,7 +2133,6 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 39,
 				timerEndOffset = 6,
-				timerStartOffset = 2,
 				uuid = "414088d4-bffb-8ab4-88ba-9403155eaa7d",
 				version = 2,
 			},
@@ -2202,6 +2255,7 @@ local tbl =
 						data = 
 						{
 							actionID = 30,
+							allowInterrupt = true,
 							atomicPriority = true,
 							conditions = 
 							{
@@ -2212,7 +2266,7 @@ local tbl =
 								},
 								
 								{
-									"d35dec42-8547-845e-a501-8f8b0a311a8b",
+									"e9e85c89-9388-2c4d-a3bd-c95e428a263c",
 									true,
 								},
 							},
@@ -2244,9 +2298,9 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "return MuAiGuide.Config.FruMitigation.Tank.P1_Death1 == 2",
-							name = "p1-1无敌",
-							uuid = "d35dec42-8547-845e-a501-8f8b0a311a8b",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Tank.P2_Open == 1",
+							name = "p2",
+							uuid = "e9e85c89-9388-2c4d-a3bd-c95e428a263c",
 							version = 2,
 						},
 					},
@@ -2458,6 +2512,7 @@ local tbl =
 							uuid = "481d8dee-5425-6f1c-8394-c0cd4cd36594",
 							version = 2,
 						},
+						inheritedIndex = 2,
 					},
 				},
 				mechanicTime = 219,
@@ -2885,7 +2940,7 @@ local tbl =
 			},
 		},
 	},
-	[119] = 
+	[118] = 
 	{
 		
 		{
@@ -2898,10 +2953,10 @@ local tbl =
 				{
 				},
 				enabled = false,
-				mechanicTime = 500,
+				mechanicTime = 466.4,
 				name = "---------------",
-				timelineIndex = 119,
-				uuid = "48f27a87-e063-c1e0-a079-9b9d2282a737",
+				timelineIndex = 118,
+				uuid = "047e1d87-5dcd-850a-8a30-c797224e77dc",
 				version = 2,
 			},
 		},
@@ -2916,10 +2971,10 @@ local tbl =
 				{
 				},
 				enabled = false,
-				mechanicTime = 500,
+				mechanicTime = 466.4,
 				name = "--P3一死刑不吃--",
-				timelineIndex = 119,
-				uuid = "57b2596b-267b-65fc-80ec-28f9698b8d77",
+				timelineIndex = 118,
+				uuid = "a8312b74-f5af-2571-b97a-d21aff6a7b18",
 				version = 2,
 			},
 		},
@@ -2947,6 +3002,7 @@ local tbl =
 									true,
 								},
 							},
+							endIfUsed = true,
 							gVar = "ACR_RikuPLD3_Hotbar_ReleaseIronWill",
 							uuid = "c2516961-9227-22b9-9fb8-c1e7e2881f41",
 							variableTogglesType = 2,
@@ -2979,13 +3035,13 @@ local tbl =
 						},
 					},
 				},
-				mechanicTime = 500,
+				mechanicTime = 466.4,
 				name = "【PLD】关闭盾姿",
+				timeRandomRange = true,
 				timeRange = true,
-				timelineIndex = 119,
-				timerEndOffset = 5,
-				timerStartOffset = -5,
-				uuid = "3bd13323-bad3-b9af-a484-7d94dd8c7416",
+				timelineIndex = 118,
+				timerEndOffset = 20,
+				uuid = "eed468c8-0be6-76f5-92b9-9a52a13bec31",
 				version = 2,
 			},
 		},
@@ -3000,10 +3056,10 @@ local tbl =
 				{
 				},
 				enabled = false,
-				mechanicTime = 500,
+				mechanicTime = 466.4,
 				name = "---------------",
-				timelineIndex = 119,
-				uuid = "c8b31131-a1a9-e1f5-a70c-abec4cd7d0c1",
+				timelineIndex = 118,
+				uuid = "152dc236-5073-7423-992a-bc97000544eb",
 				version = 2,
 			},
 		},
@@ -3018,10 +3074,10 @@ local tbl =
 				{
 				},
 				enabled = false,
-				mechanicTime = 500,
+				mechanicTime = 466.4,
 				name = "--P3一死刑自己吃--",
-				timelineIndex = 119,
-				uuid = "b7989682-e16f-7ea7-9df3-b1a81b2f8977",
+				timelineIndex = 118,
+				uuid = "7b3a99ac-6f73-8835-9832-cb230378aa53",
 				version = 2,
 			},
 		},
@@ -3049,11 +3105,13 @@ local tbl =
 									true,
 								},
 							},
+							endIfUsed = true,
 							gVar = "ACR_RikuPLD3_Hotbar_IronWill",
 							uuid = "a80b4642-d4bd-2894-97fd-e4c9e3038355",
 							variableTogglesType = 2,
 							version = 2.1,
 						},
+						inheritedIndex = 1,
 					},
 				},
 				conditions = 
@@ -3082,13 +3140,14 @@ local tbl =
 						},
 					},
 				},
-				mechanicTime = 500,
+				mechanicTime = 466.4,
 				name = "【PLD】开启盾姿 ",
 				randomOffset = 5,
+				timeRandomRange = true,
 				timeRange = true,
-				timelineIndex = 119,
-				timerEndOffset = 5,
-				uuid = "a75f14a4-35be-2aca-afc8-f1d50add6d0b",
+				timelineIndex = 118,
+				timerEndOffset = 20,
+				uuid = "ffba8041-38c0-7eae-bc70-bdf11fdf288f",
 				version = 2,
 			},
 		},
@@ -3266,7 +3325,7 @@ local tbl =
 				name = "【PLD】壁垒",
 				timeRange = true,
 				timelineIndex = 140,
-				timerStartOffset = -9,
+				timerStartOffset = -8,
 				uuid = "529944e5-d857-fd61-8dfe-db210188700f",
 				version = 2,
 			},
@@ -3337,7 +3396,7 @@ local tbl =
 				name = "【PLD】铁壁",
 				timeRange = true,
 				timelineIndex = 140,
-				timerStartOffset = -19.5,
+				timerStartOffset = -18,
 				uuid = "a27d71b1-23c2-a6c6-ac2f-f9985f8e7a63",
 				version = 2,
 			},
@@ -3475,7 +3534,7 @@ local tbl =
 				name = "【PLD】极致防御",
 				timeRange = true,
 				timelineIndex = 140,
-				timerStartOffset = -14,
+				timerStartOffset = -10,
 				uuid = "fac82f2e-1af5-7aaa-9401-d225d399e95b",
 				version = 2,
 			},
@@ -4408,6 +4467,78 @@ local tbl =
 								},
 								
 								{
+									"27b05503-5beb-5898-bf22-873f010cb6aa",
+									true,
+								},
+							},
+							endIfUsed = true,
+							gVar = "ACR_RikuDRK3_Hotbar_Provoke",
+							targetContentID = 12809,
+							targetName = "9832",
+							targetType = "ContentID",
+							uuid = "877f22cc-bc3e-d5f8-8323-c03bec73892a",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							buffID = 79,
+							category = "Self",
+							name = "钢铁信念",
+							uuid = "c8ea8aef-c2a7-b604-9137-c3b050d20198",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return _G[\"ACR_\"..gACRSelectedProfiles[TensorCore.mGetPlayer().job]..\"_TankStance\"] == \"mt\"",
+							name = "isMT",
+							uuid = "27b05503-5beb-5898-bf22-873f010cb6aa",
+							version = 2,
+						},
+					},
+				},
+				mechanicTime = 729.2,
+				name = "  挑衅",
+				timeRange = true,
+				timelineIndex = 162,
+				timerEndOffset = 5,
+				uuid = "b73bfd8c-e11b-34fe-8d5f-b4d92a019901",
+				version = 2,
+			},
+			inheritedIndex = 1,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 7533,
+							atomicPriority = true,
+							conditions = 
+							{
+								
+								{
+									"c8ea8aef-c2a7-b604-9137-c3b050d20198",
+									true,
+								},
+								
+								{
 									"4d3a5c91-f542-1289-b1ec-c4bb2ed8c254",
 									true,
 								},
@@ -5092,7 +5223,7 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 175,
 				timerOffset = -7,
-				timerStartOffset = -4,
+				timerStartOffset = -2,
 				uuid = "4436eb31-8ad9-d8ac-b213-07cc30597f80",
 				version = 2,
 			},
@@ -5219,7 +5350,7 @@ local tbl =
 				name = "【PLD】干预",
 				timeRange = true,
 				timelineIndex = 175,
-				timerStartOffset = -4,
+				timerStartOffset = -2,
 				uuid = "b54fbfe3-3d12-0799-a0f4-fcd56e115fd2",
 				version = 2,
 			},
@@ -5955,7 +6086,7 @@ local tbl =
 				name = "【PLD】干预",
 				timeRange = true,
 				timelineIndex = 202,
-				timerStartOffset = -4,
+				timerStartOffset = -2,
 				uuid = "5037ba44-2607-05f4-af22-f681e4966973",
 				version = 2,
 			},
@@ -6877,7 +7008,7 @@ local tbl =
 				name = "【PLD】干预",
 				timeRange = true,
 				timelineIndex = 222,
-				timerStartOffset = -4,
+				timerStartOffset = -8,
 				uuid = "d56c472b-3aa4-1ebb-8413-b8d4803cc91d",
 				version = 2,
 			},
@@ -7721,7 +7852,7 @@ local tbl =
 				name = "【PLD】干预",
 				timeRange = true,
 				timelineIndex = 251,
-				timerStartOffset = -4,
+				timerStartOffset = -8,
 				uuid = "d44c8a17-8a65-0f43-8817-96e86ea47e22",
 				version = 2,
 			},

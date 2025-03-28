@@ -3317,7 +3317,7 @@ local tbl =
 			},
 		},
 	},
-	[119] = 
+	[118] = 
 	{
 		
 		{
@@ -3330,10 +3330,10 @@ local tbl =
 				{
 				},
 				enabled = false,
-				mechanicTime = 500,
+				mechanicTime = 466.4,
 				name = "---------------",
-				timelineIndex = 119,
-				uuid = "2ba84b12-61dd-9ae5-9d79-58e4bda0e852",
+				timelineIndex = 118,
+				uuid = "8b1fb16f-09da-3f21-b540-14d863543e7e",
 				version = 2,
 			},
 			inheritedIndex = 1,
@@ -3349,10 +3349,10 @@ local tbl =
 				{
 				},
 				enabled = false,
-				mechanicTime = 500,
+				mechanicTime = 466.4,
 				name = "--P3一死刑不吃--",
-				timelineIndex = 119,
-				uuid = "a016d5d6-7f6e-8873-8688-a93a8fdb8152",
+				timelineIndex = 118,
+				uuid = "7dfc72b6-e801-75a9-b6d2-4d524d7ed997",
 				version = 2,
 			},
 			inheritedIndex = 2,
@@ -3415,12 +3415,13 @@ local tbl =
 						inheritedIndex = 1,
 					},
 				},
-				mechanicTime = 500,
+				mechanicTime = 466.4,
 				name = "【DRK】关闭盾姿",
+				timeRandomRange = true,
 				timeRange = true,
-				timelineIndex = 119,
-				timerEndOffset = 5,
-				uuid = "97563dc4-5e74-5805-b250-cd0ab7c24735",
+				timelineIndex = 118,
+				timerEndOffset = 20,
+				uuid = "c9355fd2-9958-7002-a723-b786b410bb34",
 				version = 2,
 			},
 			inheritedIndex = 3,
@@ -3436,10 +3437,10 @@ local tbl =
 				{
 				},
 				enabled = false,
-				mechanicTime = 500,
+				mechanicTime = 466.4,
 				name = "---------------",
-				timelineIndex = 119,
-				uuid = "ba268215-0ac5-92d6-a3ee-41abdf2c89f8",
+				timelineIndex = 118,
+				uuid = "ade8a32c-77ac-cec5-9f81-cf48bf3c284d",
 				version = 2,
 			},
 			inheritedIndex = 4,
@@ -3455,10 +3456,10 @@ local tbl =
 				{
 				},
 				enabled = false,
-				mechanicTime = 500,
+				mechanicTime = 466.4,
 				name = "--P3一死刑自己吃--",
-				timelineIndex = 119,
-				uuid = "11ffbd78-2357-3e6b-a14a-38918ac8dc0a",
+				timelineIndex = 118,
+				uuid = "af1cd939-8dc8-5f64-8c71-778c17705cbb",
 				version = 2,
 			},
 			inheritedIndex = 5,
@@ -3523,13 +3524,14 @@ local tbl =
 						inheritedIndex = 2,
 					},
 				},
-				mechanicTime = 500,
+				mechanicTime = 466.4,
 				name = "【DRK】开启盾姿 ",
 				randomOffset = 5,
+				timeRandomRange = true,
 				timeRange = true,
-				timelineIndex = 119,
-				timerEndOffset = 5,
-				uuid = "1baf374c-6d59-38bf-9a29-d84733ae599a",
+				timelineIndex = 118,
+				timerEndOffset = 20,
+				uuid = "b9a9c358-75fa-6ace-af8c-ac28003ff02b",
 				version = 2,
 			},
 			inheritedIndex = 6,
@@ -5723,6 +5725,60 @@ local tbl =
 						data = 
 						{
 							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"b33a09c5-767f-f164-ac35-71c8931e3b7a",
+									true,
+								},
+							},
+							endIfUsed = true,
+							gVar = "ACR_RikuDRK3_Tankbar_OblationSelf",
+							uuid = "829b27b1-9a80-12c7-907a-6d825971e4f8",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Tank.P4_AkhMorn1 == 1\n",
+							name = "p4",
+							uuid = "b33a09c5-767f-f164-ac35-71c8931e3b7a",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				mechanicTime = 773.5,
+				name = "【DRK】献奉",
+				timeRange = true,
+				timelineIndex = 175,
+				timerOffset = -7,
+				timerStartOffset = -4,
+				uuid = "69e6b3e4-c897-c073-99a7-7a29860ab954",
+				version = 2,
+			},
+			inheritedIndex = 4,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
 							actionID = 3634,
 							conditions = 
 							{
@@ -5781,7 +5837,7 @@ local tbl =
 				uuid = "82dc5291-67a6-29b6-8460-749b88a607f9",
 				version = 2,
 			},
-			inheritedIndex = 4,
+			inheritedIndex = 5,
 		},
 		
 		{
@@ -5868,7 +5924,7 @@ local tbl =
 				uuid = "7af363f3-af9e-f5f2-b8f2-beac6dbafe12",
 				version = 2,
 			},
-			inheritedIndex = 5,
+			inheritedIndex = 6,
 		},
 		
 		{
@@ -5887,7 +5943,7 @@ local tbl =
 				uuid = "fc1e4300-2a60-564f-9698-ba173bf67098",
 				version = 2,
 			},
-			inheritedIndex = 6,
+			inheritedIndex = 7,
 		},
 		
 		{
@@ -5906,7 +5962,7 @@ local tbl =
 				uuid = "968b844d-ea64-6561-80eb-c48d5e08aa31",
 				version = 2,
 			},
-			inheritedIndex = 7,
+			inheritedIndex = 8,
 		},
 		
 		{
@@ -5993,7 +6049,61 @@ local tbl =
 				uuid = "81febb46-9c5b-460b-a64b-714aea6b5869",
 				version = 2,
 			},
-			inheritedIndex = 8,
+			inheritedIndex = 9,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"ce9af5a3-6551-2fc7-a12a-40d483b7dce9",
+									true,
+								},
+							},
+							endIfUsed = true,
+							gVar = "ACR_RikuDRK3_Tankbar_OblationOT",
+							uuid = "829b27b1-9a80-12c7-907a-6d825971e4f8",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Tank.P4_AkhMorn1 == 2",
+							name = "p4",
+							uuid = "ce9af5a3-6551-2fc7-a12a-40d483b7dce9",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				mechanicTime = 773.5,
+				name = "【DRK】献奉",
+				timeRange = true,
+				timelineIndex = 175,
+				timerOffset = -7,
+				timerStartOffset = -4,
+				uuid = "c8db5245-061c-ba73-b706-91cc5beba5c0",
+				version = 2,
+			},
+			inheritedIndex = 10,
 		},
 		
 		{
@@ -6012,7 +6122,7 @@ local tbl =
 				uuid = "bc2b8f00-f3b4-c4ba-99c8-4ef0c547b66e",
 				version = 2,
 			},
-			inheritedIndex = 9,
+			inheritedIndex = 11,
 		},
 		
 		{
@@ -6160,7 +6270,7 @@ local tbl =
 				uuid = "d71b7b07-3a9f-fde9-9230-e440e9310d66",
 				version = 2,
 			},
-			inheritedIndex = 11,
+			inheritedIndex = 13,
 		},
 	},
 	[198] = 
@@ -6662,15 +6772,50 @@ local tbl =
 			{
 				actions = 
 				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"880bd753-eb10-8356-883d-78034a29c6fe",
+									true,
+								},
+							},
+							endIfUsed = true,
+							gVar = "ACR_RikuDRK3_Tankbar_OblationSelf",
+							uuid = "829b27b1-9a80-12c7-907a-6d825971e4f8",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
 				},
 				conditions = 
 				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Tank.P4_AkhMorn2 == 1",
+							name = "p4",
+							uuid = "880bd753-eb10-8356-883d-78034a29c6fe",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
 				},
-				enabled = false,
 				mechanicTime = 854.9,
-				name = "---------------",
+				name = "【DRK】献奉",
+				timeRange = true,
 				timelineIndex = 202,
-				uuid = "9aed0e96-7a48-c95e-a2b7-65fa75492c95",
+				timerOffset = -7,
+				timerStartOffset = -9,
+				uuid = "2ba404ef-4497-8db8-b8b8-25af7dcbb97f",
 				version = 2,
 			},
 			inheritedIndex = 6,
@@ -6687,9 +6832,9 @@ local tbl =
 				},
 				enabled = false,
 				mechanicTime = 854.9,
-				name = "--搭档减伤吃--",
+				name = "---------------",
 				timelineIndex = 202,
-				uuid = "5605171a-f497-fa33-8957-c48e9822003e",
+				uuid = "9aed0e96-7a48-c95e-a2b7-65fa75492c95",
 				version = 2,
 			},
 			inheritedIndex = 7,
@@ -6706,9 +6851,9 @@ local tbl =
 				},
 				enabled = false,
 				mechanicTime = 854.9,
-				name = "---------------",
+				name = "--搭档减伤吃--",
 				timelineIndex = 202,
-				uuid = "4ef5ae87-1003-63e6-91cd-d24f9c3f2c0b",
+				uuid = "5605171a-f497-fa33-8957-c48e9822003e",
 				version = 2,
 			},
 			inheritedIndex = 8,
@@ -6799,6 +6944,79 @@ local tbl =
 				version = 2,
 			},
 			inheritedIndex = 9,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							conditions = 
+							{
+								
+								{
+									"6eac5f47-c1f2-2f67-862b-570df43853d3",
+									true,
+								},
+							},
+							endIfUsed = true,
+							gVar = "ACR_RikuDRK3_Tankbar_OblationOT",
+							uuid = "829b27b1-9a80-12c7-907a-6d825971e4f8",
+							variableTogglesType = 3,
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return MuAiGuide.Config.FruMitigation.Tank.P4_AkhMorn2 == 2",
+							name = "p4",
+							uuid = "6eac5f47-c1f2-2f67-862b-570df43853d3",
+							version = 2,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				mechanicTime = 854.9,
+				name = "【DRK】献奉",
+				timeRange = true,
+				timelineIndex = 202,
+				timerOffset = -7,
+				timerStartOffset = -9,
+				uuid = "074da146-2030-84f0-8a5b-0abe23f9e987",
+				version = 2,
+			},
+			inheritedIndex = 10,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+				},
+				conditions = 
+				{
+				},
+				enabled = false,
+				mechanicTime = 854.9,
+				name = "---------------",
+				timelineIndex = 202,
+				uuid = "4ef5ae87-1003-63e6-91cd-d24f9c3f2c0b",
+				version = 2,
+			},
+			inheritedIndex = 11,
 		},
 		
 		{
@@ -6946,7 +7164,7 @@ local tbl =
 				uuid = "cfd8af92-d528-4115-8343-ba0d88dd1993",
 				version = 2,
 			},
-			inheritedIndex = 15,
+			inheritedIndex = 13,
 		},
 	},
 	[209] = 
