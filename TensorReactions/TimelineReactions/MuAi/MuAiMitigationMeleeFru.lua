@@ -1022,7 +1022,7 @@ local tbl =
 				mechanicTime = 322.5,
 				name = "[MuAiNelee]真言",
 				timelineIndex = 77,
-				timerOffset = -14,
+				timerOffset = -4,
 				uuid = "41717184-00b2-5657-ac1f-0996b18b7419",
 				version = 2,
 			},
