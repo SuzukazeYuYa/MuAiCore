@@ -6,7 +6,11 @@
 <br>$${\color{red}已添加快捷键设置，你可以定义自己喜欢的呼出方式了！！！}$$
 # 安装
 1.下载本仓库内容，将2个文件夹MuAiCore和TensorReactions放入 \Minionapp\Bots\FFXIVMinion64\LuaMods 中覆盖即可。
-<br>2.进入游戏并注入之后，在profiler中添加 MuAiCore<br>![image](https://github.com/user-attachments/assets/3b6e7b7c-1365-47fa-b066-383b4a7b4e3f)<br>重新加载后会得到如下<br>![image](https://github.com/user-attachments/assets/df23e701-311c-496b-b3fb-3a42b542d89f)，当然这与使用快捷键打开时一样的，如果你没有proflier跳过此步骤
+<br>2.进入游戏并注入之后，在profiler中添加 MuAiCore
+<br>$${\color{red}注意，请勿使用名称为“Optifine”配置文件，这个配置无法添加，如一定要使用，请克隆一个！}$$
+<br>![image](https://github.com/user-attachments/assets/3b6e7b7c-1365-47fa-b066-383b4a7b4e3f)
+<br>重新加载后会得到如下
+<br>![image](https://github.com/user-attachments/assets/df23e701-311c-496b-b3fb-3a42b542d89f)，当然这与使用快捷键打开时一样的，如果你没有proflier跳过此步骤
 <br>3.由于核心工具代码和UI等都迁移到插件中，所以不需要再继承全局轴！！
 <br>$${\color{red}如果你使用了老版本，全局中不要再继承MuAiGuideGeneral，请移除，请移除，请移除！}$$
 <br>4.之前欠考虑没有添加文件夹，导致部分用户觉得Timeline较为混乱，所以新版将FRU和TOP的TIMELine文件放到了\Minionapp\Bots\FFXIVMinion64\LuaMods\TensorReactions\TimelineReactions\MuAi
