@@ -95,19 +95,41 @@ local DrawMainUI = function(M)
             GUI:Dummy(1, 1)
             if M.SelfPos then
                 GUI:BulletText("当前职能:")
+                GUI:SetWindowFontSize(2.5)
+                GUI:Dummy(10, 0)
                 GUI:SameLine()
-                if M.DebugMode then
-                    GUI:TextColored(255, 0, 0, 1, M.SelfPos .. "[调试]")
+
+                if table.size(M.Party) == 4 then
+                    if M.SelfPos == "MT" then
+                        GUI:TextColored(0, 0, 1, 1, M.SelfPos)
+                    elseif M.SelfPos == "H1" then
+                        GUI:TextColored(0, 1, 0, 1, M.SelfPos)
+                    else
+                        GUI:TextColored(1, 0, 0, 1, M.SelfPos)
+                    end
                 else
-                    GUI:TextColored(255, 0, 0, 1, M.SelfPos)
+                    if M.SelfPos == "MT" or M.SelfPos == "ST" then
+                        GUI:TextColored(0, 0.3, 1, 1, M.SelfPos)
+                    elseif M.SelfPos == "H1" or M.SelfPos == "H2" then
+                        GUI:TextColored(0, 1, 0, 1, M.SelfPos)
+                    else
+                        GUI:TextColored(1, 0, 0, 1, M.SelfPos)
+                    end
                 end
-                GUI:SameLine()
-                GUI:TextColored(0, 255, 0, 1, " ※拖动角色名进行职能修改")
+
+                if M.DebugMode then
+                    GUI:SameLine()
+                    GUI:TextColored(255, 0, 0, 1, "[DEBUG]")
+                end
+                GUI:SetWindowFontSize(1)
+                GUI:TextColored(0, 255, 0, 1, "   ※拖动角色名进行职能修改")
             else
                 GUI:TextColored(255, 0, 0, 1, "当前没有加入队伍")
             end
             GUI:Dummy(1, 1)
-            GUI:Text("    <职能>    <职业>     <角色名>")
+            GUI:Separator()
+            GUI:Text("  | 职能 |职业|             角色名            |")
+
             if M.Party == nil or table.size(M.Party) == 0 then
                 M.Party = {}
                 M.Party.MT = nil
@@ -122,10 +144,9 @@ local DrawMainUI = function(M)
             GUI:Text(" ")
             GUI:SameLine()
             GUI:PushItemWidth(303)
-
             local partyMembers
             if table.size(M.Party) == 4 then
-                GUI:ListBoxHeader("##Jobs", 304, 100)
+                GUI:ListBoxHeader("##Jobs", 304, 200)
                 partyMembers = {
                     { info = M.Party.MT, label = "MT" },
                     { info = M.Party.H1, label = "H1" },
@@ -133,7 +154,7 @@ local DrawMainUI = function(M)
                     { info = M.Party.D2, label = "D2" },
                 }
             else
-                GUI:ListBoxHeader("##Jobs", 304, 200)
+                GUI:ListBoxHeader("##Jobs", 304, 275)
                 partyMembers = {
                     { info = M.Party.MT, label = "MT" },
                     { info = M.Party.ST, label = "ST" },
@@ -153,52 +174,45 @@ local DrawMainUI = function(M)
                     return false
                 end
                 local ptMember = partyMembers[i]
+                GUI:Dummy(5, 0)
+                GUI:SameLine()
+                GUI:AlignFirstTextHeightToWidgets()
+                GUI:SetWindowFontSize(1.5)
                 if table.size(M.Party) == 4 then
                     if i == 1 then
-                        GUI:ColorButton("#jobPos", 0, 0, 255, 255, GUI.ColorEditMode_NoTooltip, 20, 20)
+                        GUI:TextColored(0, 0.3, 1, 1, ptMember.label)
                     elseif i == 2 then
-                        GUI:ColorButton("#jobPos", 0, 255, 0, 255, GUI.ColorEditMode_NoTooltip, 20, 20)
+                        GUI:TextColored(0, 1, 0, 1, ptMember.label)
                     else
-                        GUI:ColorButton("#jobPos", 255, 0, 0, 255, GUI.ColorEditMode_NoTooltip, 20, 20)
-                    end
-                    GUI:SameLine()
-                    if i == 1 then
-                        GUI:TextColored(0, 100, 255, 1, "[" .. ptMember.label .. "]")
-                    elseif i == 2 then
-                        GUI:TextColored(0, 255, 0, 1, "[" .. ptMember.label .. "]")
-                    else
-                        GUI:TextColored(255, 0, 0, 1, "[" .. ptMember.label .. "]")
+                        GUI:TextColored(1, 0, 0, 1, ptMember.label)
                     end
                 else
                     if i == 1 or i == 2 then
-                        GUI:ColorButton("#jobPos", 0, 0, 255, 255, GUI.ColorEditMode_NoTooltip, 20, 20)
+                        GUI:TextColored(0, 0.3, 1, 1, ptMember.label)
                     elseif i == 3 or i == 4 then
-                        GUI:ColorButton("#jobPos", 0, 255, 0, 255, GUI.ColorEditMode_NoTooltip, 20, 20)
+                        GUI:TextColored(0, 1, 0, 1, ptMember.label)
                     else
-                        GUI:ColorButton("#jobPos", 255, 0, 0, 255, GUI.ColorEditMode_NoTooltip, 20, 20)
-                    end
-                    GUI:SameLine()
-                    if i == 1 or i == 2 then
-                        GUI:TextColored(0, 100, 255, 1, "[" .. ptMember.label .. "]")
-                    elseif i == 3 or i == 4 then
-                        GUI:TextColored(0, 255, 0, 1, "[" .. ptMember.label .. "]")
-                    else
-                        GUI:TextColored(255, 0, 0, 1, "[" .. ptMember.label .. "]")
+                        GUI:TextColored(1, 0, 0, 1, ptMember.label)
                     end
                 end
-
+                GUI:SetWindowFontSize(1.3)
+                GUI:SameLine()
+                GUI:Dummy(0, 0)
                 GUI:SameLine()
                 if ptMember.info ~= nil and ptMember.info.job ~= nil and ptMember.info.name ~= nil then
-                    GUI:Selectable("   " .. M.GetJobNameById(ptMember.info.job) .. "      " .. ptMember.info.name, IsSelected())
+                    local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\JobIcon\\" .. tostring(ptMember.info.job) .. ".png"
+                    GUI:Image(path, 25, 25)
+                    GUI:SameLine(0, 25)
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:Selectable(ptMember.info.name, IsSelected(), GUI.SelectableFlags_DontClosePopups, 0, 0)
                 else
-                    GUI:Selectable("   " .. "未知" .. "      " .. "未知玩家" .. i, IsSelected())
+                    local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\JobIcon\\00.png"
+                    GUI:Image(path, 25, 25)
+                    GUI:SameLine(0, 25)
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:Selectable("未知玩家" .. i, IsSelected())
                 end
-                if
-                GUI:IsItemHovered(
-                        GUI.HoveredFlags_AllowWhenBlockedByPopup + GUI.HoveredFlags_AllowWhenBlockedByActiveItem +
-                                GUI.HoveredFlags_AllowWhenOverlapped
-                )
-                then
+                if GUI:IsItemHovered(GUI.HoveredFlags_AllowWhenBlockedByPopup + GUI.HoveredFlags_AllowWhenBlockedByActiveItem + GUI.HoveredFlags_AllowWhenOverlapped) then
                     if GUI:IsMouseDown(0) then
                         if M.Party.mousePosition == nil then
                             if M.Party.mousePosition ~= ptMember.label then
@@ -212,17 +226,17 @@ local DrawMainUI = function(M)
                             local temp = M.Party[M.Party.mousePosition]
                             M.Party[M.Party.mousePosition] = M.Party[ptMember.label]
                             M.Party[ptMember.label] = temp
-
-                            -- 职能调整
-                            if M.Party[M.Party.mousePosition].id == M.GetPlayer().id then
-                                M.SelfPos = M.Party.mousePosition;
-                            elseif M.Party[ptMember.label].id == M.GetPlayer().id then
-                                M.SelfPos = ptMember.label;
-                            end
-
-                            M.Party.mousePosition = ptMember.label
-                            if M.Party.selected ~= ptMember.label then
-                                M.Party.selected = ptMember.label
+                            if M.Party ~= nil and M.Party[M.Party.mousePosition] ~= nil then
+                                -- 职能调整
+                                if M.Party[M.Party.mousePosition].id == M.GetPlayer().id then
+                                    M.SelfPos = M.Party.mousePosition;
+                                elseif M.Party[ptMember.label].id == M.GetPlayer().id then
+                                    M.SelfPos = ptMember.label;
+                                end
+                                M.Party.mousePosition = ptMember.label
+                                if M.Party.selected ~= ptMember.label then
+                                    M.Party.selected = ptMember.label
+                                end
                             end
                         end
                     end
@@ -234,19 +248,17 @@ local DrawMainUI = function(M)
                 if M.Party.selected ~= nil and (GUI:IsMouseReleased(0) or not GUI:IsMouseDown(0)) then
                     M.Party.selected = nil
                 end
+                GUI:Separator()
             end
             GUI:ListBoxFooter()
-            if
-            M.Party.mousePosition ~= nil and
-                    not GUI:IsItemHovered(
-                            GUI.HoveredFlags_AllowWhenBlockedByPopup + GUI.HoveredFlags_AllowWhenBlockedByActiveItem +
-                                    GUI.HoveredFlags_AllowWhenOverlapped
-                    )
+            if M.Party.mousePosition ~= nil and
+                    not GUI:IsItemHovered(GUI.HoveredFlags_AllowWhenBlockedByPopup + GUI.HoveredFlags_AllowWhenBlockedByActiveItem + GUI.HoveredFlags_AllowWhenOverlapped)
             then
                 M.Party.mousePosition = nil
             end
             GUI:Text(" ")
             GUI:SameLine()
+            GUI:SetWindowFontSize(1)
             GUI:Button("重新加载小队列表", 305, 30)
             if GUI:IsItemClicked(0) then
                 M.LoadParty()
