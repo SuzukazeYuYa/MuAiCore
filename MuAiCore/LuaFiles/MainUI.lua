@@ -154,7 +154,7 @@ local DrawMainUI = function(M)
                     { info = M.Party.D2, label = "D2" },
                 }
             else
-                GUI:ListBoxHeader("##Jobs", 304, 275)
+                GUI:ListBoxHeader("##Jobs", 304, 262)
                 partyMembers = {
                     { info = M.Party.MT, label = "MT" },
                     { info = M.Party.ST, label = "ST" },
@@ -207,6 +207,13 @@ local DrawMainUI = function(M)
                     GUI:Selectable(ptMember.info.name, IsSelected(), GUI.SelectableFlags_DontClosePopups, 0, 0)
                 else
                     local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\JobIcon\\00.png"
+                    if i <= 2 then
+                        path = GetLuaModsPath() .. "\\MuAiCore\\Image\\JobIcon\\TankRole.png"
+                    elseif i <= 4 then
+                        path = GetLuaModsPath() .. "\\MuAiCore\\Image\\JobIcon\\HealerRole.png"
+                    else
+                        path = GetLuaModsPath() .. "\\MuAiCore\\Image\\JobIcon\\DPSRole.png"
+                    end
                     GUI:Image(path, 25, 25)
                     GUI:SameLine(0, 25)
                     GUI:AlignFirstTextHeightToWidgets()
@@ -248,7 +255,9 @@ local DrawMainUI = function(M)
                 if M.Party.selected ~= nil and (GUI:IsMouseReleased(0) or not GUI:IsMouseDown(0)) then
                     M.Party.selected = nil
                 end
-                GUI:Separator()
+                if i < 8 then
+                    GUI:Separator()
+                end
             end
             GUI:ListBoxFooter()
             if M.Party.mousePosition ~= nil and
