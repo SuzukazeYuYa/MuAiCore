@@ -116,7 +116,7 @@ local tbl =
 	MornAfah2 = 
 	{
 		Field = false,
-		Target = false,
+		Target = true,
 		p = 4,
 	},
 	Polarizing1 = 
