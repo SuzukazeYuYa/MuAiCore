@@ -123,6 +123,9 @@
     end
 
     M.FruMitigation.ChangeJob = function()
+        if not M.IsPlayer(Player) then
+            return
+        end
         local defConfig = M.FruMitigation.LoadDefault()
         M.Config.FruMitigation = M.LoadConfig(M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job), M.Config.FruMitigationFile, defConfig)
         M.Config.FruMitigationPrevious = table.deepcopy(M.Config.FruMitigation)

@@ -6,6 +6,7 @@ local mainDrawer, fruConfigDrawer, fruMitigationDrawer
 local lastMap, lastJob, updateTime
 local updateNeedReLoad = false
 local lastVersion
+local downloadPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
 
 ReloadMuAiGuide = function()
     MuAiGuide = nil
@@ -26,6 +27,9 @@ core.InitMuAiGuide = function(checkUpdate)
     end
     if checkUpdate and MuAiGuide.Config.Main.AutoUpdate then
         core.ForceUpdate()
+    end
+    if FolderExists(downloadPath) then
+        FolderDelete(downloadPath)
     end
 end
 
@@ -80,10 +84,8 @@ core.Update = function()
         end
         lastMap = Player.localmapid
     end
-    if lastJob ~= Player.job then
-        if MuAiGuide and MuAiGuide.FruMitigation then
-            MuAiGuide.FruMitigation.ChangeJob()
-        end
+    if lastJob ~= Player.job and MuAiGuide and MuAiGuide.Config and MuAiGuide.FruMitigation then
+        MuAiGuide.FruMitigation.ChangeJob()
         lastJob = Player.job
     end
     if updateNeedReLoad and updateTime then
