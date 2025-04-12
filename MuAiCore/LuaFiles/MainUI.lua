@@ -333,13 +333,77 @@ local DrawMainUI = function(M)
             end
             GUI:Text(" ")
             GUI:SameLine()
-            MuAiGuide.DevelopMode = GUI:Checkbox("UI开发模式", MuAiGuide.DevelopMode)
+            M.DevelopMode = GUI:Checkbox("UI开发模式", M.DevelopMode)
             GUI:SameLine(0, 81)
             GUI:Button("重载MuAiGuide", 120, 20)
             if GUI:IsItemClicked(0) then
-                MuAiGuide.UI.open = false
-                MuAiGuide.FruConfigUI.open = false
+                M.UI.open = false
+                M.FruConfigUI.open = false
                 ReloadMuAiGuide()
+            end
+        end
+        if GUI:CollapsingHeader("Hack") then
+            M.AddLabel("移动速度作弊： ")
+            GUI:PushItemWidth(50)
+            local hackSpeed, hackSpeedChange = GUI:InputText("##hackSpeed", tostring(M.SpeedHack), GUI.InputTextFlags_CharsNoBlank)
+            if hackSpeedChange then
+                M.SpeedHack = tonumber(hackSpeed)
+            end
+            GUI:PopItemWidth()
+            GUI:SameLine()
+            GUI:Button("应用修改", 80, 20)
+            if GUI:IsItemClicked(0) then
+                local curSp = tonumber(M.SpeedHack)
+                if curSp ~= gDevHackRunningSpeed then
+                    gDevHackRunningSpeed = curSp
+                    Player:SetSpeed(1, gDevHackRunningSpeed, gDevHackBackwardsSpeed, gDevHackStrafeSpeed, gDevHackWalkingSpeed)
+                    M.Info("移动速度修改为：" .. gDevHackRunningSpeed)
+                end
+            end
+            GUI:SameLine()
+            if (GUI:Button("还原", 60, 20)) then
+                Player:ResetSpeed(0) -- flying
+                Player:ResetSpeed(1) -- walking
+                Player:ResetSpeed(2) -- mounted
+                gDevHackRunningSpeed = 6.0
+                gDevHackWalkingSpeed = 2.4000000953674
+                gDevHackBackwardsSpeed = 2.4000000953674
+                gDevHackStrafeSpeed = 2.4000000953674
+                gDevHackWalkRatio = gDevHackRunningSpeed / gDevHackWalkingSpeed
+
+                gDevHackMountRunningSpeed = 9.0
+                gDevHackMountWalkingSpeed = 3.2000000476837
+                gDevHackMountBackwardsSpeed = 3.2000000476837
+                gDevHackMountStrafeSpeed = 3.2000000476837
+                gDevHackMountRatio = gDevHackMountRunningSpeed / gDevHackMountWalkingSpeed
+
+                gDevHackFlyRunningSpeed = 20.0
+                gDevHackFlyWalkingSpeed = 9.0
+                gDevHackFlyBackwardsSpeed = 9.0
+                gDevHackFlyStrafeSpeed = 9.0
+                gDevHackFlyRatio = gDevHackFlyRunningSpeed / gDevHackFlyWalkingSpeed
+            end
+            M.AddLabel("最大视距作弊： ")
+            GUI:PushItemWidth(50)
+            local hackZoom, hackZoomChange = GUI:InputText("##hackZoom", tostring(M.HackZoom), GUI.InputTextFlags_CharsNoBlank)
+            if hackZoomChange then
+                M.HackZoom = tonumber(hackZoom)
+            end
+            GUI:PopItemWidth()
+            GUI:SameLine()
+            GUI:Button("应用修改", 80, 20)
+            if GUI:IsItemClicked(0) then
+                local curZM = tonumber(M.HackZoom)
+                if curZM ~= gDevHackMaxZoom then
+                    gDevHackMaxZoom = curZM
+                    Hacks:SetCamMaxZoom(gDevHackMinZoom,gDevHackMaxZoom)
+                end
+            end
+            GUI:SameLine()
+            if (GUI:Button("还原", 60, 20)) then
+                Hacks:ResetCamMaxZoom()
+                gDevHackMaxZoom = 20.0
+                gDevHackMinZoom = 1.5
             end
         end
         if GUI:CollapsingHeader("支持一下") then

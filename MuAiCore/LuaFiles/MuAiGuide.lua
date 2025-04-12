@@ -1,11 +1,13 @@
 ﻿local M = {}
-M.VERSION = 202
+M.VERSION = 203
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
 M.DebugPos = "MT"
 --- 是否开了UI开发模式
 M.DevelopMode = false
+M.SpeedHack = 6
+M.HackZoom = 100
 ------------------------------- UI -------------------------------
 --- UI定义
 M.UI = {}
