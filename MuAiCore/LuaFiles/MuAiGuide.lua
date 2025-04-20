@@ -58,11 +58,17 @@ end
 
 --- 字符串分割
 --- @param str string 待分割的字符串
---- @return table list 分割后的列表
+--- @param mark string 分隔符（默认为","）
+--- @return table 分割后的列表
 M.StringSplit = function(str, mark)
+    mark = mark or ","
+    local input = string.gsub(str, "，", ",")
     local t = {}
+    if input == "" then
+        return t
+    end
     local pattern = "([^" .. mark .. "]+)"
-    for match in string.gmatch(str, pattern) do
+    for match in string.gmatch(input, pattern) do
         table.insert(t, match)
     end
     return t
