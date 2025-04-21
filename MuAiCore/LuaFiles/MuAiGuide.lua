@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 204
+M.VERSION = 205
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -486,6 +486,7 @@ M.InitConfig = function()
 end
 
 ------------------------------- 游戏逻辑 -------------------------------
+local SupportMap = { 1238, 1122 }
 local TankJobs = { 19, 21, 32, 37 }
 local HealerJobs = { 24, 28, 33, 40 }
 local MeleeJob = { 20, 22, 30, 34, 39, 41 }
@@ -918,6 +919,13 @@ M.DirectTo = function(x, z, time, size, delay)
     if delay < 1 then
         M.CancelDir()
     end
+    local curPlayer = M.GetPlayer()
+    local drawY
+    if table.contains(SupportMap, Player.localmapid) then
+        drawY = 0
+    else
+        drawY = curPlayer.pos.y
+    end
     local newDraw = Argus2.ShapeDrawer:new(
             (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)),
             (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)),
@@ -925,11 +933,11 @@ M.DirectTo = function(x, z, time, size, delay)
             (GUI:ColorConvertFloat4ToU32(255 / 255, 255 / 255, 255 / 255, 1)),
             2
     )
-    local guide1 = newDraw:addTimedCircle(time, x, M.GetPlayer().pos.y, z, size, delay, true)
+    local guide1 = newDraw:addTimedCircle(time, x, drawY, z, size, delay, true)
     local guide2 = Argus2.addTimedRectFilled(
             time,
             x,
-            M.GetPlayer().pos.y,
+            drawY,
             z,
             0.3,
             0.05,
@@ -939,7 +947,7 @@ M.DirectTo = function(x, z, time, size, delay)
             nil,
             delay,
             nil,
-            M.GetPlayer().id,
+            curPlayer.id,
             false,
             nil,
             0.01,
@@ -956,7 +964,7 @@ M.DirectTo = function(x, z, time, size, delay)
             1
     )
 
-    local guide3 = newDraw2:addTimedCircle(time, x, M.GetPlayer().pos.y, z, 0.03, delay, true)
+    local guide3 = newDraw2:addTimedCircle(time, x, drawY, z, 0.03, delay, true)
     if delay < 1 then
         table.insert(M.NotDelayGuides, guide1)
         table.insert(M.NotDelayGuides, guide2)
@@ -974,10 +982,17 @@ M.LinkToPlayer = function(id, time, size, r, g, b, a)
     if r == 0 and g == 0 and b == 0 then
         b = 255
     end
+    local curPlayer = M.GetPlayer()
+    local drawY
+    if table.contains(SupportMap, Player.localmapid) then
+        drawY = 0
+    else
+        drawY = curPlayer.pos.y
+    end
     Argus2.addTimedRectFilled(
             time,
             100,
-            M.GetPlayer().pos.y,
+            drawY,
             100,
             0.3,
             size,
@@ -987,7 +1002,7 @@ M.LinkToPlayer = function(id, time, size, r, g, b, a)
             nil,
             0,
             id,
-            M.GetPlayer().id,
+            curPlayer.id,
             false,
             nil,
             0.01,
@@ -1004,7 +1019,6 @@ M.DirectToEnt = function(id, time, size)
     local drawIds = {}
     size = size or 0.2
     local color = M.Config.Main.GuidePairColor
-
     local newDraw = Argus2.ShapeDrawer:new(
             (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)),
             (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)),
@@ -1012,12 +1026,18 @@ M.DirectToEnt = function(id, time, size)
             (GUI:ColorConvertFloat4ToU32(255 / 255, 255 / 255, 255 / 255, 1)),
             2
     )
-
+    local curPlayer = M.GetPlayer()
+    local drawY
+    if table.contains(SupportMap, Player.localmapid) then
+        drawY = 0
+    else
+        drawY = curPlayer.pos.y
+    end
     local id1 = newDraw:addTimedCircleOnEnt(time, id, size, 0, true)
     local id2 = Argus2.addTimedRectFilled(
             time,
             0,
-            M.GetPlayer().pos.y,
+            drawY,
             0,
             0.3,
             0.05,
@@ -1027,7 +1047,7 @@ M.DirectToEnt = function(id, time, size)
             nil,
             0,
             id,
-            M.GetPlayer().id,
+            curPlayer.id,
             false,
             nil,
             0.01,
@@ -1057,6 +1077,12 @@ end
 M.FrameDirect = function(x, z, size)
     size = size or 0.5
     local playerPos = TensorCore.mGetEntity(M.GetPlayer().id).pos
+    local drawY
+    if table.contains(SupportMap, Player.localmapid) then
+        drawY = 0
+    else
+        drawY = playerPos.y
+    end
     local color = M.Config.Main.GuideColor
     local newDraw = Argus2.ShapeDrawer:new(
             (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)),
@@ -1065,7 +1091,7 @@ M.FrameDirect = function(x, z, size)
             (GUI:ColorConvertFloat4ToU32(255 / 255, 255 / 255, 255 / 255, 1)),
             2
     )
-    newDraw:addCircle(x, playerPos.y, z, size, true)
+    newDraw:addCircle(x, drawY, z, size, true)
     local newDraw2 = Argus2.ShapeDrawer:new(
             (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 1)),
             (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 1)),
