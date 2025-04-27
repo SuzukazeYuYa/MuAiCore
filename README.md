@@ -11,10 +11,11 @@
 <br>![image](https://github.com/user-attachments/assets/3b6e7b7c-1365-47fa-b066-383b4a7b4e3f)
 <br>重新加载后会得到如下
 <br>![image](https://github.com/user-attachments/assets/df23e701-311c-496b-b3fb-3a42b542d89f)，安装成功后，可以通过点击这里开启插件页面，当然这与使用快捷键打开时一样的（如果你没有proflier跳过此步骤）
-<br>$${\color{red}3.请根据使用的副本进行时间轴继承，MuAi\MuAiGuideFru(绝伊甸)  MuAi\MuAiGuideTop(绝欧) ，其他Timeline文件为减伤工具使用，请勿错误使用！}$$
+<br>$${\color{red}3.继承时间轴：MuAi\MuAiGuideFru(绝伊甸)  MuAi\MuAiGuideTop(绝欧) }$$
+<br>$${\color{red}其他文件为减伤轴使用，请参考减伤UI上的说明进行使用 }$$
 <br>$${\color{red}4.请严格检查继承关系，观察时间节点是否有重复内容，出现重复将导致大量指路BUG!}$$
 # 更新
-由于已经改为插件形式，所以不能再Anyone进行更新，这意味着不在支持自动更新，所以现在给出更新的替代方案
+可以通过如下方式进行插件/时间轴更新：
 <br>1.纯覆盖式重装，下载本仓库内容覆盖即可。
 <br>2.游戏内通过本工具UI进行更新。
 <br>![image](https://github.com/user-attachments/assets/a817bf0b-e0f6-4bb7-ac60-3bae417ea936)
@@ -22,19 +23,7 @@
 <br>$${\color{red}更新过程会短暂卡屏，属于正常现象，如果无法更新，请手动覆盖}$$
 <br>$${\color{red}本仓库提交记录即为更新日志，查看方式为点右上角小时钟}$$
 <br>$${\color{red}3.勾选自动更新（注意此功能对网络要求比较严格，github下载速度慢的慎用），勾选后会在mini注入时候自动检查并更新。}$$
-# 关于存档
-很抱歉的说一句，旧存档将不被支持，如果你依然想挽回你的配置文件，请按照如下流程操作：
-<br>1.新存档位置为：\LuaMods\MuAiCore\Configs\FruGuide，如果你安装插件后没有这个文件夹请逐级建好，或者进入游戏后随便进行一个修改，让他自己生成出来。
-<br>2.将旧版存档文件 \LuaMods\MuAiGuide文件夹中所有lua文件 放入到新存档文件夹内即可。
-<br>3.旧版存档文件夹 \LuaMods\MuAiGuide可以删了，随便你处理，可以删除也保留。
-
-# ------- 以下为旧版说明书新版同样适用 -------
-# MuAiGuide
-FF14 Minion TensorReactions用指路轴
-<br>1、旧版绝欧整合轴（停止维护）
-<br>2、绝伊甸全指路
-<br>3、后续版本可能有其他副本的，目前先这样了
-
+## ---------- 绝伊甸说明 ----------
 ## 攻略说明：
 1、攻略：莫古力、日基（全局设置=>一键配置）
 <br>2、其他攻略可以使用本工具的设置UI进行调整，通过设置调整基本上可以兼容绝大多数打法，如果仍然不能兼容请联系本人，会酌情考虑添加。
