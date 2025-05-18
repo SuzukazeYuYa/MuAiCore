@@ -82,12 +82,6 @@ local DrawMainUI = function(M)
 
             end
             GUI:PopItemWidth()
-            GUI:Text(" ")
-            GUI:SameLine()
-            GUI:Button("恢复默认设置", 300, 20)
-            if GUI:IsItemClicked(0) then
-                M.Config.Main = M.CreateDefMainCfg()
-            end
         end
 
         GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing | GUI.SetCond_Once)
@@ -345,15 +339,15 @@ local DrawMainUI = function(M)
         if GUI:CollapsingHeader("Hack") then
             M.AddLabel("移动速度作弊： ")
             GUI:PushItemWidth(50)
-            local hackSpeed, hackSpeedChange = GUI:InputText("##hackSpeed", tostring(M.SpeedHack), GUI.InputTextFlags_CharsNoBlank)
+            local hackSpeed, hackSpeedChange = GUI:InputText("##hackSpeed", tostring(M.Config.Main.SpeedHack), GUI.InputTextFlags_CharsNoBlank)
             if hackSpeedChange then
-                M.SpeedHack = tonumber(hackSpeed)
+                M.Config.Main.SpeedHack = tonumber(hackSpeed)
             end
             GUI:PopItemWidth()
             GUI:SameLine()
             GUI:Button("应用修改", 80, 20)
             if GUI:IsItemClicked(0) then
-                local curSp = tonumber(M.SpeedHack)
+                local curSp = tonumber(M.Config.Main.SpeedHack)
                 if curSp ~= gDevHackRunningSpeed then
                     gDevHackRunningSpeed = curSp
                     Player:SetSpeed(1, gDevHackRunningSpeed, gDevHackBackwardsSpeed, gDevHackStrafeSpeed, gDevHackWalkingSpeed)
@@ -385,15 +379,15 @@ local DrawMainUI = function(M)
             end
             M.AddLabel("最大视距作弊： ")
             GUI:PushItemWidth(50)
-            local hackZoom, hackZoomChange = GUI:InputText("##hackZoom", tostring(M.HackZoom), GUI.InputTextFlags_CharsNoBlank)
+            local hackZoom, hackZoomChange = GUI:InputText("##hackZoom", tostring(M.Config.Main.HackZoom), GUI.InputTextFlags_CharsNoBlank)
             if hackZoomChange then
-                M.HackZoom = tonumber(hackZoom)
+                M.Config.Main.HackZoom = tonumber(hackZoom)
             end
             GUI:PopItemWidth()
             GUI:SameLine()
             GUI:Button("应用修改", 80, 20)
             if GUI:IsItemClicked(0) then
-                local curZM = tonumber(M.HackZoom)
+                local curZM = tonumber(M.Config.Main.HackZoom)
                 if curZM ~= gDevHackMaxZoom then
                     gDevHackMaxZoom = curZM
                     Hacks:SetCamMaxZoom(gDevHackMinZoom,gDevHackMaxZoom)
@@ -429,8 +423,15 @@ local DrawMainUI = function(M)
         if GUI:IsItemClicked(0) then
             io.popen("start https://github.com/SuzukazeYuYa/MuAiCore")
         end
+        
+        GUI:Button("恢复默认设置", 150, 20)
+        if GUI:IsItemClicked(0) then
+            M.Config.Main = M.CreateDefMainCfg()
+            MuAiGuide.Info("已恢复默认设置。")
+        end
+        GUI:SameLine()
         GUI:AlignFirstTextHeightToWidgets()
-        GUI:Text("                         ver." .. M.VERSION .. " ")
+        GUI:Text("  ver." .. M.VERSION .. " ")
         GUI:SameLine(0, 0)
         GUI:Button("检查更新", 100, 20)
         if GUI:IsItemClicked(0) then
@@ -439,6 +440,7 @@ local DrawMainUI = function(M)
             MuAiGuide.Info("更新过程中会短暂卡屏，请耐心等待。")
             MuAiGuide.ForceUpdate()
         end
+       
         M.SaveConfig(M.Config.MainPath, M.Config.MainFile, "Main")
     end
     local winPosx, winPosy = GUI:GetWindowPos();

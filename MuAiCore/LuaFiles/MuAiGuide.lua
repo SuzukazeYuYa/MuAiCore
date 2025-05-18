@@ -1,13 +1,11 @@
 ﻿local M = {}
-M.VERSION = 205
+M.VERSION = 206
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
 M.DebugPos = "MT"
 --- 是否开了UI开发模式
 M.DevelopMode = false
-M.SpeedHack = 6
-M.HackZoom = 100
 ------------------------------- UI -------------------------------
 --- UI定义
 M.UI = {}
@@ -196,7 +194,9 @@ M.CreateDefMainCfg = function()
         --- 是否自动更新
         AutoUpdate = false,
         KeyBindFirst = 17,
-        KeyBindSecond = 70
+        KeyBindSecond = 70,
+        SpeedHack = 6,
+        HackZoom = 100,
     }
     return mainCfg
 end
