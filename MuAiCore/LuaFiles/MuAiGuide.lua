@@ -197,6 +197,7 @@ M.CreateDefMainCfg = function()
         KeyBindSecond = 70,
         SpeedHack = 6,
         HackZoom = 100,
+        MountSpeedHack = 9,
     }
     return mainCfg
 end

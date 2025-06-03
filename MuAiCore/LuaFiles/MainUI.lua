@@ -345,7 +345,7 @@ local DrawMainUI = function(M)
             end
             GUI:PopItemWidth()
             GUI:SameLine()
-            GUI:Button("应用修改", 80, 20)
+            GUI:Button("应用移动", 75, 20)
             if GUI:IsItemClicked(0) then
                 local curSp = tonumber(M.Config.Main.SpeedHack)
                 if curSp ~= gDevHackRunningSpeed then
@@ -355,27 +355,13 @@ local DrawMainUI = function(M)
                 end
             end
             GUI:SameLine()
-            if (GUI:Button("还原", 60, 20)) then
-                Player:ResetSpeed(0) -- flying
+            if (GUI:Button("还原移动", 75, 20)) then
                 Player:ResetSpeed(1) -- walking
-                Player:ResetSpeed(2) -- mounted
                 gDevHackRunningSpeed = 6.0
                 gDevHackWalkingSpeed = 2.4000000953674
                 gDevHackBackwardsSpeed = 2.4000000953674
                 gDevHackStrafeSpeed = 2.4000000953674
                 gDevHackWalkRatio = gDevHackRunningSpeed / gDevHackWalkingSpeed
-
-                gDevHackMountRunningSpeed = 9.0
-                gDevHackMountWalkingSpeed = 3.2000000476837
-                gDevHackMountBackwardsSpeed = 3.2000000476837
-                gDevHackMountStrafeSpeed = 3.2000000476837
-                gDevHackMountRatio = gDevHackMountRunningSpeed / gDevHackMountWalkingSpeed
-
-                gDevHackFlyRunningSpeed = 20.0
-                gDevHackFlyWalkingSpeed = 9.0
-                gDevHackFlyBackwardsSpeed = 9.0
-                gDevHackFlyStrafeSpeed = 9.0
-                gDevHackFlyRatio = gDevHackFlyRunningSpeed / gDevHackFlyWalkingSpeed
             end
             M.AddLabel("最大视距作弊： ")
             GUI:PushItemWidth(50)
@@ -385,7 +371,7 @@ local DrawMainUI = function(M)
             end
             GUI:PopItemWidth()
             GUI:SameLine()
-            GUI:Button("应用修改", 80, 20)
+            GUI:Button("应用视距", 75, 20)
             if GUI:IsItemClicked(0) then
                 local curZM = tonumber(M.Config.Main.HackZoom)
                 if curZM ~= gDevHackMaxZoom then
@@ -394,10 +380,33 @@ local DrawMainUI = function(M)
                 end
             end
             GUI:SameLine()
-            if (GUI:Button("还原", 60, 20)) then
+            if (GUI:Button("还原视距", 75, 20)) then
                 Hacks:ResetCamMaxZoom()
                 gDevHackMaxZoom = 20.0
                 gDevHackMinZoom = 1.5
+            end
+
+            M.AddLabel("地面坐骑速度： ")
+            GUI:PushItemWidth(50)
+            local hackMtSpeed, hackMtSpeedChange = GUI:InputText("##hackMountSpeed", tostring(M.Config.Main.MountSpeedHack), GUI.InputTextFlags_CharsNoBlank)
+            if hackMtSpeedChange then
+                M.Config.Main.MountSpeedHack = tonumber(hackMtSpeed)
+            end
+            GUI:PopItemWidth()
+            GUI:SameLine()
+            GUI:Button("应用坐骑", 75, 20)
+            if GUI:IsItemClicked(0) then
+                local curSp = tonumber(M.Config.Main.MountSpeedHack)
+                if curSp ~= gDevHackMountRunningSpeed then
+                    gDevHackMountRunningSpeed = curSp
+                    Player:SetSpeed(2,gDevHackMountRunningSpeed,gDevHackMountBackwardsSpeed,gDevHackMountStrafeSpeed,gDevHackMountWalkingSpeed)
+                    M.Info("地面坐骑速度修改为：" .. gDevHackMountRunningSpeed)
+                end
+            end
+            GUI:SameLine()
+            if (GUI:Button("还原坐骑", 75, 20)) then
+                gDevHackMountRunningSpeed = 9.0
+                Player:SetSpeed(2,gDevHackMountRunningSpeed,gDevHackMountBackwardsSpeed,gDevHackMountStrafeSpeed,gDevHackMountWalkingSpeed)
             end
         end
         if GUI:CollapsingHeader("支持一下") then
