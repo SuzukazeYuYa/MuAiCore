@@ -23,11 +23,13 @@ local DrawMainUI = function(M)
             M.Config.Main.AutoUpdate = GUI:Checkbox("开启自动更新", M.Config.Main.AutoUpdate)
             GUI:SameLine(0, 45)
             GUI:TextColored(0, 255, 0, 1, "※需要网络状态良好！")
+            GUI:Separator()
             GUI:Text(" ")
             GUI:SameLine()
             M.Config.Main.AnyOneReactionOn = GUI:Checkbox("是否启用了Anyone", M.Config.Main.AnyOneReactionOn)
             GUI:SameLine(0, 19)
             GUI:TextColored(0, 255, 0, 1, "※如果不用A轴请取消勾选")
+            GUI:Separator()
             GUI:Text(" ")
             GUI:SameLine()
             local colorChange1, colorChange2
@@ -50,11 +52,12 @@ local DrawMainUI = function(M)
             M.Config.Main.LogToEchoMsg = GUI:Checkbox("聊天栏提示信息", M.Config.Main.LogToEchoMsg)
             GUI:SameLine(0, 36)
             M.Config.Main.TTS = GUI:Checkbox("开启TTS播报", M.Config.Main.TTS)
+            GUI:Separator()
             GUI:Text(" ")
             GUI:SameLine()
             GUI:AlignFirstTextHeightToWidgets()
-            GUI:BulletText("快捷键设置：")
-            GUI:SameLine(0, 50)
+            GUI:Text("开启界面快捷键：")
+            GUI:SameLine(0, 45)
             GUI:PushItemWidth(60)
             local curKeyIndex = M.Config.Main.KeyBindFirst - 15
             local newIndex, keyBind1Change = GUI:Combo("##KEYBNIN1", curKeyIndex, M.Config.Key1, 4)
@@ -82,6 +85,35 @@ local DrawMainUI = function(M)
 
             end
             GUI:PopItemWidth()
+            GUI:Separator()
+            GUI:Text(" ")
+            GUI:SameLine()
+            M.Config.Main.DrawBlackListEnable = GUI:Checkbox("开启绘制黑名单", M.Config.Main.DrawBlackListEnable)
+            GUI:Text(" ")
+            GUI:SameLine()
+            GUI:TextColored(0, 255, 0, 1, "※在某些地图关闭莫古力基础绘制")
+            GUI:Text(" ")
+            GUI:SameLine()
+            GUI:TextColored(255, 0, 0, 1, "※注意：红点和技能范围的绘制也会被关闭")
+            if M.Config.Main.DrawBlackListEnable then
+                GUI:Text(" ")
+                GUI:SameLine()
+                M.AddLabel("黑名单地图ID：", false, 115)
+                GUI:SameLine(0, 19)
+                GUI:TextColored(0, 255, 0, 1, "※使用英文逗号分隔")
+                GUI:Text(" ")
+                GUI:SameLine()
+                GUI:PushItemWidth(315)
+                local drBlackListInput, blackChanged = GUI:InputText("##DrawBlackList", M.StringJoin(M.Config.Main.DrawBlackList, ","), GUI.InputTextFlags_CharsNoBlank)
+                if blackChanged then
+                    local blackList = M.StringSplit(drBlackListInput, ",")
+                    M.Config.Main.DrawBlackList = {}
+                    for i, mapId in pairs(blackList) do
+                        table.insert(M.Config.Main.DrawBlackList, tonumber(mapId))
+                    end
+                end
+                GUI:PopItemWidth()
+            end
         end
 
         GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing | GUI.SetCond_Once)
@@ -288,6 +320,92 @@ local DrawMainUI = function(M)
                 end
             end
         end
+       
+        if GUI:CollapsingHeader("Hack") then
+            M.AddLabel("移动速度作弊： ")
+            GUI:PushItemWidth(50)
+            local hackSpeed, hackSpeedChange = GUI:InputText("##hackSpeed", tostring(M.Config.Main.SpeedHack), GUI.InputTextFlags_CharsNoBlank)
+            if hackSpeedChange then
+                M.Config.Main.SpeedHack = tonumber(hackSpeed)
+            end
+            GUI:PopItemWidth()
+            GUI:SameLine()
+            GUI:Button("应用移动", 75, 20)
+            if GUI:IsItemClicked(0) then
+                local curSp = tonumber(M.Config.Main.SpeedHack)
+                if curSp ~= gDevHackRunningSpeed then
+                    gDevHackRunningSpeed = curSp
+                    Player:SetSpeed(1, gDevHackRunningSpeed, gDevHackBackwardsSpeed, gDevHackStrafeSpeed, gDevHackWalkingSpeed)
+                    M.Info("移动速度修改为：" .. gDevHackRunningSpeed)
+                end
+            end
+            GUI:SameLine()
+            if (GUI:Button("还原移动", 75, 20)) then
+                Player:ResetSpeed(1) -- walking
+                gDevHackRunningSpeed = 6.0
+                gDevHackWalkingSpeed = 2.4000000953674
+                gDevHackBackwardsSpeed = 2.4000000953674
+                gDevHackStrafeSpeed = 2.4000000953674
+                gDevHackWalkRatio = gDevHackRunningSpeed / gDevHackWalkingSpeed
+            end
+            M.AddLabel("最大视距作弊： ")
+            GUI:PushItemWidth(50)
+            local hackZoom, hackZoomChange = GUI:InputText("##hackZoom", tostring(M.Config.Main.HackZoom), GUI.InputTextFlags_CharsNoBlank)
+            if hackZoomChange then
+                M.Config.Main.HackZoom = tonumber(hackZoom)
+            end
+            GUI:PopItemWidth()
+            GUI:SameLine()
+            GUI:Button("应用视距", 75, 20)
+            if GUI:IsItemClicked(0) then
+                local curZM = tonumber(M.Config.Main.HackZoom)
+                if curZM ~= gDevHackMaxZoom then
+                    gDevHackMaxZoom = curZM
+                    Hacks:SetCamMaxZoom(gDevHackMinZoom, gDevHackMaxZoom)
+                end
+            end
+            GUI:SameLine()
+            if (GUI:Button("还原视距", 75, 20)) then
+                Hacks:ResetCamMaxZoom()
+                gDevHackMaxZoom = 20.0
+                gDevHackMinZoom = 1.5
+            end
+
+            M.AddLabel("地面坐骑速度： ")
+            GUI:PushItemWidth(50)
+            local hackMtSpeed, hackMtSpeedChange = GUI:InputText("##hackMountSpeed", tostring(M.Config.Main.MountSpeedHack), GUI.InputTextFlags_CharsNoBlank)
+            if hackMtSpeedChange then
+                M.Config.Main.MountSpeedHack = tonumber(hackMtSpeed)
+            end
+            GUI:PopItemWidth()
+            GUI:SameLine()
+            GUI:Button("应用坐骑", 75, 20)
+            if GUI:IsItemClicked(0) then
+                local curSp = tonumber(M.Config.Main.MountSpeedHack)
+                if curSp ~= gDevHackMountRunningSpeed then
+                    gDevHackMountRunningSpeed = curSp
+                    Player:SetSpeed(2, gDevHackMountRunningSpeed, gDevHackMountBackwardsSpeed, gDevHackMountStrafeSpeed, gDevHackMountWalkingSpeed)
+                    M.Info("地面坐骑速度修改为：" .. gDevHackMountRunningSpeed)
+                end
+            end
+            GUI:SameLine()
+            if (GUI:Button("还原坐骑", 75, 20)) then
+                gDevHackMountRunningSpeed = 9.0
+                Player:SetSpeed(2, gDevHackMountRunningSpeed, gDevHackMountBackwardsSpeed, gDevHackMountStrafeSpeed, gDevHackMountWalkingSpeed)
+            end
+        end
+        if GUI:CollapsingHeader("支持一下") then
+            local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\QRCode.png"
+            GUI:Text("        ")
+            GUI:SameLine()
+            GUI:Image(path, 200, 200)
+            GUI:TextColored(0, 1, 0, 1, "   如果您觉得我做的很好，可以支持一下。")
+            GUI:TextColored(1, 1, 0, 1, "   但是这并不能让您获得更多权益，只代表你对本")
+            GUI:TextColored(1, 1, 0, 1, "   人的支持，根本没任何回报，请慎重。")
+            GUI:TextColored(1, 0, 0, 1, "   ※郑重声明：本工具没有任何用户分级政策。")
+            GUI:TextColored(1, 0, 0, 1, "   ※码是DC群友的热情难拒，才加上的。")
+            GUI:TextColored(1, 0, 0, 1, "   ※请勿用付费说事，全凭自愿打赏。")
+        end
         if GUI:CollapsingHeader("调试工具") then
             GUI:Text(" ")
             GUI:SameLine()
@@ -336,91 +454,6 @@ local DrawMainUI = function(M)
                 ReloadMuAiGuide()
             end
         end
-        if GUI:CollapsingHeader("Hack") then
-            M.AddLabel("移动速度作弊： ")
-            GUI:PushItemWidth(50)
-            local hackSpeed, hackSpeedChange = GUI:InputText("##hackSpeed", tostring(M.Config.Main.SpeedHack), GUI.InputTextFlags_CharsNoBlank)
-            if hackSpeedChange then
-                M.Config.Main.SpeedHack = tonumber(hackSpeed)
-            end
-            GUI:PopItemWidth()
-            GUI:SameLine()
-            GUI:Button("应用移动", 75, 20)
-            if GUI:IsItemClicked(0) then
-                local curSp = tonumber(M.Config.Main.SpeedHack)
-                if curSp ~= gDevHackRunningSpeed then
-                    gDevHackRunningSpeed = curSp
-                    Player:SetSpeed(1, gDevHackRunningSpeed, gDevHackBackwardsSpeed, gDevHackStrafeSpeed, gDevHackWalkingSpeed)
-                    M.Info("移动速度修改为：" .. gDevHackRunningSpeed)
-                end
-            end
-            GUI:SameLine()
-            if (GUI:Button("还原移动", 75, 20)) then
-                Player:ResetSpeed(1) -- walking
-                gDevHackRunningSpeed = 6.0
-                gDevHackWalkingSpeed = 2.4000000953674
-                gDevHackBackwardsSpeed = 2.4000000953674
-                gDevHackStrafeSpeed = 2.4000000953674
-                gDevHackWalkRatio = gDevHackRunningSpeed / gDevHackWalkingSpeed
-            end
-            M.AddLabel("最大视距作弊： ")
-            GUI:PushItemWidth(50)
-            local hackZoom, hackZoomChange = GUI:InputText("##hackZoom", tostring(M.Config.Main.HackZoom), GUI.InputTextFlags_CharsNoBlank)
-            if hackZoomChange then
-                M.Config.Main.HackZoom = tonumber(hackZoom)
-            end
-            GUI:PopItemWidth()
-            GUI:SameLine()
-            GUI:Button("应用视距", 75, 20)
-            if GUI:IsItemClicked(0) then
-                local curZM = tonumber(M.Config.Main.HackZoom)
-                if curZM ~= gDevHackMaxZoom then
-                    gDevHackMaxZoom = curZM
-                    Hacks:SetCamMaxZoom(gDevHackMinZoom,gDevHackMaxZoom)
-                end
-            end
-            GUI:SameLine()
-            if (GUI:Button("还原视距", 75, 20)) then
-                Hacks:ResetCamMaxZoom()
-                gDevHackMaxZoom = 20.0
-                gDevHackMinZoom = 1.5
-            end
-
-            M.AddLabel("地面坐骑速度： ")
-            GUI:PushItemWidth(50)
-            local hackMtSpeed, hackMtSpeedChange = GUI:InputText("##hackMountSpeed", tostring(M.Config.Main.MountSpeedHack), GUI.InputTextFlags_CharsNoBlank)
-            if hackMtSpeedChange then
-                M.Config.Main.MountSpeedHack = tonumber(hackMtSpeed)
-            end
-            GUI:PopItemWidth()
-            GUI:SameLine()
-            GUI:Button("应用坐骑", 75, 20)
-            if GUI:IsItemClicked(0) then
-                local curSp = tonumber(M.Config.Main.MountSpeedHack)
-                if curSp ~= gDevHackMountRunningSpeed then
-                    gDevHackMountRunningSpeed = curSp
-                    Player:SetSpeed(2,gDevHackMountRunningSpeed,gDevHackMountBackwardsSpeed,gDevHackMountStrafeSpeed,gDevHackMountWalkingSpeed)
-                    M.Info("地面坐骑速度修改为：" .. gDevHackMountRunningSpeed)
-                end
-            end
-            GUI:SameLine()
-            if (GUI:Button("还原坐骑", 75, 20)) then
-                gDevHackMountRunningSpeed = 9.0
-                Player:SetSpeed(2,gDevHackMountRunningSpeed,gDevHackMountBackwardsSpeed,gDevHackMountStrafeSpeed,gDevHackMountWalkingSpeed)
-            end
-        end
-        if GUI:CollapsingHeader("支持一下") then
-            local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\QRCode.png"
-            GUI:Text("        ")
-            GUI:SameLine()
-            GUI:Image(path, 200, 200)
-            GUI:TextColored(0, 1, 0, 1, "   如果您觉得我做的很好，可以支持一下。")
-            GUI:TextColored(1, 1, 0, 1, "   但是这并不能让您获得更多权益，只代表你对本")
-            GUI:TextColored(1, 1, 0, 1, "   人的支持，根本没任何回报，请慎重。")
-            GUI:TextColored(1, 0, 0, 1, "   ※郑重声明：本工具没有任何用户分级政策。")
-            GUI:TextColored(1, 0, 0, 1, "   ※码是DC群友的热情难拒，才加上的。")
-            GUI:TextColored(1, 0, 0, 1, "   ※请勿用付费说事，全凭自愿打赏。")
-        end
         GUI:Separator()
         GUI:BulletText("BUG反馈")
         GUI:Dummy(10, 1)
@@ -432,7 +465,7 @@ local DrawMainUI = function(M)
         if GUI:IsItemClicked(0) then
             io.popen("start https://github.com/SuzukazeYuYa/MuAiCore")
         end
-        
+
         GUI:Button("恢复默认设置", 150, 20)
         if GUI:IsItemClicked(0) then
             M.Config.Main = M.CreateDefMainCfg()
@@ -449,7 +482,7 @@ local DrawMainUI = function(M)
             MuAiGuide.Info("更新过程中会短暂卡屏，请耐心等待。")
             MuAiGuide.ForceUpdate()
         end
-       
+
         M.SaveConfig(M.Config.MainPath, M.Config.MainFile, "Main")
     end
     local winPosx, winPosy = GUI:GetWindowPos();

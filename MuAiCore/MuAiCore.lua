@@ -64,6 +64,23 @@ core.Initialize = function()
     end, tooltip = tooltip, texture = Icon }, "FFXIVMINION##MENU_HEADER")
 end
 
+local disableDrawCheck = function()
+    if MuAiGuide.Config.Main.DrawBlackListEnable
+    and MuAiGuide.Config.Main.DrawBlackList
+    and table.size(MuAiGuide.Config.Main.DrawBlackList) > 0
+    then
+        if lastMap ~= Player.localmapid then
+            if table.contains(MuAiGuide.Config.Main.DrawBlackList, Player.localmapid) then
+                MuAiGuide.Info("进入绘制黑名单区域，已关闭Minion基础绘制。")
+                MoogleTelegraphs.Settings.enable = false
+            elseif table.contains(MuAiGuide.Config.Main.DrawBlackList, lastMap) then
+                MuAiGuide.Info("离开绘制黑名单区域，已开启Minion基础绘制。")
+                MoogleTelegraphs.Settings.enable = true
+            end
+        end
+    end
+end
+
 core.Update = function()
     if MuAiGuide == nil then
         core.InitMuAiGuide()
@@ -71,6 +88,7 @@ core.Update = function()
     if MuAiGuide and MuAiGuide.Config and GUI:IsKeyDown(MuAiGuide.Config.Main.KeyBindFirst) and GUI:IsKeyPressed(MuAiGuide.Config.Main.KeyBindSecond) then
         MuAiGuide.UI.open = not MuAiGuide.UI.open
     end
+    disableDrawCheck()
     if lastMap ~= Player.localmapid then
         MuAiGuide.Party = nil
         MuAiGuide.SelfPos = nil

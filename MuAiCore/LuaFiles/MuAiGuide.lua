@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 208
+M.VERSION = 209
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -73,15 +73,19 @@ M.StringSplit = function(str, mark)
 end
 
 --- 列表进行拼接
---- @param str string 待分割的字符串
+--- @param tbl table 表
+--- @param mark string 分隔符
 --- @return table result 拼合后的字符串
 M.StringJoin = function(tbl, mark)
     local result = ""
+    if table.size(tbl) == 0 then
+        return result
+    end
     for i, v in ipairs(tbl) do
         if i > 1 then
             result = result .. mark
         end
-        result = result .. v
+        result = result .. tostring(v)
     end
     return result
 end
@@ -198,6 +202,8 @@ M.CreateDefMainCfg = function()
         SpeedHack = 6,
         HackZoom = 100,
         MountSpeedHack = 9,
+        DrawBlackListEnable = false,
+        DrawBlackList = {},
     }
     return mainCfg
 end
