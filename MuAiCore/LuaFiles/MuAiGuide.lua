@@ -927,6 +927,7 @@ M.DirectTo = function(x, z, time, size, delay)
         M.CancelDir()
     end
     local curPlayer = M.GetPlayer()
+    curPlayer = curPlayer or Player
     local drawY
     if table.contains(SupportMap, Player.localmapid) then
         drawY = 0
@@ -1083,7 +1084,7 @@ end
 --- @param size number 圆圈大小
 M.FrameDirect = function(x, z, size)
     size = size or 0.5
-    local playerPos = TensorCore.mGetEntity(M.GetPlayer().id).pos
+    local playerPos = TensorCore.mGetEntity((M.GetPlayer() or Player).id).pos
     local drawY
     if table.contains(SupportMap, Player.localmapid) then
         drawY = 0
