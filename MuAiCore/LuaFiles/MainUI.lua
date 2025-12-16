@@ -28,7 +28,7 @@ local DrawMainUI = function(M)
             GUI:SameLine()
             M.Config.Main.AnyOneReactionOn = GUI:Checkbox("是否启用了Anyone", M.Config.Main.AnyOneReactionOn)
             GUI:SameLine(0, 19)
-            GUI:TextColored(0, 255, 0, 1, "※如果不用A轴请取消勾选")
+            GUI:TextColored(0, 255, 0, 1, "")
             GUI:Separator()
             GUI:Text(" ")
             GUI:SameLine()
@@ -154,7 +154,7 @@ local DrawMainUI = function(M)
             end
             GUI:Dummy(1, 1)
             GUI:Separator()
-            GUI:Text("  | 职能 |职业|             角色名            |")
+            GUI:Text("  | 职能 |职业|            角色名           |")
 
             if M.Party == nil or table.size(M.Party) == 0 then
                 M.Party = {}
@@ -200,10 +200,10 @@ local DrawMainUI = function(M)
                     return false
                 end
                 local ptMember = partyMembers[i]
-                GUI:Dummy(5, 0)
+                GUI:Dummy(7, 0)
                 GUI:SameLine()
                 GUI:AlignFirstTextHeightToWidgets()
-                GUI:SetWindowFontSize(1.5)
+                GUI:SetWindowFontSize(1.3)
                 if table.size(M.Party) == 4 then
                     if i == 1 then
                         GUI:TextColored(0, 0.3, 1, 1, ptMember.label)
@@ -221,16 +221,16 @@ local DrawMainUI = function(M)
                         GUI:TextColored(1, 0, 0, 1, ptMember.label)
                     end
                 end
-                GUI:SetWindowFontSize(1.3)
+                GUI:SetWindowFontSize(1)
                 GUI:SameLine()
-                GUI:Dummy(0, 0)
+                GUI:Dummy(5, 0)
                 GUI:SameLine()
                 if ptMember.info ~= nil and ptMember.info.job ~= nil and ptMember.info.name ~= nil then
                     local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\JobIcon\\" .. tostring(ptMember.info.job) .. ".png"
                     GUI:Image(path, 25, 25)
                     GUI:SameLine(0, 25)
-                    GUI:AlignFirstTextHeightToWidgets()
-                    GUI:Selectable(ptMember.info.name, IsSelected(), GUI.SelectableFlags_DontClosePopups, 0, 0)
+                    --GUI:AlignFirstTextHeightToWidgets()
+                    GUI:Selectable(ptMember.info.name, IsSelected(), GUI.SelectableFlags_DontClosePopups, 0, 22)
                 else
                     local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\JobIcon\\00.png"
                     if i <= 2 then
@@ -242,8 +242,8 @@ local DrawMainUI = function(M)
                     end
                     GUI:Image(path, 25, 25)
                     GUI:SameLine(0, 25)
-                    GUI:AlignFirstTextHeightToWidgets()
-                    GUI:Selectable("未知玩家" .. i, IsSelected())
+                    --GUI:AlignFirstTextHeightToWidgets()
+                    GUI:Selectable("未知玩家" .. i, IsSelected(), GUI.SelectableFlags_DontClosePopups, 0, 22)
                 end
                 if GUI:IsItemHovered(GUI.HoveredFlags_AllowWhenBlockedByPopup + GUI.HoveredFlags_AllowWhenBlockedByActiveItem + GUI.HoveredFlags_AllowWhenOverlapped) then
                     if GUI:IsMouseDown(0) then
@@ -293,7 +293,6 @@ local DrawMainUI = function(M)
             end
             GUI:Text(" ")
             GUI:SameLine()
-            GUI:SetWindowFontSize(1)
             GUI:Button("重新加载小队列表", 305, 30)
             if GUI:IsItemClicked(0) then
                 M.LoadParty()

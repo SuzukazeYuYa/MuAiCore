@@ -483,7 +483,7 @@ local DrawUI = function(M)
 
             M.SaveConfig(M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job), M.Config.FruMitigationFile, "FruMitigation")
         end
-        GUI:SetWindowSize(350, 0)
+        GUI:SetWindowSize(410, 0)
         GUI:End()
     end
 end

@@ -5,7 +5,7 @@ local DrawFruConfigUI = function(M)
             M.FruConfigUI.NewMode = false
             return
         end
-        GUI:SetNextWindowSize(200, 0, GUI.SetCond_Appearing)
+        GUI:SetNextWindowSize(300, 0, GUI.SetCond_Appearing)
         GUI:SetNextWindowPos(M.FruConfigUI.x, M.FruConfigUI.y, GUI.SetCond_Appearing)
         M.FruConfigUI.visible, M.FruConfigUI.open = GUI:Begin("MuAiGuide Fru Setting", M.FruConfigUI.open)
         if M.FruConfigUI.visible then
@@ -818,7 +818,7 @@ local DrawFruConfigUI = function(M)
             end
         end
         M.SaveConfig(M.Config.FruGuidePath, M.Config.FruGuideFile, "FruCfg")
-        GUI:SetWindowSize(350, 0)
+        GUI:SetWindowSize(410, 0)
         GUI:End()
     end
 end
