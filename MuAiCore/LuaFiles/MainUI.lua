@@ -94,7 +94,6 @@ local DrawMainUI = function(M)
             GUI:TextColored(0, 255, 0, 1, "※在某些地图关闭莫古力基础绘制")
             GUI:Text(" ")
             GUI:SameLine()
-            GUI:TextColored(255, 0, 0, 1, "※注意：红点和技能范围的绘制也会被关闭")
             if M.Config.Main.DrawBlackListEnable then
                 GUI:Text(" ")
                 GUI:SameLine()
@@ -108,7 +107,7 @@ local DrawMainUI = function(M)
                 if blackChanged then
                     local blackList = M.StringSplit(drBlackListInput, ",")
                     M.Config.Main.DrawBlackList = {}
-                    for i, mapId in pairs(blackList) do
+                    for _, mapId in pairs(blackList) do
                         table.insert(M.Config.Main.DrawBlackList, tonumber(mapId))
                     end
                 end
@@ -481,8 +480,6 @@ local DrawMainUI = function(M)
             MuAiGuide.Info("更新过程中会短暂卡屏，请耐心等待。")
             MuAiGuide.ForceUpdate()
         end
-
-        M.SaveConfig(M.Config.MainPath, M.Config.MainFile, "Main")
     end
     local winPosx, winPosy = GUI:GetWindowPos();
     M.FruConfigUI.x = winPosx + 350

@@ -1,3 +1,4 @@
+-- 测试内容
 local MuAiCore = {}
 local AddonName = "MuAiCore"
 local core = MuAiCore
@@ -72,10 +73,10 @@ local disableDrawCheck = function()
         if lastMap ~= Player.localmapid then
             if table.contains(MuAiGuide.Config.Main.DrawBlackList, Player.localmapid) then
                 MuAiGuide.Info("进入绘制黑名单区域，已关闭Minion基础绘制。")
-                MoogleTelegraphs.Settings.enable = false
+                MoogleTelegraphs.Settings.DrawEnemyAoE = false
             elseif table.contains(MuAiGuide.Config.Main.DrawBlackList, lastMap) then
                 MuAiGuide.Info("离开绘制黑名单区域，已开启Minion基础绘制。")
-                MoogleTelegraphs.Settings.enable = true
+                MoogleTelegraphs.Settings.DrawEnemyAoE = true
             end
         end
     end
