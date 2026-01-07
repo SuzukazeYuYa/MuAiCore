@@ -480,6 +480,7 @@ local DrawMainUI = function(M)
             MuAiGuide.Info("更新过程中会短暂卡屏，请耐心等待。")
             MuAiGuide.ForceUpdate()
         end
+        M.SaveConfig(M.Config.MainPath, M.Config.MainFile, "Main")
     end
     local winPosx, winPosy = GUI:GetWindowPos();
     M.FruConfigUI.x = winPosx + 350
