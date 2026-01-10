@@ -52,6 +52,7 @@ local tbl =
 						category = "Self",
 						conditionType = 8,
 						localmapid = 1325,
+						name = "M11S",
 						uuid = "19fa35c7-1605-8a7a-97a7-6dbaf9b2a568",
 						version = 2,
 					},
@@ -101,6 +102,7 @@ local tbl =
 						category = "Self",
 						conditionType = 8,
 						localmapid = 1325,
+						name = "M11S",
 						uuid = "71b6f493-41e3-df25-8619-bbdb57bd01bf",
 						version = 2,
 					},
@@ -189,23 +191,25 @@ local tbl =
 				{
 					data = 
 					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						uuid = "0e493990-e4ec-e1b4-aaf9-fb78fd408a55",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
 						category = "Event",
 						eventArgType = 2,
 						eventEntityID = 46086,
 						eventSpellID = 46086,
 						name = "还原地图",
 						uuid = "33cd5d48-a7b4-e21e-865e-3da798f01913",
+						version = 2,
+					},
+					inheritedIndex = 3,
+				},
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "0e493990-e4ec-e1b4-aaf9-fb78fd408a55",
 						version = 2,
 					},
 					inheritedIndex = 3,
@@ -237,6 +241,11 @@ local tbl =
 								"089e6374-6111-897d-8af0-fcd0c72e28ac",
 								true,
 							},
+							
+							{
+								"36552ff7-f62a-b95c-9b3e-6ec090ee0398",
+								true,
+							},
 						},
 						gVar = "ACR_RikuNIN3_CD",
 						uuid = "b71e5591-3e6b-758b-b52e-84b8c6cbeccb",
@@ -255,6 +264,18 @@ local tbl =
 						eventArgType = 2,
 						eventSpellID = 46132,
 						uuid = "089e6374-6111-897d-8af0-fcd0c72e28ac",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "36552ff7-f62a-b95c-9b3e-6ec090ee0398",
 						version = 2,
 					},
 				},
@@ -301,6 +322,7 @@ local tbl =
 						category = "Self",
 						conditionType = 8,
 						localmapid = 1325,
+						name = "M11S",
 						uuid = "cee5c51f-db3d-03b0-9b91-12cc159be349",
 						version = 2,
 					},
@@ -332,6 +354,11 @@ local tbl =
 								"2fbd9c0f-e39c-a512-9798-2586a5646898",
 								true,
 							},
+							
+							{
+								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								true,
+							},
 						},
 						gVar = "ACR_RikuNIN3_CD",
 						uuid = "031241ad-aed6-50cb-aab6-4ace640a267b",
@@ -351,9 +378,21 @@ local tbl =
 						version = 2,
 					},
 				},
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+						version = 2,
+					},
+				},
 			},
 			eventType = 12,
-			name = "M11STether",
+			name = "M11S拉线",
 			uuid = "41a903f9-67f1-06ad-8924-d2be901e0268",
 			version = 2,
 		},
@@ -394,6 +433,7 @@ local tbl =
 						category = "Self",
 						conditionType = 8,
 						localmapid = 1325,
+						name = "M11S",
 						uuid = "4b9a2018-ece0-c270-bec7-fb5391d04788",
 						version = 2,
 					},
