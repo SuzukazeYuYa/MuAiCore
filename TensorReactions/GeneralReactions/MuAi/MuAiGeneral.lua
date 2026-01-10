@@ -77,7 +77,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local redDrawer = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 1)),\n        2\n)\nif MuAiGuide.M11SMapType == nil or MuAiGuide.M11SMapType == 0 then\n\tredDrawer:addRect(100, 0, 80, 40, 40, 0, true)\t\nelse\n\tredDrawer:addRect(84, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(116, 0, 80, 40, 20, 0, true)\nend\nself.used = true",
+						actionLua = "local redDrawer = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 1)),\n        2\n)\nif MuAiGuide.M11SMapType == nil or MuAiGuide.M11SMapType ~= 1 then\n\tredDrawer:addRect(100, 0, 80, 40, 40, 0, true)\t\nelse\n\tredDrawer:addRect(84, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(116, 0, 80, 40, 20, 0, true)\nend\nself.used = true",
 						conditions = 
 						{
 							
@@ -141,6 +141,7 @@ local tbl =
 							},
 						},
 						gVar = "ACR_RikuNIN3_CD",
+						name = "拆地板",
 						uuid = "62e6a770-339c-de7b-8bf7-1e1aa5badcca",
 						version = 2.1,
 					},
@@ -166,10 +167,31 @@ local tbl =
 							},
 						},
 						gVar = "ACR_RikuMNK3_CD",
+						name = "还原地板",
 						uuid = "befcb967-2841-45e2-b927-f551c47c3b6c",
 						version = 2.1,
 					},
 					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M11SMapType = 2\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"b07946c0-f072-a961-8d22-cf8fccccc02a",
+								true,
+							},
+						},
+						gVar = "ACR_RikuNIN3_CD",
+						name = "陨石狂奔 ",
+						uuid = "a2803d71-84f4-6362-bf81-8473a4716695",
+						version = 2.1,
+					},
 				},
 			},
 			conditions = 
@@ -199,6 +221,19 @@ local tbl =
 						uuid = "33cd5d48-a7b4-e21e-865e-3da798f01913",
 						version = 2,
 					},
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46162,
+						name = "陨石狂奔",
+						uuid = "b07946c0-f072-a961-8d22-cf8fccccc02a",
+						version = 2,
+					},
 					inheritedIndex = 3,
 				},
 				
@@ -216,7 +251,7 @@ local tbl =
 				},
 			},
 			eventType = 2,
-			name = "M11S地图切换",
+			name = "M11S阶段切换",
 			uuid = "e260ac90-04cd-d071-866c-f30f070327c0",
 			version = 2,
 		},
@@ -281,7 +316,7 @@ local tbl =
 				},
 			},
 			eventType = 2,
-			name = "M11S第一次陨石位置",
+			name = "M11S陨石位置",
 			uuid = "74d161a0-ce78-a135-a5df-53829b8f7124",
 			version = 2,
 		},
@@ -346,7 +381,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local tethers = Argus.getTethersOnEnt(TensorCore.mGetPlayer().id)\nlocal linkFrom = nil\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        linkFrom = TensorCore.mGetEntity(tether.partnerid)\n    end\nend\n\nif linkFrom ~= nil then\n    local targetPos = nil\n    if linkFrom.pos.x < 100 then\n        if linkFrom.pos.z < 100 then\n            targetPos = { x = 116, z = 120 }\n        else\n            targetPos = { x = 116, z = 80 }\n        end\n    else\n        if linkFrom.pos.z < 100 then\n            targetPos = { x = 84, z = 120 }\n        else\n            targetPos = { x = 84, z = 80 }\n        end\n    end\n    local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0 / 255, 255 / 255, 0 / 255, 0.5), 1)\n    local heading = TensorCore.getHeadingToTarget(linkFrom.pos, targetPos)\n    drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, 60, 1, 1, 1,  false)\n    drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, 60, 0.03, 1, 1, true)\nend\nself.used = true ",
+						actionLua = "local player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nlocal linkFrom = nil\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        linkFrom = TensorCore.mGetEntity(tether.partnerid)\n    end\nend\n\nif linkFrom ~= nil then\n    local targetPos = nil\n    if MuAiGuide.M11SMapType == 1 then\n        if linkFrom.pos.x < 100 then\n            if linkFrom.pos.z < 100 then\n                targetPos = { x = 116, z = 120 }\n            else\n                targetPos = { x = 116, z = 80 }\n            end\n        else\n            if linkFrom.pos.z < 100 then\n                targetPos = { x = 84, z = 120 }\n            else\n                targetPos = { x = 84, z = 80 }\n            end\n        end\n    elseif MuAiGuide.M11SMapType == 2 then\n        if linkFrom.pos.z < 90 then --上\n            targetPos = { x = 120, z = 120 }\n        elseif linkFrom.pos.x < 90 then --左\n            targetPos = { x = 120, z = 80 }\n        elseif linkFrom.pos.z >110  then -- 下\n            targetPos = { x = 80, z = 80 }\n        else -- 右边\n            targetPos = { x = 80, z = 120 }\n        end\n    end\n    if targetPos ~= nil then\n        local length = TensorCore.getDistance2d(linkFrom.pos, targetPos)\n        local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0 / 255, 255 / 255, 0 / 255, 0.5), 1)\n        local heading = TensorCore.getHeadingToTarget(linkFrom.pos, targetPos)\n        drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length + 1, 1, 1, 1,  false)\n        drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length + 1, 0.03, 0.5, 0.5, true)\n    end\nend\nself.used = true ",
 						conditions = 
 						{
 							
@@ -373,7 +408,7 @@ local tbl =
 					data = 
 					{
 						category = "Lua",
-						conditionLua = "    if MuAiGuide.M11SMapType ~= 1 then\n        return false\n    end\n\n    local tethers = Argus.getTethersOnEnt(TensorCore.mGetPlayer().id)\n    if tethers == nil or table.size(tethers) <= 0 then\n        return false\n    end\n    for _, tether in pairs(tethers) do\n        if tether.type == 57 or tether.type == 249 then\n            return true\n        end\n    end\n    return false",
+						conditionLua = "if MuAiGuide.M11SMapType ~= 1 and MuAiGuide.M11SMapType ~= 2 then\n    return false\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nif tethers == nil or table.size(tethers) <= 0 then\n    return false\nend\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        return true\n    end\nend\nreturn false",
 						uuid = "2fbd9c0f-e39c-a512-9798-2586a5646898",
 						version = 2,
 					},
@@ -389,6 +424,7 @@ local tbl =
 						uuid = "16607308-c4ad-eb3e-ac3e-9036a0da5b58",
 						version = 2,
 					},
+					inheritedIndex = 2,
 				},
 			},
 			eventType = 12,
@@ -445,6 +481,33 @@ local tbl =
 			version = 2,
 		},
 		inheritedIndex = 9,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "if MuAiGuide.M11SMapType ~= 1 and MuAiGuide.M11SMapType ~= 2 then\n    d(\"01\")\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nif tethers == nil or table.size(tethers) <= 0 then\n     d(\"02\")\nend\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        d(1)\n    end\nend\nd(\"03\")\nself.used = true",
+						gVar = "ACR_RikuNIN3_CD",
+						uuid = "06275492-4708-d684-a09e-ecfa811e7f4a",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+			},
+			enabled = false,
+			name = "TEST",
+			uuid = "eaf28a6c-3d20-407a-8506-e831f03006ba",
+			version = 2,
+		},
 	}, 
 	inheritedProfiles = 
 	{
