@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 211
+M.VERSION = 212
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -143,6 +143,19 @@ M.SetHeading2Pi = function(heading)
         return heading + math.pi * 2
     end
     return heading
+end
+
+--- 2个弧度是否是同向
+M.IsSameDirection = function(rad1, rad2)
+    local diff = math.fmod(rad2 - rad1, 2 * math.pi)
+    -- 归一化到[-π, π]
+    if diff > math.pi then
+        diff = diff - 2 * math.pi
+    elseif diff < -math.pi then
+        diff = diff + 2 * math.pi
+    end
+    -- 返回比较结果
+    return math.abs(diff) <= 0.01
 end
 
 --- 判断点A到B的顺逆

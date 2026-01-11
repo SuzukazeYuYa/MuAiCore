@@ -2,7 +2,7 @@
 local MuAiCore = {}
 local AddonName = "MuAiCore"
 local core = MuAiCore
-local autoPopMap = { 1238, 1122 }
+local autoPopMap = { 1238, 1122, 1327 }
 local mainDrawer, fruConfigDrawer, fruMitigationDrawer
 local lastMap, lastJob, updateTime
 local updateNeedReLoad = false
