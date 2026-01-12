@@ -14,7 +14,7 @@ local tbl =
 			uuid = "4c04d325-7712-422b-be39-a892f38c3b0d",
 			version = 2,
 		},
-		inheritedIndex = 1,
+		inheritedIndex = 2,
 	},
 	
 	{
@@ -116,11 +116,12 @@ local tbl =
 					{
 						category = "Self",
 						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "4b9a2018-ece0-c270-bec7-fb5391d04788",
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "609f849f-a306-30ed-89bb-763044ebe97d",
 						version = 2,
 					},
+					inheritedIndex = 2,
 				},
 				
 				{
@@ -128,9 +129,9 @@ local tbl =
 					{
 						category = "Self",
 						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "609f849f-a306-30ed-89bb-763044ebe97d",
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "4b9a2018-ece0-c270-bec7-fb5391d04788",
 						version = 2,
 					},
 					inheritedIndex = 2,
@@ -158,105 +159,6 @@ local tbl =
 			version = 2,
 		},
 		inheritedIndex = 4,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local redDrawer = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 1)),\n        2\n)\nif MuAiGuide.M11SMapType == nil or MuAiGuide.M11SMapType ~= 1 then\n\tredDrawer:addRect(100, 0, 80, 40, 40, 0, true)\t\nelse\n\tredDrawer:addRect(84, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(116, 0, 80, 40, 20, 0, true)\nend\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"71b6f493-41e3-df25-8619-bbdb57bd01bf",
-								true,
-							},
-						},
-						gVar = "ACR_RikuNIN3_CD",
-						uuid = "16ba8e37-2a5d-9b6e-a6a5-3593ba5c9ac4",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "71b6f493-41e3-df25-8619-bbdb57bd01bf",
-						version = 2,
-					},
-				},
-			},
-			eventType = 13,
-			name = "M11S地图边框",
-			uuid = "15ffb251-5885-55b5-adf0-15a00a7fcba5",
-			version = 2,
-		},
-		inheritedIndex = 5,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "AnyoneCore.addTimedWorldText(60000 * 90, \"N\", {x = 100,y = 0 ,z =  77}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nAnyoneCore.addTimedWorldText(60000 * 90, \"S\", {x = 100,y = 0 ,z =  123}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nAnyoneCore.addTimedWorldText(60000 * 90, \"W\", {x = 72,y = 0 ,z =  100}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nAnyoneCore.addTimedWorldText(60000 * 90, \"E\", {x = 128,y = 0 ,z =  100}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"19fa35c7-1605-8a7a-97a7-6dbaf9b2a568",
-								true,
-							},
-						},
-						gVar = "ACR_RikuNIN3_CD",
-						uuid = "b909d181-c1fc-4737-b315-5cd0da388cc2",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "19fa35c7-1605-8a7a-97a7-6dbaf9b2a568",
-						version = 2,
-					},
-				},
-			},
-			eventType = 11,
-			name = "M11S东西南北",
-			throttleTime = 5000,
-			uuid = "285e83a5-1024-4791-bdac-921a03769a59",
-			version = 2,
-		},
-		inheritedIndex = 6,
 	},
 	
 	{
@@ -398,7 +300,7 @@ local tbl =
 			uuid = "e260ac90-04cd-d071-866c-f30f070327c0",
 			version = 2,
 		},
-		inheritedIndex = 7,
+		inheritedIndex = 5,
 	},
 	
 	{
@@ -411,20 +313,17 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
+						actionLua = "local redDrawer = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 1)),\n        2\n)\nif MuAiGuide.M11SMapType == nil or MuAiGuide.M11SMapType ~= 1 then\n\tredDrawer:addRect(100, 0, 80, 40, 40, 0, true)\t\nelse\n\tredDrawer:addRect(89, 0, 80, 40, 10, 0, true)\n\tredDrawer:addRect(84, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(116, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(111, 0, 80, 40, 10, 0, true)\nend\nself.used = true",
 						conditions = 
 						{
 							
 							{
-								"33081aec-3993-8b8d-8273-333d8dbe5eb3",
-								true,
-							},
-							
-							{
-								"9270d6bb-e3bd-ade6-bbf9-965bc15b63d4",
+								"71b6f493-41e3-df25-8619-bbdb57bd01bf",
 								true,
 							},
 						},
-						uuid = "6016ba94-6734-10e9-921f-5e51238a5ac5",
+						gVar = "ACR_RikuNIN3_CD",
+						uuid = "16ba8e37-2a5d-9b6e-a6a5-3593ba5c9ac4",
 						version = 2.1,
 					},
 					inheritedIndex = 1,
@@ -436,31 +335,69 @@ local tbl =
 				{
 					data = 
 					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.CurrentState >= MuAiGuide.M12S.StateEnumPuzzle4_Start",
-						name = "已进入4运",
-						uuid = "33081aec-3993-8b8d-8273-333d8dbe5eb3",
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "71b6f493-41e3-df25-8619-bbdb57bd01bf",
 						version = 2,
 					},
+					inheritedIndex = 1,
 				},
+			},
+			eventType = 13,
+			name = "M11S地图边框",
+			uuid = "15ffb251-5885-55b5-adf0-15a00a7fcba5",
+			version = 2,
+		},
+		inheritedIndex = 6,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "AnyoneCore.addTimedWorldText(60000 * 90, \"N\", {x = 100,y = 0 ,z =  77}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nAnyoneCore.addTimedWorldText(60000 * 90, \"S\", {x = 100,y = 0 ,z =  123}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nAnyoneCore.addTimedWorldText(60000 * 90, \"W\", {x = 72,y = 0 ,z =  100}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nAnyoneCore.addTimedWorldText(60000 * 90, \"E\", {x = 128,y = 0 ,z =  100}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"19fa35c7-1605-8a7a-97a7-6dbaf9b2a568",
+								true,
+							},
+						},
+						gVar = "ACR_RikuNIN3_CD",
+						uuid = "b909d181-c1fc-4737-b315-5cd0da388cc2",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
 				
 				{
 					data = 
 					{
 						category = "Self",
 						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "9270d6bb-e3bd-ade6-bbf9-965bc15b63d4",
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "19fa35c7-1605-8a7a-97a7-6dbaf9b2a568",
 						version = 2,
 					},
-					inheritedIndex = 2,
 				},
 			},
-			enabled = false,
-			eventType = 12,
-			name = "M12S四运",
-			uuid = "d83846fe-78bc-e879-bbba-ad89739d4197",
+			eventType = 11,
+			name = "M11S东西南北",
+			throttleTime = 5000,
+			uuid = "285e83a5-1024-4791-bdac-921a03769a59",
 			version = 2,
 		},
 		inheritedIndex = 8,
@@ -528,7 +465,7 @@ local tbl =
 			uuid = "74d161a0-ce78-a135-a5df-53829b8f7124",
 			version = 2,
 		},
-		inheritedIndex = 9,
+		inheritedIndex = 10,
 	},
 	
 	{
@@ -576,7 +513,7 @@ local tbl =
 			uuid = "b3503580-71a1-e733-a4c3-578deaae1e88",
 			version = 2,
 		},
-		inheritedIndex = 10,
+		inheritedIndex = 11,
 	},
 	
 	{
@@ -607,20 +544,11 @@ local tbl =
 						uuid = "031241ad-aed6-50cb-aab6-4ace640a267b",
 						version = 2.1,
 					},
+					inheritedIndex = 1,
 				},
 			},
 			conditions = 
 			{
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "if MuAiGuide.M11SMapType ~= 1 and MuAiGuide.M11SMapType ~= 2 then\n    return false\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nif tethers == nil or table.size(tethers) <= 0 then\n    return false\nend\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        return true\n    end\nend\nreturn false",
-						uuid = "2fbd9c0f-e39c-a512-9798-2586a5646898",
-						version = 2,
-					},
-				},
 				
 				{
 					data = 
@@ -632,7 +560,17 @@ local tbl =
 						uuid = "16607308-c4ad-eb3e-ac3e-9036a0da5b58",
 						version = 2,
 					},
-					inheritedIndex = 2,
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "if MuAiGuide.M11SMapType ~= 1 and MuAiGuide.M11SMapType ~= 2 then\n    return false\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nif tethers == nil or table.size(tethers) <= 0 then\n    return false\nend\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        return true\n    end\nend\nreturn false",
+						uuid = "2fbd9c0f-e39c-a512-9798-2586a5646898",
+						version = 2,
+					},
 				},
 			},
 			eventType = 12,
@@ -648,11 +586,61 @@ local tbl =
 		{
 			actions = 
 			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						gVar = "ACR_RikuMNK3_CD",
+						uuid = "671c1d12-998c-f538-94b6-4d404b764148",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "45fc4951-b960-96dc-b67b-64e2f567bb2b",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M11SMapType == 1",
+						uuid = "78da311e-271a-a457-bf2a-4ffa4fe2ada0",
+						version = 2,
+					},
+					inheritedIndex = 2,
+				},
+			},
+			name = "M11S半场刀",
+			uuid = "ec7a18f7-e151-2d88-bcb4-096ef1d74273",
+			version = 2,
+		},
+		inheritedIndex = 14,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
 			},
 			conditions = 
 			{
 			},
-			name = "---------------------- m12s --",
+			name = "------ m12s ------",
 			uuid = "d59f33fd-dc8f-4ea2-84c5-a200263ed342",
 			version = 2,
 		},
@@ -669,7 +657,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nM.M12S = {}\n--- M12S初始化\nM.M12S.InitM12SData = function()\n    --- 完成状态，表示当前副本进度已经完成了哪些\n    M.M12S.StateEnum = {\n        Start = 0,\n        -- 4运开始\n        Puzzle4_Start = 400,\n        -- 刷复制体1\n        Puzzle4_Spawn_Copy1 = 401,\n        -- 刷复制体2\n        Puzzle4_Spawn_Copy2 = 402,\n        -- 第一次连线\n        Puzzle4_Spawn_FirstLink = 403,\n        -- 找到上下刀\n        Puzzle4_Spawn_GetSKills = 404,\n        -- 第二次预备\n        Puzzle4_Spawn_SecondLink = 405,\n        -- 接线开始\n        Puzzle4_Spawn_CatchLink = 406,\n        -- 拉线结束\n        Puzzle4_Spawn_CatchEnd = 407,\n    }\n\n    M.M12S.DataEnum = {\n        -- 先刷数字点\n        Puzzle4Number = 401,\n        -- 先刷字母点\n        Puzzle4Char= 402,\n        --A点上下刀\n        UpDownSkillA = 403, \n        -- C点上下刀\n        UpDownSkillC = 404,\n        -- 集合\n        Gather = 113,\n        -- 大钢铁\n        Disperse = 112,\n    }\n\n    M.M12S.CurrentState = M.M12S.StateEnum.Start\n    M.M12S.Puzzle4Copy = {}\n    M.M12S.FirstLinkGuidePos = nil\n    M.M12S.SecondLinkGuidePos = nil\n    M.M12S.SecondLinkTargetId = nil\n    M.M12S.FirstLinkPos = nil\n    M.M12S.SecondLinkType = nil\n    M.M12S.SubMonsterSkillType = nil\n    M.M12S.LinkInfo = {}\n    M.Info(\"M12S初始化/重置数据完成!\")\nend\n\nM.M12S.InitM12SData()\nself.used = true",
+						actionLua = "local M = MuAiGuide\nM.M12S = {}\n--- M12S初始化\nM.M12S.InitM12SData = function()\n    --- 完成状态，表示当前副本进度已经完成了哪些\n    M.M12S.StateEnum = {\n        Start = 0,\n        -- 4运开始\n        Puzzle4_Start = 400,\n        -- 刷复制体1\n        Puzzle4_Spawn_Copy1 = 401,\n        -- 刷复制体2\n        Puzzle4_Spawn_Copy2 = 402,\n        -- 第一次连线\n        Puzzle4_FirstLink = 403,\n        -- 找到上下刀\n        Puzzle4_GetSKills = 404,\n        -- 第二次预备\n        Puzzle4_SecondLink = 405,\n        -- 接线开始\n        Puzzle4_CatchLink = 406,\n        -- 拉线结束\n        Puzzle4_CatchEnd = 407,\n        -- 小世界1\n        Puzzle4_Div1 = 408,\n        -- \n        Puzzle4_Tower1 = 409,\n        --获得光BUFF\n        Puzzle4_GetBuff = 410,\n        -- 4次分摊/大圈\n        Puzzle4_ThirdLink = 411,\n        Puzzle4_Put1 = 412,\n        Puzzle4_Put2 = 413,\n        Puzzle4_Put3 = 414,\n        Puzzle4_PutEnd = 415,\n        -- 第二次小世界\n        Puzzle4_Tower2 = 416,\n        -- 塔结束\n        Puzzle4_TowerEnd = 417,\n        -- 处理远近\n        Puzzle4_TowerFarNear = 418,\n        -- 第二次小世界小怪观察\n        Puzzle4_div2Subs = 419,\n        -- 第二次小世界小怪观测\n        Puzzle4_div2SubsEnd = 420,\n        -- 第二次小世界结束\n        Puzzle4_div2End = 421,\n        -- 第一复制体爆炸\n        Puzzle4_CopyBoom1 = 422,\n        -- 第三次小世界开始\n        Puzzle4_div3Open = 423,\n        -- 第三次小世界结束\n        Puzzle4_div3End = 424,\n        -- 第二次复制体爆炸\n        Puzzle4_CopyBoom2 = 425,\n        -- 最终结P\n        PuzzleEnd_Start = 500,\n    }\n\n    M.M12S.DataEnum = {\n        -- 先刷数字点\n        Puzzle4Number = 401,\n        -- 先刷字母点\n        Puzzle4Char = 402,\n        --A点上下刀\n        UpDownSkillA = 403,\n        -- C点上下刀\n        UpDownSkillC = 404,\n        -- 集合\n        Gather = 113,\n        -- 大钢铁\n        Disperse = 112,\n        -- 判定的线\n        LinkFinal = 117,\n        -- 4D3C\n        Left = 1,\n        -- A1B2\n        Right = 2,\n        \n        -- 上下\n        UpDown = 3,\n        -- 左右\n        LeftRight = 4,\n    }\n    -- 辅助计时器\n    M.M12S.Timer = 0\n    -- 当前副本阶段\n    M.M12S.CurrentState = M.M12S.StateEnum.Start\n    \n    -- 4运 玩家复制体数据\n    M.M12S.P4CopyInfo = {\n        ids = {},\n        entities = {},\n        guidePos,\n        linkPos,\n        -- 刷新类型：字母点/数字点\n        spawnType = nil,\n        gatherPos1,\n        gatherPos2,\n    }\n    -- 4运 被接线BOSS分身、个人需处理数据信息\n    M.M12S.P4CatchLineInfo = {\n        ids = {},\n        entities = {},\n        -- 接线类型, 分摊线/分散线\n        type = nil,\n    }\n    -- 4运 3分身信息\n    M.M12S.P4Sub3Info = {\n        skillType = nil,\n        -- 接线后指路位置\n        GuidePos1 = nil,\n        -- 躲前后左右刀参考站位\n        divGuidePos1 = nil,\n        divGuidePos2 = nil,\n        -- 躲前后左右刀实际站位(小世界)\n        GuidePos2 = nil,\n        -- 躲前后左右刀实际站位(最后)\n        GuidePos3 = nil,\n    }\n    -- 4运 踩塔数据\n    M.M12S.P4TowerData = {}\n\n    M.Info(\"M12S初始化数据完成!\")\nend\n\n-- 根据小队任意成员BUFF情况判断是否切阶段\nM.M12S.Puzzle4_4TimesChange = function(buffId)\n    for i, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, buffId)\n        if debuff ~= nil then\n            return true\n        end\n    end\n    return false\nend\n\nM.M12S.InitM12SData()\nself.used = true\n\n\n\n",
 						conditions = 
 						{
 							
@@ -681,6 +669,7 @@ local tbl =
 						uuid = "3a36b544-1644-d68a-9ebf-9dc08d976e45",
 						version = 2.1,
 					},
+					inheritedIndex = 1,
 				},
 			},
 			conditions = 
@@ -703,7 +692,7 @@ local tbl =
 			uuid = "01c21e3b-f835-8520-b7fa-247cf2d8b76b",
 			version = 2,
 		},
-		inheritedIndex = 12,
+		inheritedIndex = 13,
 	},
 	
 	{
@@ -729,8 +718,13 @@ local tbl =
 								"a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
 								true,
 							},
+							
+							{
+								"f8f3a749-3db0-a083-a884-8f131db08476",
+								true,
+							},
 						},
-						name = "四运",
+						name = "四运-开始",
 						uuid = "4dc29bbe-3a6a-0c9c-a66e-24b1414f6e2d",
 						version = 2.1,
 					},
@@ -740,7 +734,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif ent.pos.z > 100 then\n    MuAiGuide.Info(\"【C】上下刀，23外躲钢铁\")\n    M.M12S.SubMonsterSkillType = M.M12S.DataEnum.UpDownSkillC\nelse\n    MuAiGuide.Info(\"【A】上下刀，14点上安全\")\n    M.M12S.SubMonsterSkillType = M.M12S.DataEnum.UpDownSkillA\nend\n-- 切换到2次连线\nM.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Spawn_SecondLink\nself.used = true",
+						actionLua = "local M = MuAiGuide\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif ent.pos.z > 100 then\n    if M.Config.Main.M12SP4SendMacro then\n        SendTextCommand(\"/p 【C】上下刀，23外躲钢铁\")\n    end\n\n    M.M12S.P4Sub3Info.SkillType = M.M12S.DataEnum.UpDownSkillC\nelse\n    if M.Config.Main.M12SP4SendMacro then\n        SendTextCommand(\"/p 【A】上下刀，14点上安全\")\n    end\n    M.M12S.P4Sub3Info.SkillType = M.M12S.DataEnum.UpDownSkillA\nend\n-- 切换到2次连线\nM.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_SecondLink\nself.used = true",
 						conditions = 
 						{
 							
@@ -759,8 +753,67 @@ local tbl =
 								true,
 							},
 						},
+						gVar = "ACR_TensorRequiem3_CD",
 						name = "四运-上下刀小怪位置采集",
 						uuid = "8a4f6557-87e7-9029-a22e-5289e266af18",
+						version = 2.1,
+					},
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "function condition()\n    return M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_div2Subs\nend\n\nlocal M = MuAiGuide\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif eventArgs.spellID == 46351 then\n    d(\"小怪读条左右刀\")\n    --左右刀\n    if ent.pos.x > 100 then\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 110, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 110, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 114, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 114, y = 0, z = 105.5 }\n        end\n    else\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 90, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 90, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 86, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 86, y = 0, z = 105.5 }\n        end\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.UpDown\nelseif eventArgs.spellID == 46352 then\n    d(\"小怪读条左上下刀\")\n    --上下刀\n    if ent.pos.x > 100 then\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 108, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 108, y = 0, z = 100 }\n    else\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 92, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 92, y = 0, z = 100 }\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.LeftRight\nend\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_div2SubsEnd\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
+								true,
+							},
+							
+							{
+								"2ea47182-803f-86ea-87a5-c23959e8ee83",
+								true,
+							},
+							
+							{
+								"3631adb4-7ecb-8c12-99c5-971de14cb24a",
+								true,
+							},
+						},
+						name = "四运-小世界上下or左右刀",
+						uuid = "c7fb0a3c-f564-435f-b537-9076cf358bc0",
+						version = 2.1,
+					},
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.PuzzleEnd_Start\nd(\"四运结束\")\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
+								true,
+							},
+							
+							{
+								"97117f4f-6e97-da27-8352-29d3abda1724",
+								true,
+							},
+							
+							{
+								"5cd9a6f2-9e64-75ea-bb0d-26353272d646",
+								true,
+							},
+						},
+						name = "四运-结束",
+						uuid = "cc2167a1-328d-a365-8a4d-342ecaf2a03a",
 						version = 2.1,
 					},
 				},
@@ -778,6 +831,18 @@ local tbl =
 						uuid = "a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
 						version = 2,
 					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState < MuAiGuide.M12S.StateEnum.Puzzle4_Start\n",
+						name = "没到四运",
+						uuid = "f8f3a749-3db0-a083-a884-8f131db08476",
+						version = 2,
+					},
+					inheritedIndex = 2,
 				},
 				
 				{
@@ -821,13 +886,53 @@ local tbl =
 				{
 					data = 
 					{
+						category = "Event",
+						eventArgOptionType = 3,
+						eventArgType = 2,
+						name = "小世界上下or左右刀",
+						spellIDList = 
+						{
+							46352,
+							46351,
+						},
+						uuid = "2ea47182-803f-86ea-87a5-c23959e8ee83",
+						version = 2,
+					},
+					inheritedIndex = 5,
+				},
+				
+				{
+					data = 
+					{
 						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.Puzzle4_Spawn_GetSKills",
+						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.Puzzle4_GetSKills",
 						name = "四运-获取小怪上下刀阶段",
 						uuid = "e8896ce2-b9e1-bfa5-aa77-bb583e31fcbe",
 						version = 2,
 					},
 					inheritedIndex = 5,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.Puzzle4_div2Subs",
+						name = "四运-小世界观察小怪阶段",
+						uuid = "3631adb4-7ecb-8c12-99c5-971de14cb24a",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.Puzzle4_CopyBoom2 ",
+						name = "四运-最后一次炸大圈结束",
+						uuid = "5cd9a6f2-9e64-75ea-bb0d-26353272d646",
+						version = 2,
+					},
 				},
 			},
 			eventType = 3,
@@ -835,7 +940,7 @@ local tbl =
 			uuid = "b48d47b0-28c9-0e72-82e7-abf66b902646",
 			version = 2,
 		},
-		inheritedIndex = 13,
+		inheritedIndex = 14,
 	},
 	
 	{
@@ -848,7 +953,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "MuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_Spawn_GetSKills \nMuAiGuide.Info(\"准备观察小怪刀方向\")\nself.used = true",
+						actionLua = "MuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_GetSKills \nd(\"四运-停止1线，开始观察小怪\")\nself.used = true",
 						conditions = 
 						{
 							
@@ -873,6 +978,154 @@ local tbl =
 					},
 					inheritedIndex = 1,
 				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_ThirdLink\nd(\"四运-第1次小世界结束\")\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"10a41e61-6525-6b14-91c5-b7bc3c7d7f40",
+								true,
+							},
+							
+							{
+								"daa00ba3-20f1-d296-b968-928cf8113227",
+								true,
+							},
+							
+							{
+								"c4ab53ea-af69-3c46-a08f-2bd545fc86de",
+								true,
+							},
+						},
+						name = "四运-第1次小世界结束",
+						uuid = "799f2371-903b-a3c6-b658-f16efc74126e",
+						version = 2.1,
+					},
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_Tower2\nd(\"四运-第2次小世界开始\")\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"10a41e61-6525-6b14-91c5-b7bc3c7d7f40",
+								true,
+							},
+							
+							{
+								"daa00ba3-20f1-d296-b968-928cf8113227",
+								true,
+							},
+							
+							{
+								"15bdb901-b9d9-c57e-91dc-e25357f1ef8b",
+								true,
+							},
+						},
+						name = "四运-第2次小世界开始",
+						uuid = "06e9faba-df50-8e07-b072-38e0628923c8",
+						version = 2.1,
+					},
+					inheritedIndex = 3,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_div2End\nd(\"四运-第2次小世界结束\")\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"10a41e61-6525-6b14-91c5-b7bc3c7d7f40",
+								true,
+							},
+							
+							{
+								"daa00ba3-20f1-d296-b968-928cf8113227",
+								true,
+							},
+							
+							{
+								"e9b1a7c9-ae70-ba9b-ab54-ee185fe91b91",
+								true,
+							},
+						},
+						name = "四运-第2次小世界结束",
+						uuid = "0ae1e6fc-db43-fa87-80d2-fcf1e407f6ab",
+						version = 2.1,
+					},
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_div3Open\nMuAiGuide.M12S.Timer = Now()\nd(\"四运-第3次小世界开始\")\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"10a41e61-6525-6b14-91c5-b7bc3c7d7f40",
+								true,
+							},
+							
+							{
+								"896f1147-eac6-9419-aba8-a70d5d45ab28",
+								true,
+							},
+							
+							{
+								"daa00ba3-20f1-d296-b968-928cf8113227",
+								true,
+							},
+						},
+						name = "四运-第3次小世界开始",
+						uuid = "3c855660-92e0-d708-9daf-7e25b5b7fae1",
+						version = 2.1,
+					},
+					inheritedIndex = 5,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_div3End\nd(\"四运-第3次小世界结束\")\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"10a41e61-6525-6b14-91c5-b7bc3c7d7f40",
+								true,
+							},
+							
+							{
+								"547376cb-30c9-9479-af76-9031d9e6f9da",
+								true,
+							},
+							
+							{
+								"daa00ba3-20f1-d296-b968-928cf8113227",
+								true,
+							},
+						},
+						name = "四运-第3次小世界结束",
+						uuid = "ca7e6742-e2ab-0096-a25f-da7ca2be6582",
+						version = 2.1,
+					},
+					inheritedIndex = 5,
+				},
 			},
 			conditions = 
 			{
@@ -894,12 +1147,71 @@ local tbl =
 					data = 
 					{
 						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.Puzzle4_Spawn_FirstLink ",
-						name = "四运-第一次连线结束",
+						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.Puzzle4_FirstLink ",
+						name = "4运-第一次连线结束",
 						uuid = "7e92a291-58df-a968-8b38-75b9258c978f",
 						version = 2,
 					},
 					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.Puzzle4_GetBuff ",
+						name = "4运-小世界光BUFF",
+						uuid = "c4ab53ea-af69-3c46-a08f-2bd545fc86de",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.Puzzle4_PutEnd",
+						name = "4运-4次分摊分散结束",
+						uuid = "15bdb901-b9d9-c57e-91dc-e25357f1ef8b",
+						version = 2,
+					},
+					inheritedIndex = 4,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.Puzzle4_div2SubsEnd",
+						name = "4运-小世界观察小怪结束",
+						uuid = "e9b1a7c9-ae70-ba9b-ab54-ee185fe91b91",
+						version = 2,
+					},
+					inheritedIndex = 5,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.Puzzle4_CopyBoom1",
+						name = "4运-复制体爆炸1",
+						uuid = "896f1147-eac6-9419-aba8-a70d5d45ab28",
+						version = 2,
+					},
+					inheritedIndex = 6,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.Puzzle4_div3Open and TimeSince(MuAiGuide.M12S.Timer) > 2000",
+						name = "4运-第3次小世界",
+						uuid = "547376cb-30c9-9479-af76-9031d9e6f9da",
+						version = 2,
+					},
+					inheritedIndex = 7,
 				},
 				
 				{
@@ -912,102 +1224,12 @@ local tbl =
 						uuid = "daa00ba3-20f1-d296-b968-928cf8113227",
 						version = 2,
 					},
+					inheritedIndex = 4,
 				},
 			},
 			eventType = 2,
 			name = "M12S切换阶段[读条后]",
 			uuid = "021a9e74-9ec4-8881-beb5-cb1621c7a609",
-			version = 2,
-		},
-		inheritedIndex = 15,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local M = MuAiGuide\n--- step 1.2\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Start then\n    for _, ent in pairs(TensorCore.entityList(\"contentid=14383\")) do\n        if Argus.isEntityVisible(ent) then\n            if M.M12S.Puzzle4Step1Type == nil then\n                local curEntAngle = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, ent.pos)\n                for i = 0, 7 do\n                    local curAngle = i * math.pi / 4\n                    if M.IsSameDirection(curAngle, curEntAngle) then\n                        if i % 2 == 0 then\n                            M.M12S.Puzzle4Step1Type = M.M12S.DataEnum.Puzzle4Char\n                        elseif i % 2 == 1 then\n                            M.M12S.Puzzle4Step1Type = M.M12S.DataEnum.Puzzle4Number\n                        end\n                    end\n                end\n            end\n            if not table.contains(M.M12S.Puzzle4Copy, ent.id) then\n                table.insert(M.M12S.Puzzle4Copy, ent.id)\n            end\n        end\n    end\n    if M.M12S.Puzzle4Step1Type ~= nil and table.size(M.M12S.Puzzle4Copy) == 4 then\n        --进入到下一个状态\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Spawn_Copy1\n        if M.M12S.Puzzle4Step1Type == M.M12S.DataEnum.Puzzle4Char then\n            M.Info(\"字母点先刷新：\")\n            M.Info(\"第一次分摊：MT组去A，ST组去B\")\n            M.Info(\"第二次分摊：MT组去4，ST组去3\")\n        else\n            M.Info(\"数字点先刷新：\")\n            M.Info(\"第一次分摊：MT组去4，ST组去3\")\n            M.Info(\"第二次分摊：MT组去A，ST组去B\")\n        end\n    end\nend\n\n--- step 1.2\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Spawn_Copy1 then\n    for _, ent in pairs(TensorCore.entityList(\"contentid=14383\")) do\n        if Argus.isEntityVisible(ent) then\n            if not table.contains(M.M12S.Puzzle4Copy, ent.id) then\n                table.insert(M.M12S.Puzzle4Copy, ent.id)\n            end\n        end\n    end\n    if table.size(M.M12S.Puzzle4Copy) == 8 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Spawn_Copy2\n        M.Info(\"第二波复制体刷新完成\")\n    end\nend\n\n--- 连线阶段\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Spawn_Copy2 then\n    local tethers = Argus.getTethersOnEnt(M.GetPlayer().id)\n    if tethers ~= nil and table.size(tethers) > 0 then\n        for _, tether in pairs(tethers) do\n            if tether.type == 117 then\n                local partner = TensorCore.mGetEntity(tether.partnerid)\n                local targetPos = M.GetPointAtDistance({ x = 100, y = 0, z = 100 }, partner.pos, 6)\n                M.M12S.FirstLinkGuidePos = targetPos\n                M.M12S.FirstLinkPos = partner.pos\n                M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Spawn_FirstLink\n                break\n            end\n        end\n    end\nend\n\n--- 如果仍然处在连线阶段中\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Spawn_FirstLink then\n    MuAiGuide.FrameDirect(M.M12S.FirstLinkGuidePos.x, M.M12S.FirstLinkGuidePos.z)\nend\n\n--- 接线准备阶段\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Spawn_SecondLink then\n    M.M12S.LinkInfo.Ids = {}\n    M.M12S.LinkInfo.Data = {}\n    for _, ent in pairs(TensorCore.entityList(\"contentid=14380\")) do\n        if Argus.isEntityVisible(ent) then\n            if not table.contains(M.M12S.LinkInfo.Ids, ent.id) then\n                local tethers = Argus.getTethersOnEnt(ent.id)\n                for _, tether in pairs(tethers) do\n                    if tether.type == 112 or tether.type == 113 then\n                        local curLinkMstInfo = {\n                            id = ent.id,\n                            pos = ent.pos,\n                            type = tether.type\n                        }\n                        for i = 1, 8 do\n                            local curDir = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, ent.pos)\n                            if M.IsSameDirection(math.pi * i / 4, curDir) then\n                                curLinkMstInfo.dirIdx = i\n                                break\n                            end\n                        end\n                        table.insert(M.M12S.LinkInfo.Ids, ent.id)\n                        M.M12S.LinkInfo.Data[curLinkMstInfo.dirIdx] = curLinkMstInfo\n                        break\n                    end\n                end\n            end\n        end\n    end\n    if table.size(M.M12S.LinkInfo.Ids) == 8 then\n        local fstIdx = 0\n        for i = 1, 8 do\n            local curDir = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, M.M12S.FirstLinkPos)\n            if M.IsSameDirection(math.pi * i / 4, curDir) then\n                fstIdx = i\n                break\n            end\n        end\n        if fstIdx > 0 then\n            -- 右下开始索引，C点为8\n            if table.contains({2, 4, 5, 7}, fstIdx) then --BA43\n                M.M12S.SecondLinkType = M.M12S.DataEnum.Gather\n            else\n                M.M12S.SecondLinkType = M.M12S.DataEnum.Disperse\n            end\n            local backSub = M.M12S.LinkInfo.Data[fstIdx]\n            if backSub.type == M.M12S.SecondLinkType then\n                M.M12S.SecondLinkGuidePos = backSub.pos\n                M.M12S.SecondLinkTargetId = backSub.id\n            else\n                local newIdx = 0\n                if fstIdx % 2 == 1 then\n                    newIdx = fstIdx + 1\n                else\n                    newIdx = fstIdx - 1\n                end\n                local otherSub = M.M12S.LinkInfo.Data[newIdx]\n                M.M12S.SecondLinkGuidePos = otherSub.pos\n                M.M12S.SecondLinkTargetId = otherSub.id\n            end\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Spawn_CatchLink\n        end\n    end\nend\n\n-- 如果连线对象不对，就一直指路\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Spawn_CatchLink then\n    local tethers = Argus.getTethersOnEnt(M.GetPlayer().id)\n    local isTargetRight = false\n    for _, tether in pairs(tethers) do\n        if tether.type == 117 then\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Spawn_CatchEnd\n            break\n        end\n        if tether.type == M.M12S.SecondLinkType and tether.partnerid == M.M12S.SecondLinkTargetId then\n            isTargetRight = true\n            break\n        end\n    end\n    if not isTargetRight then\n        MuAiGuide.FrameDirect(M.M12S.SecondLinkGuidePos.x, M.M12S.SecondLinkGuidePos.z)\n    end\nend\n\n\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"250a3ef9-23a2-399b-8a2d-66b792869a2b",
-								true,
-							},
-							
-							{
-								"c49e6db7-9889-e5e3-bd20-a7b2376720c8",
-								true,
-							},
-						},
-						uuid = "9ebdedda-7d26-aad2-8171-acd02de4488d",
-						version = 2.1,
-					},
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "250a3ef9-23a2-399b-8a2d-66b792869a2b",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.CurrentState >= MuAiGuide.M12S.StateEnum.Puzzle4_Start",
-						name = "四运已开始",
-						uuid = "c49e6db7-9889-e5e3-bd20-a7b2376720c8",
-						version = 2,
-					},
-				},
-			},
-			eventType = 12,
-			name = "M12S四运主循环 ",
-			uuid = "246c8fb0-b1af-d697-9ebd-b28f2f91e8b5",
-			version = 2,
-		},
-		inheritedIndex = 16,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local M = MuAiGuide\n\nfor job, ent in pairs(MuAiGuide.Party) do\n    local tethers = Argus.getTethersOnEnt(ent.id)\n    d(\"-------------------------------\")\n    d(ent.name)\n    for _, tether in pairs(tethers) do\n       \n        d(tether.type)\n    end\n    d(\"-------------------------------\")\nend\n-- local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0 / 255, 255 / 255, 0 / 255, 0.5), 1)\n--drawer:addTimedArrow(5000,100, 0, 100, 0, 20, 1, 1, 1)\n  d(M.M12S.CurrentState)\nself.used = true",
-						gVar = "ACR_RikuNIN3_CD",
-						uuid = "06275492-4708-d684-a09e-ecfa811e7f4a",
-						version = 2.1,
-					},
-				},
-			},
-			conditions = 
-			{
-			},
-			enabled = false,
-			name = "TEST",
-			uuid = "eaf28a6c-3d20-407a-8506-e831f03006ba",
 			version = 2,
 		},
 		inheritedIndex = 17,
@@ -1023,21 +1245,108 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "MuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_Spawn_GetSKills \nself.used = true",
-						uuid = "54cb451b-22a3-2b42-b634-84d65a99a8aa",
+						actionLua = "local M = MuAiGuide\n--- step 1.2\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Start then\n    for _, ent in pairs(TensorCore.entityList(\"contentid=14383\")) do\n        if Argus.isEntityVisible(ent) then\n            if M.M12S.P4CopyInfo.spawnType == nil then\n                local curEntAngle = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, ent.pos)\n                for i = 0, 7 do\n                    local curAngle = i * math.pi / 4\n                    if M.IsSameDirection(curAngle, curEntAngle) then\n                        if i % 2 == 0 then\n                            M.M12S.P4CopyInfo.spawnType = M.M12S.DataEnum.Puzzle4Char\n                            if M.Config.Main.M12SP4SendMacro then\n                                if M.Config.Main.M12SP4UpTime then\n                                    SendTextCommand(\"/p 第一次分摊：双T去A，远程和奶去B，近战去1\")\n                                    SendTextCommand(\"/p 第二次分摊：双T去4，远程和奶去3，近战去D\")\n                                else\n                                    SendTextCommand(\"/p 第一次分摊：MT组去A，ST组去B\")\n                                    SendTextCommand(\"/p 第二次分摊：MT组去4，ST组去3\")\n                                end\n\n                            end\n                            break\n                        elseif i % 2 == 1 then\n                            M.M12S.P4CopyInfo.spawnType = M.M12S.DataEnum.Puzzle4Number\n                            if M.Config.Main.M12SP4SendMacro then\n                                if M.Config.Main.M12SP4UpTime then\n                                    SendTextCommand(\"/p 第一次分摊：双T去4，远程和奶去3，近战去D\")\n                                    SendTextCommand(\"/p 第二次分摊：双T去A，远程和奶去B，近战去1\")\n                                else\n                                    SendTextCommand(\"/p 第一次分摊：MT组去4，ST组去3\")\n                                    SendTextCommand(\"/p 第二次分摊：MT组去A，ST组去B\")\n                                end\n                            end\n                            break\n                        end\n                    end\n                end\n            end\n            if not table.contains(M.M12S.P4CopyInfo.ids, ent.id) then\n                table.insert(M.M12S.P4CopyInfo.ids, ent.id)\n            end\n        end\n    end\n    if M.M12S.P4CopyInfo.spawnType ~= nil and table.size(M.M12S.P4CopyInfo.ids) == 4 then\n        --进入到下一个状态\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Spawn_Copy1\n        if M.M12S.P4CopyInfo.spawnType == M.M12S.DataEnum.Puzzle4Char then\n            if M.Config.Main.M12SP4UpTime then\n                if M.SelfPos == \"MT\" or M.SelfPos == \"ST\" then\n                    M.M12S.P4CopyInfo.gatherPos1 = { x = 100, z = 84 } -- A\n                    M.M12S.P4CopyInfo.gatherPos2 = { x = 88.7, z = 88.7 } -- 4\n                elseif M.IsMelee(M.GetPlayer().job) then\n                    M.M12S.P4CopyInfo.gatherPos1 = { x = 105.8, z = 94.2 } -- 1\n                    M.M12S.P4CopyInfo.gatherPos2 = { x = 91.9, z = 100 } -- D\n                else\n                    M.M12S.P4CopyInfo.gatherPos1 = { x = 116, z = 100 } -- B\n                    M.M12S.P4CopyInfo.gatherPos2 = { x = 88.7, z = 111.26 } -- 3\n                end\n            else\n                if table.contains({ \"MT\", \"H1\", \"D1\", \"D3\" }, M.SelfPos) then\n                    M.M12S.P4CopyInfo.gatherPos1 = { x = 100, z = 84 } -- A\n                    M.M12S.P4CopyInfo.gatherPos2 = { x = 88.7, z = 88.7 } -- 4\n                else\n                    M.M12S.P4CopyInfo.gatherPos1 = { x = 116, z = 100 } -- B\n                    M.M12S.P4CopyInfo.gatherPos2 = { x = 88.7, z = 111.26 } -- 3\n                end\n            end\n        else\n            if M.Config.Main.M12SP4UpTime then\n                if M.SelfPos == \"MT\" or M.SelfPos == \"ST\" then\n                    M.M12S.P4CopyInfo.gatherPos1 = { x = 88.7, z = 88.7 } -- 4\n                    M.M12S.P4CopyInfo.gatherPos2 = { x = 100, z = 84 } -- A\n                elseif M.IsMelee(M.GetPlayer().job) then\n                    M.M12S.P4CopyInfo.gatherPos1 = { x = 91.9, z = 100 } -- D\n                    M.M12S.P4CopyInfo.gatherPos2 = { x = 105.8, z = 94.2 } -- 1\n                else\n                    M.M12S.P4CopyInfo.gatherPos1 = { x = 88.7, z = 111.26 } -- 3\n                    M.M12S.P4CopyInfo.gatherPos2 = { x = 116, z = 100 } -- B\n                end\n            else\n                if table.contains({ \"MT\", \"H1\", \"D1\", \"D3\" }, M.SelfPos) then\n                    M.M12S.P4CopyInfo.gatherPos1 = { x = 88.7, z = 88.7 } -- 4\n                    M.M12S.P4CopyInfo.gatherPos2 = { x = 100, z = 84 } -- A\n                else\n                    M.M12S.P4CopyInfo.gatherPos1 = { x = 88.7, z = 111.26 } -- 3\n                    M.M12S.P4CopyInfo.gatherPos2 = { x = 116, z = 100 } -- B\n                end\n            end\n        end\n    end\nend\n\n--- step 1.2\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Spawn_Copy1 then\n    for _, ent in pairs(TensorCore.entityList(\"contentid=14383\")) do\n        if Argus.isEntityVisible(ent) then\n            if not table.contains(M.M12S.P4CopyInfo.ids, ent.id) then\n                table.insert(M.M12S.P4CopyInfo.ids, ent.id)\n            end\n        end\n    end\n    if table.size(M.M12S.P4CopyInfo.ids) == 8 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Spawn_Copy2\n        d(\"第二波复制体刷新完成\")\n    end\nend\n\n--- 连线阶段\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Spawn_Copy2 then\n    local tethers = Argus.getTethersOnEnt(M.GetPlayer().id)\n    if tethers ~= nil and table.size(tethers) > 0 then\n        for _, tether in pairs(tethers) do\n            if tether.type == 117 then\n                local partner = TensorCore.mGetEntity(tether.partnerid)\n                local targetPos = M.GetPointAtDistance({ x = 100, y = 0, z = 100 }, partner.pos, 6)\n                M.M12S.P4CopyInfo.linkPos = partner.pos\n                M.M12S.P4CopyInfo.guidePos = targetPos\n                M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_FirstLink\n                break\n            end\n        end\n    end\nend\n\n--- 如果仍然处在连线阶段中\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_FirstLink then\n    MuAiGuide.FrameDirect(M.M12S.P4CopyInfo.guidePos.x, M.M12S.P4CopyInfo.guidePos.z)\nend\n\n--- 接线准备阶段\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_SecondLink then\n    for _, ent in pairs(TensorCore.entityList(\"contentid=14380\")) do\n        if Argus.isEntityVisible(ent) then\n            if not table.contains(M.M12S.P4CatchLineInfo.ids, ent.id) then\n                local tethers = Argus.getTethersOnEnt(ent.id)\n                for _, tether in pairs(tethers) do\n                    if tether.type == 112 or tether.type == 113 then\n                        local curLinkMstInfo = {\n                            id = ent.id,\n                            pos = ent.pos,\n                            type = tether.type\n                        }\n                        for i = 1, 8 do\n                            local curDir = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, ent.pos)\n                            if M.IsSameDirection(math.pi * i / 4, curDir) then\n                                curLinkMstInfo.dirIdx = i\n                                break\n                            end\n                        end\n                        table.insert(M.M12S.P4CatchLineInfo.ids, ent.id)\n                        M.M12S.P4CatchLineInfo.entities[curLinkMstInfo.dirIdx] = curLinkMstInfo\n                        break\n                    end\n                end\n            end\n        end\n    end\n    if table.size(M.M12S.P4CatchLineInfo.ids) == 8 then\n        if M.Config.Main.M12SP4SendMacro then\n            local EntA =  M.M12S.P4CatchLineInfo.entities[4]\n            if EntA ~= nil then\n                if EntA.type == M.M12S.DataEnum.Gather  then\n                    SendTextCommand(\"/p 分摊-13出-分摊-24出\")\n                else\n                    SendTextCommand(\"/p AC出-分摊-BD出-分摊\")\n                end\n            end \n        end\n        local fstIdx = 0\n        for i = 1, 8 do\n            local curDir = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, M.M12S.P4CopyInfo.linkPos)\n            if M.IsSameDirection(math.pi * i / 4, curDir) then\n                fstIdx = i\n                break\n            end\n        end\n        if fstIdx > 0 then\n            -- 计算分摊分散\n            -- 右下开始索引，C点为8\n            if table.contains({ 2, 4, 5, 7 }, fstIdx) then\n                --BA43\n                M.M12S.P4CatchLineInfo.type = M.M12S.DataEnum.Gather\n            else\n                M.M12S.P4CatchLineInfo.type = M.M12S.DataEnum.Disperse\n            end\n            local newIdx = 0\n            -- 计算当前应该\n            local backSub = M.M12S.P4CatchLineInfo.entities[fstIdx]\n            if backSub.type == M.M12S.P4CatchLineInfo.type then\n                M.M12S.P4CatchLineInfo.linkPos = backSub.pos\n                M.M12S.P4CatchLineInfo.linkId = backSub.id\n                newIdx = fstIdx\n            else\n                if fstIdx % 2 == 1 then\n                    newIdx = fstIdx + 1\n                else\n                    newIdx = fstIdx - 1\n                end\n                local otherSub = M.M12S.P4CatchLineInfo.entities[newIdx]\n                M.M12S.P4CatchLineInfo.linkPos = otherSub.pos\n                M.M12S.P4CatchLineInfo.linkId = otherSub.id\n            end\n            -- 计算左右分组\n            if newIdx <= 4 then\n                M.M12S.P4CatchLineInfo.group = M.M12S.DataEnum.Right\n                M.M12S.P4CatchLineInfo.putGatherPos = { x = 110, z = 90 }\n                M.M12S.P4CatchLineInfo.putDispersePos = { x = 111, z = 116 }\n            else\n                M.M12S.P4CatchLineInfo.group = M.M12S.DataEnum.Left\n                M.M12S.P4CatchLineInfo.putGatherPos = { x = 90, z = 90 }\n                M.M12S.P4CatchLineInfo.putDispersePos = { x = 89, z = 116 }\n            end\n            -- 计算点名爆炸顺序\n            if newIdx == 4 or newIdx == 8 then\n                M.M12S.P4CatchLineInfo.order = 1\n            elseif newIdx == 3 or newIdx == 7 then\n                M.M12S.P4CatchLineInfo.order = 2\n            elseif newIdx == 2 or newIdx == 6 then\n                M.M12S.P4CatchLineInfo.order = 3\n            elseif newIdx == 1 or newIdx == 5 then\n                M.M12S.P4CatchLineInfo.order = 4\n            end\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_CatchLink\n        end\n    end\nend\n\n-- 如果连线对象不对，就一直指路\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_CatchLink then\n    local changeState = false\n    for _, player in pairs(M.Party) do\n        local tethers = Argus.getTethersOnEnt(player.id)\n        if table.size(tethers) > 0 then\n            for _, tether in pairs(tethers) do\n                if tether.type == M.M12S.DataEnum.LinkFinal then\n                    M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_CatchEnd\n                    M.M12S.Timer = Now()\n                    changeState = true\n                    break\n                end\n            end\n        end\n    end\n    if not changeState then\n        local tethers = Argus.getTethersOnEnt(M.GetPlayer().id)\n        local isTargetRight = false\n        if tethers ~= nil and table.size(tethers) > 0 then\n            for _, tether in pairs(tethers) do\n                if tether.type == M.M12S.P4CatchLineInfo.type and tether.partnerid == M.M12S.P4CatchLineInfo.linkId then\n                    isTargetRight = true\n                    break\n                end\n            end\n        end\n        if not isTargetRight then\n            MuAiGuide.FrameDirect(M.M12S.P4CatchLineInfo.linkPos.x, M.M12S.P4CatchLineInfo.linkPos.z)\n        end\n    end\nend\n\n-- 分散\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_CatchEnd then\n    if TimeSince(M.M12S.Timer) > 4500 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Div1\n        M.M12S.Timer = Now()\n    else\n        if M.M12S.P4Sub3Info.GuidePos1 == nil then\n            if M.M12S.P4Sub3Info.SkillType == M.M12S.DataEnum.UpDownSkillA then\n                local p4 = { x = 93, y = 0, z = 93 }\n                local p1 = { x = 107, y = 0, z = 93 }\n                local to4 = TensorCore.getDistance2d(M.GetPlayer().pos, p4)\n                local to1 = TensorCore.getDistance2d(M.GetPlayer().pos, p1)\n                if to4 > to1 then\n                    M.M12S.P4Sub3Info.GuidePos1 = p1\n                else\n                    M.M12S.P4Sub3Info.GuidePos1 = p4\n                end\n            else\n                local pL = { x = 89, y = 0, z = 103 }\n                local pR = { x = 111, y = 0, z = 103 }\n                local toR = TensorCore.getDistance2d(M.GetPlayer().pos, pR)\n                local toL = TensorCore.getDistance2d(M.GetPlayer().pos, pL)\n                if toR > toL then\n                    M.M12S.P4Sub3Info.GuidePos1 = pL\n                else\n                    M.M12S.P4Sub3Info.GuidePos1 = pR\n                end\n            end\n        else\n            MuAiGuide.FrameDirect(M.M12S.P4Sub3Info.GuidePos1.x, M.M12S.P4Sub3Info.GuidePos1.z)\n        end\n    end\nend\n\n-- 小世界1\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Div1 then\n    if TimeSince(M.M12S.Timer) > 4000 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Tower1\n        M.M12S.Timer = Now()\n    else\n        if table.contains({ \"MT\", \"D1\", \"H1\", \"D3\" }, M.SelfPos) then\n            MuAiGuide.FrameDirect(95, 100)\n        else\n            MuAiGuide.FrameDirect(105, 100)\n        end\n    end\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Tower1 then\n    if M.M12S.P4TowerData.towerIds == nil then\n        M.M12S.P4TowerData.towerIds = {}\n        M.M12S.P4TowerData.towers = {}\n    end\n    if table.size(M.M12S.P4TowerData.towerIds) < 8 then\n        for i = 3, 6 do\n            for _, ent in pairs(TensorCore.entityList(\"contentid=201501\" .. tostring(i))) do\n                if ent.pos.x > 100 then\n                    if ent.pos.x > 115 then\n                        if ent.pos.z > 100 then\n                            M.M12S.P4TowerData.towers[\"H2\"] = ent\n                        else\n                            M.M12S.P4TowerData.towers[\"D4\"] = ent\n                        end\n                    else\n                        if ent.pos.z > 100 then\n                            M.M12S.P4TowerData.towers[\"ST\"] = ent\n                        else\n                            M.M12S.P4TowerData.towers[\"D2\"] = ent\n                        end\n                    end\n                else\n                    if ent.pos.x > 85 then\n                        if ent.pos.z > 100 then\n                            M.M12S.P4TowerData.towers[\"D1\"] = ent\n                        else\n                            M.M12S.P4TowerData.towers[\"MT\"] = ent\n                        end\n                    else\n                        if ent.pos.z > 100 then\n                            M.M12S.P4TowerData.towers[\"D3\"] = ent\n                        else\n                            M.M12S.P4TowerData.towers[\"H1\"] = ent\n                        end\n                    end\n                end\n                table.insert(M.M12S.P4TowerData.towerIds, ent.id)\n            end\n        end\n    end\n    if table.size(M.M12S.P4TowerData.towerIds) == 8 then\n        if (M.M12S.P4TowerData.Self == nil or M.M12S.P4TowerData.Partner == nil) then\n            M.M12S.P4TowerData.Self = M.M12S.P4TowerData.towers[M.SelfPos]\n            M.M12S.P4TowerData.Partner = M.M12S.P4TowerData.towers[M.GetRMPartner()]\n        else\n            local selfBuff = TensorCore.getBuff(M.GetPlayer().id, 4164)\n            local targetBuff = TensorCore.getBuff(M.Party[M.GetRMPartner()].id, 4164)\n            if selfBuff ~= nil then\n                if M.M12S.P4TowerData.Self.contentid == 2015013 or M.M12S.P4TowerData.Self.contentid == 2015014 then\n                    local temp = M.M12S.P4TowerData.Self\n                    M.M12S.P4TowerData.Self = M.M12S.P4TowerData.Partner\n                    M.M12S.P4TowerData.Partner = temp\n                end\n                M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_GetBuff\n            elseif targetBuff ~= nil then\n                if M.M12S.P4TowerData.Partner.contentid == 2015013 or M.M12S.P4TowerData.Partner.contentid == 2015014 then\n                    local temp = M.M12S.P4TowerData.Self\n                    M.M12S.P4TowerData.Self = M.M12S.P4TowerData.Partner\n                    M.M12S.P4TowerData.Partner = temp\n                end\n                M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_GetBuff\n            else\n                M.FrameDirect(M.M12S.P4TowerData.Self.pos.x, M.M12S.P4TowerData.Self.pos.z)\n            end\n        end\n    end\nend\n\n--- 如果仍然处在连线阶段中\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_GetBuff then\n    M.FrameDirect(M.M12S.P4TowerData.Self.pos.x, M.M12S.P4TowerData.Self.pos.z)\nend\n\n-- 准备处理分摊分散\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_ThirdLink then\n    if M.M12S.Puzzle4_4TimesChange(2941) then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Put1\n        M.M12STimer = Now()\n    else\n        if M.M12S.P4CatchLineInfo.order == 1 and M.M12S.P4CatchLineInfo.type == M.M12S.DataEnum.Disperse then\n            pos = M.M12S.P4CatchLineInfo.putDispersePos\n        else\n            pos = M.M12S.P4CatchLineInfo.putGatherPos\n        end\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\n-- 分摊/分散2\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Put1 then\n    if M.M12S.Puzzle4_4TimesChange(2941) and TimeSince(M.M12STimer) > 3000 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Put2\n        M.M12STimer = Now()\n    else\n        if M.M12S.P4CatchLineInfo.order == 2 and M.M12S.P4CatchLineInfo.type == M.M12S.DataEnum.Disperse then\n            pos = M.M12S.P4CatchLineInfo.putDispersePos\n        else\n            pos = M.M12S.P4CatchLineInfo.putGatherPos\n        end\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\n-- 分摊/分散3\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Put2 then\n    if M.M12S.Puzzle4_4TimesChange(2941) and TimeSince(M.M12STimer) > 3000 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Put3\n        M.M12STimer = Now()\n    else\n        if M.M12S.P4CatchLineInfo.order == 3 and M.M12S.P4CatchLineInfo.type == M.M12S.DataEnum.Disperse then\n            pos = M.M12S.P4CatchLineInfo.putDispersePos\n        else\n            pos = M.M12S.P4CatchLineInfo.putGatherPos\n        end\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\n-- 分摊/分散4\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Put3 then\n    if M.M12S.Puzzle4_4TimesChange(2941) and TimeSince(M.M12STimer) > 3000 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_PutEnd\n        M.M12STimer = Now()\n    else\n        if M.M12S.P4CatchLineInfo.order == 4 and M.M12S.P4CatchLineInfo.type == M.M12S.DataEnum.Disperse then\n            pos = M.M12S.P4CatchLineInfo.putDispersePos\n        else\n            pos = M.M12S.P4CatchLineInfo.putGatherPos\n        end\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Tower2 then\n    if M.M12S.P4TowerData.guidePos == nil then\n        local selfTower = M.M12S.P4TowerData.Self\n        if selfTower.contentid == 2015016 then\n            -- 火\n            M.M12S.P4TowerData.guidePos = selfTower.pos\n        elseif selfTower.contentid == 2015013 then\n            -- 风\n            if selfTower.pos.x > 100 then\n                M.M12S.P4TowerData.guidePos = { x = selfTower.pos.x - 2, z = selfTower.pos.z }\n            else\n                M.M12S.P4TowerData.guidePos = { x = selfTower.pos.x + 2, z = selfTower.pos.z }\n            end\n        elseif selfTower.contentid == 2015014 then\n            -- 暗\n            if selfTower.pos.z > 100 then\n                M.M12S.P4TowerData.guidePos = { x = selfTower.pos.x, z = selfTower.pos.z + 2 }\n            else\n                M.M12S.P4TowerData.guidePos = { x = selfTower.pos.x, z = selfTower.pos.z - 2 }\n            end\n        elseif selfTower.contentid == 2015015 then\n            -- 土\n            M.M12S.P4TowerData.guidePos = selfTower.pos\n        end\n    end\n    local stateChange = M.M12S.Puzzle4_4TimesChange(4765)\n    if stateChange then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_TowerEnd\n        M.M12S.Timer = Now()\n    else\n        M.FrameDirect(M.M12S.P4TowerData.guidePos.x, M.M12S.P4TowerData.guidePos.z)\n    end\nend\n\n-- 踩塔后\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_TowerEnd then\n    if M.M12S.P4TowerData.Self.contentid == 2015013 then\n        -- 风等落地\n        if TimeSince(M.M12S.Timer) > 1000 and M.GetPlayer().pos.y < 0.01 then\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_TowerFarNear\n        end\n    else\n        if M.M12S.P4TowerData.Self.contentid == 2015015 then\n            --土，先移动等待\n            if M.M12S.P4TowerData.Self.pos.z > 100 then\n                M.FrameDirect(M.M12S.P4TowerData.Self.pos.x, M.M12S.P4TowerData.Self.pos.z - 4)\n            else\n                M.FrameDirect(M.M12S.P4TowerData.Self.pos.x, M.M12S.P4TowerData.Self.pos.z + 4)\n            end\n        end\n        if TimeSince(M.M12S.Timer) > 1500 then\n            local anyoneHasFire = false\n            for _, player in pairs(M.Party) do\n                local debuff = TensorCore.getBuff(player.id, 4768)\n                if debuff ~= nil and debuff.duration >= 0 then\n                    anyoneHasFire = true\n                    break\n                end\n            end\n            if not anyoneHasFire then\n                M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_TowerFarNear\n            end\n        end\n    end\nend\n\n-- 远近扇形\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_TowerFarNear then\n    local changeState = true\n    for _, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, 4765)\n        if debuff ~= nil and debuff.duration >= 0 then\n            changeState = false\n            break\n        end\n    end\n    if changeState then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_div2Subs\n    else\n        local player = M.GetPlayer()\n        if TensorCore.getBuff(player.id, 4767) then\n            --近\n            if player.pos.x > 100 then\n                M.FrameDirect(107, 100)\n            else\n                M.FrameDirect(93, 100)\n            end\n        elseif TensorCore.getBuff(player.id, 4766) then\n            -- 远\n            if player.pos.x > 100 then\n                M.FrameDirect(109, 92)\n            else\n                M.FrameDirect(91, 108)\n            end\n        else\n            if table.contains({ \"MT\", \"ST\", \"D1\", \"D2\" }, M.SelfPos) then\n                local target\n                for _, ent in pairs(M.Party) do\n                    local debuff = TensorCore.getBuff(ent.id, 4767)\n                    if debuff ~= nil then\n                        if player.pos.x > 100 and ent.pos.x > 100\n                                or player.pos.x < 100 and ent.pos.x < 100\n                        then\n                            target = ent\n                            break\n                        end\n                    end\n                end\n                if target ~= nil then\n                    local heading\n                    if target.pos.x > 100 then\n                        heading = math.pi / 2\n                    else\n                        heading = math.pi * 3 / 2\n                    end\n                    local targetPos = TensorCore.getPosInDirection(target.pos, heading, 1)\n                    M.FrameDirect(targetPos.x, targetPos.z, 0.3)\n                end\n            else\n                if player.pos.x > 100 then\n                    M.FrameDirect(117, 109)\n                else\n                    M.FrameDirect(83, 91)\n                end\n            end\n        end\n    end\nend\n\n-- 抓到小怪数据后完成当前\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_div2End then\n    if M.M12S.Puzzle4_4TimesChange(2941) then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_CopyBoom1\n    else\n        local pos = M.M12S.P4CopyInfo.gatherPos1\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_CopyBoom1 then\n    if M.M12S.P4Sub3Info.GuidePos2 == nil then\n        local to1 = TensorCore.getDistance2d(M.M12S.P4Sub3Info.divGuidePos1, M.GetPlayer().pos)\n        local to2 = TensorCore.getDistance2d(M.M12S.P4Sub3Info.divGuidePos2, M.GetPlayer().pos)\n        if to1 < to2 then\n            M.M12S.P4Sub3Info.GuidePos2 = M.M12S.P4Sub3Info.divGuidePos1\n        else\n            M.M12S.P4Sub3Info.GuidePos2 = M.M12S.P4Sub3Info.divGuidePos2\n        end\n    end\n    local pos = M.M12S.P4Sub3Info.GuidePos2\n    M.FrameDirect(pos.x, pos.z)\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_div3End then\n    if M.M12S.Puzzle4_4TimesChange(2941) then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_CopyBoom2\n    else\n        local pos = M.M12S.P4CopyInfo.gatherPos2\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_CopyBoom2 then\n    if M.M12S.P4Sub3Info.GuidePos3 == nil then\n        if M.M12S.P4Sub3Info.teleport == M.M12S.DataEnum.UpDown then\n            local p4 = { x = 93, y = 0, z = 93 }\n            local p1 = { x = 107, y = 0, z = 93 }\n            local to4 = TensorCore.getDistance2d(M.GetPlayer().pos, p4)\n            local to1 = TensorCore.getDistance2d(M.GetPlayer().pos, p1)\n            if to4 > to1 then\n                M.M12S.P4Sub3Info.GuidePos3 = p1\n            else\n                M.M12S.P4Sub3Info.GuidePos3 = p4\n            end\n        else\n            M.M12S.P4Sub3Info.GuidePos3 = { x = 100, y = 0, z = 100 }\n        end\n    else\n        local pos = M.M12S.P4Sub3Info.GuidePos3\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"fcdccc63-40b0-afa5-a8c4-261d687192bb",
+								true,
+							},
+							
+							{
+								"19d1b924-5472-dc2a-ac83-8dedf60abad9",
+								true,
+							},
+						},
+						gVar = "ACR_TensorRequiem3_CD",
+						uuid = "278da120-34ad-7653-8f54-24a90e3c98e4",
 						version = 2.1,
 					},
+					inheritedIndex = 1,
 				},
 			},
 			conditions = 
 			{
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState >= MuAiGuide.M12S.StateEnum.Puzzle4_Start",
+						name = "四运已开始",
+						uuid = "19d1b924-5472-dc2a-ac83-8dedf60abad9",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "fcdccc63-40b0-afa5-a8c4-261d687192bb",
+						version = 2,
+					},
+				},
 			},
-			enabled = false,
 			eventType = 12,
-			name = "testFrame",
+			name = "M12S四运主循环",
+			uuid = "cf3ae25c-c974-dd93-a124-4473c49119b2",
+			version = 2,
+		},
+		inheritedIndex = 16,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "if data.lastState == nil or data.lastState ~=  MuAiGuide.M12S.CurrentState then\n\tdata.lastState = MuAiGuide.M12S.CurrentState\n\td(\"当前进度：\" .. tostring(MuAiGuide.M12S.CurrentState))\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"b85884ca-8a3a-7d01-92c3-e1ac9e2f6f2b",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						uuid = "54cb451b-22a3-2b42-b634-84d65a99a8aa",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "b85884ca-8a3a-7d01-92c3-e1ac9e2f6f2b",
+						version = 2,
+					},
+				},
+			},
+			eventType = 12,
+			name = "FrameDebug",
 			uuid = "83898426-1459-2294-b52d-fbafeb6d698e",
 			version = 2,
 		},
+		inheritedIndex = 17,
 	}, 
 	inheritedProfiles = 
 	{

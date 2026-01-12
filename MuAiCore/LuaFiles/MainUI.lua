@@ -317,6 +317,9 @@ local DrawMainUI = function(M)
                     M.FruConfigUI.open = false
                 end
             end
+            M.Config.Main.M12SP4UpTime = GUI:Checkbox("M12S 本体4运近战uptime", M.Config.Main.M12SP4UpTime)
+            GUI:SameLine()
+            M.Config.Main.M12SP4SendMacro = GUI:Checkbox("M12S 本体4运发宏", M.Config.Main.M12SP4SendMacro)
         end
        
         if GUI:CollapsingHeader("Hack") then

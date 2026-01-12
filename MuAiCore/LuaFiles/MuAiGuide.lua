@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 212
+M.VERSION = 213
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -217,6 +217,9 @@ M.CreateDefMainCfg = function()
         MountSpeedHack = 9,
         DrawBlackListEnable = false,
         DrawBlackList = {},
+        M12SP4UpTime = false,
+        M12SP4Draw = false,
+        M12SP4SendMacro = false,
     }
     return mainCfg
 end
