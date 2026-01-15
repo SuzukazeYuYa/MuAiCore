@@ -27,56 +27,6 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local redDrawer = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 1)),\n        2\n)\nif MuAiGuide.M11SMapType == nil or MuAiGuide.M11SMapType ~= 1 then\n\tredDrawer:addRect(100, 0, 80, 40, 40, 0, true)\t\nelse\n\tredDrawer:addRect(89, 0, 80, 40, 10, 0, true)\n\tredDrawer:addRect(84, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(116, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(111, 0, 80, 40, 10, 0, true)\nend\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"71b6f493-41e3-df25-8619-bbdb57bd01bf",
-								true,
-							},
-						},
-						gVar = "ACR_RikuNIN3_CD",
-						uuid = "16ba8e37-2a5d-9b6e-a6a5-3593ba5c9ac4",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "71b6f493-41e3-df25-8619-bbdb57bd01bf",
-						version = 2,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			eventType = 13,
-			name = "M11S地图边框",
-			uuid = "15ffb251-5885-55b5-adf0-15a00a7fcba5",
-			version = 2,
-		},
-		inheritedIndex = 2,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
 						actionLua = "MuAiGuide.M11SMapType = 0\nself.used = true",
 						conditions = 
 						{
@@ -146,7 +96,71 @@ local tbl =
 			uuid = "b610ef51-6410-2e2c-8cd0-fff9d16334a8",
 			version = 2,
 		},
+		inheritedIndex = 2,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+			},
+			conditions = 
+			{
+			},
+			name = "-------- m11s --------",
+			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
+			version = 2,
+		},
 		inheritedIndex = 3,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local drawTime = 3000\nlocal posLabel = { \"MT\", \"D4\", \"H2\", \"D2\", \"ST\", \"D1\", \"H1\", \"D3\" }\n\nif data.MuAiM11S_Sickle_Data == nil then\n    data.MuAiM11S_Sickle_Data = {}\nend\n\nfunction drawPos(ent)\n    local heading = ent.pos.h\n    for i = 0, 7 do\n        local pos = TensorCore.getPosInDirection(ent.pos, heading - i * math.pi / 4, 4)\n        AnyoneCore.addTimedWorldText(drawTime, posLabel[i + 1], pos, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n    end\n    -- 更新时间戳\n    data.MuAiM11S_Sickle_Data[ent.id] = {\n        pos = ent.pos,\n        time = Now()\n    }\nend\n\nlocal entList = TensorCore.entityList(\"contentid=108\") or {}\nfor _, ent in pairs(entList) do\n    if Argus.getEntityModel(ent.id) == 19185 and Argus.isEntityVisible(ent) then\n        local dataCache = data.MuAiM11S_Sickle_Data[ent.id]\n\n        if dataCache == nil then\n            drawPos(ent)  -- 首次绘制\n        else\n            local distance = TensorCore.getDistance2d(ent.pos, dataCache.pos)\n            local timeSinceDraw = Now() - dataCache.time\n            local isTimeOut = timeSinceDraw > drawTime - 50\n\n            if distance > 0.5 or isTimeOut then\n                drawPos(ent)  -- 位置变化或超时重新绘制\n            end\n        end\n    end\nend\n\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"cee5c51f-db3d-03b0-9b91-12cc159be349",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						uuid = "9a68066e-0fda-cac6-964b-abd739087ef1",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "cee5c51f-db3d-03b0-9b91-12cc159be349",
+						version = 2,
+					},
+				},
+			},
+			eventType = 12,
+			name = "M11S月环8方",
+			uuid = "b3503580-71a1-e733-a4c3-578deaae1e88",
+			version = 2,
+		},
+		inheritedIndex = 4,
 	},
 	
 	{
@@ -200,15 +214,114 @@ local tbl =
 		{
 			actions = 
 			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "AnyoneCore.addTimedWorldText(60000 * 90, \"N\", {x = 100,y = 0 ,z =  77}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nAnyoneCore.addTimedWorldText(60000 * 90, \"S\", {x = 100,y = 0 ,z =  123}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nAnyoneCore.addTimedWorldText(60000 * 90, \"W\", {x = 72,y = 0 ,z =  100}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nAnyoneCore.addTimedWorldText(60000 * 90, \"E\", {x = 128,y = 0 ,z =  100}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"19fa35c7-1605-8a7a-97a7-6dbaf9b2a568",
+								true,
+							},
+						},
+						gVar = "ACR_RikuNIN3_CD",
+						uuid = "b909d181-c1fc-4737-b315-5cd0da388cc2",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
 			},
 			conditions = 
 			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "19fa35c7-1605-8a7a-97a7-6dbaf9b2a568",
+						version = 2,
+					},
+				},
 			},
-			name = "-------- m11s --------",
-			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
+			eventType = 11,
+			name = "M11S东西南北",
+			throttleTime = 5000,
+			uuid = "285e83a5-1024-4791-bdac-921a03769a59",
 			version = 2,
 		},
-		inheritedIndex = 5,
+		inheritedIndex = 6,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local drawTime = 40000\n\nAnyoneCore.addTimedWorldText(drawTime , \"H1\", {x = 85, y = 0 ,z =  115}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"H2/D2\", {x = 105, y = 0 ,z =  95}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\n\nAnyoneCore.addTimedWorldText(drawTime , \"D3\", {x = 90, y = 0 ,z =  110}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D4\", {x = 105, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D1\", {x = 95, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"089e6374-6111-897d-8af0-fcd0c72e28ac",
+								true,
+							},
+							
+							{
+								"36552ff7-f62a-b95c-9b3e-6ec090ee0398",
+								true,
+							},
+						},
+						gVar = "ACR_RikuNIN3_CD",
+						uuid = "b71e5591-3e6b-758b-b52e-84b8c6cbeccb",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46132,
+						uuid = "089e6374-6111-897d-8af0-fcd0c72e28ac",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "36552ff7-f62a-b95c-9b3e-6ec090ee0398",
+						version = 2,
+					},
+				},
+			},
+			eventType = 2,
+			name = "M11S陨石位置",
+			uuid = "74d161a0-ce78-a135-a5df-53829b8f7124",
+			version = 2,
+		},
+		inheritedIndex = 6,
 	},
 	
 	{
@@ -297,12 +410,13 @@ local tbl =
 					{
 						category = "Event",
 						eventArgType = 2,
-						eventSpellID = 46143,
-						name = "拆地图",
-						uuid = "6ccf9f23-4952-5e4c-bbf6-111de25eaffa",
+						eventEntityID = 46086,
+						eventSpellID = 46086,
+						name = "还原地图",
+						uuid = "33cd5d48-a7b4-e21e-865e-3da798f01913",
 						version = 2,
 					},
-					inheritedIndex = 1,
+					inheritedIndex = 2,
 				},
 				
 				{
@@ -310,10 +424,9 @@ local tbl =
 					{
 						category = "Event",
 						eventArgType = 2,
-						eventEntityID = 46086,
-						eventSpellID = 46086,
-						name = "还原地图",
-						uuid = "33cd5d48-a7b4-e21e-865e-3da798f01913",
+						eventSpellID = 46143,
+						name = "拆地图",
+						uuid = "6ccf9f23-4952-5e4c-bbf6-111de25eaffa",
 						version = 2,
 					},
 					inheritedIndex = 2,
@@ -350,121 +463,6 @@ local tbl =
 			uuid = "e260ac90-04cd-d071-866c-f30f070327c0",
 			version = 2,
 		},
-		inheritedIndex = 6,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "AnyoneCore.addTimedWorldText(60000 * 90, \"N\", {x = 100,y = 0 ,z =  77}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nAnyoneCore.addTimedWorldText(60000 * 90, \"S\", {x = 100,y = 0 ,z =  123}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nAnyoneCore.addTimedWorldText(60000 * 90, \"W\", {x = 72,y = 0 ,z =  100}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nAnyoneCore.addTimedWorldText(60000 * 90, \"E\", {x = 128,y = 0 ,z =  100}, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 3)\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"19fa35c7-1605-8a7a-97a7-6dbaf9b2a568",
-								true,
-							},
-						},
-						gVar = "ACR_RikuNIN3_CD",
-						uuid = "b909d181-c1fc-4737-b315-5cd0da388cc2",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "19fa35c7-1605-8a7a-97a7-6dbaf9b2a568",
-						version = 2,
-					},
-				},
-			},
-			eventType = 11,
-			name = "M11S东西南北",
-			throttleTime = 5000,
-			uuid = "285e83a5-1024-4791-bdac-921a03769a59",
-			version = 2,
-		},
-		inheritedIndex = 7,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local drawTime = 40000\n\nAnyoneCore.addTimedWorldText(drawTime , \"H1\", {x = 85, y = 0 ,z =  115}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"H2/D2\", {x = 105, y = 0 ,z =  95}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\n\nAnyoneCore.addTimedWorldText(drawTime , \"D3\", {x = 90, y = 0 ,z =  110}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D4\", {x = 105, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D1\", {x = 95, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"089e6374-6111-897d-8af0-fcd0c72e28ac",
-								true,
-							},
-							
-							{
-								"36552ff7-f62a-b95c-9b3e-6ec090ee0398",
-								true,
-							},
-						},
-						gVar = "ACR_RikuNIN3_CD",
-						uuid = "b71e5591-3e6b-758b-b52e-84b8c6cbeccb",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Event",
-						eventArgType = 2,
-						eventSpellID = 46132,
-						uuid = "089e6374-6111-897d-8af0-fcd0c72e28ac",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "36552ff7-f62a-b95c-9b3e-6ec090ee0398",
-						version = 2,
-					},
-				},
-			},
-			eventType = 2,
-			name = "M11S陨石位置",
-			uuid = "74d161a0-ce78-a135-a5df-53829b8f7124",
-			version = 2,
-		},
 		inheritedIndex = 8,
 	},
 	
@@ -478,19 +476,20 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local drawTime = 3000\nlocal posLabel = { \"MT\", \"D4\", \"H2\", \"D2\", \"ST\", \"D1\", \"H1\", \"D3\" }\n\nif data.MuAiM11S_Sickle_Data == nil then\n    data.MuAiM11S_Sickle_Data = {}\nend\n\nfunction drawPos(ent)\n    local heading = ent.pos.h\n    for i = 0, 7 do\n        local pos = TensorCore.getPosInDirection(ent.pos, heading - i * math.pi / 4, 4)\n        AnyoneCore.addTimedWorldText(drawTime, posLabel[i + 1], pos, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n    end\n    -- 更新时间戳\n    data.MuAiM11S_Sickle_Data[ent.id] = {\n        pos = ent.pos,\n        time = Now()\n    }\nend\n\nlocal entList = TensorCore.entityList(\"contentid=108\") or {}\nfor _, ent in pairs(entList) do\n    if Argus.getEntityModel(ent.id) == 19185 and Argus.isEntityVisible(ent) then\n        local dataCache = data.MuAiM11S_Sickle_Data[ent.id]\n\n        if dataCache == nil then\n            drawPos(ent)  -- 首次绘制\n        else\n            local distance = TensorCore.getDistance2d(ent.pos, dataCache.pos)\n            local timeSinceDraw = Now() - dataCache.time\n            local isTimeOut = timeSinceDraw > drawTime - 50\n\n            if distance > 0.5 or isTimeOut then\n                drawPos(ent)  -- 位置变化或超时重新绘制\n            end\n        end\n    end\nend\n\nself.used = true",
+						actionLua = "local redDrawer = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 1)),\n        2\n)\nif MuAiGuide.M11SMapType == nil or MuAiGuide.M11SMapType ~= 1 then\n\tredDrawer:addRect(100, 0, 80, 40, 40, 0, true)\t\nelse\n\tredDrawer:addRect(89, 0, 80, 40, 10, 0, true)\n\tredDrawer:addRect(84, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(116, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(111, 0, 80, 40, 10, 0, true)\nend\nself.used = true",
 						conditions = 
 						{
 							
 							{
-								"cee5c51f-db3d-03b0-9b91-12cc159be349",
+								"71b6f493-41e3-df25-8619-bbdb57bd01bf",
 								true,
 							},
 						},
-						gVar = "ACR_RikuMNK3_CD",
-						uuid = "9a68066e-0fda-cac6-964b-abd739087ef1",
+						gVar = "ACR_RikuNIN3_CD",
+						uuid = "16ba8e37-2a5d-9b6e-a6a5-3593ba5c9ac4",
 						version = 2.1,
 					},
+					inheritedIndex = 1,
 				},
 			},
 			conditions = 
@@ -503,17 +502,18 @@ local tbl =
 						conditionType = 8,
 						localmapid = 1325,
 						name = "M11S",
-						uuid = "cee5c51f-db3d-03b0-9b91-12cc159be349",
+						uuid = "71b6f493-41e3-df25-8619-bbdb57bd01bf",
 						version = 2,
 					},
+					inheritedIndex = 1,
 				},
 			},
-			eventType = 12,
-			name = "M11S月环8方",
-			uuid = "b3503580-71a1-e733-a4c3-578deaae1e88",
+			eventType = 13,
+			name = "M11S地图边框",
+			uuid = "15ffb251-5885-55b5-adf0-15a00a7fcba5",
 			version = 2,
 		},
-		inheritedIndex = 11,
+		inheritedIndex = 8,
 	},
 	
 	{
@@ -553,6 +553,17 @@ local tbl =
 				{
 					data = 
 					{
+						category = "Lua",
+						conditionLua = "if MuAiGuide.M11SMapType ~= 1 and MuAiGuide.M11SMapType ~= 2 then\n    return false\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nif tethers == nil or table.size(tethers) <= 0 then\n    return false\nend\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        return true\n    end\nend\nreturn false",
+						uuid = "2fbd9c0f-e39c-a512-9798-2586a5646898",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
 						category = "Self",
 						conditionType = 8,
 						localmapid = 1325,
@@ -562,23 +573,13 @@ local tbl =
 					},
 					inheritedIndex = 1,
 				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "if MuAiGuide.M11SMapType ~= 1 and MuAiGuide.M11SMapType ~= 2 then\n    return false\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nif tethers == nil or table.size(tethers) <= 0 then\n    return false\nend\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        return true\n    end\nend\nreturn false",
-						uuid = "2fbd9c0f-e39c-a512-9798-2586a5646898",
-						version = 2,
-					},
-				},
 			},
 			eventType = 12,
 			name = "M11S拉线",
 			uuid = "41a903f9-67f1-06ad-8924-d2be901e0268",
 			version = 2,
 		},
-		inheritedIndex = 11,
+		inheritedIndex = 10,
 	},
 	
 	{
@@ -670,7 +671,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nM.M12S = {}\n--- M12S初始化\nM.M12S.InitM12SData = function()\n    --- 完成状态，表示当前副本进度已经完成了哪些\n    M.M12S.StateEnum = {\n        Start = 0,\n        GPuzzle2_Start = 1200,\n        -- 场地塔刷新完毕,开始循环\n        GPuzzle2_Looping = 1201,\n        -- 门神2运结束\n        GPuzzle2_End = 1299,\n        -- 进入3运\n        GPuzzle3_Start = 1300,\n        -- 已读取蛇位置\n        GPuzzle3_GotSnake = 1301,\n        -- 门神3运结束\n        GPuzzle3_End = 1399,\n        -- 4运开始\n        Puzzle4_Start = 2400,\n        -- 刷复制体1\n        Puzzle4_Spawn_Copy1 = 2401,\n        -- 刷复制体2\n        Puzzle4_Spawn_Copy2 = 2402,\n        -- 第一次连线\n        Puzzle4_FirstLink = 2403,\n        -- 找到上下刀\n        Puzzle4_GetSKills = 2404,\n        -- 第二次预备\n        Puzzle4_SecondLink = 2405,\n        -- 接线开始\n        Puzzle4_CatchLink = 2406,\n        -- 拉线结束\n        Puzzle4_CatchEnd = 2407,\n        -- 小世界1\n        Puzzle4_Div1 = 2408,\n        -- \n        Puzzle4_Tower1 = 2409,\n        --获得光BUFF\n        Puzzle4_GetBuff = 2410,\n        -- 4次分摊/大圈\n        Puzzle4_ThirdLink = 2411,\n        Puzzle4_Put1 = 2412,\n        Puzzle4_Put2 = 2413,\n        Puzzle4_Put3 = 2414,\n        Puzzle4_PutEnd = 2415,\n        -- 第二次小世界\n        Puzzle4_Tower2 = 2416,\n        -- 塔结束\n        Puzzle4_TowerEnd = 2417,\n        -- 处理远近\n        Puzzle4_TowerFarNear = 2418,\n        -- 第二次小世界小怪观察\n        Puzzle4_div2Subs = 2419,\n        -- 第二次小世界小怪观测\n        Puzzle4_div2SubsEnd = 2420,\n        -- 第二次小世界结束\n        Puzzle4_div2End = 2421,\n        -- 第一复制体爆炸\n        Puzzle4_CopyBoom1 = 2422,\n        -- 第三次小世界结束\n        Puzzle4_div3End = 2423,\n        -- 第二次复制体爆炸\n        Puzzle4_CopyBoom2 = 2424,\n        -- 最终结P\n        PuzzleEnd_Start = 2500,\n    }\n\n    M.M12S.DataEnum = {\n        A1 = 11, A2 = 12, A3 = 13, A4 = 14,\n        B1 = 21, B2 = 22, B3 = 23, B4 = 24,\n        Gp2_01 = 201, Gp2_02 = 202, Gp2_03 = 203, Gp2_04 = 204, Gp2_end = 299,\n        -- 先刷数字点\n        Puzzle4Number = 401,\n        -- 先刷字母点\n        Puzzle4Char = 402,\n        --A点上下刀\n        UpDownSkillA = 403,\n        -- C点上下刀\n        UpDownSkillC = 404,\n        -- 集合\n        Gather = 113,\n        -- 大钢铁\n        Disperse = 112,\n        -- 判定的线\n        LinkFinal = 117,\n        -- 4D3C\n        Left = 1,\n        -- A1B2\n        Right = 2,\n\n        -- 上下\n        UpDown = 3,\n        -- 左右\n        LeftRight = 4,\n    }\n    -- 辅助计时器\n    M.M12S.Timer = 0\n\n    M.M12S.CurrentBoss = nil\n    -- 当前副本阶段\n    M.M12S.CurrentState = M.M12S.StateEnum.Start\n    M.M12S.GP2Info = {\n        -- 场地塔Id\n        ids = {},\n        -- 场地塔信息,索引\n        gTowers = {},\n        gSpawnIdx = 0,\n        -- 玩家塔信息,索引\n        pTowers = {},\n        pSpawnIdx = 0,\n        selfType = 0,\n        pTowerFinish = false,\n        State = M.M12S.DataEnum.Gp2_01\n    }\n    M.M12S.GP3Info = {\n        selfBuff = nil,\n        guidePos = nil, \n    }\n    \n    -- 4运 玩家复制体数据\n    M.M12S.P4CopyInfo = {\n        ids = {},\n        entities = {},\n        guidePos,\n        linkPos,\n        -- 刷新类型：字母点/数字点\n        spawnType = nil,\n        gatherPos1,\n        gatherPos2,\n    }\n    -- 4运 被接线BOSS分身、个人需处理数据信息\n    M.M12S.P4CatchLineInfo = {\n        ids = {},\n        entities = {},\n        -- 接线类型, 分摊线/分散线\n        type = nil,\n    }\n    -- 4运 3分身信息\n    M.M12S.P4Sub3Info = {\n        skillType = nil,\n        -- 接线后指路位置\n        GuidePos1 = nil,\n        -- 躲前后左右刀参考站位\n        divGuidePos1 = nil,\n        divGuidePos2 = nil,\n        -- 躲前后左右刀实际站位(小世界)\n        GuidePos2 = nil,\n        -- 躲前后左右刀实际站位(最后)\n        GuidePos3 = nil,\n    }\n    -- 4运 踩塔数据\n    M.M12S.P4TowerData = {}\n\n    M.Info(\"M12S初始化数据完成!\")\nend\n\n-- 根据小队任意成员BUFF情况判断是否切阶段\nM.M12S.Puzzle4_4TimesChange = function(buffId)\n    for i, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, buffId)\n        if debuff ~= nil then\n            return true\n        end\n    end\n    return false\nend\n\nM.M12S.InitM12SData()\nself.used = true",
+						actionLua = "local M = MuAiGuide\nM.M12S = {}\n--- M12S初始化\nM.M12S.InitM12SData = function()\n    --- 完成状态，表示当前副本进度已经完成了哪些\n    M.M12S.StateEnum = {\n        Start = 0,\n        -- 门神1运开始\n        GPuzzle1_Start = 1100,\n        -- 自动锁定\n        GPuzzle1_AutoLock = 1101,\n        -- 1运结束\n        GPuzzle1_end = 1099,\n        -- 门神2运开始\n        GPuzzle2_Start = 1200,\n        -- 场地塔刷新完毕,开始循环\n        GPuzzle2_Looping = 1201,\n        -- 门神2运结束\n        GPuzzle2_End = 1299,\n        -- 进入3运\n        GPuzzle3_Start = 1300,\n        -- 已读取蛇位置\n        GPuzzle3_GotSnake = 1301,\n        -- 门神3运结束\n        GPuzzle3_End = 1399,\n        \n        -- 4运开始\n        Puzzle4_Start = 2400,\n        -- 刷复制体1\n        Puzzle4_Spawn_Copy1 = 2401,\n        -- 刷复制体2\n        Puzzle4_Spawn_Copy2 = 2402,\n        -- 第一次连线\n        Puzzle4_FirstLink = 2403,\n        -- 找到上下刀\n        Puzzle4_GetSKills = 2404,\n        -- 第二次预备\n        Puzzle4_SecondLink = 2405,\n        -- 接线开始\n        Puzzle4_CatchLink = 2406,\n        -- 拉线结束\n        Puzzle4_CatchEnd = 2407,\n        -- 小世界1\n        Puzzle4_Div1 = 2408,\n        -- \n        Puzzle4_Tower1 = 2409,\n        --获得光BUFF\n        Puzzle4_GetBuff = 2410,\n        -- 4次分摊/大圈\n        Puzzle4_ThirdLink = 2411,\n        Puzzle4_Put1 = 2412,\n        Puzzle4_Put2 = 2413,\n        Puzzle4_Put3 = 2414,\n        Puzzle4_PutEnd = 2415,\n        -- 第二次小世界\n        Puzzle4_Tower2 = 2416,\n        -- 塔结束\n        Puzzle4_TowerEnd = 2417,\n        -- 处理远近\n        Puzzle4_TowerFarNear = 2418,\n        -- 第二次小世界小怪观察\n        Puzzle4_div2Subs = 2419,\n        -- 第二次小世界小怪观测\n        Puzzle4_div2SubsEnd = 2420,\n        -- 第二次小世界结束\n        Puzzle4_div2End = 2421,\n        -- 第一复制体爆炸\n        Puzzle4_CopyBoom1 = 2422,\n        -- 第三次小世界结束\n        Puzzle4_div3End = 2423,\n        -- 第二次复制体爆炸\n        Puzzle4_CopyBoom2 = 2424,\n        -- 最终结P\n        PuzzleEnd_Start = 2500,\n    }\n\n    M.M12S.DataEnum = {\n        A1 = 11, A2 = 12, A3 = 13, A4 = 14,\n        B1 = 21, B2 = 22, B3 = 23, B4 = 24,\n        Gp2_01 = 201, Gp2_02 = 202, Gp2_03 = 203, Gp2_04 = 204, Gp2_end = 299,\n        -- 先刷数字点\n        Puzzle4Number = 401,\n        -- 先刷字母点\n        Puzzle4Char = 402,\n        --A点上下刀\n        UpDownSkillA = 403,\n        -- C点上下刀\n        UpDownSkillC = 404,\n        -- 集合\n        Gather = 113,\n        -- 大钢铁\n        Disperse = 112,\n        -- 判定的线\n        LinkFinal = 117,\n        -- 4D3C\n        Left = 1,\n        -- A1B2\n        Right = 2,\n\n        -- 上下\n        UpDown = 3,\n        -- 左右\n        LeftRight = 4,\n    }\n    -- 辅助计时器\n    M.M12S.Timer = 0\n\n    M.M12S.CurrentBoss = nil\n    -- 当前副本阶段\n    M.M12S.CurrentState = M.M12S.StateEnum.Start\n    M.M12S.GP1Info = {}\n    M.M12S.GP2Info = {\n        -- 场地塔Id\n        ids = {},\n        -- 场地塔信息,索引\n        gTowers = {},\n        gSpawnIdx = 0,\n        -- 玩家塔信息,索引\n        pTowers = {},\n        pSpawnIdx = 0,\n        selfType = 0,\n        pTowerFinish = false,\n        State = M.M12S.DataEnum.Gp2_01\n    }\n    M.M12S.GP3Info = {\n        selfBuff = nil,\n        guidePos = nil, \n    }\n    \n    -- 4运 玩家复制体数据\n    M.M12S.P4CopyInfo = {\n        ids = {},\n        entities = {},\n        guidePos,\n        linkPos,\n        -- 刷新类型：字母点/数字点\n        spawnType = nil,\n        gatherPos1,\n        gatherPos2,\n    }\n    -- 4运 被接线BOSS分身、个人需处理数据信息\n    M.M12S.P4CatchLineInfo = {\n        ids = {},\n        entities = {},\n        -- 接线类型, 分摊线/分散线\n        type = nil,\n    }\n    -- 4运 3分身信息\n    M.M12S.P4Sub3Info = {\n        skillType = nil,\n        -- 接线后指路位置\n        GuidePos1 = nil,\n        -- 躲前后左右刀参考站位\n        divGuidePos1 = nil,\n        divGuidePos2 = nil,\n        -- 躲前后左右刀实际站位(小世界)\n        GuidePos2 = nil,\n        -- 躲前后左右刀实际站位(最后)\n        GuidePos3 = nil,\n    }\n    -- 4运 踩塔数据\n    M.M12S.P4TowerData = {}\n\n    M.Info(\"M12S初始化数据完成!\")\nend\n\n-- 根据小队任意成员BUFF情况判断是否切阶段\nM.M12S.Puzzle4_4TimesChange = function(buffId)\n    for i, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, buffId)\n        if debuff ~= nil then\n            return true\n        end\n    end\n    return false\nend\n\nM.M12S.InitM12SData()\nself.used = true\n\n\n\n",
 						conditions = 
 						{
 							
@@ -679,6 +680,7 @@ local tbl =
 								true,
 							},
 						},
+						gVar = "ACR_RikuMNK3_CD",
 						uuid = "3a36b544-1644-d68a-9ebf-9dc08d976e45",
 						version = 2.1,
 					},
@@ -706,7 +708,7 @@ local tbl =
 			uuid = "01c21e3b-f835-8520-b7fa-247cf2d8b76b",
 			version = 2,
 		},
-		inheritedIndex = 14,
+		inheritedIndex = 13,
 	},
 	
 	{
@@ -714,6 +716,37 @@ local tbl =
 		{
 			actions = 
 			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nM.M12S.GP1Info.head = TensorCore.mGetEntity(eventArgs.entityID)\nM.M12S.CurrentState = M.M12S.StateEnum.GPuzzle1_Start\n\nfor jobNamed, ent in pairs(M.Party) do\n    local buff = TensorCore.getBuff(ent.id, 4762)\n    if buff ~= nil then\n        if M.IsDps(ent.job) then\n            if M.IsDps(M.GetPlayer().job) then\n                M.M12S.GP1Info.opType = M.M12S.DataEnum.Gather\n            else\n                M.M12S.GP1Info.opType = M.M12S.DataEnum.Disperse\n            end\n        else\n            if M.IsDps(M.GetPlayer().job) then\n                M.M12S.GP1Info.opType = M.M12S.DataEnum.Disperse\n            else\n                M.M12S.GP1Info.opType = M.M12S.DataEnum.Gather\n            end\n        end\n    end\nend\n\nlocal curBuff = TensorCore.getBuff(M.GetPlayer().id, 3558)\nif M.M12S.GP1Info.opType == M.M12S.DataEnum.Gather then\n    -- 集合 最终目标是设置 打向 math.pi\n    if curBuff.stacks == 1036 then\n        M.M12S.GP1Info.face = math.pi\n    elseif curBuff.stacks == 1037 then\n        M.M12S.GP1Info.face = math.pi * 3 / 2\n    elseif curBuff.stacks == 1038 then\n        M.M12S.GP1Info.face = 0\n    elseif curBuff.stacks == 1039 then\n        M.M12S.GP1Info.face = math.pi / 2\n    end\nelse\n    if M.M12S.GP1Info.head.pos.x > 100 then\n        -- 右半场\n        if table.contains({ \"MT\", \"D1\", \"D3\", \"H1\" }, M.SelfPos) then\n            -- 最终目标是设置 射向 math.pi * 3 / 2\n            if curBuff.stacks == 1036 then\n                M.M12S.GP1Info.face = math.pi * 3 / 2\n            elseif curBuff.stacks == 1037 then\n                M.M12S.GP1Info.face = 0\n            elseif curBuff.stacks == 1038 then\n\n                M.M12S.GP1Info.face = math.pi / 2\n            elseif curBuff.stacks == 1039 then\n                M.M12S.GP1Info.face = math.pi\n            end\n        else\n            -- 最终目标是设置 射向 math.pi  / 2\n            if curBuff.stacks == 1036 then\n                M.M12S.GP1Info.face = math.pi  / 2\n            elseif curBuff.stacks == 1037 then\n                M.M12S.GP1Info.face = math.pi\n            elseif curBuff.stacks == 1038 then\n                M.M12S.GP1Info.face = math.pi * 3 / 2\n            elseif curBuff.stacks == 1039 then\n                M.M12S.GP1Info.face = 0\n            end\n        end\n    else\n        if table.contains({ \"MT\", \"D1\", \"D3\", \"H1\" }, M.SelfPos) then\n            -- 最终目标是设置 射向 math.pi  / 2\n            if curBuff.stacks == 1036 then\n                M.M12S.GP1Info.face = math.pi  / 2\n            elseif curBuff.stacks == 1037 then\n                M.M12S.GP1Info.face = math.pi\n            elseif curBuff.stacks == 1038 then\n                M.M12S.GP1Info.face = math.pi * 3 / 2\n            elseif curBuff.stacks == 1039 then\n                M.M12S.GP1Info.face = 0\n            end\n        else\n            if curBuff.stacks == 1036 then\n                M.M12S.GP1Info.face = math.pi * 3 / 2\n            elseif curBuff.stacks == 1037 then\n                M.M12S.GP1Info.face = 0\n            elseif curBuff.stacks == 1038 then\n                M.M12S.GP1Info.face = math.pi / 2\n            elseif curBuff.stacks == 1039 then\n                M.M12S.GP1Info.face = math.pi\n            end\n        end\n    end\nend\nd(\"已采集到蛇头数据\")\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
+								true,
+							},
+							
+							{
+								"82f27b87-655b-728c-a0a5-551821fdb883",
+								true,
+							},
+							
+							{
+								"dc97e63d-ce22-890f-98f6-149f2aebb647",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "1运-采集蛇头位置",
+						uuid = "9587bed3-2a71-7954-9227-1fbaff493b9d",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
 				
 				{
 					data = 
@@ -785,6 +818,11 @@ local tbl =
 							
 							{
 								"d1d5aabe-1b01-beeb-8f16-6fc4328870d0",
+								true,
+							},
+							
+							{
+								"c05df42b-66b0-a7dc-8dd3-477d84bc82ea",
 								true,
 							},
 						},
@@ -868,9 +906,34 @@ local tbl =
 				{
 					data = 
 					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46237,
+						name = "46237",
+						uuid = "82f27b87-655b-728c-a0a5-551821fdb883",
+						version = 2,
+					},
+					inheritedIndex = 6,
+				},
+				
+				{
+					data = 
+					{
 						category = "Lua",
 						conditionLua = "return MuAiGuide.M12S.CurrentState > MuAiGuide.M12S.StateEnum.GPuzzle3_Start\n\t\t\tand MuAiGuide.M12S.CurrentState < MuAiGuide.M12S.StateEnum.GPuzzle3_End",
 						name = "已进入3运",
+						uuid = "c05df42b-66b0-a7dc-8dd3-477d84bc82ea",
+						version = 2,
+					},
+					inheritedIndex = 6,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState < MuAiGuide.M12S.StateEnum.GPuzzle1_Start",
+						name = "未进入1运",
 						uuid = "dc97e63d-ce22-890f-98f6-149f2aebb647",
 						version = 2,
 					},
@@ -882,6 +945,144 @@ local tbl =
 			version = 2,
 		},
 		inheritedIndex = 14,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "TensorCore.API.TensorACR.setLockFaceHeading(MuAiGuide.M12S.GP1Info.face)\nTensorCore.API.TensorACR.toggleLockFace(true)\nMuAiGuide.M12S.Timer = Now()\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.GPuzzle1_AutoLock\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"6d035129-cd47-17cc-ae57-023df4037b1b",
+								true,
+							},
+							
+							{
+								"080acc92-067a-5769-a4ee-58b0e3e87377",
+								true,
+							},
+							
+							{
+								"467ad839-919e-2318-9553-473d3680a0a0",
+								true,
+							},
+						},
+						gVar = "ACR_TensorMagnum3_CD",
+						name = "锁定面向",
+						uuid = "a058e886-a447-ec2c-b29d-c0360f5ef21d",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "TensorCore.API.TensorACR.toggleLockFace(false)\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.GPuzzle1_end\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"6d035129-cd47-17cc-ae57-023df4037b1b",
+								true,
+							},
+							
+							{
+								"5641790e-35d5-6128-b8ab-65c0fae5590e",
+								true,
+							},
+							
+							{
+								"cce86369-f0d4-9218-8a97-388bd7e3e162",
+								true,
+							},
+						},
+						gVar = "ACR_TensorMagnum3_CD",
+						name = "取消锁定面向",
+						uuid = "10eef159-d1fd-5ebf-8dc3-6ca2ad3b13b8",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "6d035129-cd47-17cc-ae57-023df4037b1b",
+						version = 2,
+					},
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						buffCheckType = 3,
+						buffDuration = 2,
+						buffID = 4976,
+						category = "Self",
+						comparator = 2,
+						name = "指向判定2秒",
+						uuid = "080acc92-067a-5769-a4ee-58b0e3e87377",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState >= MuAiGuide.M12S.StateEnum.GPuzzle1_Start",
+						name = "进入到门神1运",
+						uuid = "467ad839-919e-2318-9553-473d3680a0a0",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return TimeSince(MuAiGuide.M12S.Timer) > 3000",
+						name = "锁定面向已大于3秒",
+						uuid = "cce86369-f0d4-9218-8a97-388bd7e3e162",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.GPuzzle1_AutoLock",
+						name = "当前是锁定阶段",
+						uuid = "5641790e-35d5-6128-b8ab-65c0fae5590e",
+						version = 2,
+					},
+				},
+			},
+			name = "M12S门神1运自动面向",
+			uuid = "288f9733-cd95-3e4b-ab8d-30c5a0d637a7",
+			version = 2,
+		},
+		inheritedIndex = 15,
 	},
 	
 	{
@@ -944,38 +1145,7 @@ local tbl =
 			uuid = "79562d51-d887-4795-96b7-ca10cab1b0e9",
 			version = 2,
 		},
-		inheritedIndex = 17,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "10a41e61-6525-6b14-91c5-b7bc3c7d7f40",
-						version = 2,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			enabled = false,
-			eventType = 2,
-			name = "M12S门神切换阶段[读条后]",
-			uuid = "4b024502-df43-593f-861e-52e28a341687",
-			version = 2,
-		},
-		inheritedIndex = 16,
+		inheritedIndex = 18,
 	},
 	
 	{
@@ -1054,76 +1224,6 @@ local tbl =
 			},
 			name = "-- 本体 --",
 			uuid = "960bb8b2-a094-8d02-93bf-bed17a863848",
-			version = 2,
-		},
-		inheritedIndex = 20,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local drawer, pos\nif eventArgs.spellID == 46301 then\n    --火读条\n    drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0.2), 1)\n    pos = TensorCore.mGetEntity(eventArgs.entityID).pos\nelseif eventArgs.spellID == 46303 then\n    --暗读条\n    drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 255 / 255, 0.2), 1)\n    pos = TensorCore.mGetEntity(eventArgs.entityID).pos\nend\nif drawer ~= nil then\n    drawer:addTimedCircle(3000, pos.x, 0, pos.z, 2, 0, true)\nend\nself.used = true\n",
-						conditions = 
-						{
-							
-							{
-								"5f1a198f-2aad-2829-a667-3542181eb2b4",
-								true,
-							},
-							
-							{
-								"6da42a21-cb5c-9030-98e2-a3c7c88ea860",
-								true,
-							},
-						},
-						uuid = "166ea82c-7e88-fb84-9415-b9df22d34e19",
-						version = 2.1,
-					},
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "5f1a198f-2aad-2829-a667-3542181eb2b4",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Event",
-						eventArgOptionType = 3,
-						eventArgType = 2,
-						eventEntityID = 46301,
-						eventSpellID = 46301,
-						spellIDList = 
-						{
-							46301,
-							46303,
-						},
-						uuid = "6da42a21-cb5c-9030-98e2-a3c7c88ea860",
-						version = 2,
-					},
-				},
-			},
-			eventType = 3,
-			name = "M12S本体一运小怪读条",
-			uuid = "0f39daec-7399-2a52-b3b0-7ec0c6a5e610",
 			version = 2,
 		},
 		inheritedIndex = 19,
@@ -1368,13 +1468,22 @@ local tbl =
 						version = 2,
 					},
 				},
+				
+				{
+					data = 
+					{
+						name = "没到2运",
+						uuid = "39f3cd87-37cb-3eae-9e6e-415d95e85520",
+						version = 2,
+					},
+				},
 			},
 			eventType = 3,
 			name = "M12S本体阶段切换[开始读条]",
 			uuid = "b48d47b0-28c9-0e72-82e7-abf66b902646",
 			version = 2,
 		},
-		inheritedIndex = 14,
+		inheritedIndex = 19,
 	},
 	
 	{
@@ -1582,7 +1691,7 @@ local tbl =
 			uuid = "021a9e74-9ec4-8881-beb5-cb1621c7a609",
 			version = 2,
 		},
-		inheritedIndex = 21,
+		inheritedIndex = 20,
 	},
 	
 	{
@@ -1647,7 +1756,7 @@ local tbl =
 			uuid = "cf3ae25c-c974-dd93-a124-4473c49119b2",
 			version = 2,
 		},
-		inheritedIndex = 23,
+		inheritedIndex = 22,
 	},
 	
 	{
@@ -1691,10 +1800,79 @@ local tbl =
 					},
 				},
 			},
-			enabled = false,
 			eventType = 12,
 			name = "FrameDebug",
 			uuid = "83898426-1459-2294-b52d-fbafeb6d698e",
+			version = 2,
+		},
+		inheritedIndex = 22,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local drawer, pos\nif eventArgs.spellID == 46301 then\n    --火读条\n    drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0.2), 1)\n    pos = TensorCore.mGetEntity(eventArgs.entityID).pos\nelseif eventArgs.spellID == 46303 then\n    --暗读条\n    drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 255 / 255, 0.2), 1)\n    pos = TensorCore.mGetEntity(eventArgs.entityID).pos\nend\nif drawer ~= nil then\n    drawer:addTimedCircle(3000, pos.x, 0, pos.z, 2, 0, true)\nend\nself.used = true\n",
+						conditions = 
+						{
+							
+							{
+								"5f1a198f-2aad-2829-a667-3542181eb2b4",
+								true,
+							},
+							
+							{
+								"6da42a21-cb5c-9030-98e2-a3c7c88ea860",
+								true,
+							},
+						},
+						uuid = "166ea82c-7e88-fb84-9415-b9df22d34e19",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "5f1a198f-2aad-2829-a667-3542181eb2b4",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgOptionType = 3,
+						eventArgType = 2,
+						eventEntityID = 46301,
+						eventSpellID = 46301,
+						spellIDList = 
+						{
+							46301,
+							46303,
+						},
+						uuid = "6da42a21-cb5c-9030-98e2-a3c7c88ea860",
+						version = 2,
+					},
+				},
+			},
+			eventType = 3,
+			name = "M12S本体一运小怪读条",
+			uuid = "0f39daec-7399-2a52-b3b0-7ec0c6a5e610",
 			version = 2,
 		},
 		inheritedIndex = 23,
