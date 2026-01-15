@@ -6,22 +6,6 @@ local tbl =
 		{
 			actions = 
 			{
-			},
-			conditions = 
-			{
-			},
-			name = "--------------------- MuAiDraw ---------------------------",
-			uuid = "4c04d325-7712-422b-be39-a892f38c3b0d",
-			version = 2,
-		},
-		inheritedIndex = 1,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
 				
 				{
 					data = 
@@ -62,6 +46,22 @@ local tbl =
 			eventType = 13,
 			name = "M11S地图边框",
 			uuid = "15ffb251-5885-55b5-adf0-15a00a7fcba5",
+			version = 2,
+		},
+		inheritedIndex = 1,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+			},
+			conditions = 
+			{
+			},
+			name = "--------------------- MuAiDraw ---------------------------",
+			uuid = "4c04d325-7712-422b-be39-a892f38c3b0d",
 			version = 2,
 		},
 		inheritedIndex = 2,
@@ -400,7 +400,7 @@ local tbl =
 			uuid = "285e83a5-1024-4791-bdac-921a03769a59",
 			version = 2,
 		},
-		inheritedIndex = 8,
+		inheritedIndex = 7,
 	},
 	
 	{
@@ -465,7 +465,7 @@ local tbl =
 			uuid = "74d161a0-ce78-a135-a5df-53829b8f7124",
 			version = 2,
 		},
-		inheritedIndex = 10,
+		inheritedIndex = 8,
 	},
 	
 	{
@@ -586,56 +586,6 @@ local tbl =
 		{
 			actions = 
 			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						gVar = "ACR_RikuMNK3_CD",
-						uuid = "671c1d12-998c-f538-94b6-4d404b764148",
-						version = 2.1,
-					},
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "45fc4951-b960-96dc-b67b-64e2f567bb2b",
-						version = 2,
-					},
-					inheritedIndex = 1,
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M11SMapType == 1",
-						uuid = "78da311e-271a-a457-bf2a-4ffa4fe2ada0",
-						version = 2,
-					},
-					inheritedIndex = 2,
-				},
-			},
-			name = "M11S半场刀",
-			uuid = "ec7a18f7-e151-2d88-bcb4-096ef1d74273",
-			version = 2,
-		},
-		inheritedIndex = 15,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
 			},
 			conditions = 
 			{
@@ -672,7 +622,7 @@ local tbl =
 							},
 						},
 						uuid = "0df32b43-05f8-e8a9-a31d-6b54cbaa72f1",
-						version = 2,
+						version = 2.1,
 					},
 				},
 			},
@@ -689,6 +639,7 @@ local tbl =
 						uuid = "af059daa-90a8-74b4-9550-caf534e00639",
 						version = 2,
 					},
+					inheritedIndex = 1,
 				},
 				
 				{
@@ -719,7 +670,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nM.M12S = {}\n--- M12S初始化\nM.M12S.InitM12SData = function()\n    --- 完成状态，表示当前副本进度已经完成了哪些\n    M.M12S.StateEnum = {\n        Start = 0,\n        GPuzzle2_Start = 1200,\n        -- 场地塔刷新完毕,开始循环\n        GPuzzle2_Looping = 1201,\n        -- 门神2运结束\n        GPuzzle2_End = 1299,\n        -- 4运开始\n        Puzzle4_Start = 2400,\n        -- 刷复制体1\n        Puzzle4_Spawn_Copy1 = 2401,\n        -- 刷复制体2\n        Puzzle4_Spawn_Copy2 = 2402,\n        -- 第一次连线\n        Puzzle4_FirstLink = 2403,\n        -- 找到上下刀\n        Puzzle4_GetSKills = 2404,\n        -- 第二次预备\n        Puzzle4_SecondLink = 2405,\n        -- 接线开始\n        Puzzle4_CatchLink = 2406,\n        -- 拉线结束\n        Puzzle4_CatchEnd = 2407,\n        -- 小世界1\n        Puzzle4_Div1 = 2408,\n        -- \n        Puzzle4_Tower1 = 2409,\n        --获得光BUFF\n        Puzzle4_GetBuff = 2410,\n        -- 4次分摊/大圈\n        Puzzle4_ThirdLink = 2411,\n        Puzzle4_Put1 = 2412,\n        Puzzle4_Put2 = 2413,\n        Puzzle4_Put3 = 2414,\n        Puzzle4_PutEnd = 2415,\n        -- 第二次小世界\n        Puzzle4_Tower2 = 2416,\n        -- 塔结束\n        Puzzle4_TowerEnd = 2417,\n        -- 处理远近\n        Puzzle4_TowerFarNear = 2418,\n        -- 第二次小世界小怪观察\n        Puzzle4_div2Subs = 2419,\n        -- 第二次小世界小怪观测\n        Puzzle4_div2SubsEnd = 2420,\n        -- 第二次小世界结束\n        Puzzle4_div2End = 2421,\n        -- 第一复制体爆炸\n        Puzzle4_CopyBoom1 = 2422,\n        -- 第三次小世界结束\n        Puzzle4_div3End = 2423,\n        -- 第二次复制体爆炸\n        Puzzle4_CopyBoom2 = 2424,\n        -- 最终结P\n        PuzzleEnd_Start = 2500,\n    }\n\n    M.M12S.DataEnum = {\n        A1 = 11, A2 = 12, A3 = 13, A4 = 14,\n        B1 = 21, B2 = 22, B3 = 23, B4 = 24,\n        Gp2_01 = 201, Gp2_02 = 202, Gp2_03 = 203, Gp2_04 = 204, Gp2_end = 299,\n        -- 先刷数字点\n        Puzzle4Number = 401,\n        -- 先刷字母点\n        Puzzle4Char = 402,\n        --A点上下刀\n        UpDownSkillA = 403,\n        -- C点上下刀\n        UpDownSkillC = 404,\n        -- 集合\n        Gather = 113,\n        -- 大钢铁\n        Disperse = 112,\n        -- 判定的线\n        LinkFinal = 117,\n        -- 4D3C\n        Left = 1,\n        -- A1B2\n        Right = 2,\n\n        -- 上下\n        UpDown = 3,\n        -- 左右\n        LeftRight = 4,\n    }\n    -- 辅助计时器\n    M.M12S.Timer = 0\n\n    M.M12S.CurrentBoss = nil\n    -- 当前副本阶段\n    M.M12S.CurrentState = M.M12S.StateEnum.Start\n    M.M12S.GP2Info = {\n        -- 场地塔Id\n        ids = {},\n        -- 场地塔信息,索引\n        gTowers = {},\n        gSpawnIdx = 0,\n        -- 玩家塔信息,索引\n        pTowers = {},\n        pSpawnIdx = 0,\n        selfType = 0,\n        pTowerFinish = false,\n        State = M.M12S.DataEnum.Gp2_01\n    }\n    -- 4运 玩家复制体数据\n    M.M12S.P4CopyInfo = {\n        ids = {},\n        entities = {},\n        guidePos,\n        linkPos,\n        -- 刷新类型：字母点/数字点\n        spawnType = nil,\n        gatherPos1,\n        gatherPos2,\n    }\n    -- 4运 被接线BOSS分身、个人需处理数据信息\n    M.M12S.P4CatchLineInfo = {\n        ids = {},\n        entities = {},\n        -- 接线类型, 分摊线/分散线\n        type = nil,\n    }\n    -- 4运 3分身信息\n    M.M12S.P4Sub3Info = {\n        skillType = nil,\n        -- 接线后指路位置\n        GuidePos1 = nil,\n        -- 躲前后左右刀参考站位\n        divGuidePos1 = nil,\n        divGuidePos2 = nil,\n        -- 躲前后左右刀实际站位(小世界)\n        GuidePos2 = nil,\n        -- 躲前后左右刀实际站位(最后)\n        GuidePos3 = nil,\n    }\n    -- 4运 踩塔数据\n    M.M12S.P4TowerData = {}\n\n    M.Info(\"M12S初始化数据完成!\")\nend\n\n-- 根据小队任意成员BUFF情况判断是否切阶段\nM.M12S.Puzzle4_4TimesChange = function(buffId)\n    for i, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, buffId)\n        if debuff ~= nil then\n            return true\n        end\n    end\n    return false\nend\n\nM.M12S.InitM12SData()\nself.used = true\n",
+						actionLua = "local M = MuAiGuide\nM.M12S = {}\n--- M12S初始化\nM.M12S.InitM12SData = function()\n    --- 完成状态，表示当前副本进度已经完成了哪些\n    M.M12S.StateEnum = {\n        Start = 0,\n        GPuzzle2_Start = 1200,\n        -- 场地塔刷新完毕,开始循环\n        GPuzzle2_Looping = 1201,\n        -- 门神2运结束\n        GPuzzle2_End = 1299,\n        -- 进入3运\n        GPuzzle3_Start = 1300,\n        -- 已读取蛇位置\n        GPuzzle3_GotSnake = 1301,\n        -- 门神3运结束\n        GPuzzle3_End = 1399,\n        -- 4运开始\n        Puzzle4_Start = 2400,\n        -- 刷复制体1\n        Puzzle4_Spawn_Copy1 = 2401,\n        -- 刷复制体2\n        Puzzle4_Spawn_Copy2 = 2402,\n        -- 第一次连线\n        Puzzle4_FirstLink = 2403,\n        -- 找到上下刀\n        Puzzle4_GetSKills = 2404,\n        -- 第二次预备\n        Puzzle4_SecondLink = 2405,\n        -- 接线开始\n        Puzzle4_CatchLink = 2406,\n        -- 拉线结束\n        Puzzle4_CatchEnd = 2407,\n        -- 小世界1\n        Puzzle4_Div1 = 2408,\n        -- \n        Puzzle4_Tower1 = 2409,\n        --获得光BUFF\n        Puzzle4_GetBuff = 2410,\n        -- 4次分摊/大圈\n        Puzzle4_ThirdLink = 2411,\n        Puzzle4_Put1 = 2412,\n        Puzzle4_Put2 = 2413,\n        Puzzle4_Put3 = 2414,\n        Puzzle4_PutEnd = 2415,\n        -- 第二次小世界\n        Puzzle4_Tower2 = 2416,\n        -- 塔结束\n        Puzzle4_TowerEnd = 2417,\n        -- 处理远近\n        Puzzle4_TowerFarNear = 2418,\n        -- 第二次小世界小怪观察\n        Puzzle4_div2Subs = 2419,\n        -- 第二次小世界小怪观测\n        Puzzle4_div2SubsEnd = 2420,\n        -- 第二次小世界结束\n        Puzzle4_div2End = 2421,\n        -- 第一复制体爆炸\n        Puzzle4_CopyBoom1 = 2422,\n        -- 第三次小世界结束\n        Puzzle4_div3End = 2423,\n        -- 第二次复制体爆炸\n        Puzzle4_CopyBoom2 = 2424,\n        -- 最终结P\n        PuzzleEnd_Start = 2500,\n    }\n\n    M.M12S.DataEnum = {\n        A1 = 11, A2 = 12, A3 = 13, A4 = 14,\n        B1 = 21, B2 = 22, B3 = 23, B4 = 24,\n        Gp2_01 = 201, Gp2_02 = 202, Gp2_03 = 203, Gp2_04 = 204, Gp2_end = 299,\n        -- 先刷数字点\n        Puzzle4Number = 401,\n        -- 先刷字母点\n        Puzzle4Char = 402,\n        --A点上下刀\n        UpDownSkillA = 403,\n        -- C点上下刀\n        UpDownSkillC = 404,\n        -- 集合\n        Gather = 113,\n        -- 大钢铁\n        Disperse = 112,\n        -- 判定的线\n        LinkFinal = 117,\n        -- 4D3C\n        Left = 1,\n        -- A1B2\n        Right = 2,\n\n        -- 上下\n        UpDown = 3,\n        -- 左右\n        LeftRight = 4,\n    }\n    -- 辅助计时器\n    M.M12S.Timer = 0\n\n    M.M12S.CurrentBoss = nil\n    -- 当前副本阶段\n    M.M12S.CurrentState = M.M12S.StateEnum.Start\n    M.M12S.GP2Info = {\n        -- 场地塔Id\n        ids = {},\n        -- 场地塔信息,索引\n        gTowers = {},\n        gSpawnIdx = 0,\n        -- 玩家塔信息,索引\n        pTowers = {},\n        pSpawnIdx = 0,\n        selfType = 0,\n        pTowerFinish = false,\n        State = M.M12S.DataEnum.Gp2_01\n    }\n    M.M12S.GP3Info = {\n        selfBuff = nil,\n        guidePos = nil, \n    }\n    \n    -- 4运 玩家复制体数据\n    M.M12S.P4CopyInfo = {\n        ids = {},\n        entities = {},\n        guidePos,\n        linkPos,\n        -- 刷新类型：字母点/数字点\n        spawnType = nil,\n        gatherPos1,\n        gatherPos2,\n    }\n    -- 4运 被接线BOSS分身、个人需处理数据信息\n    M.M12S.P4CatchLineInfo = {\n        ids = {},\n        entities = {},\n        -- 接线类型, 分摊线/分散线\n        type = nil,\n    }\n    -- 4运 3分身信息\n    M.M12S.P4Sub3Info = {\n        skillType = nil,\n        -- 接线后指路位置\n        GuidePos1 = nil,\n        -- 躲前后左右刀参考站位\n        divGuidePos1 = nil,\n        divGuidePos2 = nil,\n        -- 躲前后左右刀实际站位(小世界)\n        GuidePos2 = nil,\n        -- 躲前后左右刀实际站位(最后)\n        GuidePos3 = nil,\n    }\n    -- 4运 踩塔数据\n    M.M12S.P4TowerData = {}\n\n    M.Info(\"M12S初始化数据完成!\")\nend\n\n-- 根据小队任意成员BUFF情况判断是否切阶段\nM.M12S.Puzzle4_4TimesChange = function(buffId)\n    for i, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, buffId)\n        if debuff ~= nil then\n            return true\n        end\n    end\n    return false\nend\n\nM.M12S.InitM12SData()\nself.used = true",
 						conditions = 
 						{
 							
@@ -747,6 +698,7 @@ local tbl =
 						uuid = "6fe5e0b6-2218-6544-9b9f-1c54202db3d2",
 						version = 2,
 					},
+					inheritedIndex = 1,
 				},
 			},
 			eventType = 11,
@@ -781,9 +733,65 @@ local tbl =
 								true,
 							},
 						},
+						gVar = "ACR_RikuMNK3_CD",
 						name = "进入2运",
 						uuid = "b40045c5-7ee7-23e9-baf8-f9323c86cef4",
-						version = 2,
+						version = 2.1,
+					},
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.GPuzzle3_Start\nd(\"进入门神3运\")\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
+								true,
+							},
+							
+							{
+								"980d9718-370d-de12-adc6-5bc75490b141",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "进入3运",
+						uuid = "90bbf146-5bad-6e63-ac82-a5b00c656e45",
+						version = 2.1,
+					},
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M12S.GP3Info.SubMonster = TensorCore.mGetEntity(eventArgs.entityID)\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.GPuzzle3_GotSnake\nd(\"读条效果获取完毕\")\nd(MuAiGuide.M12S.GP3Info.SubMonster.pos)\nd(eventArgs.spellID)\nd('--------------------------------------')\nself.used = true\n",
+						conditions = 
+						{
+							
+							{
+								"a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
+								true,
+							},
+							
+							{
+								"28c71d1c-aef6-6454-8619-3a6601879186",
+								true,
+							},
+							
+							{
+								"d1d5aabe-1b01-beeb-8f16-6fc4328870d0",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "破坏场地的蛇数据采集",
+						uuid = "941fa26c-0e97-089e-a2e6-22701a7ebb3b",
+						version = 2.1,
 					},
 				},
 			},
@@ -813,44 +821,67 @@ local tbl =
 						version = 2,
 					},
 				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 48831,
+						name = "48331-细胞附身·晚期",
+						uuid = "980d9718-370d-de12-adc6-5bc75490b141",
+						version = 2,
+					},
+					inheritedIndex = 3,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgOptionType = 3,
+						eventArgType = 2,
+						eventSpellID = 46240,
+						name = "46240 46241-盛大登场",
+						spellIDList = 
+						{
+							46240,
+							46241,
+						},
+						uuid = "28c71d1c-aef6-6454-8619-3a6601879186",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.GP3Info.SubMonster == nil",
+						name = "尚未读取到3运小怪",
+						uuid = "d1d5aabe-1b01-beeb-8f16-6fc4328870d0",
+						version = 2,
+					},
+					inheritedIndex = 5,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState > MuAiGuide.M12S.StateEnum.GPuzzle3_Start\n\t\t\tand MuAiGuide.M12S.CurrentState < MuAiGuide.M12S.StateEnum.GPuzzle3_End",
+						name = "已进入3运",
+						uuid = "dc97e63d-ce22-890f-98f6-149f2aebb647",
+						version = 2,
+					},
+				},
 			},
 			eventType = 3,
 			name = "M12S门神阶段切换[开始读条]",
 			uuid = "ed3702b5-fda0-d2eb-bfce-9dc253883a46",
 			version = 2,
 		},
-		inheritedIndex = 15,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "10a41e61-6525-6b14-91c5-b7bc3c7d7f40",
-						version = 2,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			enabled = false,
-			eventType = 2,
-			name = "M12S门神切换阶段[读条后]",
-			uuid = "4b024502-df43-593f-861e-52e28a341687",
-			version = 2,
-		},
-		inheritedIndex = 16,
+		inheritedIndex = 14,
 	},
 	
 	{
@@ -878,7 +909,7 @@ local tbl =
 							},
 						},
 						uuid = "3beb9fc0-87d2-67b7-8665-6c6ba1676348",
-						version = 2,
+						version = 2.1,
 					},
 				},
 			},
@@ -924,12 +955,108 @@ local tbl =
 			},
 			conditions = 
 			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "10a41e61-6525-6b14-91c5-b7bc3c7d7f40",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			enabled = false,
+			eventType = 2,
+			name = "M12S门神切换阶段[读条后]",
+			uuid = "4b024502-df43-593f-861e-52e28a341687",
+			version = 2,
+		},
+		inheritedIndex = 16,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nif M.M12S.CurrentState == M.M12S.StateEnum.GPuzzle3_GotSnake then\n    if M.M12S.GP3Info.selfBuff == nil then\n        M.M12S.GP3Info.selfBuff = TensorCore.getBuff(M.GetPlayer().id, 3558)\n    end\n    if M.M12S.GP3Info.guidePos == nil then\n        if MuAiGuide.M12S.GP3Info.SubMonster.pos.x < 85 then\n            --左上出现，十字安全\n            if M.M12S.GP3Info.selfBuff.stacks == 1078 then\n                --向上\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 103.5, z = 106.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 96.5, z = 113.5 }\n                end\n            elseif M.M12S.GP3Info.selfBuff.stacks == 1079 then\n                --向右\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 88.5, z = 103.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 81.5, z = 96.5 }\n                end\n            elseif M.M12S.GP3Info.selfBuff.stacks == 1080 then\n                --向下\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 103.5, z = 86.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 96.5, z = 93.5 }\n                end\n            elseif M.M12S.GP3Info.selfBuff.stacks == 1081 then\n                --向左\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 118.5, z = 103.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 111.5, z = 96.5 }\n                end\n            end\n        else\n            if M.M12S.GP3Info.selfBuff.stacks == 1078 then\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 88.5, z = 113.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 81.5, z = 106.5 }\n                end\n                --向上\n            elseif M.M12S.GP3Info.selfBuff.stacks == 1079 then\n                --向右\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 88.5, z = 93.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 81.5, z = 86.5 }\n                end\n            elseif M.M12S.GP3Info.selfBuff.stacks == 1080 then\n                --向下\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 118.5, z = 93.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 111.5, z = 86.5 }\n                end\n            elseif M.M12S.GP3Info.selfBuff.stacks == 1081 then\n                --向左\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 118.5, z = 113.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 111.5, z = 106.5 }\n                end\n            end\n        end\n    end\n    M.FrameDirect(M.M12S.GP3Info.guidePos.x, M.M12S.GP3Info.guidePos.z)\n\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"42135860-fa43-bb22-ba90-ab4d78c0b3bd",
+								true,
+							},
+							
+							{
+								"0b399c82-8d7f-f81a-9292-bd9ec13413e9",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						uuid = "3beb9fc0-87d2-67b7-8665-6c6ba1676348",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "42135860-fa43-bb22-ba90-ab4d78c0b3bd",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState > MuAiGuide.M12S.StateEnum.GPuzzle3_Start\n\t\t\tand MuAiGuide.M12S.CurrentState < MuAiGuide.M12S.StateEnum.GPuzzle3_End",
+						name = "已进入3运",
+						uuid = "0b399c82-8d7f-f81a-9292-bd9ec13413e9",
+						version = 2,
+					},
+				},
+			},
+			eventType = 12,
+			name = "M12S门神3运主循环",
+			uuid = "c88ef753-2fab-19da-b48b-cd0a69a9505c",
+			version = 2,
+		},
+		inheritedIndex = 18,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+			},
+			conditions = 
+			{
 			},
 			name = "-- 本体 --",
 			uuid = "960bb8b2-a094-8d02-93bf-bed17a863848",
 			version = 2,
 		},
-		inheritedIndex = 18,
+		inheritedIndex = 19,
 	},
 	
 	{
@@ -1177,7 +1304,7 @@ local tbl =
 			uuid = "b48d47b0-28c9-0e72-82e7-abf66b902646",
 			version = 2,
 		},
-		inheritedIndex = 15,
+		inheritedIndex = 14,
 	},
 	
 	{
@@ -1385,7 +1512,7 @@ local tbl =
 			uuid = "021a9e74-9ec4-8881-beb5-cb1621c7a609",
 			version = 2,
 		},
-		inheritedIndex = 21,
+		inheritedIndex = 20,
 	},
 	
 	{
@@ -1450,7 +1577,7 @@ local tbl =
 			uuid = "cf3ae25c-c974-dd93-a124-4473c49119b2",
 			version = 2,
 		},
-		inheritedIndex = 20,
+		inheritedIndex = 22,
 	},
 	
 	{
@@ -1499,7 +1626,7 @@ local tbl =
 			uuid = "83898426-1459-2294-b52d-fbafeb6d698e",
 			version = 2,
 		},
-		inheritedIndex = 21,
+		inheritedIndex = 22,
 	}, 
 	inheritedProfiles = 
 	{
