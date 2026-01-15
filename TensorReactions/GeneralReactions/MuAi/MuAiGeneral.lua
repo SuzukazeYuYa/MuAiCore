@@ -14,7 +14,7 @@ local tbl =
 			uuid = "4c04d325-7712-422b-be39-a892f38c3b0d",
 			version = 2,
 		},
-		inheritedIndex = 2,
+		inheritedIndex = 1,
 	},
 	
 	{
@@ -27,19 +27,20 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local target = TensorCore.mGetTarget()\nlocal drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(255 / 255, 255 / 255, 1 / 255, 1), 1)\ndrawer:addCircle(target.pos.x, target.pos.y, target.pos.z, 0.03, true)\nself.used = true",
+						actionLua = "local redDrawer = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 1)),\n        2\n)\nif MuAiGuide.M11SMapType == nil or MuAiGuide.M11SMapType ~= 1 then\n\tredDrawer:addRect(100, 0, 80, 40, 40, 0, true)\t\nelse\n\tredDrawer:addRect(89, 0, 80, 40, 10, 0, true)\n\tredDrawer:addRect(84, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(116, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(111, 0, 80, 40, 10, 0, true)\nend\nself.used = true",
 						conditions = 
 						{
 							
 							{
-								"e882c803-8a68-c906-b70f-afbc3e6d7bf3",
+								"71b6f493-41e3-df25-8619-bbdb57bd01bf",
 								true,
 							},
 						},
-						gVar = "ACR_RikuMNK3_CD",
-						uuid = "659945ac-70c9-be8f-8d1e-d4497eb55c3d",
+						gVar = "ACR_RikuNIN3_CD",
+						uuid = "16ba8e37-2a5d-9b6e-a6a5-3593ba5c9ac4",
 						version = 2.1,
 					},
+					inheritedIndex = 1,
 				},
 			},
 			conditions = 
@@ -48,16 +49,19 @@ local tbl =
 				{
 					data = 
 					{
-						category = "Lua",
-						conditionLua = "local curTarget = TensorCore.mGetTarget() \nreturn curTarget ~= nil \n\t\tand curTarget.attackable\n\t\tand not MuAiGuide.IsTank(TensorCore.mGetPlayer())",
-						uuid = "e882c803-8a68-c906-b70f-afbc3e6d7bf3",
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "71b6f493-41e3-df25-8619-bbdb57bd01bf",
 						version = 2,
 					},
+					inheritedIndex = 1,
 				},
 			},
-			eventType = 12,
-			name = "目标脚下画个黄点",
-			uuid = "f6607c59-fc75-1a2f-b73e-8825dbe3d5b3",
+			eventType = 13,
+			name = "M11S地图边框",
+			uuid = "15ffb251-5885-55b5-adf0-15a00a7fcba5",
 			version = 2,
 		},
 		inheritedIndex = 2,
@@ -150,15 +154,61 @@ local tbl =
 		{
 			actions = 
 			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local target = TensorCore.mGetTarget()\nlocal drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(255 / 255, 255 / 255, 1 / 255, 1), 1)\ndrawer:addCircle(target.pos.x, target.pos.y, target.pos.z, 0.03, true)\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e882c803-8a68-c906-b70f-afbc3e6d7bf3",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						uuid = "659945ac-70c9-be8f-8d1e-d4497eb55c3d",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "local curTarget = TensorCore.mGetTarget() \nreturn curTarget ~= nil \n\t\tand curTarget.attackable\n\t\tand not MuAiGuide.IsTank(TensorCore.mGetPlayer())",
+						uuid = "e882c803-8a68-c906-b70f-afbc3e6d7bf3",
+						version = 2,
+					},
+				},
+			},
+			eventType = 12,
+			name = "目标脚下画个黄点",
+			uuid = "f6607c59-fc75-1a2f-b73e-8825dbe3d5b3",
+			version = 2,
+		},
+		inheritedIndex = 4,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
 			},
 			conditions = 
 			{
 			},
-			name = "------ m11s ------",
+			name = "-------- m11s --------",
 			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
 			version = 2,
 		},
-		inheritedIndex = 4,
+		inheritedIndex = 5,
 	},
 	
 	{
@@ -298,56 +348,6 @@ local tbl =
 			eventType = 2,
 			name = "M11S阶段切换",
 			uuid = "e260ac90-04cd-d071-866c-f30f070327c0",
-			version = 2,
-		},
-		inheritedIndex = 5,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local redDrawer = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 1)),\n        2\n)\nif MuAiGuide.M11SMapType == nil or MuAiGuide.M11SMapType ~= 1 then\n\tredDrawer:addRect(100, 0, 80, 40, 40, 0, true)\t\nelse\n\tredDrawer:addRect(89, 0, 80, 40, 10, 0, true)\n\tredDrawer:addRect(84, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(116, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(111, 0, 80, 40, 10, 0, true)\nend\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"71b6f493-41e3-df25-8619-bbdb57bd01bf",
-								true,
-							},
-						},
-						gVar = "ACR_RikuNIN3_CD",
-						uuid = "16ba8e37-2a5d-9b6e-a6a5-3593ba5c9ac4",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "71b6f493-41e3-df25-8619-bbdb57bd01bf",
-						version = 2,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			eventType = 13,
-			name = "M11S地图边框",
-			uuid = "15ffb251-5885-55b5-adf0-15a00a7fcba5",
 			version = 2,
 		},
 		inheritedIndex = 6,
@@ -628,7 +628,7 @@ local tbl =
 			uuid = "ec7a18f7-e151-2d88-bcb4-096ef1d74273",
 			version = 2,
 		},
-		inheritedIndex = 14,
+		inheritedIndex = 15,
 	},
 	
 	{
@@ -640,7 +640,7 @@ local tbl =
 			conditions = 
 			{
 			},
-			name = "------ m12s ------",
+			name = "-------- m12s --------",
 			uuid = "d59f33fd-dc8f-4ea2-84c5-a200263ed342",
 			version = 2,
 		},
@@ -657,7 +657,69 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nM.M12S = {}\n--- M12S初始化\nM.M12S.InitM12SData = function()\n    --- 完成状态，表示当前副本进度已经完成了哪些\n    M.M12S.StateEnum = {\n        Start = 0,\n        -- 4运开始\n        Puzzle4_Start = 400,\n        -- 刷复制体1\n        Puzzle4_Spawn_Copy1 = 401,\n        -- 刷复制体2\n        Puzzle4_Spawn_Copy2 = 402,\n        -- 第一次连线\n        Puzzle4_FirstLink = 403,\n        -- 找到上下刀\n        Puzzle4_GetSKills = 404,\n        -- 第二次预备\n        Puzzle4_SecondLink = 405,\n        -- 接线开始\n        Puzzle4_CatchLink = 406,\n        -- 拉线结束\n        Puzzle4_CatchEnd = 407,\n        -- 小世界1\n        Puzzle4_Div1 = 408,\n        -- \n        Puzzle4_Tower1 = 409,\n        --获得光BUFF\n        Puzzle4_GetBuff = 410,\n        -- 4次分摊/大圈\n        Puzzle4_ThirdLink = 411,\n        Puzzle4_Put1 = 412,\n        Puzzle4_Put2 = 413,\n        Puzzle4_Put3 = 414,\n        Puzzle4_PutEnd = 415,\n        -- 第二次小世界\n        Puzzle4_Tower2 = 416,\n        -- 塔结束\n        Puzzle4_TowerEnd = 417,\n        -- 处理远近\n        Puzzle4_TowerFarNear = 418,\n        -- 第二次小世界小怪观察\n        Puzzle4_div2Subs = 419,\n        -- 第二次小世界小怪观测\n        Puzzle4_div2SubsEnd = 420,\n        -- 第二次小世界结束\n        Puzzle4_div2End = 421,\n        -- 第一复制体爆炸\n        Puzzle4_CopyBoom1 = 422,\n        -- 第三次小世界开始\n        Puzzle4_div3Open = 423,\n        -- 第三次小世界结束\n        Puzzle4_div3End = 424,\n        -- 第二次复制体爆炸\n        Puzzle4_CopyBoom2 = 425,\n        -- 最终结P\n        PuzzleEnd_Start = 500,\n    }\n\n    M.M12S.DataEnum = {\n        -- 先刷数字点\n        Puzzle4Number = 401,\n        -- 先刷字母点\n        Puzzle4Char = 402,\n        --A点上下刀\n        UpDownSkillA = 403,\n        -- C点上下刀\n        UpDownSkillC = 404,\n        -- 集合\n        Gather = 113,\n        -- 大钢铁\n        Disperse = 112,\n        -- 判定的线\n        LinkFinal = 117,\n        -- 4D3C\n        Left = 1,\n        -- A1B2\n        Right = 2,\n        \n        -- 上下\n        UpDown = 3,\n        -- 左右\n        LeftRight = 4,\n    }\n    -- 辅助计时器\n    M.M12S.Timer = 0\n    -- 当前副本阶段\n    M.M12S.CurrentState = M.M12S.StateEnum.Start\n    \n    -- 4运 玩家复制体数据\n    M.M12S.P4CopyInfo = {\n        ids = {},\n        entities = {},\n        guidePos,\n        linkPos,\n        -- 刷新类型：字母点/数字点\n        spawnType = nil,\n        gatherPos1,\n        gatherPos2,\n    }\n    -- 4运 被接线BOSS分身、个人需处理数据信息\n    M.M12S.P4CatchLineInfo = {\n        ids = {},\n        entities = {},\n        -- 接线类型, 分摊线/分散线\n        type = nil,\n    }\n    -- 4运 3分身信息\n    M.M12S.P4Sub3Info = {\n        skillType = nil,\n        -- 接线后指路位置\n        GuidePos1 = nil,\n        -- 躲前后左右刀参考站位\n        divGuidePos1 = nil,\n        divGuidePos2 = nil,\n        -- 躲前后左右刀实际站位(小世界)\n        GuidePos2 = nil,\n        -- 躲前后左右刀实际站位(最后)\n        GuidePos3 = nil,\n    }\n    -- 4运 踩塔数据\n    M.M12S.P4TowerData = {}\n\n    M.Info(\"M12S初始化数据完成!\")\nend\n\n-- 根据小队任意成员BUFF情况判断是否切阶段\nM.M12S.Puzzle4_4TimesChange = function(buffId)\n    for i, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, buffId)\n        if debuff ~= nil then\n            return true\n        end\n    end\n    return false\nend\n\nM.M12S.InitM12SData()\nself.used = true\n\n\n\n",
+						actionLua = "MuAiGuide.M12S.CurrentBoss = TensorCore.mGetTarget()\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"af059daa-90a8-74b4-9550-caf534e00639",
+								true,
+							},
+							
+							{
+								"4851d130-4a01-de13-b3fc-e5bf6e579bc7",
+								true,
+							},
+						},
+						uuid = "0df32b43-05f8-e8a9-a31d-6b54cbaa72f1",
+						version = 2,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "af059daa-90a8-74b4-9550-caf534e00639",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "local target = TensorCore.mGetTarget()\nreturn target ~= nil\n\tand target.attackable\n\tand (MuAiGuide.M12S.CurrentBoss == nil or MuAiGuide.M12S.CurrentBoss.id ~= target.id)",
+						conditionType = 5,
+						uuid = "4851d130-4a01-de13-b3fc-e5bf6e579bc7",
+						version = 2,
+					},
+				},
+			},
+			name = "M12S-GetBoss",
+			uuid = "52909867-07a0-dd48-a645-bcbc9d9e4be2",
+			version = 2,
+		},
+		inheritedIndex = 13,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nM.M12S = {}\n--- M12S初始化\nM.M12S.InitM12SData = function()\n    --- 完成状态，表示当前副本进度已经完成了哪些\n    M.M12S.StateEnum = {\n        Start = 0,\n        GPuzzle2_Start = 1200,\n        -- 场地塔刷新完毕,开始循环\n        GPuzzle2_Looping = 1201,\n        -- 门神2运结束\n        GPuzzle2_End = 1299,\n        -- 4运开始\n        Puzzle4_Start = 2400,\n        -- 刷复制体1\n        Puzzle4_Spawn_Copy1 = 2401,\n        -- 刷复制体2\n        Puzzle4_Spawn_Copy2 = 2402,\n        -- 第一次连线\n        Puzzle4_FirstLink = 2403,\n        -- 找到上下刀\n        Puzzle4_GetSKills = 2404,\n        -- 第二次预备\n        Puzzle4_SecondLink = 2405,\n        -- 接线开始\n        Puzzle4_CatchLink = 2406,\n        -- 拉线结束\n        Puzzle4_CatchEnd = 2407,\n        -- 小世界1\n        Puzzle4_Div1 = 2408,\n        -- \n        Puzzle4_Tower1 = 2409,\n        --获得光BUFF\n        Puzzle4_GetBuff = 2410,\n        -- 4次分摊/大圈\n        Puzzle4_ThirdLink = 2411,\n        Puzzle4_Put1 = 2412,\n        Puzzle4_Put2 = 2413,\n        Puzzle4_Put3 = 2414,\n        Puzzle4_PutEnd = 2415,\n        -- 第二次小世界\n        Puzzle4_Tower2 = 2416,\n        -- 塔结束\n        Puzzle4_TowerEnd = 2417,\n        -- 处理远近\n        Puzzle4_TowerFarNear = 2418,\n        -- 第二次小世界小怪观察\n        Puzzle4_div2Subs = 2419,\n        -- 第二次小世界小怪观测\n        Puzzle4_div2SubsEnd = 2420,\n        -- 第二次小世界结束\n        Puzzle4_div2End = 2421,\n        -- 第一复制体爆炸\n        Puzzle4_CopyBoom1 = 2422,\n        -- 第三次小世界结束\n        Puzzle4_div3End = 2423,\n        -- 第二次复制体爆炸\n        Puzzle4_CopyBoom2 = 2424,\n        -- 最终结P\n        PuzzleEnd_Start = 2500,\n    }\n\n    M.M12S.DataEnum = {\n        A1 = 11, A2 = 12, A3 = 13, A4 = 14,\n        B1 = 21, B2 = 22, B3 = 23, B4 = 24,\n        Gp2_01 = 201, Gp2_02 = 202, Gp2_03 = 203, Gp2_04 = 204, Gp2_end = 299,\n        -- 先刷数字点\n        Puzzle4Number = 401,\n        -- 先刷字母点\n        Puzzle4Char = 402,\n        --A点上下刀\n        UpDownSkillA = 403,\n        -- C点上下刀\n        UpDownSkillC = 404,\n        -- 集合\n        Gather = 113,\n        -- 大钢铁\n        Disperse = 112,\n        -- 判定的线\n        LinkFinal = 117,\n        -- 4D3C\n        Left = 1,\n        -- A1B2\n        Right = 2,\n\n        -- 上下\n        UpDown = 3,\n        -- 左右\n        LeftRight = 4,\n    }\n    -- 辅助计时器\n    M.M12S.Timer = 0\n\n    M.M12S.CurrentBoss = nil\n    -- 当前副本阶段\n    M.M12S.CurrentState = M.M12S.StateEnum.Start\n    M.M12S.GP2Info = {\n        -- 场地塔Id\n        ids = {},\n        -- 场地塔信息,索引\n        gTowers = {},\n        gSpawnIdx = 0,\n        -- 玩家塔信息,索引\n        pTowers = {},\n        pSpawnIdx = 0,\n        selfType = 0,\n        pTowerFinish = false,\n        State = M.M12S.DataEnum.Gp2_01\n    }\n    -- 4运 玩家复制体数据\n    M.M12S.P4CopyInfo = {\n        ids = {},\n        entities = {},\n        guidePos,\n        linkPos,\n        -- 刷新类型：字母点/数字点\n        spawnType = nil,\n        gatherPos1,\n        gatherPos2,\n    }\n    -- 4运 被接线BOSS分身、个人需处理数据信息\n    M.M12S.P4CatchLineInfo = {\n        ids = {},\n        entities = {},\n        -- 接线类型, 分摊线/分散线\n        type = nil,\n    }\n    -- 4运 3分身信息\n    M.M12S.P4Sub3Info = {\n        skillType = nil,\n        -- 接线后指路位置\n        GuidePos1 = nil,\n        -- 躲前后左右刀参考站位\n        divGuidePos1 = nil,\n        divGuidePos2 = nil,\n        -- 躲前后左右刀实际站位(小世界)\n        GuidePos2 = nil,\n        -- 躲前后左右刀实际站位(最后)\n        GuidePos3 = nil,\n    }\n    -- 4运 踩塔数据\n    M.M12S.P4TowerData = {}\n\n    M.Info(\"M12S初始化数据完成!\")\nend\n\n-- 根据小队任意成员BUFF情况判断是否切阶段\nM.M12S.Puzzle4_4TimesChange = function(buffId)\n    for i, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, buffId)\n        if debuff ~= nil then\n            return true\n        end\n    end\n    return false\nend\n\nM.M12S.InitM12SData()\nself.used = true\n",
 						conditions = 
 						{
 							
@@ -692,7 +754,182 @@ local tbl =
 			uuid = "01c21e3b-f835-8520-b7fa-247cf2d8b76b",
 			version = 2,
 		},
-		inheritedIndex = 13,
+		inheritedIndex = 14,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.GPuzzle2_Start\nd(\"进入门神2运\")\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
+								true,
+							},
+							
+							{
+								"1644ed74-d65c-273e-bc55-ba3cff92c5f2",
+								true,
+							},
+						},
+						name = "进入2运",
+						uuid = "b40045c5-7ee7-23e9-baf8-f9323c86cef4",
+						version = 2,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 48830,
+						name = "48330-细胞附身·中期",
+						uuid = "1644ed74-d65c-273e-bc55-ba3cff92c5f2",
+						version = 2,
+					},
+				},
+			},
+			eventType = 3,
+			name = "M12S门神阶段切换[开始读条]",
+			uuid = "ed3702b5-fda0-d2eb-bfce-9dc253883a46",
+			version = 2,
+		},
+		inheritedIndex = 15,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "10a41e61-6525-6b14-91c5-b7bc3c7d7f40",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			enabled = false,
+			eventType = 2,
+			name = "M12S门神切换阶段[读条后]",
+			uuid = "4b024502-df43-593f-861e-52e28a341687",
+			version = 2,
+		},
+		inheritedIndex = 16,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\n\nif data.debug2test == nil or data.debug2test ~= M.M12S.GP2Info.State then\n    d(\"M.M12S.GP2Info.State=\" .. tostring(M.M12S.GP2Info.State))\n    data.debug2test = M.M12S.GP2Info.State\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.GPuzzle2_Start then\n    M.FrameDirect(100, 100)\n    if table.size(M.M12S.GP2Info.ids) < 4 then\n        for _, ent in pairs(TensorCore.entityList(\"contentid=14381\")) do\n            if ent.action == 9352 then\n                if not table.contains(M.M12S.GP2Info.ids, ent.id) then\n                    table.insert(M.M12S.GP2Info.ids, ent.id)\n                    M.M12S.GP2Info.gSpawnIdx = M.M12S.GP2Info.gSpawnIdx + 1\n                    M.M12S.GP2Info.gTowers[M.M12S.GP2Info.gSpawnIdx] = ent\n                end\n            end\n        end\n        if table.size(M.M12S.GP2Info.ids) == 4 then\n            -- 读取BUFF信息，进入循环监视\n            M.M12S.CurrentState = M.M12S.StateEnum.GPuzzle2_Looping\n            if TensorCore.getBuff(M.GetPlayer().id, 4752) then\n                if TensorCore.getBuff(M.GetPlayer().id, 3004) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.A1\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3005) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.A2\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3006) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.A3\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3451) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.A4\n                end\n            elseif TensorCore.getBuff(M.GetPlayer().id, 4754) then\n                if TensorCore.getBuff(M.GetPlayer().id, 3004) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.B1\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3005) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.B2\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3006) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.B3\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3451) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.B4\n                end\n            end\n            d(\"M.M12S.GP2Info.selfType =\" .. tostring(M.M12S.GP2Info.selfType))\n        end\n    end\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.GPuzzle2_Looping then\n    if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_end then\n        M.M12S.CurrentState = M.M12S.StateEnum.GPuzzle2_End\n    else\n        if (not M.M12S.GP2Info.pTowerFinish) and table.size(M.M12S.GP2Info.ids) < 8 then\n            for _, ent in pairs(TensorCore.entityList(\"contentid=14381\")) do\n                if ent.action == 9352 then\n                    if not table.contains(M.M12S.GP2Info.ids, ent.id) then\n                        table.insert(M.M12S.GP2Info.ids, ent.id)\n                        M.M12S.GP2Info.pSpawnIdx = M.M12S.GP2Info.pSpawnIdx + 1\n                        M.M12S.GP2Info.pTowers[M.M12S.GP2Info.pSpawnIdx] = ent\n                    end\n                end\n            end\n            if table.size(M.M12S.GP2Info.ids) == 8 then\n                M.M12S.GP2Info.pTowerFinish = true\n            end\n        end\n\n        if M.M12S.GP2Info.selfType == M.M12S.DataEnum.A1\n                or M.M12S.GP2Info.selfType == M.M12S.DataEnum.A2 then\n            if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_01 then\n                local alpha = TensorCore.getBuff(M.GetPlayer().id, 4752)\n                if alpha == nil or alpha.duration <= 0 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_02\n                else\n                    --等待\n                    M.FrameDirect(100, 100)\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_02 then\n                --拉线\n                if TensorCore.getBuff(M.GetPlayer().id, 2941) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_03\n                else\n                    local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                    if boss ~= nil then\n                        local pos = TensorCore.getPosInDirection(boss.pos, boss.pos.h, 14.5)\n                        M.FrameDirect(pos.x, pos.z)\n                    end\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_03 then\n                --踩塔\n                if TensorCore.getBuff(M.GetPlayer().id, 3935) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                else\n                    local tower\n                    if M.M12S.GP2Info.selfType == M.M12S.DataEnum.A1 then\n                        tower = M.M12S.GP2Info.gTowers[3]\n                    else\n                        tower = M.M12S.GP2Info.gTowers[4]\n                    end\n                    M.FrameDirect(tower.pos.x, tower.pos.z)\n                end\n            end\n        elseif M.M12S.GP2Info.selfType == M.M12S.DataEnum.A3\n                or M.M12S.GP2Info.selfType == M.M12S.DataEnum.A4 then\n            if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_01 then\n                --踩塔\n                if TensorCore.getBuff(M.GetPlayer().id, 3935) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_02\n                else\n                    local tower\n                    if M.M12S.GP2Info.selfType == M.M12S.DataEnum.A3 then\n                        tower = M.M12S.GP2Info.gTowers[1]\n                    else\n                        tower = M.M12S.GP2Info.gTowers[2]\n                    end\n                    M.FrameDirect(tower.pos.x, tower.pos.z)\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_02 then\n                --回中\n                local alpha = TensorCore.getBuff(M.GetPlayer().id, 4752)\n                if alpha == nil or alpha.duration <= 0 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_03\n                else\n                    M.FrameDirect(100, 100)\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_03 then\n                if TensorCore.getBuff(M.GetPlayer().id, 2941) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                else\n                    local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                    if boss ~= nil then\n                        local pos = TensorCore.getPosInDirection(boss.pos, boss.pos.h, 14.5)\n                        M.FrameDirect(pos.x, pos.z)\n                    end\n                end\n            end\n\n        elseif M.M12S.GP2Info.selfType == M.M12S.DataEnum.B1\n                or M.M12S.GP2Info.selfType == M.M12S.DataEnum.B2 then\n            if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_01 then\n                local beta = TensorCore.getBuff(M.GetPlayer().id, 4754)\n                if beta == nil or beta.duration <= 0 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_02\n                else\n                    M.FrameDirect(100, 100)\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_02 then\n                if TensorCore.getBuff(M.GetPlayer().id, 2941) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_03\n                else\n                    local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                    if boss ~= nil then\n                        local pos = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi, 9)\n                        M.FrameDirect(pos.x, pos.z)\n                    end\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_03 then\n                if TensorCore.getBuff(M.GetPlayer().id, 3935) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_04\n                else\n                    local tower\n                    if M.M12S.GP2Info.selfType == M.M12S.DataEnum.B1 then\n                        tower = M.M12S.GP2Info.pTowers[3]\n                    else\n                        tower = M.M12S.GP2Info.pTowers[4]\n                    end\n                    if tower ~= nil then\n                        M.FrameDirect(tower.pos.x, tower.pos.z)\n                    else\n                        M.FrameDirect(100, 100)\n                    end\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_04 then\n                local buff = TensorCore.getBuff(M.GetPlayer().id, 3935)\n                if buff ~= nil and buff.duration > 0 then\n                    if M.M12S.GP2Info.guidePosIn == nil then\n                        local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                        M.M12S.GP2Info.guidePosIn = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi / 2, 8)\n                        M.M12S.GP2Info.guidePosOut = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi / 2, 14.5)\n                    end\n                    if buff.duration > 22 then\n                        M.FrameDirect(M.M12S.GP2Info.guidePosIn.x, M.M12S.GP2Info.guidePosIn.z)\n                    elseif buff.duration > 17 then\n                        M.FrameDirect(M.M12S.GP2Info.guidePosOut.x, M.M12S.GP2Info.guidePosOut.z)\n                    else\n                        M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                    end\n                end\n            end\n        elseif M.M12S.GP2Info.selfType == M.M12S.DataEnum.B3\n                or M.M12S.GP2Info.selfType == M.M12S.DataEnum.B4 then\n            if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_01 then\n                local buff = TensorCore.getBuff(M.GetPlayer().id, 3935) --出毒抗\n                if buff ~= nil and buff.duration > 0 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_02\n                else\n                    local tower\n                    if M.M12S.GP2Info.selfType == M.M12S.DataEnum.B3 then\n                        tower = M.M12S.GP2Info.pTowers[1]\n                    else\n                        tower = M.M12S.GP2Info.pTowers[2]\n                    end\n                    if tower ~= nil then\n                        M.FrameDirect(tower.pos.x, tower.pos.z)\n                    else\n                        M.FrameDirect(100, 100)\n                    end\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_02 then\n                local beta = TensorCore.getBuff(M.GetPlayer().id, 4754)\n                if beta == nil or beta.duration <= 0 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_03\n                else\n                    M.FrameDirect(100, 100)\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_03 then\n                if TensorCore.getBuff(M.GetPlayer().id, 2941) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_04\n                else\n                    local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                    if boss ~= nil then\n                        local pos = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi, 9)\n                        M.FrameDirect(pos.x, pos.z)\n                    end\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_04 then\n                local buff = TensorCore.getBuff(M.GetPlayer().id, 2941)\n                if buff and buff.duration > 0 then\n                    if M.M12S.GP2Info.selfType == M.M12S.DataEnum.B3 then\n                        if buff.duration < 6.5 and buff.duration > 5 then\n                            if M.M12S.GP2Info.guidePosIn == nil then\n                                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                                M.M12S.GP2Info.guidePosIn = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi / 2, 8)\n                                M.M12S.GP2Info.guidePosOut = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi / 2, 14.5)\n                            end\n                        end\n                        if buff.duration > 4.5 then\n                            M.FrameDirect(100, 100)\n                        elseif buff.duration > 1 then\n                            M.FrameDirect(M.M12S.GP2Info.guidePosIn.x, M.M12S.GP2Info.guidePosIn.z)\n                        else\n                            local buff3935 = TensorCore.getBuff(M.GetPlayer().id, 3935)\n                            if buff3935 == nil or buff3935.duration < 8 then\n                                M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                            else\n                                M.FrameDirect(M.M12S.GP2Info.guidePosOut.x, M.M12S.GP2Info.guidePosOut.z)\n                            end\n                        end\n                    elseif M.M12S.GP2Info.selfType == M.M12S.DataEnum.B4 then\n                        if buff.duration < 6.5 then\n                            if M.M12S.GP2Info.guidePosOut == nil then\n                                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                                M.M12S.GP2Info.guidePosOut = TensorCore.getPosInDirection(boss.pos, boss.pos.h, 14.5)\n                            end\n                            M.FrameDirect(M.M12S.GP2Info.guidePosOut.x, M.M12S.GP2Info.guidePosOut.z)\n                        elseif buff == nil or buff.duration < 0.1 then\n                            M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                        end\n                    end\n                end\n            end\n        end\n    end\nend\n\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"42135860-fa43-bb22-ba90-ab4d78c0b3bd",
+								true,
+							},
+							
+							{
+								"53868273-c873-a826-a0c3-a3e1586e62d9",
+								true,
+							},
+						},
+						uuid = "3beb9fc0-87d2-67b7-8665-6c6ba1676348",
+						version = 2,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "42135860-fa43-bb22-ba90-ab4d78c0b3bd",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState >= MuAiGuide.M12S.StateEnum.GPuzzle2_Start\n\t\tand MuAiGuide.M12S.CurrentState < MuAiGuide.M12S.StateEnum.GPuzzle2_End",
+						name = "门神2运",
+						uuid = "53868273-c873-a826-a0c3-a3e1586e62d9",
+						version = 2,
+					},
+				},
+			},
+			eventType = 12,
+			name = "M12S门神2运主循环",
+			uuid = "79562d51-d887-4795-96b7-ca10cab1b0e9",
+			version = 2,
+		},
+		inheritedIndex = 17,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+			},
+			conditions = 
+			{
+			},
+			name = "-- 本体 --",
+			uuid = "960bb8b2-a094-8d02-93bf-bed17a863848",
+			version = 2,
+		},
+		inheritedIndex = 18,
 	},
 	
 	{
@@ -936,11 +1173,11 @@ local tbl =
 				},
 			},
 			eventType = 3,
-			name = "M12S阶段切换[开始读条]",
+			name = "M12S本体阶段切换[开始读条]",
 			uuid = "b48d47b0-28c9-0e72-82e7-abf66b902646",
 			version = 2,
 		},
-		inheritedIndex = 14,
+		inheritedIndex = 15,
 	},
 	
 	{
@@ -1144,11 +1381,11 @@ local tbl =
 				},
 			},
 			eventType = 2,
-			name = "M12S切换阶段[读条后]",
+			name = "M12S本体切换阶段[读条后]",
 			uuid = "021a9e74-9ec4-8881-beb5-cb1621c7a609",
 			version = 2,
 		},
-		inheritedIndex = 17,
+		inheritedIndex = 21,
 	},
 	
 	{
@@ -1209,11 +1446,11 @@ local tbl =
 				},
 			},
 			eventType = 12,
-			name = "M12S四运主循环",
+			name = "M12S本体4运主循环",
 			uuid = "cf3ae25c-c974-dd93-a124-4473c49119b2",
 			version = 2,
 		},
-		inheritedIndex = 16,
+		inheritedIndex = 20,
 	},
 	
 	{
@@ -1262,7 +1499,7 @@ local tbl =
 			uuid = "83898426-1459-2294-b52d-fbafeb6d698e",
 			version = 2,
 		},
-		inheritedIndex = 17,
+		inheritedIndex = 21,
 	}, 
 	inheritedProfiles = 
 	{
