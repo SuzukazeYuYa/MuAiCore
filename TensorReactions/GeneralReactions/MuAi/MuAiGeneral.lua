@@ -6,6 +6,22 @@ local tbl =
 		{
 			actions = 
 			{
+			},
+			conditions = 
+			{
+			},
+			name = "--------------------- MuAiDraw ---------------------------",
+			uuid = "4c04d325-7712-422b-be39-a892f38c3b0d",
+			version = 2,
+		},
+		inheritedIndex = 1,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
 				
 				{
 					data = 
@@ -46,22 +62,6 @@ local tbl =
 			eventType = 13,
 			name = "M11S地图边框",
 			uuid = "15ffb251-5885-55b5-adf0-15a00a7fcba5",
-			version = 2,
-		},
-		inheritedIndex = 1,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-			},
-			conditions = 
-			{
-			},
-			name = "--------------------- MuAiDraw ---------------------------",
-			uuid = "4c04d325-7712-422b-be39-a892f38c3b0d",
 			version = 2,
 		},
 		inheritedIndex = 2,
@@ -988,7 +988,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nif M.M12S.CurrentState == M.M12S.StateEnum.GPuzzle3_GotSnake then\n    if M.M12S.GP3Info.selfBuff == nil then\n        M.M12S.GP3Info.selfBuff = TensorCore.getBuff(M.GetPlayer().id, 3558)\n    end\n    if M.M12S.GP3Info.guidePos == nil then\n        if MuAiGuide.M12S.GP3Info.SubMonster.pos.x < 85 then\n            --左上出现，十字安全\n            if M.M12S.GP3Info.selfBuff.stacks == 1078 then\n                --向上\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 103.5, z = 106.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 96.5, z = 113.5 }\n                end\n            elseif M.M12S.GP3Info.selfBuff.stacks == 1079 then\n                --向右\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 88.5, z = 103.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 81.5, z = 96.5 }\n                end\n            elseif M.M12S.GP3Info.selfBuff.stacks == 1080 then\n                --向下\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 103.5, z = 86.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 96.5, z = 93.5 }\n                end\n            elseif M.M12S.GP3Info.selfBuff.stacks == 1081 then\n                --向左\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 118.5, z = 103.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 111.5, z = 96.5 }\n                end\n            end\n        else\n            if M.M12S.GP3Info.selfBuff.stacks == 1078 then\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 88.5, z = 113.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 81.5, z = 106.5 }\n                end\n                --向上\n            elseif M.M12S.GP3Info.selfBuff.stacks == 1079 then\n                --向右\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 88.5, z = 93.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 81.5, z = 86.5 }\n                end\n            elseif M.M12S.GP3Info.selfBuff.stacks == 1080 then\n                --向下\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 118.5, z = 93.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 111.5, z = 86.5 }\n                end\n            elseif M.M12S.GP3Info.selfBuff.stacks == 1081 then\n                --向左\n                if M.IsDps(M.GetPlayer().job) then\n                    M.M12S.GP3Info.guidePos = { x = 118.5, z = 113.5 }\n                else\n                    M.M12S.GP3Info.guidePos = { x = 111.5, z = 106.5 }\n                end\n            end\n        end\n    end\n    M.FrameDirect(M.M12S.GP3Info.guidePos.x, M.M12S.GP3Info.guidePos.z)\n\nend\nself.used = true",
+						actionLua = "local M = MuAiGuide\nif M.M12S.CurrentState == M.M12S.StateEnum.GPuzzle3_GotSnake then\n    local buff3935 = TensorCore.getBuff(M.GetPlayer().id, 3935)\n    if buff3935 ~= nil then\n        M.M12S.CurrentState = M.M12S.StateEnum.GPuzzle3_End\n    else\n        if M.M12S.GP3Info.selfBuff == nil then\n            M.M12S.GP3Info.selfBuff = TensorCore.getBuff(M.GetPlayer().id, 3558)\n        end\n        if M.M12S.GP3Info.guidePos == nil then\n            if MuAiGuide.M12S.GP3Info.SubMonster.pos.x < 85 then\n                --左上出现，十字安全\n                if M.M12S.GP3Info.selfBuff.stacks == 1078 then\n                    --向上\n                    if M.IsDps(M.GetPlayer().job) then\n                        M.M12S.GP3Info.guidePos = { x = 103.5, z = 106.5 }\n                    else\n                        M.M12S.GP3Info.guidePos = { x = 96.5, z = 113.5 }\n                    end\n                elseif M.M12S.GP3Info.selfBuff.stacks == 1079 then\n                    --向右\n                    if M.IsDps(M.GetPlayer().job) then\n                        M.M12S.GP3Info.guidePos = { x = 88.5, z = 103.5 }\n                    else\n                        M.M12S.GP3Info.guidePos = { x = 81.5, z = 96.5 }\n                    end\n                elseif M.M12S.GP3Info.selfBuff.stacks == 1080 then\n                    --向下\n                    if M.IsDps(M.GetPlayer().job) then\n                        M.M12S.GP3Info.guidePos = { x = 103.5, z = 86.5 }\n                    else\n                        M.M12S.GP3Info.guidePos = { x = 96.5, z = 93.5 }\n                    end\n                elseif M.M12S.GP3Info.selfBuff.stacks == 1081 then\n                    --向左\n                    if M.IsDps(M.GetPlayer().job) then\n                        M.M12S.GP3Info.guidePos = { x = 118.5, z = 103.5 }\n                    else\n                        M.M12S.GP3Info.guidePos = { x = 111.5, z = 96.5 }\n                    end\n                end\n            else\n                if M.M12S.GP3Info.selfBuff.stacks == 1078 then\n                    if M.IsDps(M.GetPlayer().job) then\n                        M.M12S.GP3Info.guidePos = { x = 88.5, z = 113.5 }\n                    else\n                        M.M12S.GP3Info.guidePos = { x = 81.5, z = 106.5 }\n                    end\n                    --向上\n                elseif M.M12S.GP3Info.selfBuff.stacks == 1079 then\n                    --向右\n                    if M.IsDps(M.GetPlayer().job) then\n                        M.M12S.GP3Info.guidePos = { x = 88.5, z = 93.5 }\n                    else\n                        M.M12S.GP3Info.guidePos = { x = 81.5, z = 86.5 }\n                    end\n                elseif M.M12S.GP3Info.selfBuff.stacks == 1080 then\n                    --向下\n                    if M.IsDps(M.GetPlayer().job) then\n                        M.M12S.GP3Info.guidePos = { x = 118.5, z = 93.5 }\n                    else\n                        M.M12S.GP3Info.guidePos = { x = 111.5, z = 86.5 }\n                    end\n                elseif M.M12S.GP3Info.selfBuff.stacks == 1081 then\n                    --向左\n                    if M.IsDps(M.GetPlayer().job) then\n                        M.M12S.GP3Info.guidePos = { x = 118.5, z = 113.5 }\n                    else\n                        M.M12S.GP3Info.guidePos = { x = 111.5, z = 106.5 }\n                    end\n                end\n            end\n        end\n        M.FrameDirect(M.M12S.GP3Info.guidePos.x, M.M12S.GP3Info.guidePos.z)\n    end\nend\nself.used = true",
 						conditions = 
 						{
 							
@@ -1054,6 +1054,76 @@ local tbl =
 			},
 			name = "-- 本体 --",
 			uuid = "960bb8b2-a094-8d02-93bf-bed17a863848",
+			version = 2,
+		},
+		inheritedIndex = 20,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local drawer, pos\nif eventArgs.spellID == 46301 then\n    --火读条\n    drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0.2), 1)\n    pos = TensorCore.mGetEntity(eventArgs.entityID).pos\nelseif eventArgs.spellID == 46303 then\n    --暗读条\n    drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 255 / 255, 0.2), 1)\n    pos = TensorCore.mGetEntity(eventArgs.entityID).pos\nend\nif drawer ~= nil then\n    drawer:addTimedCircle(3000, pos.x, 0, pos.z, 2, 0, true)\nend\nself.used = true\n",
+						conditions = 
+						{
+							
+							{
+								"5f1a198f-2aad-2829-a667-3542181eb2b4",
+								true,
+							},
+							
+							{
+								"6da42a21-cb5c-9030-98e2-a3c7c88ea860",
+								true,
+							},
+						},
+						uuid = "166ea82c-7e88-fb84-9415-b9df22d34e19",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "5f1a198f-2aad-2829-a667-3542181eb2b4",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgOptionType = 3,
+						eventArgType = 2,
+						eventEntityID = 46301,
+						eventSpellID = 46301,
+						spellIDList = 
+						{
+							46301,
+							46303,
+						},
+						uuid = "6da42a21-cb5c-9030-98e2-a3c7c88ea860",
+						version = 2,
+					},
+				},
+			},
+			eventType = 3,
+			name = "M12S本体一运小怪读条",
+			uuid = "0f39daec-7399-2a52-b3b0-7ec0c6a5e610",
 			version = 2,
 		},
 		inheritedIndex = 19,
@@ -1512,7 +1582,7 @@ local tbl =
 			uuid = "021a9e74-9ec4-8881-beb5-cb1621c7a609",
 			version = 2,
 		},
-		inheritedIndex = 20,
+		inheritedIndex = 21,
 	},
 	
 	{
@@ -1577,7 +1647,7 @@ local tbl =
 			uuid = "cf3ae25c-c974-dd93-a124-4473c49119b2",
 			version = 2,
 		},
-		inheritedIndex = 22,
+		inheritedIndex = 23,
 	},
 	
 	{
@@ -1621,12 +1691,13 @@ local tbl =
 					},
 				},
 			},
+			enabled = false,
 			eventType = 12,
 			name = "FrameDebug",
 			uuid = "83898426-1459-2294-b52d-fbafeb6d698e",
 			version = 2,
 		},
-		inheritedIndex = 22,
+		inheritedIndex = 23,
 	}, 
 	inheritedProfiles = 
 	{
