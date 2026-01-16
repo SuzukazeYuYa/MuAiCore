@@ -10,8 +10,8 @@ local tbl =
 			conditions = 
 			{
 			},
-			name = "-------- m11s --------",
-			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
+			name = "--------------------- MuAiDraw ---------------------------",
+			uuid = "4c04d325-7712-422b-be39-a892f38c3b0d",
 			version = 2,
 		},
 		inheritedIndex = 1,
@@ -154,8 +154,8 @@ local tbl =
 			conditions = 
 			{
 			},
-			name = "--------------------- MuAiDraw ---------------------------",
-			uuid = "4c04d325-7712-422b-be39-a892f38c3b0d",
+			name = "-------- m11s --------",
+			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
 			version = 2,
 		},
 		inheritedIndex = 4,
@@ -802,7 +802,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "MuAiGuide.M12S.GP3Info.SubMonster = TensorCore.mGetEntity(eventArgs.entityID)\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.GPuzzle3_GotSnake\nd(\"读条效果获取完毕\")\nd(MuAiGuide.M12S.GP3Info.SubMonster.pos)\nd(eventArgs.spellID)\nd('--------------------------------------')\nself.used = true\n",
+						actionLua = "MuAiGuide.M12S.GP3Info.SubMonster = TensorCore.mGetEntity(eventArgs.entityID)\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.GPuzzle3_GotSnake\nd(\"读条效果获取完毕\")\nself.used = true\n",
 						conditions = 
 						{
 							
@@ -920,7 +920,7 @@ local tbl =
 					data = 
 					{
 						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.CurrentState > MuAiGuide.M12S.StateEnum.GPuzzle3_Start\n\t\t\tand MuAiGuide.M12S.CurrentState < MuAiGuide.M12S.StateEnum.GPuzzle3_End",
+						conditionLua = "return MuAiGuide.M12S.CurrentState >= MuAiGuide.M12S.StateEnum.GPuzzle3_Start\n\t\t\tand MuAiGuide.M12S.CurrentState < MuAiGuide.M12S.StateEnum.GPuzzle3_End",
 						name = "已进入3运",
 						uuid = "c05df42b-66b0-a7dc-8dd3-477d84bc82ea",
 						version = 2,
