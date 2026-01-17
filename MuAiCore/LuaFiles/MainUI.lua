@@ -105,10 +105,12 @@ local DrawMainUI = function(M)
                 GUI:PushItemWidth(315)
                 local drBlackListInput, blackChanged = GUI:InputText("##DrawBlackList", M.StringJoin(M.Config.Main.DrawBlackList, ","), GUI.InputTextFlags_CharsNoBlank)
                 if blackChanged then
-                    local blackList = M.StringSplit(drBlackListInput, ",")
-                    M.Config.Main.DrawBlackList = {}
-                    for _, mapId in pairs(blackList) do
-                        table.insert(M.Config.Main.DrawBlackList, tonumber(mapId))
+                    if drBlackListInput ~= nil and drBlackListInput ~= '' then
+                        local blackList = M.StringSplit(drBlackListInput, ",")
+                        M.Config.Main.DrawBlackList = {}
+                        for _, mapId in pairs(blackList) do
+                            table.insert(M.Config.Main.DrawBlackList, tonumber(mapId))
+                        end
                     end
                 end
                 GUI:PopItemWidth()
@@ -321,7 +323,7 @@ local DrawMainUI = function(M)
             GUI:SameLine()
             M.Config.Main.M12SP4SendMacro = GUI:Checkbox("M12S 本体4运发宏", M.Config.Main.M12SP4SendMacro)
         end
-       
+
         if GUI:CollapsingHeader("Hack") then
             M.AddLabel("移动速度作弊： ")
             GUI:PushItemWidth(50)
