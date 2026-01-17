@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 218
+M.VERSION = 219
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -145,18 +145,19 @@ M.SetHeading2Pi = function(heading)
     return heading
 end
 
---- 2个弧度是否是同向
-M.IsSameDirection = function(rad1, rad2)
-    local diff = math.fmod(rad2 - rad1, 2 * math.pi)
-    -- 归一化到[-π, π]
+M.IsSameDirection = function(angle1, angle2, tolerance)
+    tolerance = tolerance or 0.05
+    angle1 = angle1 % (2 * math.pi)
+    if angle1 < 0 then angle1 = angle1 + 2 * math.pi end
+    angle2 = angle2 % (2 * math.pi)
+    if angle2 < 0 then angle2 = angle2 + 2 * math.pi end
+    local diff = math.abs(angle1 - angle2)
     if diff > math.pi then
-        diff = diff - 2 * math.pi
-    elseif diff < -math.pi then
-        diff = diff + 2 * math.pi
+        diff = 2 * math.pi - diff
     end
-    -- 返回比较结果
-    return math.abs(diff) <= 0.01
+    return diff <= tolerance
 end
+
 
 --- 判断点A到B的顺逆
 --- @return boolean true 顺时针，false 逆时针
@@ -509,7 +510,7 @@ M.InitConfig = function()
 end
 
 ------------------------------- 游戏逻辑 -------------------------------
-local SupportMap = { 1238, 1122 }
+local SupportMap = { 1238, 1122, 1327}
 local TankJobs = { 19, 21, 32, 37 }
 local HealerJobs = { 24, 28, 33, 40 }
 local MeleeJob = { 20, 22, 30, 34, 39, 41 }
