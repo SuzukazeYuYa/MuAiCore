@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 220
+M.VERSION = 221
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -1126,7 +1126,7 @@ M.FrameDirect = function(x, z, size)
     )
     local distance = TensorCore.getDistance2d(playerPos, { x = x, y = 0, z = z })
     local heading = TensorCore.getHeadingToTarget(playerPos, { x = x, y = 0, z = z })
-    newDraw2:addRect(playerPos.x, playerPos.y, playerPos.z, distance, 0.05, heading, true)
+    newDraw2:addRect(playerPos.x, drawY, playerPos.z, distance, 0.05, heading, true)
     local newDraw3 = Argus2.ShapeDrawer:new(
             (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 255 / 255, 1)),
             (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 255 / 255, 1)),
@@ -1134,7 +1134,7 @@ M.FrameDirect = function(x, z, size)
             nil,
             1
     )
-    newDraw3:addCircle(x, playerPos.y, z, 0.03, true)
+    newDraw3:addCircle(x, drawY, z, 0.03, true)
 end
 
 --- 绘制一个圆（已废弃仿报错用）
