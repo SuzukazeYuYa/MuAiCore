@@ -125,7 +125,6 @@ local DrawMainUI = function(M)
                 GUI:SetWindowFontSize(2.5)
                 GUI:Dummy(10, 0)
                 GUI:SameLine()
-
                 if table.size(M.Party) == 4 then
                     if M.SelfPos == "MT" then
                         GUI:TextColored(0, 0, 1, 1, M.SelfPos)
@@ -303,30 +302,71 @@ local DrawMainUI = function(M)
         if GUI:CollapsingHeader("副本设置", GUI.TreeNodeFlags_SDefaultOpen) then
             GUI:Text(" ")
             GUI:SameLine()
-            GUI:Button("绝伊甸指路设置", 150, 30)
-            if GUI:IsItemClicked(0) then
-                M.ConfigFruInit = false
-                M.FruConfigUI.open = not M.FruConfigUI.open
-                M.FruMitigationUI.open = false
-            end
-            GUI:SameLine()
-            GUI:Button("绝伊甸减伤设置", 150, 30)
-            if GUI:IsItemClicked(0) then
-                if MuAiGuide.IsHealer(Player.job) then
-                    M.Info("不支持治疗职业<se.1>")
-                else
-                    M.FruMitigationUI.open = not M.FruMitigationUI.open
-                    M.FruConfigUI.open = false
+            if GUI:CollapsingHeader("绝伊甸") then
+                GUI:Text("  ")
+                GUI:SameLine()
+                GUI:Button("绝伊甸指路设置", 150, 30)
+                if GUI:IsItemClicked(0) then
+                    M.ConfigFruInit = false
+                    M.FruConfigUI.open = not M.FruConfigUI.open
+                    M.FruMitigationUI.open = false
+                end
+                GUI:SameLine()
+                GUI:Button("绝伊甸减伤设置", 150, 30)
+                if GUI:IsItemClicked(0) then
+                    if MuAiGuide.IsHealer(Player.job) then
+                        M.Info("不支持治疗职业<se.1>")
+                    else
+                        M.FruMitigationUI.open = not M.FruMitigationUI.open
+                        M.FruConfigUI.open = false
+                    end
                 end
             end
-            M.Config.Main.M12SP4UpTime = GUI:Checkbox("M12S 本体4运近战uptime", M.Config.Main.M12SP4UpTime)
+            GUI:Text(" ")
             GUI:SameLine()
-            M.Config.Main.M12SP4SendMacro = GUI:Checkbox("M12S 本体4运发宏", M.Config.Main.M12SP4SendMacro)
+            if GUI:CollapsingHeader("M12S") then
+                GUI:Text("  ")
+                GUI:SameLine()
+                M.Config.Main.M12SAutoFace1 = GUI:Checkbox("门神1运自动面向", M.Config.Main.M12SAutoFace1)
+                GUI:SameLine(0, 15)
+                if M.Config.Main.M12SAutoFace1  then
+                    GUI:PushItemWidth(80)
+                    local faceType, faceTypeChange = GUI:Combo("##FaceType", M.Config.Main.M12SAutoFaceType, {"传统", "UpTime"}, 4)
+                    if faceTypeChange then
+                        M.Config.Main.M12SAutoFaceType = faceType
+                    end
+                    GUI:PopItemWidth()
+                end
+                GUI:Text("  ")
+                GUI:SameLine()
+                M.Config.Main.M12SAutoFace2 = GUI:Checkbox("本体2运自动面向", M.Config.Main.M12SAutoFace2)
+                GUI:Text("  ")
+                GUI:SameLine()
+                GUI:AlignFirstTextHeightToWidgets()
+                GUI:Text("本体四运打法：")
+                GUI:SameLine(0, 45)
+                GUI:PushItemWidth(80)
+                local newType, m12sP4TypeChanged = GUI:Combo("##M12SP4Type", M.Config.Main.M12SP4Type, {"盗火改", "NOCCHH"}, 4)
+                if m12sP4TypeChanged then
+                    M.Config.Main.M12SP4Type = newType
+                end
+                GUI:PopItemWidth()
+                GUI:Text("  ")
+                GUI:SameLine()
+                M.Config.Main.M12SP4UpTime = GUI:Checkbox("近战优化", M.Config.Main.M12SP4UpTime)
+                GUI:SameLine()
+                GUI:Text("  ")
+                GUI:SameLine(0,44)
+                M.Config.Main.M12SP4SendMacro = GUI:Checkbox("发宏", M.Config.Main.M12SP4SendMacro)
+                if  M.Config.Main.M12SP4SendMacro then
+                    GUI:TextColored(1, 0, 0, 1, "   注意：宏的很快，有被看出开了的风险！")
+                end
+            end
         end
 
         if GUI:CollapsingHeader("Hack") then
             M.AddLabel("移动速度作弊： ")
-            GUI:PushItemWidth(50)
+            GUI:PushItemWidth(35)
             local hackSpeed, hackSpeedChange = GUI:InputText("##hackSpeed", tostring(M.Config.Main.SpeedHack), GUI.InputTextFlags_CharsNoBlank)
             if hackSpeedChange then
                 M.Config.Main.SpeedHack = tonumber(hackSpeed)
@@ -352,7 +392,7 @@ local DrawMainUI = function(M)
                 gDevHackWalkRatio = gDevHackRunningSpeed / gDevHackWalkingSpeed
             end
             M.AddLabel("最大视距作弊： ")
-            GUI:PushItemWidth(50)
+            GUI:PushItemWidth(35)
             local hackZoom, hackZoomChange = GUI:InputText("##hackZoom", tostring(M.Config.Main.HackZoom), GUI.InputTextFlags_CharsNoBlank)
             if hackZoomChange then
                 M.Config.Main.HackZoom = tonumber(hackZoom)
@@ -375,7 +415,7 @@ local DrawMainUI = function(M)
             end
 
             M.AddLabel("地面坐骑速度： ")
-            GUI:PushItemWidth(50)
+            GUI:PushItemWidth(35)
             local hackMtSpeed, hackMtSpeedChange = GUI:InputText("##hackMountSpeed", tostring(M.Config.Main.MountSpeedHack), GUI.InputTextFlags_CharsNoBlank)
             if hackMtSpeedChange then
                 M.Config.Main.MountSpeedHack = tonumber(hackMtSpeed)
