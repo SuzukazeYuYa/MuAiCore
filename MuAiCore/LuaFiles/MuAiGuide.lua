@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 225
+M.VERSION = 226
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -78,7 +78,7 @@ end
 --- @return table result 拼合后的字符串
 M.StringJoin = function(tbl, mark)
     local result = ""
-    if table.size(tbl) == 0 then
+    if tbl == nil or table.size(tbl) == 0 then
         return result
     end
     for i, v in ipairs(tbl) do

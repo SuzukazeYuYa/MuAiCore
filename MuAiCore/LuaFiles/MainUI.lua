@@ -106,7 +106,8 @@ local DrawMainUI = function(M)
                 local drBlackListInput, blackChanged = GUI:InputText("##DrawBlackList", M.StringJoin(M.Config.Main.DrawBlackList, ","), GUI.InputTextFlags_CharsNoBlank)
                 if blackChanged then
                     if drBlackListInput ~= nil and drBlackListInput ~= '' then
-                        local blackList = M.StringSplit(drBlackListInput, ",")
+                        local newStr, _ = string.gsub(drBlackListInput, "，", ",")
+                        local blackList = M.StringSplit(newStr, ",")
                         M.Config.Main.DrawBlackList = {}
                         for _, mapId in pairs(blackList) do
                             table.insert(M.Config.Main.DrawBlackList, tonumber(mapId))
@@ -329,9 +330,9 @@ local DrawMainUI = function(M)
                 GUI:SameLine()
                 M.Config.Main.M12SAutoFace1 = GUI:Checkbox("门神1运自动面向, 面向方式:", M.Config.Main.M12SAutoFace1)
                 GUI:SameLine(0, 15)
-                if M.Config.Main.M12SAutoFace1  then
+                if M.Config.Main.M12SAutoFace1 then
                     GUI:PushItemWidth(80)
-                    local faceType, faceTypeChange = GUI:Combo("##FaceType", M.Config.Main.M12SAutoFaceType, {"传统", "UpTime"}, 4)
+                    local faceType, faceTypeChange = GUI:Combo("##FaceType", M.Config.Main.M12SAutoFaceType, { "传统", "UpTime" }, 4)
                     if faceTypeChange then
                         M.Config.Main.M12SAutoFaceType = faceType
                     end
@@ -340,18 +341,18 @@ local DrawMainUI = function(M)
                 GUI:Text("  ")
                 GUI:SameLine()
                 M.Config.Main.M12SAutoFace2 = GUI:Checkbox("本体2运自动面向正上", M.Config.Main.M12SAutoFace2)
-                
+
                 GUI:Text("  ")
                 GUI:SameLine()
                 M.Config.Main.M12SP2is13 = GUI:Checkbox("本体3运1|3分组撞球（仅奶妈有用）", M.Config.Main.M12SP2is13)
-                
+
                 GUI:Text("  ")
                 GUI:SameLine()
                 GUI:AlignFirstTextHeightToWidgets()
                 GUI:Text("本体4运打法：")
                 GUI:SameLine(0, 45)
                 GUI:PushItemWidth(80)
-                local newType, m12sP4TypeChanged = GUI:Combo("##M12SP4Type", M.Config.Main.M12SP4Type, {"盗火改", "NOCCHH"}, 4)
+                local newType, m12sP4TypeChanged = GUI:Combo("##M12SP4Type", M.Config.Main.M12SP4Type, { "盗火改", "NOCCHH" }, 4)
                 if m12sP4TypeChanged then
                     M.Config.Main.M12SP4Type = newType
                 end
@@ -361,9 +362,9 @@ local DrawMainUI = function(M)
                 M.Config.Main.M12SP4UpTime = GUI:Checkbox("近战优化", M.Config.Main.M12SP4UpTime)
                 GUI:SameLine()
                 GUI:Text("  ")
-                GUI:SameLine(0,36)
+                GUI:SameLine(0, 36)
                 M.Config.Main.M12SP4SendMacro = GUI:Checkbox("发宏", M.Config.Main.M12SP4SendMacro)
-                if  M.Config.Main.M12SP4SendMacro then
+                if M.Config.Main.M12SP4SendMacro then
                     GUI:TextColored(1, 0, 0, 1, "   注意：宏的很快，有被看出开了的风险！")
                 end
             end
