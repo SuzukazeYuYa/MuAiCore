@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 224
+M.VERSION = 225
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -20,7 +20,6 @@ M.FruMitigationUI = {
     SendParty = true,
     NewFileName = ""
 }
-M.M12S = {}
 ------------------------------- 工具方法 -------------------------------
 --- 输出消息到聊天栏
 --- @param msg string
@@ -224,6 +223,7 @@ M.CreateDefMainCfg = function()
         -- 4运打法，1 盗火改，2NOCCHH
         M12SP4Type = 1,
         M12SP4SendMacro = false,
+        M12SP2is13 = false,
         M12SAutoFace1 = true,
         M12SAutoFace2 = true,
         -- 传统-传统uptime
