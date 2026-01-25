@@ -15,7 +15,7 @@ local tbl =
 			uuid = "4c04d325-7712-422b-be39-a892f38c3b0d",
 			version = 2,
 		},
-		inheritedIndex = 1,
+		inheritedIndex = 2,
 	},
 	
 	{
@@ -114,7 +114,7 @@ local tbl =
 			uuid = "b610ef51-6410-2e2c-8cd0-fff9d16334a8",
 			version = 2,
 		},
-		inheritedIndex = 2,
+		inheritedIndex = 3,
 	},
 	
 	{
@@ -160,7 +160,7 @@ local tbl =
 			uuid = "f6607c59-fc75-1a2f-b73e-8825dbe3d5b3",
 			version = 2,
 		},
-		inheritedIndex = 3,
+		inheritedIndex = 4,
 	},
 	
 	{
@@ -177,7 +177,74 @@ local tbl =
 			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
 			version = 2,
 		},
-		inheritedIndex = 4,
+		inheritedIndex = 5,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "if data.MuAiM11SMark == nil then\n\tdata.MuAiM11SMark = {}\nend\ntable.insert(data.MuAiM11SMark, eventArgs.entityID)\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"9620fec1-0095-abec-bb97-e0d78948abb7",
+								true,
+							},
+							
+							{
+								"4d5427f0-b5d4-7103-b9d6-eb40c66b3f2a",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "被点名放圈",
+						uuid = "a08d7ed6-2786-6c18-aca7-8d311294c87a",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "9620fec1-0095-abec-bb97-e0d78948abb7",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventMarkerID = 30,
+						name = "点圈标记",
+						uuid = "4d5427f0-b5d4-7103-b9d6-eb40c66b3f2a",
+						version = 2,
+					},
+					inheritedIndex = 2,
+				},
+			},
+			eventType = 4,
+			name = "M11S添加MARK",
+			uuid = "a72980e1-23b8-4169-b80d-4bbcb3beccf1",
+			version = 2,
+		},
+		inheritedIndex = 5,
 	},
 	
 	{
@@ -242,7 +309,7 @@ local tbl =
 			uuid = "74d161a0-ce78-a135-a5df-53829b8f7124",
 			version = 2,
 		},
-		inheritedIndex = 4,
+		inheritedIndex = 5,
 	},
 	
 	{
@@ -292,7 +359,7 @@ local tbl =
 			uuid = "15ffb251-5885-55b5-adf0-15a00a7fcba5",
 			version = 2,
 		},
-		inheritedIndex = 6,
+		inheritedIndex = 7,
 	},
 	
 	{
@@ -434,7 +501,7 @@ local tbl =
 			uuid = "e260ac90-04cd-d071-866c-f30f070327c0",
 			version = 2,
 		},
-		inheritedIndex = 7,
+		inheritedIndex = 8,
 	},
 	
 	{
@@ -482,7 +549,145 @@ local tbl =
 			uuid = "b3503580-71a1-e733-a4c3-578deaae1e88",
 			version = 2,
 		},
-		inheritedIndex = 8,
+		inheritedIndex = 9,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "if data.MuAiM11SSpell46166 == nil then\n    data.MuAiM11SSpell46166 = {}\n    data.MuAiM11SSpell46167 = {}\n    data.MuAiM11STowerDir = { math.pi * 3 / 4, math.pi / 4, math.pi * 7 / 4, math.pi * 5 / 4 }\n    data.MuAiM11SOrder = { \"H1\", \"D3\", \"D4\", \"H2\" }\n    data.FindDir = function(id1, id2)\n        local t1 = TensorCore.mGetEntity(id1)\n        local t2 = TensorCore.mGetEntity(id2)\n        local h1 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t1.pos)\n        local h2 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t2.pos)\n        local ent1, ent2\n        for i = 1, 4 do\n            local dir = data.MuAiM11STowerDir[i]\n            if MuAiGuide.IsSameDirection(dir, h1) then\n                if ent1 == nil then\n                    ent1 = t1\n                else\n                    ent2 = t1\n                end\n            end\n            if MuAiGuide.IsSameDirection(dir, h2) then\n                if ent1 == nil then\n                    ent1 = t2\n                else\n                    ent2 = t2\n                end\n            end\n        end\n        return ent1, ent2\n    end\nend\n\nif eventArgs.spellID == 46166 then\n    table.insert(data.MuAiM11SSpell46166, eventArgs.entityID)\nelseif eventArgs.spellID == 46167 then\n    table.insert(data.MuAiM11SSpell46167, eventArgs.entityID)\nend\n\nlocal guidePos, selfTower\nif MuAiGuide.SelfPos == \"MT\" or MuAiGuide.SelfPos == \"ST\" then\n    if table.size(data.MuAiM11SSpell46166) == 2 then\n        local MtTake, StTake = data.FindDir(data.MuAiM11SSpell46166[1], data.MuAiM11SSpell46166[2])\n        if MuAiGuide.SelfPos == \"MT\" then\n            selfTower = MtTake\n        else\n            selfTower = StTake\n        end\n        local heading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, selfTower.pos)\n        guidePos = TensorCore.getPosInDirection({ x = 100, y = 0, z = 100 }, heading, 8)\n    end\nelseif MuAiGuide.SelfPos == \"D1\" or MuAiGuide.SelfPos == \"D2\" then\n    if table.size(data.MuAiM11SSpell46167) == 2 then\n        local D1Take, D2Take = data.FindDir(data.MuAiM11SSpell46167[1], data.MuAiM11SSpell46167[2])\n        if MuAiGuide.SelfPos == \"D1\" then\n            selfTower = D1Take\n        else\n            selfTower = D2Take\n        end\n        local heading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, selfTower.pos)\n        guidePos = TensorCore.getPosInDirection({ x = 100, y = 0, z = 100 }, heading, 8)\n    end\nelse\n    if table.size(data.MuAiM11SSpell46167) == 2 and (not table.contains(data.MuAiM11SMark, MuAiGuide.GetPlayer().id)) then\n        local t1, t2 = data.FindDir(data.MuAiM11SSpell46167[1], data.MuAiM11SSpell46167[2])\n        local selfIdx = MuAiGuide.IndexOf(data.MuAiM11SOrder, MuAiGuide.SelfPos)\n        local otherJob\n        for job, ent in pairs(MuAiGuide.Party) do\n            if ent.id ~= MuAiGuide.GetPlayer().id and table.contains(data.MuAiM11SOrder, job) and (not table.contains(data.MuAiM11SMark, ent.id)) then\n                otherJob = job\n                break\n            end\n        end\n        local otherIndex = MuAiGuide.IndexOf(data.MuAiM11SOrder, otherJob)\n        if selfIdx > otherIndex then\n            selfTower = t2\n        else\n            selfTower = t1\n        end\n        local heading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, selfTower.pos)\n        guidePos = TensorCore.getPosInDirection({ x = 100, y = 0, z = 100 }, heading, 14)\n    end\nend\n\nif guidePos ~= nil then\n    MuAiGuide.DirectTo(guidePos.x, guidePos.z, 5000)\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+								true,
+							},
+							
+							{
+								"dadf049a-9910-9885-ab10-a3eecdc35f8e",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						uuid = "42a3dd23-f10b-4e65-be32-3d3a6d439f6f",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgOptionType = 3,
+						eventArgType = 2,
+						eventSpellID = 46167,
+						name = "46166坦克塔|46167双人塔",
+						spellIDList = 
+						{
+							46167,
+							46166,
+						},
+						uuid = "dadf049a-9910-9885-ab10-a3eecdc35f8e",
+						version = 2,
+					},
+				},
+			},
+			eventType = 3,
+			name = "M11S技能读条",
+			uuid = "eb90697a-3de9-b2eb-a153-167ddda24d73",
+			version = 2,
+		},
+		inheritedIndex = 10,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nlocal linkFrom = nil\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        linkFrom = TensorCore.mGetEntity(tether.partnerid)\n    end\nend\n\nif linkFrom ~= nil then\n    local targetPos = nil\n    if MuAiGuide.M11SMapType == 1 then\n        if linkFrom.pos.x < 100 then\n            if linkFrom.pos.z < 100 then\n                targetPos = { x = 116, z = 120 }\n            else\n                targetPos = { x = 116, z = 80 }\n            end\n        else\n            if linkFrom.pos.z < 100 then\n                targetPos = { x = 84, z = 120 }\n            else\n                targetPos = { x = 84, z = 80 }\n            end\n        end\n        if targetPos ~= nil then\n            local length = TensorCore.getDistance2d(linkFrom.pos, targetPos)\n            local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0 / 255, 255 / 255, 0 / 255, 0.2), 1)\n            local heading = TensorCore.getHeadingToTarget(linkFrom.pos, targetPos)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length + 1, 0.5, 1, 1, true)\n        end\n    elseif MuAiGuide.M11SMapType == 2 then\n        if linkFrom.pos.z < 90 then\n            --上\n            targetPos = { x = 119.5, z = 119.5 }\n        elseif linkFrom.pos.x < 90 then\n            --左\n            targetPos = { x = 119.5, z = 81.5 }\n        elseif linkFrom.pos.z > 110 then\n            -- 下\n            targetPos = { x = 81.5, z = 81.5 }\n        else\n            -- 右边\n            targetPos = { x = 81.5, z = 119.5 }\n        end\n        MuAiGuide.FrameDirect(targetPos.pos.x, targetPos.pos.z)\n    end\nend\nself.used = true ",
+						conditions = 
+						{
+							
+							{
+								"2fbd9c0f-e39c-a512-9798-2586a5646898",
+								true,
+							},
+							
+							{
+								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								true,
+							},
+						},
+						gVar = "ACR_RikuNIN3_CD",
+						uuid = "031241ad-aed6-50cb-aab6-4ace640a267b",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "if MuAiGuide.M11SMapType ~= 1 and MuAiGuide.M11SMapType ~= 2 then\n    return false\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nif tethers == nil or table.size(tethers) <= 0 then\n    return false\nend\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        return true\n    end\nend\nreturn false",
+						uuid = "2fbd9c0f-e39c-a512-9798-2586a5646898",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			eventType = 12,
+			name = "M11S拉线",
+			uuid = "41a903f9-67f1-06ad-8924-d2be901e0268",
+			version = 2,
+		},
+		inheritedIndex = 11,
 	},
 	
 	{
@@ -499,7 +704,7 @@ local tbl =
 			uuid = "d59f33fd-dc8f-4ea2-84c5-a200263ed342",
 			version = 2,
 		},
-		inheritedIndex = 10,
+		inheritedIndex = 12,
 	},
 	
 	{
@@ -565,73 +770,7 @@ local tbl =
 			uuid = "01c21e3b-f835-8520-b7fa-247cf2d8b76b",
 			version = 2,
 		},
-		inheritedIndex = 12,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nlocal linkFrom = nil\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        linkFrom = TensorCore.mGetEntity(tether.partnerid)\n    end\nend\n\nif linkFrom ~= nil then\n    local targetPos = nil\n    if MuAiGuide.M11SMapType == 1 then\n        if linkFrom.pos.x < 100 then\n            if linkFrom.pos.z < 100 then\n                targetPos = { x = 116, z = 120 }\n            else\n                targetPos = { x = 116, z = 80 }\n            end\n        else\n            if linkFrom.pos.z < 100 then\n                targetPos = { x = 84, z = 120 }\n            else\n                targetPos = { x = 84, z = 80 }\n            end\n        end\n    elseif MuAiGuide.M11SMapType == 2 then\n        if linkFrom.pos.z < 90 then --上\n            targetPos = { x = 120, z = 120 }\n        elseif linkFrom.pos.x < 90 then --左\n            targetPos = { x = 120, z = 80 }\n        elseif linkFrom.pos.z >110  then -- 下\n            targetPos = { x = 80, z = 80 }\n        else -- 右边\n            targetPos = { x = 80, z = 120 }\n        end\n    end\n    if targetPos ~= nil then\n        local length = TensorCore.getDistance2d(linkFrom.pos, targetPos)\n        local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0 / 255, 255 / 255, 0 / 255, 0.2), 1)\n        local heading = TensorCore.getHeadingToTarget(linkFrom.pos, targetPos)\n        drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length + 1, 0.5, 1, 1,  true)\n        --drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length + 1, 0.03, 0.5, 0.5, true)\n    end\nend\nself.used = true ",
-						conditions = 
-						{
-							
-							{
-								"2fbd9c0f-e39c-a512-9798-2586a5646898",
-								true,
-							},
-							
-							{
-								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
-								true,
-							},
-						},
-						gVar = "ACR_RikuNIN3_CD",
-						uuid = "031241ad-aed6-50cb-aab6-4ace640a267b",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "if MuAiGuide.M11SMapType ~= 1 and MuAiGuide.M11SMapType ~= 2 then\n    return false\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nif tethers == nil or table.size(tethers) <= 0 then\n    return false\nend\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        return true\n    end\nend\nreturn false",
-						uuid = "2fbd9c0f-e39c-a512-9798-2586a5646898",
-						version = 2,
-					},
-					inheritedIndex = 1,
-				},
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "16607308-c4ad-eb3e-ac3e-9036a0da5b58",
-						version = 2,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			eventType = 12,
-			name = "M11S拉线",
-			uuid = "41a903f9-67f1-06ad-8924-d2be901e0268",
-			version = 2,
-		},
-		inheritedIndex = 11,
+		inheritedIndex = 14,
 	},
 	
 	{
@@ -696,7 +835,7 @@ local tbl =
 			uuid = "52909867-07a0-dd48-a645-bcbc9d9e4be2",
 			version = 2,
 		},
-		inheritedIndex = 12,
+		inheritedIndex = 14,
 	},
 	
 	{
@@ -761,7 +900,7 @@ local tbl =
 			uuid = "68b39db5-37db-ecc8-a289-060327422b48",
 			version = 2,
 		},
-		inheritedIndex = 13,
+		inheritedIndex = 14,
 	},
 	
 	{
@@ -1035,7 +1174,7 @@ local tbl =
 			uuid = "ed3702b5-fda0-d2eb-bfce-9dc253883a46",
 			version = 2,
 		},
-		inheritedIndex = 15,
+		inheritedIndex = 16,
 	},
 	
 	{
@@ -1227,7 +1366,7 @@ local tbl =
 			uuid = "288f9733-cd95-3e4b-ab8d-30c5a0d637a7",
 			version = 2,
 		},
-		inheritedIndex = 15,
+		inheritedIndex = 16,
 	},
 	
 	{
@@ -1310,7 +1449,7 @@ local tbl =
 			uuid = "79562d51-d887-4795-96b7-ca10cab1b0e9",
 			version = 2,
 		},
-		inheritedIndex = 19,
+		inheritedIndex = 20,
 	},
 	
 	{
@@ -1410,7 +1549,7 @@ local tbl =
 			uuid = "c88ef753-2fab-19da-b48b-cd0a69a9505c",
 			version = 2,
 		},
-		inheritedIndex = 18,
+		inheritedIndex = 19,
 	},
 	
 	{
@@ -1427,7 +1566,7 @@ local tbl =
 			uuid = "960bb8b2-a094-8d02-93bf-bed17a863848",
 			version = 2,
 		},
-		inheritedIndex = 26,
+		inheritedIndex = 27,
 	},
 	
 	{
@@ -1511,7 +1650,7 @@ local tbl =
 			uuid = "055265c3-863a-b90b-a145-a430b7c9eaee",
 			version = 2,
 		},
-		inheritedIndex = 21,
+		inheritedIndex = 22,
 	},
 	
 	{
@@ -1594,7 +1733,7 @@ local tbl =
 			uuid = "fd49bbfa-8561-3e1f-a70c-3386577dd147",
 			version = 2,
 		},
-		inheritedIndex = 26,
+		inheritedIndex = 27,
 	},
 	
 	{
@@ -1773,7 +1912,7 @@ local tbl =
 			uuid = "3c288afb-43ad-00b0-bc5d-69201059c52e",
 			version = 2,
 		},
-		inheritedIndex = 22,
+		inheritedIndex = 23,
 	},
 	
 	{
@@ -1855,7 +1994,7 @@ local tbl =
 			uuid = "c3c28799-5cb7-1e41-ba63-0c1dc145c447",
 			version = 2,
 		},
-		inheritedIndex = 26,
+		inheritedIndex = 27,
 	},
 	
 	{
@@ -2397,7 +2536,7 @@ local tbl =
 			uuid = "cf3ae25c-c974-dd93-a124-4473c49119b2",
 			version = 2,
 		},
-		inheritedIndex = 25,
+		inheritedIndex = 26,
 	},
 	
 	{
@@ -3092,7 +3231,7 @@ local tbl =
 			uuid = "b48d47b0-28c9-0e72-82e7-abf66b902646",
 			version = 2,
 		},
-		inheritedIndex = 26,
+		inheritedIndex = 27,
 	},
 	
 	{
@@ -3359,7 +3498,7 @@ local tbl =
 			uuid = "021a9e74-9ec4-8881-beb5-cb1621c7a609",
 			version = 2,
 		},
-		inheritedIndex = 27,
+		inheritedIndex = 28,
 	},
 	
 	{
@@ -3425,7 +3564,7 @@ local tbl =
 			uuid = "83898426-1459-2294-b52d-fbafeb6d698e",
 			version = 2,
 		},
-		inheritedIndex = 26,
+		inheritedIndex = 27,
 	}, 
 	inheritedProfiles = 
 	{

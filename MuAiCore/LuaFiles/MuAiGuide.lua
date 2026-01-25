@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 228
+M.VERSION = 229
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -148,16 +148,19 @@ end
 M.IsSameDirection = function(angle1, angle2, tolerance)
     tolerance = tolerance or 0.05
     angle1 = angle1 % (2 * math.pi)
-    if angle1 < 0 then angle1 = angle1 + 2 * math.pi end
+    if angle1 < 0 then
+        angle1 = angle1 + 2 * math.pi
+    end
     angle2 = angle2 % (2 * math.pi)
-    if angle2 < 0 then angle2 = angle2 + 2 * math.pi end
+    if angle2 < 0 then
+        angle2 = angle2 + 2 * math.pi
+    end
     local diff = math.abs(angle1 - angle2)
     if diff > math.pi then
         diff = 2 * math.pi - diff
     end
     return diff <= tolerance
 end
-
 
 --- 判断点A到B的顺逆
 --- @return boolean true 顺时针，false 逆时针
@@ -519,7 +522,7 @@ M.InitConfig = function()
 end
 
 ------------------------------- 游戏逻辑 -------------------------------
-local SupportMap = { 1238, 1122, 1327}
+local SupportMap = { 1238, 1122, 1325, 1327 }
 local TankJobs = { 19, 21, 32, 37 }
 local HealerJobs = { 24, 28, 33, 40 }
 local MeleeJob = { 20, 22, 30, 34, 39, 41 }
@@ -652,7 +655,9 @@ end
 M.LoadParty = function()
     M.Party = {}
     local members = M.GetPartyPlayers()
-    table.sort(members, function(p1, p2) return M.IndexOf(JobIds, p1.job) < M.IndexOf(JobIds, p2.job) end)
+    table.sort(members, function(p1, p2)
+        return M.IndexOf(JobIds, p1.job) < M.IndexOf(JobIds, p2.job)
+    end)
     if table.size(members) == 4 then
         for i = 1, 4 do
             if M.IsTank(members[i].job) then
