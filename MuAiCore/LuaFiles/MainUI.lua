@@ -372,9 +372,10 @@ local DrawMainUI = function(M)
                 M.Config.Main.M12SExDraw = GUI:Checkbox("M12S扩展绘图", M.Config.Main.M12SExDraw)
                 if M.Config.Main.M12SExDraw then
                     GUI:TextColored(1, 0, 1, 1, "   添加一些额外的绘图, 包括:")
-                    GUI:TextColored(1, 0, 1, 1, "    1.本体1运, 火暗点名")
-                    GUI:TextColored(1, 0, 1, 1, "    2.本体4运, 踩塔激光、击退")
-                    GUI:TextColored(1, 0, 1, 1, "    3.本体4运, 远近")
+                    GUI:TextColored(1, 0, 1, 1, "    1.门神，致命灾变")
+                    GUI:TextColored(1, 0, 1, 1, "    2.本体，1运, 火暗点名")
+                    GUI:TextColored(1, 0, 1, 1, "    3.本体，4运, 踩塔激光、击退")
+                    GUI:TextColored(1, 0, 1, 1, "    4.本体，4运, 远近")
                 end
             end
         end
