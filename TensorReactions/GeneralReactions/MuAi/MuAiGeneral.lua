@@ -122,23 +122,6 @@ local tbl =
 		{
 			actions = 
 			{
-			},
-			conditions = 
-			{
-			},
-			enabled = false,
-			name = "-------- m11s --------",
-			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
-			version = 2,
-		},
-		inheritedIndex = 5,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
 				
 				{
 					data = 
@@ -177,7 +160,24 @@ local tbl =
 			uuid = "f6607c59-fc75-1a2f-b73e-8825dbe3d5b3",
 			version = 2,
 		},
-		inheritedIndex = 4,
+		inheritedIndex = 3,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+			},
+			conditions = 
+			{
+			},
+			enabled = false,
+			name = "-------- m11s --------",
+			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
+			version = 2,
+		},
+		inheritedIndex = 5,
 	},
 	
 	{
@@ -709,7 +709,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nM.M12S.GP1Info.head = TensorCore.mGetEntity(eventArgs.entityID)\nM.M12S.CurrentState = M.M12S.StateEnum.GPuzzle1_Start\n\nfor jobNamed, ent in pairs(M.Party) do\n    local buff = TensorCore.getBuff(ent.id, 4762)\n    if buff ~= nil then\n        if M.IsDps(ent.job) then\n            if M.IsDps(M.GetPlayer().job) then\n                M.M12S.GP1Info.opType = M.M12S.DataEnum.Gather\n            else\n                M.M12S.GP1Info.opType = M.M12S.DataEnum.Disperse\n            end\n        else\n            if M.IsDps(M.GetPlayer().job) then\n                M.M12S.GP1Info.opType = M.M12S.DataEnum.Disperse\n            else\n                M.M12S.GP1Info.opType = M.M12S.DataEnum.Gather\n            end\n        end\n    end\nend\n\nlocal curBuff = TensorCore.getBuff(M.GetPlayer().id, 3558)\nif curBuff ~= nil then\n\n\n    if M.M12S.GP1Info.opType == M.M12S.DataEnum.Gather then\n        -- 集合 最终目标是设置 打向 math.pi\n        if curBuff.stacks == 1036 then\n            M.M12S.GP1Info.face = math.pi\n        elseif curBuff.stacks == 1037 then\n            M.M12S.GP1Info.face = math.pi * 3 / 2\n        elseif curBuff.stacks == 1038 then\n            M.M12S.GP1Info.face = 0\n        elseif curBuff.stacks == 1039 then\n            M.M12S.GP1Info.face = math.pi / 2\n        end\n    else\n        if M.M12S.GP1Info.head.pos.x > 100 then\n            -- 右半场\n            if table.contains({ \"MT\", \"D1\", \"D3\", \"H1\" }, M.SelfPos) then\n                -- 最终目标是设置 射向 math.pi * 3 / 2\n                if curBuff.stacks == 1036 then\n                    M.M12S.GP1Info.face = math.pi * 3 / 2\n                elseif curBuff.stacks == 1037 then\n                    M.M12S.GP1Info.face = 0\n                elseif curBuff.stacks == 1038 then\n\n                    M.M12S.GP1Info.face = math.pi / 2\n                elseif curBuff.stacks == 1039 then\n                    M.M12S.GP1Info.face = math.pi\n                end\n            else\n                -- 最终目标是设置 射向 math.pi  / 2\n                if curBuff.stacks == 1036 then\n                    M.M12S.GP1Info.face = math.pi / 2\n                elseif curBuff.stacks == 1037 then\n                    M.M12S.GP1Info.face = math.pi\n                elseif curBuff.stacks == 1038 then\n                    M.M12S.GP1Info.face = math.pi * 3 / 2\n                elseif curBuff.stacks == 1039 then\n                    M.M12S.GP1Info.face = 0\n                end\n            end\n        else\n            if table.contains({ \"MT\", \"D1\", \"D3\", \"H1\" }, M.SelfPos) then\n                -- 最终目标是设置 射向 math.pi  / 2\n                if curBuff.stacks == 1036 then\n                    M.M12S.GP1Info.face = math.pi / 2\n                elseif curBuff.stacks == 1037 then\n                    M.M12S.GP1Info.face = math.pi\n                elseif curBuff.stacks == 1038 then\n                    M.M12S.GP1Info.face = math.pi * 3 / 2\n                elseif curBuff.stacks == 1039 then\n                    M.M12S.GP1Info.face = 0\n                end\n            else\n                if curBuff.stacks == 1036 then\n                    M.M12S.GP1Info.face = math.pi * 3 / 2\n                elseif curBuff.stacks == 1037 then\n                    M.M12S.GP1Info.face = 0\n                elseif curBuff.stacks == 1038 then\n                    M.M12S.GP1Info.face = math.pi / 2\n                elseif curBuff.stacks == 1039 then\n                    M.M12S.GP1Info.face = math.pi\n                end\n            end\n        end\n    end\n    d(\"已采集到蛇头数据\")\nend\nself.used = true\n",
+						actionLua = "--[[\n4976  判断剩余时间\nbuffid = 3558\nstacks :\n当前面向 \n前：1036\n右：1037\n后：1038\n左：1039\n]]\n\n--- 数据采集\nlocal M = MuAiGuide\nM.M12S.GP1Info.head = TensorCore.mGetEntity(eventArgs.entityID)\nM.M12S.CurrentState = M.M12S.StateEnum.GPuzzle1_Start\n\nfor jobNamed, ent in pairs(M.Party) do\n    local buff = TensorCore.getBuff(ent.id, 4762)\n    if buff ~= nil then\n        if M.IsDps(ent.job) then\n            if M.IsDps(M.GetPlayer().job) then\n                M.M12S.GP1Info.opType = M.M12S.DataEnum.Gather\n            else\n                M.M12S.GP1Info.opType = M.M12S.DataEnum.Disperse\n            end\n        else\n            if M.IsDps(M.GetPlayer().job) then\n                M.M12S.GP1Info.opType = M.M12S.DataEnum.Disperse\n            else\n                M.M12S.GP1Info.opType = M.M12S.DataEnum.Gather\n            end\n        end\n    end\nend\n\nlocal curBuff = TensorCore.getBuff(M.GetPlayer().id, 3558)\nif curBuff ~= nil then\n    if M.M12S.GP1Info.opType == M.M12S.DataEnum.Gather then\n        -- 集合 最终目标是设置 打向 math.pi\n        if curBuff.stacks == 1036 then\n            M.M12S.GP1Info.face = math.pi\n        elseif curBuff.stacks == 1037 then\n            M.M12S.GP1Info.face = math.pi * 3 / 2\n        elseif curBuff.stacks == 1038 then\n            M.M12S.GP1Info.face = 0\n        elseif curBuff.stacks == 1039 then\n            M.M12S.GP1Info.face = math.pi / 2\n        end\n    elseif M.Config.Main.M12SAutoFaceType == 3 then\n        M.M12S.GP1Info.face = math.pi\n    else\n        local ToIn = true\n        if M.Config.Main.M12SAutoFaceType == 1 then\n            ToIn = table.contains({ \"MT\", \"D1\", \"D3\", \"H1\" }, M.SelfPos)\n        elseif M.Config.Main.M12SAutoFaceType == 2 then\n            ToIn = table.contains({ \"MT\", \"ST\", \"H2\", \"D1\", \"D2\", \"D4\" }, M.SelfPos)\n        end\n        if M.M12S.GP1Info.head.pos.x > 100 then\n            -- 右半场\n            if ToIn then\n                -- 最终目标是设置 射向 math.pi * 3 / 2\n                if curBuff.stacks == 1036 then\n                    M.M12S.GP1Info.face = math.pi * 3 / 2\n                elseif curBuff.stacks == 1037 then\n                    M.M12S.GP1Info.face = 0\n                elseif curBuff.stacks == 1038 then\n                    M.M12S.GP1Info.face = math.pi / 2\n                elseif curBuff.stacks == 1039 then\n                    M.M12S.GP1Info.face = math.pi\n                end\n            else\n                -- 最终目标是设置 射向 math.pi  / 2\n                if curBuff.stacks == 1036 then\n                    M.M12S.GP1Info.face = math.pi / 2\n                elseif curBuff.stacks == 1037 then\n                    M.M12S.GP1Info.face = math.pi\n                elseif curBuff.stacks == 1038 then\n                    M.M12S.GP1Info.face = math.pi * 3 / 2\n                elseif curBuff.stacks == 1039 then\n                    M.M12S.GP1Info.face = 0\n                end\n            end\n        else\n            if ToIn then\n                -- 最终目标是设置 射向 math.pi  / 2\n                if curBuff.stacks == 1036 then\n                    M.M12S.GP1Info.face = math.pi / 2\n                elseif curBuff.stacks == 1037 then\n                    M.M12S.GP1Info.face = math.pi\n                elseif curBuff.stacks == 1038 then\n                    M.M12S.GP1Info.face = math.pi * 3 / 2\n                elseif curBuff.stacks == 1039 then\n                    M.M12S.GP1Info.face = 0\n                end\n            else\n                if curBuff.stacks == 1036 then\n                    M.M12S.GP1Info.face = math.pi * 3 / 2\n                elseif curBuff.stacks == 1037 then\n                    M.M12S.GP1Info.face = 0\n                elseif curBuff.stacks == 1038 then\n                    M.M12S.GP1Info.face = math.pi / 2\n                elseif curBuff.stacks == 1039 then\n                    M.M12S.GP1Info.face = math.pi\n                end\n            end\n        end\n    end\n    d(\"已采集到蛇头数据\")\nend\nself.used = true",
 						conditions = 
 						{
 							
@@ -2355,7 +2355,7 @@ local tbl =
 						gVar = "ACR_RikuMNK3_CD",
 						name = "1运-小怪数据采集",
 						uuid = "d0a5806e-5591-a173-acb1-c4bfcc973adb",
-						version = 2,
+						version = 2.1,
 					},
 					inheritedIndex = 2,
 				},
