@@ -10,6 +10,7 @@ local tbl =
 			conditions = 
 			{
 			},
+			enabled = false,
 			name = "------------ MuAiDraw ---------------------------",
 			uuid = "4c04d325-7712-422b-be39-a892f38c3b0d",
 			version = 2,
@@ -121,6 +122,23 @@ local tbl =
 		{
 			actions = 
 			{
+			},
+			conditions = 
+			{
+			},
+			enabled = false,
+			name = "-------- m11s --------",
+			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
+			version = 2,
+		},
+		inheritedIndex = 5,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
 				
 				{
 					data = 
@@ -160,22 +178,6 @@ local tbl =
 			version = 2,
 		},
 		inheritedIndex = 4,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-			},
-			conditions = 
-			{
-			},
-			name = "-------- m11s --------",
-			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
-			version = 2,
-		},
-		inheritedIndex = 5,
 	},
 	
 	{
@@ -223,7 +225,7 @@ local tbl =
 			uuid = "b3503580-71a1-e733-a4c3-578deaae1e88",
 			version = 2,
 		},
-		inheritedIndex = 6,
+		inheritedIndex = 5,
 	},
 	
 	{
@@ -288,7 +290,74 @@ local tbl =
 			uuid = "74d161a0-ce78-a135-a5df-53829b8f7124",
 			version = 2,
 		},
+		inheritedIndex = 6,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+			},
+			conditions = 
+			{
+			},
+			enabled = false,
+			name = "-------- m12s --------",
+			uuid = "d59f33fd-dc8f-4ea2-84c5-a200263ed342",
+			version = 2,
+		},
 		inheritedIndex = 7,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local redDrawer = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 1)),\n        2\n)\nif MuAiGuide.M11SMapType == nil or MuAiGuide.M11SMapType ~= 1 then\n\tredDrawer:addRect(100, 0, 80, 40, 40, 0, true)\t\nelse\n\tredDrawer:addRect(89, 0, 80, 40, 10, 0, true)\n\tredDrawer:addRect(84, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(116, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(111, 0, 80, 40, 10, 0, true)\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"71b6f493-41e3-df25-8619-bbdb57bd01bf",
+								true,
+							},
+						},
+						gVar = "ACR_RikuNIN3_CD",
+						uuid = "16ba8e37-2a5d-9b6e-a6a5-3593ba5c9ac4",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "71b6f493-41e3-df25-8619-bbdb57bd01bf",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			eventType = 13,
+			name = "M11S地图边框",
+			uuid = "15ffb251-5885-55b5-adf0-15a00a7fcba5",
+			version = 2,
+		},
+		inheritedIndex = 8,
 	},
 	
 	{
@@ -430,56 +499,6 @@ local tbl =
 			uuid = "e260ac90-04cd-d071-866c-f30f070327c0",
 			version = 2,
 		},
-		inheritedIndex = 8,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local redDrawer = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 1)),\n        2\n)\nif MuAiGuide.M11SMapType == nil or MuAiGuide.M11SMapType ~= 1 then\n\tredDrawer:addRect(100, 0, 80, 40, 40, 0, true)\t\nelse\n\tredDrawer:addRect(89, 0, 80, 40, 10, 0, true)\n\tredDrawer:addRect(84, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(116, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(111, 0, 80, 40, 10, 0, true)\nend\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"71b6f493-41e3-df25-8619-bbdb57bd01bf",
-								true,
-							},
-						},
-						gVar = "ACR_RikuNIN3_CD",
-						uuid = "16ba8e37-2a5d-9b6e-a6a5-3593ba5c9ac4",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "71b6f493-41e3-df25-8619-bbdb57bd01bf",
-						version = 2,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			eventType = 13,
-			name = "M11S地图边框",
-			uuid = "15ffb251-5885-55b5-adf0-15a00a7fcba5",
-			version = 2,
-		},
 		inheritedIndex = 9,
 	},
 	
@@ -547,22 +566,6 @@ local tbl =
 			version = 2,
 		},
 		inheritedIndex = 10,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-			},
-			conditions = 
-			{
-			},
-			name = "-------- m12s --------",
-			uuid = "d59f33fd-dc8f-4ea2-84c5-a200263ed342",
-			version = 2,
-		},
-		inheritedIndex = 13,
 	},
 	
 	{
@@ -1316,6 +1319,7 @@ local tbl =
 			conditions = 
 			{
 			},
+			enabled = false,
 			name = "-- 本体 --",
 			uuid = "960bb8b2-a094-8d02-93bf-bed17a863848",
 			version = 2,
@@ -1333,7 +1337,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle1_Start then\n    local changeState = false\n    for _, ent in pairs(M.Party) do\n        local buff = TensorCore.getBuff(ent.id, 3323)\n        if buff ~= nil then\n            changeState = true\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle1_GotBuff\n            M.M12S.Timer = Now()\n            break\n        end\n    end\n    if not changeState then\n        local guidePos = nil\n        if M.SelfPos == \"MT\" then\n            guidePos = { x = 96, z = 96 }\n        elseif M.SelfPos == \"ST\" then\n            guidePos = { x = 104, z = 104 }\n        elseif M.SelfPos == \"H1\" then\n            guidePos = { x = 93, z = 107 }\n        elseif M.SelfPos == \"H2\" then\n            guidePos = { x = 107, z = 93 }\n        elseif M.SelfPos == \"D1\" then\n            guidePos = { x = 96, z = 104 }\n        elseif M.SelfPos == \"D2\" then\n            guidePos = { x = 104, z = 96 }\n        elseif M.SelfPos == \"D3\" then\n            guidePos = { x = 93, z = 93 }\n        elseif M.SelfPos == \"D4\" then\n            guidePos = { x = 107, z = 107 }\n        end\n        M.FrameDirect(guidePos.x, guidePos.z)\n    end\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle1_GotBuff and TimeSince(M.M12S.Timer) > 2000 then\n    if table.size(M.M12S.P1Info.SubsDark) == 2 and table.size(M.M12S.P1Info.SubsFire) == 2 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle1_GotSub\n        M.M12S.Timer = Now()\n    else\n        local cnt = 0\n        for _, ent in pairs(TensorCore.entityList(\"contentid=14380\")) do\n            if Argus.isEntityVisible(ent) then\n                cnt = cnt + 1\n            end\n        end\n        if cnt == 12 then\n            for _, ent in pairs(TensorCore.entityList(\"contentid=14380\")) do\n                if Argus.isEntityVisible(ent) then\n                    local _, flag = Argus.getEntityTransforms(ent.id)\n                    if flag == 16 and table.size(M.M12S.P1Info.Subs) < 8 then\n                        table.insert(M.M12S.P1Info.Subs, ent)\n                    else\n                        local index = -1\n                        local rad = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, ent.pos)\n                        for i = 0, 3 do\n                            local dir = math.pi / 2 * i\n                            if M.IsSameDirection(dir, rad) then\n                                index = i\n                                break\n                            end\n                        end\n                        if index == -1 then\n                            M.M12S.P1Info.FireMain = ent\n                        else\n                            table.insert(M.M12S.P1Info.SubOld, ent)\n                        end\n                    end\n                end\n            end\n\n            local pA = M.M12S.P1Info.SubOld[1].pos\n            local pB = M.M12S.P1Info.SubOld[2].pos\n            local pC = M.M12S.P1Info.SubOld[3].pos\n            local disAB = TensorCore.getDistance2d(pA, pB)\n            local disAC = TensorCore.getDistance2d(pA, pC)\n            local disBC = TensorCore.getDistance2d(pB, pC)\n            if disAB == disAC then\n                M.M12S.P1Info.DarkMain = M.M12S.P1Info.SubOld[1]\n            elseif disAB == disBC then\n                M.M12S.P1Info.DarkMain = M.M12S.P1Info.SubOld[2]\n            elseif disBC == disAC then\n                M.M12S.P1Info.DarkMain = M.M12S.P1Info.SubOld[3]\n            end\n            if table.size(M.M12S.P1Info.Subs) == 8\n                    and M.M12S.P1Info.FireMain ~= nil\n                    and M.M12S.P1Info.DarkMain ~= nil then\n                local others = {}\n                for _, sub in pairs(M.M12S.P1Info.Subs) do\n                    if M.IsSameDirection(sub.pos.h, M.M12S.P1Info.FireMain.pos.h) then\n                        table.insert(M.M12S.P1Info.SubsFire, sub)\n                    else\n                        table.insert(others, sub)\n                    end\n                end\n                M.M12S.P1Info.SubsDark = M.M12S.P1Info.getNear2(M.M12S.P1Info.DarkMain, others)\n                if table.size(M.M12S.P1Info.SubsDark) == 2 and table.size(M.M12S.P1Info.SubsFire) == 2 then\n                    local focus = M.M12S.P1Info.SubsDark[1].pos\n                    M.M12S.P1Info.oldPos = { x = focus.x, y = focus.y, z = focus.z }\n                    M.M12S.P1Info.lastPos = { x = focus.x, y = focus.y, z = focus.z }\n                end\n            end\n        end\n    end\nend\n\n-- 等待位置变化\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle1_GotSub and TimeSince(M.M12S.Timer) > 1000 then\n    local fucus = M.M12S.P1Info.SubsDark[1]\n    local focusSub = TensorCore.mGetEntity(fucus.id)\n    local curPos = { x = focusSub.pos.x, y = focusSub.pos.y, z = focusSub.pos.z }\n    local toOld = TensorCore.getDistance2d(M.M12S.P1Info.oldPos, curPos)\n    if toOld > 0.5 then\n        local toLast = TensorCore.getDistance2d(M.M12S.P1Info.lastPos, curPos)\n        if toLast < 0.5 then\n            --距离元始位置大于0.5 距离新前次检查位置小于0.5表示小怪已经移动完毕\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle1_SubMove\n        else\n            M.M12S.P1Info.lastPos = curPos\n            M.M12S.Timer = Now()\n        end\n    end\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle1_SubMove then\n    local player = M.GetPlayer()\n    if M.M12S.P1Info.buffType == nil then\n        local buff = TensorCore.getBuff(player.id, 3323)\n        if buff == nil then\n            M.M12S.P1Info.buffType = 2937\n        else\n            M.M12S.P1Info.buffType = 3323\n        end\n    elseif M.M12S.P1Info.buffType == 2937 then\n        local buff = TensorCore.getBuff(player.id, 3323)\n        if buff ~= nil then\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle1_End\n        end\n    elseif M.M12S.P1Info.buffType == 3323 then\n        local buff = TensorCore.getBuff(player.id, 2937)\n        if buff ~= nil then\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle1_End\n        end\n    end\n    local list\n    if M.M12S.P1Info.buffType == 3323 then\n        list = M.M12S.P1Info.SubsFire\n    else\n        list = M.M12S.P1Info.SubsDark\n    end\n    if M.M12S.P1Info.guideId == nil then\n        local target\n        if table.contains({ \"MT\", \"ST\", \"D1\", \"D2\" }, M.SelfPos) then\n            local distance = 10000\n            for _, ent in pairs(list) do\n                local newEnt = TensorCore.mGetEntity(ent.id)\n                local curDis = TensorCore.getDistance2d({ x = 100, y = 0, z = 100 }, newEnt.pos)\n                if curDis < distance then\n                    distance = curDis\n                    target = ent\n                end\n            end\n        else\n            local distance = 0\n            for _, ent in pairs(list) do\n                local newEnt = TensorCore.mGetEntity(ent.id)\n                local curDis = TensorCore.getDistance2d({ x = 100, y = 0, z = 100 }, newEnt.pos)\n                if curDis > distance then\n                    distance = curDis\n                    target = ent\n                end\n            end\n        end\n        M.M12S.P1Info.guideId = target.id\n    end\n    local drawer\n    local pos = TensorCore.mGetEntity(M.M12S.P1Info.guideId).pos\n    if M.M12S.P1Info.buffType == 2937 then\n        drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.7), 1)\n    elseif M.M12S.P1Info.buffType == 3323 then\n        drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.7), 1)\n    end\n    local heading = TensorCore.getHeadingToTarget(player.pos, pos)\n    drawer:addRect(player.pos.x, player.pos.y, player.pos.z, TensorCore.getDistance2d(player.pos, pos), 0.05, heading, true)\nend\nself.used = true",
+						actionLua = "local M = MuAiGuide\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle1_Start then\n    local changeState = false\n    for _, ent in pairs(M.Party) do\n        local buff = TensorCore.getBuff(ent.id, 3323)\n        if buff ~= nil then\n            changeState = true\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle1_GotBuff\n            M.M12S.Timer = Now()\n            break\n        end\n    end\n    if not changeState then\n        local guidePos = nil\n        if M.SelfPos == \"MT\" then\n            guidePos = { x = 96, z = 96 }\n        elseif M.SelfPos == \"ST\" then\n            guidePos = { x = 104, z = 104 }\n        elseif M.SelfPos == \"H1\" then\n            guidePos = { x = 93, z = 107 }\n        elseif M.SelfPos == \"H2\" then\n            guidePos = { x = 107, z = 93 }\n        elseif M.SelfPos == \"D1\" then\n            guidePos = { x = 96, z = 104 }\n        elseif M.SelfPos == \"D2\" then\n            guidePos = { x = 104, z = 96 }\n        elseif M.SelfPos == \"D3\" then\n            guidePos = { x = 93, z = 93 }\n        elseif M.SelfPos == \"D4\" then\n            guidePos = { x = 107, z = 107 }\n        end\n        M.FrameDirect(guidePos.x, guidePos.z)\n    end\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle1_GotBuff and TimeSince(M.M12S.Timer) > 2000 then\n    if table.size(M.M12S.P1Info.SubsDark) == 2 and table.size(M.M12S.P1Info.SubsFire) == 2 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle1_GotSub\n        M.M12S.Timer = Now()\n    else\n        local cnt = 0\n        for _, ent in pairs(TensorCore.entityList(\"contentid=14380\")) do\n            if Argus.isEntityVisible(ent) then\n                cnt = cnt + 1\n            end\n        end\n        if cnt == 12 then\n            for _, ent in pairs(TensorCore.entityList(\"contentid=14380\")) do\n                if Argus.isEntityVisible(ent) then\n                    local _, flag = Argus.getEntityTransforms(ent.id)\n                    if flag == 16 and table.size(M.M12S.P1Info.Subs) < 8 then\n                        table.insert(M.M12S.P1Info.Subs, ent)\n                    else\n                        local index = -1\n                        local rad = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, ent.pos)\n                        for i = 0, 3 do\n                            local dir = math.pi / 2 * i\n                            if M.IsSameDirection(dir, rad) then\n                                index = i\n                                break\n                            end\n                        end\n                        if index == -1 then\n                            M.M12S.P1Info.FireMain = ent\n                        else\n                            table.insert(M.M12S.P1Info.SubOld, ent)\n                        end\n                    end\n                end\n            end\n\n            local pA = M.M12S.P1Info.SubOld[1].pos\n            local pB = M.M12S.P1Info.SubOld[2].pos\n            local pC = M.M12S.P1Info.SubOld[3].pos\n            local disAB = TensorCore.getDistance2d(pA, pB)\n            local disAC = TensorCore.getDistance2d(pA, pC)\n            local disBC = TensorCore.getDistance2d(pB, pC)\n            if disAB == disAC then\n                M.M12S.P1Info.DarkMain = M.M12S.P1Info.SubOld[1]\n            elseif disAB == disBC then\n                M.M12S.P1Info.DarkMain = M.M12S.P1Info.SubOld[2]\n            elseif disBC == disAC then\n                M.M12S.P1Info.DarkMain = M.M12S.P1Info.SubOld[3]\n            end\n            if table.size(M.M12S.P1Info.Subs) == 8\n                    and M.M12S.P1Info.FireMain ~= nil\n                    and M.M12S.P1Info.DarkMain ~= nil then\n                local others = {}\n                for _, sub in pairs(M.M12S.P1Info.Subs) do\n                    if M.IsSameDirection(sub.pos.h, M.M12S.P1Info.FireMain.pos.h) then\n                        table.insert(M.M12S.P1Info.SubsFire, sub)\n                    else\n                        table.insert(others, sub)\n                    end\n                end\n                M.M12S.P1Info.SubsDark = M.M12S.P1Info.getNear2(M.M12S.P1Info.DarkMain, others)\n                if table.size(M.M12S.P1Info.SubsDark) == 2 and table.size(M.M12S.P1Info.SubsFire) == 2 then\n                    local focus = M.M12S.P1Info.SubsDark[1].pos\n                    M.M12S.P1Info.oldPos = { x = focus.x, y = focus.y, z = focus.z }\n                    M.M12S.P1Info.lastPos = { x = focus.x, y = focus.y, z = focus.z }\n                end\n            end\n        end\n    end\nend\n\n-- 等待位置变化\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle1_GotSub and TimeSince(M.M12S.Timer) > 1000 then\n    local fucus = M.M12S.P1Info.SubsDark[1]\n    local focusSub = TensorCore.mGetEntity(fucus.id)\n    local curPos = { x = focusSub.pos.x, y = focusSub.pos.y, z = focusSub.pos.z }\n    local toOld = TensorCore.getDistance2d(M.M12S.P1Info.oldPos, curPos)\n    if toOld > 0.5 then\n        local toLast = TensorCore.getDistance2d(M.M12S.P1Info.lastPos, curPos)\n        if toLast < 0.5 then\n            --距离元始位置大于0.5 距离新前次检查位置小于0.5表示小怪已经移动完毕\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle1_SubMove\n        else\n            M.M12S.P1Info.lastPos = curPos\n            M.M12S.Timer = Now()\n        end\n    end\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle1_SubMove then\n    local player = M.GetPlayer()\n    if M.M12S.P1Info.buffType == nil then\n        local buff = TensorCore.getBuff(player.id, 3323)\n        if buff == nil then\n            M.M12S.P1Info.buffType = 2937\n        else\n            M.M12S.P1Info.buffType = 3323\n        end\n    elseif M.M12S.P1Info.buffType == 2937 then\n        local buff = TensorCore.getBuff(player.id, 3323)\n        if buff ~= nil then\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle1_End\n        end\n    elseif M.M12S.P1Info.buffType == 3323 then\n        local buff = TensorCore.getBuff(player.id, 2937)\n        if buff ~= nil then\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle1_End\n        end\n    end\n    local list\n    if M.M12S.P1Info.buffType == 3323 then\n        list = M.M12S.P1Info.SubsFire\n    else\n        list = M.M12S.P1Info.SubsDark\n    end\n    if M.M12S.P1Info.guideId == nil then\n        local target\n        if table.contains({ \"MT\", \"ST\", \"D1\", \"D2\" }, M.SelfPos) then\n            local distance = 10000\n            for _, ent in pairs(list) do\n                local newEnt = TensorCore.mGetEntity(ent.id)\n                local curDis = TensorCore.getDistance2d({ x = 100, y = 0, z = 100 }, newEnt.pos)\n                if curDis < distance then\n                    distance = curDis\n                    target = ent\n                end\n            end\n        else\n            local distance = 0\n            for _, ent in pairs(list) do\n                local newEnt = TensorCore.mGetEntity(ent.id)\n                local curDis = TensorCore.getDistance2d({ x = 100, y = 0, z = 100 }, newEnt.pos)\n                if curDis > distance then\n                    distance = curDis\n                    target = ent\n                end\n            end\n        end\n        M.M12S.P1Info.guideId = target.id\n    end\n    local pos = TensorCore.mGetEntity(M.M12S.P1Info.guideId).pos\n    if M.SelfPos == \"MT\" or M.SelfPos == \"ST\" then\n        if pos.z > 100 then\n            M.FrameDirect(100, 106.8, 0.45)\n        else\n            M.FrameDirect(100, 93.2, 0.45)\n        end\n    elseif M.SelfPos == \"D1\" or M.SelfPos == \"D2\" then\n        if M.M12S.P1Info.buffType == 3323 then\n            --暗找火\n            if pos.z > 100 then\n                M.FrameDirect(100, 106.8, 0.45)\n            else\n                M.FrameDirect(100, 93.2, 0.45)\n            end\n        else\n            if pos.x > 100 then\n                M.FrameDirect(106.8, 100, 0.45)\n            else\n                M.FrameDirect(93.2, 100, 0.45)\n            end\n        end\n    else\n        if M.M12S.P1Info.ConeType == 46299 then\n            -- 横着打\n            if M.M12S.P1Info.buffType == 3323 then\n                --暗找火\n                if pos.x > 100 then\n                    if pos.z > 100 then\n                        M.FrameDirect(110, 115.8)\n                    else\n                        M.FrameDirect(110, 84.2)\n                    end\n                else\n                    if pos.z > 100 then\n                        M.FrameDirect(90, 115.8)\n                    else\n                        M.FrameDirect(90, 84.2)\n                    end\n                end\n            else\n                if M.SelfPos == \"H1\" or M.SelfPos == \"H2\" then\n                    if pos.x > 100 then\n                        if pos.z > 100 then\n                            M.FrameDirect(111, 116)\n                        else\n                            M.FrameDirect(111, 84)\n                        end\n                    else\n                        if pos.z > 100 then\n                            M.FrameDirect(89, 116)\n                        else\n                            M.FrameDirect(89, 84)\n                        end\n                    end\n                else\n                    if pos.x > 100 then\n                        if pos.z > 100 then\n                            M.FrameDirect(105.5, 114.5)\n                        else\n                            M.FrameDirect(105.5, 85.5)\n                        end\n                    else\n                        if pos.z > 100 then\n                            M.FrameDirect(94.5, 114.5)\n                        else\n                            M.FrameDirect(94.5, 85.5)\n                        end\n                    end\n                end\n            end\n        elseif M.M12S.P1Info.ConeType == 46298 then\n            -- 竖着打\n            if M.M12S.P1Info.buffType == 3323 then\n                --暗找火\n                if pos.x > 100 then\n                    if pos.z > 100 then\n                        M.FrameDirect(115.8, 110)\n                    else\n                        M.FrameDirect(115.8, 90)\n                    end\n                else\n                    if pos.z > 100 then\n                        M.FrameDirect(84.2, 110)\n                    else\n                        M.FrameDirect(84.2, 90)\n                    end\n                end\n            else\n                if M.SelfPos == \"H1\" or M.SelfPos == \"H2\" then\n                    if pos.x > 100 then\n                        if pos.z > 100 then\n                            M.FrameDirect(116, 110)\n                        else\n                            M.FrameDirect(116, 90)\n                        end\n                    else\n                        if pos.z > 100 then\n                            M.FrameDirect(84, 110)\n                        else\n                            M.FrameDirect(84, 90)\n                        end\n                    end\n                else\n                    if pos.x > 100 then\n                        if pos.z > 100 then\n                            M.FrameDirect(114.5, 105.5)\n                        else\n                            M.FrameDirect(114.5, 94.5)\n                        end\n                    else\n                        if pos.z > 100 then\n                            M.FrameDirect(85.5, 105.5)\n                        else\n                            M.FrameDirect(85.5, 94.5)\n                        end\n                    end\n                end\n            end\n        end\n    end\nend\n\nif M.Config.Main.M12SExDraw and M.M12S.CurrentState == M.M12S.StateEnum.Puzzle1_SubMove then\n    local players = {}\n    for _, player in pairs(M.Party) do\n        table.insert(players, TensorCore.mGetEntity(player.id))\n    end\n    for _, fireEnt in pairs(M.M12S.P1Info.SubsFire) do\n        local curEnt = TensorCore.mGetEntity(fireEnt.id)\n        local dis = nil\n        local targetPlayer\n        for _, player in pairs(players) do\n            local curDis = TensorCore.getDistance2d(player.pos, curEnt.pos)\n            if dis == nil or curDis < dis then\n                targetPlayer = player\n                dis = curDis\n            end\n        end\n        if targetPlayer ~= nil then\n            local drawer = Argus2.ShapeDrawer:new(\n                    (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n                    (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n                    (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n                    (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                    1\n            )\n\n            drawer:addCircle(targetPlayer.pos.x, 0, targetPlayer.pos.z, 5)\n        end\n    end\n    for _, darkEnt in pairs(M.M12S.P1Info.SubsDark) do\n        local curDrk = TensorCore.mGetEntity(darkEnt.id)\n        local near2 = M.M12S.P1Info.getNear2(curDrk, players)\n        if table.size(near2) > 0 then\n            for i, ent in pairs(near2) do\n                local drawer = Argus2.ShapeDrawer:new(\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.2)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.2)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.2)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                        1\n                )\n                drawer:addCircle(ent.pos.x, 0, ent.pos.z, 5)\n            end\n        end\n    end\nend\n\nself.used = true",
 						conditions = 
 						{
 							
@@ -2064,7 +2068,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Tower2 then\n    if M.M12S.P4TowerData.guidePos == nil then\n        local selfTower = M.M12S.P4TowerData.Self\n        if selfTower.contentid == 2015016 then\n            -- 火 \n            M.M12S.P4TowerData.guidePos = selfTower.pos\n        elseif selfTower.contentid == 2015013 then\n            -- 风\n            if selfTower.pos.x > 100 then\n                M.M12S.P4TowerData.guidePos = { x = selfTower.pos.x - 2, z = selfTower.pos.z }\n            else\n                M.M12S.P4TowerData.guidePos = { x = selfTower.pos.x + 2, z = selfTower.pos.z }\n            end\n        elseif selfTower.contentid == 2015014 then\n            -- 暗\n            if selfTower.pos.z > 100 then\n                M.M12S.P4TowerData.guidePos = { x = selfTower.pos.x, z = selfTower.pos.z + 2 }\n            else\n                M.M12S.P4TowerData.guidePos = { x = selfTower.pos.x, z = selfTower.pos.z - 2 }\n            end\n        elseif selfTower.contentid == 2015015 then\n            -- 土\n            M.M12S.P4TowerData.guidePos = selfTower.pos\n        end\n    end\n    local stateChange = M.M12S.StateChangeByBuff(4765)\n    if stateChange then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_TowerEnd\n        M.M12S.Timer = Now()\n    else\n        M.FrameDirect(M.M12S.P4TowerData.guidePos.x, M.M12S.P4TowerData.guidePos.z)\n    end\nend\n\n-- 踩塔后\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_TowerEnd then\n    if M.M12S.P4TowerData.Self.contentid == 2015013 then\n        -- 风等落地\n        if TimeSince(M.M12S.Timer) > 1000 and M.GetPlayer().pos.y < 0.01 then\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_TowerFarNear\n        end\n    else\n        if M.M12S.P4TowerData.Self.contentid == 2015015 then\n            --土，先移动等待\n            if M.M12S.P4TowerData.Self.pos.z > 100 then\n                M.FrameDirect(M.M12S.P4TowerData.Self.pos.x, M.M12S.P4TowerData.Self.pos.z - 4)\n            else\n                M.FrameDirect(M.M12S.P4TowerData.Self.pos.x, M.M12S.P4TowerData.Self.pos.z + 4)\n            end\n        end\n        if TimeSince(M.M12S.Timer) > 1500 then\n            local anyoneHasFire = false\n            for _, player in pairs(M.Party) do\n                local debuff = TensorCore.getBuff(player.id, 4768)\n                if debuff ~= nil and debuff.duration >= 0 then\n                    anyoneHasFire = true\n                    break\n                end\n            end\n            if not anyoneHasFire then\n                M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_TowerFarNear\n            end\n        end\n    end\nend\n\n-- 远近扇形\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_TowerFarNear then\n    local changeState = true\n    for _, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, 4765)\n        if debuff ~= nil and debuff.duration >= 0 then\n            changeState = false\n            break\n        end\n    end\n    if changeState then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_div2Subs\n    else\n        local player = M.GetPlayer()\n        if TensorCore.getBuff(player.id, 4767) then\n            --近\n            if player.pos.x > 100 then\n                M.FrameDirect(106, 100)\n            else\n                M.FrameDirect(94, 100)\n            end\n        elseif TensorCore.getBuff(player.id, 4766) then\n            -- 远\n            if player.pos.x > 100 then\n                M.FrameDirect(107, 93)\n            else\n                M.FrameDirect(93, 106)\n            end\n        else\n            if table.contains({ \"MT\", \"ST\", \"D1\", \"D2\" }, M.SelfPos) then\n                if M.M12S.P4NearTargetId == nil then\n                    for _, ent in pairs(M.Party) do\n                        local debuff = TensorCore.getBuff(ent.id, 4767)\n                        if debuff ~= nil then\n                            if player.pos.x > 100 and ent.pos.x > 100\n                                    or player.pos.x < 100 and ent.pos.x < 100\n                            then\n                                M.M12S.P4NearTargetId = ent.id\n                                break\n                            end\n                        end\n                    end\n                else\n                    local heading\n                    local curTarget = TensorCore.mGetEntity(M.M12S.P4NearTargetId)\n                    if curTarget.pos.x > 100 then\n                        heading = math.pi / 2\n                    else\n                        heading = math.pi * 3 / 2\n                    end\n                    local targetPos = TensorCore.getPosInDirection(curTarget.pos, heading, 1)\n                    M.FrameDirect(targetPos.x, targetPos.z, 0.3)\n                end\n            else\n                if player.pos.x > 100 then\n                    M.FrameDirect(117, 109)\n                else\n                    M.FrameDirect(83, 91)\n                end\n            end\n        end\n    end\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_div2End then\n    if M.M12S.StateChangeByBuff(2941) then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_CopyBoom1\n        M.M12S.Timer = Now()\n    else\n        local pos = M.M12S.P4CopyInfo.gatherPos1\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\nself.used = true",
+						actionLua = "local M = MuAiGuide\nM.M12S.P4TowerData.guidePos = nil\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Tower2 then\n    local selfTower = M.M12S.P4TowerData.Self\n    if M.M12S.P4TowerData.guidePos == nil then\n        if selfTower.contentid == 2015016 then\n            -- 火 \n            M.M12S.P4TowerData.guidePos = selfTower.pos\n        elseif selfTower.contentid == 2015013 then\n            -- 风\n            if selfTower.pos.x > 100 then\n                M.M12S.P4TowerData.guidePos = { x = selfTower.pos.x - 2.7, z = selfTower.pos.z }\n            else\n                M.M12S.P4TowerData.guidePos = { x = selfTower.pos.x + 2.7, z = selfTower.pos.z }\n            end\n        elseif selfTower.contentid == 2015014 then\n            -- 暗\n            if selfTower.pos.z > 100 then\n                M.M12S.P4TowerData.guidePos = { x = selfTower.pos.x, z = selfTower.pos.z + 2 }\n            else\n                M.M12S.P4TowerData.guidePos = { x = selfTower.pos.x, z = selfTower.pos.z - 2 }\n            end\n        elseif selfTower.contentid == 2015015 then\n            -- 土\n            M.M12S.P4TowerData.guidePos = selfTower.pos\n        end\n    end\n    local stateChange = M.M12S.StateChangeByBuff(4765)\n    if stateChange then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_TowerEnd\n        M.M12S.Timer = Now()\n    else\n        local size\n        if selfTower.contentid == 2015013 then\n            size = 0.3\n        else\n            size = 0.5\n        end\n        M.FrameDirect(M.M12S.P4TowerData.guidePos.x, M.M12S.P4TowerData.guidePos.z, size)\n    end\nend\n\n-- 踩塔后\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_TowerEnd then\n    if M.M12S.P4TowerData.Self.contentid == 2015013 then\n        -- 风等落地\n        if TimeSince(M.M12S.Timer) > 1000 and M.GetPlayer().pos.y < 0.01 then\n            M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_TowerFarNear\n        end\n    else\n        if M.M12S.P4TowerData.Self.contentid == 2015015 then\n            --土，先移动等待\n            if M.M12S.P4TowerData.Self.pos.z > 100 then\n                M.FrameDirect(M.M12S.P4TowerData.Self.pos.x, M.M12S.P4TowerData.Self.pos.z - 5)\n            else\n                M.FrameDirect(M.M12S.P4TowerData.Self.pos.x, M.M12S.P4TowerData.Self.pos.z + 5)\n            end\n        end\n        if TimeSince(M.M12S.Timer) > 1500 then\n            local anyoneHasFire = false\n            for _, player in pairs(M.Party) do\n                local debuff = TensorCore.getBuff(player.id, 4768)\n                if debuff ~= nil and debuff.duration >= 0 then\n                    anyoneHasFire = true\n                    break\n                end\n            end\n            if not anyoneHasFire then\n                M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_TowerFarNear\n            end\n        end\n    end\nend\n\n-- 远近扇形\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_TowerFarNear then\n    local changeState = true\n    for _, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, 4765)\n        if debuff ~= nil and debuff.duration >= 0 then\n            changeState = false\n            break\n        end\n    end\n    if changeState then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_div2Subs\n    else\n        local player = M.GetPlayer()\n        if TensorCore.getBuff(player.id, 4767) then\n            --近\n            if player.pos.x > 100 then\n                M.FrameDirect(106, 100)\n            else\n                M.FrameDirect(94, 100)\n            end\n        elseif TensorCore.getBuff(player.id, 4766) then\n            -- 远\n            if player.pos.x > 100 then\n                M.FrameDirect(107, 93)\n            else\n                M.FrameDirect(93, 106)\n            end\n        else\n            if table.contains({ \"MT\", \"ST\", \"D1\", \"D2\" }, M.SelfPos) then\n                if M.M12S.P4NearTargetId == nil then\n                    for _, ent in pairs(M.Party) do\n                        local debuff = TensorCore.getBuff(ent.id, 4767)\n                        if debuff ~= nil then\n                            if player.pos.x > 100 and ent.pos.x > 100\n                                    or player.pos.x < 100 and ent.pos.x < 100\n                            then\n                                M.M12S.P4NearTargetId = ent.id\n                                break\n                            end\n                        end\n                    end\n                else\n                    local heading\n                    local curTarget = TensorCore.mGetEntity(M.M12S.P4NearTargetId)\n                    if curTarget.pos.x > 100 then\n                        heading = math.pi / 2\n                    else\n                        heading = math.pi * 3 / 2\n                    end\n                    local targetPos = TensorCore.getPosInDirection(curTarget.pos, heading, 1)\n                    M.FrameDirect(targetPos.x, targetPos.z, 0.3)\n                end\n            else\n                if player.pos.x > 100 then\n                    M.FrameDirect(117, 109)\n                else\n                    M.FrameDirect(83, 91)\n                end\n            end\n        end\n    end\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_div2End then\n    if M.M12S.StateChangeByBuff(2941) then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_CopyBoom1\n        M.M12S.Timer = Now()\n    else\n        local pos = M.M12S.P4CopyInfo.gatherPos1\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\nif M.Config.Main.M12SExDraw and M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_TowerFarNear then\n    for i, ent in pairs(M.Party) do\n        local near = TensorCore.getBuff(ent.id, 4767)\n        local far = TensorCore.getBuff(ent.id, 4766)\n        if near ~= nil then\n            local from = TensorCore.mGetEntity(ent.id)\n            local dis, targetPos\n            for _, player in pairs(M.Party) do\n                if player.id ~= from.id then\n                    local entPos = TensorCore.mGetEntity(player.id).pos\n                    local curDis = TensorCore.getDistance2d(entPos, from.pos)\n                    if dis == nil or curDis < dis then\n                        dis = curDis\n                        targetPos = entPos\n                    end\n                end\n            end\n            if targetPos ~= nil then\n                local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1), 1)\n                local heading = TensorCore.getHeadingToTarget(from.pos, targetPos)\n                drawer:addCone(from.pos.x, from.pos.y, from.pos.z, 20, math.pi / 8, heading, true)\n            end\n        elseif far ~= nil then\n            local from = TensorCore.mGetEntity(ent.id)\n            local dis, targetPos\n            for _, player in pairs(M.Party) do\n                if player.id ~= from.id then\n                    local entPos = TensorCore.mGetEntity(player.id).pos\n                    local curDis = TensorCore.getDistance2d(entPos, from.pos)\n                    if dis == nil or curDis > dis then\n                        dis = curDis\n                        targetPos = entPos\n                    end\n                end\n            end\n            if targetPos ~= nil then\n                local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1), 1)\n                local heading = TensorCore.getHeadingToTarget(from.pos, targetPos)\n                drawer:addCone(from.pos.x, from.pos.y, from.pos.z, 40, math.pi / 8, heading, true)\n            end\n        end\n    end\nend\n\nif M.Config.Main.M12SExDraw and M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Tower2 then\n    if M.M12S.P4TowerData.Earth == nil then\n        M.M12S.P4TowerData.Earth = {}\n        for _, ent in pairs(TensorCore.entityList(\"contentid=2015015\")) do\n            table.insert(M.M12S.P4TowerData.Earth, ent)\n        end\n    end\n    if M.M12S.P4TowerData.Self.contentid == 2015013 then\n        local from = M.M12S.P4TowerData.Self\n        local player = M.GetPlayer()\n        local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.2), 1)\n        local heading = TensorCore.getHeadingToTarget(from.pos, player.pos)\n        drawer:addArrow(player.pos.x, player.pos.y, player.pos.z, heading, 21.6, 0.2, 0.4, 0.2, true)\n    end\n    for _, ent in pairs(TensorCore.entityList(\"contentid=2015014\")) do\n        -- 暗\n        local dis = 10000\n        local lockPlayer\n        for _, player in pairs(M.Party) do\n            local curPlayer = TensorCore.mGetEntity(player.id)\n            local disPT = TensorCore.getDistance2d(ent.pos, curPlayer.pos)\n            if disPT <= 4 and disPT < dis then\n                dis = disPT\n                lockPlayer = curPlayer\n            end\n        end\n        if lockPlayer ~= nil then\n            local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1), 1)\n            local heading = TensorCore.getHeadingToTarget(ent.pos, lockPlayer.pos)\n            drawer:addRect(ent.pos.x, ent.pos.y, ent.pos.z, 40, 5, heading, true)\n        end\n    end\nend\n\nif M.Config.Main.M12SExDraw and M.M12S.CurrentState >= M.M12S.StateEnum.Puzzle4_TowerEnd \n        and M.M12S.CurrentState <= M.M12S.StateEnum.Puzzle4_TowerFarNear then\n    local anyoneHasFire = false\n    for _, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, 4768)\n        if debuff ~= nil and debuff.duration >= 0 then\n            anyoneHasFire = true\n            break\n        end\n    end\n    if anyoneHasFire then\n        for _, ent in pairs(M.M12S.P4TowerData.Earth) do\n            local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.1), 1)\n            drawer:addCircle(ent.pos.x, ent.pos.y, ent.pos.z, 4, true)\n        end\n    end\nend\n\nself.used = true",
 						conditions = 
 						{
 							
@@ -2323,11 +2327,37 @@ local tbl =
 							},
 						},
 						gVar = "ACR_TensorViper3_CD",
-						name = "1运开始",
+						name = "1运-开始",
 						uuid = "e168ce13-a389-cf0e-bb57-985f14698f22",
 						version = 2.1,
 					},
 					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "if eventArgs.spellID == 46299 then\n    MuAiGuide.M12S.P1Info.ConeType = 46299  -- 横着打\n    d(\"小怪横着打\")\nelseif eventArgs.spellID == 46298 then\n    MuAiGuide.M12S.P1Info.ConeType = 46298  -- 竖着打\n    d(\"小怪竖着打\")\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
+								true,
+							},
+							
+							{
+								"04e4bb3c-98d6-addf-bcfb-4d30d420d13e",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "1运-小怪数据采集",
+						uuid = "d0a5806e-5591-a173-acb1-c4bfcc973adb",
+						version = 2,
+					},
+					inheritedIndex = 2,
 				},
 				
 				{
@@ -2354,7 +2384,7 @@ local tbl =
 							},
 						},
 						gVar = "ACR_TensorViper3_CD",
-						name = "2运开始",
+						name = "2运-开始",
 						uuid = "20198ade-90b0-f178-a7a3-7cb7b0817df8",
 						version = 2.1,
 					},
@@ -2545,6 +2575,37 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
+						actionLua = "function condition()\n    return M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_div2Subs\nend\n\nlocal M = MuAiGuide\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif eventArgs.spellID == 46351 then\n    d(\"小怪读条左右刀\")\n    --左右刀\n    if ent.pos.x > 100 then\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 110, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 110, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 114, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 114, y = 0, z = 105.5 }\n        end\n    else\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 90, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 90, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 86, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 86, y = 0, z = 105.5 }\n        end\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.UpDown\nelseif eventArgs.spellID == 46352 then\n    d(\"小怪读条左上下刀\")\n    --上下刀\n    if ent.pos.x > 100 then\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 108, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 108, y = 0, z = 100 }\n    else\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 92, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 92, y = 0, z = 100 }\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.LeftRight\nend\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_div2SubsEnd\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
+								true,
+							},
+							
+							{
+								"2ea47182-803f-86ea-87a5-c23959e8ee83",
+								true,
+							},
+							
+							{
+								"3631adb4-7ecb-8c12-99c5-971de14cb24a",
+								true,
+							},
+						},
+						gVar = "ACR_TensorViper3_CD",
+						name = "4运-小世界上下or左右刀",
+						uuid = "c7fb0a3c-f564-435f-b537-9076cf358bc0",
+						version = 2.1,
+					},
+					inheritedIndex = 9,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
 						actionLua = "local M = MuAiGuide\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif ent.pos.z > 100 then\n    if M.Config.Main.M12SP4SendMacro then\n        SendTextCommand(\"/p 【C】上下刀，23外躲钢铁\")\n    end\n\n    M.M12S.P4Sub3Info.SkillType = M.M12S.DataEnum.UpDownSkillC\nelse\n    if M.Config.Main.M12SP4SendMacro then\n        SendTextCommand(\"/p 【A】上下刀，14点上安全\")\n    end\n    M.M12S.P4Sub3Info.SkillType = M.M12S.DataEnum.UpDownSkillA\nend\n-- 切换到2次连线\nM.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_SecondLink\nself.used = true",
 						conditions = 
 						{
@@ -2601,36 +2662,6 @@ local tbl =
 						version = 2.1,
 					},
 					inheritedIndex = 6,
-				},
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "function condition()\n    return M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_div2Subs\nend\n\nlocal M = MuAiGuide\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif eventArgs.spellID == 46351 then\n    d(\"小怪读条左右刀\")\n    --左右刀\n    if ent.pos.x > 100 then\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 110, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 110, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 114, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 114, y = 0, z = 105.5 }\n        end\n    else\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 90, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 90, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 86, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 86, y = 0, z = 105.5 }\n        end\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.UpDown\nelseif eventArgs.spellID == 46352 then\n    d(\"小怪读条左上下刀\")\n    --上下刀\n    if ent.pos.x > 100 then\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 108, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 108, y = 0, z = 100 }\n    else\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 92, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 92, y = 0, z = 100 }\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.LeftRight\nend\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_div2SubsEnd\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
-								true,
-							},
-							
-							{
-								"2ea47182-803f-86ea-87a5-c23959e8ee83",
-								true,
-							},
-							
-							{
-								"3631adb4-7ecb-8c12-99c5-971de14cb24a",
-								true,
-							},
-						},
-						gVar = "ACR_TensorViper3_CD",
-						name = "4运-小世界上下or左右刀",
-						uuid = "c7fb0a3c-f564-435f-b537-9076cf358bc0",
-						version = 2.1,
-					},
 				},
 			},
 			conditions = 
@@ -2835,12 +2866,33 @@ local tbl =
 					data = 
 					{
 						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.P1Info.startDark == nil or MuAiGuide.M12S.P1Info.startDark == 0",
+						conditionLua = "return MuAiGuide.M12S.CurrentState <= MuAiGuide.M12S.StateEnum.Puzzle1_GotBuff",
 						name = "1运-没有拿到",
 						uuid = "04e4bb3c-98d6-addf-bcfb-4d30d420d13e",
 						version = 2,
 					},
 					inheritedIndex = 16,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgOptionType = 3,
+						eventArgType = 2,
+						eventSpellID = 46303,
+						name = "1运小怪读条",
+						spellIDList = 
+						{
+							46303,
+							46301,
+							46299,
+							46298,
+						},
+						uuid = "bf03dd86-0f76-964c-83d1-f6a6ff17585a",
+						version = 2,
+					},
+					inheritedIndex = 17,
 				},
 				
 				{
@@ -2929,6 +2981,7 @@ local tbl =
 						uuid = "5cd9a6f2-9e64-75ea-bb0d-26353272d646",
 						version = 2,
 					},
+					inheritedIndex = 24,
 				},
 			},
 			eventType = 3,
@@ -3269,7 +3322,7 @@ local tbl =
 			uuid = "83898426-1459-2294-b52d-fbafeb6d698e",
 			version = 2,
 		},
-		inheritedIndex = 28,
+		inheritedIndex = 25,
 	}, 
 	inheritedProfiles = 
 	{

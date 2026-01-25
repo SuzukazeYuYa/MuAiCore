@@ -367,6 +367,15 @@ local DrawMainUI = function(M)
                 if M.Config.Main.M12SP4SendMacro then
                     GUI:TextColored(1, 0, 0, 1, "   注意：宏的很快，有被看出开了的风险！")
                 end
+                GUI:Text("  ")
+                GUI:SameLine()
+                M.Config.Main.M12SExDraw = GUI:Checkbox("M12S扩展绘图", M.Config.Main.M12SExDraw)
+                if M.Config.Main.M12SExDraw then
+                    GUI:TextColored(1, 0, 1, 1, "   添加一些额外的绘图, 包括:")
+                    GUI:TextColored(1, 0, 1, 1, "    1.本体1运, 火暗点名")
+                    GUI:TextColored(1, 0, 1, 1, "    2.本体4运, 踩塔激光、击退")
+                    GUI:TextColored(1, 0, 1, 1, "    3.本体4运, 远近")
+                end
             end
         end
 

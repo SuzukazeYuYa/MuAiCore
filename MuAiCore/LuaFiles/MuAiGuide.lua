@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 226
+M.VERSION = 227
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -228,6 +228,8 @@ M.CreateDefMainCfg = function()
         M12SAutoFace2 = true,
         -- 传统-传统uptime
         M12SAutoFaceType = 1,
+        -- 添加一些关键性绘图
+        M12SExDraw = false,
     }
     return mainCfg
 end
