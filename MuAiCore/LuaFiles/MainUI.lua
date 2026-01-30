@@ -332,7 +332,7 @@ local DrawMainUI = function(M)
                 GUI:SameLine(0, 15)
                 if M.Config.Main.M12SAutoFace1 then
                     GUI:PushItemWidth(80)
-                    local faceType, faceTypeChange = GUI:Combo("##FaceType", M.Config.Main.M12SAutoFaceType, { "传统", "UpTime", "一字" }, 4)
+                    local faceType, faceTypeChange = GUI:Combo("##FaceType", M.Config.Main.M12SAutoFaceType, { "传统", "UpTime", "一字", "MMW" }, 4)
                     if faceTypeChange then
                         M.Config.Main.M12SAutoFaceType = faceType
                     end
