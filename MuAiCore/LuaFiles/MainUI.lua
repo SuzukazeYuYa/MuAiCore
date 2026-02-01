@@ -325,6 +325,17 @@ local DrawMainUI = function(M)
             end
             GUI:Text(" ")
             GUI:SameLine()
+            if GUI:CollapsingHeader("M11S") then
+                GUI:Text("  ")
+                GUI:SameLine()
+                M.Config.Main.M11SExDraw = GUI:Checkbox("M11S扩展绘图", M.Config.Main.M11SExDraw)
+                if M.Config.Main.M11SExDraw then
+                    GUI:TextColored(1, 0, 1, 1, "   添加一些额外的绘图, 包括:")
+                    GUI:TextColored(1, 0, 1, 1, "    1.王者陨石阶段左右刀")
+                end
+            end
+            GUI:Text(" ")
+            GUI:SameLine()
             if GUI:CollapsingHeader("M12S") then
                 GUI:Text("  ")
                 GUI:SameLine()

@@ -257,6 +257,88 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
+						actionLua = "if eventArgs.a2 == 4 then\n    data.MuAiM11SDraw = false\n    data.MuAiM11SGroundMeteorInfo = nil\n\tdata.MuAiM11SOnFrameFire = false\nelseif eventArgs.a2 == 16 then\n    data.MuAiM11SDraw = true\n    if data.MuAiM11SGroundMeteorInfo == nil then\n        data.MuAiM11SGroundMeteorInfo = {}\n    end\n    table.insert(data.MuAiM11SGroundMeteorInfo, eventArgs.a1)\nend\nself.used = true\n",
+						conditions = 
+						{
+							
+							{
+								"359737fa-48f6-5020-b6a1-84e25259a08c",
+								true,
+							},
+							
+							{
+								"8f34e1e2-87ee-9ffe-878a-58ee4c23d63e",
+								true,
+							},
+							
+							{
+								"fa8eb8ce-be6d-18a4-8bce-40afb43c637d",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "王者陨石黑洞位置采集",
+						uuid = "672c0d5b-456d-6cc3-8a89-2c4b1be28ad9",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "359737fa-48f6-5020-b6a1-84e25259a08c",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return 22 <= eventArgs.a1 and eventArgs.a1 <= 25",
+						name = "王者陨石黑洞",
+						uuid = "8f34e1e2-87ee-9ffe-878a-58ee4c23d63e",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M11SMapType == 1",
+						name = "分割地板",
+						uuid = "fa8eb8ce-be6d-18a4-8bce-40afb43c637d",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			eventType = 14,
+			name = "M11S-OnMapEffect",
+			uuid = "2eae2546-62d4-4827-ae4c-9e4cfa626b52",
+			version = 2,
+		},
+		inheritedIndex = 6,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
 						actionLua = "local drawTime = 40000\n\nAnyoneCore.addTimedWorldText(drawTime , \"H1\", {x = 85, y = 0 ,z =  115}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"H2/D2\", {x = 105, y = 0 ,z =  95}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\n\nAnyoneCore.addTimedWorldText(drawTime , \"D3\", {x = 90, y = 0 ,z =  110}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D4\", {x = 105, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D1\", {x = 95, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nself.used = true",
 						conditions = 
 						{
@@ -322,7 +404,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local redDrawer = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 1)),\n        2\n)\nif MuAiGuide.M11SMapType == nil or MuAiGuide.M11SMapType ~= 1 then\n\tredDrawer:addRect(100, 0, 80, 40, 40, 0, true)\t\nelse\n\tredDrawer:addRect(89, 0, 80, 40, 10, 0, true)\n\tredDrawer:addRect(84, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(116, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(111, 0, 80, 40, 10, 0, true)\nend\nself.used = true",
+						actionLua = "local redDrawer = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0)),\n        (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 1)),\n        2\n)\nif MuAiGuide.M11SMapType == nil or MuAiGuide.M11SMapType ~= 1 then\n\tredDrawer:addRect(100, 0, 80, 40, 40, 0, true)\t\nelse\n\tredDrawer:addRect(84, 0, 80, 40, 20, 0, true)\n\tredDrawer:addRect(116, 0, 80, 40, 20, 0, true)\n\tif MuAiGuide.Config.Main.M11SExDraw ~= true then\n\t\tredDrawer:addRect(111, 0, 80, 40, 10, 0, true)\n\t\tredDrawer:addRect(89, 0, 80, 40, 10, 0, true)\n\tend\nend\nself.used = true",
 						conditions = 
 						{
 							
@@ -577,7 +659,33 @@ local tbl =
 							},
 						},
 						gVar = "ACR_RikuMNK3_CD",
+						name = "踩塔指路",
 						uuid = "42a3dd23-f10b-4e65-be32-3d3a6d439f6f",
+						version = 2.1,
+					},
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "data.MuAiM11SOnFrameFire = true\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+								true,
+							},
+							
+							{
+								"100a5d14-8de2-cb3d-9714-45498fa63b00",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "火焰吐息开始读条",
+						uuid = "1e53f0c0-abd4-cfd7-b797-8e3c4bfbe444",
 						version = 2.1,
 					},
 				},
@@ -615,6 +723,18 @@ local tbl =
 						version = 2,
 					},
 				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46150,
+						name = "46150-火焰吐息",
+						uuid = "100a5d14-8de2-cb3d-9714-45498fa63b00",
+						version = 2,
+					},
+				},
 			},
 			eventType = 3,
 			name = "M11S技能读条",
@@ -634,7 +754,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local player = MuAiGuide.GetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nlocal linkFrom = nil\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        linkFrom = TensorCore.mGetEntity(tether.partnerid)\n    end\nend\n\nif linkFrom ~= nil then\n    local targetPos = nil\n    if MuAiGuide.M11SMapType == 1 then\n        if linkFrom.pos.x < 100 then\n            if linkFrom.pos.z < 100 then\n                targetPos = { x = 116, z = 120 }\n            else\n                targetPos = { x = 116, z = 80 }\n            end\n        else\n            if linkFrom.pos.z < 100 then\n                targetPos = { x = 84, z = 120 }\n            else\n                targetPos = { x = 84, z = 80 }\n            end\n        end\n        if targetPos ~= nil then\n            local length = TensorCore.getDistance2d(linkFrom.pos, targetPos)\n            local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(1, 1, 0, 1), 1)\n            local heading = TensorCore.getHeadingToTarget(linkFrom.pos, targetPos)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length -   0.6, 0.05, 0.6, 0.4, true)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length * 1 / 5, 0.05, 0.6, 0.4, true)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length * 2 / 5, 0.05, 0.6, 0.4, true)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length * 3 / 5, 0.05, 0.6, 0.4, true)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length * 4 / 5, 0.05, 0.6, 0.4, true)\n        end\n    elseif MuAiGuide.M11SMapType == 2 then\n        if linkFrom.pos.z < 90 then\n            --上\n            targetPos = { x = 119.5, z = 119.5 }\n        elseif linkFrom.pos.x < 90 then\n            --左\n            targetPos = { x = 119.5, z = 81.5 }\n        elseif linkFrom.pos.z > 110 then\n            -- 下\n            targetPos = { x = 81.5, z = 81.5 }\n        else\n            -- 右边\n            targetPos = { x = 81.5, z = 119.5 }\n        end\n        MuAiGuide.FrameDirect(targetPos.x, targetPos.z)\n    end\nend\nself.used = true ",
+						actionLua = "local M = MuAiGuide\nlocal player = M.GetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nlocal linkFrom = nil\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        linkFrom = TensorCore.mGetEntity(tether.partnerid)\n    end\nend\n\nif linkFrom ~= nil then\n    local targetPos = nil\n    if M.M11SMapType == 1 then\n        if linkFrom.pos.x < 100 then\n            if linkFrom.pos.z < 100 then\n                targetPos = { x = 116, z = 120 }\n            else\n                targetPos = { x = 116, z = 80 }\n            end\n        else\n            if linkFrom.pos.z < 100 then\n                targetPos = { x = 84, z = 120 }\n            else\n                targetPos = { x = 84, z = 80 }\n            end\n        end\n        if targetPos ~= nil then\n            local length = TensorCore.getDistance2d(linkFrom.pos, targetPos)\n            local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(1, 1, 0, 1), 1)\n            local heading = TensorCore.getHeadingToTarget(linkFrom.pos, targetPos)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length - 0.6, 0.05, 0.6, 0.4, true)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length * 1 / 5, 0.05, 0.6, 0.4, true)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length * 2 / 5, 0.05, 0.6, 0.4, true)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length * 3 / 5, 0.05, 0.6, 0.4, true)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length * 4 / 5, 0.05, 0.6, 0.4, true)\n            if data.MuAiM11SOnFrameFire ~= nil and data.MuAiM11SOnFrameFire == true then\n                local guidePosX, guidePosZ\n                if table.contains(data.MuAiM11SGroundMeteorInfo, 22) or table.contains(data.MuAiM11SGroundMeteorInfo, 24) then\n                    guidePosX = targetPos.x + 0.5\n                elseif table.contains(data.MuAiM11SGroundMeteorInfo, 23) or table.contains(data.MuAiM11SGroundMeteorInfo, 25) then\n                    guidePosX = targetPos.x - 0.5\n                end\n                if targetPos.z > 100 then\n                    guidePosZ = targetPos.z - 0.5\n                else\n                    guidePosZ = targetPos.z + 0.5\n                end\n                M.FrameDirect(guidePosX, guidePosZ)\n            end\n        end\n    elseif M.M11SMapType == 2 then\n        if linkFrom.pos.z < 90 then\n            --上\n            targetPos = { x = 119.5, z = 119.5 }\n        elseif linkFrom.pos.x < 90 then\n            --左\n            targetPos = { x = 119.5, z = 81.5 }\n        elseif linkFrom.pos.z > 110 then\n            -- 下\n            targetPos = { x = 81.5, z = 81.5 }\n        else\n            -- 右边\n            targetPos = { x = 81.5, z = 119.5 }\n        end\n        M.FrameDirect(targetPos.x, targetPos.z)\n    end\nend\nself.used = true ",
 						conditions = 
 						{
 							
@@ -649,25 +769,40 @@ local tbl =
 							},
 						},
 						gVar = "ACR_RikuNIN3_CD",
+						name = "拉线",
 						uuid = "031241ad-aed6-50cb-aab6-4ace640a267b",
 						version = 2.1,
 					},
 					inheritedIndex = 1,
 				},
-			},
-			conditions = 
-			{
 				
 				{
 					data = 
 					{
-						category = "Lua",
-						conditionLua = "if MuAiGuide.M11SMapType ~= 1 and MuAiGuide.M11SMapType ~= 2 then\n    return false\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nif tethers == nil or table.size(tethers) <= 0 then\n    return false\nend\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        return true\n    end\nend\nreturn false",
-						uuid = "2fbd9c0f-e39c-a512-9798-2586a5646898",
-						version = 2,
+						aType = "Lua",
+						actionLua = "for _, effectId in pairs(data.MuAiM11SGroundMeteorInfo) do\n\n    local posX\n    if effectId == 22 then\n        posX = 79\n    elseif effectId == 23 then\n        posX = 89\n    elseif effectId == 24 then\n        posX = 111\n    elseif effectId == 25 then\n        posX = 121\n    end\n    local drawer = Argus2.ShapeDrawer:new(\n            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 1)),\n            1\n    )\n    drawer:addRect(posX, 0, 80, 40, 10, 0)\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								true,
+							},
+							
+							{
+								"9df6c43b-98a1-cbc0-9a5e-8f335214de42",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "画半场刀",
+						uuid = "4dc14777-179a-c551-a488-7deba3207fd9",
+						version = 2.1,
 					},
-					inheritedIndex = 1,
 				},
+			},
+			conditions = 
+			{
 				
 				{
 					data = 
@@ -681,9 +816,32 @@ local tbl =
 					},
 					inheritedIndex = 1,
 				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "if MuAiGuide.M11SMapType ~= 1 and MuAiGuide.M11SMapType ~= 2 then\n    return false\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nif tethers == nil or table.size(tethers) <= 0 then\n    return false\nend\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        return true\n    end\nend\nreturn false",
+						name = "拉线阶段",
+						uuid = "2fbd9c0f-e39c-a512-9798-2586a5646898",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.Config.Main.M11SExDraw ~= nil and MuAiGuide.Config.Main.M11SExDraw == true\n\t\tand data ~= nil \n\t\tand data.MuAiM11SDraw ~= nil and data.MuAiM11SDraw == true\n\t\tand data.MuAiM11SGroundMeteorInfo ~= nil",
+						name = "是否开启功能且取到数据",
+						uuid = "9df6c43b-98a1-cbc0-9a5e-8f335214de42",
+						version = 2,
+					},
+				},
 			},
 			eventType = 12,
-			name = "M11S拉线",
+			name = "M11S-OnFrame",
 			uuid = "41a903f9-67f1-06ad-8924-d2be901e0268",
 			version = 2,
 		},

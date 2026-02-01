@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 230
+M.VERSION = 231
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -221,6 +221,8 @@ M.CreateDefMainCfg = function()
         MountSpeedHack = 9,
         DrawBlackListEnable = false,
         DrawBlackList = {},
+        --------- M11S -----------
+        M11SExDraw = false,
         --------- M12S -----------
         M12SP4UpTime = false,
         -- 4运打法，1 盗火改，2NOCCHH
