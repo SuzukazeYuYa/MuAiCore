@@ -330,9 +330,9 @@ local DrawMainUI = function(M)
                 GUI:SameLine()
                 M.Config.Main.M11SExDraw = GUI:Checkbox("M11S画图", M.Config.Main.M11SExDraw)
                 if M.Config.Main.M11SExDraw then
-                    GUI:TextColored(1, 0, 1, 1, "   请注意: 绘图包含除[星轨链]以外全部机制")
-                    GUI:TextColored(1, 0, 1, 1, "   为防止花眼, 使用时请注意关闭其他绘图,")
-                    GUI:TextColored(1, 0, 1, 1, "   并将地图ID 1325 添加到屏蔽黑名单")
+                    GUI:TextColored(1, 0, 1, 1, "   请注意: 绘图包含全部机制, 为防止花眼")
+                    GUI:TextColored(1, 0, 1, 1, "   建议使用时请注意关闭其他绘图, 并将地")
+                    GUI:TextColored(1, 0, 1, 1, "   图ID 1325 添加到屏蔽黑名单！")
                 end
                 GUI:Text("  ")
                 GUI:SameLine()
