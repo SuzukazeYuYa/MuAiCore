@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 231
+M.VERSION = 232
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -129,20 +129,18 @@ end
 
 --- 将给定弧度调整到0~2π
 M.SetHeading2Pi = function(heading)
-    if M.IsSame(heading, 0) or M.IsSame(heading, 2 * math.pi) then
+    -- 处理零值
+    if M.IsSame(heading, 0) then
         return 0
     end
-    if heading > math.pi * 2 then
-        local result = heading - math.pi * 2
-        if M.IsSame(endH, 0) then
-            return 0
-        end
-        return result
+    local result = heading % (2 * math.pi)
+    if M.IsSame(result, 0) or M.IsSame(result, 2 * math.pi) then
+        return 0
     end
-    if heading < 0 then
-        return heading + math.pi * 2
+    if result < 0 then
+        result = result + 2 * math.pi
     end
-    return heading
+    return result
 end
 
 M.IsSameDirection = function(angle1, angle2, tolerance)
@@ -223,7 +221,12 @@ M.CreateDefMainCfg = function()
         DrawBlackList = {},
         --------- M11S -----------
         M11SExDraw = false,
-        --------- M12S -----------
+        -- 击飞方式 1 直 2斜
+        M11SKickType = 1,
+        -- 22 分摊 1 X 2 十字
+        M11SGatherType = 1,
+        ---------
+        --- M12S -----------
         M12SP4UpTime = false,
         -- 4运打法，1 盗火改，2NOCCHH
         M12SP4Type = 1,
@@ -1161,5 +1164,5 @@ end
 M.DrawCircleFloor = function(x, z, time, size, r, g, b, a, delay)
 end
 
-M.Debug("初始化成功!")
+M.Debug("MuAiGuide初始化成功!")
 return M

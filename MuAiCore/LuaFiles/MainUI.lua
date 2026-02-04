@@ -106,7 +106,7 @@ local DrawMainUI = function(M)
                 local drBlackListInput, blackChanged = GUI:InputText("##DrawBlackList", M.StringJoin(M.Config.Main.DrawBlackList, ","), GUI.InputTextFlags_CharsNoBlank)
                 if blackChanged then
                     if drBlackListInput ~= nil and drBlackListInput ~= '' then
-                        local newStr, _ = string.gsub(drBlackListInput, "，", ",")
+                        local newStr, _ = string.gsub(drBlackListInput, ", ", ",")
                         local blackList = M.StringSplit(newStr, ",")
                         M.Config.Main.DrawBlackList = {}
                         for _, mapId in pairs(blackList) do
@@ -328,11 +328,34 @@ local DrawMainUI = function(M)
             if GUI:CollapsingHeader("M11S") then
                 GUI:Text("  ")
                 GUI:SameLine()
-                M.Config.Main.M11SExDraw = GUI:Checkbox("M11S扩展绘图", M.Config.Main.M11SExDraw)
+                M.Config.Main.M11SExDraw = GUI:Checkbox("M11S画图", M.Config.Main.M11SExDraw)
                 if M.Config.Main.M11SExDraw then
-                    GUI:TextColored(1, 0, 1, 1, "   添加一些额外的绘图, 包括:")
-                    GUI:TextColored(1, 0, 1, 1, "    1.王者陨石阶段左右刀")
+                    GUI:TextColored(1, 0, 1, 1, "   请注意: 绘图包含除[星轨链]以外全部机制")
+                    GUI:TextColored(1, 0, 1, 1, "   为防止花眼, 使用时请注意关闭其他绘图,")
+                    GUI:TextColored(1, 0, 1, 1, "   并将地图ID 1325 添加到屏蔽黑名单")
                 end
+                GUI:Text("  ")
+                GUI:SameLine()
+                GUI:AlignFirstTextHeightToWidgets()
+                GUI:Text("王者陨石闲人踩塔方式: ")
+                GUI:SameLine(0, 15)
+                GUI:PushItemWidth(65)
+                local m11sKickType, m11sKickTypeChange = GUI:Combo("##m11sKickType", M.Config.Main.M11SKickType, { "直飞", "斜飞" }, 4)
+                if m11sKickTypeChange then
+                    M.Config.Main.M11SKickType = m11sKickType
+                end
+                GUI:PopItemWidth()
+                GUI:Text("  ")
+                GUI:SameLine()
+                GUI:AlignFirstTextHeightToWidgets()
+                GUI:Text("陨石狂奔22分摊方式: ")
+                GUI:SameLine(0, 31)
+                GUI:PushItemWidth(65)
+                local m11sGatherType, m11sGatherTypeChange = GUI:Combo("##m11sGatherType", M.Config.Main.M11SGatherType, { "X字", "十字" }, 4)
+                if m11sGatherTypeChange then
+                    M.Config.Main.M11SGatherType = m11sGatherType
+                end
+                GUI:PopItemWidth()
             end
             GUI:Text(" ")
             GUI:SameLine()
@@ -376,17 +399,17 @@ local DrawMainUI = function(M)
                 GUI:SameLine(0, 36)
                 M.Config.Main.M12SP4SendMacro = GUI:Checkbox("发宏", M.Config.Main.M12SP4SendMacro)
                 if M.Config.Main.M12SP4SendMacro then
-                    GUI:TextColored(1, 0, 0, 1, "   注意：宏的很快，有被看出开了的风险！")
+                    GUI:TextColored(1, 0, 0, 1, "   注意：宏的很快, 有被看出开了的风险！")
                 end
                 GUI:Text("  ")
                 GUI:SameLine()
                 M.Config.Main.M12SExDraw = GUI:Checkbox("M12S扩展绘图", M.Config.Main.M12SExDraw)
                 if M.Config.Main.M12SExDraw then
                     GUI:TextColored(1, 0, 1, 1, "   添加一些额外的绘图, 包括:")
-                    GUI:TextColored(1, 0, 1, 1, "    1.门神，致命灾变")
-                    GUI:TextColored(1, 0, 1, 1, "    2.本体，1运, 火暗点名")
-                    GUI:TextColored(1, 0, 1, 1, "    3.本体，4运, 踩塔激光、击退")
-                    GUI:TextColored(1, 0, 1, 1, "    4.本体，4运, 远近")
+                    GUI:TextColored(1, 0, 1, 1, "    1.门神, 致命灾变")
+                    GUI:TextColored(1, 0, 1, 1, "    2.本体, 1运, 火暗点名")
+                    GUI:TextColored(1, 0, 1, 1, "    3.本体, 4运, 踩塔激光, 击退")
+                    GUI:TextColored(1, 0, 1, 1, "    4.本体, 4运, 远近")
                 end
             end
         end
@@ -469,12 +492,12 @@ local DrawMainUI = function(M)
             GUI:Text("        ")
             GUI:SameLine()
             GUI:Image(path, 200, 200)
-            GUI:TextColored(0, 1, 0, 1, "   如果您觉得我做的很好，可以支持一下。")
-            GUI:TextColored(1, 1, 0, 1, "   但是这并不能让您获得更多权益，只代表你对本")
-            GUI:TextColored(1, 1, 0, 1, "   人的支持，根本没任何回报，请慎重。")
+            GUI:TextColored(0, 1, 0, 1, "   如果您觉得我做的很好, 可以支持一下。")
+            GUI:TextColored(1, 1, 0, 1, "   但是这并不能让您获得更多权益, 只代表你对本")
+            GUI:TextColored(1, 1, 0, 1, "   人的支持, 根本没任何回报, 请慎重。")
             GUI:TextColored(1, 0, 0, 1, "   ※郑重声明：本工具没有任何用户分级政策。")
-            GUI:TextColored(1, 0, 0, 1, "   ※码是DC群友的热情难拒，才加上的。")
-            GUI:TextColored(1, 0, 0, 1, "   ※请勿用付费说事，全凭自愿打赏。")
+            GUI:TextColored(1, 0, 0, 1, "   ※码是DC群友的热情难拒, 才加上的。")
+            GUI:TextColored(1, 0, 0, 1, "   ※请勿用付费说事, 全凭自愿打赏。")
         end
         if GUI:CollapsingHeader("调试工具") then
             GUI:Text(" ")
@@ -500,7 +523,7 @@ local DrawMainUI = function(M)
                     else
                         M.DebugMode = true
                         M.GetSelfPos()
-                        M.Info("进入视角调试模式，当前视角：" .. M.SelfPos)
+                        M.Info("进入视角调试模式, 当前视角：" .. M.SelfPos)
                     end
                 end
             else
@@ -510,7 +533,7 @@ local DrawMainUI = function(M)
                 if GUI:IsItemClicked(0) then
                     M.DebugMode = false
                     M.GetSelfPos()
-                    M.Info("退出视角调试，视角还原到：" .. M.SelfPos)
+                    M.Info("退出视角调试, 视角还原到：" .. M.SelfPos)
                 end
             end
             GUI:Text(" ")
@@ -528,9 +551,9 @@ local DrawMainUI = function(M)
         GUI:BulletText("BUG反馈")
         GUI:Dummy(10, 1)
         GUI:SameLine()
-        GUI:Text("添加QQ2437365584，备注BUG反馈")
+        GUI:Text("添加QQ2437365584, 备注BUG反馈")
         GUI:Dummy(10, 1)
-        GUI:BulletText("说明书、下载地址、更新日志：")
+        GUI:BulletText("说明书, 下载地址, 更新日志：")
         GUI:Button("https://github.com/SuzukazeYuYa/MuAiCore", 330, 20)
         if GUI:IsItemClicked(0) then
             io.popen("start https://github.com/SuzukazeYuYa/MuAiCore")
@@ -549,7 +572,7 @@ local DrawMainUI = function(M)
         if GUI:IsItemClicked(0) then
             MuAiGuide.UI.open = false
             MuAiGuide.FruConfigUI.open = false
-            MuAiGuide.Info("更新过程中会短暂卡屏，请耐心等待。")
+            MuAiGuide.Info("更新过程中会短暂卡屏, 请耐心等待。")
             MuAiGuide.ForceUpdate()
         end
         M.SaveConfig(M.Config.MainPath, M.Config.MainFile, "Main")

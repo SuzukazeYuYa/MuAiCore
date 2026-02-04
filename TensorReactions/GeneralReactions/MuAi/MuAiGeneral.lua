@@ -15,7 +15,7 @@ local tbl =
 			uuid = "4c04d325-7712-422b-be39-a892f38c3b0d",
 			version = 2,
 		},
-		inheritedIndex = 2,
+		inheritedIndex = 1,
 	},
 	
 	{
@@ -28,12 +28,17 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "MuAiGuide.M11SMapType = 0\nself.used = true",
+						actionLua = "MuAiGuide.M11SMapType = 0\nMuAiGuide.M11S.InitData()\nself.used = true",
 						conditions = 
 						{
 							
 							{
 								"4b9a2018-ece0-c270-bec7-fb5391d04788",
+								true,
+							},
+							
+							{
+								"779fc96c-7e91-aacd-93bd-84ed131e406b",
 								true,
 							},
 						},
@@ -67,6 +72,7 @@ local tbl =
 						uuid = "e6bf07be-9f1c-840b-a240-1a8746e75d76",
 						version = 2.1,
 					},
+					inheritedIndex = 2,
 				},
 			},
 			conditions = 
@@ -108,13 +114,24 @@ local tbl =
 						version = 2,
 					},
 				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M11S ~= nil",
+						name = "M11S已初始化",
+						uuid = "779fc96c-7e91-aacd-93bd-84ed131e406b",
+						version = 2,
+					},
+				},
 			},
 			eventType = 9,
 			name = "OnWipe[团灭]",
 			uuid = "b610ef51-6410-2e2c-8cd0-fff9d16334a8",
 			version = 2,
 		},
-		inheritedIndex = 3,
+		inheritedIndex = 2,
 	},
 	
 	{
@@ -160,7 +177,124 @@ local tbl =
 			uuid = "f6607c59-fc75-1a2f-b73e-8825dbe3d5b3",
 			version = 2,
 		},
-		inheritedIndex = 4,
+		inheritedIndex = 3,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "if data.lastState == nil or data.lastState ~=  MuAiGuide.M11S.CurrentState then\n\tdata.lastState = MuAiGuide.M11S.CurrentState\n\td(\"当前进度：\" .. tostring(MuAiGuide.M11S.CurrentState))\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"37a950fd-cffd-5a07-9d99-30a2f34235cc",
+								true,
+							},
+							
+							{
+								"723d1fca-2c1f-9390-872d-6ca83eb320ac",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "m11s_debug",
+						uuid = "bb146fdb-c962-fa55-98d8-1cfdbbd5702a",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "if data.lastState == nil or data.lastState ~= MuAiGuide.M12S.CurrentState then\n\tdata.lastState = MuAiGuide.M12S.CurrentState\n\td(\"当前进度：\" .. tostring(MuAiGuide.M12S.CurrentState))\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"b85884ca-8a3a-7d01-92c3-e1ac9e2f6f2b",
+								true,
+							},
+							
+							{
+								"47395bfe-d1be-33fb-ab6b-31893d391866",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "m12s_debug",
+						uuid = "54cb451b-22a3-2b42-b634-84d65a99a8aa",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "b85884ca-8a3a-7d01-92c3-e1ac9e2f6f2b",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S ~= nil and MuAiGuide.M12S.CurrentState ~= nil",
+						name = "M12S已初始化",
+						uuid = "47395bfe-d1be-33fb-ab6b-31893d391866",
+						version = 2,
+					},
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "37a950fd-cffd-5a07-9d99-30a2f34235cc",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M11S ~= nil and MuAiGuide.M11S.CurrentState ~= nil",
+						name = "M11S已初始化",
+						uuid = "723d1fca-2c1f-9390-872d-6ca83eb320ac",
+						version = 2,
+					},
+					inheritedIndex = 2,
+				},
+			},
+			eventType = 12,
+			name = "FrameDebug",
+			uuid = "83898426-1459-2294-b52d-fbafeb6d698e",
+			version = 2,
+		},
+		inheritedIndex = 5,
 	},
 	
 	{
@@ -177,221 +311,7 @@ local tbl =
 			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
 			version = 2,
 		},
-		inheritedIndex = 5,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "if data.MuAiM11SMark == nil then\n\tdata.MuAiM11SMark = {}\nend\ntable.insert(data.MuAiM11SMark, eventArgs.entityID)\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"9620fec1-0095-abec-bb97-e0d78948abb7",
-								true,
-							},
-							
-							{
-								"4d5427f0-b5d4-7103-b9d6-eb40c66b3f2a",
-								true,
-							},
-						},
-						gVar = "ACR_RikuMNK3_CD",
-						name = "被点名放圈",
-						uuid = "a08d7ed6-2786-6c18-aca7-8d311294c87a",
-						version = 2.1,
-					},
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "9620fec1-0095-abec-bb97-e0d78948abb7",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Event",
-						eventArgType = 2,
-						eventMarkerID = 30,
-						name = "点圈标记",
-						uuid = "4d5427f0-b5d4-7103-b9d6-eb40c66b3f2a",
-						version = 2,
-					},
-					inheritedIndex = 2,
-				},
-			},
-			eventType = 4,
-			name = "M11S添加MARK",
-			uuid = "a72980e1-23b8-4169-b80d-4bbcb3beccf1",
-			version = 2,
-		},
-		inheritedIndex = 5,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "if eventArgs.a2 == 4 then\n    data.MuAiM11SDraw = false\n    data.MuAiM11SGroundMeteorInfo = nil\n\tdata.MuAiM11SOnFrameFire = false\nelseif eventArgs.a2 == 16 then\n    data.MuAiM11SDraw = true\n    if data.MuAiM11SGroundMeteorInfo == nil then\n        data.MuAiM11SGroundMeteorInfo = {}\n    end\n    table.insert(data.MuAiM11SGroundMeteorInfo, eventArgs.a1)\nend\nself.used = true\n",
-						conditions = 
-						{
-							
-							{
-								"359737fa-48f6-5020-b6a1-84e25259a08c",
-								true,
-							},
-							
-							{
-								"8f34e1e2-87ee-9ffe-878a-58ee4c23d63e",
-								true,
-							},
-							
-							{
-								"fa8eb8ce-be6d-18a4-8bce-40afb43c637d",
-								true,
-							},
-						},
-						gVar = "ACR_RikuMNK3_CD",
-						name = "王者陨石黑洞位置采集",
-						uuid = "672c0d5b-456d-6cc3-8a89-2c4b1be28ad9",
-						version = 2.1,
-					},
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "359737fa-48f6-5020-b6a1-84e25259a08c",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return 22 <= eventArgs.a1 and eventArgs.a1 <= 25",
-						name = "王者陨石黑洞",
-						uuid = "8f34e1e2-87ee-9ffe-878a-58ee4c23d63e",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M11SMapType == 1",
-						name = "分割地板",
-						uuid = "fa8eb8ce-be6d-18a4-8bce-40afb43c637d",
-						version = 2,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			eventType = 14,
-			name = "M11S-OnMapEffect",
-			uuid = "2eae2546-62d4-4827-ae4c-9e4cfa626b52",
-			version = 2,
-		},
 		inheritedIndex = 6,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local drawTime = 40000\n\nAnyoneCore.addTimedWorldText(drawTime , \"H1\", {x = 85, y = 0 ,z =  115}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"H2/D2\", {x = 105, y = 0 ,z =  95}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\n\nAnyoneCore.addTimedWorldText(drawTime , \"D3\", {x = 90, y = 0 ,z =  110}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D4\", {x = 105, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D1\", {x = 95, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"089e6374-6111-897d-8af0-fcd0c72e28ac",
-								true,
-							},
-							
-							{
-								"36552ff7-f62a-b95c-9b3e-6ec090ee0398",
-								true,
-							},
-						},
-						gVar = "ACR_RikuNIN3_CD",
-						uuid = "b71e5591-3e6b-758b-b52e-84b8c6cbeccb",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Event",
-						eventArgType = 2,
-						eventSpellID = 46132,
-						uuid = "089e6374-6111-897d-8af0-fcd0c72e28ac",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "36552ff7-f62a-b95c-9b3e-6ec090ee0398",
-						version = 2,
-					},
-				},
-			},
-			eventType = 2,
-			name = "M11S陨石位置",
-			uuid = "74d161a0-ce78-a135-a5df-53829b8f7124",
-			version = 2,
-		},
-		inheritedIndex = 5,
 	},
 	
 	{
@@ -454,24 +374,35 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "MuAiGuide.M11SMapType = 1\n",
+						actionLua = "local M = MuAiGuide\nM.M11S = {}\nM.M11S.InitData = function()\n    M.M11S.State = {\n        Start = 0,\n        -- 3连兵器1\n        Weapon1_Start = 1100,\n        Weapon1_01 = 1101,\n        Weapon1_02 = 1102,\n        Weapon1_03 = 1103,\n        Weapon1_End = 1199,\n\n        -- 3连兵器2\n        Weapon2_Start = 1200,\n        Weapon2_01 = 1201,\n        Weapon2_02 = 1202,\n        Weapon2_03 = 1203,\n        Weapon2_End = 1299,\n\n        -- 六联兵器\n        Weapon3_Start = 1300,\n        Weapon3_01 = 1301,\n        Weapon3_02 = 1302,\n        Weapon3_03 = 1303,\n        Weapon3_04 = 1304,\n        Weapon3_05 = 1305,\n        Weapon3_06 = 1306,\n        Weapon3_End = 1399,\n\n        Meteor1_01 = 1501,\n        Meteor1_02 = 1502,\n        Meteor1_03 = 1503,\n        Meteor1_04 = 1504,\n        Meteor1_05 = 1505,\n\n        Meteor2_Start = 1600,\n        Meteor2_Link1 = 1601,\n        Meteor2_Tower1 = 1602,\n        Meteor2_GetMark1 = 1603,\n        Meteor2_Debuff1 = 1604,\n        Meteor2_Link2 = 1605,\n        Meteor2_Tower2 = 1606,\n        Meteor2_GetMark2 = 1607,\n        Meteor2_Debuff2 = 1608,\n        Meteor2_GatherMark = 1609,\n        Meteor2_GatherEnd = 1610,\n        Meteor2_Tower3 = 1611,\n        Meteor2_Hit = 1612,\n        Meteor2_end = 1699,\n\n        Meteor3_Start = 1700,\n        Meteor3_Guide1 = 1701,\n        Meteor3_CatchBoom = 1702,\n        Meteor3_Link = 1703,\n        Meteor3_End = 1799,\n    }\n    M.M11S.CurrentState = M.M11S.State.Start\n    M.M11S.WeaponInfo = nil\n    M.M11S.ReachTime = nil\n    M.M11S.JumpTime = nil\n    M.M11S.GetMarkTime = nil\n    M.M11S.BreakTime = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2Link = nil\n    M.M11S.TowerPos = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2MapEffect = nil\n    M.M11S.Meteor2Gather = nil\n    M.M11S.Meteor3Info = {\n        JobOrder = { \"H1\", \"D3\", \"D4\", \"H2\" },\n        Dir = { math.pi * 3 / 4, math.pi / 4, math.pi * 7 / 4, math.pi * 5 / 4 },\n        Spell46166 = {},\n        Spell46167 = {},\n        FindDir = function(id1, id2)\n            local t1 = TensorCore.mGetEntity(id1)\n            local t2 = TensorCore.mGetEntity(id2)\n            local h1 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t1.pos)\n            local h2 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t2.pos)\n            local ent1, ent2\n            for i = 1, 4 do\n                local dir = M.M11S.Meteor3Info.Dir[i]\n                if M.IsSameDirection(dir, h1) then\n                    if ent1 == nil then\n                        ent1 = t1\n                    else\n                        ent2 = t1\n                    end\n                end\n                if M.IsSameDirection(dir, h2) then\n                    if ent1 == nil then\n                        ent1 = t2\n                    else\n                        ent2 = t2\n                    end\n                end\n            end\n            return ent1, ent2\n        end\n    }\n    M.M11S.TowerData = {\n        leftUp = { pos = { x = 84, z = 89 }, crossPos = { x = 87, z = 89 }, leapPos = { x = 86.9, z = 90.1 }, localPos = { x = 84, z = 92 } },\n        leftDown = { pos = { x = 84, z = 111 }, crossPos = { x = 87, z = 111 }, leapPos = { x = 86.9, z = 109.9 }, localPos = { x = 84, z = 108 } },\n        rightUp = { pos = { x = 116, z = 89 }, crossPos = { x = 113, z = 89 }, leapPos = { x = 113.1, z = 90.1 }, localPos = { x = 116, z = 92 } },\n        rightDown = { pos = { x = 116, z = 111 }, crossPos = { x = 113, z = 111 }, leapPos = { x = 113.1, z = 109.9 }, localPos = { x = 116, z = 108 } },\n    }\n    M.Info(\"M11S初始化数据完成!\")\nend\nM.M11S.InitData()\n\nlocal redDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        0.5\n)\n\nlocal greenDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        0.5\n)\n\nlocal yellowDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        0.5\n)\n\nlocal orangeDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 0.5, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 0.5, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 0.5, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        0.5\n)\n\nlocal litBlueDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        0.5\n)\n\nlocal center = { x = 100, y = 0, z = 100 }\nM.M11S.DrawWeapon = function(ent, model)\n    local player = M.GetPlayer()\n    local curEnt = TensorCore.mGetEntity(ent.id)\n    if model == 19184 then\n        -- 19184 斧子\n        local heading = TensorCore.getHeadingToTarget(curEnt.pos, center)\n        local guidePos, size\n        if M.IsTank(player.job) or M.IsMelee(player.job) then\n            guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, 8.3)\n            size = 0.25\n        else\n            guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, 10)\n            size = 0.5\n        end\n        -- 画图\n        if M.Config.Main.M11SExDraw then\n            orangeDraw:addCircle(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 8)\n            local inRange = true\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                local dis2d = TensorCore.getDistance2d(curMem.pos, player.pos)\n                if dis2d > 6 then\n                    inRange = false\n                    break\n                end\n            end\n            if inRange then\n                greenDraw:addCircle(player.pos.x, player.pos.y, player.pos.z, 6)\n            else\n                yellowDraw:addCircle(player.pos.x, player.pos.y, player.pos.z, 6)\n            end\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    elseif model == 19185 then\n        -- 19185 镰刀\n        local index = M.IndexOf({ \"MT\", \"D4\", \"H2\", \"D2\", \"ST\", \"D1\", \"H1\", \"D3\" }, M.SelfPos)\n        local guidePos = TensorCore.getPosInDirection(curEnt.pos, curEnt.pos.h - (index - 1) * math.pi / 4, 4.3)\n        if M.Config.Main.M11SExDraw then\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                if curMem.alive then\n                    local curHeading = TensorCore.getHeadingToTarget(curEnt.pos, curMem.pos)\n                    litBlueDraw:addCone(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, math.pi / 6, curHeading)\n                end\n            end\n            redDraw:addDonut(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 5, 40)\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    elseif model == 19186 then\n        local heading\n        -- 19186 大剑\n        if table.contains({ \"MT\", \"H1\", \"D1\", \"D3\" }, M.SelfPos) then\n            heading = curEnt.pos.h + math.pi * 3 / 4\n        else\n            heading = curEnt.pos.h - math.pi * 3 / 4\n        end\n        local distance\n        if M.IsTank(player.job) or M.IsMelee(player.job) then\n            distance = 8\n        else\n            distance = 11\n        end\n        local guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, distance)\n        if M.Config.Main.M11SExDraw then\n            redDraw:addCross(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, 10, curEnt.pos.h)\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                if M.IsHealer(curMem.job) then\n                    local curHeading = TensorCore.getHeadingToTarget(curEnt.pos, curMem.pos)\n                    litBlueDraw:addRect(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, 6, curHeading)\n                end\n            end\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    end\nend\n\nM.M11S.InitWeapon = function()\n    if M.M11S.WeaponInfo == nil then\n        M.M11S.WeaponInfo = {}\n        M.M11S.WeaponInfo.ids = {}\n        M.M11S.WeaponInfo.data = {}\n        M.M11S.WeaponInfo.ordered = {}\n        M.M11S.WeaponInfo.CurrentWeaponIdx = 1\n    end\nend\n\nM.M11S.RecordWeapon = function()\n    for _, ent in pairs(TensorCore.entityList(\"contentid=108\")) do\n        if Argus.isEntityVisible(ent) and not table.contains(M.M11S.WeaponInfo.ids, ent.id) then\n            local md = Argus.getEntityModel(ent.id)\n            if (md == 19184 or md == 19185 or md == 19186)\n            then\n                table.insert(M.M11S.WeaponInfo.ids, ent.id)\n                table.insert(M.M11S.WeaponInfo.data, { entity = ent, model = md })\n            end\n        end\n    end\nend\n\nM.M11S.OrderWeapon = function()\n    M.M11S.InitWeapon()\n    M.M11S.RecordWeapon()\n    if table.size(M.M11S.WeaponInfo.ids) == 3 then\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            local curHeading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, info.entity.pos)\n            -- 如果当前面向与场中到当前物体方向相同，表示为第一个武器\n            if M.IsSameDirection(info.entity.pos.h, curHeading, 0.1) then\n                table.insert(M.M11S.WeaponInfo.ordered, info)\n                d(\"已找到第1把武器， 类型为：\" .. tostring(info.model))\n                break\n            end\n        end\n        local first = M.M11S.WeaponInfo.ordered[1]\n        local second\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            if info.entity.id ~= first.entity.id then\n                local curHeading = TensorCore.getHeadingToTarget(first.entity.pos, info.entity.pos)\n                if M.IsSameDirection(info.entity.pos.h, curHeading, 0.1) then\n                    table.insert(M.M11S.WeaponInfo.ordered, info)\n                    d(\"已找到第2把武器， 类型为：\" .. tostring(info.model))\n                    second = info\n                    break\n                end\n            end\n        end\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            if info.entity.id ~= first.entity.id and info.entity.id ~= second.entity.id then\n                table.insert(M.M11S.WeaponInfo.ordered, info)\n                d(\"已找到第3把武器， 类型为：\" .. tostring(info.model))\n                break\n            end\n        end\n    end\nend\n\nM.M11S.TakeWeapon = function(index, nextState)\n    local curBoss = TensorCore.mGetEntity(M.M11S.CurrentBoss.id)\n    local curEnt = M.M11S.WeaponInfo.ordered[index]\n    local distance = TensorCore.getDistance2d(curEnt.entity.pos, curBoss.pos)\n    if distance > 0.2 then\n        M.M11S.DrawWeapon(curEnt.entity, curEnt.model)\n    else\n        if M.M11S.ReachTime == nil then\n            M.M11S.ReachTime = Now()\n        end\n        -- 跳过去之后2秒蓄力\n        if TimeSince(M.M11S.ReachTime) > 2000 then\n            M.M11S.CurrentState = nextState\n            M.M11S.ReachTime = nil\n        else\n            M.M11S.DrawWeapon(curEnt.entity, curEnt.model)\n        end\n    end\nend\n\nM.M11S.TakeExWeapon = function(nextState)\n    if M.M11S.WeaponInfo == nil\n            or M.M11S.WeaponInfo.data == nil\n            or table.size(M.M11S.WeaponInfo.ids) == 0\n            or M.M11S.WeaponInfo.CurrentWeaponIdx > 6\n    then\n        return\n    end\n    if M.M11S.WeaponInfo.CurrentWeaponId == nil then\n        -- M.M11S.WeaponInfo.CurrentWeaponId = table.remove(M.M11S.WeaponInfo.ids, 1)\n        M.M11S.WeaponInfo.CurrentWeaponId = M.M11S.WeaponInfo.ids[M.M11S.WeaponInfo.CurrentWeaponIdx]\n        M.M11S.WeaponInfo.CurrentWeaponPos = TensorCore.mGetEntity(M.M11S.WeaponInfo.CurrentWeaponId).pos\n        d(\"[\" .. Now() .. \"]当前兵器：\" .. M.M11S.WeaponInfo.CurrentWeaponId)\n    else\n        local curEnt = TensorCore.mGetEntity(M.M11S.WeaponInfo.CurrentWeaponId)\n        local model = Argus.getEntityModel(M.M11S.WeaponInfo.CurrentWeaponId)\n        local curBoss = TensorCore.mGetEntity(M.M11S.CurrentBoss.id)\n        local distance = TensorCore.getDistance2d(curEnt.pos, curBoss.pos)\n        if distance > 0.2 then\n            M.M11S.DrawWeapon(curEnt, model)\n        else\n            if M.M11S.ReachTime == nil then\n                M.M11S.ReachTime = Now()\n            end\n            -- 跳过去之后2秒蓄力\n            if TimeSince(M.M11S.ReachTime) > 2000 then\n                M.M11S.CurrentState = nextState\n                M.M11S.ReachTime = nil\n                M.M11S.WeaponInfo.CurrentWeaponId = nil\n                M.M11S.WeaponInfo.CurrentWeaponIdx = M.M11S.WeaponInfo.CurrentWeaponIdx + 1\n            else\n                M.M11S.DrawWeapon(curEnt, model)\n            end\n        end\n    end\nend\n\nM.M11S.GetTakeTowerPos = function(type)\n    M.M11S.Meteor2Link = {}\n    M.M11S.Meteor2Link.Has = false\n    local player = M.GetPlayer()\n    local tethers = Argus.getTethersOnEnt(player.id)\n    for _, tether in pairs(tethers) do\n        if tether.type == 57 or tether.type == 249 then\n            M.M11S.Meteor2Link.Has = true\n            M.M11S.Meteor2Link.from = TensorCore.mGetEntity(tether.partnerid)\n            break\n        end\n    end\n    local towerData\n    if type == 1 then\n        if player.pos.x > 100 then\n            if M.IsDps(player.job) then\n                towerData = M.M11S.TowerData.rightDown\n            else\n                towerData = M.M11S.TowerData.rightUp\n            end\n        else\n            if M.IsDps(player.job) then\n                towerData = M.M11S.TowerData.leftDown\n            else\n                towerData = M.M11S.TowerData.leftUp\n            end\n        end\n    else\n        if player.pos.x > 100 then\n            if M.M11S.Tower2Type == \"Down\" then\n                towerData = M.M11S.TowerData.rightDown\n            else\n                towerData = M.M11S.TowerData.rightUp\n            end\n        else\n            if M.M11S.Tower2Type == \"Down\" then\n                towerData = M.M11S.TowerData.leftDown\n            else\n                towerData = M.M11S.TowerData.leftUp\n            end\n        end\n    end\n    if M.M11S.Meteor2Link.Has then\n        if M.M11S.Meteor2Link.from.pos.x > 100 and player.pos.x > 100 then\n            M.M11S.TowerPos = towerData.crossPos\n        else\n            M.M11S.TowerPos = towerData.localPos\n        end\n    else\n        if M.Config.Main.M11SKickType == 1 then\n            M.M11S.TowerPos = towerData.localPos\n        else\n            M.M11S.TowerPos = towerData.leapPos\n        end\n    end\nend\n\nM.M11S.Meteor2Page1To2 = function()\n    M.M11S.Meteor2Link = nil\n    M.M11S.TowerPos = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2MapEffect = nil\n    M.M11S.GetMarkTime = nil\nend\nMuAiGuide.M11SMapType = nil\nself.used = true",
 						conditions = 
 						{
 							
 							{
-								"6ccf9f23-4952-5e4c-bbf6-111de25eaffa",
-								true,
-							},
-							
-							{
-								"0e493990-e4ec-e1b4-aaf9-fb78fd408a55",
+								"6fe5e0b6-2218-6544-9b9f-1c54202db3d2",
 								true,
 							},
 						},
-						gVar = "ACR_RikuNIN3_CD",
-						name = "拆地板",
-						uuid = "62e6a770-339c-de7b-8bf7-1e1aa5badcca",
+						gVar = "ACR_RikuMNK3_CD",
+						name = "M11S初始化",
+						uuid = "3a36b544-1644-d68a-9ebf-9dc08d976e45",
 						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "6fe5e0b6-2218-6544-9b9f-1c54202db3d2",
+						version = 2,
 					},
 					inheritedIndex = 1,
 				},
@@ -479,45 +410,50 @@ local tbl =
 				{
 					data = 
 					{
-						aType = "Lua",
-						actionLua = "MuAiGuide.M11SMapType = 0\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"33cd5d48-a7b4-e21e-865e-3da798f01913",
-								true,
-							},
-							
-							{
-								"0e493990-e4ec-e1b4-aaf9-fb78fd408a55",
-								true,
-							},
-						},
-						gVar = "ACR_RikuMNK3_CD",
-						name = "还原地板",
-						uuid = "befcb967-2841-45e2-b927-f551c47c3b6c",
-						version = 2.1,
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M11S == nil",
+						name = "没有进行初始化",
+						uuid = "14feac43-0fe9-acff-9467-14b989e563e3",
+						version = 2,
 					},
-					inheritedIndex = 2,
 				},
+			},
+			eventType = 11,
+			name = "M11S初始化",
+			timeout = 10,
+			uuid = "3512393e-6d61-9d77-8fae-d2c56fb0ddb3",
+			version = 2,
+		},
+		inheritedIndex = 8,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
 				
 				{
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "MuAiGuide.M11SMapType = 2\nself.used = true",
+						actionLua = "MuAiGuide.M11S.CurrentBoss = TensorCore.mGetTarget()\nself.used = true",
 						conditions = 
 						{
 							
 							{
-								"b07946c0-f072-a961-8d22-cf8fccccc02a",
+								"af059daa-90a8-74b4-9550-caf534e00639",
+								true,
+							},
+							
+							{
+								"4851d130-4a01-de13-b3fc-e5bf6e579bc7",
 								true,
 							},
 						},
-						gVar = "ACR_RikuNIN3_CD",
-						name = "陨石狂奔 ",
-						uuid = "a2803d71-84f4-6362-bf81-8473a4716695",
+						gVar = "ACR_TensorViper3_CD",
+						name = "M11S-GetBoss",
+						uuid = "0df32b43-05f8-e8a9-a31d-6b54cbaa72f1",
 						version = 2.1,
 					},
 				},
@@ -528,12 +464,93 @@ local tbl =
 				{
 					data = 
 					{
-						category = "Event",
-						eventArgType = 2,
-						eventSpellID = 46143,
-						name = "拆地图",
-						uuid = "6ccf9f23-4952-5e4c-bbf6-111de25eaffa",
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "af059daa-90a8-74b4-9550-caf534e00639",
 						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "local target = TensorCore.mGetTarget()\nreturn target ~= nil\n\tand target.attackable\n\tand (MuAiGuide.M11S.CurrentBoss == nil or MuAiGuide.M11S.CurrentBoss.id ~= target.id)",
+						conditionType = 5,
+						name = "当前BOSS为空或者目标变化",
+						uuid = "4851d130-4a01-de13-b3fc-e5bf6e579bc7",
+						version = 2,
+					},
+				},
+			},
+			name = "M11S-GetBoss",
+			uuid = "7ad16923-a30a-aa9c-9e09-42bbab94283e",
+			version = 2,
+		},
+		inheritedIndex = 9,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "if eventArgs.a2 == 4 then\n    data.MuAiM11SDraw = false\n    data.MuAiM11SGroundMeteorInfo = nil\n\tdata.MuAiM11SOnFrameFire = false\nelseif eventArgs.a2 == 16 then\n    data.MuAiM11SDraw = true\n    if data.MuAiM11SGroundMeteorInfo == nil then\n        data.MuAiM11SGroundMeteorInfo = {}\n    end  \n    table.insert(data.MuAiM11SGroundMeteorInfo, eventArgs.a1)\nend\nself.used = true\n",
+						conditions = 
+						{
+							
+							{
+								"359737fa-48f6-5020-b6a1-84e25259a08c",
+								true,
+							},
+							
+							{
+								"8f34e1e2-87ee-9ffe-878a-58ee4c23d63e",
+								true,
+							},
+							
+							{
+								"fa8eb8ce-be6d-18a4-8bce-40afb43c637d",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "王者陨石黑洞位置采集",
+						uuid = "672c0d5b-456d-6cc3-8a89-2c4b1be28ad9",
+						version = 2.1,
+					},
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nif eventArgs.a2 == 4 then\n    M.M11S.Meteor2MapEffect = nil\nelseif eventArgs.a2 == 16 then\n    if M.M11S.Meteor2MapEffect == nil then\n        M.M11S.Meteor2MapEffect = {}\n    end\n    table.insert(M.M11S.Meteor2MapEffect, eventArgs.a1)\n    if M.M11S.CurrentState == M.M11S.State.Meteor2_Debuff1 then\n        M.M11S.CurrentState = M.M11S.State.Meteor2_Link2\n    end\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"359737fa-48f6-5020-b6a1-84e25259a08c",
+								true,
+							},
+							
+							{
+								"8f34e1e2-87ee-9ffe-878a-58ee4c23d63e",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "王者陨石-半场刀",
+						uuid = "df56c109-489a-f42e-af38-81699e705bf0",
+						version = 2.1,
 					},
 					inheritedIndex = 2,
 				},
@@ -541,29 +558,16 @@ local tbl =
 				{
 					data = 
 					{
-						category = "Event",
-						eventArgType = 2,
-						eventEntityID = 46086,
-						eventSpellID = 46086,
-						name = "还原地图",
-						uuid = "33cd5d48-a7b4-e21e-865e-3da798f01913",
-						version = 2,
+						aType = "Lua",
+						actionLua = "--MuAiGuide.Info(\"MapEffect: | \" .. eventArgs.a1 .. \" | \" .. eventArgs.a2 .. \" | \" .. eventArgs.a3 .. \" | Time= \" .. Now())\nself.used = true",
+						gVar = "ACR_TensorWeeb3_CD",
+						uuid = "fa914412-9ee6-ca99-8719-4c5e3ab4911f",
+						version = 2.1,
 					},
-					inheritedIndex = 2,
 				},
-				
-				{
-					data = 
-					{
-						category = "Event",
-						eventArgType = 2,
-						eventSpellID = 46162,
-						name = "陨石狂奔",
-						uuid = "b07946c0-f072-a961-8d22-cf8fccccc02a",
-						version = 2,
-					},
-					inheritedIndex = 3,
-				},
+			},
+			conditions = 
+			{
 				
 				{
 					data = 
@@ -572,18 +576,310 @@ local tbl =
 						conditionType = 8,
 						localmapid = 1325,
 						name = "M11S",
-						uuid = "0e493990-e4ec-e1b4-aaf9-fb78fd408a55",
+						uuid = "359737fa-48f6-5020-b6a1-84e25259a08c",
 						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return 22 <= eventArgs.a1 and eventArgs.a1 <= 25",
+						name = "王者陨石黑洞",
+						uuid = "8f34e1e2-87ee-9ffe-878a-58ee4c23d63e",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M11SMapType == 1",
+						name = "分割地板",
+						uuid = "fa8eb8ce-be6d-18a4-8bce-40afb43c637d",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			eventType = 14,
+			name = "M11S-OnMapEffect",
+			uuid = "2eae2546-62d4-4827-ae4c-9e4cfa626b52",
+			version = 2,
+		},
+		inheritedIndex = 10,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nif M.M11S.Meteor2Gather == nil then\n    M.M11S.Meteor2Gather = {}\nend\n\nif table.size(M.M11S.Meteor2Gather) < 2 then\n    table.insert(M.M11S.Meteor2Gather, eventArgs.entityID)\n    if table.size(M.M11S.Meteor2Gather) == 2 then\n        local player = M.GetPlayer()\n        for _, id in pairs(M.M11S.Meteor2Gather) do\n            local curHealer = TensorCore.mGetEntity(id)\n            if curHealer.pos.x > 100 and player.pos.x > 100\n                    or curHealer.pos.x < 100 and player.pos.x < 100\n            then\n                M.M11S.Meteor2GatherPartnerId = id\n                M.M11S.CurrentState = M.M11S.State.Meteor2_GatherMark\n            end\n        end\n    end\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"9620fec1-0095-abec-bb97-e0d78948abb7",
+								true,
+							},
+							
+							{
+								"551c95b8-9b55-2da2-b99d-1d4b88347760",
+								true,
+							},
+							
+							{
+								"7b99f9cf-0d4f-f10e-8478-01f39e54232e",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "王者陨石-点名分摊",
+						uuid = "28895952-675b-89ea-83a1-862e0a108e23",
+						version = 2.1,
+					},
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nif M.M11S.Meteor2Marks == nil then\n    M.M11S.Meteor2Marks = {}\nend\ntable.insert(M.M11S.Meteor2Marks, eventArgs.entityID)\nif table.size(M.M11S.Meteor2Marks) == 4 then\n    if M.M11S.CurrentState < M.M11S.State.Meteor2_GetMark1 then\n        M.M11S.CurrentState = M.M11S.State.Meteor2_GetMark1\n    elseif M.M11S.CurrentState < M.M11S.State.Meteor2_GetMark2 then\n        M.M11S.CurrentState = M.M11S.State.Meteor2_GetMark2\n    end\n    M.M11S.GetMarkTime = Now()\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"9620fec1-0095-abec-bb97-e0d78948abb7",
+								true,
+							},
+							
+							{
+								"dc0ab7b8-c12b-fa25-ad8b-0a36d5956a66",
+								true,
+							},
+							
+							{
+								"7b99f9cf-0d4f-f10e-8478-01f39e54232e",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "王者陨石-火焰点名",
+						uuid = "e32e8973-f3b4-5ef4-bee5-101725e29f84",
+						version = 2.1,
 					},
 					inheritedIndex = 3,
 				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nif M.M11S.Meteor3Info.Marked == nil then\n    M.M11S.Meteor3Info.Marked = {}\nend\ntable.insert(M.M11S.Meteor3Info.Marked, eventArgs.entityID)\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"9620fec1-0095-abec-bb97-e0d78948abb7",
+								true,
+							},
+							
+							{
+								"4d5427f0-b5d4-7103-b9d6-eb40c66b3f2a",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "陨石狂奔-被点名放圈",
+						uuid = "ab24f600-dcd0-892f-8dd2-f4338cf3946d",
+						version = 2.1,
+					},
+					inheritedIndex = 3,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "if data.MuAiM11SMark == nil then\n\tdata.MuAiM11SMark = {}\nend\ntable.insert(data.MuAiM11SMark, eventArgs.entityID)\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"9620fec1-0095-abec-bb97-e0d78948abb7",
+								true,
+							},
+							
+							{
+								"4d5427f0-b5d4-7103-b9d6-eb40c66b3f2a",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "陨石狂奔-被点名放圈old",
+						uuid = "a08d7ed6-2786-6c18-aca7-8d311294c87a",
+						version = 2.1,
+					},
+					inheritedIndex = 4,
+				},
 			},
-			eventType = 2,
-			name = "M11S阶段切换",
-			uuid = "e260ac90-04cd-d071-866c-f30f070327c0",
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "9620fec1-0095-abec-bb97-e0d78948abb7",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventMarkerID = 244,
+						name = "灵星雨|王者陨石-点名标记",
+						uuid = "dc0ab7b8-c12b-fa25-ad8b-0a36d5956a66",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventMarkerID = 525,
+						name = "流星雨-分摊标记",
+						uuid = "d5e4eff2-a633-fe5c-80b8-cef49373c5b6",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventMarkerID = 305,
+						name = "王者陨石-分摊标记",
+						uuid = "551c95b8-9b55-2da2-b99d-1d4b88347760",
+						version = 2,
+					},
+					inheritedIndex = 5,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M11S.CurrentState >= MuAiGuide.M11S.State.Meteor2_Start\n   and MuAiGuide.M11S.CurrentState < MuAiGuide.M11S.State.Meteor2_end",
+						name = "王者陨石阶段",
+						uuid = "7b99f9cf-0d4f-f10e-8478-01f39e54232e",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventMarkerID = 30,
+						name = "陨石狂奔-点圈标记",
+						uuid = "4d5427f0-b5d4-7103-b9d6-eb40c66b3f2a",
+						version = 2,
+					},
+					inheritedIndex = 6,
+				},
+			},
+			eventType = 4,
+			name = "M11S-OnAddMark",
+			uuid = "a72980e1-23b8-4169-b80d-4bbcb3beccf1",
 			version = 2,
 		},
-		inheritedIndex = 8,
+		inheritedIndex = 11,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local drawTime = 40000\n\nAnyoneCore.addTimedWorldText(drawTime , \"H1\", {x = 85, y = 0 ,z =  115}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"H2/D2\", {x = 105, y = 0 ,z =  95}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\n\nAnyoneCore.addTimedWorldText(drawTime , \"D3\", {x = 90, y = 0 ,z =  110}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D4\", {x = 105, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D1\", {x = 95, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"089e6374-6111-897d-8af0-fcd0c72e28ac",
+								true,
+							},
+							
+							{
+								"36552ff7-f62a-b95c-9b3e-6ec090ee0398",
+								true,
+							},
+						},
+						gVar = "ACR_RikuNIN3_CD",
+						uuid = "b71e5591-3e6b-758b-b52e-84b8c6cbeccb",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "36552ff7-f62a-b95c-9b3e-6ec090ee0398",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46132,
+						name = "46132-流星雨",
+						uuid = "089e6374-6111-897d-8af0-fcd0c72e28ac",
+						version = 2,
+					},
+				},
+			},
+			eventType = 2,
+			name = "M11S陨石位置",
+			uuid = "74d161a0-ce78-a135-a5df-53829b8f7124",
+			version = 2,
+		},
+		inheritedIndex = 7,
 	},
 	
 	{
@@ -626,12 +922,13 @@ local tbl =
 					},
 				},
 			},
+			enabled = false,
 			eventType = 12,
 			name = "M11S月环8方",
 			uuid = "b3503580-71a1-e733-a4c3-578deaae1e88",
 			version = 2,
 		},
-		inheritedIndex = 9,
+		inheritedIndex = 14,
 	},
 	
 	{
@@ -644,7 +941,538 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "if data.MuAiM11SSpell46166 == nil then\n    data.MuAiM11SSpell46166 = {}\n    data.MuAiM11SSpell46167 = {}\n    data.MuAiM11STowerDir = { math.pi * 3 / 4, math.pi / 4, math.pi * 7 / 4, math.pi * 5 / 4 }\n    data.MuAiM11SOrder = { \"H1\", \"D3\", \"D4\", \"H2\" }\n    data.FindDir = function(id1, id2)\n        local t1 = TensorCore.mGetEntity(id1)\n        local t2 = TensorCore.mGetEntity(id2)\n        local h1 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t1.pos)\n        local h2 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t2.pos)\n        local ent1, ent2\n        for i = 1, 4 do\n            local dir = data.MuAiM11STowerDir[i]\n            if MuAiGuide.IsSameDirection(dir, h1) then\n                if ent1 == nil then\n                    ent1 = t1\n                else\n                    ent2 = t1\n                end\n            end\n            if MuAiGuide.IsSameDirection(dir, h2) then\n                if ent1 == nil then\n                    ent1 = t2\n                else\n                    ent2 = t2\n                end\n            end\n        end\n        return ent1, ent2\n    end\nend\n\nif eventArgs.spellID == 46166 then\n    table.insert(data.MuAiM11SSpell46166, eventArgs.entityID)\nelseif eventArgs.spellID == 46167 then\n    table.insert(data.MuAiM11SSpell46167, eventArgs.entityID)\nend\n\nlocal guidePos, selfTower\nif MuAiGuide.SelfPos == \"MT\" or MuAiGuide.SelfPos == \"ST\" then\n    if table.size(data.MuAiM11SSpell46166) == 2 then\n        local MtTake, StTake = data.FindDir(data.MuAiM11SSpell46166[1], data.MuAiM11SSpell46166[2])\n        if MuAiGuide.SelfPos == \"MT\" then\n            selfTower = MtTake\n        else\n            selfTower = StTake\n        end\n        local heading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, selfTower.pos)\n        guidePos = TensorCore.getPosInDirection({ x = 100, y = 0, z = 100 }, heading, 8)\n    end\nelseif MuAiGuide.SelfPos == \"D1\" or MuAiGuide.SelfPos == \"D2\" then\n    if table.size(data.MuAiM11SSpell46167) == 2 then\n        local D1Take, D2Take = data.FindDir(data.MuAiM11SSpell46167[1], data.MuAiM11SSpell46167[2])\n        if MuAiGuide.SelfPos == \"D1\" then\n            selfTower = D1Take\n        else\n            selfTower = D2Take\n        end\n        local heading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, selfTower.pos)\n        guidePos = TensorCore.getPosInDirection({ x = 100, y = 0, z = 100 }, heading, 8)\n    end\nelse\n    if table.size(data.MuAiM11SSpell46167) == 2 and (not table.contains(data.MuAiM11SMark, MuAiGuide.GetPlayer().id)) then\n        local t1, t2 = data.FindDir(data.MuAiM11SSpell46167[1], data.MuAiM11SSpell46167[2])\n        local selfIdx = MuAiGuide.IndexOf(data.MuAiM11SOrder, MuAiGuide.SelfPos)\n        local otherJob\n        for job, ent in pairs(MuAiGuide.Party) do\n            if ent.id ~= MuAiGuide.GetPlayer().id and table.contains(data.MuAiM11SOrder, job) and (not table.contains(data.MuAiM11SMark, ent.id)) then\n                otherJob = job\n                break\n            end\n        end\n        local otherIndex = MuAiGuide.IndexOf(data.MuAiM11SOrder, otherJob)\n        if selfIdx > otherIndex then\n            selfTower = t2\n        else\n            selfTower = t1\n        end\n        local heading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, selfTower.pos)\n        guidePos = TensorCore.getPosInDirection({ x = 100, y = 0, z = 100 }, heading, 14)\n    end\nend\n\nif guidePos ~= nil then\n    MuAiGuide.DirectTo(guidePos.x, guidePos.z, 5000)\nend\nself.used = true",
+						actionLua = "local M = MuAiGuide\nif M.M11S.CurrentState == M.M11S.State.Weapon1_Start then\n    if M.M11S.WeaponInfo == nil or table.size(M.M11S.WeaponInfo.ordered) < 3 then\n        M.M11S.OrderWeapon()\n    elseif table.size(M.M11S.WeaponInfo.ordered) == 3 then\n        M.M11S.TakeWeapon(1, M.M11S.State.Weapon1_01)\n    end\nend\n\nif M.M11S.CurrentState == M.M11S.State.Weapon1_01 then\n    M.M11S.TakeWeapon(2, M.M11S.State.Weapon1_02)\nend\n\nif M.M11S.CurrentState == M.M11S.State.Weapon1_02 then\n    M.M11S.TakeWeapon(3, M.M11S.State.Weapon1_03)\nend\n\nif M.M11S.CurrentState == M.M11S.State.Weapon1_03 then\n    M.M11S.CurrentState = M.M11S.State.Weapon1_End\n    M.M11S.WeaponInfo = nil\nend\n\nif M.M11S.CurrentState == M.M11S.State.Weapon2_Start then\n    if M.M11S.WeaponInfo == nil or table.size(M.M11S.WeaponInfo.ordered) < 3 then\n        M.M11S.OrderWeapon()\n    elseif table.size(M.M11S.WeaponInfo.ordered) == 3 then\n        M.M11S.TakeWeapon(1, M.M11S.State.Weapon2_01)\n    end\nend\n\nif M.M11S.CurrentState == M.M11S.State.Weapon2_01 then\n    M.M11S.TakeWeapon(2, M.M11S.State.Weapon2_02)\nend\n\nif M.M11S.CurrentState == M.M11S.State.Weapon2_02 then\n    M.M11S.TakeWeapon(3, M.M11S.State.Weapon2_03)\nend\n\nif M.M11S.CurrentState == M.M11S.State.Weapon2_03 then\n    M.M11S.CurrentState = M.M11S.State.Weapon2_End\n    M.M11S.WeaponInfo = nil\n    M.M11S.InitWeapon()\nend\n\nif M.M11S.CurrentState >= M.M11S.State.Weapon3_Start and M.M11S.CurrentState < M.M11S.State.Weapon3_End then\n    for _, ent in pairs(TensorCore.entityList(\"contentid=108\")) do\n        if Argus.isEntityVisible(ent)\n                and (not table.contains(M.M11S.WeaponInfo.ids, ent.id))\n                and (M.M11S.WeaponInfo.CurrentWeaponId == nil or ent.id ~= M.M11S.WeaponInfo.CurrentWeaponId)\n        then\n            local md = Argus.getEntityModel(ent.id)\n            if (md == 19184 or md == 19185 or md == 19186)\n            then\n                table.insert(M.M11S.WeaponInfo.ids, ent.id)\n            end\n        end\n    end\nend\n\nfor state = M.M11S.State.Weapon3_Start, M.M11S.State.Weapon3_Start + 5 do\n    if M.M11S.CurrentState == state then\n        local nextState = state + 1\n        M.M11S.TakeExWeapon(nextState)\n        break\n    end\nend\n\nif M.M11S.CurrentState == M.M11S.State.Weapon3_06 then\n    if M.M11S.WeaponInfo.Winds == nil then\n        M.M11S.WeaponInfo.Winds = {}\n        M.M11S.WeaponInfo.WindTime = Now()\n    end\n    if table.size(M.M11S.WeaponInfo.Winds) < 4 then\n        for _, ent in pairs(TensorCore.entityList(\"contentid=14307\")) do\n            if Argus.isEntityVisible(ent)\n                    and (not table.contains(M.M11S.WeaponInfo.Winds, ent.id))\n            then\n                table.insert(M.M11S.WeaponInfo.Winds, ent.id)\n            end\n        end\n        if table.size(M.M11S.WeaponInfo.Winds) == 4 then\n            local dirWinds = {}\n            for _, id in pairs(M.M11S.WeaponInfo.Winds) do\n                local curWind = TensorCore.mGetEntity(id)\n                if curWind.pos.z < 95 then\n                    dirWinds.up = curWind\n                elseif curWind.pos.x < 95 then\n                    dirWinds.left = curWind\n                elseif curWind.pos.z > 105 then\n                    dirWinds.down = curWind\n                else\n                    dirWinds.right = curWind\n                end\n            end\n            local guideWind\n            if M.SelfPos == \"MT\" or M.SelfPos == \"D1\" then\n                guideWind = dirWinds.up\n            elseif M.SelfPos == \"ST\" or M.SelfPos == \"D2\" then\n                guideWind = dirWinds.down\n            elseif M.SelfPos == \"H1\" or M.SelfPos == \"D3\" then\n                guideWind = dirWinds.left\n            elseif M.SelfPos == \"H2\" or M.SelfPos == \"D4\" then\n                guideWind = dirWinds.right\n            end\n            local dir = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, guideWind.pos)\n            if table.contains({ \"D1\", \"D2\", \"D3\", \"D4\" }, M.SelfPos) then\n                M.M11S.WeaponInfo.GuidePos = TensorCore.getPosInDirection(guideWind.pos, dir + math.pi / 4, 6.5)\n            else\n                M.M11S.WeaponInfo.GuidePos = TensorCore.getPosInDirection(guideWind.pos, dir - math.pi / 4, 6.5)\n            end\n        end\n    end\n    local changeState = false\n    for _, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, 2941)\n        if debuff ~= nil then\n            changeState = true\n        end\n    end\n    if changeState then\n        M.M11S.CurrentState = M.M11S.State.Weapon3_End\n        M.DirectTo(100, 100, 5000)\n    elseif M.M11S.WeaponInfo.GuidePos ~= nil then\n        if M.Config.Main.M11SExDraw\n                and table.size(M.M11S.WeaponInfo.Winds) == 4\n                and TimeSince(M.M11S.WeaponInfo.WindTime) > 3000\n        then\n            for _, id in pairs(M.M11S.WeaponInfo.Winds) do\n                local wind = TensorCore.mGetEntity(id)\n                local nearest = {\n                    TensorCore.mGetEntity(M.Party[\"MT\"].id),\n                    TensorCore.mGetEntity(M.Party[\"ST\"].id),\n                }\n\n                local distances = {\n                    TensorCore.getDistance2d(wind.pos, nearest[1].pos),\n                    TensorCore.getDistance2d(wind.pos, nearest[2].pos)\n                }\n\n                if distances[1] > distances[2] then\n                    nearest[1], nearest[2] = nearest[2], nearest[1]\n                    distances[1], distances[2] = distances[2], distances[1]\n                end\n\n                for job, member in pairs(M.Party) do\n                    local curMem = TensorCore.mGetEntity(member.id)\n                    if job ~= \"MT\" and job ~= \"ST\" then\n                        local dist = TensorCore.getDistance2d(wind.pos, curMem.pos)\n                        if dist < distances[1] then\n                            -- 比最近的还近，更新最近，原最近变成第二近\n                            nearest[2] = nearest[1]\n                            distances[2] = distances[1]\n                            nearest[1] = curMem\n                            distances[1] = dist\n                        elseif dist < distances[2] then\n                            -- 只比第二近的近，更新第二近\n                            nearest[2] = curMem\n                            distances[2] = dist\n                        end\n                    end\n                end\n                for _, member in pairs(nearest) do\n                    local heading = TensorCore.getHeadingToTarget(wind.pos, member.pos)\n                    local litBlueDraw = Argus2.ShapeDrawer:new(\n                            (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.3)),\n                            (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.3)),\n                            (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.3)),\n                            (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                            0.5\n                    )\n                    litBlueDraw:addCone(wind.pos.x, 0, wind.pos.z, 40, math.pi / 2, heading)\n                end\n            end\n        end\n        local pos = M.M11S.WeaponInfo.GuidePos\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								true,
+							},
+							
+							{
+								"d47bff10-5a20-28a6-a170-7e8497075651",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "主循环-兵器",
+						uuid = "f2e2043a-9cb9-a5b4-89d1-89c40054c2ae",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nif M.M11S.CurrentState == M.M11S.State.Meteor2_Start then\n    local cnt = 0\n    for _, player in pairs(M.Party) do\n        local tethers = Argus.getTethersOnEnt(player.id)\n        for _, tether in pairs(tethers) do\n            if tether.type == 57 or tether.type == 249 then\n                cnt = cnt + 1\n                break\n            end\n        end\n    end\n    if cnt >= 4 then\n        M.M11S.CurrentState = M.M11S.State.Meteor2_Link1\n    end\nend\n\nif M.M11S.CurrentState == M.M11S.State.Meteor2_Link1\n        or M.M11S.CurrentState == M.M11S.State.Meteor2_Link2\nthen\n    if M.M11S.TowerPos == nil then\n        local type\n        if M.M11S.CurrentState == M.M11S.State.Meteor2_Link1 then\n            type = 1\n        else\n            type = 2\n        end\n        M.M11S.GetTakeTowerPos(type)\n    else\n        local player = M.GetPlayer()\n        if player.pos.y > 0.5 then\n            if M.M11S.CurrentState == M.M11S.State.Meteor2_Link1 then\n                M.M11S.CurrentState = M.M11S.State.Meteor2_Tower1\n            else\n                M.M11S.CurrentState = M.M11S.State.Meteor2_Tower2\n            end\n            M.M11S.JumpTime = Now()\n        else\n            M.FrameDirect(M.M11S.TowerPos.x, M.M11S.TowerPos.z, 0.3)\n        end\n    end\nend\n\nif M.M11S.CurrentState == M.M11S.State.Meteor2_Tower1\n        or M.M11S.CurrentState == M.M11S.State.Meteor2_Tower2\nthen\n    local player = M.GetPlayer()\n    --落地\n    if player.pos.y < 0.1 and TimeSince(M.M11S.JumpTime) > 1000 then\n        if M.M11S.Meteor2Link.Has then\n            if player.pos.x > 100 then\n                M.FrameDirect(113, 100)\n            else\n                M.FrameDirect(87, 100)\n            end\n        else\n            if player.pos.x > 100 then\n                M.FrameDirect(106.5, 100)\n            else\n                M.FrameDirect(93.5, 100)\n            end\n        end\n    end\nend\n\nif (M.M11S.CurrentState == M.M11S.State.Meteor2_GetMark1\n        or M.M11S.CurrentState == M.M11S.State.Meteor2_GetMark2)\n        and M.M11S.GetMarkTime ~= nil\nthen\n    local changeState\n    for _, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, 2941)\n        if debuff ~= nil then\n            changeState = true\n            break\n        end\n    end\n    if changeState then\n        if M.M11S.CurrentState == M.M11S.State.Meteor2_GetMark1 then\n            M.M11S.CurrentState = M.M11S.State.Meteor2_Debuff1\n            M.M11S.Meteor2Page1To2()\n        else\n            M.M11S.CurrentState = M.M11S.State.Meteor2_Debuff2\n        end\n    else\n        if TimeSince(M.M11S.GetMarkTime) < 2000 then\n            local player = M.GetPlayer()\n            if player.pos.x > 100 then\n                M.FrameDirect(106.5, 100)\n            else\n                M.FrameDirect(93.5, 100)\n            end\n        else\n            if M.M11S.Meteor2Link.guidePos == nil then\n                if M.M11S.Meteor2Link.Has then\n                    local linkFrom = M.M11S.Meteor2Link.from\n                    if linkFrom.pos.x < 100 then\n                        if linkFrom.pos.z < 100 then\n                            targetPos = { x = 116, z = 120 }\n                        else\n                            targetPos = { x = 116, z = 80 }\n                        end\n                    else\n                        if linkFrom.pos.z < 100 then\n                            targetPos = { x = 84, z = 120 }\n                        else\n                            targetPos = { x = 84, z = 80 }\n                        end\n                    end\n                    if M.M11S.Meteor2MapEffect ~= nil then\n                        local guidePosX, guidePosZ\n                        if table.contains(M.M11S.Meteor2MapEffect, 22) or table.contains(M.M11S.Meteor2MapEffect, 24) then\n                            guidePosX = targetPos.x + 0.5\n                        elseif table.contains(M.M11S.Meteor2MapEffect, 23) or table.contains(M.M11S.Meteor2MapEffect, 25) then\n                            guidePosX = targetPos.x - 0.5\n                        end\n                        if targetPos.z > 100 then\n                            guidePosZ = targetPos.z - 0.5\n                        else\n                            guidePosZ = targetPos.z + 0.5\n                        end\n                        if guidePosZ < 100 then\n                            M.M11S.Tower2Type = \"Up\"\n                        else\n                            M.M11S.Tower2Type = \"Down\"\n                        end\n                        M.M11S.Meteor2Link.guidePos = { x = guidePosX, z = guidePosZ }\n                    end\n                else\n                    local selfPlayer = M.GetPlayer()\n                    local partner\n                    --找到同组\n                    for _, playerId in pairs(M.M11S.Meteor2Marks) do\n                        if playerId ~= selfPlayer.id then\n                            local curPlayer = TensorCore.mGetEntity(playerId)\n                            if curPlayer.pos.x > 100 and selfPlayer.pos.x > 100\n                                    or curPlayer.pos.x < 100 and selfPlayer.pos.x < 100\n                            then\n                                partner = curPlayer\n                                break\n                            end\n                        end\n                    end\n                    if partner.pos.z > selfPlayer.pos.z then\n                        M.M11S.Tower2Type = \"Up\"\n                    else\n                        M.M11S.Tower2Type = \"Down\"\n                    end\n                    if selfPlayer.pos.x < 100 then\n                        if M.M11S.Tower2Type == \"Up\" then\n                            targetPos = { x = 84, z = 88.5 }\n                        else\n                            targetPos = { x = 84, z = 111.5 }\n                        end\n                    else\n                        if M.M11S.Tower2Type == \"Up\" then\n                            targetPos = { x = 116, z = 88.5 }\n                        else\n                            targetPos = { x = 116, z = 111.5 }\n                        end\n                    end\n                    local guidePosX\n                    if table.contains(M.M11S.Meteor2MapEffect, 22) or table.contains(M.M11S.Meteor2MapEffect, 24) then\n                        guidePosX = targetPos.x + 0.5\n                    elseif table.contains(M.M11S.Meteor2MapEffect, 23) or table.contains(M.M11S.Meteor2MapEffect, 25) then\n                        guidePosX = targetPos.x - 0.5\n                    end\n                    M.M11S.Meteor2Link.guidePos = { x = guidePosX, z = targetPos.z }\n                end\n            else\n                local pos = M.M11S.Meteor2Link.guidePos\n                M.FrameDirect(pos.x, pos.z)\n                if M.Config.Main.M11SExDraw and TimeSince(M.M11S.GetMarkTime) > 3000 then\n                    for _, member in pairs(M.Party) do\n                        local curPlayer = TensorCore.mGetEntity(member.id)\n                        local tethers = Argus.getTethersOnEnt(curPlayer.id)\n                        local hasLink = false\n                        if tethers ~= nil and table.size(tethers) > 0 then\n                            for _, tether in pairs(tethers) do\n                                if tether.type == 57 or tether.type == 249 then\n                                    hasLink = true\n                                    local linkFrom = TensorCore.mGetEntity(tether.partnerid)\n                                    local heading = TensorCore.getHeadingToTarget(linkFrom.pos, curPlayer.pos)\n                                    local redDraw = Argus2.ShapeDrawer:new(\n                                            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n                                            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n                                            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n                                            (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                                            1\n                                    )\n                                    redDraw:addRect(linkFrom.pos.x, linkFrom.pos.y, linkFrom.pos.z, 80, 10, heading)\n                                end\n                            end\n                        end\n                        if not hasLink then\n                            local curBoss = TensorCore.mGetEntity(M.M11S.CurrentBoss.id)\n                            local heading = TensorCore.getHeadingToTarget(curBoss.pos, curPlayer.pos)\n                            local yellowDraw = Argus2.ShapeDrawer:new(\n                                    (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n                                    (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n                                    (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n                                    (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                                    1\n                            )\n                            yellowDraw:addRect(curBoss.pos.x, curBoss.pos.y, curBoss.pos.z, 80, 6, heading)\n                        end\n                    end\n                end\n            end\n        end\n    end\nend\n\nif M.Config.Main.M11SExDraw and M.M11S.Meteor2MapEffect ~= nil then\n    for _, effectId in pairs(M.M11S.Meteor2MapEffect) do\n        local posX\n        if effectId == 22 then\n            posX = 79\n        elseif effectId == 23 then\n            posX = 89\n        elseif effectId == 24 then\n            posX = 111\n        elseif effectId == 25 then\n            posX = 121\n        end\n        local drawer = Argus2.ShapeDrawer:new(\n                (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n                (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n                (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n                (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                1\n        )\n        drawer:addRect(posX, 0, 80, 40, 10, 0)\n    end\nend\n\nif M.M11S.CurrentState == M.M11S.State.Meteor2_GatherMark then\n    local curHealer = TensorCore.mGetEntity(M.M11S.Meteor2GatherPartnerId)\n    local guidePos\n    if M.M11S.Tower2Type == \"Up\" then\n        guidePos = { x = curHealer.pos.x, z = curHealer.pos.z - 3 }\n    else\n        guidePos = { x = curHealer.pos.x, z = curHealer.pos.z + 3 }\n    end\n    if M.Config.Main.M11SExDraw then\n        local player = M.GetPlayer()\n        local distances = TensorCore.getHeadingToTarget(curHealer.pos, player.pos)\n        local drawer\n        if distances >= 5 then\n            drawer = Argus2.ShapeDrawer:new(\n                    (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)),\n                    (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)),\n                    (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)),\n                    (GUI:ColorConvertFloat4ToU32(1, 0, 0, 1)),\n                    5\n            )\n        else\n            drawer = Argus2.ShapeDrawer:new(\n                    (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)),\n                    (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)),\n                    (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)),\n                    (GUI:ColorConvertFloat4ToU32(0, 1, 0, 1)),\n                    5\n            )\n        end\n        drawer:addCircle(curHealer.pos.x, 0, curHealer.pos.z, 5)\n    end\n    M.FrameDirect(guidePos.x, guidePos.z)\nend\n\nif M.M11S.CurrentState == M.M11S.State.Meteor2_GatherEnd then\n    -- 动态计算位置\n    local player = M.GetPlayer()\n    if player.pos.y > 0.5 then\n        M.M11S.CurrentState = M.M11S.State.Meteor2_Tower3\n        M.M11S.JumpTime = Now()\n    else\n        local upMe = 0\n        for _, member in pairs(M.Party) do\n            local curPlayer = TensorCore.mGetEntity(member.id)\n            if player.id ~= member.id\n                    and ((player.pos.x > 100 and curPlayer.pos.x > 100) or (player.pos.x < 100 and curPlayer.pos.x < 100))\n            then\n                if curPlayer.pos.z < player.pos.z then\n                    upMe = upMe + 1\n                end\n            end\n        end\n        local myTower\n        if upMe < 2 then\n            if player.pos.x > 100 then\n                myTower = M.M11S.TowerData.rightUp\n            else\n                myTower = M.M11S.TowerData.leftUp\n            end\n        else\n            if player.pos.x > 100 then\n                myTower = M.M11S.TowerData.rightDown\n            else\n                myTower = M.M11S.TowerData.leftDown\n            end\n        end\n        local curBoss = TensorCore.mGetEntity(MuAiGuide.M11S.CurrentBoss.id)\n        local guidePos\n        if M.IsSameDirection(curBoss.pos.h, math.pi / 2) then\n            M.M11S.Meteor2HitType = \"Right\" --搬走了右边\n            if player.pos.x > 100 then\n                guidePos = myTower.leapPos\n            else\n                guidePos = myTower.localPos\n            end\n        elseif M.IsSameDirection(curBoss.pos.h, math.pi * 3 / 2) then\n            M.M11S.Meteor2HitType = \"Left\" --搬走了左边\n            if player.pos.x > 100 then\n                guidePos = myTower.localPos\n            else\n                guidePos = myTower.leapPos\n            end\n        end\n        if guidePos ~= nil then\n            M.FrameDirect(guidePos.x, guidePos.z, 0.3)\n        end\n    end\nend\n\nif M.M11S.CurrentState == M.M11S.State.Meteor2_Tower3 then\n    if TimeSince(M.M11S.BreakTime) < 15000 then\n        local curBoss = TensorCore.mGetEntity(MuAiGuide.M11S.CurrentBoss.id)\n        local curHeading = M.SetHeading2Pi(curBoss.pos.h)\n        local dir, guidePos\n        local player = M.GetPlayer()\n        if player.pos.y < 0.1 and TimeSince(M.M11S.JumpTime) > 1000 then\n            if M.M11S.Meteor2HitType == \"Right\" then\n                if math.pi < curHeading and curHeading < math.pi * 3 / 2 then\n                    guidePos = { x = 84, z = 115 }\n                    dir = math.pi * 4 / 3\n                elseif math.pi * 3 / 2 < curHeading and curHeading < 2 * math.pi then\n                    guidePos = { x = 84, z = 85 }\n                    dir = math.pi * 5 / 3\n                end\n            elseif M.M11S.Meteor2HitType == \"Left\" then\n                if 0 < curHeading and curHeading < math.pi / 2 then\n                    guidePos = { x = 116, z = 85 }\n                    dir = math.pi / 3\n                elseif math.pi / 2 < curHeading and curHeading < math.pi then\n                    guidePos = { x = 116, z = 115 }\n                    dir = math.pi * 2 / 3\n                end\n            end\n            if M.Config.Main.M11SExDraw and dir ~= nil then\n                local drawer = Argus2.ShapeDrawer:new(\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                        1\n                )\n                local startPos = TensorCore.getPosInDirection(curBoss.pos, dir + math.pi, 5)\n                drawer:addRect(startPos.x, 0, startPos.z, 38, 40, dir)\n            end\n            if guidePos ~= nil then\n                M.FrameDirect(guidePos.x, guidePos.z)\n            end\n        end\n    else\n        M.M11S.CurrentState = M.M11S.State.Meteor2_Hit\n    end\nend\n\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								true,
+							},
+							
+							{
+								"6057d08b-fae1-2c5f-9386-36b74f082f65",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "主循环-王者陨石",
+						uuid = "c46504d3-2486-2775-a866-cdfd108680c0",
+						version = 2.1,
+					},
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nif M.M11S.CurrentState == M.M11S.State.Meteor3_Start then\n    if table.contains({ \"MT\", \"ST\", \"D1\", \"D2\" }, M.SelfPos) then\n        M.FrameDirect(100, 100)\n    else\n        -- 动态计算站哪\n        local player = M.GetPlayer()\n        -- local selfOrder = M.IndexOf({ \"H1\", \"H2\", \"D3\", \"D4\" }, M.SelfPos)\n        local curRanges = {}\n        local value = 0\n        for job, ent in pairs(M.Party) do\n            if player.id ~= ent.id and table.contains({ \"H1\", \"H2\", \"D3\", \"D4\" }, job) then\n                local curPlayer = TensorCore.mGetEntity(ent.id)\n                table.insert(curRanges, curPlayer)\n                value = value + curPlayer.pos.x\n            end\n        end\n        table.sort(curRanges, function(a, b)\n            return a.pos.z < b.pos.z\n        end)\n        local posX = value / 3\n        if posX > 93 then\n            posX = 93\n        end\n        if M.SelfPos == \"H1\" then\n            M.FrameDirect(posX, curRanges[1].pos.z - 2)\n        elseif M.SelfPos == \"H1\" then\n            M.FrameDirect(posX, curRanges[1].pos.z + 2)\n        elseif M.SelfPos == \"D3\" then\n            local posZ = (curRanges[1].pos.z + curRanges[2].pos.z) / 2\n            M.FrameDirect(posX, posZ)\n        elseif M.SelfPos == \"D4\" then\n            local posZ = (curRanges[2].pos.z + curRanges[3].pos.z) / 2\n            M.FrameDirect(posX, posZ)\n        end\n    end\nend\n\nif M.M11S.CurrentState == M.M11S.State.Meteor3_Guide1 then\n    if TimeSince(M.M11S.Meteor3Info.BoomTime) < 5000 then\n        if table.contains({ \"MT\", \"ST\", \"D1\", \"D2\" }, M.SelfPos) then\n            M.FrameDirect(100, 100)\n        else\n            local curPlayer = M.GetPlayer()\n            if table.contains(M.M11S.Meteor3Info.Marked, curPlayer.id) then\n                local otherJob\n                for job, ent in pairs(M.Party) do\n                    if ent.id ~= curPlayer.id and table.contains(M.M11S.Meteor3Info.Marked, ent.id) then\n                        otherJob = job\n                        break\n                    end\n                    if otherJob ~= nil then\n                        break\n                    end\n                end\n                local selfIdx = M.IndexOf(M.M11S.Meteor3Info.JobOrder, M.SelfPos)\n                local otherIdx = M.IndexOf(M.M11S.Meteor3Info.JobOrder, otherJob)\n                local upBoom, bottomBoom\n                for _, id in pairs(M.M11S.Meteor3Info.boom) do\n                    local curBoom = TensorCore.mGetEntity(id)\n                    if upBoom == nil then\n                        upBoom = curBoom\n                    else\n                        if upBoom.pos.z > curBoom.pos.z then\n                            bottomBoom = upBoom\n                            upBoom = curBoom\n                        else\n                            bottomBoom = curBoom\n                        end\n                    end\n                end\n                local selfBoom, guidePosX, guidePosZ\n                if selfIdx < otherIdx then\n                    selfBoom = upBoom\n                    guidePosZ = 81\n                else\n                    selfBoom = bottomBoom\n                    guidePosZ = 119\n                end\n                if selfBoom.pos.x > 100 then\n                    guidePosX = 89\n                else\n                    guidePosX = 111\n                end\n                M.FrameDirect(guidePosX, guidePosZ)\n            else\n                M.FrameDirect(100, 100)\n            end\n        end\n    else\n        M.M11S.CurrentState = M.M11S.State.Meteor3_CatchBoom\n    end\nend\n\nif M.M11S.CurrentState == M.M11S.State.Meteor3_CatchBoom\n        and TimeSince(M.M11S.Meteor3Info.BoomTime) > 25000 then\n    local changeState\n    for _, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, 2937)\n        if debuff ~= nil then\n            changeState = true\n            break\n        end\n    end\n    if changeState then\n        M.M11S.CurrentState = M.M11S.State.Meteor3_Link\n    else\n        local player = M.GetPlayer()\n        local selfLink = nil\n        local cnt = 0\n        for _, member in pairs(M.Party) do\n            local tethers = Argus.getTethersOnEnt(member.id)\n            for _, tether in pairs(tethers) do\n                if tether.type == 57 or tether.type == 249 then\n                    local linkFrom = TensorCore.mGetEntity(tether.partnerid)\n                    if M.Config.Main.M11SExDraw then\n                        local redDraw = Argus2.ShapeDrawer:new(\n                                (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n                                (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n                                (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n                                (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                                1\n                        )\n                        local curPlayer = TensorCore.mGetEntity(member.id)\n                        local heading = TensorCore.getHeadingToTarget(linkFrom.pos, curPlayer.pos)\n                        redDraw:addRect(linkFrom.pos.x, linkFrom.pos.y, linkFrom.pos.z, 80, 10, heading)\n                    end\n                    cnt = cnt + 1\n                    if member.id == player.id then\n                        selfLink = linkFrom\n                    end\n                end\n            end\n        end\n        if cnt >= 4 then\n            if selfLink ~= nil then\n                if selfLink.pos.z < 90 then\n                    --上\n                    targetPos = { x = 119.5, z = 119.5 }\n                elseif selfLink.pos.x < 90 then\n                    --左\n                    targetPos = { x = 119.5, z = 81.5 }\n                elseif selfLink.pos.z > 110 then\n                    -- 下\n                    targetPos = { x = 81.5, z = 81.5 }\n                else\n                    -- 右边\n                    targetPos = { x = 81.5, z = 119.5 }\n                end\n                M.FrameDirect(targetPos.x, targetPos.z)\n            else\n                M.FrameDirect(100, 100)\n            end\n        end\n    end\nend\n\n-- 双向，四项火\nif M.M11S.CurrentState == M.M11S.State.Meteor3_Link then\n    local changeState\n    for _, player in pairs(M.Party) do\n        local debuff = TensorCore.getBuff(player.id, 2941)\n        if debuff ~= nil then\n            changeState = true\n            break\n        end\n    end\n    if changeState then\n        M.M11S.CurrentState = M.M11S.State.Meteor3_End\n    else\n        if M.Config.Main.M11SExDraw then\n            local curBoss = TensorCore.mGetEntity(M.M11S.CurrentBoss.id)\n            local curFramePlayer = {}\n            for _, member in pairs(M.Party) do\n                table.insert(curFramePlayer, TensorCore.mGetEntity(member.id))\n            end\n            table.sort(curFramePlayer, function(a, b)\n                local distanceBoss2A = TensorCore.getDistance2d(curBoss.pos, a.pos)\n                local distanceBoss2B = TensorCore.getDistance2d(curBoss.pos, b.pos)\n                return distanceBoss2A < distanceBoss2B\n            end)\n            local maxIdx\n            if M.M11S.Meteor3Info.LastFrame == 46170 then\n                maxIdx = 4\n            elseif M.M11S.Meteor3Info.LastFrame == 47037 then\n                maxIdx = 2\n            end\n            for i = 1, maxIdx do\n                local yellowDraw = Argus2.ShapeDrawer:new(\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                        1\n                )\n                local heading = TensorCore.getHeadingToTarget(curBoss.pos, curFramePlayer[i].pos)\n                yellowDraw:addRect(curBoss.pos.x, curBoss.pos.y, curBoss.pos.z, 80, 6, heading)\n            end\n        end\n        if M.M11S.Meteor3Info.LastFrameEnd == nil or M.M11S.Meteor3Info.LastFrameEnd == false then\n            if M.M11S.Meteor3Info.LastFrameEnd == nil then\n                M.M11S.Meteor3Info.LastFrameEnd = false\n                -- 首先检查点名是否混乱，混乱，放弃指路\n                for job, member in pairs(M.Party) do\n                    if job == \"D1\" or job == \"D2\" or table.contains(M.M11S.Meteor3Info.Marked, M.GetPlayer().id) then\n                        local tethers = Argus.getTethersOnEnt(member.id)\n                        for _, tether in pairs(tethers) do\n                            if tether.type == 57 or tether.type == 249 then\n                                M.M11S.Meteor3Info.LastFrameEnd = true\n                                break\n                            end\n                        end\n                    end\n                    if M.M11S.Meteor3Info.LastFrameEnd then\n                        M.Info(\"点名混乱了，自己看吧!<se.1>\")\n                        break\n                    end\n                end\n            end\n            if (not M.M11S.Meteor3Info.LastFrameEnd) and (job == \"D1\" or job == \"D2\" or table.contains(M.M11S.Meteor3Info.Marked, M.GetPlayer().id)) then\n                if M.M11S.Meteor3Info.LastFramePos == nil then\n                    if M.M11S.Meteor3Info.LastFrame == 46170 then\n                        if M.SelfPos == \"D1\" then\n                            if M.Config.Main.M11SGatherType == 1 then\n                                M.M11S.Meteor3Info.LastFramePos = { x = 97.5, z = 97.5 }\n                            else\n                                M.M11S.Meteor3Info.LastFramePos = { x = 96.3, z = 100 }\n                            end\n                        elseif M.SelfPos == \"D2\" then\n                            if M.Config.Main.M11SGatherType == 1 then\n                                M.M11S.Meteor3Info.LastFramePos = { x = 102.5, z = 102.5 }\n                            else\n                                M.M11S.Meteor3Info.LastFramePos = { x = 103.7, z = 100 }\n                            end\n                        else\n                            for job, ent in pairs(M.Party) do\n                                if ent.id ~= M.GetPlayer().id and table.contains(M.M11S.Meteor3Info.Marked, ent.id) then\n                                    otherJob = job\n                                    break\n                                end\n                            end\n                            local selfIdx = M.IndexOf(M.M11S.Meteor3Info.JobOrder, M.SelfPos)\n                            local otherIndex = M.IndexOf(M.M11S.Meteor3Info.JobOrder, otherJob)\n                            if selfIdx > otherIndex then\n                                if M.Config.Main.M11SGatherType == 1 then\n                                    M.M11S.Meteor3Info.LastFramePos = { x = 97.5, z = 102.5 }\n                                else\n                                    M.M11S.Meteor3Info.LastFramePos = { x = 100, z = 103.7 }\n                                end\n                            else\n                                if M.Config.Main.M11SGatherType == 1 then\n                                    M.M11S.Meteor3Info.LastFramePos = { x = 102.5, z = 97.5 }\n                                else\n                                    M.M11S.Meteor3Info.LastFramePos = { x = 100, z = 96.3 }\n                                end\n                            end\n                        end\n                    elseif M.M11S.Meteor3Info.LastFrame == 47037 then\n                        if M.SelfPos == \"D1\" then\n                            M.M11S.Meteor3Info.LastFramePos = { x = 100, z = 94 }\n                        elseif M.SelfPos == \"D2\" then\n                            M.M11S.Meteor3Info.LastFramePos = { x = 100, z = 106 }\n                        else\n                            for job, ent in pairs(M.Party) do\n                                if ent.id ~= M.GetPlayer().id and table.contains(M.M11S.Meteor3Info.Marked, ent.id) then\n                                    otherJob = job\n                                    break\n                                end\n                            end\n                            local selfIdx = M.IndexOf(M.M11S.Meteor3Info.JobOrder, M.SelfPos)\n                            local otherIndex = M.IndexOf(M.M11S.Meteor3Info.JobOrder, otherJob)\n                            if selfIdx > otherIndex then\n                                M.M11S.Meteor3Info.LastFramePos = { x = 100, z = 103 }\n                            else\n                                M.M11S.Meteor3Info.LastFramePos = { x = 100, z = 97 }\n                            end\n                        end\n                    end\n                else\n                    local pos = M.M11S.Meteor3Info.LastFramePos\n                    M.FrameDirect(pos.x, pos.z)\n                end\n            end\n        end\n    end\nend\n\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "主循环-陨石狂奔",
+						uuid = "3fb2226d-4edc-8a40-b9b9-e100dcc579f7",
+						version = 2.1,
+					},
+					inheritedIndex = 3,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local redDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal yellowDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal litBlueDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.3)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal M = MuAiGuide\nif data.MuAiM11SDrawDeathCastId == 46114 then\n    for job, member in pairs(M.Party) do\n        local curMem = TensorCore.mGetEntity(member.id)\n        if job == \"MT\" then\n            redDraw:addCircle(curMem.pos.x, curMem.pos.y, curMem.pos.z, 6)\n        elseif job ~= \"ST\" then\n            yellowDraw:addCircle(curMem.pos.x, curMem.pos.y, curMem.pos.z, 6)\n        end\n    end\nelseif data.MuAiM11SDrawDeathCastId == 46115 then\n    local player = M.GetPlayer()\n    local curBoss = TensorCore.mGetEntity(M.M11S.CurrentBoss.id)\n    local memberHeading = {}\n    --镰刀\n    for job, member in pairs(M.Party) do\n        local curMember = TensorCore.mGetEntity(member.id)\n        local curHeading = TensorCore.getHeadingToTarget(curBoss.pos, curMember.pos)\n        if job == \"MT\" or job == \"ST\" then\n            redDraw:addCone(curBoss.pos.x, curBoss.pos.y, curBoss.pos.z, 40, math.pi / 2, curHeading)\n        else\n            if curHeading > math.pi then\n                memberHeading[job] = curHeading - math.pi * 2\n            else\n                memberHeading[job] = curHeading\n            end\n        end\n    end\n    if M.IsTank(player.job) then\n        litBlueDraw:addCone(100, 0, 100, 30, math.pi / 4, 0)\n    else\n        local isSafe = true\n        local selfHeading = memberHeading[M.SelfPos]\n        for job, heading in pairs(memberHeading) do\n            if job ~= M.SelfPos then\n                local sub = math.abs(heading - selfHeading)\n                if sub > math.pi / 4 then\n                    isSafe = false\n                end\n            end\n        end\n        if isSafe then\n            litBlueDraw:addCone(curBoss.pos.x, 0, curBoss.pos.z, 30, math.pi / 4, selfHeading)\n        else\n            yellowDraw:addCone(curBoss.pos.x, 0, curBoss.pos.z, 30, math.pi / 4, selfHeading)\n        end\n    end\nend\nif TimeSince(data.MuAiM11SDrawDeathCastTime) > 9500 then\n    data.MuAiM11SDrawDeathCastTime = nil\n    data.MuAiM11SDrawDeathCastId = nil\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								true,
+							},
+							
+							{
+								"73f59343-3c8e-4978-9544-35ffa6d1bc03",
+								true,
+							},
+							
+							{
+								"f61323c3-aa84-edaf-b26f-e9dc55863f5f",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "死刑绘图",
+						uuid = "6bfbb85f-6798-3d25-9a72-da6a5163dfe8",
+						version = 2.1,
+					},
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local redDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.5)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.5)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.5)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\nfor _, wind in pairs(TensorCore.entityList(\"contentid=14307\")) do\n    if Argus.isEntityVisible(wind) then\n        redDraw:addCircle(wind.pos.x, wind.pos.y, wind.pos.z, 4.4, false)\n    end\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								true,
+							},
+							
+							{
+								"73f59343-3c8e-4978-9544-35ffa6d1bc03",
+								true,
+							},
+							
+							{
+								"cd5179b0-09eb-76c0-9dbc-e203655b67fd",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "6连兵器-大漩涡绘图",
+						uuid = "670b1434-3b50-7b8d-9fd0-7da085f076c1",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.Config.Main.M11SExDraw",
+						name = "画图设置",
+						uuid = "73f59343-3c8e-4978-9544-35ffa6d1bc03",
+						version = 2,
+					},
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "if MuAiGuide.M11SMapType ~= 1 and MuAiGuide.M11SMapType ~= 2 then\n    return false\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nif tethers == nil or table.size(tethers) <= 0 then\n    return false\nend\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        return true\n    end\nend\nreturn false",
+						name = "拉线阶段",
+						uuid = "2fbd9c0f-e39c-a512-9798-2586a5646898",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.Config.Main.M11SExDraw ~= nil and MuAiGuide.Config.Main.M11SExDraw == true\n\t\tand data ~= nil \n\t\tand data.MuAiM11SDraw ~= nil and data.MuAiM11SDraw == true\n\t\tand data.MuAiM11SGroundMeteorInfo ~= nil",
+						name = "是否开启功能且取到数据",
+						uuid = "9df6c43b-98a1-cbc0-9a5e-8f335214de42",
+						version = 2,
+					},
+					inheritedIndex = 4,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return data ~= nil and data.MuAiM11SDrawDeathCastId ~= nil",
+						name = "当前处于显示死刑中",
+						uuid = "f61323c3-aa84-edaf-b26f-e9dc55863f5f",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = " return MuAiGuide.M11S.CurrentState >= MuAiGuide.M11S.State.Weapon3_Start \n\tand MuAiGuide.M11S.CurrentState < MuAiGuide.M11S.State.Weapon3_End ",
+						name = "6连兵器中",
+						uuid = "cd5179b0-09eb-76c0-9dbc-e203655b67fd",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = " return MuAiGuide.M11S.CurrentState >= MuAiGuide.M11S.State.Weapon1_Start \n\tand MuAiGuide.M11S.CurrentState <= MuAiGuide.M11S.State.Weapon3_End ",
+						name = "3连兵器到6连兵器结束",
+						uuid = "d47bff10-5a20-28a6-a170-7e8497075651",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = " return MuAiGuide.M11S.CurrentState >= MuAiGuide.M11S.State.Meteor2_Start \n\tand MuAiGuide.M11S.CurrentState <= MuAiGuide.M11S.State.Meteor2_end ",
+						name = "王者陨石阶段",
+						uuid = "6057d08b-fae1-2c5f-9386-36b74f082f65",
+						version = 2,
+					},
+					inheritedIndex = 8,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = " return MuAiGuide.M11S.CurrentState >= MuAiGuide.M11S.State.Meteor3_Start \n\tand MuAiGuide.M11S.CurrentState < MuAiGuide.M11S.State.Meteor3_End ",
+						name = "陨石狂奔阶段",
+						uuid = "e7db56cc-52d2-5ffd-ab7b-95f8c22002db",
+						version = 2,
+					},
+					inheritedIndex = 9,
+				},
+			},
+			eventType = 12,
+			name = "M11S主循环",
+			uuid = "41a903f9-67f1-06ad-8924-d2be901e0268",
+			version = 2,
+		},
+		inheritedIndex = 13,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "data.MuAiM11SDrawDeathCastTime = Now()\ndata.MuAiM11SDrawDeathCastId = eventArgs.spellID\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+								true,
+							},
+							
+							{
+								"d7d686ef-d64b-a32c-b12d-cd6ee9164227",
+								true,
+							},
+							
+							{
+								"599e9feb-a4c2-9634-9533-e469c9016c28",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "死刑数据采集",
+						uuid = "1043ba46-3471-a0b0-9503-82d61e57a8a5",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nlocal curEnt = TensorCore.mGetEntity(eventArgs.entityID)\nlocal time = eventArgs.channelTimeMax * 1000\nif M.Config.Main.M11SExDraw then\n    local redDraw = Argus2.ShapeDrawer:new(\n            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n            (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n            1\n    )\n    redDraw:addTimedCenteredRect(time, curEnt.pos.x, 0, curEnt.pos.z, 10, 60, curEnt.pos.h + math.pi / 2)\nend\nif M.M11S.Blade == nil then\n    M.M11S.Blade = {}\n    M.M11S.BladeIds = {}\nend\nif table.size(M.M11S.BladeIds) < 6 then\n    table.insert(M.M11S.BladeIds, eventArgs.entityID)\n    table.insert(M.M11S.Blade, curEnt)\n    local outBoom = {}\n    if table.size(M.M11S.BladeIds) == 6 then\n        for i, ent in pairs(M.M11S.Blade) do\n            local dis = TensorCore.getDistance2d(ent.pos, { x = 100, y = 0, z = 100 })\n            if dis > 3 then\n                table.insert(outBoom, ent)\n            end\n        end\n        local noBoomIdx\n        for i = 0, 3 do\n            local hasBoom = false\n            for _, ent in pairs(outBoom) do\n                local curHeading = math.pi / 2 * i\n                local entHeading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, ent.pos)\n                if M.IsSameDirection(curHeading, entHeading, 0.1) then\n                    hasBoom = true\n                end\n            end\n            if not hasBoom then\n                noBoomIdx = i\n                break\n            end\n        end\n        local guidePos\n        -- 缺口在哪？\n        if noBoomIdx == 0 then\n            if M.SelfPos == \"MT\" or M.SelfPos == \"D1\" then\n                guidePos = { x = 92, z = 100 }\n            elseif M.SelfPos == \"ST\" or M.SelfPos == \"D2\" then\n                guidePos = { x = 108, z = 100 }\n            elseif M.SelfPos == \"H1\" or M.SelfPos == \"D3\" then\n                guidePos = { x = 93.7, z = 115 }\n            elseif M.SelfPos == \"H2\" or M.SelfPos == \"D4\" then\n                guidePos = { x = 106.3, z = 115 }\n            end\n        elseif noBoomIdx == 1 then\n            if M.SelfPos == \"MT\" or M.SelfPos == \"D1\" then\n                guidePos = { x = 100, z = 92 }\n            elseif M.SelfPos == \"ST\" or M.SelfPos == \"D2\" then\n                guidePos = { x = 100, z = 108 }\n            elseif M.SelfPos == \"H1\" or M.SelfPos == \"D3\" then\n                guidePos = { x = 115, z = 106.3 }\n            elseif M.SelfPos == \"H2\" or M.SelfPos == \"D4\" then\n                guidePos = { x = 115, z = 93.7 }\n            end\n        elseif noBoomIdx == 2 then\n            if M.SelfPos == \"MT\" or M.SelfPos == \"D1\" then\n                guidePos = { x = 92, z = 100 }\n            elseif M.SelfPos == \"ST\" or M.SelfPos == \"D2\" then\n                guidePos = { x = 108, z = 100 }\n            elseif M.SelfPos == \"H1\" or M.SelfPos == \"D3\" then\n                guidePos = { x = 106.3, z = 85 }\n            elseif M.SelfPos == \"H2\" or M.SelfPos == \"D4\" then\n                guidePos = { x = 93.7, z = 85 }\n            end\n        elseif noBoomIdx == 3 then\n            if M.SelfPos == \"MT\" or M.SelfPos == \"D1\" then\n                guidePos = { x = 100, z = 92 }\n            elseif M.SelfPos == \"ST\" or M.SelfPos == \"D2\" then\n                guidePos = { x = 100, z = 108 }\n            elseif M.SelfPos == \"H1\" or M.SelfPos == \"D3\" then\n                guidePos = { x = 85, z = 93.7 }\n            elseif M.SelfPos == \"H2\" or M.SelfPos == \"D4\" then\n                guidePos = { x = 85, z = 106.3 }\n            end\n        end\n        M.DirectTo(guidePos.x, guidePos.z, time)\n    end\nend\n\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+								true,
+							},
+							
+							{
+								"16bb9852-efcf-a977-ac2c-ffde0662d2da",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "米字型劈刀",
+						uuid = "bef2d249-bf0a-dd0e-ab1c-0c0b728ec8f4",
+						version = 2.1,
+					},
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M11S.CurrentState = MuAiGuide.M11S.State.Weapon1_Start\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+								true,
+							},
+							
+							{
+								"a3b7139c-b3a9-3e6b-8175-830f52c3a921",
+								true,
+							},
+							
+							{
+								"1e73bf37-8a27-da19-b9a3-7783f9117aa6",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "进入3连兵器1",
+						uuid = "ab524b3a-0f4e-236f-a9ba-6c280b28bf93",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M11S.CurrentState = MuAiGuide.M11S.State.Weapon2_Start\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+								true,
+							},
+							
+							{
+								"dd416fb1-1595-99e6-ba90-08b042b7231a",
+								true,
+							},
+							
+							{
+								"0db5b078-547f-e6c2-a183-5441c51345a0",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "进入3连兵器2",
+						uuid = "23ce0296-a170-628c-9735-85949f0a044e",
+						version = 2.1,
+					},
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M11S.CurrentState = MuAiGuide.M11S.State.Weapon3_Start\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+								true,
+							},
+							
+							{
+								"9881615b-f494-85ff-98ba-4f68742f42c7",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "进入6连兵器",
+						uuid = "b7e56c2e-366c-4a48-a5e2-e36cacf90ee5",
+						version = 2.1,
+					},
+					inheritedIndex = 3,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local time = eventArgs.channelTimeMax * 1000\nif table.contains({ \"MT\", \"H1\", \"D1\", \"D3\" }, MuAiGuide.SelfPos) then\n\tMuAiGuide.DirectTo(98, 100, time)\nelse\n\tMuAiGuide.DirectTo(102, 100, time)\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+								true,
+							},
+							
+							{
+								"cdc353e5-0e50-2da4-b26b-cba68c1fd602",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "开始拆地板",
+						uuid = "5ab518b8-2916-ed2e-9c28-f811719b2067",
+						version = 2.1,
+					},
+					inheritedIndex = 6,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M11S.CurrentState = MuAiGuide.M11S.State.Meteor2_Start\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+								true,
+							},
+							
+							{
+								"fcd424a1-fa9c-b941-b3d4-a177a774c78d",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "进入王者陨石阶段",
+						uuid = "f4877b23-8419-87db-a108-613fa0e8354c",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M11S.CurrentState = MuAiGuide.M11S.State.Meteor2_GatherEnd\nMuAiGuide.M11S.BreakTime = Now()\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+								true,
+							},
+							
+							{
+								"e294ba3c-78ed-ebf7-8e0b-1d5ff7ed4f23",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "王者陨石-开始最后一波踩塔",
+						uuid = "8a55d519-c566-fb8e-a32b-48e5735eb84f",
+						version = 2.1,
+					},
+					inheritedIndex = 8,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M11S.CurrentState = MuAiGuide.M11S.State.Meteor3_Start\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+								true,
+							},
+							
+							{
+								"1eb74c66-cda9-4f74-9531-d17a7c8c6de6",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "进入陨石狂奔",
+						uuid = "43dc02a9-be5f-ce72-924d-198fe07a1269",
+						version = 2.1,
+					},
+					inheritedIndex = 10,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nif M.M11S.Meteor3Info.boom == nil then\n    M.M11S.Meteor3Info.boom = {}\nend\n\nif table.size(M.M11S.Meteor3Info.boom) < 2 then\n    table.insert(M.M11S.Meteor3Info.boom, eventArgs.entityID)\n    if table.size(M.M11S.Meteor3Info.boom) == 2 then\n        M.M11S.Meteor3Info.BoomTime = Now()\n        M.M11S.CurrentState = M.M11S.State.Meteor3_Guide1\n    end\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+								true,
+							},
+							
+							{
+								"5467f634-a82b-69f1-b31e-ad5f89024dbe",
+								true,
+							},
+						},
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "陨石狂奔-距离衰减读条",
+						uuid = "a451d098-b718-5c14-b5d0-f1d7e328d9a6",
+						version = 2.1,
+					},
+					inheritedIndex = 10,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nif eventArgs.spellID == 46166 then\n    table.insert(M.M11S.Meteor3Info.Spell46166, eventArgs.entityID)\nelseif eventArgs.spellID == 46167 then\n    table.insert(M.M11S.Meteor3Info.Spell46167, eventArgs.entityID)\nend\n\nlocal guidePos, selfTower\nif M.SelfPos == \"MT\" or M.SelfPos == \"ST\" then\n    if table.size(M.M11S.Meteor3Info.Spell46166) == 2 then\n        local MtTake, StTake = M.M11S.Meteor3Info.FindDir(M.M11S.Meteor3Info.Spell46166[1], M.M11S.Meteor3Info.Spell46166[2])\n        if M.SelfPos == \"MT\" then\n            selfTower = MtTake\n        else\n            selfTower = StTake\n        end\n        local heading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, selfTower.pos)\n        guidePos = TensorCore.getPosInDirection({ x = 100, y = 0, z = 100 }, heading, 8)\n    end\nelseif M.SelfPos == \"D1\" or M.SelfPos == \"D2\" then\n    if table.size(M.M11S.Meteor3Info.Spell46167) == 2 then\n        local D1Take, D2Take = M.M11S.Meteor3Info.FindDir(M.M11S.Meteor3Info.Spell46167[1], M.M11S.Meteor3Info.Spell46167[2])\n        if M.SelfPos == \"D1\" then\n            selfTower = D1Take\n        else\n            selfTower = D2Take\n        end\n        local heading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, selfTower.pos)\n        guidePos = TensorCore.getPosInDirection({ x = 100, y = 0, z = 100 }, heading, 8)\n    end\nelse\n    if table.size(M.M11S.Meteor3Info.Spell46167) == 2 and (not table.contains(M.M11S.Meteor3Info.Marked, M.GetPlayer().id)) then\n        local t1, t2 = M.M11S.Meteor3Info.FindDir(M.M11S.Meteor3Info.Spell46167[1], M.M11S.Meteor3Info.Spell46167[2])\n        local selfIdx = M.IndexOf(M.M11S.Meteor3Info.JobOrder, M.SelfPos)\n        local otherJob\n        for job, ent in pairs(M.Party) do\n            if ent.id ~= M.GetPlayer().id and table.contains(M.M11S.Meteor3Info.JobOrder, job) and (not table.contains(M.M11S.Meteor3Info.Marked, ent.id)) then\n                otherJob = job\n                break\n            end\n        end\n        local otherIndex = M.IndexOf(M.M11S.Meteor3Info.JobOrder, otherJob)\n        if selfIdx > otherIndex then\n            selfTower = t2\n        else\n            selfTower = t1\n        end\n        local heading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, selfTower.pos)\n        guidePos = TensorCore.getPosInDirection({ x = 100, y = 0, z = 100 }, heading, 14)\n    end\nend\n\nif guidePos ~= nil then\n    M.DirectTo(guidePos.x, guidePos.z, 5000)\nend\nself.used = true",
 						conditions = 
 						{
 							
@@ -658,18 +1486,19 @@ local tbl =
 								true,
 							},
 						},
-						gVar = "ACR_RikuMNK3_CD",
-						name = "踩塔指路",
-						uuid = "42a3dd23-f10b-4e65-be32-3d3a6d439f6f",
+						gVar = "ACR_TensorWeeb3_CD",
+						name = "陨石狂奔-踩塔",
+						uuid = "553e3aae-7c3f-d5bc-a66d-f8217a5f5a87",
 						version = 2.1,
 					},
+					inheritedIndex = 10,
 				},
 				
 				{
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "data.MuAiM11SOnFrameFire = true\nself.used = true",
+						actionLua = "MuAiGuide.M11S.Meteor3Info.LastFrame = eventArgs.spellID\nself.used = true",
 						conditions = 
 						{
 							
@@ -679,15 +1508,16 @@ local tbl =
 							},
 							
 							{
-								"100a5d14-8de2-cb3d-9714-45498fa63b00",
+								"96650570-3677-0c1f-832a-cff4a857401c",
 								true,
 							},
 						},
-						gVar = "ACR_TensorWeeb3_CD",
-						name = "火焰吐息开始读条",
-						uuid = "1e53f0c0-abd4-cfd7-b797-8e3c4bfbe444",
+						gVar = "ACR_RikuMNK3_CD",
+						name = "陨石狂奔-4or2向火",
+						uuid = "22e8251c-e03d-e73f-bb49-2496365ca4d4",
 						version = 2.1,
 					},
+					inheritedIndex = 11,
 				},
 			},
 			conditions = 
@@ -704,6 +1534,18 @@ local tbl =
 						version = 2,
 					},
 					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.Config.Main.M11SExDraw",
+						name = "画图设置",
+						uuid = "d7d686ef-d64b-a32c-b12d-cd6ee9164227",
+						version = 2,
+					},
+					inheritedIndex = 2,
 				},
 				
 				{
@@ -735,13 +1577,199 @@ local tbl =
 						version = 2,
 					},
 				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgOptionType = 3,
+						eventArgType = 2,
+						name = "46115-镰刀||46115-斧子",
+						spellIDList = 
+						{
+							46115,
+							46114,
+						},
+						uuid = "599e9feb-a4c2-9634-9533-e469c9016c28",
+						version = 2,
+					},
+					inheritedIndex = 5,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46102,
+						name = "46102-历战之兵武",
+						uuid = "a3b7139c-b3a9-3e6b-8175-830f52c3a921",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46103,
+						name = "46103-铸兵突袭",
+						uuid = "dd416fb1-1595-99e6-ba90-08b042b7231a",
+						version = 2,
+					},
+					inheritedIndex = 7,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46112,
+						name = "46112-爆炸(劈刀)",
+						uuid = "16bb9852-efcf-a977-ac2c-ffde0662d2da",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 47085,
+						name = "47085-历战之极武",
+						uuid = "9881615b-f494-85ff-98ba-4f68742f42c7",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventEntityID = 46144,
+						eventSpellID = 46144,
+						name = "46144-王者陨石",
+						uuid = "fcd424a1-fa9c-b941-b3d4-a177a774c78d",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46143,
+						name = "46143-绝命分断击",
+						uuid = "cdc353e5-0e50-2da4-b26b-cba68c1fd602",
+						version = 2,
+					},
+					inheritedIndex = 12,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46154,
+						name = "46154-登天碎地",
+						uuid = "e294ba3c-78ed-ebf7-8e0b-1d5ff7ed4f23",
+						version = 2,
+					},
+					inheritedIndex = 13,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46162,
+						name = "46162-陨石狂奔",
+						uuid = "1eb74c66-cda9-4f74-9531-d17a7c8c6de6",
+						version = 2,
+					},
+					inheritedIndex = 13,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46163,
+						name = "46163-遮天陨石",
+						uuid = "5467f634-a82b-69f1-b31e-ad5f89024dbe",
+						version = 2,
+					},
+					inheritedIndex = 14,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgOptionType = 3,
+						eventArgType = 2,
+						name = "46170-四向|47037-双向",
+						spellIDList = 
+						{
+							46170,
+							47037,
+						},
+						uuid = "96650570-3677-0c1f-832a-cff4a857401c",
+						version = 2,
+					},
+					inheritedIndex = 15,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M11S.CurrentState < MuAiGuide.M11S.State.Weapon1_Start",
+						name = "三连兵器1-未开始",
+						uuid = "1e73bf37-8a27-da19-b9a3-7783f9117aa6",
+						version = 2,
+					},
+					inheritedIndex = 14,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M11S.CurrentState >= MuAiGuide.M11S.State.Weapon1_End\n   and MuAiGuide.M11S.CurrentState < MuAiGuide.M11S.State.Weapon2_Start",
+						name = "三连兵器2-未开始",
+						uuid = "0db5b078-547f-e6c2-a183-5441c51345a0",
+						version = 2,
+					},
+					inheritedIndex = 12,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M11S.CurrentState < MuAiGuide.M11S.State.Meteor2_Start",
+						name = "王者陨石-未开始",
+						uuid = "d0d48b0d-93e0-d389-8d89-e243205e328d",
+						version = 2,
+					},
+					inheritedIndex = 14,
+				},
 			},
 			eventType = 3,
-			name = "M11S技能读条",
+			name = "M11S阶段切换[读条开始]",
 			uuid = "eb90697a-3de9-b2eb-a153-167ddda24d73",
 			version = 2,
 		},
-		inheritedIndex = 10,
+		inheritedIndex = 15,
 	},
 	
 	{
@@ -754,23 +1782,23 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nlocal player = M.GetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nlocal linkFrom = nil\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        linkFrom = TensorCore.mGetEntity(tether.partnerid)\n    end\nend\n\nif linkFrom ~= nil then\n    local targetPos = nil\n    if M.M11SMapType == 1 then\n        if linkFrom.pos.x < 100 then\n            if linkFrom.pos.z < 100 then\n                targetPos = { x = 116, z = 120 }\n            else\n                targetPos = { x = 116, z = 80 }\n            end\n        else\n            if linkFrom.pos.z < 100 then\n                targetPos = { x = 84, z = 120 }\n            else\n                targetPos = { x = 84, z = 80 }\n            end\n        end\n        if targetPos ~= nil then\n            local length = TensorCore.getDistance2d(linkFrom.pos, targetPos)\n            local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(1, 1, 0, 1), 1)\n            local heading = TensorCore.getHeadingToTarget(linkFrom.pos, targetPos)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length - 0.6, 0.05, 0.6, 0.4, true)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length * 1 / 5, 0.05, 0.6, 0.4, true)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length * 2 / 5, 0.05, 0.6, 0.4, true)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length * 3 / 5, 0.05, 0.6, 0.4, true)\n            drawer:addArrow(linkFrom.pos.x, 0, linkFrom.pos.z, heading, length * 4 / 5, 0.05, 0.6, 0.4, true)\n            if data.MuAiM11SOnFrameFire ~= nil and data.MuAiM11SOnFrameFire == true then\n                local guidePosX, guidePosZ\n                if table.contains(data.MuAiM11SGroundMeteorInfo, 22) or table.contains(data.MuAiM11SGroundMeteorInfo, 24) then\n                    guidePosX = targetPos.x + 0.5\n                elseif table.contains(data.MuAiM11SGroundMeteorInfo, 23) or table.contains(data.MuAiM11SGroundMeteorInfo, 25) then\n                    guidePosX = targetPos.x - 0.5\n                end\n                if targetPos.z > 100 then\n                    guidePosZ = targetPos.z - 0.5\n                else\n                    guidePosZ = targetPos.z + 0.5\n                end\n                M.FrameDirect(guidePosX, guidePosZ)\n            end\n        end\n    elseif M.M11SMapType == 2 then\n        if linkFrom.pos.z < 90 then\n            --上\n            targetPos = { x = 119.5, z = 119.5 }\n        elseif linkFrom.pos.x < 90 then\n            --左\n            targetPos = { x = 119.5, z = 81.5 }\n        elseif linkFrom.pos.z > 110 then\n            -- 下\n            targetPos = { x = 81.5, z = 81.5 }\n        else\n            -- 右边\n            targetPos = { x = 81.5, z = 119.5 }\n        end\n        M.FrameDirect(targetPos.x, targetPos.z)\n    end\nend\nself.used = true ",
+						actionLua = "MuAiGuide.M11SMapType = 1\nself.used = true",
 						conditions = 
 						{
 							
 							{
-								"2fbd9c0f-e39c-a512-9798-2586a5646898",
+								"0e493990-e4ec-e1b4-aaf9-fb78fd408a55",
 								true,
 							},
 							
 							{
-								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								"6ccf9f23-4952-5e4c-bbf6-111de25eaffa",
 								true,
 							},
 						},
 						gVar = "ACR_RikuNIN3_CD",
-						name = "拉线",
-						uuid = "031241ad-aed6-50cb-aab6-4ace640a267b",
+						name = "拆地板",
+						uuid = "62e6a770-339c-de7b-8bf7-1e1aa5badcca",
 						version = 2.1,
 					},
 					inheritedIndex = 1,
@@ -780,23 +1808,49 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "for _, effectId in pairs(data.MuAiM11SGroundMeteorInfo) do\n\n    local posX\n    if effectId == 22 then\n        posX = 79\n    elseif effectId == 23 then\n        posX = 89\n    elseif effectId == 24 then\n        posX = 111\n    elseif effectId == 25 then\n        posX = 121\n    end\n    local drawer = Argus2.ShapeDrawer:new(\n            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),\n            (GUI:ColorConvertFloat4ToU32(1, 0, 0, 1)),\n            1\n    )\n    drawer:addRect(posX, 0, 80, 40, 10, 0)\nend\nself.used = true",
+						actionLua = "MuAiGuide.M11SMapType = 0\nMuAiGuide.M11S.CurrentState = MuAiGuide.M11S.State.Meteor2_end\nself.used = true",
 						conditions = 
 						{
 							
 							{
-								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								"0e493990-e4ec-e1b4-aaf9-fb78fd408a55",
 								true,
 							},
 							
 							{
-								"9df6c43b-98a1-cbc0-9a5e-8f335214de42",
+								"33cd5d48-a7b4-e21e-865e-3da798f01913",
+								true,
+							},
+							
+							{
+								"4499f3d4-9d21-ea34-9204-41201ee0ce19",
 								true,
 							},
 						},
 						gVar = "ACR_RikuMNK3_CD",
-						name = "画半场刀",
-						uuid = "4dc14777-179a-c551-a488-7deba3207fd9",
+						name = "天顶的主宰-王者陨石结束",
+						uuid = "befcb967-2841-45e2-b927-f551c47c3b6c",
+						version = 2.1,
+					},
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "MuAiGuide.M11SMapType = 2\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"b07946c0-f072-a961-8d22-cf8fccccc02a",
+								true,
+							},
+						},
+						gVar = "ACR_RikuNIN3_CD",
+						name = "陨石狂奔 ",
+						uuid = "a2803d71-84f4-6362-bf81-8473a4716695",
 						version = 2.1,
 					},
 				},
@@ -811,7 +1865,7 @@ local tbl =
 						conditionType = 8,
 						localmapid = 1325,
 						name = "M11S",
-						uuid = "16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+						uuid = "0e493990-e4ec-e1b4-aaf9-fb78fd408a55",
 						version = 2,
 					},
 					inheritedIndex = 1,
@@ -820,32 +1874,60 @@ local tbl =
 				{
 					data = 
 					{
-						category = "Lua",
-						conditionLua = "if MuAiGuide.M11SMapType ~= 1 and MuAiGuide.M11SMapType ~= 2 then\n    return false\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal tethers = Argus.getTethersOnEnt(player.id)\nif tethers == nil or table.size(tethers) <= 0 then\n    return false\nend\nfor _, tether in pairs(tethers) do\n    if tether.type == 57 or tether.type == 249 then\n        return true\n    end\nend\nreturn false",
-						name = "拉线阶段",
-						uuid = "2fbd9c0f-e39c-a512-9798-2586a5646898",
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46143,
+						name = "46143-绝命分断击",
+						uuid = "6ccf9f23-4952-5e4c-bbf6-111de25eaffa",
 						version = 2,
 					},
-					inheritedIndex = 1,
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventEntityID = 46086,
+						eventSpellID = 46086,
+						name = "46086-天顶的主宰",
+						uuid = "33cd5d48-a7b4-e21e-865e-3da798f01913",
+						version = 2,
+					},
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46162,
+						name = "46162-陨石狂奔",
+						uuid = "b07946c0-f072-a961-8d22-cf8fccccc02a",
+						version = 2,
+					},
+					inheritedIndex = 3,
 				},
 				
 				{
 					data = 
 					{
 						category = "Lua",
-						conditionLua = "return MuAiGuide.Config.Main.M11SExDraw ~= nil and MuAiGuide.Config.Main.M11SExDraw == true\n\t\tand data ~= nil \n\t\tand data.MuAiM11SDraw ~= nil and data.MuAiM11SDraw == true\n\t\tand data.MuAiM11SGroundMeteorInfo ~= nil",
-						name = "是否开启功能且取到数据",
-						uuid = "9df6c43b-98a1-cbc0-9a5e-8f335214de42",
+						conditionLua = "return MuAiGuide.M11S.CurrentState < MuAiGuide.M11S.State.Meteor2_end",
+						name = "王者陨石阶段-未结束",
+						uuid = "4499f3d4-9d21-ea34-9204-41201ee0ce19",
 						version = 2,
 					},
 				},
 			},
-			eventType = 12,
-			name = "M11S-OnFrame",
-			uuid = "41a903f9-67f1-06ad-8924-d2be901e0268",
+			eventType = 2,
+			name = "M11S阶段切换[读条后]",
+			uuid = "e260ac90-04cd-d071-866c-f30f070327c0",
 			version = 2,
 		},
-		inheritedIndex = 11,
+		inheritedIndex = 16,
 	},
 	
 	{
@@ -862,7 +1944,72 @@ local tbl =
 			uuid = "d59f33fd-dc8f-4ea2-84c5-a200263ed342",
 			version = 2,
 		},
-		inheritedIndex = 12,
+		inheritedIndex = 16,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\n\nif TimeSince(M.M12S.Timer) > 22000 then\n    M.M12S.ArmySlayer = false\n    M.M12S.ArmyInfo = nil\nelse\n    if M.M12S.ArmyInfo == nil then\n        M.M12S.ArmyInfo = {}\n        M.M12S.ArmyInfo.ids = {}\n        M.M12S.ArmyInfo.LeftCnt = 1\n        M.M12S.ArmyInfo.RightCnt = 1\n        M.M12S.ArmyInfo.State = 1\n        M.M12S.ArmyInfo.Left = {}\n        M.M12S.ArmyInfo.Right = {}\n        M.M12S.ArmyInfo.All = {}\n        M.M12S.ArmyInfo.FirstPurple = nil\n        M.M12S.ArmyInfo.PositionLeft = {\n            [1] = { x = 95, y = 0, z = 85.5 },\n            [2] = { x = 97, y = 0, z = 93 },\n            [3] = { x = 87, y = 0, z = 86 },\n            [4] = { x = 90, y = 0, z = 95 },\n        }\n        M.M12S.ArmyInfo.PositionRight = {\n            [1] = { x = 105, y = 0, z = 85.5 },\n            [2] = { x = 103, y = 0, z = 93 },\n            [3] = { x = 113, y = 0, z = 86 },\n            [4] = { x = 110, y = 0, z = 95 },\n        }\n        M.M12S.ArmyInfo.GotPos = {\n            [\"MT\"] = false,\n            [\"ST\"] = false,\n            [\"H1\"] = false,\n            [\"H2\"] = false,\n        }\n        M.M12S.ArmyInfo.THOrder = nil\n        M.M12S.ArmyInfo.Timer = 0\n        M.M12S.ArmyInfo.Temp = {}\n    end\n\n    if table.size(M.M12S.ArmyInfo.ids) < 8 then\n        for _, ent in pairs(TensorCore.entityList(\"contentid=14378\")) do\n            if Argus.isEntityVisible(ent) then\n                local model = Argus.getEntityModel(ent.id)\n                if model == 19200 or model == 19201 then\n                    if not table.contains(M.M12S.ArmyInfo.ids, ent.id) then\n                        table.insert(M.M12S.ArmyInfo.ids, ent.id)\n                        if table.size(M.M12S.ArmyInfo.Temp) < 2 then\n                            table.insert(M.M12S.ArmyInfo.Temp, ent)\n                        end\n                    end\n                end\n            end\n        end\n        if table.size(M.M12S.ArmyInfo.Temp) == 2 then\n            if M.M12S.ArmyInfo.Temp[1].pos.y < M.M12S.ArmyInfo.Temp[2].pos.y\n                    or M.M12S.ArmyInfo.Temp[1].pos.x < 100 and M.M12S.ArmyInfo.Temp[2].pos.x < 100 and M.M12S.ArmyInfo.Temp[1].pos.x > M.M12S.ArmyInfo.Temp[2].pos.x\n                    or M.M12S.ArmyInfo.Temp[1].pos.x > 100 and M.M12S.ArmyInfo.Temp[2].pos.x > 100 and M.M12S.ArmyInfo.Temp[1].pos.x < M.M12S.ArmyInfo.Temp[2].pos.x\n            then\n                M.M12S.ArmyInfo.Temp[1], M.M12S.ArmyInfo.Temp[2] = M.M12S.ArmyInfo.Temp[2], M.M12S.ArmyInfo.Temp[1]\n            end\n            for i = 1, #M.M12S.ArmyInfo.Temp do\n                local curEnt = M.M12S.ArmyInfo.Temp[i]\n                local modelTemp = Argus.getEntityModel(curEnt.id)\n                table.insert(M.M12S.ArmyInfo.All, { ent = curEnt, model = modelTemp })\n                if curEnt.pos.x > 100 then\n                    M.M12S.ArmyInfo.Right[M.M12S.ArmyInfo.RightCnt] = curEnt\n                    M.M12S.ArmyInfo.RightCnt = M.M12S.ArmyInfo.RightCnt + 1\n                else\n                    M.M12S.ArmyInfo.Left[M.M12S.ArmyInfo.LeftCnt] = curEnt\n                    M.M12S.ArmyInfo.LeftCnt = M.M12S.ArmyInfo.LeftCnt + 1\n                end\n                if modelTemp == 19200 and M.M12S.ArmyInfo.FirstPurple == nil then\n                    M.M12S.ArmyInfo.FirstPurple = curEnt\n                end\n            end\n            M.M12S.ArmyInfo.Temp = {}\n        end\n        if table.size(M.M12S.ArmyInfo.ids) == 8 then\n            M.M12S.ArmyInfo.Timer = Now()\n        end\n    end\n    if M.M12S.ArmyInfo.FirstPurple ~= nil then\n        local buff = TensorCore.getBuff(M.GetPlayer().id, 3935)\n        if buff == nil then\n            local dps = { \"D1\", \"D2\", \"D3\", \"D4\" }\n            local posListTh, posListDps\n            local entListTh\n            if M.M12S.ArmyInfo.FirstPurple.pos.x > 100 then\n                posListDps = M.M12S.ArmyInfo.PositionLeft\n                posListTh = M.M12S.ArmyInfo.PositionRight\n                entListTh = M.M12S.ArmyInfo.Right\n            else\n                posListDps = M.M12S.ArmyInfo.PositionRight\n                posListTh = M.M12S.ArmyInfo.PositionLeft\n                entListTh = M.M12S.ArmyInfo.Left\n            end\n            if table.contains(dps, M.SelfPos) then\n                local index = M.IndexOf(dps, M.SelfPos)\n                local pos = posListDps[index]\n                M.M12S.ArmyInfo.SelfIdx = index\n                M.FrameDirect(pos.x, pos.z)\n            elseif table.size(M.M12S.ArmyInfo.ids) == 8 then\n                if M.M12S.ArmyInfo.THOrder == nil then\n                    M.M12S.ArmyInfo.THOrder = {}\n                    for i = 1, 4 do\n                        local ball = entListTh[i]\n                        local model = Argus.getEntityModel(ball.id)\n                        if model == 19200 then\n                            if not M.M12S.ArmyInfo.GotPos[\"MT\"] then\n                                M.M12S.ArmyInfo.THOrder[\"MT\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"MT\"] = true\n                            else\n                                M.M12S.ArmyInfo.THOrder[\"ST\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"ST\"] = true\n                            end\n                        else\n                            if not M.M12S.ArmyInfo.GotPos[\"H1\"] then\n                                M.M12S.ArmyInfo.THOrder[\"H1\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"H1\"] = true\n                            else\n                                M.M12S.ArmyInfo.THOrder[\"H2\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"H2\"] = true\n                            end\n                        end\n                    end\n                    M.M12S.ArmyInfo.SelfIdx = M.M12S.ArmyInfo.THOrder[M.SelfPos]\n                    d(M.M12S.ArmyInfo.THOrder)\n                else\n                    local pos = posListTh[M.M12S.ArmyInfo.SelfIdx]\n                    M.FrameDirect(pos.x, pos.z)\n                end\n            end\n        else\n            if M.M12S.ArmyInfo.SelfIdx == 1 then\n                local player = M.GetPlayer()\n                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                if buff.duration > 8.5 and TensorCore.getDistance2d(player.pos, boss.pos) < 13.8 then\n                    if player.pos.x > 100 then\n                        M.FrameDirect(114, 89)\n                    else\n                        M.FrameDirect(86, 89)\n                    end\n                elseif buff.duration > 5.5 then\n                    M.FrameDirect(100, 101.5)\n                end\n            else\n                if buff.duration > 5.5 then\n                    M.FrameDirect(100, 101.5)\n                end\n            end\n        end\n        if M.Config.Main.M12SExDraw and table.size(M.M12S.ArmyInfo.ids) == 8 then\n            if TimeSince(M.M12S.ArmyInfo.Timer) > 1200 then\n                local changed = false\n                for i, player in pairs(M.Party) do\n                    local debuff = TensorCore.getBuff(player.id, 3935)\n                    if debuff ~= nil and debuff.duration > 11 then\n                        changed = true\n                        break\n                    end\n                end\n                if changed then\n                    M.M12S.ArmyInfo.State = M.M12S.ArmyInfo.State + 1\n                    M.M12S.ArmyInfo.Timer = Now()\n                end\n            end\n            if M.M12S.ArmyInfo.State <= 4 then\n                local target1, target2\n                local ball1 = M.M12S.ArmyInfo.All[M.M12S.ArmyInfo.State * 2 - 1]\n                local ball2 = M.M12S.ArmyInfo.All[M.M12S.ArmyInfo.State * 2]\n                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                local distance = 10000\n                --找ball1的目标\n                for _, player in pairs(M.Party) do\n                    local curPlayer = TensorCore.mGetEntity(player.id)\n                    if (ball1.ent.pos.x > 100 and curPlayer.pos.x > 100)\n                            or (ball1.ent.pos.x < 100 and curPlayer.pos.x < 100)\n                    then\n                        local dis = TensorCore.getDistance2d(boss.pos, curPlayer.pos)\n                        if dis < distance then\n                            target1 = curPlayer\n                            distance = dis\n                        end\n                    end\n                end\n                distance = 10000\n                --找ball2的目标\n                for _, player in pairs(M.Party) do\n                    local curPlayer = TensorCore.mGetEntity(player.id)\n                    if curPlayer.id ~= target1.id and (\n                            (ball2.ent.pos.x > 100 and curPlayer.pos.x > 100)\n                                    or (ball2.ent.pos.x < 100 and curPlayer.pos.x < 100))\n                    then\n                        local dis = TensorCore.getDistance2d(boss.pos, curPlayer.pos)\n                        if dis < distance then\n                            target2 = curPlayer\n                            distance = dis\n                        end\n                    end\n                end\n                local greenDrawer = Argus2.ShapeDrawer:new(\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                        1\n                )\n                local purpleDrawer = Argus2.ShapeDrawer:new(\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                        1\n                )\n\n                if ball1.model == 19200 then\n                    purpleDrawer:addCircle(target1.pos.x, target1.pos.y, target1.pos.z, 6)\n                else\n                    greenDrawer:addCircle(target1.pos.x, target1.pos.y, target1.pos.z, 6)\n                end\n                if ball2.model == 19200 then\n                    purpleDrawer:addCircle(target2.pos.x, target2.pos.y, target2.pos.z, 6)\n                else\n                    greenDrawer:addCircle(target2.pos.x, target2.pos.y, target2.pos.z, 6)\n                end\n            end\n        end\n    end\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"79695dbf-76bd-fb59-b4fc-c6c7b59db258",
+								true,
+							},
+							
+							{
+								"3b5a92e6-57ae-be17-86cc-738c6cb9d5f5",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "致命灾变主循环",
+						uuid = "49501902-5a85-0242-b59e-9c16a80420c1",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "79695dbf-76bd-fb59-b4fc-c6c7b59db258",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.ArmySlayer ~= nil and MuAiGuide.M12S.ArmySlayer == true",
+						name = "致命灾变",
+						uuid = "3b5a92e6-57ae-be17-86cc-738c6cb9d5f5",
+						version = 2,
+					},
+				},
+			},
+			eventType = 12,
+			name = "M12S门神致命灾变",
+			uuid = "68b39db5-37db-ecc8-a289-060327422b48",
+			version = 2,
+		},
+		inheritedIndex = 18,
 	},
 	
 	{
@@ -928,72 +2075,7 @@ local tbl =
 			uuid = "01c21e3b-f835-8520-b7fa-247cf2d8b76b",
 			version = 2,
 		},
-		inheritedIndex = 14,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "MuAiGuide.M12S.CurrentBoss = TensorCore.mGetTarget()\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"af059daa-90a8-74b4-9550-caf534e00639",
-								true,
-							},
-							
-							{
-								"4851d130-4a01-de13-b3fc-e5bf6e579bc7",
-								true,
-							},
-						},
-						gVar = "ACR_TensorViper3_CD",
-						name = "M12S-GetBoss",
-						uuid = "0df32b43-05f8-e8a9-a31d-6b54cbaa72f1",
-						version = 2.1,
-					},
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "af059daa-90a8-74b4-9550-caf534e00639",
-						version = 2,
-					},
-					inheritedIndex = 1,
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "local target = TensorCore.mGetTarget()\nreturn target ~= nil\n\tand target.attackable\n\tand (MuAiGuide.M12S.CurrentBoss == nil or MuAiGuide.M12S.CurrentBoss.id ~= target.id)",
-						conditionType = 5,
-						uuid = "4851d130-4a01-de13-b3fc-e5bf6e579bc7",
-						version = 2,
-					},
-				},
-			},
-			name = "M12S-GetBoss",
-			uuid = "52909867-07a0-dd48-a645-bcbc9d9e4be2",
-			version = 2,
-		},
-		inheritedIndex = 14,
+		inheritedIndex = 19,
 	},
 	
 	{
@@ -1060,7 +2142,7 @@ local tbl =
 			uuid = "a0d021b4-1dd5-1d6c-a905-2559ee27a23c",
 			version = 2,
 		},
-		inheritedIndex = 15,
+		inheritedIndex = 17,
 	},
 	
 	{
@@ -1073,23 +2155,23 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\n\nif TimeSince(M.M12S.Timer) > 22000 then\n    M.M12S.ArmySlayer = false\n    M.M12S.ArmyInfo = nil\nelse\n    if M.M12S.ArmyInfo == nil then\n        M.M12S.ArmyInfo = {}\n        M.M12S.ArmyInfo.ids = {}\n        M.M12S.ArmyInfo.LeftCnt = 1\n        M.M12S.ArmyInfo.RightCnt = 1\n        M.M12S.ArmyInfo.State = 1\n        M.M12S.ArmyInfo.Left = {}\n        M.M12S.ArmyInfo.Right = {}\n        M.M12S.ArmyInfo.All = {}\n        M.M12S.ArmyInfo.FirstPurple = nil\n        M.M12S.ArmyInfo.PositionLeft = {\n            [1] = { x = 95, y = 0, z = 85.5 },\n            [2] = { x = 97, y = 0, z = 93 },\n            [3] = { x = 87, y = 0, z = 86 },\n            [4] = { x = 90, y = 0, z = 95 },\n        }\n        M.M12S.ArmyInfo.PositionRight = {\n            [1] = { x = 105, y = 0, z = 85.5 },\n            [2] = { x = 103, y = 0, z = 93 },\n            [3] = { x = 113, y = 0, z = 86 },\n            [4] = { x = 110, y = 0, z = 95 },\n        }\n        M.M12S.ArmyInfo.GotPos = {\n            [\"MT\"] = false,\n            [\"ST\"] = false,\n            [\"H1\"] = false,\n            [\"H2\"] = false,\n        }\n        M.M12S.ArmyInfo.THOrder = nil\n        M.M12S.ArmyInfo.Timer = 0\n        M.M12S.ArmyInfo.Temp = {}\n    end\n\n    if table.size(M.M12S.ArmyInfo.ids) < 8 then\n        for _, ent in pairs(TensorCore.entityList(\"contentid=14378\")) do\n            if Argus.isEntityVisible(ent) then\n                local model = Argus.getEntityModel(ent.id)\n                if model == 19200 or model == 19201 then\n                    if not table.contains(M.M12S.ArmyInfo.ids, ent.id) then\n                        table.insert(M.M12S.ArmyInfo.ids, ent.id)\n                        if table.size(M.M12S.ArmyInfo.Temp) < 2 then\n                            table.insert(M.M12S.ArmyInfo.Temp, ent)\n                        end\n                    end\n                end\n            end\n        end\n        if table.size(M.M12S.ArmyInfo.Temp) == 2 then\n            if M.M12S.ArmyInfo.Temp[1].pos.y < M.M12S.ArmyInfo.Temp[2].pos.y\n                    or M.M12S.ArmyInfo.Temp[1].pos.x < 100 and M.M12S.ArmyInfo.Temp[2].pos.x < 100 and M.M12S.ArmyInfo.Temp[1].pos.x > M.M12S.ArmyInfo.Temp[2].pos.x\n                    or M.M12S.ArmyInfo.Temp[1].pos.x > 100 and M.M12S.ArmyInfo.Temp[2].pos.x > 100 and M.M12S.ArmyInfo.Temp[1].pos.x < M.M12S.ArmyInfo.Temp[2].pos.x\n            then\n                M.M12S.ArmyInfo.Temp[1], M.M12S.ArmyInfo.Temp[2] = M.M12S.ArmyInfo.Temp[2], M.M12S.ArmyInfo.Temp[1]\n            end\n            for i = 1, #M.M12S.ArmyInfo.Temp do\n                local curEnt = M.M12S.ArmyInfo.Temp[i]\n                local modelTemp = Argus.getEntityModel(curEnt.id)\n                table.insert(M.M12S.ArmyInfo.All, { ent = curEnt, model = modelTemp })\n                if curEnt.pos.x > 100 then\n                    M.M12S.ArmyInfo.Right[M.M12S.ArmyInfo.RightCnt] = curEnt\n                    M.M12S.ArmyInfo.RightCnt = M.M12S.ArmyInfo.RightCnt + 1\n                else\n                    M.M12S.ArmyInfo.Left[M.M12S.ArmyInfo.LeftCnt] = curEnt\n                    M.M12S.ArmyInfo.LeftCnt = M.M12S.ArmyInfo.LeftCnt + 1\n                end\n                if modelTemp == 19200 and M.M12S.ArmyInfo.FirstPurple == nil then\n                    M.M12S.ArmyInfo.FirstPurple = curEnt\n                end\n            end\n            M.M12S.ArmyInfo.Temp = {}\n        end\n        if table.size(M.M12S.ArmyInfo.ids) == 8 then\n            M.M12S.ArmyInfo.Timer = Now()\n        end\n    end\n    if M.M12S.ArmyInfo.FirstPurple ~= nil then\n        local buff = TensorCore.getBuff(M.GetPlayer().id, 3935)\n        if buff == nil then\n            local dps = { \"D1\", \"D2\", \"D3\", \"D4\" }\n            local posListTh, posListDps\n            local entListTh\n            if M.M12S.ArmyInfo.FirstPurple.pos.x > 100 then\n                posListDps = M.M12S.ArmyInfo.PositionLeft\n                posListTh = M.M12S.ArmyInfo.PositionRight\n                entListTh = M.M12S.ArmyInfo.Right\n            else\n                posListDps = M.M12S.ArmyInfo.PositionRight\n                posListTh = M.M12S.ArmyInfo.PositionLeft\n                entListTh = M.M12S.ArmyInfo.Left\n            end\n            if table.contains(dps, M.SelfPos) then\n                local index = M.IndexOf(dps, M.SelfPos)\n                local pos = posListDps[index]\n                M.M12S.ArmyInfo.SelfIdx = index\n                M.FrameDirect(pos.x, pos.z)\n            elseif table.size(M.M12S.ArmyInfo.ids) == 8 then\n                if M.M12S.ArmyInfo.THOrder == nil then\n                    M.M12S.ArmyInfo.THOrder = {}\n                    for i = 1, 4 do\n                        local ball = entListTh[i]\n                        local model = Argus.getEntityModel(ball.id)\n                        if model == 19200 then\n                            if not M.M12S.ArmyInfo.GotPos[\"MT\"] then\n                                M.M12S.ArmyInfo.THOrder[\"MT\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"MT\"] = true\n                            else\n                                M.M12S.ArmyInfo.THOrder[\"ST\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"ST\"] = true\n                            end\n                        else\n                            if not M.M12S.ArmyInfo.GotPos[\"H1\"] then\n                                M.M12S.ArmyInfo.THOrder[\"H1\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"H1\"] = true\n                            else\n                                M.M12S.ArmyInfo.THOrder[\"H2\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"H2\"] = true\n                            end\n                        end\n                    end\n                    M.M12S.ArmyInfo.SelfIdx = M.M12S.ArmyInfo.THOrder[M.SelfPos]\n                    d(M.M12S.ArmyInfo.THOrder)\n                else\n                    local pos = posListTh[M.M12S.ArmyInfo.SelfIdx]\n                    M.FrameDirect(pos.x, pos.z)\n                end\n            end\n        else\n            if M.M12S.ArmyInfo.SelfIdx == 1 then\n                local player = M.GetPlayer()\n                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                if buff.duration > 8.5 and TensorCore.getDistance2d(player.pos, boss.pos) < 13.8 then\n                    if player.pos.x > 100 then\n                        M.FrameDirect(114, 89)\n                    else\n                        M.FrameDirect(86, 89)\n                    end\n                elseif buff.duration > 5.5 then\n                    M.FrameDirect(100, 101.5)\n                end\n            else\n                if buff.duration > 5.5 then\n                    M.FrameDirect(100, 101.5)\n                end\n            end\n        end\n        if M.Config.Main.M12SExDraw and table.size(M.M12S.ArmyInfo.ids) == 8 then\n            if TimeSince(M.M12S.ArmyInfo.Timer) > 1200 then\n                local changed = false\n                for i, player in pairs(M.Party) do\n                    local debuff = TensorCore.getBuff(player.id, 3935)\n                    if debuff ~= nil and debuff.duration > 11 then\n                        changed = true\n                        break\n                    end\n                end\n                if changed then\n                    M.M12S.ArmyInfo.State = M.M12S.ArmyInfo.State + 1\n                    M.M12S.ArmyInfo.Timer = Now()\n                end\n            end\n            if M.M12S.ArmyInfo.State <= 4 then\n                local target1, target2\n                local ball1 = M.M12S.ArmyInfo.All[M.M12S.ArmyInfo.State * 2 - 1]\n                local ball2 = M.M12S.ArmyInfo.All[M.M12S.ArmyInfo.State * 2]\n                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                local distance = 10000\n                --找ball1的目标\n                for _, player in pairs(M.Party) do\n                    local curPlayer = TensorCore.mGetEntity(player.id)\n                    if (ball1.ent.pos.x > 100 and curPlayer.pos.x > 100)\n                            or (ball1.ent.pos.x < 100 and curPlayer.pos.x < 100)\n                    then\n                        local dis = TensorCore.getDistance2d(boss.pos, curPlayer.pos)\n                        if dis < distance then\n                            target1 = curPlayer\n                            distance = dis\n                        end\n                    end\n                end\n                distance = 10000\n                --找ball2的目标\n                for _, player in pairs(M.Party) do\n                    local curPlayer = TensorCore.mGetEntity(player.id)\n                    if curPlayer.id ~= target1.id and (\n                            (ball2.ent.pos.x > 100 and curPlayer.pos.x > 100)\n                                    or (ball2.ent.pos.x < 100 and curPlayer.pos.x < 100))\n                    then\n                        local dis = TensorCore.getDistance2d(boss.pos, curPlayer.pos)\n                        if dis < distance then\n                            target2 = curPlayer\n                            distance = dis\n                        end\n                    end\n                end\n                local greenDrawer = Argus2.ShapeDrawer:new(\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                        1\n                )\n                local purpleDrawer = Argus2.ShapeDrawer:new(\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                        1\n                )\n\n                if ball1.model == 19200 then\n                    purpleDrawer:addCircle(target1.pos.x, target1.pos.y, target1.pos.z, 6)\n                else\n                    greenDrawer:addCircle(target1.pos.x, target1.pos.y, target1.pos.z, 6)\n                end\n                if ball2.model == 19200 then\n                    purpleDrawer:addCircle(target2.pos.x, target2.pos.y, target2.pos.z, 6)\n                else\n                    greenDrawer:addCircle(target2.pos.x, target2.pos.y, target2.pos.z, 6)\n                end\n            end\n        end\n    end\nend\nself.used = true",
+						actionLua = "MuAiGuide.M12S.CurrentBoss = TensorCore.mGetTarget()\nself.used = true",
 						conditions = 
 						{
 							
 							{
-								"79695dbf-76bd-fb59-b4fc-c6c7b59db258",
+								"af059daa-90a8-74b4-9550-caf534e00639",
 								true,
 							},
 							
 							{
-								"3b5a92e6-57ae-be17-86cc-738c6cb9d5f5",
+								"4851d130-4a01-de13-b3fc-e5bf6e579bc7",
 								true,
 							},
 						},
-						gVar = "ACR_RikuMNK3_CD",
-						name = "致命灾变主循环",
-						uuid = "49501902-5a85-0242-b59e-9c16a80420c1",
+						gVar = "ACR_TensorViper3_CD",
+						name = "M12S-GetBoss",
+						uuid = "0df32b43-05f8-e8a9-a31d-6b54cbaa72f1",
 						version = 2.1,
 					},
 				},
@@ -1104,7 +2186,156 @@ local tbl =
 						conditionType = 8,
 						localmapid = 1327,
 						name = "M12S",
-						uuid = "79695dbf-76bd-fb59-b4fc-c6c7b59db258",
+						uuid = "af059daa-90a8-74b4-9550-caf534e00639",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "local target = TensorCore.mGetTarget()\nreturn target ~= nil\n\tand target.attackable\n\tand (MuAiGuide.M12S.CurrentBoss == nil or MuAiGuide.M12S.CurrentBoss.id ~= target.id)",
+						conditionType = 5,
+						uuid = "4851d130-4a01-de13-b3fc-e5bf6e579bc7",
+						version = 2,
+					},
+				},
+			},
+			name = "M12S-GetBoss",
+			uuid = "52909867-07a0-dd48-a645-bcbc9d9e4be2",
+			version = 2,
+		},
+		inheritedIndex = 20,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "TensorCore.API.TensorACR.setLockFaceHeading(MuAiGuide.M12S.GP1Info.face)\nTensorCore.API.TensorACR.toggleLockFace(true)\nMuAiGuide.M12S.Timer = Now()\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.GPuzzle1_AutoLock\nMuAiGuide.M12S.Locking = true\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"8785e636-0643-2c4a-877d-b941da280ccf",
+								true,
+							},
+							
+							{
+								"6d035129-cd47-17cc-ae57-023df4037b1b",
+								true,
+							},
+							
+							{
+								"080acc92-067a-5769-a4ee-58b0e3e87377",
+								true,
+							},
+							
+							{
+								"467ad839-919e-2318-9553-473d3680a0a0",
+								true,
+							},
+							
+							{
+								"d5f34a5d-dc44-d2a4-a4a6-c7f72ae59e82",
+								true,
+							},
+						},
+						gVar = "ACR_TensorMagnum3_CD",
+						name = "锁定面向",
+						uuid = "a058e886-a447-ec2c-b29d-c0360f5ef21d",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "TensorCore.API.TensorACR.toggleLockFace(false)\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.GPuzzle1_end\nMuAiGuide.M12S.Locking = false\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"8785e636-0643-2c4a-877d-b941da280ccf",
+								true,
+							},
+							
+							{
+								"6d035129-cd47-17cc-ae57-023df4037b1b",
+								true,
+							},
+							
+							{
+								"5641790e-35d5-6128-b8ab-65c0fae5590e",
+								true,
+							},
+							
+							{
+								"cce86369-f0d4-9218-8a97-388bd7e3e162",
+								true,
+							},
+							
+							{
+								"0c7813c1-db9e-db2e-976d-0b6260a3566f",
+								true,
+							},
+						},
+						gVar = "ACR_TensorMagnum3_CD",
+						name = "取消锁定面向",
+						uuid = "10eef159-d1fd-5ebf-8dc3-6ca2ad3b13b8",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.Config.Main.M12SAutoFace1",
+						name = "Config",
+						uuid = "8785e636-0643-2c4a-877d-b941da280ccf",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "6d035129-cd47-17cc-ae57-023df4037b1b",
+						version = 2,
+					},
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						buffCheckType = 3,
+						buffDuration = 2,
+						buffID = 4976,
+						category = "Self",
+						comparator = 2,
+						name = "指向判定2秒",
+						uuid = "080acc92-067a-5769-a4ee-58b0e3e87377",
 						version = 2,
 					},
 				},
@@ -1113,19 +2344,245 @@ local tbl =
 					data = 
 					{
 						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.ArmySlayer ~= nil and MuAiGuide.M12S.ArmySlayer == true",
-						name = "致命灾变",
-						uuid = "3b5a92e6-57ae-be17-86cc-738c6cb9d5f5",
+						conditionLua = "return MuAiGuide.M12S.CurrentState >= MuAiGuide.M12S.StateEnum.GPuzzle1_Start",
+						name = "进入到门神1运",
+						uuid = "467ad839-919e-2318-9553-473d3680a0a0",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return TimeSince(MuAiGuide.M12S.Timer) > 3000",
+						name = "锁定面向已大于3秒",
+						uuid = "cce86369-f0d4-9218-8a97-388bd7e3e162",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.GPuzzle1_AutoLock",
+						name = "当前是锁定阶段",
+						uuid = "5641790e-35d5-6128-b8ab-65c0fae5590e",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return  MuAiGuide.M12S.Locking == true",
+						name = "锁定面向中",
+						uuid = "0c7813c1-db9e-db2e-976d-0b6260a3566f",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return  MuAiGuide.M12S.Locking == false",
+						name = "没有锁定面向",
+						uuid = "d5f34a5d-dc44-d2a4-a4a6-c7f72ae59e82",
+						version = 2,
+					},
+				},
+			},
+			name = "M12S门神1运自动面向",
+			uuid = "288f9733-cd95-3e4b-ab8d-30c5a0d637a7",
+			version = 2,
+		},
+		inheritedIndex = 20,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\n\nif data.debug2test == nil or data.debug2test ~= M.M12S.GP2Info.State then\n    d(\"M.M12S.GP2Info.State=\" .. tostring(M.M12S.GP2Info.State))\n    data.debug2test = M.M12S.GP2Info.State\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.GPuzzle2_Start then\n    M.FrameDirect(100, 100)\n    if table.size(M.M12S.GP2Info.ids) < 4 then\n        for _, ent in pairs(TensorCore.entityList(\"contentid=14381\")) do\n            if ent.action == 9352 then\n                if not table.contains(M.M12S.GP2Info.ids, ent.id) then\n                    table.insert(M.M12S.GP2Info.ids, ent.id)\n                    M.M12S.GP2Info.gSpawnIdx = M.M12S.GP2Info.gSpawnIdx + 1\n                    M.M12S.GP2Info.gTowers[M.M12S.GP2Info.gSpawnIdx] = ent\n                end\n            end\n        end\n        if table.size(M.M12S.GP2Info.ids) == 4 then\n            -- 读取BUFF信息，进入循环监视\n            M.M12S.CurrentState = M.M12S.StateEnum.GPuzzle2_Looping\n            if TensorCore.getBuff(M.GetPlayer().id, 4752) then\n                if TensorCore.getBuff(M.GetPlayer().id, 3004) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.A1\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3005) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.A2\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3006) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.A3\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3451) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.A4\n                end\n            elseif TensorCore.getBuff(M.GetPlayer().id, 4754) then\n                if TensorCore.getBuff(M.GetPlayer().id, 3004) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.B1\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3005) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.B2\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3006) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.B3\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3451) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.B4\n                end\n            end\n            d(\"M.M12S.GP2Info.selfType =\" .. tostring(M.M12S.GP2Info.selfType))\n        end\n    end\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.GPuzzle2_Looping then\n    if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_end then\n        M.M12S.CurrentState = M.M12S.StateEnum.GPuzzle2_End\n    else\n        if (not M.M12S.GP2Info.pTowerFinish) and table.size(M.M12S.GP2Info.ids) < 8 then\n            for _, ent in pairs(TensorCore.entityList(\"contentid=14381\")) do\n                if ent.action == 9352 then\n                    if not table.contains(M.M12S.GP2Info.ids, ent.id) then\n                        table.insert(M.M12S.GP2Info.ids, ent.id)\n                        M.M12S.GP2Info.pSpawnIdx = M.M12S.GP2Info.pSpawnIdx + 1\n                        M.M12S.GP2Info.pTowers[M.M12S.GP2Info.pSpawnIdx] = ent\n                    end\n                end\n            end\n            if table.size(M.M12S.GP2Info.ids) == 8 then\n                M.M12S.GP2Info.pTowerFinish = true\n            end\n        end\n\n        if M.M12S.GP2Info.selfType == M.M12S.DataEnum.A1\n                or M.M12S.GP2Info.selfType == M.M12S.DataEnum.A2 then\n            if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_01 then\n                local alpha = TensorCore.getBuff(M.GetPlayer().id, 4752)\n                if alpha == nil or alpha.duration <= 0 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_02\n                else\n                    --等待\n                    M.FrameDirect(100, 100)\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_02 then\n                --拉线\n                if TensorCore.getBuff(M.GetPlayer().id, 2941) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_03\n                else\n                    local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                    if boss ~= nil then\n                        local pos = TensorCore.getPosInDirection(boss.pos, boss.pos.h, 14.5)\n                        M.FrameDirect(pos.x, pos.z)\n                    end\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_03 then\n                --踩塔\n                if TensorCore.getBuff(M.GetPlayer().id, 3935) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                else\n                    local tower\n                    if M.M12S.GP2Info.selfType == M.M12S.DataEnum.A1 then\n                        tower = M.M12S.GP2Info.gTowers[3]\n                    else\n                        tower = M.M12S.GP2Info.gTowers[4]\n                    end\n                    M.FrameDirect(tower.pos.x, tower.pos.z)\n                end\n            end\n        elseif M.M12S.GP2Info.selfType == M.M12S.DataEnum.A3\n                or M.M12S.GP2Info.selfType == M.M12S.DataEnum.A4 then\n            if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_01 then\n                --踩塔\n                if TensorCore.getBuff(M.GetPlayer().id, 3935) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_02\n                else\n                    local tower\n                    if M.M12S.GP2Info.selfType == M.M12S.DataEnum.A3 then\n                        tower = M.M12S.GP2Info.gTowers[1]\n                    else\n                        tower = M.M12S.GP2Info.gTowers[2]\n                    end\n                    M.FrameDirect(tower.pos.x, tower.pos.z)\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_02 then\n                --回中\n                local alpha = TensorCore.getBuff(M.GetPlayer().id, 4752)\n                if alpha == nil or alpha.duration <= 0 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_03\n                else\n                    M.FrameDirect(100, 100)\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_03 then\n                if TensorCore.getBuff(M.GetPlayer().id, 2941) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                else\n                    local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                    if boss ~= nil then\n                        local pos = TensorCore.getPosInDirection(boss.pos, boss.pos.h, 14.5)\n                        M.FrameDirect(pos.x, pos.z)\n                    end\n                end\n            end\n\n        elseif M.M12S.GP2Info.selfType == M.M12S.DataEnum.B1\n                or M.M12S.GP2Info.selfType == M.M12S.DataEnum.B2 then\n            if TensorCore.getDistance2d(M.GetPlayer().pos, { x = 100, y = 0, z = 100 }) > 14 then\n                M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n            else\n                if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_01 then\n                    local beta = TensorCore.getBuff(M.GetPlayer().id, 4754)\n                    if beta == nil or beta.duration <= 0 then\n                        M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_02\n                    else\n                        M.FrameDirect(100, 100)\n                    end\n                elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_02 then\n                    if TensorCore.getBuff(M.GetPlayer().id, 2941) then\n                        M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_03\n                    else\n                        local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                        if boss ~= nil then\n                            local pos = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi, 9)\n                            M.FrameDirect(pos.x, pos.z)\n                        end\n                    end\n                elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_03 then\n                    if TensorCore.getBuff(M.GetPlayer().id, 3935) then\n                        M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_04\n                    else\n                        local tower\n                        if M.M12S.GP2Info.selfType == M.M12S.DataEnum.B1 then\n                            tower = M.M12S.GP2Info.pTowers[3]\n                        else\n                            tower = M.M12S.GP2Info.pTowers[4]\n                        end\n                        if tower ~= nil then\n                            M.FrameDirect(tower.pos.x, tower.pos.z)\n                        else\n                            M.FrameDirect(100, 100)\n                        end\n                    end\n                elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_04 then\n                    local buff = TensorCore.getBuff(M.GetPlayer().id, 3935)\n                    if buff ~= nil and buff.duration > 0 then\n                        if M.M12S.GP2Info.guidePosIn == nil then\n                            local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                            M.M12S.GP2Info.guidePosIn = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi / 2, 8)\n                            M.M12S.GP2Info.guidePosOut = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi / 2, 14.5)\n                        end\n                        if buff.duration > 22 then\n                            M.FrameDirect(M.M12S.GP2Info.guidePosIn.x, M.M12S.GP2Info.guidePosIn.z)\n                        elseif buff.duration > 17 then\n                            M.FrameDirect(M.M12S.GP2Info.guidePosOut.x, M.M12S.GP2Info.guidePosOut.z)\n                        --else\n                        --    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                        end\n                    end\n                end\n            end\n        elseif M.M12S.GP2Info.selfType == M.M12S.DataEnum.B3\n                or M.M12S.GP2Info.selfType == M.M12S.DataEnum.B4 then\n            if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_01 then\n                local buff = TensorCore.getBuff(M.GetPlayer().id, 3935) --出毒抗\n                if buff ~= nil and buff.duration > 0 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_02\n                else\n                    local tower\n                    if M.M12S.GP2Info.selfType == M.M12S.DataEnum.B3 then\n                        tower = M.M12S.GP2Info.pTowers[1]\n                    else\n                        tower = M.M12S.GP2Info.pTowers[2]\n                    end\n                    if tower ~= nil then\n                        M.FrameDirect(tower.pos.x, tower.pos.z)\n                    else\n                        M.FrameDirect(100, 100)\n                    end\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_02 then\n                local beta = TensorCore.getBuff(M.GetPlayer().id, 4754)\n                if beta == nil or beta.duration <= 0 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_03\n                else\n                    M.FrameDirect(100, 100)\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_03 then\n                if TensorCore.getBuff(M.GetPlayer().id, 2941) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_04\n                else\n                    local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                    if boss ~= nil then\n                        local pos = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi, 9)\n                        M.FrameDirect(pos.x, pos.z)\n                    end\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_04 then\n                if TensorCore.getDistance2d(M.GetPlayer().pos, { x = 100, y = 0, z = 100 }) > 14 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                else\n                    local buff = TensorCore.getBuff(M.GetPlayer().id, 2941)\n                    if buff and buff.duration > 0 then\n                        if M.M12S.GP2Info.selfType == M.M12S.DataEnum.B3 then\n                            if buff.duration < 6.5 and buff.duration > 5 then\n                                if M.M12S.GP2Info.guidePosIn == nil then\n                                    local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                                    M.M12S.GP2Info.guidePosIn = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi / 2, 8)\n                                    M.M12S.GP2Info.guidePosOut = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi / 2, 14.5)\n                                end\n                            end\n                            if buff.duration > 4.5 then\n                                M.FrameDirect(100, 100)\n                            elseif buff.duration > 1 then\n                                M.FrameDirect(M.M12S.GP2Info.guidePosIn.x, M.M12S.GP2Info.guidePosIn.z)\n                            else\n                                local buff3935 = TensorCore.getBuff(M.GetPlayer().id, 3935)\n                                if buff3935 == nil or buff3935.duration < 8 then\n                                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                                else\n                                    M.FrameDirect(M.M12S.GP2Info.guidePosOut.x, M.M12S.GP2Info.guidePosOut.z)\n                                end\n                            end\n                        elseif M.M12S.GP2Info.selfType == M.M12S.DataEnum.B4 then\n                            if buff.duration > 6.5 then\n                                M.FrameDirect(100, 100)\n                            else\n                                local isHeadingOk = false\n                                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                                for i = 1, 4 do\n                                    local dir = math.pi * i / 2\n                                    if M.IsSameDirection(dir, boss.pos.h) then\n                                        isHeadingOk = true\n                                        break\n                                    end\n                                end\n                                if isHeadingOk then\n                                    if M.M12S.GP2Info.guidePosOut == nil then\n                                        M.M12S.GP2Info.guidePosOut = TensorCore.getPosInDirection(boss.pos, boss.pos.h, 14.5)\n                                    else\n                                        M.FrameDirect(M.M12S.GP2Info.guidePosOut.x, M.M12S.GP2Info.guidePosOut.z)\n                                    end\n                                end\n                            end\n                        end\n                    end\n                end\n            end\n        end\n    end\nend\n\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"42135860-fa43-bb22-ba90-ab4d78c0b3bd",
+								true,
+							},
+							
+							{
+								"5f0416e8-58c4-89b4-8c78-b63bd589a932",
+								true,
+							},
+							
+							{
+								"53868273-c873-a826-a0c3-a3e1586e62d9",
+								true,
+							},
+						},
+						gVar = "ACR_TensorViper3_CD",
+						name = "M12S门神2运主循环",
+						uuid = "3beb9fc0-87d2-67b7-8665-6c6ba1676348",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "42135860-fa43-bb22-ba90-ab4d78c0b3bd",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S ~= nil",
+						name = "M12S已初始化",
+						uuid = "5f0416e8-58c4-89b4-8c78-b63bd589a932",
+						version = 2,
+					},
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState >= MuAiGuide.M12S.StateEnum.GPuzzle2_Start\n\t\tand MuAiGuide.M12S.CurrentState < MuAiGuide.M12S.StateEnum.GPuzzle2_End",
+						name = "门神2运",
+						uuid = "53868273-c873-a826-a0c3-a3e1586e62d9",
 						version = 2,
 					},
 				},
 			},
 			eventType = 12,
-			name = "M12S门神致命灾变",
-			uuid = "68b39db5-37db-ecc8-a289-060327422b48",
+			name = "M12S门神2运主循环",
+			uuid = "79562d51-d887-4795-96b7-ca10cab1b0e9",
 			version = 2,
 		},
-		inheritedIndex = 14,
+		inheritedIndex = 22,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nif M.M12S.CurrentState == M.M12S.StateEnum.GPuzzle3_GotSnake then\n    local buff3935 = TensorCore.getBuff(M.GetPlayer().id, 3935)\n    if buff3935 ~= nil then\n        M.M12S.CurrentState = M.M12S.StateEnum.GPuzzle3_End\n    else\n        if M.M12S.GP3Info.selfBuff == nil then\n            M.M12S.GP3Info.selfBuff = TensorCore.getBuff(M.GetPlayer().id, 3558)\n        else\n            if M.M12S.GP3Info.guidePos == nil then\n                if MuAiGuide.M12S.GP3Info.SubMonster.pos.x < 85 then\n                    --左上出现，十字安全\n                    if M.M12S.GP3Info.selfBuff.stacks == 1078 then\n                        --向上\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 103.5, z = 106.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 96.5, z = 113.5 }\n                        end\n                    elseif M.M12S.GP3Info.selfBuff.stacks == 1079 then\n                        --向右\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 88.5, z = 103.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 81.5, z = 96.5 }\n                        end\n                    elseif M.M12S.GP3Info.selfBuff.stacks == 1080 then\n                        --向下\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 103.5, z = 86.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 96.5, z = 93.5 }\n                        end\n                    elseif M.M12S.GP3Info.selfBuff.stacks == 1081 then\n                        --向左\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 118.5, z = 103.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 111.5, z = 96.5 }\n                        end\n                    end\n                else\n                    if M.M12S.GP3Info.selfBuff.stacks == 1078 then\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 88.5, z = 113.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 81.5, z = 106.5 }\n                        end\n                        --向上\n                    elseif M.M12S.GP3Info.selfBuff.stacks == 1079 then\n                        --向右\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 88.5, z = 93.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 81.5, z = 86.5 }\n                        end\n                    elseif M.M12S.GP3Info.selfBuff.stacks == 1080 then\n                        --向下\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 118.5, z = 93.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 111.5, z = 86.5 }\n                        end\n                    elseif M.M12S.GP3Info.selfBuff.stacks == 1081 then\n                        --向左\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 118.5, z = 113.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 111.5, z = 106.5 }\n                        end\n                    end\n                end\n            end\n            M.FrameDirect(M.M12S.GP3Info.guidePos.x, M.M12S.GP3Info.guidePos.z)\n        end\n    end\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"42135860-fa43-bb22-ba90-ab4d78c0b3bd",
+								true,
+							},
+							
+							{
+								"ce87c006-b852-9e5b-a11a-1f0b423a832b",
+								true,
+							},
+							
+							{
+								"0b399c82-8d7f-f81a-9292-bd9ec13413e9",
+								true,
+							},
+							
+							{
+								"d8f5335a-5f3c-c70f-a98f-078fffd87812",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "M12S门神3运主循环",
+						uuid = "3beb9fc0-87d2-67b7-8665-6c6ba1676348",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "42135860-fa43-bb22-ba90-ab4d78c0b3bd",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S ~= nil",
+						name = "M12S已初始化",
+						uuid = "ce87c006-b852-9e5b-a11a-1f0b423a832b",
+						version = 2,
+					},
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.CurrentState >= MuAiGuide.M12S.StateEnum.GPuzzle3_Start\n\t\t\tand MuAiGuide.M12S.CurrentState < MuAiGuide.M12S.StateEnum.GPuzzle3_End",
+						name = "已进入3运",
+						uuid = "0b399c82-8d7f-f81a-9292-bd9ec13413e9",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.GP3Info.SubMonster ~= nil",
+						name = "已查找到地形情况",
+						uuid = "d8f5335a-5f3c-c70f-a98f-078fffd87812",
+						version = 2,
+					},
+				},
+			},
+			eventType = 12,
+			name = "M12S门神3运主循环",
+			uuid = "c88ef753-2fab-19da-b48b-cd0a69a9505c",
+			version = 2,
+		},
+		inheritedIndex = 23,
 	},
 	
 	{
@@ -1399,382 +2856,7 @@ local tbl =
 			uuid = "ed3702b5-fda0-d2eb-bfce-9dc253883a46",
 			version = 2,
 		},
-		inheritedIndex = 16,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "TensorCore.API.TensorACR.setLockFaceHeading(MuAiGuide.M12S.GP1Info.face)\nTensorCore.API.TensorACR.toggleLockFace(true)\nMuAiGuide.M12S.Timer = Now()\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.GPuzzle1_AutoLock\nMuAiGuide.M12S.Locking = true\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"8785e636-0643-2c4a-877d-b941da280ccf",
-								true,
-							},
-							
-							{
-								"6d035129-cd47-17cc-ae57-023df4037b1b",
-								true,
-							},
-							
-							{
-								"080acc92-067a-5769-a4ee-58b0e3e87377",
-								true,
-							},
-							
-							{
-								"467ad839-919e-2318-9553-473d3680a0a0",
-								true,
-							},
-							
-							{
-								"d5f34a5d-dc44-d2a4-a4a6-c7f72ae59e82",
-								true,
-							},
-						},
-						gVar = "ACR_TensorMagnum3_CD",
-						name = "锁定面向",
-						uuid = "a058e886-a447-ec2c-b29d-c0360f5ef21d",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "TensorCore.API.TensorACR.toggleLockFace(false)\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.GPuzzle1_end\nMuAiGuide.M12S.Locking = false\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"8785e636-0643-2c4a-877d-b941da280ccf",
-								true,
-							},
-							
-							{
-								"6d035129-cd47-17cc-ae57-023df4037b1b",
-								true,
-							},
-							
-							{
-								"5641790e-35d5-6128-b8ab-65c0fae5590e",
-								true,
-							},
-							
-							{
-								"cce86369-f0d4-9218-8a97-388bd7e3e162",
-								true,
-							},
-							
-							{
-								"0c7813c1-db9e-db2e-976d-0b6260a3566f",
-								true,
-							},
-						},
-						gVar = "ACR_TensorMagnum3_CD",
-						name = "取消锁定面向",
-						uuid = "10eef159-d1fd-5ebf-8dc3-6ca2ad3b13b8",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.Config.Main.M12SAutoFace1",
-						name = "Config",
-						uuid = "8785e636-0643-2c4a-877d-b941da280ccf",
-						version = 2,
-					},
-					inheritedIndex = 1,
-				},
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "6d035129-cd47-17cc-ae57-023df4037b1b",
-						version = 2,
-					},
-					inheritedIndex = 2,
-				},
-				
-				{
-					data = 
-					{
-						buffCheckType = 3,
-						buffDuration = 2,
-						buffID = 4976,
-						category = "Self",
-						comparator = 2,
-						name = "指向判定2秒",
-						uuid = "080acc92-067a-5769-a4ee-58b0e3e87377",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.CurrentState >= MuAiGuide.M12S.StateEnum.GPuzzle1_Start",
-						name = "进入到门神1运",
-						uuid = "467ad839-919e-2318-9553-473d3680a0a0",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return TimeSince(MuAiGuide.M12S.Timer) > 3000",
-						name = "锁定面向已大于3秒",
-						uuid = "cce86369-f0d4-9218-8a97-388bd7e3e162",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.CurrentState == MuAiGuide.M12S.StateEnum.GPuzzle1_AutoLock",
-						name = "当前是锁定阶段",
-						uuid = "5641790e-35d5-6128-b8ab-65c0fae5590e",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return  MuAiGuide.M12S.Locking == true",
-						name = "锁定面向中",
-						uuid = "0c7813c1-db9e-db2e-976d-0b6260a3566f",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return  MuAiGuide.M12S.Locking == false",
-						name = "没有锁定面向",
-						uuid = "d5f34a5d-dc44-d2a4-a4a6-c7f72ae59e82",
-						version = 2,
-					},
-				},
-			},
-			name = "M12S门神1运自动面向",
-			uuid = "288f9733-cd95-3e4b-ab8d-30c5a0d637a7",
-			version = 2,
-		},
-		inheritedIndex = 16,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local M = MuAiGuide\n\nif data.debug2test == nil or data.debug2test ~= M.M12S.GP2Info.State then\n    d(\"M.M12S.GP2Info.State=\" .. tostring(M.M12S.GP2Info.State))\n    data.debug2test = M.M12S.GP2Info.State\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.GPuzzle2_Start then\n    M.FrameDirect(100, 100)\n    if table.size(M.M12S.GP2Info.ids) < 4 then\n        for _, ent in pairs(TensorCore.entityList(\"contentid=14381\")) do\n            if ent.action == 9352 then\n                if not table.contains(M.M12S.GP2Info.ids, ent.id) then\n                    table.insert(M.M12S.GP2Info.ids, ent.id)\n                    M.M12S.GP2Info.gSpawnIdx = M.M12S.GP2Info.gSpawnIdx + 1\n                    M.M12S.GP2Info.gTowers[M.M12S.GP2Info.gSpawnIdx] = ent\n                end\n            end\n        end\n        if table.size(M.M12S.GP2Info.ids) == 4 then\n            -- 读取BUFF信息，进入循环监视\n            M.M12S.CurrentState = M.M12S.StateEnum.GPuzzle2_Looping\n            if TensorCore.getBuff(M.GetPlayer().id, 4752) then\n                if TensorCore.getBuff(M.GetPlayer().id, 3004) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.A1\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3005) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.A2\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3006) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.A3\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3451) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.A4\n                end\n            elseif TensorCore.getBuff(M.GetPlayer().id, 4754) then\n                if TensorCore.getBuff(M.GetPlayer().id, 3004) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.B1\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3005) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.B2\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3006) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.B3\n                elseif TensorCore.getBuff(M.GetPlayer().id, 3451) then\n                    M.M12S.GP2Info.selfType = M.M12S.DataEnum.B4\n                end\n            end\n            d(\"M.M12S.GP2Info.selfType =\" .. tostring(M.M12S.GP2Info.selfType))\n        end\n    end\nend\n\nif M.M12S.CurrentState == M.M12S.StateEnum.GPuzzle2_Looping then\n    if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_end then\n        M.M12S.CurrentState = M.M12S.StateEnum.GPuzzle2_End\n    else\n        if (not M.M12S.GP2Info.pTowerFinish) and table.size(M.M12S.GP2Info.ids) < 8 then\n            for _, ent in pairs(TensorCore.entityList(\"contentid=14381\")) do\n                if ent.action == 9352 then\n                    if not table.contains(M.M12S.GP2Info.ids, ent.id) then\n                        table.insert(M.M12S.GP2Info.ids, ent.id)\n                        M.M12S.GP2Info.pSpawnIdx = M.M12S.GP2Info.pSpawnIdx + 1\n                        M.M12S.GP2Info.pTowers[M.M12S.GP2Info.pSpawnIdx] = ent\n                    end\n                end\n            end\n            if table.size(M.M12S.GP2Info.ids) == 8 then\n                M.M12S.GP2Info.pTowerFinish = true\n            end\n        end\n\n        if M.M12S.GP2Info.selfType == M.M12S.DataEnum.A1\n                or M.M12S.GP2Info.selfType == M.M12S.DataEnum.A2 then\n            if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_01 then\n                local alpha = TensorCore.getBuff(M.GetPlayer().id, 4752)\n                if alpha == nil or alpha.duration <= 0 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_02\n                else\n                    --等待\n                    M.FrameDirect(100, 100)\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_02 then\n                --拉线\n                if TensorCore.getBuff(M.GetPlayer().id, 2941) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_03\n                else\n                    local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                    if boss ~= nil then\n                        local pos = TensorCore.getPosInDirection(boss.pos, boss.pos.h, 14.5)\n                        M.FrameDirect(pos.x, pos.z)\n                    end\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_03 then\n                --踩塔\n                if TensorCore.getBuff(M.GetPlayer().id, 3935) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                else\n                    local tower\n                    if M.M12S.GP2Info.selfType == M.M12S.DataEnum.A1 then\n                        tower = M.M12S.GP2Info.gTowers[3]\n                    else\n                        tower = M.M12S.GP2Info.gTowers[4]\n                    end\n                    M.FrameDirect(tower.pos.x, tower.pos.z)\n                end\n            end\n        elseif M.M12S.GP2Info.selfType == M.M12S.DataEnum.A3\n                or M.M12S.GP2Info.selfType == M.M12S.DataEnum.A4 then\n            if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_01 then\n                --踩塔\n                if TensorCore.getBuff(M.GetPlayer().id, 3935) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_02\n                else\n                    local tower\n                    if M.M12S.GP2Info.selfType == M.M12S.DataEnum.A3 then\n                        tower = M.M12S.GP2Info.gTowers[1]\n                    else\n                        tower = M.M12S.GP2Info.gTowers[2]\n                    end\n                    M.FrameDirect(tower.pos.x, tower.pos.z)\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_02 then\n                --回中\n                local alpha = TensorCore.getBuff(M.GetPlayer().id, 4752)\n                if alpha == nil or alpha.duration <= 0 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_03\n                else\n                    M.FrameDirect(100, 100)\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_03 then\n                if TensorCore.getBuff(M.GetPlayer().id, 2941) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                else\n                    local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                    if boss ~= nil then\n                        local pos = TensorCore.getPosInDirection(boss.pos, boss.pos.h, 14.5)\n                        M.FrameDirect(pos.x, pos.z)\n                    end\n                end\n            end\n\n        elseif M.M12S.GP2Info.selfType == M.M12S.DataEnum.B1\n                or M.M12S.GP2Info.selfType == M.M12S.DataEnum.B2 then\n            if TensorCore.getDistance2d(M.GetPlayer().pos, { x = 100, y = 0, z = 100 }) > 14 then\n                M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n            else\n                if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_01 then\n                    local beta = TensorCore.getBuff(M.GetPlayer().id, 4754)\n                    if beta == nil or beta.duration <= 0 then\n                        M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_02\n                    else\n                        M.FrameDirect(100, 100)\n                    end\n                elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_02 then\n                    if TensorCore.getBuff(M.GetPlayer().id, 2941) then\n                        M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_03\n                    else\n                        local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                        if boss ~= nil then\n                            local pos = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi, 9)\n                            M.FrameDirect(pos.x, pos.z)\n                        end\n                    end\n                elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_03 then\n                    if TensorCore.getBuff(M.GetPlayer().id, 3935) then\n                        M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_04\n                    else\n                        local tower\n                        if M.M12S.GP2Info.selfType == M.M12S.DataEnum.B1 then\n                            tower = M.M12S.GP2Info.pTowers[3]\n                        else\n                            tower = M.M12S.GP2Info.pTowers[4]\n                        end\n                        if tower ~= nil then\n                            M.FrameDirect(tower.pos.x, tower.pos.z)\n                        else\n                            M.FrameDirect(100, 100)\n                        end\n                    end\n                elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_04 then\n                    local buff = TensorCore.getBuff(M.GetPlayer().id, 3935)\n                    if buff ~= nil and buff.duration > 0 then\n                        if M.M12S.GP2Info.guidePosIn == nil then\n                            local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                            M.M12S.GP2Info.guidePosIn = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi / 2, 8)\n                            M.M12S.GP2Info.guidePosOut = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi / 2, 14.5)\n                        end\n                        if buff.duration > 22 then\n                            M.FrameDirect(M.M12S.GP2Info.guidePosIn.x, M.M12S.GP2Info.guidePosIn.z)\n                        elseif buff.duration > 17 then\n                            M.FrameDirect(M.M12S.GP2Info.guidePosOut.x, M.M12S.GP2Info.guidePosOut.z)\n                        --else\n                        --    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                        end\n                    end\n                end\n            end\n        elseif M.M12S.GP2Info.selfType == M.M12S.DataEnum.B3\n                or M.M12S.GP2Info.selfType == M.M12S.DataEnum.B4 then\n            if M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_01 then\n                local buff = TensorCore.getBuff(M.GetPlayer().id, 3935) --出毒抗\n                if buff ~= nil and buff.duration > 0 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_02\n                else\n                    local tower\n                    if M.M12S.GP2Info.selfType == M.M12S.DataEnum.B3 then\n                        tower = M.M12S.GP2Info.pTowers[1]\n                    else\n                        tower = M.M12S.GP2Info.pTowers[2]\n                    end\n                    if tower ~= nil then\n                        M.FrameDirect(tower.pos.x, tower.pos.z)\n                    else\n                        M.FrameDirect(100, 100)\n                    end\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_02 then\n                local beta = TensorCore.getBuff(M.GetPlayer().id, 4754)\n                if beta == nil or beta.duration <= 0 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_03\n                else\n                    M.FrameDirect(100, 100)\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_03 then\n                if TensorCore.getBuff(M.GetPlayer().id, 2941) then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_04\n                else\n                    local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                    if boss ~= nil then\n                        local pos = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi, 9)\n                        M.FrameDirect(pos.x, pos.z)\n                    end\n                end\n            elseif M.M12S.GP2Info.State == M.M12S.DataEnum.Gp2_04 then\n                if TensorCore.getDistance2d(M.GetPlayer().pos, { x = 100, y = 0, z = 100 }) > 14 then\n                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                else\n                    local buff = TensorCore.getBuff(M.GetPlayer().id, 2941)\n                    if buff and buff.duration > 0 then\n                        if M.M12S.GP2Info.selfType == M.M12S.DataEnum.B3 then\n                            if buff.duration < 6.5 and buff.duration > 5 then\n                                if M.M12S.GP2Info.guidePosIn == nil then\n                                    local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                                    M.M12S.GP2Info.guidePosIn = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi / 2, 8)\n                                    M.M12S.GP2Info.guidePosOut = TensorCore.getPosInDirection(boss.pos, boss.pos.h + math.pi / 2, 14.5)\n                                end\n                            end\n                            if buff.duration > 4.5 then\n                                M.FrameDirect(100, 100)\n                            elseif buff.duration > 1 then\n                                M.FrameDirect(M.M12S.GP2Info.guidePosIn.x, M.M12S.GP2Info.guidePosIn.z)\n                            else\n                                local buff3935 = TensorCore.getBuff(M.GetPlayer().id, 3935)\n                                if buff3935 == nil or buff3935.duration < 8 then\n                                    M.M12S.GP2Info.State = M.M12S.DataEnum.Gp2_end\n                                else\n                                    M.FrameDirect(M.M12S.GP2Info.guidePosOut.x, M.M12S.GP2Info.guidePosOut.z)\n                                end\n                            end\n                        elseif M.M12S.GP2Info.selfType == M.M12S.DataEnum.B4 then\n                            if buff.duration > 6.5 then\n                                M.FrameDirect(100, 100)\n                            else\n                                local isHeadingOk = false\n                                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                                for i = 1, 4 do\n                                    local dir = math.pi * i / 2\n                                    if M.IsSameDirection(dir, boss.pos.h) then\n                                        isHeadingOk = true\n                                        break\n                                    end\n                                end\n                                if isHeadingOk then\n                                    if M.M12S.GP2Info.guidePosOut == nil then\n                                        M.M12S.GP2Info.guidePosOut = TensorCore.getPosInDirection(boss.pos, boss.pos.h, 14.5)\n                                    else\n                                        M.FrameDirect(M.M12S.GP2Info.guidePosOut.x, M.M12S.GP2Info.guidePosOut.z)\n                                    end\n                                end\n                            end\n                        end\n                    end\n                end\n            end\n        end\n    end\nend\n\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"42135860-fa43-bb22-ba90-ab4d78c0b3bd",
-								true,
-							},
-							
-							{
-								"5f0416e8-58c4-89b4-8c78-b63bd589a932",
-								true,
-							},
-							
-							{
-								"53868273-c873-a826-a0c3-a3e1586e62d9",
-								true,
-							},
-						},
-						gVar = "ACR_TensorViper3_CD",
-						name = "M12S门神2运主循环",
-						uuid = "3beb9fc0-87d2-67b7-8665-6c6ba1676348",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "42135860-fa43-bb22-ba90-ab4d78c0b3bd",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S ~= nil",
-						name = "M12S已初始化",
-						uuid = "5f0416e8-58c4-89b4-8c78-b63bd589a932",
-						version = 2,
-					},
-					inheritedIndex = 2,
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.CurrentState >= MuAiGuide.M12S.StateEnum.GPuzzle2_Start\n\t\tand MuAiGuide.M12S.CurrentState < MuAiGuide.M12S.StateEnum.GPuzzle2_End",
-						name = "门神2运",
-						uuid = "53868273-c873-a826-a0c3-a3e1586e62d9",
-						version = 2,
-					},
-				},
-			},
-			eventType = 12,
-			name = "M12S门神2运主循环",
-			uuid = "79562d51-d887-4795-96b7-ca10cab1b0e9",
-			version = 2,
-		},
-		inheritedIndex = 20,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nif M.M12S.CurrentState == M.M12S.StateEnum.GPuzzle3_GotSnake then\n    local buff3935 = TensorCore.getBuff(M.GetPlayer().id, 3935)\n    if buff3935 ~= nil then\n        M.M12S.CurrentState = M.M12S.StateEnum.GPuzzle3_End\n    else\n        if M.M12S.GP3Info.selfBuff == nil then\n            M.M12S.GP3Info.selfBuff = TensorCore.getBuff(M.GetPlayer().id, 3558)\n        else\n            if M.M12S.GP3Info.guidePos == nil then\n                if MuAiGuide.M12S.GP3Info.SubMonster.pos.x < 85 then\n                    --左上出现，十字安全\n                    if M.M12S.GP3Info.selfBuff.stacks == 1078 then\n                        --向上\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 103.5, z = 106.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 96.5, z = 113.5 }\n                        end\n                    elseif M.M12S.GP3Info.selfBuff.stacks == 1079 then\n                        --向右\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 88.5, z = 103.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 81.5, z = 96.5 }\n                        end\n                    elseif M.M12S.GP3Info.selfBuff.stacks == 1080 then\n                        --向下\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 103.5, z = 86.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 96.5, z = 93.5 }\n                        end\n                    elseif M.M12S.GP3Info.selfBuff.stacks == 1081 then\n                        --向左\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 118.5, z = 103.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 111.5, z = 96.5 }\n                        end\n                    end\n                else\n                    if M.M12S.GP3Info.selfBuff.stacks == 1078 then\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 88.5, z = 113.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 81.5, z = 106.5 }\n                        end\n                        --向上\n                    elseif M.M12S.GP3Info.selfBuff.stacks == 1079 then\n                        --向右\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 88.5, z = 93.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 81.5, z = 86.5 }\n                        end\n                    elseif M.M12S.GP3Info.selfBuff.stacks == 1080 then\n                        --向下\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 118.5, z = 93.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 111.5, z = 86.5 }\n                        end\n                    elseif M.M12S.GP3Info.selfBuff.stacks == 1081 then\n                        --向左\n                        if M.IsDps(M.GetPlayer().job) then\n                            M.M12S.GP3Info.guidePos = { x = 118.5, z = 113.5 }\n                        else\n                            M.M12S.GP3Info.guidePos = { x = 111.5, z = 106.5 }\n                        end\n                    end\n                end\n            end\n            M.FrameDirect(M.M12S.GP3Info.guidePos.x, M.M12S.GP3Info.guidePos.z)\n        end\n    end\nend\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"42135860-fa43-bb22-ba90-ab4d78c0b3bd",
-								true,
-							},
-							
-							{
-								"ce87c006-b852-9e5b-a11a-1f0b423a832b",
-								true,
-							},
-							
-							{
-								"0b399c82-8d7f-f81a-9292-bd9ec13413e9",
-								true,
-							},
-							
-							{
-								"d8f5335a-5f3c-c70f-a98f-078fffd87812",
-								true,
-							},
-						},
-						gVar = "ACR_RikuMNK3_CD",
-						name = "M12S门神3运主循环",
-						uuid = "3beb9fc0-87d2-67b7-8665-6c6ba1676348",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "42135860-fa43-bb22-ba90-ab4d78c0b3bd",
-						version = 2,
-					},
-					inheritedIndex = 1,
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S ~= nil",
-						name = "M12S已初始化",
-						uuid = "ce87c006-b852-9e5b-a11a-1f0b423a832b",
-						version = 2,
-					},
-					inheritedIndex = 2,
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.CurrentState >= MuAiGuide.M12S.StateEnum.GPuzzle3_Start\n\t\t\tand MuAiGuide.M12S.CurrentState < MuAiGuide.M12S.StateEnum.GPuzzle3_End",
-						name = "已进入3运",
-						uuid = "0b399c82-8d7f-f81a-9292-bd9ec13413e9",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.GP3Info.SubMonster ~= nil",
-						name = "已查找到地形情况",
-						uuid = "d8f5335a-5f3c-c70f-a98f-078fffd87812",
-						version = 2,
-					},
-				},
-			},
-			eventType = 12,
-			name = "M12S门神3运主循环",
-			uuid = "c88ef753-2fab-19da-b48b-cd0a69a9505c",
-			version = 2,
-		},
-		inheritedIndex = 19,
+		inheritedIndex = 24,
 	},
 	
 	{
@@ -1875,7 +2957,7 @@ local tbl =
 			uuid = "055265c3-863a-b90b-a145-a430b7c9eaee",
 			version = 2,
 		},
-		inheritedIndex = 22,
+		inheritedIndex = 26,
 	},
 	
 	{
@@ -1958,7 +3040,7 @@ local tbl =
 			uuid = "fd49bbfa-8561-3e1f-a70c-3386577dd147",
 			version = 2,
 		},
-		inheritedIndex = 27,
+		inheritedIndex = 31,
 	},
 	
 	{
@@ -2137,7 +3219,7 @@ local tbl =
 			uuid = "3c288afb-43ad-00b0-bc5d-69201059c52e",
 			version = 2,
 		},
-		inheritedIndex = 23,
+		inheritedIndex = 28,
 	},
 	
 	{
@@ -2219,7 +3301,7 @@ local tbl =
 			uuid = "c3c28799-5cb7-1e41-ba63-0c1dc145c447",
 			version = 2,
 		},
-		inheritedIndex = 27,
+		inheritedIndex = 31,
 	},
 	
 	{
@@ -2761,7 +3843,7 @@ local tbl =
 			uuid = "cf3ae25c-c974-dd93-a124-4473c49119b2",
 			version = 2,
 		},
-		inheritedIndex = 26,
+		inheritedIndex = 30,
 	},
 	
 	{
@@ -3456,7 +4538,7 @@ local tbl =
 			uuid = "b48d47b0-28c9-0e72-82e7-abf66b902646",
 			version = 2,
 		},
-		inheritedIndex = 27,
+		inheritedIndex = 31,
 	},
 	
 	{
@@ -3723,73 +4805,7 @@ local tbl =
 			uuid = "021a9e74-9ec4-8881-beb5-cb1621c7a609",
 			version = 2,
 		},
-		inheritedIndex = 28,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "if data.lastState == nil or data.lastState ~=  MuAiGuide.M12S.CurrentState then\n\tdata.lastState = MuAiGuide.M12S.CurrentState\n\td(\"当前进度：\" .. tostring(MuAiGuide.M12S.CurrentState))\nend\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"b85884ca-8a3a-7d01-92c3-e1ac9e2f6f2b",
-								true,
-							},
-							
-							{
-								"47395bfe-d1be-33fb-ab6b-31893d391866",
-								true,
-							},
-						},
-						gVar = "ACR_RikuMNK3_CD",
-						uuid = "54cb451b-22a3-2b42-b634-84d65a99a8aa",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "b85884ca-8a3a-7d01-92c3-e1ac9e2f6f2b",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S ~= nil",
-						name = "M12S已初始化",
-						uuid = "47395bfe-d1be-33fb-ab6b-31893d391866",
-						version = 2,
-					},
-					inheritedIndex = 2,
-				},
-			},
-			eventType = 12,
-			name = "FrameDebug",
-			uuid = "83898426-1459-2294-b52d-fbafeb6d698e",
-			version = 2,
-		},
-		inheritedIndex = 27,
+		inheritedIndex = 32,
 	}, 
 	inheritedProfiles = 
 	{
