@@ -371,39 +371,11 @@ local tbl =
 				},
 			},
 			eventType = 12,
-			name = "调试工具",
+			name = "调试工具Frame",
 			uuid = "83898426-1459-2294-b52d-fbafeb6d698e",
 			version = 2,
 		},
 		inheritedIndex = 5,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nd(M.M11S.OrbitalOmen)\nself.used = true",
-						gVar = "ACR_RikuMNK3_CD",
-						uuid = "02bc99db-e245-87c4-baec-c7369f58455c",
-						version = 2.1,
-					},
-				},
-			},
-			conditions = 
-			{
-			},
-			enabled = false,
-			name = "test",
-			uuid = "98e712d8-abee-6540-85b4-1b597f5372e3",
-			version = 2,
-		},
-		inheritedIndex = 6,
 	},
 	
 	{
@@ -420,7 +392,7 @@ local tbl =
 			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
 			version = 2,
 		},
-		inheritedIndex = 10,
+		inheritedIndex = 9,
 	},
 	
 	{
@@ -519,7 +491,7 @@ local tbl =
 			uuid = "15ffb251-5885-55b5-adf0-15a00a7fcba5",
 			version = 2,
 		},
-		inheritedIndex = 11,
+		inheritedIndex = 10,
 	},
 	
 	{
@@ -532,7 +504,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nM.M11S = {}\nM.M11S.InitData = function()\n    M.M11S.State = {\n        Start = 0,\n        -- 3连兵器1\n        Weapon1_Start = 1100,\n        Weapon1_01 = 1101,\n        Weapon1_02 = 1102,\n        Weapon1_03 = 1103,\n        Weapon1_End = 1199,\n\n        -- 3连兵器2\n        Weapon2_Start = 1200,\n        Weapon2_01 = 1201,\n        Weapon2_02 = 1202,\n        Weapon2_03 = 1203,\n        Weapon2_End = 1299,\n\n        -- 六联兵器\n        Weapon3_Start = 1300,\n        Weapon3_01 = 1301,\n        Weapon3_02 = 1302,\n        Weapon3_03 = 1303,\n        Weapon3_04 = 1304,\n        Weapon3_05 = 1305,\n        Weapon3_06 = 1306,\n        Weapon3_End = 1399,\n\n        Meteor1_01 = 1501,\n        Meteor1_02 = 1502,\n        Meteor1_03 = 1503,\n        Meteor1_04 = 1504,\n        Meteor1_05 = 1505,\n\n        Meteor2_Start = 1600,\n        Meteor2_Link1 = 1601,\n        Meteor2_Tower1 = 1602,\n        Meteor2_GetMark1 = 1603,\n        Meteor2_Debuff1 = 1604,\n        Meteor2_Link2 = 1605,\n        Meteor2_Tower2 = 1606,\n        Meteor2_GetMark2 = 1607,\n        Meteor2_Debuff2 = 1608,\n        Meteor2_GatherMark = 1609,\n        Meteor2_GatherEnd = 1610,\n        Meteor2_Tower3 = 1611,\n        Meteor2_Hit = 1612,\n        Meteor2_end = 1699,\n\n        Meteor3_Start = 1700,\n        Meteor3_Guide1 = 1701,\n        Meteor3_CatchBoom = 1702,\n        Meteor3_Link = 1703,\n        Meteor3_End = 1799,\n    }\n    M.M11S.CurrentState = M.M11S.State.Start\n    M.M11S.WeaponInfo = nil\n    M.M11S.ReachTime = nil\n    M.M11S.JumpTime = nil\n    M.M11S.GetMarkTime = nil\n    M.M11S.BreakTime = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2Link = nil\n    M.M11S.TowerPos = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2MapEffect = nil\n    M.M11S.Meteor2Gather = nil\n    M.M11S.OrbitalOmen = nil\n    M.M11S.Meteor3Info = {\n        JobOrder = { \"H1\", \"D3\", \"D4\", \"H2\" },\n        Dir = { math.pi * 3 / 4, math.pi / 4, math.pi * 7 / 4, math.pi * 5 / 4 },\n        Spell46166 = {},\n        Spell46167 = {},\n        FindDir = function(id1, id2)\n            local t1 = TensorCore.mGetEntity(id1)\n            local t2 = TensorCore.mGetEntity(id2)\n            local h1 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t1.pos)\n            local h2 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t2.pos)\n            local ent1, ent2\n            for i = 1, 4 do\n                local dir = M.M11S.Meteor3Info.Dir[i]\n                if M.IsSameDirection(dir, h1) then\n                    if ent1 == nil then\n                        ent1 = t1\n                    else\n                        ent2 = t1\n                    end\n                end\n                if M.IsSameDirection(dir, h2) then\n                    if ent1 == nil then\n                        ent1 = t2\n                    else\n                        ent2 = t2\n                    end\n                end\n            end\n            return ent1, ent2\n        end\n    }\n    M.M11S.TowerData = {\n        leftUp = { pos = { x = 84, z = 89 }, crossPos = { x = 87, z = 89 }, leapPos = { x = 86.9, z = 90.1 }, localPos = { x = 84, z = 92 } },\n        leftDown = { pos = { x = 84, z = 111 }, crossPos = { x = 87, z = 111 }, leapPos = { x = 86.9, z = 109.9 }, localPos = { x = 84, z = 108 } },\n        rightUp = { pos = { x = 116, z = 89 }, crossPos = { x = 113, z = 89 }, leapPos = { x = 113.1, z = 90.1 }, localPos = { x = 116, z = 92 } },\n        rightDown = { pos = { x = 116, z = 111 }, crossPos = { x = 113, z = 111 }, leapPos = { x = 113.1, z = 109.9 }, localPos = { x = 116, z = 108 } },\n    }\n    M.Info(\"M11S初始化数据完成!\")\nend\nM.M11S.InitData()\n\nlocal redDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal greenDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal yellowDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal litBlueDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nM.M11S.DrawWeapon = function(ent, model)\n    local player = M.GetPlayer()\n    local curEnt = TensorCore.mGetEntity(ent.id)\n    if model == 19184 then\n        -- 19184 斧子\n        local heading = curEnt.pos.h + math.pi\n        local guidePos, size\n        if M.IsTank(player.job) or M.IsMelee(player.job) then\n            guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, 8.3)\n            size = 0.25\n        else\n            guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, 10)\n            size = 0.5\n        end\n        -- 画图\n        if M.Config.Main.M11SExDraw then\n            redDraw:addCircle(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 8)\n            local inRange = true\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                local dis2d = TensorCore.getDistance2d(curMem.pos, player.pos)\n                if dis2d > 6 then\n                    inRange = false\n                    break\n                end\n            end\n            if inRange then\n                greenDraw:addCircle(player.pos.x, player.pos.y, player.pos.z, 6)\n            else\n                yellowDraw:addCircle(player.pos.x, player.pos.y, player.pos.z, 6)\n            end\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    elseif model == 19185 then\n        -- 19185 镰刀\n        local index = M.IndexOf({ \"MT\", \"D4\", \"H2\", \"D2\", \"ST\", \"D1\", \"H1\", \"D3\" }, M.SelfPos)\n        local guidePos = TensorCore.getPosInDirection(curEnt.pos, curEnt.pos.h - (index - 1) * math.pi / 4, 4.3)\n        if M.Config.Main.M11SExDraw then\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                if curMem.alive then\n                    local curHeading = TensorCore.getHeadingToTarget(curEnt.pos, curMem.pos)\n                    litBlueDraw:addCone(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, math.pi / 6, curHeading)\n                end\n            end\n            redDraw:addDonut(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 5, 40)\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    elseif model == 19186 then\n        local heading\n        -- 19186 大剑\n        if table.contains({ \"MT\", \"H1\", \"D1\", \"D3\" }, M.SelfPos) then\n            heading = curEnt.pos.h + math.pi * 3 / 4\n        else\n            heading = curEnt.pos.h - math.pi * 3 / 4\n        end\n        local distance\n        if M.IsTank(player.job) or M.IsMelee(player.job) then\n            distance = 8\n        else\n            distance = 11\n        end\n        local guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, distance)\n        if M.Config.Main.M11SExDraw then\n            redDraw:addCross(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, 10, curEnt.pos.h)\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                if M.IsHealer(curMem.job) then\n                    local curHeading = TensorCore.getHeadingToTarget(curEnt.pos, curMem.pos)\n                    litBlueDraw:addRect(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, 6, curHeading)\n                end\n            end\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    end\nend\n\nM.M11S.InitWeapon = function()\n    if M.M11S.WeaponInfo == nil then\n        M.M11S.WeaponInfo = {}\n        M.M11S.WeaponInfo.ids = {}\n        M.M11S.WeaponInfo.data = {}\n        M.M11S.WeaponInfo.ordered = {}\n        M.M11S.WeaponInfo.CurrentWeaponIdx = 1\n    end\nend\n\nM.M11S.RecordWeapon = function()\n    for _, ent in pairs(TensorCore.entityList(\"contentid=108\")) do\n        if Argus.isEntityVisible(ent) and not table.contains(M.M11S.WeaponInfo.ids, ent.id) then\n            local md = Argus.getEntityModel(ent.id)\n            if (md == 19184 or md == 19185 or md == 19186)\n            then\n                table.insert(M.M11S.WeaponInfo.ids, ent.id)\n                table.insert(M.M11S.WeaponInfo.data, { entity = ent, model = md })\n            end\n        end\n    end\nend\n\nM.M11S.OrderWeapon = function()\n    M.M11S.InitWeapon()\n    M.M11S.RecordWeapon()\n    if table.size(M.M11S.WeaponInfo.ids) == 3 then\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            local curHeading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, info.entity.pos)\n            -- 如果当前面向与场中到当前物体方向相同，表示为第一个武器\n            if M.IsSameDirection(info.entity.pos.h, curHeading, 0.1) then\n                table.insert(M.M11S.WeaponInfo.ordered, info)\n                d(\"已找到第1把武器， 类型为：\" .. tostring(info.model))\n                break\n            end\n        end\n        local first = M.M11S.WeaponInfo.ordered[1]\n        local second\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            if info.entity.id ~= first.entity.id then\n                local curHeading = TensorCore.getHeadingToTarget(first.entity.pos, info.entity.pos)\n                if M.IsSameDirection(info.entity.pos.h, curHeading, 0.1) then\n                    table.insert(M.M11S.WeaponInfo.ordered, info)\n                    d(\"已找到第2把武器， 类型为：\" .. tostring(info.model))\n                    second = info\n                    break\n                end\n            end\n        end\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            if info.entity.id ~= first.entity.id and info.entity.id ~= second.entity.id then\n                table.insert(M.M11S.WeaponInfo.ordered, info)\n                d(\"已找到第3把武器， 类型为：\" .. tostring(info.model))\n                break\n            end\n        end\n    end\nend\n\nM.M11S.TakeWeapon = function(index, nextState)\n    local curBoss = TensorCore.mGetEntity(M.M11S.CurrentBoss.id)\n    local curEnt = M.M11S.WeaponInfo.ordered[index]\n    local distance = TensorCore.getDistance2d(curEnt.entity.pos, curBoss.pos)\n    if distance > 0.2 then\n        M.M11S.DrawWeapon(curEnt.entity, curEnt.model)\n    else\n        if M.M11S.ReachTime == nil then\n            M.M11S.ReachTime = Now()\n        end\n        -- 跳过去之后2秒蓄力\n        if TimeSince(M.M11S.ReachTime) > 2000 then\n            M.M11S.CurrentState = nextState\n            M.M11S.ReachTime = nil\n        else\n            M.M11S.DrawWeapon(curEnt.entity, curEnt.model)\n        end\n    end\nend\n\nM.M11S.TakeExWeapon = function(nextState)\n    if M.M11S.WeaponInfo == nil\n            or M.M11S.WeaponInfo.data == nil\n            or table.size(M.M11S.WeaponInfo.ids) == 0\n            or M.M11S.WeaponInfo.CurrentWeaponIdx > 6\n    then\n        return\n    end\n    if M.M11S.WeaponInfo.CurrentWeaponId == nil then\n        -- M.M11S.WeaponInfo.CurrentWeaponId = table.remove(M.M11S.WeaponInfo.ids, 1)\n        M.M11S.WeaponInfo.CurrentWeaponId = M.M11S.WeaponInfo.ids[M.M11S.WeaponInfo.CurrentWeaponIdx]\n        M.M11S.WeaponInfo.CurrentWeaponPos = TensorCore.mGetEntity(M.M11S.WeaponInfo.CurrentWeaponId).pos\n        d(\"[\" .. Now() .. \"]当前兵器：\" .. M.M11S.WeaponInfo.CurrentWeaponId)\n    else\n        local curEnt = TensorCore.mGetEntity(M.M11S.WeaponInfo.CurrentWeaponId)\n        local model = Argus.getEntityModel(M.M11S.WeaponInfo.CurrentWeaponId)\n        local curBoss = TensorCore.mGetEntity(M.M11S.CurrentBoss.id)\n        local distance = TensorCore.getDistance2d(curEnt.pos, curBoss.pos)\n        if distance > 0.2 then\n            M.M11S.DrawWeapon(curEnt, model)\n        else\n            if M.M11S.ReachTime == nil then\n                M.M11S.ReachTime = Now()\n            end\n            -- 跳过去之后2秒蓄力\n            if TimeSince(M.M11S.ReachTime) > 2000 then\n                M.M11S.CurrentState = nextState\n                M.M11S.ReachTime = nil\n                M.M11S.WeaponInfo.CurrentWeaponId = nil\n                M.M11S.WeaponInfo.CurrentWeaponIdx = M.M11S.WeaponInfo.CurrentWeaponIdx + 1\n            else\n                M.M11S.DrawWeapon(curEnt, model)\n            end\n        end\n    end\nend\n\nM.M11S.GetTakeTowerPos = function(type)\n    M.M11S.Meteor2Link = {}\n    M.M11S.Meteor2Link.Has = false\n    local player = M.GetPlayer()\n    local tethers = Argus.getTethersOnEnt(player.id)\n    for _, tether in pairs(tethers) do\n        if tether.type == 57 or tether.type == 249 then\n            M.M11S.Meteor2Link.Has = true\n            M.M11S.Meteor2Link.from = TensorCore.mGetEntity(tether.partnerid)\n            break\n        end\n    end\n    local towerData\n    if type == 1 then\n        if player.pos.x > 100 then\n            if M.IsDps(player.job) then\n                towerData = M.M11S.TowerData.rightDown\n            else\n                towerData = M.M11S.TowerData.rightUp\n            end\n        else\n            if M.IsDps(player.job) then\n                towerData = M.M11S.TowerData.leftDown\n            else\n                towerData = M.M11S.TowerData.leftUp\n            end\n        end\n    else\n        if player.pos.x > 100 then\n            if M.M11S.Tower2Type == \"Down\" then\n                towerData = M.M11S.TowerData.rightDown\n            else\n                towerData = M.M11S.TowerData.rightUp\n            end\n        else\n            if M.M11S.Tower2Type == \"Down\" then\n                towerData = M.M11S.TowerData.leftDown\n            else\n                towerData = M.M11S.TowerData.leftUp\n            end\n        end\n    end\n    if M.M11S.Meteor2Link.Has then\n        if M.M11S.Meteor2Link.from.pos.x > 100 and player.pos.x > 100 then\n            M.M11S.TowerPos = towerData.crossPos\n        else\n            M.M11S.TowerPos = towerData.localPos\n        end\n    else\n        if M.Config.Main.M11SKickType == 1 then\n            M.M11S.TowerPos = towerData.localPos\n        else\n            M.M11S.TowerPos = towerData.leapPos\n        end\n    end\nend\n\nM.M11S.Meteor2Page1To2 = function()\n    M.M11S.Meteor2Link = nil\n    M.M11S.TowerPos = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2MapEffect = nil\n    M.M11S.GetMarkTime = nil\nend\n\nself.used = true",
+						actionLua = "local M = MuAiGuide\nM.M11S = {}\nM.M11S.InitData = function()\n    M.M11S.State = {\n        Start = 0,\n        -- 3连兵器1\n        Weapon1_Start = 1100,\n        Weapon1_01 = 1101,\n        Weapon1_02 = 1102,\n        Weapon1_03 = 1103,\n        Weapon1_End = 1199,\n\n        -- 3连兵器2\n        Weapon2_Start = 1200,\n        Weapon2_01 = 1201,\n        Weapon2_02 = 1202,\n        Weapon2_03 = 1203,\n        Weapon2_End = 1299,\n\n        -- 六联兵器\n        Weapon3_Start = 1300,\n        Weapon3_01 = 1301,\n        Weapon3_02 = 1302,\n        Weapon3_03 = 1303,\n        Weapon3_04 = 1304,\n        Weapon3_05 = 1305,\n        Weapon3_06 = 1306,\n        Weapon3_End = 1399,\n\n        Meteor1_01 = 1501,\n        Meteor1_02 = 1502,\n        Meteor1_03 = 1503,\n        Meteor1_04 = 1504,\n        Meteor1_05 = 1505,\n\n        Meteor2_Start = 1600,\n        Meteor2_Link1 = 1601,\n        Meteor2_Tower1 = 1602,\n        Meteor2_GetMark1 = 1603,\n        Meteor2_Debuff1 = 1604,\n        Meteor2_Link2 = 1605,\n        Meteor2_Tower2 = 1606,\n        Meteor2_GetMark2 = 1607,\n        Meteor2_Debuff2 = 1608,\n        Meteor2_GatherMark = 1609,\n        Meteor2_GatherEnd = 1610,\n        Meteor2_Tower3 = 1611,\n        Meteor2_Hit = 1612,\n        Meteor2_end = 1699,\n\n        Meteor3_Start = 1700,\n        Meteor3_Guide1 = 1701,\n        Meteor3_CatchBoom = 1702,\n        Meteor3_Link = 1703,\n        Meteor3_End = 1799,\n    }\n    M.M11S.CurrentState = M.M11S.State.Start\n    M.M11S.WeaponInfo = nil\n    M.M11S.ReachTime = nil\n    M.M11S.JumpTime = nil\n    M.M11S.GetMarkTime = nil\n    M.M11S.BreakTime = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2Link = nil\n    M.M11S.TowerPos = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2MapEffect = nil\n    M.M11S.Meteor2Gather = nil\n    M.M11S.OrbitalOmen = nil\n    M.M11S.Meteor3Info = {\n        JobOrder = { \"H1\", \"D3\", \"D4\", \"H2\" },\n        Dir = { math.pi * 3 / 4, math.pi / 4, math.pi * 7 / 4, math.pi * 5 / 4 },\n        Spell46166 = {},\n        Spell46167 = {},\n        FindDir = function(id1, id2)\n            local t1 = TensorCore.mGetEntity(id1)\n            local t2 = TensorCore.mGetEntity(id2)\n            local h1 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t1.pos)\n            local h2 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t2.pos)\n            local ent1, ent2\n            for i = 1, 4 do\n                local dir = M.M11S.Meteor3Info.Dir[i]\n                if M.IsSameDirection(dir, h1) then\n                    if ent1 == nil then\n                        ent1 = t1\n                    else\n                        ent2 = t1\n                    end\n                end\n                if M.IsSameDirection(dir, h2) then\n                    if ent1 == nil then\n                        ent1 = t2\n                    else\n                        ent2 = t2\n                    end\n                end\n            end\n            return ent1, ent2\n        end\n    }\n    M.M11S.TowerData = {\n        leftUp = { pos = { x = 84, z = 89 }, crossPos = { x = 87, z = 89 }, leapPos = { x = 86.9, z = 90.1 }, localPos = { x = 84, z = 92 } },\n        leftDown = { pos = { x = 84, z = 111 }, crossPos = { x = 87, z = 111 }, leapPos = { x = 86.9, z = 109.9 }, localPos = { x = 84, z = 108 } },\n        rightUp = { pos = { x = 116, z = 89 }, crossPos = { x = 113, z = 89 }, leapPos = { x = 113.1, z = 90.1 }, localPos = { x = 116, z = 92 } },\n        rightDown = { pos = { x = 116, z = 111 }, crossPos = { x = 113, z = 111 }, leapPos = { x = 113.1, z = 109.9 }, localPos = { x = 116, z = 108 } },\n    }\n    M.Info(\"M11S初始化数据完成!\")\nend\nM.M11S.InitData()\n\nlocal redDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal greenDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal yellowDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal litBlueDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nM.M11S.DrawWeapon = function(ent, model)\n    local player = M.GetPlayer()\n    local curEnt = TensorCore.mGetEntity(ent.id)\n    if model == 19184 then\n        -- 19184 斧子\n        local heading = curEnt.pos.h + math.pi\n        local guidePos, size\n        if M.IsTank(player.job) or M.IsMelee(player.job) then\n            guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, 8.3)\n            size = 0.25\n        else\n            guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, 10)\n            size = 0.5\n        end\n        -- 画图\n        if M.Config.Main.M11SExDraw then\n            redDraw:addCircle(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 8)\n            local inRange = true\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                local dis2d = TensorCore.getDistance2d(curMem.pos, player.pos)\n                if dis2d > 6 then\n                    inRange = false\n                    break\n                end\n            end\n            if inRange then\n                greenDraw:addCircle(player.pos.x, player.pos.y, player.pos.z, 6)\n            else\n                yellowDraw:addCircle(player.pos.x, player.pos.y, player.pos.z, 6)\n            end\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    elseif model == 19185 then\n        -- 19185 镰刀\n        local index = M.IndexOf({ \"MT\", \"D4\", \"H2\", \"D2\", \"ST\", \"D1\", \"H1\", \"D3\" }, M.SelfPos)\n        local guidePos = TensorCore.getPosInDirection(curEnt.pos, curEnt.pos.h - (index - 1) * math.pi / 4, 4.3)\n        if M.Config.Main.M11SExDraw then\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                if curMem.alive then\n                    local curHeading = TensorCore.getHeadingToTarget(curEnt.pos, curMem.pos)\n                    litBlueDraw:addCone(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, math.pi / 6, curHeading)\n                end\n            end\n            redDraw:addDonut(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 5, 40)\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    elseif model == 19186 then\n        local heading\n        -- 19186 大剑\n        if table.contains({ \"MT\", \"H1\", \"D1\", \"D3\" }, M.SelfPos) then\n            heading = curEnt.pos.h + math.pi * 3 / 4\n        else\n            heading = curEnt.pos.h - math.pi * 3 / 4\n        end\n        local distance\n        if M.IsTank(player.job) or M.IsMelee(player.job) then\n            distance = 8\n        else\n            distance = 11\n        end\n        local guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, distance)\n        if M.Config.Main.M11SExDraw then\n            redDraw:addCross(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, 10, curEnt.pos.h)\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                if M.IsHealer(curMem.job) then\n                    local curHeading = TensorCore.getHeadingToTarget(curEnt.pos, curMem.pos)\n                    litBlueDraw:addRect(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, 6, curHeading)\n                end\n            end\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    end\nend\n\nM.M11S.InitWeapon = function()\n    if M.M11S.WeaponInfo == nil then\n        M.M11S.WeaponInfo = {}\n        M.M11S.WeaponInfo.ids = {}\n        M.M11S.WeaponInfo.data = {}\n        M.M11S.WeaponInfo.ordered = {}\n        M.M11S.WeaponInfo.CurrentWeaponIdx = 1\n    end\nend\n\nM.M11S.RecordWeapon = function()\n    for _, ent in pairs(TensorCore.entityList(\"contentid=108\")) do\n        if Argus.isEntityVisible(ent) and not table.contains(M.M11S.WeaponInfo.ids, ent.id) then\n            local md = Argus.getEntityModel(ent.id)\n            if (md == 19184 or md == 19185 or md == 19186)\n            then\n                table.insert(M.M11S.WeaponInfo.ids, ent.id)\n                table.insert(M.M11S.WeaponInfo.data, { entity = ent, model = md })\n            end\n        end\n    end\nend\n\nM.M11S.OrderWeapon = function()\n    M.M11S.InitWeapon()\n    M.M11S.RecordWeapon()\n    if table.size(M.M11S.WeaponInfo.ids) == 3 then\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            local curHeading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, info.entity.pos)\n            -- 如果当前面向与场中到当前物体方向相同，表示为第一个武器\n            if M.IsSameDirection(info.entity.pos.h, curHeading, 0.1) then\n                table.insert(M.M11S.WeaponInfo.ordered, info)\n                d(\"已找到第1把武器， 类型为：\" .. tostring(info.model))\n                break\n            end\n        end\n        local first = M.M11S.WeaponInfo.ordered[1]\n        local second\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            if info.entity.id ~= first.entity.id then\n                local curHeading = TensorCore.getHeadingToTarget(first.entity.pos, info.entity.pos)\n                if M.IsSameDirection(info.entity.pos.h, curHeading, 0.1) then\n                    table.insert(M.M11S.WeaponInfo.ordered, info)\n                    d(\"已找到第2把武器， 类型为：\" .. tostring(info.model))\n                    second = info\n                    break\n                end\n            end\n        end\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            if info.entity.id ~= first.entity.id and info.entity.id ~= second.entity.id then\n                table.insert(M.M11S.WeaponInfo.ordered, info)\n                d(\"已找到第3把武器， 类型为：\" .. tostring(info.model))\n                break\n            end\n        end\n    end\nend\n\nM.M11S.TakeWeapon = function(index, nextState)\n    local curBoss = TensorCore.mGetEntity(M.M11S.CurrentBoss.id)\n    local curEnt = M.M11S.WeaponInfo.ordered[index]\n    local distance = TensorCore.getDistance2d(curEnt.entity.pos, curBoss.pos)\n    if distance > 0.2 then\n        M.M11S.DrawWeapon(curEnt.entity, curEnt.model)\n    else\n        if M.M11S.ReachTime == nil then\n            M.M11S.ReachTime = Now()\n        end\n        -- 跳过去之后2秒蓄力\n        if TimeSince(M.M11S.ReachTime) > 2000 then\n            M.M11S.CurrentState = nextState\n            M.M11S.ReachTime = nil\n        else\n            M.M11S.DrawWeapon(curEnt.entity, curEnt.model)\n        end\n    end\nend\n\nM.M11S.TakeExWeapon = function(nextState)\n    if M.M11S.WeaponInfo == nil\n            or M.M11S.WeaponInfo.data == nil\n            or table.size(M.M11S.WeaponInfo.ids) == 0\n            or M.M11S.WeaponInfo.CurrentWeaponIdx > 6\n    then\n        return\n    end\n    if M.M11S.WeaponInfo.CurrentWeaponId == nil then\n        -- M.M11S.WeaponInfo.CurrentWeaponId = table.remove(M.M11S.WeaponInfo.ids, 1)\n        M.M11S.WeaponInfo.CurrentWeaponId = M.M11S.WeaponInfo.ids[M.M11S.WeaponInfo.CurrentWeaponIdx]\n        M.M11S.WeaponInfo.CurrentWeaponPos = TensorCore.mGetEntity(M.M11S.WeaponInfo.CurrentWeaponId).pos\n        d(\"[\" .. Now() .. \"]当前兵器：\" .. M.M11S.WeaponInfo.CurrentWeaponId)\n    else\n        local curEnt = TensorCore.mGetEntity(M.M11S.WeaponInfo.CurrentWeaponId)\n        local model = Argus.getEntityModel(M.M11S.WeaponInfo.CurrentWeaponId)\n        local curBoss = TensorCore.mGetEntity(M.M11S.CurrentBoss.id)\n        local distance = TensorCore.getDistance2d(curEnt.pos, curBoss.pos)\n        if distance > 0.2 then\n            M.M11S.DrawWeapon(curEnt, model)\n        else\n            if M.M11S.ReachTime == nil then\n                M.M11S.ReachTime = Now()\n            end\n            -- 跳过去之后2秒蓄力\n            if TimeSince(M.M11S.ReachTime) > 2000 then\n                M.M11S.CurrentState = nextState\n                M.M11S.ReachTime = nil\n                M.M11S.WeaponInfo.CurrentWeaponId = nil\n                M.M11S.WeaponInfo.CurrentWeaponIdx = M.M11S.WeaponInfo.CurrentWeaponIdx + 1\n            else\n                M.M11S.DrawWeapon(curEnt, model)\n            end\n        end\n    end\nend\n\nM.M11S.GetTakeTowerPos = function(type)\n    M.M11S.Meteor2Link = {}\n    M.M11S.Meteor2Link.Has = false\n    local player = M.GetPlayer()\n    local tethers = Argus.getTethersOnEnt(player.id)\n    for _, tether in pairs(tethers) do\n        if tether.type == 57 or tether.type == 249 then\n            M.M11S.Meteor2Link.Has = true\n            M.M11S.Meteor2Link.from = TensorCore.mGetEntity(tether.partnerid)\n            break\n        end\n    end\n    local towerData\n    if type == 1 then\n        if player.pos.x > 100 then\n            if M.IsDps(player.job) then\n                towerData = M.M11S.TowerData.rightDown\n            else\n                towerData = M.M11S.TowerData.rightUp\n            end\n        else\n            if M.IsDps(player.job) then\n                towerData = M.M11S.TowerData.leftDown\n            else\n                towerData = M.M11S.TowerData.leftUp\n            end\n        end\n    else\n        if player.pos.x > 100 then\n            if M.M11S.Tower2Type == \"Down\" then\n                towerData = M.M11S.TowerData.rightDown\n            else\n                towerData = M.M11S.TowerData.rightUp\n            end\n        else\n            if M.M11S.Tower2Type == \"Down\" then\n                towerData = M.M11S.TowerData.leftDown\n            else\n                towerData = M.M11S.TowerData.leftUp\n            end\n        end\n    end\n    if M.M11S.Meteor2Link.Has then\n        if (M.M11S.Meteor2Link.from.pos.x > 100 and player.pos.x > 100)\n                or (M.M11S.Meteor2Link.from.pos.x < 100 and player.pos.x < 100) then\n            M.M11S.TowerPos = towerData.crossPos\n        else\n            M.M11S.TowerPos = towerData.localPos\n        end\n    else\n        if M.Config.Main.M11SKickType == 1 then\n            M.M11S.TowerPos = towerData.localPos\n        else\n            M.M11S.TowerPos = towerData.leapPos\n        end\n    end\nend\n\nM.M11S.Meteor2Page1To2 = function()\n    M.M11S.Meteor2Link = nil\n    M.M11S.TowerPos = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2MapEffect = nil\n    M.M11S.GetMarkTime = nil\nend\n\nself.used = true",
 						conditions = 
 						{
 							
@@ -651,7 +623,7 @@ local tbl =
 			uuid = "7ad16923-a30a-aa9c-9e09-42bbab94283e",
 			version = 2,
 		},
-		inheritedIndex = 11,
+		inheritedIndex = 10,
 	},
 	
 	{
@@ -664,7 +636,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nif M.M11S.OrbitalOmen == nil then\n    M.M11S.OrbitalOmen = {}\n    M.M11S.OrbitalOmenTemp = {}\n    M.M11S.OrbitalOmenMid = { { 3, 7 }, { 3, 8 }, { 4, 7 }, { 4, 8 } }\n    M.M11S.OrbitalOmenCorner = { { 2, 6 }, { 5, 8 }, { 2, 9 }, { 5, 9 } }\n    M.M11S.OrbitalOmenEdge = { { 2, 7 }, { 2, 8 }, { 3, 6 }, { 4, 6 }, { 5, 7 }, { 5, 8 }, { 3, 9 }, { 4, 9 } }\n    M.M11S.OrbitalOmenDisable = 0\n    M.M11S.OrbitalOmenPrecess = 1\n    M.M11S.OrbitalOmenDrawId = nil\n    M.M11S.OrbitalSame = function(table1, table2)\n        if (table1[1] == table2[1] and table1[2] == table2[2])\n                or (table1[1] == table2[2] and table1[2] == table2[1])\n        then\n            return true\n        end\n        return false\n    end\n    M.M11S.DrawCross = function() \n        local redDraw = Argus2.ShapeDrawer:new(\n                (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n                (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n                (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n                (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                0.5\n        )\n        local drawing = M.M11S.OrbitalOmen[M.M11S.OrbitalOmenPrecess]\n        local posX, posZ\n        if drawing[1] == 2 then\n            posX = 85\n        elseif drawing[1] == 3 then\n            posX = 95\n        elseif drawing[1] == 4 then\n            posX = 105\n        elseif drawing[1] == 5 then\n            posX = 115\n        end\n        if drawing[2] == 6 then\n            posZ = 85\n        elseif drawing[2] == 7 then\n            posZ = 95\n        elseif drawing[2] == 8 then\n            posZ = 105\n        elseif drawing[2] == 9 then\n            posZ = 115\n        end\n        return redDraw:addTimedCross(10000, posX, 0, posZ, 40, 10, 0)\n    end\nend\n\nif eventArgs.a2 == 4 then\n    if M.M11S.OrbitalOmenPrecess <= 4 then\n        local drawing = M.M11S.OrbitalOmen[M.M11S.OrbitalOmenPrecess]\n        if eventArgs.a1 == drawing[1] or eventArgs.a1 == drawing[2] then\n            -- 关闭数量等于2 表示当前方块已经爆炸\n            M.M11S.OrbitalOmenDisable = M.M11S.OrbitalOmenDisable + 1\n            if M.M11S.OrbitalOmenDisable == 2 then\n                M.M11S.OrbitalOmenDisable = 0\n                --进入下一个阶段\n                M.M11S.OrbitalOmenPrecess = M.M11S.OrbitalOmenPrecess + 1\n                if M.M11S.OrbitalOmenPrecess <= 4 then\n                    if M.Config.Main.M11SExDraw then\n                        if M.M11S.OrbitalOmenDrawId ~= nil then\n                            Argus.deleteTimedShape(M.M11S.OrbitalOmenDrawId)\n                        end\n                        M.M11S.OrbitalOmenDrawId = M.M11S.DrawCross()\n                    end\n                    if M.M11S.OrbitalOmenPrecess == 2 then\n                        if M.M11S.OrbitalOmen.guideType ~= 2 then\n                            local pos = M.M11S.OrbitalOmen.guide[2]\n                            M.DirectTo(pos.x, pos.z, 10000)\n                        end\n                    elseif M.M11S.OrbitalOmenPrecess == 3 then\n                        local pos\n                        if M.M11S.OrbitalOmen.guideType == 3 then\n                            pos = M.M11S.OrbitalOmen.guide[1]\n                        else\n                            pos = M.M11S.OrbitalOmen.guide[2]\n                        end\n                        M.DirectTo(pos.x, pos.z, 10000)\n                    end\n                else\n                    if M.Config.Main.M11SExDraw and M.M11S.OrbitalOmenDrawId ~= nil then\n                        Argus.deleteTimedShape(M.M11S.OrbitalOmenDrawId)\n                    end\n                    M.CancelDir()\n                end\n            end\n        end\n    end\nelseif eventArgs.a2 == 1 then\n    if table.size(M.M11S.OrbitalOmenTemp) < 2 then\n        table.insert(M.M11S.OrbitalOmenTemp, eventArgs.a1)\n        if table.size(M.M11S.OrbitalOmenTemp) == 2 then\n            table.sort(M.M11S.OrbitalOmenTemp, function(a, b)\n                return a < b\n            end)\n            table.insert(M.M11S.OrbitalOmen, M.M11S.OrbitalOmenTemp)\n            M.M11S.OrbitalOmenTemp = {}\n        end\n    end\n    if M.Config.Main.M11SExDraw and M.M11S.OrbitalOmenDrawId == nil and table.size(M.M11S.OrbitalOmen) == 1 then\n        M.M11S.OrbitalOmenDrawId = M.M11S.DrawCross()\n    end\n    -- 2条线出现即可进行指路分析\n    if table.size(M.M11S.OrbitalOmen) == 2 then\n        -- 分析1的情况\n        local cross1 = M.M11S.OrbitalOmen[1]\n        local cross2 = M.M11S.OrbitalOmen[2]\n        local player = M.GetPlayer()\n        local guidePos1, guidePos2\n\n        if M.IsMelee(player.job) or M.IsTank(player.job) then\n            local spawnType\n            -- 近战采取阿洛攻略方案\n            for _, c1Pos in pairs(M.M11S.OrbitalOmenMid) do\n                if M.M11S.OrbitalSame(cross1, c1Pos) then\n                    spawnType = 1\n                    break\n                end\n            end\n            if spawnType == nil then\n                for _, c1Pos in pairs(M.M11S.OrbitalOmenCorner) do\n                    if M.M11S.OrbitalSame(cross1, c1Pos) then\n                        spawnType = 2\n                        break\n                    end\n                end\n            end\n            if spawnType == nil then\n                for _, c1Pos in pairs(M.M11S.OrbitalOmenEdge) do\n                    if M.M11S.OrbitalSame(cross1, c1Pos) then\n                        spawnType = 3\n                        break\n                    end\n                end\n            end\n            M.M11S.OrbitalOmen.guideType = spawnType\n            if spawnType == 1 then\n                if M.M11S.OrbitalSame(cross1, { 3, 7 }) then\n                    guidePos1 = { x = 102, z = 100.5 }\n                    guidePos2 = { x = 98, z = 99.5 }\n                elseif M.M11S.OrbitalSame(cross1, { 4, 7 }) then\n                    guidePos1 = { x = 98, z = 100.5 }\n                    guidePos2 = { x = 102, z = 99.5 }\n                elseif M.M11S.OrbitalSame(cross1, { 3, 8 }) then\n                    guidePos1 = { x = 102, z = 99.5 }\n                    guidePos2 = { x = 98, z = 100.5 }\n                elseif M.M11S.OrbitalSame(cross1, { 4, 8 }) then\n                    guidePos1 = { x = 98, z = 99.5 }\n                    guidePos2 = { x = 102, z = 100.5 }\n                end\n            elseif spawnType == 2 then\n                if M.M11S.OrbitalSame(cross2, { 3, 7 }) then\n                    guidePos1 = { x = 102, z = 100.5 }\n                    guidePos2 = { x = 98, z = 99.5 }\n                elseif M.M11S.OrbitalSame(cross2, { 4, 7 }) then\n                    guidePos1 = { x = 98, z = 100.5 }\n                    guidePos2 = { x = 102, z = 99.5 }\n                elseif M.M11S.OrbitalSame(cross2, { 3, 8 }) then\n                    guidePos1 = { x = 102, z = 99.5 }\n                    guidePos2 = { x = 98, z = 100.5 }\n                elseif M.M11S.OrbitalSame(cross2, { 4, 8 }) then\n                    guidePos1 = { x = 98, z = 99.5 }\n                    guidePos2 = { x = 102, z = 100.5 }\n                end\n            elseif spawnType == 3 then\n                if M.M11S.OrbitalSame(cross2, { 3, 7 }) then\n                    guidePos1 = { x = 98, z = 99.5 }\n                    guidePos2 = { x = 102, z = 100.5 }\n                elseif M.M11S.OrbitalSame(cross2, { 4, 7 }) then\n                    guidePos1 = { x = 102, z = 99.5 }\n                    guidePos2 = { x = 98, z = 100.5 }\n                elseif M.M11S.OrbitalSame(cross2, { 3, 8 }) then\n                    guidePos1 = { x = 98, z = 100.5 }\n                    guidePos2 = { x = 102, z = 99.5 }\n                elseif M.M11S.OrbitalSame(cross2, { 4, 8 }) then\n                    guidePos1 = { x = 102, z = 100.5 }\n                    guidePos2 = { x = 98, z = 99.5 }\n                end\n            end\n        else\n            M.M11S.OrbitalOmen.guideType = 4\n            --如果是远程，直接采取一步法\n            ----------------------- 第1行 -----------------------\n            if M.M11S.OrbitalSame(cross1, { 2, 6 }) then\n                guidePos1 = { x = 90.5, z = 92 }\n                guidePos2 = { x = 89, z = 89 }\n            elseif M.M11S.OrbitalSame(cross1, { 3, 6 }) then\n                guidePos1 = { x = 89, z = 91 }\n                guidePos2 = { x = 91, z = 89 }\n            elseif M.M11S.OrbitalSame(cross1, { 4, 6 }) then\n                guidePos1 = { x = 111, z = 91 }\n                guidePos2 = { x = 109, z = 89 }\n            elseif M.M11S.OrbitalSame(cross1, { 5, 6 }) then\n                guidePos1 = { x = 109.5, z = 92 }\n                guidePos2 = { x = 111, z = 89 }\n                ----------------------- 第2行 -----------------------\n            elseif M.M11S.OrbitalSame(cross1, { 2, 7 }) then\n                guidePos1 = { x = 91, z = 101 }\n                guidePos2 = { x = 89, z = 99 }\n            elseif M.M11S.OrbitalSame(cross1, { 3, 7 }) then\n                guidePos1 = { x = 89, z = 101 }\n                guidePos2 = { x = 91, z = 99 }\n            elseif M.M11S.OrbitalSame(cross1, { 4, 7 }) then\n                guidePos1 = { x = 111, z = 101 }\n                guidePos2 = { x = 109, z = 99 }\n            elseif M.M11S.OrbitalSame(cross1, { 5, 7 }) then\n                guidePos1 = { x = 109, z = 101 }\n                guidePos2 = { x = 111, z = 99 }\n                ----------------------- 第3行 -----------------------\n            elseif M.M11S.OrbitalSame(cross1, { 2, 8 }) then\n                guidePos1 = { x = 91, z = 99 }\n                guidePos2 = { x = 89, z = 101 }\n            elseif M.M11S.OrbitalSame(cross1, { 3, 8 }) then\n                guidePos1 = { x = 89, z = 99 }\n                guidePos2 = { x = 91, z = 101 }\n            elseif M.M11S.OrbitalSame(cross1, { 4, 8 }) then\n                guidePos1 = { x = 111, z = 99 }\n                guidePos2 = { x = 109, z = 101 }\n            elseif M.M11S.OrbitalSame(cross1, { 5, 8 }) then\n                guidePos1 = { x = 109, z = 99 }\n                guidePos2 = { x = 111, z = 101 }\n                ----------------------- 第4行 -----------------------\n            elseif M.M11S.OrbitalSame(cross1, { 2, 9 }) then\n                guidePos1 = { x = 90.5, z = 108 }\n                guidePos2 = { x = 89, z = 111 }\n            elseif M.M11S.OrbitalSame(cross1, { 3, 9 }) then\n                guidePos1 = { x = 89, z = 109 }\n                guidePos2 = { x = 91, z = 111 }\n            elseif M.M11S.OrbitalSame(cross1, { 4, 9 }) then\n                guidePos1 = { x = 111, z = 109 }\n                guidePos2 = { x = 109, z = 111 }\n            elseif M.M11S.OrbitalSame(cross1, { 5, 9 }) then\n                guidePos1 = { x = 109.5, z = 108 }\n                guidePos2 = { x = 111, z = 111 }\n            end\n        end\n        M.M11S.OrbitalOmen.guide = { guidePos1, guidePos2 }\n        M.DirectTo(guidePos1.x, guidePos1.z, 10000)\n    end\nend\nself.used = true",
+						actionLua = "local M = MuAiGuide\nif table.size(M.M11S.OrbitalOmen.Pair) < 2 then\n    table.insert(M.M11S.OrbitalOmen.Pair, eventArgs.a1)\n    if table.size(M.M11S.OrbitalOmen.Pair) == 2 then\n        table.sort(M.M11S.OrbitalOmen.Pair, function(a, b)\n            return a < b\n        end)\n        table.insert(M.M11S.OrbitalOmen.Data, { cross = M.M11S.OrbitalOmen.Pair, time = Now() })\n        M.M11S.OrbitalOmen.Pair = {}\n    end\nend\n-- 2条线出现即可进行指路分析\nif table.size(M.M11S.OrbitalOmen.Data) == 2 then\n    -- 分析1的情况\n    local cross1 = M.M11S.OrbitalOmen.Data[1].cross\n    local cross2 = M.M11S.OrbitalOmen.Data[2].cross\n    local player = M.GetPlayer()\n    local guidePos1, guidePos2, guidePos3\n    if M.IsMelee(player.job) or M.IsTank(player.job) then\n        local spawnType\n        -- 近战采取阿洛攻略方案\n        for _, c1Pos in pairs(M.M11S.OrbitalOmen.Mid) do\n            if M.M11S.OrbitalOmen.IsSame(cross1, c1Pos) then\n                spawnType = 1\n                break\n            end\n        end\n        if spawnType == nil then\n            for _, c1Pos in pairs(M.M11S.OrbitalOmen.Corner) do\n                if M.M11S.OrbitalOmen.IsSame(cross1, c1Pos) then\n                    spawnType = 2\n                    break\n                end\n            end\n        end\n        if spawnType == nil then\n            for _, c1Pos in pairs(M.M11S.OrbitalOmen.Edge) do\n                if M.M11S.OrbitalOmen.IsSame(cross1, c1Pos) then\n                    spawnType = 3\n                    break\n                end\n            end\n        end\n        M.M11S.OrbitalOmen.guideType = spawnType\n        if spawnType == 1 then\n            if M.M11S.OrbitalOmen.IsSame(cross1, { 3, 7 }) then\n                guidePos1 = { x = 101, z = 100.4 }\n                guidePos2 = { x = 99.5, z = 99.5 }\n            elseif M.M11S.OrbitalOmen.IsSame(cross1, { 4, 8 }) then\n                guidePos1 = { x = 99, z = 99.6 }\n                guidePos2 = { x = 100.5, z = 100.5 }\n            elseif M.M11S.OrbitalOmen.IsSame(cross1, { 3, 8 }) then\n                guidePos1 = { x = 101, z = 99.6 }\n                guidePos2 = { x = 99.5, z = 100.5 }\n            elseif M.M11S.OrbitalOmen.IsSame(cross1, { 4, 7 }) then\n                guidePos1 = { x = 99, z = 100.4 }\n                guidePos2 = { x = 100.5, z = 99.5 }\n            end\n        elseif spawnType == 2 then\n            if M.M11S.OrbitalOmen.IsSame(cross2, { 3, 7 }) then\n                guidePos1 = { x = 101, z = 100.4 }\n                guidePos2 = { x = 99.5, z = 99.5 }\n            elseif M.M11S.OrbitalOmen.IsSame(cross2, { 4, 8 }) then\n                guidePos1 = { x = 99, z = 99.6 }\n                guidePos2 = { x = 100.5, z = 100.5 }\n            elseif M.M11S.OrbitalOmen.IsSame(cross2, { 3, 8 }) then\n                guidePos1 = { x = 101, z = 99.6 }\n                guidePos2 = { x = 99.5, z = 100.5 }\n            elseif M.M11S.OrbitalOmen.IsSame(cross2, { 4, 7 }) then\n                guidePos1 = { x = 99, z = 100.4 }\n                guidePos2 = { x = 100.5, z = 99.5 }\n            end\n        elseif spawnType == 3 then\n            if M.M11S.OrbitalOmen.IsSame(cross2, { 3, 7 }) then\n                guidePos1 = { x = 99, z = 99.6 }\n                guidePos2 = { x = 100.5, z = 100.5 }\n                guidePos3 = { x = 99.5, z = 99.5 }\n            elseif M.M11S.OrbitalOmen.IsSame(cross2, { 4, 8 }) then\n                guidePos1 = { x = 101, z = 100.4 }\n                guidePos2 = { x = 99.5, z = 99.5 }\n                guidePos3 = { x = 100.5, z = 100.5 }\n            elseif M.M11S.OrbitalOmen.IsSame(cross2, { 3, 8 }) then\n                guidePos1 = { x = 99, z = 100.4 }\n                guidePos2 = { x = 100.5, z = 99.5 }\n                guidePos3 = { x = 99.5, z = 100.5 }\n            elseif M.M11S.OrbitalOmen.IsSame(cross2, { 4, 7 }) then\n                guidePos1 = { x = 101, z = 99.6 }\n                guidePos2 = { x = 99.5, z = 100.5 }\n                guidePos3 = { x = 100.5, z = 99.5 }\n            end\n        end\n    else\n        M.M11S.OrbitalOmen.guideType = 4\n        --如果是远程，直接采取一步法\n        ----------------------- 第1行 -----------------------\n        if M.M11S.OrbitalOmen.IsSame(cross1, { 2, 6 }) then\n            guidePos1 = { x = 90.4, z = 91 }\n            guidePos2 = { x = 89.5, z = 89.5 }\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 3, 6 }) then\n            guidePos1 = { x = 89, z = 91 }\n            guidePos2 = { x = 91, z = 89 }\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 4, 6 }) then\n            guidePos1 = { x = 111, z = 91 }\n            guidePos2 = { x = 109, z = 89 }\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 5, 6 }) then\n            guidePos1 = { x = 109.6, z = 91 }\n            guidePos2 = { x = 111, z = 89 }\n            ----------------------- 第2行 -----------------------\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 2, 7 }) then\n            guidePos1 = { x = 91, z = 101 }\n            guidePos2 = { x = 89, z = 99 }\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 3, 7 }) then\n            guidePos1 = { x = 89, z = 101 }\n            guidePos2 = { x = 91, z = 99 }\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 4, 7 }) then\n            guidePos1 = { x = 111, z = 101 }\n            guidePos2 = { x = 109, z = 99 }\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 5, 7 }) then\n            guidePos1 = { x = 109, z = 101 }\n            guidePos2 = { x = 111, z = 99 }\n            ----------------------- 第3行 -----------------------\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 2, 8 }) then\n            guidePos1 = { x = 91, z = 99 }\n            guidePos2 = { x = 89, z = 101 }\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 3, 8 }) then\n            guidePos1 = { x = 89, z = 99 }\n            guidePos2 = { x = 91, z = 101 }\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 4, 8 }) then\n            guidePos1 = { x = 111, z = 99 }\n            guidePos2 = { x = 109, z = 101 }\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 5, 8 }) then\n            guidePos1 = { x = 109, z = 99 }\n            guidePos2 = { x = 111, z = 101 }\n            ----------------------- 第4行 -----------------------\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 2, 9 }) then\n            guidePos1 = { x = 90.4, z = 109 }\n            guidePos2 = { x = 89, z = 111 }\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 3, 9 }) then\n            guidePos1 = { x = 89, z = 109 }\n            guidePos2 = { x = 91, z = 111 }\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 4, 9 }) then\n            guidePos1 = { x = 111, z = 109 }\n            guidePos2 = { x = 109, z = 111 }\n        elseif M.M11S.OrbitalOmen.IsSame(cross1, { 5, 9 }) then\n            guidePos1 = { x = 109.6, z = 109 }\n            guidePos2 = { x = 111, z = 111 }\n        end\n    end\n    M.M11S.OrbitalOmen.GuidePos = { guidePos1, guidePos2, guidePos3 }\nend\nself.used = true",
 						conditions = 
 						{
 							
@@ -679,7 +651,7 @@ local tbl =
 							},
 						},
 						gVar = "ACR_TensorViper3_CD",
-						name = "星轨链",
+						name = "星轨链-数据采集",
 						uuid = "51e44c1c-fe7a-744a-b727-f2ff3003503f",
 						version = 2.1,
 					},
@@ -741,19 +713,6 @@ local tbl =
 					},
 					inheritedIndex = 2,
 				},
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "--MuAiGuide.Info(\"MapEffect: | \" .. eventArgs.a1 .. \" | \" .. eventArgs.a2 .. \" | \" .. eventArgs.a3 .. \" | Time = \" .. Now())\nself.used = true",
-						gVar = "ACR_TensorWeeb3_CD",
-						name = "test",
-						uuid = "fa914412-9ee6-ca99-8719-4c5e3ab4911f",
-						version = 2.1,
-					},
-					inheritedIndex = 3,
-				},
 			},
 			conditions = 
 			{
@@ -797,7 +756,7 @@ local tbl =
 					data = 
 					{
 						category = "Lua",
-						conditionLua = "return 2 <= eventArgs.a1 and eventArgs.a1 <= 9",
+						conditionLua = "return 2 <= eventArgs.a1 and eventArgs.a1 <= 9 and eventArgs.a2 == 1",
 						name = "星轨链",
 						uuid = "fa6fe897-d10d-97a1-9d9c-251558105853",
 						version = 2,
@@ -809,7 +768,7 @@ local tbl =
 			uuid = "2eae2546-62d4-4827-ae4c-9e4cfa626b52",
 			version = 2,
 		},
-		inheritedIndex = 14,
+		inheritedIndex = 13,
 	},
 	
 	{
@@ -903,32 +862,6 @@ local tbl =
 						version = 2.1,
 					},
 					inheritedIndex = 3,
-				},
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "if data.MuAiM11SMark == nil then\n\tdata.MuAiM11SMark = {}\nend\ntable.insert(data.MuAiM11SMark, eventArgs.entityID)\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"9620fec1-0095-abec-bb97-e0d78948abb7",
-								true,
-							},
-							
-							{
-								"4d5427f0-b5d4-7103-b9d6-eb40c66b3f2a",
-								true,
-							},
-						},
-						gVar = "ACR_RikuMNK3_CD",
-						name = "陨石狂奔-被点名放圈old",
-						uuid = "a08d7ed6-2786-6c18-aca7-8d311294c87a",
-						version = 2.1,
-					},
-					inheritedIndex = 4,
 				},
 			},
 			conditions = 
@@ -1079,7 +1012,7 @@ local tbl =
 			uuid = "74d161a0-ce78-a135-a5df-53829b8f7124",
 			version = 2,
 		},
-		inheritedIndex = 11,
+		inheritedIndex = 13,
 	},
 	
 	{
@@ -1159,6 +1092,32 @@ local tbl =
 						version = 2.1,
 					},
 					inheritedIndex = 3,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nif M.M11S.OrbitalOmen.Data ~= nil and table.size(M.M11S.OrbitalOmen.Data) > 0 then\n    local curData = M.M11S.OrbitalOmen.Data[M.M11S.OrbitalOmen.Precess]\n    if TimeSince(curData.time) < 8500 then\n        if M.Config.Main.M11SExDraw then\n            M.M11S.OrbitalOmen.DrawCross(curData.cross)\n        end\n    else\n        M.M11S.OrbitalOmen.Precess = M.M11S.OrbitalOmen.Precess + 1\n        d(M.M11S.OrbitalOmen.Precess)\n    end\n    if M.M11S.OrbitalOmen.GuidePos ~= nil\n            and table.size(M.M11S.OrbitalOmen.GuidePos) > 0 then\n        local guidePos1 = M.M11S.OrbitalOmen.GuidePos[1]\n        local guidePos2 = M.M11S.OrbitalOmen.GuidePos[2]\n        local guidePos3 = M.M11S.OrbitalOmen.GuidePos[3]\n        if M.M11S.OrbitalOmen.Precess == 1 then\n            M.FrameDirect(guidePos1.x, guidePos1.z, 0.3)\n        elseif M.M11S.OrbitalOmen.Precess == 2 then\n            if M.M11S.OrbitalOmen.guideType == 2 then\n                M.FrameDirect(guidePos1.x, guidePos1.z)\n            else\n                M.FrameDirect(guidePos2.x, guidePos2.z)\n            end\n        elseif M.M11S.OrbitalOmen.Precess >= 3 then\n            if M.M11S.OrbitalOmen.guideType == 3 then\n                M.FrameDirect(guidePos3.x, guidePos3.z)\n            else\n                M.FrameDirect(guidePos2.x, guidePos2.z)\n            end\n        end\n    end\nend\nif M.Config.Main.M11SExDraw then\n    local drawer = Argus2.ShapeDrawer:new(\n            (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0)),\n            (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0)),\n            (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0)),\n            (GUI:ColorConvertFloat4ToU32(1, 1, 0, 1)),\n            2\n    )\n    for x = 80, 120, 10 do\n        drawer:addLine(x, 0, 80, x, 0, 120, 1, 0)\n        drawer:addLine(80, 0, x, 120, 0, x, 1, 1)\n    end\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								true,
+							},
+							
+							{
+								"4a9ef5d0-a5f7-6ebc-b770-882159be51c5",
+								true,
+							},
+						},
+						gVar = "ACR_RikuDRG3_CD",
+						name = "主循环-星轨链",
+						uuid = "523bc7d7-816c-df9b-9734-a9202239b389",
+						version = 2.1,
+					},
+					inheritedIndex = 4,
 				},
 				
 				{
@@ -1329,13 +1288,24 @@ local tbl =
 					},
 					inheritedIndex = 9,
 				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M11S.OrbitalOmen ~= nil\n\tand MuAiGuide.M11S.OrbitalOmen.Precess ~= nil\n\tand MuAiGuide.M11S.OrbitalOmen.Precess  >= 1 \n\tand MuAiGuide.M11S.OrbitalOmen.Precess  <= 4",
+						name = "星轨链中",
+						uuid = "4a9ef5d0-a5f7-6ebc-b770-882159be51c5",
+						version = 2,
+					},
+				},
 			},
 			eventType = 12,
 			name = "M11S主循环",
 			uuid = "41a903f9-67f1-06ad-8924-d2be901e0268",
 			version = 2,
 		},
-		inheritedIndex = 16,
+		inheritedIndex = 15,
 	},
 	
 	{
@@ -1675,6 +1645,32 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nM.M11S.OrbitalOmen = {\n    Data = {},\n    Pair = {},\n    Disable = 0,\n    Precess = 1,\n    DrawId = nil,\n    Mid = { { 3, 7 }, { 3, 8 }, { 4, 7 }, { 4, 8 } },\n    Corner = { { 2, 6 }, { 5, 8 }, { 2, 9 }, { 5, 9 } },\n    Edge = { { 2, 7 }, { 2, 8 }, { 3, 6 }, { 4, 6 }, { 5, 7 }, { 5, 8 }, { 3, 9 }, { 4, 9 } },\n    IsSame = function(table1, table2)\n        if (table1[1] == table2[1] and table1[2] == table2[2])\n                or (table1[1] == table2[2] and table1[2] == table2[1])\n        then\n            return true\n        end\n        return false\n    end,\n    DrawCross = function(crossData)\n        local redDraw = Argus2.ShapeDrawer:new(\n                (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n                (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n                (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n                (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                0.5\n        )\n        local posX, posZ\n        if crossData[1] == 2 then\n            posX = 85\n        elseif crossData[1] == 3 then\n            posX = 95\n        elseif crossData[1] == 4 then\n            posX = 105\n        elseif crossData[1] == 5 then\n            posX = 115\n        end\n        if crossData[2] == 6 then\n            posZ = 85\n        elseif crossData[2] == 7 then\n            posZ = 95\n        elseif crossData[2] == 8 then\n            posZ = 105\n        elseif crossData[2] == 9 then\n            posZ = 115\n        end\n        redDraw:addCross(posX, 0, posZ, 40, 10, 0)\n    end\n}\nd(\"星轨链数据初始化完成\")\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"e16c03b1-59aa-4644-a384-eb22f3fef5dd",
+								true,
+							},
+							
+							{
+								"0ea03ec8-3099-bcd7-8911-ea92a548c6e8",
+								true,
+							},
+						},
+						gVar = "ACR_RikuDRG3_CD",
+						name = "星轨链-初始化",
+						uuid = "42199814-6155-2e8c-b943-85c8a4e94ee6",
+						version = 2.1,
+					},
+					inheritedIndex = 13,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
 						actionLua = "local curBoss = TensorCore.mGetEntity(eventArgs.entityID)\nlocal yellowDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\nyellowDraw:addTimedCone(5000, curBoss.pos.x, 0, curBoss.pos.z, 30, math.pi / 2, curBoss.pos.h)\nyellowDraw:addTimedCone(5000, curBoss.pos.x, 0, curBoss.pos.z, 30, math.pi / 2, curBoss.pos.h + math.pi)\nself.used = true",
 						conditions = 
 						{
@@ -1686,6 +1682,11 @@ local tbl =
 							
 							{
 								"44282433-3925-c3d9-ac41-44068c5c125b",
+								true,
+							},
+							
+							{
+								"d7d686ef-d64b-a32c-b12d-cd6ee9164227",
 								true,
 							},
 						},
@@ -1790,6 +1791,19 @@ local tbl =
 						version = 2,
 					},
 					inheritedIndex = 9,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46130,
+						name = "46130-星轨链",
+						uuid = "0ea03ec8-3099-bcd7-8911-ea92a548c6e8",
+						version = 2,
+					},
+					inheritedIndex = 8,
 				},
 				
 				{
