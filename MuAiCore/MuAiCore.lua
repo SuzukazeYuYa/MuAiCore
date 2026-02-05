@@ -65,20 +65,43 @@ core.Initialize = function()
     end, tooltip = tooltip, texture = Icon }, "FFXIVMINION##MENU_HEADER")
 end
 
+local isDrawBlackListOn = function()
+    return MuAiGuide.Config.Main.DrawBlackListEnable
+            and MuAiGuide.Config.Main.DrawBlackList
+            and table.size(MuAiGuide.Config.Main.DrawBlackList) > 0
+end
+
 local disableDrawCheck = function()
-    if MuAiGuide.Config.Main.DrawBlackListEnable
-    and MuAiGuide.Config.Main.DrawBlackList
-    and table.size(MuAiGuide.Config.Main.DrawBlackList) > 0
-    then
+    if isDrawBlackListOn() then
         if lastMap ~= Player.localmapid then
             if table.contains(MuAiGuide.Config.Main.DrawBlackList, Player.localmapid) then
-                MuAiGuide.Info("进入绘制黑名单区域，已关闭Minion基础绘制。")
+                MuAiGuide.Info("进入绘制黑名单区域，MoogleTelegraphs的[敌人范围]已关闭。")
                 MoogleTelegraphs.Settings.DrawEnemyAoE = false
             elseif table.contains(MuAiGuide.Config.Main.DrawBlackList, lastMap) then
-                MuAiGuide.Info("离开绘制黑名单区域，已开启Minion基础绘制。")
+                MuAiGuide.Info("离开绘制黑名单区域，MoogleTelegraphs的[敌人范围]已开启。")
                 MoogleTelegraphs.Settings.DrawEnemyAoE = true
             end
         end
+    end
+end
+
+local onMapChange = function()
+    MuAiGuide.Party = nil
+    MuAiGuide.SelfPos = nil
+    if table.contains(autoPopMap, Player.localmapid) then
+        if MuAiGuide.UI.open == false then
+            MuAiGuide.UI.open = true
+        end
+        MuAiGuide.LoadParty()
+    else
+        MuAiGuide.UI.open = false
+    end
+    lastMap = Player.localmapid
+    if isDrawBlackListOn()
+            and not table.contains(MuAiGuide.Config.Main.DrawBlackList, Player.localmapid)
+            and MoogleTelegraphs.Settings.DrawEnemyAoE == false
+    then
+        MuAiGuide.Info("当前已由MuAiGuide管理莫古力敌人范围开关，检测MoogleTelegraphs的[敌人范围]被关闭，已将其恢复到开启状态。")
     end
 end
 
@@ -91,17 +114,7 @@ core.Update = function()
     end
     disableDrawCheck()
     if lastMap ~= Player.localmapid then
-        MuAiGuide.Party = nil
-        MuAiGuide.SelfPos = nil
-        if table.contains(autoPopMap, Player.localmapid) then
-            if MuAiGuide.UI.open == false then
-                MuAiGuide.UI.open = true
-            end
-            MuAiGuide.LoadParty()
-        else
-            MuAiGuide.UI.open = false
-        end
-        lastMap = Player.localmapid
+        onMapChange()
     end
     if lastJob ~= Player.job and MuAiGuide and MuAiGuide.Config and MuAiGuide.FruMitigation then
         MuAiGuide.FruMitigation.ChangeJob()
