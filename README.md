@@ -3,10 +3,10 @@
 <br>2.进入游戏并注入之后，在profiler中添加 MuAiCore
 <br>$${\color{red}注意，请勿使用名称为“Optifine”配置文件，这个配置无法添加，如一定要使用，请克隆一个！}$$
 <br>![image](https://github.com/user-attachments/assets/3b6e7b7c-1365-47fa-b066-383b4a7b4e3f)
-<br>重新加载后会得到如下（目前插件图标已修改，请以实际版本为准）
-<br>![image](https://github.com/user-attachments/assets/df23e701-311c-496b-b3fb-3a42b542d89f)，安装成功后，可以通过点击这里开启插件页面，当然这与使用快捷键打开时一样的（如果你没有proflier跳过此步骤）
-<br>$${\color{red}3.继承对应的时间轴等详见下面的 副本支持模块的说明。
-<br>$${\color{red}其他文件为减伤轴使用，请参考减伤UI上的说明进行使用 }$$
+<br>重新加载后会得到如下
+<br><img width="465" height="471" alt="image" src="https://github.com/user-attachments/assets/7ee15be2-4719-44dd-adb6-8c0d06e91d93" />
+<br>可以通过点击这里开启插件页面，当然这与使用快捷键打开时一样的（如果你没有proflier跳过此步骤）
+<br>$${\color{red}3.继承对应的时间轴等详见下面的 副本支持模块的说明。}$$
 <br>$${\color{red}4.请严格检查继承关系，观察时间节点是否有重复内容，出现重复将导致大量指路BUG!}$$
 ##  更新
 可以通过如下方式进行插件/时间轴更新：
