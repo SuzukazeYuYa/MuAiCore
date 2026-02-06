@@ -101,6 +101,7 @@ local onMapChange = function()
             and not table.contains(MuAiGuide.Config.Main.DrawBlackList, Player.localmapid)
             and MoogleTelegraphs.Settings.DrawEnemyAoE == false
     then
+        MoogleTelegraphs.Settings.DrawEnemyAoE = true
         MuAiGuide.Info("当前已由MuAiGuide管理莫古力敌人范围开关，检测MoogleTelegraphs的[敌人范围]被关闭，已将其恢复到开启状态。")
     end
 end
