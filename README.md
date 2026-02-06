@@ -23,8 +23,8 @@
 ## 支持副本
 <br>1、绝伊甸：事无巨细，支持日服、国服各类型打法，可以自定义站位等，继承时间轴，   MuAi\MuAiGuideFru
 <br>2、绝欧米茄：国野主流的mlm标点，斜迷拉线等， 继承时间轴  MuAi\MuAiGuideTop
-<br>3、M11S，中国服野队一套： 近战固定，流星雨奶远近引导点名，王者陨石L团拉线，支持斜飞和直飞（可设置），狂奔全引导，支持十字和X字
-<br>4、M12S，使用联合文档攻略，4运盗火改，参考下面链接，继承全局轴 MuAi\MuAiGeneral
+<br>3、M11S，中国服野队一套： 近战固定，流星雨奶远近引导点名，王者陨石L团拉线，支持斜飞和直飞（可设置），狂奔全引导，支持十字和X字（可设置），继承全局 MuAi\MuAiGeneral
+<br>4、M12S，使用联合文档攻略，4运盗火改，参考下面链接，继承全局 MuAi\MuAiGeneral
 <br>    门神：https://docs.qq.com/doc/DUHZiZU54ZGx5eGZV?nlc=1
 <br>    本体：https://docs.qq.com/doc/DUEVnSkFnU0hqdHRt
 ## 免责声明
