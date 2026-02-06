@@ -1,5 +1,7 @@
 ## 安装
 1.下载本仓库内容，将2个文件夹MuAiCore和TensorReactions放入 \Minionapp\Bots\FFXIVMinion64\LuaMods 中覆盖即可。
+<img width="918" height="390" alt="image" src="https://github.com/user-attachments/assets/51ec7fd3-67db-46c4-b070-1fbeec8316ca" />
+
 <br>2.进入游戏并注入之后，在profiler中添加 MuAiCore
 <br>$${\color{red}注意，请勿使用名称为“Optifine”配置文件，这个配置无法添加，如一定要使用，请克隆一个！}$$
 <br>![image](https://github.com/user-attachments/assets/3b6e7b7c-1365-47fa-b066-383b4a7b4e3f)
