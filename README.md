@@ -17,7 +17,8 @@
 <br>![image](https://github.com/user-attachments/assets/a817bf0b-e0f6-4bb7-ac60-3bae417ea936)
 <br>$${\color{red}如果你想使用游戏内更新，请勿随意更改文件路径}$$
 <br>$${\color{red}更新过程会短暂卡屏，属于正常现象，如果无法更新，请手动覆盖}$$
-<br>$${\color{red}本仓库提交记录即为更新日志，查看方式为点右上角小时钟}$$
+<br>$${\color{red}本仓库提交记录即为更新日志，查看方式如下，请根据日志内容判断当前版本！}$$
+<img width="912" height="309" alt="image" src="https://github.com/user-attachments/assets/a0340bcd-8d44-400e-b142-feb900975a93" />
 <br>$${\color{red}3.勾选自动更新（注意此功能对网络要求比较严格，github下载速度慢的慎用），勾选后会在mini注入时候自动检查并更新。}$$
 
 ## 支持副本
