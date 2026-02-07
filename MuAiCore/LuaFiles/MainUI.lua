@@ -15,7 +15,7 @@ local DrawMainUI = function(M)
         end
     end
     GUI:SetNextWindowSize(200, 0, GUI.SetCond_Appearing)
-    M.UI.visible, M.UI.open = GUI:Begin("MuAiGuide Setting", M.UI.open)
+    M.UI.visible, M.UI.open = GUI:Begin("MuAiGuide Setting" , M.UI.open)
     if M.UI.visible then
         if GUI:CollapsingHeader("基础设置") then
             GUI:Text(" ")
@@ -115,6 +115,13 @@ local DrawMainUI = function(M)
                     end
                 end
                 GUI:PopItemWidth()
+            end
+            GUI:Text(" ")
+            GUI:SameLine()
+            GUI:Button("恢复默认设置", 150, 20)
+            if GUI:IsItemClicked(0) then
+                M.Config.Main = M.CreateDefMainCfg()
+                MuAiGuide.Info("已恢复默认设置。")
             end
         end
 
@@ -539,7 +546,7 @@ local DrawMainUI = function(M)
             GUI:Text(" ")
             GUI:SameLine()
             M.DevelopMode = GUI:Checkbox("UI开发模式", M.DevelopMode)
-            GUI:SameLine(0, 81)
+            GUI:SameLine(125, 81)
             GUI:Button("重载MuAiGuide", 120, 20)
             if GUI:IsItemClicked(0) then
                 M.UI.open = false
@@ -548,32 +555,56 @@ local DrawMainUI = function(M)
             end
         end
         GUI:Separator()
-        GUI:BulletText("BUG反馈")
-        GUI:Dummy(10, 1)
+        GUI:Dummy(10, 2)
+        GUI:BulletText("如需BUG反馈, 请添加QQ2437365584")
         GUI:SameLine()
-        GUI:Text("添加QQ2437365584, 备注BUG反馈")
         GUI:Dummy(10, 1)
-        GUI:BulletText("说明书, 下载地址, 更新日志：")
-        GUI:Button("https://github.com/SuzukazeYuYa/MuAiCore", 330, 20)
+        GUI:AlignFirstTextHeightToWidgets()
+        GUI:BulletText("GitHub主页（说明书）")
+        GUI:SameLine()
+        GUI:Button("点击查看主页说明书", 160, 20)
         if GUI:IsItemClicked(0) then
             io.popen("start https://github.com/SuzukazeYuYa/MuAiCore")
         end
-
-        GUI:Button("恢复默认设置", 150, 20)
-        if GUI:IsItemClicked(0) then
-            M.Config.Main = M.CreateDefMainCfg()
-            MuAiGuide.Info("已恢复默认设置。")
-        end
-        GUI:SameLine()
         GUI:AlignFirstTextHeightToWidgets()
-        GUI:Text("  ver." .. M.VERSION .. " ")
-        GUI:SameLine(0, 0)
-        GUI:Button("检查更新", 100, 20)
+        GUI:BulletText("更新日志：")
+        GUI:SameLine(185)
+        GUI:Button("点击查看更新日志", 160, 20)
         if GUI:IsItemClicked(0) then
-            MuAiGuide.UI.open = false
-            MuAiGuide.FruConfigUI.open = false
-            MuAiGuide.Info("更新过程中会短暂卡屏, 请耐心等待。")
-            MuAiGuide.ForceUpdate()
+            io.popen("start https://github.com/SuzukazeYuYa/MuAiCore/commits/main/")
+        end
+        GUI:Dummy(10, 2)
+        GUI:Separator()
+        GUI:Dummy(10, 2)
+        GUI:BulletText("版本信息")
+
+        if M.LatestVersion == nil then
+            GUI:TextColored(1, 1, 0, 1, "   获取在线版本信息失败！请检查VPN状态，或")
+            GUI:TextColored(1, 1, 0, 1, "   点击上方链接检查是否为最新版本！")
+            GUI:Text("                                      ver." .. M.VERSION .. " ")
+        else
+            local ver = tonumber(M.LatestVersion)
+            if ver > M.VERSION then
+                GUI:TextColored(0, 1, 0, 1, "  有新的版本: ver." .. M.LatestVersion)
+                GUI:SameLine(0, 20)
+                GUI:TextColored(1, 0, 0, 1, " 当前版本: ver." .. M.VERSION .. " ")
+                GUI:Button("点击此处进行更新", 335, 20)
+                if GUI:IsItemClicked(0) then
+                    MuAiGuide.UI.open = false
+                    MuAiGuide.FruConfigUI.open = false
+                    MuAiGuide.Info("更新过程中会短暂卡屏, 请耐心等待。")
+                    MuAiGuide.ForceUpdate()
+                end
+                GUI:TextColored(1, 1, 0, 1, "提示：如无法正常更新，请点击上方链接手动覆盖！")
+            else
+                GUI:AlignFirstTextHeightToWidgets()
+                GUI:TextColored(0, 1, 0, 1, "   当前已是最新版本: ver." .. M.LatestVersion.. "   ")
+                GUI:SameLine(0, 0)
+                GUI:Button("检查更新", 100, 20)
+                if GUI:IsItemClicked(0) then
+                    MuAiGuide.checkVersion()
+                end
+            end
         end
         M.SaveConfig(M.Config.MainPath, M.Config.MainFile, "Main")
     end

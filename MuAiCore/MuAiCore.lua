@@ -32,6 +32,22 @@ core.InitMuAiGuide = function(checkUpdate)
     if FolderExists(downloadPath) then
         FolderDelete(downloadPath)
     end
+    MuAiGuide.checkVersion = function(auto)
+        MuAiGuide.LatestVersion = nil
+        local url = string.format("https://gist.githubusercontent.com/SuzukazeYuYa/3967e5bc841aa3b28cea219d7da6c74c/raw/MuAiCoreVerson.txt?nocache=%d", Now())
+        local cmd = string.format('powershell -Command "(Invoke-WebRequest -Uri \'%s\' -UseBasicParsing).Content"', url)
+        local result = io.popen(cmd):read("*a"):gsub("%s+$", "")
+        if not auto then
+            local verNumber = tonumber(result)
+            if verNumber == MuAiGuide.VERSION then
+                MuAiGuide.Info("版本检查完毕：没有发现新的版本<se.3>！")
+            else
+                MuAiGuide.Info("版本检查完毕：发现新的版本：ver." .. result .. "<se.1>!")
+            end
+        end
+        MuAiGuide.LatestVersion = result
+    end
+    MuAiGuide.checkVersion(true)
 end
 
 core.DrawMainUI = function()
