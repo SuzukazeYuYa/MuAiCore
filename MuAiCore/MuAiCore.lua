@@ -9,6 +9,15 @@ local updateNeedReLoad = false
 local lastVersion
 local downloadPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
 
+-- 显示攻击距离的数据
+local atkRangeData = {
+    [1321] = { [14300] = 4, [14301] = 10, [14302] = 3, [14303] = 3, [14304] = 4, },
+    [1323] = { [14369] = 4, [14370] = 4, [14373] = 4 },
+    [1325] = { [14305] = { range = 5, buff = 3808, onBuffRange = 10 } },
+    [1327] = { [14378] = 13.8, [14379] = { range = 5, buff = 3808, onBuffRange = 9 } },
+   -- [341] = { [541] = 1.5 },
+}
+
 ReloadMuAiGuide = function()
     MuAiGuide = nil
     core.InitMuAiGuide()
@@ -101,6 +110,64 @@ local disableDrawCheck = function()
     end
 end
 
+local attackRangeHackHelper = function()
+    if Player == nil or (not MuAiGuide.Config.Main.AttackRangeHelper)
+            or ((not MuAiGuide.IsTank(Player.job)) and (not MuAiGuide.IsMelee(Player.job))) then
+        return
+    end
+    local mapData = atkRangeData[Player.localmapid]
+    if mapData == nil then
+        return
+    end
+    local curTarget = TensorCore.mGetTarget()
+    if curTarget == nil then
+        return
+    end
+    local bossInfo = mapData[curTarget.contentid]
+    if bossInfo == nil then
+        return
+    end
+    local curDistance = TensorCore.getDistance2d(Player.pos, curTarget.pos)
+    local hitRange
+    if type(bossInfo) == "number" then
+        hitRange = bossInfo
+    elseif type(bossInfo) == "table" then
+        if bossInfo.buff == nil then
+            return
+        end
+        if TensorCore.hasBuff(curTarget.id, bossInfo.buff) then
+            hitRange = bossInfo.onBuffRange
+        else
+            hitRange = bossInfo.range
+        end
+    end
+    local deltaDistance = curDistance - hitRange
+    local alpha, color
+    local radius = hitRange + 3.5
+    if deltaDistance >= 3.5 then
+        alpha = MuAiGuide.Config.Main.OutRangeColor.a
+        color = MuAiGuide.Config.Main.OutRangeColor
+    elseif deltaDistance >= 2 then
+        local sub = deltaDistance - 2
+        if sub < 1 then
+            alpha = MuAiGuide.Config.Main.InRangeColor.a * sub
+        else
+            alpha = MuAiGuide.Config.Main.InRangeColor.a
+        end
+        color = MuAiGuide.Config.Main.InRangeColor
+    else
+        return
+    end
+    local drawer = Argus2.ShapeDrawer:new(
+            (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 0)),
+            (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 0)),
+            (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 0)),
+            (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, alpha)),
+            MuAiGuide.Config.Main.LineSize
+    )
+    drawer:addCircle(curTarget.pos.x, curTarget.pos.y, curTarget.pos.z, radius)
+end
+
 local onMapChange = function()
     MuAiGuide.Party = nil
     MuAiGuide.SelfPos = nil
@@ -169,6 +236,7 @@ core.Draw = function()
         if MuAiGuide.FruMitigationUI.open and not MuAiGuide.IsHealer(Player.job) then
             core.DrawFruMitigationUI()
         end
+        attackRangeHackHelper()
     end
 end
 

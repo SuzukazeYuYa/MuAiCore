@@ -15,7 +15,7 @@ local DrawMainUI = function(M)
         end
     end
     GUI:SetNextWindowSize(200, 0, GUI.SetCond_Appearing)
-    M.UI.visible, M.UI.open = GUI:Begin("MuAiGuide Setting" , M.UI.open)
+    M.UI.visible, M.UI.open = GUI:Begin("MuAiGuide Setting", M.UI.open)
     if M.UI.visible then
         if GUI:CollapsingHeader("基础设置") then
             GUI:Text(" ")
@@ -95,8 +95,6 @@ local DrawMainUI = function(M)
             GUI:Text(" ")
             GUI:SameLine()
             if M.Config.Main.DrawBlackListEnable then
-                GUI:Text(" ")
-                GUI:SameLine()
                 M.AddLabel("黑名单地图ID：", false, 115)
                 GUI:SameLine(0, 19)
                 GUI:TextColored(0, 255, 0, 1, "※使用英文逗号分隔")
@@ -120,7 +118,9 @@ local DrawMainUI = function(M)
             GUI:SameLine()
             GUI:Button("恢复默认设置", 150, 20)
             if GUI:IsItemClicked(0) then
+                local blackList = M.Config.Main.DrawBlackList
                 M.Config.Main = M.CreateDefMainCfg()
+                M.Config.Main.DrawBlackList = blackList
                 MuAiGuide.Info("已恢复默认设置。")
             end
         end
@@ -493,6 +493,38 @@ local DrawMainUI = function(M)
                 gDevHackMountRunningSpeed = 9.0
                 Player:SetSpeed(2, gDevHackMountRunningSpeed, gDevHackMountBackwardsSpeed, gDevHackMountStrafeSpeed, gDevHackMountWalkingSpeed)
             end
+            GUI:Separator()
+            GUI:Text(" ")
+            GUI:SameLine()
+            M.Config.Main.AttackRangeHelper = GUI:Checkbox("绘制原始攻击范围", M.Config.Main.AttackRangeHelper)
+            GUI:SameLine()
+            GUI:TextColored(1, 0, 1, 1, "  (目前仅支持M9S~M12S)")
+            if M.Config.Main.AttackRangeHelper then
+                GUI:Text(" ")
+                GUI:SameLine()
+                local OutRangeColorChange, InRangeColorChange
+                M.Config.Main.OutRangeColor.r, M.Config.Main.OutRangeColor.g, M.Config.Main.OutRangeColor.b, M.Config.Main.OutRangeColor.a, OutRangeColorChange = GUI:ColorEdit4("范围外颜色",
+                        M.Config.Main.OutRangeColor.r,
+                        M.Config.Main.OutRangeColor.g,
+                        M.Config.Main.OutRangeColor.b,
+                        M.Config.Main.OutRangeColor.a,
+                        GUI.ColorEditMode_NoInputs)
+
+                GUI:SameLine(0, 50)
+                M.Config.Main.InRangeColor.r, M.Config.Main.InRangeColor.g, M.Config.Main.InRangeColor.b, M.Config.Main.InRangeColor.a, InRangeColorChange = GUI:ColorEdit4("范围内颜色",
+                        M.Config.Main.InRangeColor.r,
+                        M.Config.Main.InRangeColor.g,
+                        M.Config.Main.InRangeColor.b,
+                        M.Config.Main.InRangeColor.a,
+                        GUI.ColorEditMode_NoInputs)
+                local LineSizeChange
+                GUI:AlignFirstTextHeightToWidgets()
+                GUI:Text("  边缘线宽度 ")
+                GUI:SameLine()
+                GUI:PushItemWidth(80)
+                M.Config.Main.LineSize,LineSizeChange = GUI:SliderFloat( "##LineSize",M.Config.Main.LineSize, 1, 10)
+                GUI:PopItemWidth()
+            end
         end
         if GUI:CollapsingHeader("支持一下") then
             local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\QRCode.png"
@@ -598,7 +630,7 @@ local DrawMainUI = function(M)
                 GUI:TextColored(1, 1, 0, 1, "提示：如无法正常更新，请点击上方链接手动覆盖！")
             else
                 GUI:AlignFirstTextHeightToWidgets()
-                GUI:TextColored(0, 1, 0, 1, "   当前已是最新版本: ver." .. M.LatestVersion.. "   ")
+                GUI:TextColored(0, 1, 0, 1, "   当前已是最新版本: ver." .. M.LatestVersion .. "   ")
                 GUI:SameLine(0, 0)
                 GUI:Button("检查更新", 100, 20)
                 if GUI:IsItemClicked(0) then

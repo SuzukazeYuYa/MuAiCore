@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 238
+M.VERSION = 239
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -219,6 +219,10 @@ M.CreateDefMainCfg = function()
         MountSpeedHack = 9,
         DrawBlackListEnable = false,
         DrawBlackList = {},
+        AttackRangeHelper =  false,
+        OutRangeColor = { r = 1, g = 1, b = 0, a = 1 },
+        InRangeColor = { r = 1, g = 1, b = 1, a = 1 },
+        LineSize = 3,
         --------- M11S -----------
         M11SExDraw = false,
         -- 击飞方式 1 直 2斜
@@ -438,8 +442,8 @@ end
 --- 将表格序列化到文件
 M.SaveFileConfig = function(path, fileName, table)
     local saveFile = path .. "\\" .. fileName .. ".lua"
-    if (not FolderExists(savePath)) then
-        FolderCreate(savePath)
+    if (not FolderExists(path)) then
+        FolderCreate(path)
     end
     FileSave(saveFile, table)
     M.Info("已将当前设置保存到配置[" .. fileName .. "]。")
