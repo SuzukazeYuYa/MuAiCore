@@ -609,13 +609,18 @@ local DrawMainUI = function(M)
         GUI:Separator()
         GUI:Dummy(10, 2)
         GUI:BulletText("版本信息")
-
-        if M.LatestVersion == nil then
-            GUI:TextColored(1, 1, 0, 1, "   获取在线版本信息失败！请检查VPN状态，或")
-            GUI:TextColored(1, 1, 0, 1, "   点击上方链接检查是否为最新版本！")
-            GUI:Text("                                      ver." .. M.VERSION .. " ")
+        local ver = tonumber(M.LatestVersion)
+        if ver == nil or M.LatestVersion == nil then
+            GUI:TextColored(1, 1, 0, 1, "   获取在线版本信息失败！请检查网络状态，")
+            GUI:TextColored(1, 1, 0, 1, "   或点击上方链接查看版本状态！")
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text("                      ver." .. M.VERSION .. " ")
+            GUI:SameLine(0, 0)
+            GUI:Button("尝试检查版本", 120, 20)
+            if GUI:IsItemClicked(0) then
+                MuAiGuide.checkVersion()
+            end
         else
-            local ver = tonumber(M.LatestVersion)
             if ver > M.VERSION then
                 GUI:TextColored(0, 1, 0, 1, "  有新的版本: ver." .. M.LatestVersion)
                 GUI:SameLine(0, 20)

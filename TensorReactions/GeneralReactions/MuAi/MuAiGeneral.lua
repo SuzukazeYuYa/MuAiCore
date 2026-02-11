@@ -521,7 +521,6 @@ local tbl =
 					},
 				},
 			},
-			enabled = false,
 			eventType = 3,
 			name = "M9S-OnEntityChannal",
 			uuid = "b9c9fcd1-e2ff-8c91-9d34-9b71b42be6ff",
@@ -4126,7 +4125,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_ThirdLink then\n    if M.M12S.StateChangeByBuff(2941) then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Put1\n        M.M12STimer = Now()\n    else\n        if M.M12S.P4CatchLineInfo.order == 1 and M.M12S.P4CatchLineInfo.type == M.M12S.DataEnum.Disperse then\n            pos = M.M12S.P4CatchLineInfo.putDispersePos\n        else\n            pos = M.M12S.P4CatchLineInfo.putGatherPos\n        end\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\n-- 分摊/分散2\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Put1 then\n    if M.M12S.StateChangeByBuff(2941) and TimeSince(M.M12STimer) > 3000 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Put2\n        M.M12STimer = Now()\n    else\n        if M.M12S.P4CatchLineInfo.order == 2 and M.M12S.P4CatchLineInfo.type == M.M12S.DataEnum.Disperse then\n            pos = M.M12S.P4CatchLineInfo.putDispersePos\n        else\n            pos = M.M12S.P4CatchLineInfo.putGatherPos\n        end\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\n-- 分摊/分散3\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Put2 then\n    if M.M12S.StateChangeByBuff(2941) and TimeSince(M.M12STimer) > 3000 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Put3\n        M.M12STimer = Now()\n    else\n        if M.M12S.P4CatchLineInfo.order == 3 and M.M12S.P4CatchLineInfo.type == M.M12S.DataEnum.Disperse then\n            pos = M.M12S.P4CatchLineInfo.putDispersePos\n        else\n            pos = M.M12S.P4CatchLineInfo.putGatherPos\n        end\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\n-- 分摊/分散4\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Put3 then\n    if M.M12S.StateChangeByBuff(2941) and TimeSince(M.M12STimer) > 3000 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_PutEnd\n        M.M12STimer = Now()\n    else\n        if M.M12S.P4CatchLineInfo.order == 4 and M.M12S.P4CatchLineInfo.type == M.M12S.DataEnum.Disperse then\n            pos = M.M12S.P4CatchLineInfo.putDispersePos\n        else\n            pos = M.M12S.P4CatchLineInfo.putGatherPos\n        end\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\n--[[if M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_PutEnd then\n    local pos\n    if table.contains({ \"MT\", \"H1\", \"D1\", \"D3\" }, M.SelfPos) then\n        pos = { x = 90, z = 100 }\n    else\n        pos = { x = 110, z = 100 }\n    end\n    M.FrameDirect(pos.x, pos.z)\nend]]\nself.used = true",
+						actionLua = "local M = MuAiGuide\nlocal pos\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_ThirdLink then\n    if M.M12S.StateChangeByBuff(2941) then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Put1\n        M.M12STimer = Now()\n    else\n        if M.M12S.P4CatchLineInfo.order == 1 and M.M12S.P4CatchLineInfo.type == M.M12S.DataEnum.Disperse then\n            pos = M.M12S.P4CatchLineInfo.putDispersePos\n        else\n            pos = M.M12S.P4CatchLineInfo.putGatherPos\n        end\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\n-- 分摊/分散2\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Put1 then\n    if M.M12S.StateChangeByBuff(2941) and TimeSince(M.M12STimer) > 3000 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Put2\n        M.M12STimer = Now()\n    else\n        if M.M12S.P4CatchLineInfo.order == 2 and M.M12S.P4CatchLineInfo.type == M.M12S.DataEnum.Disperse then\n            pos = M.M12S.P4CatchLineInfo.putDispersePos\n        else\n            pos = M.M12S.P4CatchLineInfo.putGatherPos\n        end\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\n-- 分摊/分散3\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Put2 then\n    if M.M12S.StateChangeByBuff(2941) and TimeSince(M.M12STimer) > 3000 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_Put3\n        M.M12STimer = Now()\n    else\n        if M.M12S.P4CatchLineInfo.order == 3 and M.M12S.P4CatchLineInfo.type == M.M12S.DataEnum.Disperse then\n            pos = M.M12S.P4CatchLineInfo.putDispersePos\n        else\n            pos = M.M12S.P4CatchLineInfo.putGatherPos\n        end\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\n-- 分摊/分散4\nif M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_Put3 then\n    if M.M12S.StateChangeByBuff(2941) and TimeSince(M.M12STimer) > 3000 then\n        M.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_PutEnd\n        M.M12STimer = Now()\n    else\n        if M.M12S.P4CatchLineInfo.order == 4 and M.M12S.P4CatchLineInfo.type == M.M12S.DataEnum.Disperse then\n            pos = M.M12S.P4CatchLineInfo.putDispersePos\n        else\n            pos = M.M12S.P4CatchLineInfo.putGatherPos\n        end\n        M.FrameDirect(pos.x, pos.z)\n    end\nend\n\n--[[if M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_PutEnd then\n    local pos\n    if table.contains({ \"MT\", \"H1\", \"D1\", \"D3\" }, M.SelfPos) then\n        pos = { x = 90, z = 100 }\n    else\n        pos = { x = 110, z = 100 }\n    end\n    M.FrameDirect(pos.x, pos.z)\nend]]\nself.used = true",
 						conditions = 
 						{
 							
@@ -4668,37 +4667,6 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "function condition()\n    return M.M12S.CurrentState == M.M12S.StateEnum.Puzzle4_div2Subs\nend\n\nlocal M = MuAiGuide\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif eventArgs.spellID == 46351 then\n    d(\"小怪读条左右刀\")\n    --左右刀\n    if ent.pos.x > 100 then\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 110, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 110, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 114, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 114, y = 0, z = 105.5 }\n        end\n    else\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 90, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 90, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 86, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 86, y = 0, z = 105.5 }\n        end\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.UpDown\nelseif eventArgs.spellID == 46352 then\n    d(\"小怪读条左上下刀\")\n    --上下刀\n    if ent.pos.x > 100 then\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 108, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 108, y = 0, z = 100 }\n    else\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 92, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 92, y = 0, z = 100 }\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.LeftRight\nend\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_div2SubsEnd\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
-								true,
-							},
-							
-							{
-								"2ea47182-803f-86ea-87a5-c23959e8ee83",
-								true,
-							},
-							
-							{
-								"3631adb4-7ecb-8c12-99c5-971de14cb24a",
-								true,
-							},
-						},
-						gVar = "ACR_TensorViper3_CD",
-						name = "4运-小世界上下or左右刀",
-						uuid = "c7fb0a3c-f564-435f-b537-9076cf358bc0",
-						version = 2.1,
-					},
-					inheritedIndex = 9,
-				},
-				
-				{
-					data = 
-					{
-						aType = "Lua",
 						actionLua = "local M = MuAiGuide\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif ent.pos.z > 100 then\n    if M.Config.Main.M12SP4SendMacro then\n        SendTextCommand(\"/p 【C】上下刀，23外躲钢铁\")\n    end\n\n    M.M12S.P4Sub3Info.SkillType = M.M12S.DataEnum.UpDownSkillC\nelse\n    if M.Config.Main.M12SP4SendMacro then\n        SendTextCommand(\"/p 【A】上下刀，14点上安全\")\n    end\n    M.M12S.P4Sub3Info.SkillType = M.M12S.DataEnum.UpDownSkillA\nend\n-- 切换到2次连线\nM.M12S.CurrentState = M.M12S.StateEnum.Puzzle4_SecondLink\nself.used = true",
 						conditions = 
 						{
@@ -4723,7 +4691,38 @@ local tbl =
 						uuid = "8a4f6557-87e7-9029-a22e-5289e266af18",
 						version = 2.1,
 					},
-					inheritedIndex = 5,
+					inheritedIndex = 10,
+				},
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif eventArgs.spellID == 46351 then\n    d(\"小怪读条左右刀\")\n    --左右刀\n    if ent.pos.x > 100 then\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 110, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 110, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 114, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 114, y = 0, z = 105.5 }\n        end\n        if M.Config.Main.M12SP4SendMacro then\n            SendTextCommand(\"/p 左右刀小怪跳B，稍后B点面向BOSS两侧\")\n        end\n    else\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 90, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 90, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 86, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 86, y = 0, z = 105.5 }\n        end\n        if M.Config.Main.M12SP4SendMacro then\n            SendTextCommand(\"/p 左右刀小怪跳D，稍后D点面向BOSS两侧\")\n        end\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.UpDown\nelseif eventArgs.spellID == 46352 then\n    d(\"小怪读条上下刀\")\n    --上下刀\n    if ent.pos.x > 100 then\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 108, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 108, y = 0, z = 100 }\n        if M.Config.Main.M12SP4SendMacro then\n            SendTextCommand(\"/p 上下刀小怪跳B，稍B点靠近BOSS\")\n        end\n    else\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 92, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 92, y = 0, z = 100 }\n        if M.Config.Main.M12SP4SendMacro then\n            SendTextCommand(\"/p 上下刀小怪跳D，稍D点靠近BOSS\")\n        end\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.LeftRight\nend\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_div2SubsEnd\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
+								true,
+							},
+							
+							{
+								"2ea47182-803f-86ea-87a5-c23959e8ee83",
+								true,
+							},
+							
+							{
+								"3631adb4-7ecb-8c12-99c5-971de14cb24a",
+								true,
+							},
+						},
+						gVar = "ACR_TensorViper3_CD",
+						name = "4运-小世界上下or左右刀",
+						uuid = "c7fb0a3c-f564-435f-b537-9076cf358bc0",
+						version = 2.1,
+					},
+					inheritedIndex = 9,
 				},
 				
 				{

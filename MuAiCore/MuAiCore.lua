@@ -47,11 +47,15 @@ core.InitMuAiGuide = function(checkUpdate)
         local cmd = string.format('powershell -Command "(Invoke-WebRequest -Uri \'%s\' -UseBasicParsing).Content"', url)
         local result = io.popen(cmd):read("*a"):gsub("%s+$", "")
         if not auto then
-            local verNumber = tonumber(result)
-            if verNumber == MuAiGuide.VERSION then
-                MuAiGuide.Info("版本检查完毕：没有发现新的版本<se.3>！")
+            if result ~= nil then
+                local verNumber = tonumber(result)
+                if verNumber == MuAiGuide.VERSION then
+                    MuAiGuide.Info("版本检查完毕：没有发现新的版本<se.3>！")
+                else
+                    MuAiGuide.Info("版本检查完毕：发现新的版本：ver." .. result .. "<se.1>!")
+                end
             else
-                MuAiGuide.Info("版本检查完毕：发现新的版本：ver." .. result .. "<se.1>!")
+                MuAiGuide.Info("版本检查失败，请检查网络或重新启动游戏后再次尝试。")
             end
         end
         MuAiGuide.LatestVersion = result
