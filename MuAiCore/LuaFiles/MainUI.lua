@@ -49,6 +49,13 @@ local DrawMainUI = function(M)
                     GUI.ColorEditMode_NoInputs)
             GUI:Text(" ")
             GUI:SameLine()
+            GUI:Button("指路工具预览", 140, 20)
+            if GUI:IsItemClicked(0) then
+                local testPos = TensorCore.getPosInDirection(Player.pos, Player.pos.h, 2)
+                MuAiGuide.DirectTo(testPos.x, testPos .z, 5000)
+            end
+            GUI:Text(" ")
+            GUI:SameLine()
             M.Config.Main.LogToEchoMsg = GUI:Checkbox("聊天栏提示信息", M.Config.Main.LogToEchoMsg)
             GUI:SameLine(0, 36)
             M.Config.Main.TTS = GUI:Checkbox("开启TTS播报", M.Config.Main.TTS)
@@ -118,10 +125,21 @@ local DrawMainUI = function(M)
             GUI:SameLine()
             GUI:Button("恢复默认设置", 150, 20)
             if GUI:IsItemClicked(0) then
-                local blackList = M.Config.Main.DrawBlackList
+                local oldConfig = M.Config.Main
                 M.Config.Main = M.CreateDefMainCfg()
-                M.Config.Main.DrawBlackList = blackList
-                MuAiGuide.Info("已恢复默认设置。")
+                M.Config.Main.DrawBlackList = oldConfig.DrawBlackList
+                M.Config.Main.M11SExDraw = oldConfig.M11SExDraw
+                M.Config.Main.M11SKickType = oldConfig.M11SKickType
+                M.Config.Main.M11SGatherType = oldConfig.M11SGatherType
+                M.Config.Main.M12SP4UpTime = oldConfig.M12SP4UpTime
+                M.Config.Main.M12SP4Type = oldConfig.M12SP4Type
+                M.Config.Main.M12SP4SendMacro = oldConfig.M12SP4SendMacro
+                M.Config.Main.M12SP2is13 = oldConfig.M12SP2is13
+                M.Config.Main.M12SAutoFace1 = oldConfig.M12SAutoFace1
+                M.Config.Main.M12SAutoFace2 = oldConfig.M12SAutoFace2
+                M.Config.Main.M12SAutoFaceType = oldConfig.M12SAutoFaceType
+                M.Config.Main.M12SExDraw = oldConfig.M12SExDraw
+                MuAiGuide.Info("已恢复默认设置.")
             end
         end
 
@@ -419,9 +437,13 @@ local DrawMainUI = function(M)
                     GUI:TextColored(1, 0, 1, 1, "    4.本体, 4运, 远近")
                 end
             end
+            GUI:TextColored(0, 1, 0, 1, "已支持副本：")
+            GUI:TextColored(1, 1, 0, 1, "  1.光暗未来绝境战, 时间轴: MuAi\\MuaiGuideFru")
+            GUI:TextColored(1, 1, 0, 1, "  2.欧米茄绝境检定战, 时间轴: MuAi\\MuAiGuideTop")
+            GUI:TextColored(1, 1, 0, 1, "  3.M11S|M12S, 【全局】: MuAi\\MuAiGeneral")
         end
 
-        if GUI:CollapsingHeader("Hack") then
+        if GUI:CollapsingHeader("辅助工具") then
             M.AddLabel("移动速度作弊： ")
             GUI:PushItemWidth(35)
             local hackSpeed, hackSpeedChange = GUI:InputText("##hackSpeed", tostring(M.Config.Main.SpeedHack), GUI.InputTextFlags_CharsNoBlank)
@@ -494,6 +516,9 @@ local DrawMainUI = function(M)
                 Player:SetSpeed(2, gDevHackMountRunningSpeed, gDevHackMountBackwardsSpeed, gDevHackMountStrafeSpeed, gDevHackMountWalkingSpeed)
             end
             GUI:Separator()
+            GUI:TextColored(0, 1, 0, 1, "  针对目标圈修改后Moogle Telegraphs攻击距离")
+            GUI:TextColored(0, 1, 0, 1, "  显示不准确问题提供如下功能:")
+            GUI:TextColored(0, 1, 0, 1, "  (本插件不含相关修改功能)")
             GUI:Text(" ")
             GUI:SameLine()
             M.Config.Main.AttackRangeHelper = GUI:Checkbox("绘制原始攻击范围", M.Config.Main.AttackRangeHelper)
@@ -522,21 +547,9 @@ local DrawMainUI = function(M)
                 GUI:Text("  边缘线宽度 ")
                 GUI:SameLine()
                 GUI:PushItemWidth(80)
-                M.Config.Main.LineSize,LineSizeChange = GUI:SliderFloat( "##LineSize",M.Config.Main.LineSize, 1, 10)
+                M.Config.Main.LineSize, LineSizeChange = GUI:SliderFloat("##LineSize", M.Config.Main.LineSize, 1, 10)
                 GUI:PopItemWidth()
             end
-        end
-        if GUI:CollapsingHeader("支持一下") then
-            local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\QRCode.png"
-            GUI:Text("        ")
-            GUI:SameLine()
-            GUI:Image(path, 200, 200)
-            GUI:TextColored(0, 1, 0, 1, "   如果您觉得我做的很好, 可以支持一下。")
-            GUI:TextColored(1, 1, 0, 1, "   但是这并不能让您获得更多权益, 只代表你对本")
-            GUI:TextColored(1, 1, 0, 1, "   人的支持, 根本没任何回报, 请慎重。")
-            GUI:TextColored(1, 0, 0, 1, "   ※郑重声明：本工具没有任何用户分级政策。")
-            GUI:TextColored(1, 0, 0, 1, "   ※码是DC群友的热情难拒, 才加上的。")
-            GUI:TextColored(1, 0, 0, 1, "   ※请勿用付费说事, 全凭自愿打赏。")
         end
         if GUI:CollapsingHeader("调试工具") then
             GUI:Text(" ")
@@ -586,6 +599,21 @@ local DrawMainUI = function(M)
                 ReloadMuAiGuide()
             end
         end
+        if GUI:CollapsingHeader("支持一下") then
+            local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\QRCode.png"
+            GUI:TextColored(0, 1, 0, 1, "如果您觉得我做的很好, 可以支持一下.")
+            GUI:Image(path, 340, 170)
+            GUI:TextColored(0, 1, 0, 1, "        微  信")
+            GUI:SameLine()
+            GUI:TextColored(0, 0, 1, 1, "                  支付宝")
+            GUI:Separator()
+            GUI:TextColored(1, 1, 0, 1, "感谢您的支持, 但是这并不能让您获得更多权益, ")
+            GUI:TextColored(1, 1, 0, 1, "仅代表您对本人的支持, 所以请慎重打赏! ")
+            GUI:TextColored(1, 0, 0, 1, "※郑重声明：本插件没有任何用户分级政策.")
+            GUI:TextColored(1, 0, 0, 1, "※请勿用付费说事, 全凭自愿打赏, 甚至您后悔打赏")
+            GUI:TextColored(1, 0, 0, 1, "可以选择退款（七日内凭打款记录）")
+            GUI:TextColored(0, 1, 0, 1, "※感谢支持~")
+        end
         GUI:Separator()
         GUI:Dummy(10, 2)
         GUI:BulletText("如需BUG反馈, 请添加QQ2437365584")
@@ -629,7 +657,7 @@ local DrawMainUI = function(M)
                 if GUI:IsItemClicked(0) then
                     MuAiGuide.UI.open = false
                     MuAiGuide.FruConfigUI.open = false
-                    MuAiGuide.Info("更新过程中会短暂卡屏, 请耐心等待。")
+                    MuAiGuide.Info("更新过程中会短暂卡屏, 请耐心等待.")
                     MuAiGuide.ForceUpdate()
                 end
                 GUI:TextColored(1, 1, 0, 1, "提示：如无法正常更新，请点击上方链接手动覆盖！")
@@ -643,12 +671,13 @@ local DrawMainUI = function(M)
                 end
             end
         end
+
         M.SaveConfig(M.Config.MainPath, M.Config.MainFile, "Main")
     end
     local winPosx, winPosy = GUI:GetWindowPos();
     M.FruConfigUI.x = winPosx + 350
     M.FruConfigUI.y = winPosy
-    GUI:SetWindowSize(350, 0)
+    GUI:SetWindowSize(355, 0)
     GUI:End()
 end
 return DrawMainUI
