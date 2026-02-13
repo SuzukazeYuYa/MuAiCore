@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 242
+M.VERSION = 243
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -785,7 +785,7 @@ end
 --- @return table | nil player
 M.GetPlayer = function()
     if M.Party == nil then
-        return nil
+        return TensorCore.mGetPlayer()
     end
     if M.DebugMode then
         local testPlayer = M.Party[M.DebugPos]

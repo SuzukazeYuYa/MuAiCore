@@ -54,6 +54,31 @@ local DrawMainUI = function(M)
                 local testPos = TensorCore.getPosInDirection(Player.pos, Player.pos.h, 2)
                 MuAiGuide.DirectTo(testPos.x, testPos .z, 5000)
             end
+            GUI:SameLine(186, 0)
+            GUI:Button("分摊连线预览", 140, 20)
+            if GUI:IsItemClicked(0) then
+                local entities = TensorCore.entityList("All")
+                if entities ~= nil and table.size(entities) > 0 then
+                    local target
+                    local dis = 100000
+                    for _, ent in pairs(entities) do
+                        if Argus.isEntityVisible(ent) and ent.name ~= nil and ent.job ~= 0 and ent.charType == 4 then
+                            local distance = TensorCore.getDistance2d(Player.pos, ent.pos)
+                            if target == nil or distance < dis then
+                                dis = distance
+                                target = ent
+                            end
+                        end
+                    end
+                    if target ~= nil then
+                        MuAiGuide.DirectToEnt(target.id, 5000)
+                    else
+                        MuAiGuide.Info("附近没有任何玩家！")
+                    end
+                else
+                    MuAiGuide.Info("附近没有任何玩家！")
+                end
+            end
             GUI:Text(" ")
             GUI:SameLine()
             M.Config.Main.LogToEchoMsg = GUI:Checkbox("聊天栏提示信息", M.Config.Main.LogToEchoMsg)

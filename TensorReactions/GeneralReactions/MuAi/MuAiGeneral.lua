@@ -606,7 +606,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nM.M11S = {}\nM.M11S.State = {\n    Start = 0,\n    -- 3连兵器1\n    Weapon1_Start = 1100,\n    Weapon1_01 = 1101,\n    Weapon1_02 = 1102,\n    Weapon1_03 = 1103,\n    Weapon1_End = 1199,\n\n    -- 3连兵器2\n    Weapon2_Start = 1200,\n    Weapon2_01 = 1201,\n    Weapon2_02 = 1202,\n    Weapon2_03 = 1203,\n    Weapon2_End = 1299,\n\n    -- 六联兵器\n    Weapon3_Start = 1300,\n    Weapon3_01 = 1301,\n    Weapon3_02 = 1302,\n    Weapon3_03 = 1303,\n    Weapon3_04 = 1304,\n    Weapon3_05 = 1305,\n    Weapon3_06 = 1306,\n    Weapon3_End = 1399,\n\n    Meteor1_Start = 1500,\n    Meteor1_Mark1 = 1501,\n    Meteor1_Shoot1 = 1502,\n    Meteor1_Put1 = 1503,\n    Meteor1_Shoot2 = 1504,\n    Meteor1_Put2 = 1505,\n    Meteor1_Shoot3 = 1506,\n    Meteor1_Put3 = 1507,\n    Meteor1_Shoot4 = 1508,\n    Meteor1_End = 1599,\n\n    Meteor2_Start = 1600,\n    Meteor2_Link1 = 1601,\n    Meteor2_Tower1 = 1602,\n    Meteor2_GetMark1 = 1603,\n    Meteor2_Debuff1 = 1604,\n    Meteor2_Link2 = 1605,\n    Meteor2_Tower2 = 1606,\n    Meteor2_GetMark2 = 1607,\n    Meteor2_Debuff2 = 1608,\n    Meteor2_GatherMark = 1609,\n    Meteor2_GatherEnd = 1610,\n    Meteor2_Tower3 = 1611,\n    Meteor2_Hit = 1612,\n    Meteor2_end = 1699,\n\n    Meteor3_Start = 1700,\n    Meteor3_Guide1 = 1701,\n    Meteor3_CatchBoom = 1702,\n    Meteor3_Link = 1703,\n    Meteor3_End = 1799,\n}\nM.M11S.InitData = function()\n    M.M11SMapType = nil\n    M.M11S.CurrentState = M.M11S.State.Start\n    M.M11S.WeaponInfo = nil\n    M.M11S.ReachTime = nil\n    M.M11S.JumpTime = nil\n    M.M11S.GetMarkTime = nil\n    M.M11S.BreakTime = nil\n    M.M11S.Meteor1 = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2Link = nil\n    M.M11S.TowerPos = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2MapEffect = nil\n    M.M11S.Meteor2Gather = nil\n    M.M11S.OrbitalOmen = nil\n    M.M11S.Blade = nil\n    M.M11S.BladeIds = nil\n    M.M11S.Meteor3Info = {\n        JobOrder = { \"H1\", \"D3\", \"D4\", \"H2\" },\n        Dir = { math.pi * 3 / 4, math.pi / 4, math.pi * 7 / 4, math.pi * 5 / 4 },\n        Spell46166 = {},\n        Spell46167 = {},\n        FindDir = function(id1, id2)\n            local t1 = TensorCore.mGetEntity(id1)\n            local t2 = TensorCore.mGetEntity(id2)\n            local h1 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t1.pos)\n            local h2 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t2.pos)\n            local ent1, ent2\n            for i = 1, 4 do\n                local dir = M.M11S.Meteor3Info.Dir[i]\n                if M.IsSameDirection(dir, h1) then\n                    if ent1 == nil then\n                        ent1 = t1\n                    else\n                        ent2 = t1\n                    end\n                end\n                if M.IsSameDirection(dir, h2) then\n                    if ent1 == nil then\n                        ent1 = t2\n                    else\n                        ent2 = t2\n                    end\n                end\n            end\n            return ent1, ent2\n        end\n    }\n    M.M11S.TowerData = {\n        leftUp = { pos = { x = 84, z = 89 }, crossPos = { x = 87, z = 89 }, leapPos = { x = 86.9, z = 90.1 }, localPos = { x = 84, z = 92 } },\n        leftDown = { pos = { x = 84, z = 111 }, crossPos = { x = 87, z = 111 }, leapPos = { x = 86.9, z = 109.9 }, localPos = { x = 84, z = 108 } },\n        rightUp = { pos = { x = 116, z = 89 }, crossPos = { x = 113, z = 89 }, leapPos = { x = 113.1, z = 90.1 }, localPos = { x = 116, z = 92 } },\n        rightDown = { pos = { x = 116, z = 111 }, crossPos = { x = 113, z = 111 }, leapPos = { x = 113.1, z = 109.9 }, localPos = { x = 116, z = 108 } },\n    }\n    M.Info(\"M11S初始化数据完成!\")\nend\n\nM.M11S.InitData()\n\nlocal redDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal greenDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal yellowDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal litBlueDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal center = { x = 100, y = 0, z = 100 }\nM.M11S.DrawWeapon = function(ent, model, drawTime)\n    drawTime = drawTime or 0\n    local player = M.GetPlayer()\n    local curEnt = TensorCore.mGetEntity(ent.id)\n    if model == 19184 then\n        -- 19184 斧子\n        local heading = TensorCore.getHeadingToTarget(curEnt.pos, center)\n        local guidePos, size\n        if M.IsTank(player.job) or M.IsMelee(player.job) then\n            guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, 8.3)\n            size = 0.25\n        else\n            guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, 10)\n            size = 0.5\n        end\n        -- 画图\n        if M.Config.Main.M11SExDraw and (drawTime == 0 or Now() > drawTime) then\n            redDraw:addCircle(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 8)\n            local inRange = true\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                local dis2d = TensorCore.getDistance2d(curMem.pos, player.pos)\n                if dis2d > 6 then\n                    inRange = false\n                    break\n                end\n            end\n            if inRange then\n                greenDraw:addCircle(player.pos.x, player.pos.y, player.pos.z, 6)\n            else\n                yellowDraw:addCircle(player.pos.x, player.pos.y, player.pos.z, 6)\n            end\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    elseif model == 19185 then\n        -- 19185 镰刀\n        local index = M.IndexOf({ \"MT\", \"D4\", \"H2\", \"D2\", \"ST\", \"D1\", \"H1\", \"D3\" }, M.SelfPos)\n        local guidePos = TensorCore.getPosInDirection(curEnt.pos, curEnt.pos.h - (index - 1) * math.pi / 4, 4.3)\n        if M.Config.Main.M11SExDraw and (drawTime == 0 or Now() > drawTime) then\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                if curMem.alive then\n                    local curHeading = TensorCore.getHeadingToTarget(curEnt.pos, curMem.pos)\n                    litBlueDraw:addCone(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, math.pi / 6, curHeading)\n                end\n            end\n            redDraw:addDonut(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 5, 40)\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    elseif model == 19186 then\n        local heading\n        -- 19186 大剑\n        if table.contains({ \"MT\", \"H1\", \"D1\", \"D3\" }, M.SelfPos) then\n            heading = curEnt.pos.h + math.pi * 3 / 4\n        else\n            heading = curEnt.pos.h - math.pi * 3 / 4\n        end\n        local distance\n        if M.IsTank(player.job) or M.IsMelee(player.job) then\n            distance = 8\n        else\n            distance = 11\n        end\n        local guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, distance)\n        if M.Config.Main.M11SExDraw and (drawTime == 0 or Now() > drawTime) then\n            redDraw:addCross(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, 10, curEnt.pos.h)\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                if M.IsHealer(curMem.job) then\n                    local curHeading = TensorCore.getHeadingToTarget(curEnt.pos, curMem.pos)\n                    litBlueDraw:addRect(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, 6, curHeading)\n                end\n            end\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    end\nend\n\nM.M11S.InitWeapon = function()\n    if M.M11S.WeaponInfo == nil then\n        M.M11S.WeaponInfo = {}\n        M.M11S.WeaponInfo.ids = {}\n        M.M11S.WeaponInfo.data = {}\n        M.M11S.WeaponInfo.ordered = {}\n        M.M11S.WeaponInfo.CurrentWeaponIdx = 1\n    end\nend\n\nM.M11S.RecordWeapon = function()\n    for _, ent in pairs(TensorCore.entityList(\"contentid=108\")) do\n        if Argus.isEntityVisible(ent) and not table.contains(M.M11S.WeaponInfo.ids, ent.id) then\n            local md = Argus.getEntityModel(ent.id)\n            if (md == 19184 or md == 19185 or md == 19186)\n            then\n                table.insert(M.M11S.WeaponInfo.ids, ent.id)\n                table.insert(M.M11S.WeaponInfo.data, { entity = ent, model = md })\n            end\n        end\n    end\nend\n\nM.M11S.OrderWeapon = function()\n    M.M11S.InitWeapon()\n    M.M11S.RecordWeapon()\n    if table.size(M.M11S.WeaponInfo.ids) == 3 then\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            local curHeading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, info.entity.pos)\n            -- 如果当前面向与场中到当前物体方向相同，表示为第一个武器\n            if M.IsSameDirection(info.entity.pos.h, curHeading, 0.1) then\n                table.insert(M.M11S.WeaponInfo.ordered, info)\n                d(\"已找到第1把武器， 类型为：\" .. tostring(info.model))\n                break\n            end\n        end\n        local first = M.M11S.WeaponInfo.ordered[1]\n        local second\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            if info.entity.id ~= first.entity.id then\n                local curHeading = TensorCore.getHeadingToTarget(first.entity.pos, info.entity.pos)\n                if M.IsSameDirection(info.entity.pos.h, curHeading, 0.1) then\n                    table.insert(M.M11S.WeaponInfo.ordered, info)\n                    d(\"已找到第2把武器， 类型为：\" .. tostring(info.model))\n                    second = info\n                    break\n                end\n            end\n        end\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            if info.entity.id ~= first.entity.id and info.entity.id ~= second.entity.id then\n                table.insert(M.M11S.WeaponInfo.ordered, info)\n                d(\"已找到第3把武器， 类型为：\" .. tostring(info.model))\n                break\n            end\n        end\n    end\nend\n\nM.M11S.TakeWeapon = function(index, nextState, drawTime)\n    drawTime = drawTime or 0\n    local curBoss = TensorCore.mGetEntity(M.M11S.CurrentBoss.id)\n    local curEnt = M.M11S.WeaponInfo.ordered[index]\n    local distance = TensorCore.getDistance2d(curEnt.entity.pos, curBoss.pos)\n    if distance > 0.2 then\n        M.M11S.DrawWeapon(curEnt.entity, curEnt.model, drawTime)\n    else\n        if M.M11S.ReachTime == nil then\n            M.M11S.ReachTime = Now()\n        end\n        -- 跳过去之后2秒蓄力\n        if TimeSince(M.M11S.ReachTime) > 2000 then\n            M.M11S.CurrentState = nextState\n            M.M11S.ReachTime = nil\n        else\n            M.M11S.DrawWeapon(curEnt.entity, curEnt.model, drawTime)\n        end\n    end\nend\n\nM.M11S.TakeExWeapon = function(nextState)\n    if M.M11S.WeaponInfo == nil\n            or M.M11S.WeaponInfo.data == nil\n            or table.size(M.M11S.WeaponInfo.ids) == 0\n            or M.M11S.WeaponInfo.CurrentWeaponIdx > 6\n    then\n        return\n    end\n    if M.M11S.WeaponInfo.CurrentWeaponId == nil then\n        -- M.M11S.WeaponInfo.CurrentWeaponId = table.remove(M.M11S.WeaponInfo.ids, 1)\n        M.M11S.WeaponInfo.CurrentWeaponId = M.M11S.WeaponInfo.ids[M.M11S.WeaponInfo.CurrentWeaponIdx]\n        M.M11S.WeaponInfo.CurrentWeaponPos = TensorCore.mGetEntity(M.M11S.WeaponInfo.CurrentWeaponId).pos\n        d(\"[\" .. Now() .. \"]当前兵器：\" .. M.M11S.WeaponInfo.CurrentWeaponId)\n    else\n        local curEnt = TensorCore.mGetEntity(M.M11S.WeaponInfo.CurrentWeaponId)\n        local model = Argus.getEntityModel(M.M11S.WeaponInfo.CurrentWeaponId)\n        local curBoss = TensorCore.mGetEntity(M.M11S.CurrentBoss.id)\n        local distance = TensorCore.getDistance2d(curEnt.pos, curBoss.pos)\n        if distance > 0.2 then\n            M.M11S.DrawWeapon(curEnt, model)\n        else\n            if M.M11S.ReachTime == nil then\n                M.M11S.ReachTime = Now()\n            end\n            -- 跳过去之后2秒蓄力\n            if TimeSince(M.M11S.ReachTime) > 2000 then\n                M.M11S.CurrentState = nextState\n                M.M11S.ReachTime = nil\n                M.M11S.WeaponInfo.CurrentWeaponId = nil\n                M.M11S.WeaponInfo.CurrentWeaponIdx = M.M11S.WeaponInfo.CurrentWeaponIdx + 1\n            else\n                M.M11S.DrawWeapon(curEnt, model)\n            end\n        end\n    end\nend\n\nM.M11S.GetTakeTowerPos = function(type)\n    M.M11S.Meteor2Link = {}\n    M.M11S.Meteor2Link.Has = false\n    local player = M.GetPlayer()\n    local tethers = Argus.getTethersOnEnt(player.id)\n    for _, tether in pairs(tethers) do\n        if tether.type == 57 or tether.type == 249 then\n            M.M11S.Meteor2Link.Has = true\n            M.M11S.Meteor2Link.from = TensorCore.mGetEntity(tether.partnerid)\n            break\n        end\n    end\n    local towerData\n    if type == 1 then\n        if player.pos.x > 100 then\n            if M.IsDps(player.job) then\n                towerData = M.M11S.TowerData.rightDown\n            else\n                towerData = M.M11S.TowerData.rightUp\n            end\n        else\n            if M.IsDps(player.job) then\n                towerData = M.M11S.TowerData.leftDown\n            else\n                towerData = M.M11S.TowerData.leftUp\n            end\n        end\n    else\n        if player.pos.x > 100 then\n            if M.M11S.Tower2Type == \"Down\" then\n                towerData = M.M11S.TowerData.rightDown\n            else\n                towerData = M.M11S.TowerData.rightUp\n            end\n        else\n            if M.M11S.Tower2Type == \"Down\" then\n                towerData = M.M11S.TowerData.leftDown\n            else\n                towerData = M.M11S.TowerData.leftUp\n            end\n        end\n    end\n    if M.M11S.Meteor2Link.Has then\n        if (M.M11S.Meteor2Link.from.pos.x > 100 and player.pos.x > 100)\n                or (M.M11S.Meteor2Link.from.pos.x < 100 and player.pos.x < 100) then\n            M.M11S.TowerPos = towerData.crossPos\n        else\n            M.M11S.TowerPos = towerData.localPos\n        end\n    else\n        if M.Config.Main.M11SKickType == 1 then\n            M.M11S.TowerPos = towerData.localPos\n        else\n            M.M11S.TowerPos = towerData.leapPos\n        end\n    end\nend\n\nM.M11S.Meteor2Page1To2 = function()\n    M.M11S.Meteor2Link = nil\n    M.M11S.TowerPos = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2MapEffect = nil\n    M.M11S.GetMarkTime = nil\nend\n\nself.used = true",
+						actionLua = "local M = MuAiGuide\nM.M11S = {}\nM.M11S.State = {\n    Start = 0,\n    -- 3连兵器1\n    Weapon1_Start = 1100,\n    Weapon1_01 = 1101,\n    Weapon1_02 = 1102,\n    Weapon1_03 = 1103,\n    Weapon1_End = 1199,\n\n    -- 3连兵器2\n    Weapon2_Start = 1200,\n    Weapon2_01 = 1201,\n    Weapon2_02 = 1202,\n    Weapon2_03 = 1203,\n    Weapon2_End = 1299,\n\n    -- 六联兵器\n    Weapon3_Start = 1300,\n    Weapon3_01 = 1301,\n    Weapon3_02 = 1302,\n    Weapon3_03 = 1303,\n    Weapon3_04 = 1304,\n    Weapon3_05 = 1305,\n    Weapon3_06 = 1306,\n    Weapon3_End = 1399,\n\n    Meteor1_Start = 1500,\n    Meteor1_Mark1 = 1501,\n    Meteor1_Shoot1 = 1502,\n    Meteor1_Put1 = 1503,\n    Meteor1_Shoot2 = 1504,\n    Meteor1_Put2 = 1505,\n    Meteor1_Shoot3 = 1506,\n    Meteor1_Put3 = 1507,\n    Meteor1_Shoot4 = 1508,\n    Meteor1_End = 1599,\n\n    Meteor2_Start = 1600,\n    Meteor2_Link1 = 1601,\n    Meteor2_Tower1 = 1602,\n    Meteor2_GetMark1 = 1603,\n    Meteor2_Debuff1 = 1604,\n    Meteor2_Link2 = 1605,\n    Meteor2_Tower2 = 1606,\n    Meteor2_GetMark2 = 1607,\n    Meteor2_Debuff2 = 1608,\n    Meteor2_GatherMark = 1609,\n    Meteor2_GatherEnd = 1610,\n    Meteor2_Tower3 = 1611,\n    Meteor2_Hit = 1612,\n    Meteor2_end = 1699,\n\n    Meteor3_Start = 1700,\n    Meteor3_Guide1 = 1701,\n    Meteor3_CatchBoom = 1702,\n    Meteor3_Link = 1703,\n    Meteor3_End = 1799,\n}\nM.M11S.InitData = function()\n    M.M11SMapType = nil\n    M.M11S.CurrentState = M.M11S.State.Start\n    M.M11S.WeaponInfo = nil\n    M.M11S.ReachTime = nil\n    M.M11S.JumpTime = nil\n    M.M11S.GetMarkTime = nil\n    M.M11S.BreakTime = nil\n    M.M11S.Meteor1 = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2Link = nil\n    M.M11S.TowerPos = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2MapEffect = nil\n    M.M11S.Meteor2Gather = nil\n    M.M11S.OrbitalOmen = nil\n    M.M11S.Blade = nil\n    M.M11S.BladeIds = nil\n    M.M11S.Meteor3Info = {\n        JobOrder = { \"H1\", \"D3\", \"D4\", \"H2\" },\n        Dir = { math.pi * 3 / 4, math.pi / 4, math.pi * 7 / 4, math.pi * 5 / 4 },\n        Spell46166 = {},\n        Spell46167 = {},\n        FindDir = function(id1, id2)\n            local t1 = TensorCore.mGetEntity(id1)\n            local t2 = TensorCore.mGetEntity(id2)\n            local h1 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t1.pos)\n            local h2 = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, t2.pos)\n            local ent1, ent2\n            for i = 1, 4 do\n                local dir = M.M11S.Meteor3Info.Dir[i]\n                if M.IsSameDirection(dir, h1) then\n                    if ent1 == nil then\n                        ent1 = t1\n                    else\n                        ent2 = t1\n                    end\n                end\n                if M.IsSameDirection(dir, h2) then\n                    if ent1 == nil then\n                        ent1 = t2\n                    else\n                        ent2 = t2\n                    end\n                end\n            end\n            return ent1, ent2\n        end\n    }\n    M.M11S.TowerData = {\n        leftUp = { pos = { x = 84, z = 89 }, crossPos = { x = 87, z = 89 }, leapPos = { x = 86.9, z = 90.1 }, localPos = { x = 84, z = 92 } },\n        leftDown = { pos = { x = 84, z = 111 }, crossPos = { x = 87, z = 111 }, leapPos = { x = 86.9, z = 109.9 }, localPos = { x = 84, z = 108 } },\n        rightUp = { pos = { x = 116, z = 89 }, crossPos = { x = 113, z = 89 }, leapPos = { x = 113.1, z = 90.1 }, localPos = { x = 116, z = 92 } },\n        rightDown = { pos = { x = 116, z = 111 }, crossPos = { x = 113, z = 111 }, leapPos = { x = 113.1, z = 109.9 }, localPos = { x = 116, z = 108 } },\n    }\n    local kickType, gatherType\n    if M.Config.Main.M11SKickType == 1 then\n        kickType = \"直飞\"\n    else\n        kickType = \"斜飞\"\n    end\n    if M.Config.Main.M11SGatherType == 1 then\n        gatherType = \"X字\"\n    else\n        gatherType = \"十字\"\n    end\n    M.Info(\"M11S初始化数据完成! 当前设置: [\" .. kickType .. \"], [\" .. gatherType .. \"]!\")\nend\n\nM.M11S.InitData()\n\nlocal redDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal greenDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal yellowDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal litBlueDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(0, 0.5, 1, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\n\nlocal center = { x = 100, y = 0, z = 100 }\nM.M11S.DrawWeapon = function(ent, model, drawTime)\n    drawTime = drawTime or 0\n    local player = M.GetPlayer()\n    local curEnt = TensorCore.mGetEntity(ent.id)\n    if model == 19184 then\n        -- 19184 斧子\n        local heading = TensorCore.getHeadingToTarget(curEnt.pos, center)\n        local guidePos, size\n        if M.IsTank(player.job) or M.IsMelee(player.job) then\n            guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, 8.3)\n            size = 0.25\n        else\n            guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, 10)\n            size = 0.5\n        end\n        -- 画图\n        if M.Config.Main.M11SExDraw and (drawTime == 0 or Now() > drawTime) then\n            redDraw:addCircle(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 8)\n            local inRange = true\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                local dis2d = TensorCore.getDistance2d(curMem.pos, player.pos)\n                if dis2d > 6 then\n                    inRange = false\n                    break\n                end\n            end\n            if inRange then\n                greenDraw:addCircle(player.pos.x, player.pos.y, player.pos.z, 6)\n            else\n                yellowDraw:addCircle(player.pos.x, player.pos.y, player.pos.z, 6)\n            end\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    elseif model == 19185 then\n        -- 19185 镰刀\n        local index = M.IndexOf({ \"MT\", \"D4\", \"H2\", \"D2\", \"ST\", \"D1\", \"H1\", \"D3\" }, M.SelfPos)\n        local guidePos = TensorCore.getPosInDirection(curEnt.pos, curEnt.pos.h - (index - 1) * math.pi / 4, 4.3)\n        if M.Config.Main.M11SExDraw and (drawTime == 0 or Now() > drawTime) then\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                if curMem.alive then\n                    local curHeading = TensorCore.getHeadingToTarget(curEnt.pos, curMem.pos)\n                    litBlueDraw:addCone(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, math.pi / 6, curHeading)\n                end\n            end\n            redDraw:addDonut(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 5, 40)\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    elseif model == 19186 then\n        local heading\n        -- 19186 大剑\n        if table.contains({ \"MT\", \"H1\", \"D1\", \"D3\" }, M.SelfPos) then\n            heading = curEnt.pos.h + math.pi * 3 / 4\n        else\n            heading = curEnt.pos.h - math.pi * 3 / 4\n        end\n        local distance\n        if M.IsTank(player.job) or M.IsMelee(player.job) then\n            distance = 8\n        else\n            distance = 11\n        end\n        local guidePos = TensorCore.getPosInDirection(curEnt.pos, heading, distance)\n        if M.Config.Main.M11SExDraw and (drawTime == 0 or Now() > drawTime) then\n            redDraw:addCross(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, 10, curEnt.pos.h)\n            for _, member in pairs(M.Party) do\n                local curMem = TensorCore.mGetEntity(member.id)\n                if M.IsHealer(curMem.job) then\n                    local curHeading = TensorCore.getHeadingToTarget(curEnt.pos, curMem.pos)\n                    litBlueDraw:addRect(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 40, 6, curHeading)\n                end\n            end\n        end\n        M.FrameDirect(guidePos.x, guidePos.z, size)\n    end\nend\n\nM.M11S.InitWeapon = function()\n    if M.M11S.WeaponInfo == nil then\n        M.M11S.WeaponInfo = {}\n        M.M11S.WeaponInfo.ids = {}\n        M.M11S.WeaponInfo.data = {}\n        M.M11S.WeaponInfo.ordered = {}\n        M.M11S.WeaponInfo.CurrentWeaponIdx = 1\n    end\nend\n\nM.M11S.RecordWeapon = function()\n    for _, ent in pairs(TensorCore.entityList(\"contentid=108\")) do\n        if Argus.isEntityVisible(ent) and not table.contains(M.M11S.WeaponInfo.ids, ent.id) then\n            local md = Argus.getEntityModel(ent.id)\n            if (md == 19184 or md == 19185 or md == 19186)\n            then\n                table.insert(M.M11S.WeaponInfo.ids, ent.id)\n                table.insert(M.M11S.WeaponInfo.data, { entity = ent, model = md })\n            end\n        end\n    end\nend\n\nM.M11S.OrderWeapon = function()\n    M.M11S.InitWeapon()\n    M.M11S.RecordWeapon()\n    if table.size(M.M11S.WeaponInfo.ids) == 3 then\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            local curHeading = TensorCore.getHeadingToTarget({ x = 100, y = 0, z = 100 }, info.entity.pos)\n            -- 如果当前面向与场中到当前物体方向相同，表示为第一个武器\n            if M.IsSameDirection(info.entity.pos.h, curHeading, 0.1) then\n                table.insert(M.M11S.WeaponInfo.ordered, info)\n                d(\"已找到第1把武器， 类型为：\" .. tostring(info.model))\n                break\n            end\n        end\n        local first = M.M11S.WeaponInfo.ordered[1]\n        local second\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            if info.entity.id ~= first.entity.id then\n                local curHeading = TensorCore.getHeadingToTarget(first.entity.pos, info.entity.pos)\n                if M.IsSameDirection(info.entity.pos.h, curHeading, 0.1) then\n                    table.insert(M.M11S.WeaponInfo.ordered, info)\n                    d(\"已找到第2把武器， 类型为：\" .. tostring(info.model))\n                    second = info\n                    break\n                end\n            end\n        end\n        for _, info in pairs(M.M11S.WeaponInfo.data) do\n            if info.entity.id ~= first.entity.id and info.entity.id ~= second.entity.id then\n                table.insert(M.M11S.WeaponInfo.ordered, info)\n                d(\"已找到第3把武器， 类型为：\" .. tostring(info.model))\n                break\n            end\n        end\n    end\nend\n\nM.M11S.TakeWeapon = function(index, nextState, drawTime)\n    drawTime = drawTime or 0\n    local curBoss = TensorCore.mGetEntity(M.M11S.CurrentBoss.id)\n    local curEnt = M.M11S.WeaponInfo.ordered[index]\n    local distance = TensorCore.getDistance2d(curEnt.entity.pos, curBoss.pos)\n    if distance > 0.2 then\n        M.M11S.DrawWeapon(curEnt.entity, curEnt.model, drawTime)\n    else\n        if M.M11S.ReachTime == nil then\n            M.M11S.ReachTime = Now()\n        end\n        -- 跳过去之后2秒蓄力\n        if TimeSince(M.M11S.ReachTime) > 2000 then\n            M.M11S.CurrentState = nextState\n            M.M11S.ReachTime = nil\n        else\n            M.M11S.DrawWeapon(curEnt.entity, curEnt.model, drawTime)\n        end\n    end\nend\n\nM.M11S.TakeExWeapon = function(nextState)\n    if M.M11S.WeaponInfo == nil\n            or M.M11S.WeaponInfo.data == nil\n            or table.size(M.M11S.WeaponInfo.ids) == 0\n            or M.M11S.WeaponInfo.CurrentWeaponIdx > 6\n    then\n        return\n    end\n    if M.M11S.WeaponInfo.CurrentWeaponId == nil then\n        -- M.M11S.WeaponInfo.CurrentWeaponId = table.remove(M.M11S.WeaponInfo.ids, 1)\n        M.M11S.WeaponInfo.CurrentWeaponId = M.M11S.WeaponInfo.ids[M.M11S.WeaponInfo.CurrentWeaponIdx]\n        M.M11S.WeaponInfo.CurrentWeaponPos = TensorCore.mGetEntity(M.M11S.WeaponInfo.CurrentWeaponId).pos\n        d(\"[\" .. Now() .. \"]当前兵器：\" .. M.M11S.WeaponInfo.CurrentWeaponId)\n    else\n        local curEnt = TensorCore.mGetEntity(M.M11S.WeaponInfo.CurrentWeaponId)\n        local model = Argus.getEntityModel(M.M11S.WeaponInfo.CurrentWeaponId)\n        local curBoss = TensorCore.mGetEntity(M.M11S.CurrentBoss.id)\n        local distance = TensorCore.getDistance2d(curEnt.pos, curBoss.pos)\n        if distance > 0.2 then\n            M.M11S.DrawWeapon(curEnt, model)\n        else\n            if M.M11S.ReachTime == nil then\n                M.M11S.ReachTime = Now()\n            end\n            -- 跳过去之后2秒蓄力\n            if TimeSince(M.M11S.ReachTime) > 2000 then\n                M.M11S.CurrentState = nextState\n                M.M11S.ReachTime = nil\n                M.M11S.WeaponInfo.CurrentWeaponId = nil\n                M.M11S.WeaponInfo.CurrentWeaponIdx = M.M11S.WeaponInfo.CurrentWeaponIdx + 1\n            else\n                M.M11S.DrawWeapon(curEnt, model)\n            end\n        end\n    end\nend\n\nM.M11S.GetTakeTowerPos = function(type)\n    M.M11S.Meteor2Link = {}\n    M.M11S.Meteor2Link.Has = false\n    local player = M.GetPlayer()\n    local tethers = Argus.getTethersOnEnt(player.id)\n    for _, tether in pairs(tethers) do\n        if tether.type == 57 or tether.type == 249 then\n            M.M11S.Meteor2Link.Has = true\n            M.M11S.Meteor2Link.from = TensorCore.mGetEntity(tether.partnerid)\n            break\n        end\n    end\n    local towerData\n    if type == 1 then\n        if player.pos.x > 100 then\n            if M.IsDps(player.job) then\n                towerData = M.M11S.TowerData.rightDown\n            else\n                towerData = M.M11S.TowerData.rightUp\n            end\n        else\n            if M.IsDps(player.job) then\n                towerData = M.M11S.TowerData.leftDown\n            else\n                towerData = M.M11S.TowerData.leftUp\n            end\n        end\n    else\n        if player.pos.x > 100 then\n            if M.M11S.Tower2Type == \"Down\" then\n                towerData = M.M11S.TowerData.rightDown\n            else\n                towerData = M.M11S.TowerData.rightUp\n            end\n        else\n            if M.M11S.Tower2Type == \"Down\" then\n                towerData = M.M11S.TowerData.leftDown\n            else\n                towerData = M.M11S.TowerData.leftUp\n            end\n        end\n    end\n    if M.M11S.Meteor2Link.Has then\n        if (M.M11S.Meteor2Link.from.pos.x > 100 and player.pos.x > 100)\n                or (M.M11S.Meteor2Link.from.pos.x < 100 and player.pos.x < 100) then\n            M.M11S.TowerPos = towerData.crossPos\n        else\n            M.M11S.TowerPos = towerData.localPos\n        end\n    else\n        if M.Config.Main.M11SKickType == 1 then\n            M.M11S.TowerPos = towerData.localPos\n        else\n            M.M11S.TowerPos = towerData.leapPos\n        end\n    end\nend\n\nM.M11S.Meteor2Page1To2 = function()\n    M.M11S.Meteor2Link = nil\n    M.M11S.TowerPos = nil\n    M.M11S.Meteor2Marks = nil\n    M.M11S.Meteor2MapEffect = nil\n    M.M11S.GetMarkTime = nil\nend\n\nself.used = true",
 						conditions = 
 						{
 							
@@ -1258,7 +1258,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local redDraw = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n        1\n)\nfor _, wind in pairs(TensorCore.entityList(\"contentid=14307\")) do\n    if Argus.isEntityVisible(wind) then\n        redDraw:addCircle(wind.pos.x, wind.pos.y, wind.pos.z, 4.4, false)\n    end\nend\nself.used = true",
+						actionLua = "local redDraw2 = Argus2.ShapeDrawer:new(\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.2)),\n        (GUI:ColorConvertFloat4ToU32(1, 0, 0, 1)),\n        3\n)\nfor _, wind in pairs(TensorCore.entityList(\"contentid=14307\")) do\n    if Argus.isEntityVisible(wind) then\n        redDraw2:addCircle(wind.pos.x, wind.pos.y, wind.pos.z, 4.3, true)\n    end\nend\nself.used = true",
 						conditions = 
 						{
 							
@@ -1269,11 +1269,6 @@ local tbl =
 							
 							{
 								"73f59343-3c8e-4978-9544-35ffa6d1bc03",
-								true,
-							},
-							
-							{
-								"cd5179b0-09eb-76c0-9dbc-e203655b67fd",
 								true,
 							},
 						},
@@ -2178,7 +2173,7 @@ local tbl =
 			uuid = "eb90697a-3de9-b2eb-a153-167ddda24d73",
 			version = 2,
 		},
-		inheritedIndex = 18,
+		inheritedIndex = 17,
 	},
 	
 	{
@@ -2348,146 +2343,12 @@ local tbl =
 			conditions = 
 			{
 			},
-			name = "-- 弃用 --",
-			uuid = "89c762b0-be14-cb99-bfdb-7f34e2e85d93",
-			version = 2,
-		},
-		inheritedIndex = 19,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local drawTime = 3000\nlocal posLabel = { \"MT\", \"D4\", \"H2\", \"D2\", \"ST\", \"D1\", \"H1\", \"D3\" }\n\nif data.MuAiM11S_Sickle_Data == nil then\n    data.MuAiM11S_Sickle_Data = {}\nend\n\nfunction drawPos(ent)\n    local heading = ent.pos.h\n    for i = 0, 7 do\n        local pos = TensorCore.getPosInDirection(ent.pos, heading - i * math.pi / 4, 4)\n        AnyoneCore.addTimedWorldText(drawTime, posLabel[i + 1], pos, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n    end\n    -- 更新时间戳\n    data.MuAiM11S_Sickle_Data[ent.id] = {\n        pos = ent.pos,\n        time = Now()\n    }\nend\n\nlocal entList = TensorCore.entityList(\"contentid=108\") or {}\nfor _, ent in pairs(entList) do\n    if Argus.getEntityModel(ent.id) == 19185 and Argus.isEntityVisible(ent) then\n        local dataCache = data.MuAiM11S_Sickle_Data[ent.id]\n\n        if dataCache == nil then\n            drawPos(ent)  -- 首次绘制\n        else\n            local distance = TensorCore.getDistance2d(ent.pos, dataCache.pos)\n            local timeSinceDraw = Now() - dataCache.time\n            local isTimeOut = timeSinceDraw > drawTime - 50\n\n            if distance > 0.5 or isTimeOut then\n                drawPos(ent)  -- 位置变化或超时重新绘制\n            end\n        end\n    end\nend\n\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"cee5c51f-db3d-03b0-9b91-12cc159be349",
-								true,
-							},
-						},
-						gVar = "ACR_RikuMNK3_CD",
-						uuid = "9a68066e-0fda-cac6-964b-abd739087ef1",
-						version = 2.1,
-					},
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "cee5c51f-db3d-03b0-9b91-12cc159be349",
-						version = 2,
-					},
-				},
-			},
-			enabled = false,
-			eventType = 12,
-			name = "M11S月环8方",
-			uuid = "b3503580-71a1-e733-a4c3-578deaae1e88",
-			version = 2,
-		},
-		inheritedIndex = 19,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local drawTime = 40000\n\nAnyoneCore.addTimedWorldText(drawTime , \"H1\", {x = 85, y = 0 ,z =  115}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"H2/D2\", {x = 105, y = 0 ,z =  95}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\n\nAnyoneCore.addTimedWorldText(drawTime , \"D3\", {x = 90, y = 0 ,z =  110}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D4\", {x = 105, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D1\", {x = 95, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"089e6374-6111-897d-8af0-fcd0c72e28ac",
-								true,
-							},
-							
-							{
-								"36552ff7-f62a-b95c-9b3e-6ec090ee0398",
-								true,
-							},
-						},
-						gVar = "ACR_RikuNIN3_CD",
-						uuid = "b71e5591-3e6b-758b-b52e-84b8c6cbeccb",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "36552ff7-f62a-b95c-9b3e-6ec090ee0398",
-						version = 2,
-					},
-					inheritedIndex = 1,
-				},
-				
-				{
-					data = 
-					{
-						category = "Event",
-						eventArgType = 2,
-						eventSpellID = 46132,
-						name = "46132-流星雨",
-						uuid = "089e6374-6111-897d-8af0-fcd0c72e28ac",
-						version = 2,
-					},
-					inheritedIndex = 2,
-				},
-			},
-			enabled = false,
-			eventType = 2,
-			name = "M11S陨石位置",
-			uuid = "74d161a0-ce78-a135-a5df-53829b8f7124",
-			version = 2,
-		},
-		inheritedIndex = 20,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-			},
-			conditions = 
-			{
-			},
 			enabled = false,
 			name = "-------- m12s --------",
 			uuid = "d59f33fd-dc8f-4ea2-84c5-a200263ed342",
 			version = 2,
 		},
-		inheritedIndex = 21,
+		inheritedIndex = 18,
 	},
 	
 	{
@@ -2553,7 +2414,7 @@ local tbl =
 			uuid = "01c21e3b-f835-8520-b7fa-247cf2d8b76b",
 			version = 2,
 		},
-		inheritedIndex = 22,
+		inheritedIndex = 19,
 	},
 	
 	{
@@ -2618,7 +2479,7 @@ local tbl =
 			uuid = "52909867-07a0-dd48-a645-bcbc9d9e4be2",
 			version = 2,
 		},
-		inheritedIndex = 23,
+		inheritedIndex = 20,
 	},
 	
 	{
@@ -2685,7 +2546,72 @@ local tbl =
 			uuid = "a0d021b4-1dd5-1d6c-a905-2559ee27a23c",
 			version = 2,
 		},
-		inheritedIndex = 26,
+		inheritedIndex = 24,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\n\nif TimeSince(M.M12S.Timer) > 22000 then\n    M.M12S.ArmySlayer = false\n    M.M12S.ArmyInfo = nil\nelse\n    if M.M12S.ArmyInfo == nil then\n        M.M12S.ArmyInfo = {}\n        M.M12S.ArmyInfo.ids = {}\n        M.M12S.ArmyInfo.LeftCnt = 1\n        M.M12S.ArmyInfo.RightCnt = 1\n        M.M12S.ArmyInfo.Left = {}\n        M.M12S.ArmyInfo.Right = {}\n        M.M12S.ArmyInfo.LeftWave = {}\n        M.M12S.ArmyInfo.RightWave = {}\n        M.M12S.ArmyInfo.State = 1\n        M.M12S.ArmyInfo.All = {}\n        M.M12S.ArmyInfo.FirstPurple = nil\n        M.M12S.ArmyInfo.PositionLeft = {\n            [1] = { x = 95, y = 0, z = 85.5 },\n            [2] = { x = 96.5, y = 0, z = 93 },\n            [3] = { x = 87, y = 0, z = 86 },\n            [4] = { x = 90, y = 0, z = 95 },\n        }\n        M.M12S.ArmyInfo.PositionRight = {\n            [1] = { x = 105, y = 0, z = 85.5 },\n            [2] = { x = 103.5, y = 0, z = 93 },\n            [3] = { x = 113, y = 0, z = 86 },\n            [4] = { x = 110, y = 0, z = 95 },\n        }\n        M.M12S.ArmyInfo.GotPos = {\n            [\"MT\"] = false,\n            [\"ST\"] = false,\n            [\"H1\"] = false,\n            [\"H2\"] = false,\n        }\n        M.M12S.ArmyInfo.THOrder = {}\n        M.M12S.ArmyInfo.Timer = 0\n        M.M12S.ArmyInfo.Temp = {}\n        M.M12S.ArmyInfo.Wave = 0\n        M.M12S.ArmyInfo.GuidePos = nil\n    end\n\n    if table.size(M.M12S.ArmyInfo.ids) < 8 then\n        for _, ent in pairs(TensorCore.entityList(\"contentid=14378\")) do\n            if Argus.isEntityVisible(ent) then\n                local model = Argus.getEntityModel(ent.id)\n                if model == 19200 or model == 19201 then\n                    if not table.contains(M.M12S.ArmyInfo.ids, ent.id) then\n                        table.insert(M.M12S.ArmyInfo.ids, ent.id)\n                        if table.size(M.M12S.ArmyInfo.Temp) < 2 then\n                            table.insert(M.M12S.ArmyInfo.Temp, ent)\n                        end\n                    end\n                end\n            end\n        end\n        if table.size(M.M12S.ArmyInfo.Temp) == 2 then\n            M.M12S.ArmyInfo.Wave = M.M12S.ArmyInfo.Wave + 1\n            if M.M12S.ArmyInfo.Temp[1].pos.y < M.M12S.ArmyInfo.Temp[2].pos.y\n                    or M.M12S.ArmyInfo.Temp[1].pos.x < 100 and M.M12S.ArmyInfo.Temp[2].pos.x < 100 and M.M12S.ArmyInfo.Temp[1].pos.x > M.M12S.ArmyInfo.Temp[2].pos.x\n                    or M.M12S.ArmyInfo.Temp[1].pos.x > 100 and M.M12S.ArmyInfo.Temp[2].pos.x > 100 and M.M12S.ArmyInfo.Temp[1].pos.x < M.M12S.ArmyInfo.Temp[2].pos.x\n            then\n                M.M12S.ArmyInfo.Temp[1], M.M12S.ArmyInfo.Temp[2] = M.M12S.ArmyInfo.Temp[2], M.M12S.ArmyInfo.Temp[1]\n            end\n            for i = 1, #M.M12S.ArmyInfo.Temp do\n                local curEnt = M.M12S.ArmyInfo.Temp[i]\n                local modelTemp = Argus.getEntityModel(curEnt.id)\n                table.insert(M.M12S.ArmyInfo.All, { ent = curEnt, model = modelTemp })\n                if curEnt.pos.x > 100 then\n                    M.M12S.ArmyInfo.Right[M.M12S.ArmyInfo.RightCnt] = curEnt\n                    M.M12S.ArmyInfo.RightCnt = M.M12S.ArmyInfo.RightCnt + 1\n                    table.insert(M.M12S.ArmyInfo.RightWave, M.M12S.ArmyInfo.Wave)\n                else\n                    M.M12S.ArmyInfo.Left[M.M12S.ArmyInfo.LeftCnt] = curEnt\n                    M.M12S.ArmyInfo.LeftCnt = M.M12S.ArmyInfo.LeftCnt + 1\n                    table.insert(M.M12S.ArmyInfo.LeftWave, M.M12S.ArmyInfo.Wave)\n                end\n                if modelTemp == 19200 and M.M12S.ArmyInfo.FirstPurple == nil then\n                    M.M12S.ArmyInfo.FirstPurple = curEnt\n                end\n            end\n            M.M12S.ArmyInfo.Temp = {}\n        end\n        if table.size(M.M12S.ArmyInfo.ids) == 8 then\n            M.M12S.ArmyInfo.Timer = Now()\n        end\n    end\n    local buff = TensorCore.getBuff(M.GetPlayer().id, 3935)\n    if buff == nil then\n        if M.M12S.ArmyInfo.GuidePos == nil then\n            local dps = { \"D1\", \"D2\", \"D3\", \"D4\" }\n            if M.M12S.ArmyInfo.FirstPurple ~= nil then\n                local posListTh, posListDps\n                local entListTh\n                if M.M12S.ArmyInfo.FirstPurple.pos.x > 100 then\n                    posListDps = M.M12S.ArmyInfo.PositionLeft\n                    posListTh = M.M12S.ArmyInfo.PositionRight\n                    entListTh = M.M12S.ArmyInfo.Right\n                else\n                    posListDps = M.M12S.ArmyInfo.PositionRight\n                    posListTh = M.M12S.ArmyInfo.PositionLeft\n                    entListTh = M.M12S.ArmyInfo.Left\n                end\n                if table.contains(dps, M.SelfPos) then\n                    M.M12S.ArmyInfo.SelfIdx = M.IndexOf(dps, M.SelfPos)\n                    M.M12S.ArmyInfo.GuidePos = posListDps[M.M12S.ArmyInfo.SelfIdx]\n                else\n                    if table.size(entListTh) == 2 then\n                        local model1 = Argus.getEntityModel(entListTh[1])\n                        local model2 = Argus.getEntityModel(entListTh[2])\n                        if model1 == 19200 and model2 == 19200 then\n                            M.M12S.ArmyInfo.THOrder = {\n                                [\"MT\"] = 1,\n                                [\"ST\"] = 2,\n                                [\"H1\"] = 3,\n                                [\"H2\"] = 4,\n                            }\n                        end\n                        M.M12S.ArmyInfo.SelfIdx = M.M12S.ArmyInfo.THOrder[M.SelfPos]\n                        M.M12S.ArmyInfo.GuidePos = posListTh[M.M12S.ArmyInfo.SelfIdx]\n                    elseif table.size(entListTh) >= 3 then\n                        for i = 1, #entListTh do\n                            local ball = entListTh[i]\n                            local model = Argus.getEntityModel(ball.id)\n                            if model == 19200 then\n                                if not M.M12S.ArmyInfo.GotPos[\"MT\"] then\n                                    M.M12S.ArmyInfo.THOrder[\"MT\"] = i\n                                    M.M12S.ArmyInfo.GotPos[\"MT\"] = true\n                                else\n                                    M.M12S.ArmyInfo.THOrder[\"ST\"] = i\n                                    M.M12S.ArmyInfo.GotPos[\"ST\"] = true\n                                end\n                            else\n                                if not M.M12S.ArmyInfo.GotPos[\"H1\"] then\n                                    M.M12S.ArmyInfo.THOrder[\"H1\"] = i\n                                    M.M12S.ArmyInfo.GotPos[\"H1\"] = true\n                                else\n                                    M.M12S.ArmyInfo.THOrder[\"H2\"] = i\n                                    M.M12S.ArmyInfo.GotPos[\"H2\"] = true\n                                end\n                            end\n                        end\n                        if #entListTh < 4 then\n                            local notGot\n                            for job, bool in pairs(M.M12S.ArmyInfo.GotPos) do\n                                if not bool then\n                                    notGot = job\n                                    break\n                                end\n                            end\n                            M.M12S.ArmyInfo.THOrder[notGot] = 4\n                            M.M12S.ArmyInfo.GotPos[notGot] = true\n                        end\n                        M.M12S.ArmyInfo.SelfIdx = M.M12S.ArmyInfo.THOrder[M.SelfPos]\n                        M.M12S.ArmyInfo.GuidePos = posListTh[M.M12S.ArmyInfo.SelfIdx]\n                    end\n                end\n            elseif table.size(M.M12S.ArmyInfo.ids) == 6 then\n                local posListTh, posListDps\n                local entListTh\n                if table.size(M.M12S.ArmyInfo.Left) == 4 then\n                    posListDps = M.M12S.ArmyInfo.PositionLeft\n                    posListTh = M.M12S.ArmyInfo.PositionRight\n                    entListTh = M.M12S.ArmyInfo.Right\n                elseif table.size(M.M12S.ArmyInfo.Right) == 4 then\n                    posListDps = M.M12S.ArmyInfo.PositionRight\n                    posListTh = M.M12S.ArmyInfo.PositionLeft\n                    entListTh = M.M12S.ArmyInfo.Left\n                end\n                if entListTh ~= nil then\n                    if table.contains(dps, M.SelfPos) then\n                        M.M12S.ArmyInfo.SelfIdx = M.IndexOf(dps, M.SelfPos)\n                        M.M12S.ArmyInfo.GuidePos = posListDps[M.M12S.ArmyInfo.SelfIdx]\n                    else\n                        M.M12S.ArmyInfo.THOrder = {\n                            [\"H1\"] = 1,\n                            [\"H2\"] = 2,\n                            [\"MT\"] = 3,\n                            [\"ST\"] = 4\n                        }\n                        M.M12S.ArmyInfo.SelfIdx = M.M12S.ArmyInfo.THOrder[M.SelfPos]\n                        M.M12S.ArmyInfo.GuidePos = posListTh[M.M12S.ArmyInfo.SelfIdx]\n                    end\n                end\n            end\n        else\n            local pos = M.M12S.ArmyInfo.GuidePos\n            M.FrameDirect(pos.x, pos.z)\n        end\n    else\n        local waveList\n        local player = M.GetPlayer()\n        if player.pos.x > 100 then\n            waveList = M.M12S.ArmyInfo.RightWave\n        else\n            waveList = M.M12S.ArmyInfo.LeftWave\n        end\n        if M.M12S.ArmyInfo.SelfIdx == 1 then\n            local selfWave = waveList[1]\n            local secondWave = waveList[2]\n            if selfWave ~= secondWave then\n                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                if buff.duration > 8.5 and TensorCore.getDistance2d(player.pos, boss.pos) < 13.8 then\n                    if player.pos.x > 100 then\n                        M.FrameDirect(114, 89)\n                    else\n                        M.FrameDirect(86, 89)\n                    end\n                elseif buff.duration > 5.5 then\n                    M.FrameDirect(100, 101.5)\n                end\n            else\n                if buff.duration > 5.5 then\n                    M.FrameDirect(100, 101.5)\n                end\n            end\n        elseif M.M12S.ArmyInfo.SelfIdx == 3 then\n            local selfWave = waveList[3]\n            local fourthWave = waveList[4]\n            if selfWave ~= fourthWave then\n                if buff.duration > 5.5 then\n                    if player.pos.x < 100 then\n                        M.FrameDirect(83.5, 85.5)\n                    else\n                        M.FrameDirect(116.5, 85.5)\n                    end\n                end\n            else\n                if buff.duration > 5.5 then\n                    M.FrameDirect(100, 101.5)\n                end\n            end\n        else\n            if buff.duration > 5.5 then\n                M.FrameDirect(100, 101.5)\n            end\n        end\n    end\n    if M.Config.Main.M12SExDraw and table.size(M.M12S.ArmyInfo.ids) == 8 then\n        if TimeSince(M.M12S.ArmyInfo.Timer) > 1200 then\n            local changed = false\n            for i, player in pairs(M.Party) do\n                local debuff = TensorCore.getBuff(player.id, 3935)\n                if debuff ~= nil and debuff.duration > 11 then\n                    changed = true\n                    break\n                end\n            end\n            if changed then\n                M.M12S.ArmyInfo.State = M.M12S.ArmyInfo.State + 1\n                M.M12S.ArmyInfo.Timer = Now()\n            end\n        end\n        if M.M12S.ArmyInfo.State <= 4 then\n            local target1, target2\n            local ball1 = M.M12S.ArmyInfo.All[M.M12S.ArmyInfo.State * 2 - 1]\n            local ball2 = M.M12S.ArmyInfo.All[M.M12S.ArmyInfo.State * 2]\n            local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n            local distance = 10000\n            for _, player in pairs(M.Party) do\n                local curPlayer = TensorCore.mGetEntity(player.id)\n                if (ball1.ent.pos.x > 100 and curPlayer.pos.x > 100)\n                        or (ball1.ent.pos.x < 100 and curPlayer.pos.x < 100)\n                then\n                    local dis = TensorCore.getDistance2d(boss.pos, curPlayer.pos)\n                    if dis < distance then\n                        target1 = curPlayer\n                        distance = dis\n                    end\n                end\n            end\n            distance = 10000\n            for _, player in pairs(M.Party) do\n                local curPlayer = TensorCore.mGetEntity(player.id)\n                if curPlayer.id ~= target1.id and (\n                        (ball2.ent.pos.x > 100 and curPlayer.pos.x > 100)\n                                or (ball2.ent.pos.x < 100 and curPlayer.pos.x < 100))\n                then\n                    local dis = TensorCore.getDistance2d(boss.pos, curPlayer.pos)\n                    if dis < distance then\n                        target2 = curPlayer\n                        distance = dis\n                    end\n                end\n            end\n            local greenDrawer = Argus2.ShapeDrawer:new(\n                    (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                    (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                    (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                    (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                    1\n            )\n            local purpleDrawer = Argus2.ShapeDrawer:new(\n                    (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                    (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                    (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                    (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                    1\n            )\n\n            if ball1.model == 19200 then\n                purpleDrawer:addCircle(target1.pos.x, target1.pos.y, target1.pos.z, 6)\n            else\n                greenDrawer:addCircle(target1.pos.x, target1.pos.y, target1.pos.z, 6)\n            end\n            if ball2.model == 19200 then\n                purpleDrawer:addCircle(target2.pos.x, target2.pos.y, target2.pos.z, 6)\n            else\n                greenDrawer:addCircle(target2.pos.x, target2.pos.y, target2.pos.z, 6)\n            end\n        end\n    end\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"79695dbf-76bd-fb59-b4fc-c6c7b59db258",
+								true,
+							},
+							
+							{
+								"3b5a92e6-57ae-be17-86cc-738c6cb9d5f5",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "致命灾变主循环",
+						uuid = "49501902-5a85-0242-b59e-9c16a80420c1",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "79695dbf-76bd-fb59-b4fc-c6c7b59db258",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.ArmySlayer ~= nil and MuAiGuide.M12S.ArmySlayer == true",
+						name = "致命灾变",
+						uuid = "3b5a92e6-57ae-be17-86cc-738c6cb9d5f5",
+						version = 2,
+					},
+				},
+			},
+			eventType = 12,
+			name = "M12S门神致命灾变-New",
+			uuid = "68b39db5-37db-ecc8-a289-060327422b48",
+			version = 2,
+		},
+		inheritedIndex = 22,
 	},
 	
 	{
@@ -2877,72 +2803,7 @@ local tbl =
 			uuid = "288f9733-cd95-3e4b-ab8d-30c5a0d637a7",
 			version = 2,
 		},
-		inheritedIndex = 25,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local M = MuAiGuide\n\nif TimeSince(M.M12S.Timer) > 22000 then\n    M.M12S.ArmySlayer = false\n    M.M12S.ArmyInfo = nil\nelse\n    if M.M12S.ArmyInfo == nil then\n        M.M12S.ArmyInfo = {}\n        M.M12S.ArmyInfo.ids = {}\n        M.M12S.ArmyInfo.LeftCnt = 1\n        M.M12S.ArmyInfo.RightCnt = 1\n        M.M12S.ArmyInfo.State = 1\n        M.M12S.ArmyInfo.Left = {}\n        M.M12S.ArmyInfo.Right = {}\n        M.M12S.ArmyInfo.All = {}\n        M.M12S.ArmyInfo.FirstPurple = nil\n        M.M12S.ArmyInfo.PositionLeft = {\n            [1] = { x = 95, y = 0, z = 85.5 },\n            [2] = { x = 97, y = 0, z = 93 },\n            [3] = { x = 87, y = 0, z = 86 },\n            [4] = { x = 90, y = 0, z = 95 },\n        }\n        M.M12S.ArmyInfo.PositionRight = {\n            [1] = { x = 105, y = 0, z = 85.5 },\n            [2] = { x = 103, y = 0, z = 93 },\n            [3] = { x = 113, y = 0, z = 86 },\n            [4] = { x = 110, y = 0, z = 95 },\n        }\n        M.M12S.ArmyInfo.GotPos = {\n            [\"MT\"] = false,\n            [\"ST\"] = false,\n            [\"H1\"] = false,\n            [\"H2\"] = false,\n        }\n        M.M12S.ArmyInfo.THOrder = nil\n        M.M12S.ArmyInfo.Timer = 0\n        M.M12S.ArmyInfo.Temp = {}\n    end\n\n    if table.size(M.M12S.ArmyInfo.ids) < 8 then\n        for _, ent in pairs(TensorCore.entityList(\"contentid=14378\")) do\n            if Argus.isEntityVisible(ent) then\n                local model = Argus.getEntityModel(ent.id)\n                if model == 19200 or model == 19201 then\n                    if not table.contains(M.M12S.ArmyInfo.ids, ent.id) then\n                        table.insert(M.M12S.ArmyInfo.ids, ent.id)\n                        if table.size(M.M12S.ArmyInfo.Temp) < 2 then\n                            table.insert(M.M12S.ArmyInfo.Temp, ent)\n                        end\n                    end\n                end\n            end\n        end\n        if table.size(M.M12S.ArmyInfo.Temp) == 2 then\n            if M.M12S.ArmyInfo.Temp[1].pos.y < M.M12S.ArmyInfo.Temp[2].pos.y\n                    or M.M12S.ArmyInfo.Temp[1].pos.x < 100 and M.M12S.ArmyInfo.Temp[2].pos.x < 100 and M.M12S.ArmyInfo.Temp[1].pos.x > M.M12S.ArmyInfo.Temp[2].pos.x\n                    or M.M12S.ArmyInfo.Temp[1].pos.x > 100 and M.M12S.ArmyInfo.Temp[2].pos.x > 100 and M.M12S.ArmyInfo.Temp[1].pos.x < M.M12S.ArmyInfo.Temp[2].pos.x\n            then\n                M.M12S.ArmyInfo.Temp[1], M.M12S.ArmyInfo.Temp[2] = M.M12S.ArmyInfo.Temp[2], M.M12S.ArmyInfo.Temp[1]\n            end\n            for i = 1, #M.M12S.ArmyInfo.Temp do\n                local curEnt = M.M12S.ArmyInfo.Temp[i]\n                local modelTemp = Argus.getEntityModel(curEnt.id)\n                table.insert(M.M12S.ArmyInfo.All, { ent = curEnt, model = modelTemp })\n                if curEnt.pos.x > 100 then\n                    M.M12S.ArmyInfo.Right[M.M12S.ArmyInfo.RightCnt] = curEnt\n                    M.M12S.ArmyInfo.RightCnt = M.M12S.ArmyInfo.RightCnt + 1\n                else\n                    M.M12S.ArmyInfo.Left[M.M12S.ArmyInfo.LeftCnt] = curEnt\n                    M.M12S.ArmyInfo.LeftCnt = M.M12S.ArmyInfo.LeftCnt + 1\n                end\n                if modelTemp == 19200 and M.M12S.ArmyInfo.FirstPurple == nil then\n                    M.M12S.ArmyInfo.FirstPurple = curEnt\n                end\n            end\n            M.M12S.ArmyInfo.Temp = {}\n        end\n        if table.size(M.M12S.ArmyInfo.ids) == 8 then\n            M.M12S.ArmyInfo.Timer = Now()\n        end\n    end\n    if M.M12S.ArmyInfo.FirstPurple ~= nil then\n        local buff = TensorCore.getBuff(M.GetPlayer().id, 3935)\n        if buff == nil then\n            local dps = { \"D1\", \"D2\", \"D3\", \"D4\" }\n            local posListTh, posListDps\n            local entListTh\n            if M.M12S.ArmyInfo.FirstPurple.pos.x > 100 then\n                posListDps = M.M12S.ArmyInfo.PositionLeft\n                posListTh = M.M12S.ArmyInfo.PositionRight\n                entListTh = M.M12S.ArmyInfo.Right\n            else\n                posListDps = M.M12S.ArmyInfo.PositionRight\n                posListTh = M.M12S.ArmyInfo.PositionLeft\n                entListTh = M.M12S.ArmyInfo.Left\n            end\n            if table.contains(dps, M.SelfPos) then\n                local index = M.IndexOf(dps, M.SelfPos)\n                local pos = posListDps[index]\n                M.M12S.ArmyInfo.SelfIdx = index\n                M.FrameDirect(pos.x, pos.z)\n            elseif table.size(M.M12S.ArmyInfo.ids) == 8 then\n                if M.M12S.ArmyInfo.THOrder == nil then\n                    M.M12S.ArmyInfo.THOrder = {}\n                    for i = 1, 4 do\n                        local ball = entListTh[i]\n                        local model = Argus.getEntityModel(ball.id)\n                        if model == 19200 then\n                            if not M.M12S.ArmyInfo.GotPos[\"MT\"] then\n                                M.M12S.ArmyInfo.THOrder[\"MT\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"MT\"] = true\n                            else\n                                M.M12S.ArmyInfo.THOrder[\"ST\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"ST\"] = true\n                            end\n                        else\n                            if not M.M12S.ArmyInfo.GotPos[\"H1\"] then\n                                M.M12S.ArmyInfo.THOrder[\"H1\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"H1\"] = true\n                            else\n                                M.M12S.ArmyInfo.THOrder[\"H2\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"H2\"] = true\n                            end\n                        end\n                    end\n                    M.M12S.ArmyInfo.SelfIdx = M.M12S.ArmyInfo.THOrder[M.SelfPos]\n                    d(M.M12S.ArmyInfo.THOrder)\n                else\n                    local pos = posListTh[M.M12S.ArmyInfo.SelfIdx]\n                    M.FrameDirect(pos.x, pos.z)\n                end\n            end\n        else\n            if M.M12S.ArmyInfo.SelfIdx == 1 then\n                local player = M.GetPlayer()\n                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                if buff.duration > 8.5 and TensorCore.getDistance2d(player.pos, boss.pos) < 13.8 then\n                    if player.pos.x > 100 then\n                        M.FrameDirect(114, 89)\n                    else\n                        M.FrameDirect(86, 89)\n                    end\n                elseif buff.duration > 5.5 then\n                    M.FrameDirect(100, 101.5)\n                end\n            else\n                if buff.duration > 5.5 then\n                    M.FrameDirect(100, 101.5)\n                end\n            end\n        end\n        if M.Config.Main.M12SExDraw and table.size(M.M12S.ArmyInfo.ids) == 8 then\n            if TimeSince(M.M12S.ArmyInfo.Timer) > 1200 then\n                local changed = false\n                for i, player in pairs(M.Party) do\n                    local debuff = TensorCore.getBuff(player.id, 3935)\n                    if debuff ~= nil and debuff.duration > 11 then\n                        changed = true\n                        break\n                    end\n                end\n                if changed then\n                    M.M12S.ArmyInfo.State = M.M12S.ArmyInfo.State + 1\n                    M.M12S.ArmyInfo.Timer = Now()\n                end\n            end\n            if M.M12S.ArmyInfo.State <= 4 then\n                local target1, target2\n                local ball1 = M.M12S.ArmyInfo.All[M.M12S.ArmyInfo.State * 2 - 1]\n                local ball2 = M.M12S.ArmyInfo.All[M.M12S.ArmyInfo.State * 2]\n                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                local distance = 10000\n                --找ball1的目标\n                for _, player in pairs(M.Party) do\n                    local curPlayer = TensorCore.mGetEntity(player.id)\n                    if (ball1.ent.pos.x > 100 and curPlayer.pos.x > 100)\n                            or (ball1.ent.pos.x < 100 and curPlayer.pos.x < 100)\n                    then\n                        local dis = TensorCore.getDistance2d(boss.pos, curPlayer.pos)\n                        if dis < distance then\n                            target1 = curPlayer\n                            distance = dis\n                        end\n                    end\n                end\n                distance = 10000\n                --找ball2的目标\n                for _, player in pairs(M.Party) do\n                    local curPlayer = TensorCore.mGetEntity(player.id)\n                    if curPlayer.id ~= target1.id and (\n                            (ball2.ent.pos.x > 100 and curPlayer.pos.x > 100)\n                                    or (ball2.ent.pos.x < 100 and curPlayer.pos.x < 100))\n                    then\n                        local dis = TensorCore.getDistance2d(boss.pos, curPlayer.pos)\n                        if dis < distance then\n                            target2 = curPlayer\n                            distance = dis\n                        end\n                    end\n                end\n                local greenDrawer = Argus2.ShapeDrawer:new(\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                        1\n                )\n                local purpleDrawer = Argus2.ShapeDrawer:new(\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                        1\n                )\n\n                if ball1.model == 19200 then\n                    purpleDrawer:addCircle(target1.pos.x, target1.pos.y, target1.pos.z, 6)\n                else\n                    greenDrawer:addCircle(target1.pos.x, target1.pos.y, target1.pos.z, 6)\n                end\n                if ball2.model == 19200 then\n                    purpleDrawer:addCircle(target2.pos.x, target2.pos.y, target2.pos.z, 6)\n                else\n                    greenDrawer:addCircle(target2.pos.x, target2.pos.y, target2.pos.z, 6)\n                end\n            end\n        end\n    end\nend\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"79695dbf-76bd-fb59-b4fc-c6c7b59db258",
-								true,
-							},
-							
-							{
-								"3b5a92e6-57ae-be17-86cc-738c6cb9d5f5",
-								true,
-							},
-						},
-						gVar = "ACR_RikuMNK3_CD",
-						name = "致命灾变主循环",
-						uuid = "49501902-5a85-0242-b59e-9c16a80420c1",
-						version = 2.1,
-					},
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "79695dbf-76bd-fb59-b4fc-c6c7b59db258",
-						version = 2,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.ArmySlayer ~= nil and MuAiGuide.M12S.ArmySlayer == true",
-						name = "致命灾变",
-						uuid = "3b5a92e6-57ae-be17-86cc-738c6cb9d5f5",
-						version = 2,
-					},
-				},
-			},
-			eventType = 12,
-			name = "M12S门神致命灾变",
-			uuid = "68b39db5-37db-ecc8-a289-060327422b48",
-			version = 2,
-		},
-		inheritedIndex = 27,
+		inheritedIndex = 23,
 	},
 	
 	{
@@ -3025,7 +2886,7 @@ local tbl =
 			uuid = "79562d51-d887-4795-96b7-ca10cab1b0e9",
 			version = 2,
 		},
-		inheritedIndex = 29,
+		inheritedIndex = 26,
 	},
 	
 	{
@@ -3125,7 +2986,7 @@ local tbl =
 			uuid = "c88ef753-2fab-19da-b48b-cd0a69a9505c",
 			version = 2,
 		},
-		inheritedIndex = 30,
+		inheritedIndex = 27,
 	},
 	
 	{
@@ -3399,7 +3260,7 @@ local tbl =
 			uuid = "ed3702b5-fda0-d2eb-bfce-9dc253883a46",
 			version = 2,
 		},
-		inheritedIndex = 31,
+		inheritedIndex = 28,
 	},
 	
 	{
@@ -3416,7 +3277,7 @@ local tbl =
 			uuid = "960bb8b2-a094-8d02-93bf-bed17a863848",
 			version = 2,
 		},
-		inheritedIndex = 34,
+		inheritedIndex = 31,
 	},
 	
 	{
@@ -3500,7 +3361,7 @@ local tbl =
 			uuid = "055265c3-863a-b90b-a145-a430b7c9eaee",
 			version = 2,
 		},
-		inheritedIndex = 34,
+		inheritedIndex = 31,
 	},
 	
 	{
@@ -3679,7 +3540,7 @@ local tbl =
 			uuid = "3c288afb-43ad-00b0-bc5d-69201059c52e",
 			version = 2,
 		},
-		inheritedIndex = 32,
+		inheritedIndex = 29,
 	},
 	
 	{
@@ -4698,7 +4559,7 @@ local tbl =
 					data = 
 					{
 						aType = "Lua",
-						actionLua = "local M = MuAiGuide\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif eventArgs.spellID == 46351 then\n    d(\"小怪读条左右刀\")\n    --左右刀\n    if ent.pos.x > 100 then\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 110, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 110, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 114, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 114, y = 0, z = 105.5 }\n        end\n        if M.Config.Main.M12SP4SendMacro then\n            SendTextCommand(\"/p 左右刀小怪跳B，稍后B点面向BOSS两侧\")\n        end\n    else\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 90, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 90, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 86, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 86, y = 0, z = 105.5 }\n        end\n        if M.Config.Main.M12SP4SendMacro then\n            SendTextCommand(\"/p 左右刀小怪跳D，稍后D点面向BOSS两侧\")\n        end\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.UpDown\nelseif eventArgs.spellID == 46352 then\n    d(\"小怪读条上下刀\")\n    --上下刀\n    if ent.pos.x > 100 then\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 108, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 108, y = 0, z = 100 }\n        if M.Config.Main.M12SP4SendMacro then\n            SendTextCommand(\"/p 上下刀小怪跳B，稍B点靠近BOSS\")\n        end\n    else\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 92, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 92, y = 0, z = 100 }\n        if M.Config.Main.M12SP4SendMacro then\n            SendTextCommand(\"/p 上下刀小怪跳D，稍D点靠近BOSS\")\n        end\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.LeftRight\nend\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_div2SubsEnd\nself.used = true",
+						actionLua = "local M = MuAiGuide\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif eventArgs.spellID == 46351 then\n    d(\"小怪读条左右刀\")\n    --左右刀\n    if ent.pos.x > 100 then\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 110, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 110, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 114, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 114, y = 0, z = 105.5 }\n        end\n        if M.Config.Main.M12SP4SendMacro then\n            SendTextCommand(\"/p 左右刀小怪跳B，稍后B点面向BOSS两侧\")\n        end\n    else\n        if M.IsTank(M.SelfPos) or M.IsMelee(M.GetPlayer().job) then\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 90, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 90, y = 0, z = 105.5 }\n        else\n            M.M12S.P4Sub3Info.divGuidePos1 = { x = 86, y = 0, z = 94.5 }\n            M.M12S.P4Sub3Info.divGuidePos2 = { x = 86, y = 0, z = 105.5 }\n        end\n        if M.Config.Main.M12SP4SendMacro then\n            SendTextCommand(\"/p 左右刀小怪跳D，稍后D点面向BOSS两侧\")\n        end\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.UpDown\nelseif eventArgs.spellID == 46352 then\n    d(\"小怪读条上下刀\")\n    --上下刀\n    if ent.pos.x > 100 then\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 108, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 108, y = 0, z = 100 }\n        if M.Config.Main.M12SP4SendMacro then\n            SendTextCommand(\"/p 上下刀小怪跳B，稍后B点靠近BOSS\")\n        end\n    else\n        M.M12S.P4Sub3Info.divGuidePos1 = { x = 92, y = 0, z = 100 }\n        M.M12S.P4Sub3Info.divGuidePos2 = { x = 92, y = 0, z = 100 }\n        if M.Config.Main.M12SP4SendMacro then\n            SendTextCommand(\"/p 上下刀小怪跳D，稍后D点靠近BOSS\")\n        end\n    end\n    M.M12S.P4Sub3Info.teleport = M.M12S.DataEnum.LeftRight\nend\nMuAiGuide.M12S.CurrentState = MuAiGuide.M12S.StateEnum.Puzzle4_div2SubsEnd\nself.used = true",
 						conditions = 
 						{
 							
@@ -5348,7 +5209,207 @@ local tbl =
 			uuid = "021a9e74-9ec4-8881-beb5-cb1621c7a609",
 			version = 2,
 		},
+		inheritedIndex = 34,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+			},
+			conditions = 
+			{
+			},
+			name = "-------- 已弃用 --------",
+			uuid = "89c762b0-be14-cb99-bfdb-7f34e2e85d93",
+			version = 2,
+		},
+		inheritedIndex = 35,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local drawTime = 3000\nlocal posLabel = { \"MT\", \"D4\", \"H2\", \"D2\", \"ST\", \"D1\", \"H1\", \"D3\" }\n\nif data.MuAiM11S_Sickle_Data == nil then\n    data.MuAiM11S_Sickle_Data = {}\nend\n\nfunction drawPos(ent)\n    local heading = ent.pos.h\n    for i = 0, 7 do\n        local pos = TensorCore.getPosInDirection(ent.pos, heading - i * math.pi / 4, 4)\n        AnyoneCore.addTimedWorldText(drawTime, posLabel[i + 1], pos, GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n    end\n    -- 更新时间戳\n    data.MuAiM11S_Sickle_Data[ent.id] = {\n        pos = ent.pos,\n        time = Now()\n    }\nend\n\nlocal entList = TensorCore.entityList(\"contentid=108\") or {}\nfor _, ent in pairs(entList) do\n    if Argus.getEntityModel(ent.id) == 19185 and Argus.isEntityVisible(ent) then\n        local dataCache = data.MuAiM11S_Sickle_Data[ent.id]\n\n        if dataCache == nil then\n            drawPos(ent)  -- 首次绘制\n        else\n            local distance = TensorCore.getDistance2d(ent.pos, dataCache.pos)\n            local timeSinceDraw = Now() - dataCache.time\n            local isTimeOut = timeSinceDraw > drawTime - 50\n\n            if distance > 0.5 or isTimeOut then\n                drawPos(ent)  -- 位置变化或超时重新绘制\n            end\n        end\n    end\nend\n\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"cee5c51f-db3d-03b0-9b91-12cc159be349",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						uuid = "9a68066e-0fda-cac6-964b-abd739087ef1",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "cee5c51f-db3d-03b0-9b91-12cc159be349",
+						version = 2,
+					},
+				},
+			},
+			enabled = false,
+			eventType = 12,
+			name = "M11S月环8方",
+			uuid = "b3503580-71a1-e733-a4c3-578deaae1e88",
+			version = 2,
+		},
+		inheritedIndex = 36,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local drawTime = 40000\n\nAnyoneCore.addTimedWorldText(drawTime , \"H1\", {x = 85, y = 0 ,z =  115}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"H2/D2\", {x = 105, y = 0 ,z =  95}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\n\nAnyoneCore.addTimedWorldText(drawTime , \"D3\", {x = 90, y = 0 ,z =  110}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D4\", {x = 105, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D1\", {x = 95, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"089e6374-6111-897d-8af0-fcd0c72e28ac",
+								true,
+							},
+							
+							{
+								"36552ff7-f62a-b95c-9b3e-6ec090ee0398",
+								true,
+							},
+						},
+						gVar = "ACR_RikuNIN3_CD",
+						uuid = "b71e5591-3e6b-758b-b52e-84b8c6cbeccb",
+						version = 2.1,
+					},
+					inheritedIndex = 1,
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1325,
+						name = "M11S",
+						uuid = "36552ff7-f62a-b95c-9b3e-6ec090ee0398",
+						version = 2,
+					},
+					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Event",
+						eventArgType = 2,
+						eventSpellID = 46132,
+						name = "46132-流星雨",
+						uuid = "089e6374-6111-897d-8af0-fcd0c72e28ac",
+						version = 2,
+					},
+					inheritedIndex = 2,
+				},
+			},
+			enabled = false,
+			eventType = 2,
+			name = "M11S陨石位置",
+			uuid = "74d161a0-ce78-a135-a5df-53829b8f7124",
+			version = 2,
+		},
 		inheritedIndex = 37,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+				
+				{
+					data = 
+					{
+						aType = "Lua",
+						actionLua = "local M = MuAiGuide\n\nif TimeSince(M.M12S.Timer) > 22000 then\n    M.M12S.ArmySlayer = false\n    M.M12S.ArmyInfo = nil\nelse\n    if M.M12S.ArmyInfo == nil then\n        M.M12S.ArmyInfo = {}\n        M.M12S.ArmyInfo.ids = {}\n        M.M12S.ArmyInfo.LeftCnt = 1\n        M.M12S.ArmyInfo.RightCnt = 1\n        M.M12S.ArmyInfo.State = 1\n        M.M12S.ArmyInfo.Left = {}\n        M.M12S.ArmyInfo.Right = {}\n        M.M12S.ArmyInfo.All = {}\n        M.M12S.ArmyInfo.FirstPurple = nil\n        M.M12S.ArmyInfo.PositionLeft = {\n            [1] = { x = 95, y = 0, z = 85.5 },\n            [2] = { x = 97, y = 0, z = 93 },\n            [3] = { x = 87, y = 0, z = 86 },\n            [4] = { x = 90, y = 0, z = 95 },\n        }\n        M.M12S.ArmyInfo.PositionRight = {\n            [1] = { x = 105, y = 0, z = 85.5 },\n            [2] = { x = 103, y = 0, z = 93 },\n            [3] = { x = 113, y = 0, z = 86 },\n            [4] = { x = 110, y = 0, z = 95 },\n        }\n        M.M12S.ArmyInfo.GotPos = {\n            [\"MT\"] = false,\n            [\"ST\"] = false,\n            [\"H1\"] = false,\n            [\"H2\"] = false,\n        }\n        M.M12S.ArmyInfo.THOrder = nil\n        M.M12S.ArmyInfo.Timer = 0\n        M.M12S.ArmyInfo.Temp = {}\n    end\n\n    if table.size(M.M12S.ArmyInfo.ids) < 8 then\n        for _, ent in pairs(TensorCore.entityList(\"contentid=14378\")) do\n            if Argus.isEntityVisible(ent) then\n                local model = Argus.getEntityModel(ent.id)\n                if model == 19200 or model == 19201 then\n                    if not table.contains(M.M12S.ArmyInfo.ids, ent.id) then\n                        table.insert(M.M12S.ArmyInfo.ids, ent.id)\n                        if table.size(M.M12S.ArmyInfo.Temp) < 2 then\n                            table.insert(M.M12S.ArmyInfo.Temp, ent)\n                        end\n                    end\n                end\n            end\n        end\n        if table.size(M.M12S.ArmyInfo.Temp) == 2 then\n            if M.M12S.ArmyInfo.Temp[1].pos.y < M.M12S.ArmyInfo.Temp[2].pos.y\n                    or M.M12S.ArmyInfo.Temp[1].pos.x < 100 and M.M12S.ArmyInfo.Temp[2].pos.x < 100 and M.M12S.ArmyInfo.Temp[1].pos.x > M.M12S.ArmyInfo.Temp[2].pos.x\n                    or M.M12S.ArmyInfo.Temp[1].pos.x > 100 and M.M12S.ArmyInfo.Temp[2].pos.x > 100 and M.M12S.ArmyInfo.Temp[1].pos.x < M.M12S.ArmyInfo.Temp[2].pos.x\n            then\n                M.M12S.ArmyInfo.Temp[1], M.M12S.ArmyInfo.Temp[2] = M.M12S.ArmyInfo.Temp[2], M.M12S.ArmyInfo.Temp[1]\n            end\n            for i = 1, #M.M12S.ArmyInfo.Temp do\n                local curEnt = M.M12S.ArmyInfo.Temp[i]\n                local modelTemp = Argus.getEntityModel(curEnt.id)\n                table.insert(M.M12S.ArmyInfo.All, { ent = curEnt, model = modelTemp })\n                if curEnt.pos.x > 100 then\n                    M.M12S.ArmyInfo.Right[M.M12S.ArmyInfo.RightCnt] = curEnt\n                    M.M12S.ArmyInfo.RightCnt = M.M12S.ArmyInfo.RightCnt + 1\n                else\n                    M.M12S.ArmyInfo.Left[M.M12S.ArmyInfo.LeftCnt] = curEnt\n                    M.M12S.ArmyInfo.LeftCnt = M.M12S.ArmyInfo.LeftCnt + 1\n                end\n                if modelTemp == 19200 and M.M12S.ArmyInfo.FirstPurple == nil then\n                    M.M12S.ArmyInfo.FirstPurple = curEnt\n                end\n            end\n            M.M12S.ArmyInfo.Temp = {}\n        end\n        if table.size(M.M12S.ArmyInfo.ids) == 8 then\n            M.M12S.ArmyInfo.Timer = Now()\n        end\n    end\n    if M.M12S.ArmyInfo.FirstPurple ~= nil then\n        local buff = TensorCore.getBuff(M.GetPlayer().id, 3935)\n        if buff == nil then\n            local dps = { \"D1\", \"D2\", \"D3\", \"D4\" }\n            local posListTh, posListDps\n            local entListTh\n            if M.M12S.ArmyInfo.FirstPurple.pos.x > 100 then\n                posListDps = M.M12S.ArmyInfo.PositionLeft\n                posListTh = M.M12S.ArmyInfo.PositionRight\n                entListTh = M.M12S.ArmyInfo.Right\n            else\n                posListDps = M.M12S.ArmyInfo.PositionRight\n                posListTh = M.M12S.ArmyInfo.PositionLeft\n                entListTh = M.M12S.ArmyInfo.Left\n            end\n            if table.contains(dps, M.SelfPos) then\n                local index = M.IndexOf(dps, M.SelfPos)\n                local pos = posListDps[index]\n                M.M12S.ArmyInfo.SelfIdx = index\n                M.FrameDirect(pos.x, pos.z)\n            elseif table.size(M.M12S.ArmyInfo.ids) == 8 then\n                if M.M12S.ArmyInfo.THOrder == nil then\n                    M.M12S.ArmyInfo.THOrder = {}\n                    for i = 1, 4 do\n                        local ball = entListTh[i]\n                        local model = Argus.getEntityModel(ball.id)\n                        if model == 19200 then\n                            if not M.M12S.ArmyInfo.GotPos[\"MT\"] then\n                                M.M12S.ArmyInfo.THOrder[\"MT\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"MT\"] = true\n                            else\n                                M.M12S.ArmyInfo.THOrder[\"ST\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"ST\"] = true\n                            end\n                        else\n                            if not M.M12S.ArmyInfo.GotPos[\"H1\"] then\n                                M.M12S.ArmyInfo.THOrder[\"H1\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"H1\"] = true\n                            else\n                                M.M12S.ArmyInfo.THOrder[\"H2\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"H2\"] = true\n                            end\n                        end\n                    end\n                    M.M12S.ArmyInfo.SelfIdx = M.M12S.ArmyInfo.THOrder[M.SelfPos]\n                    d(M.M12S.ArmyInfo.THOrder)\n                else\n                    local pos = posListTh[M.M12S.ArmyInfo.SelfIdx]\n                    M.FrameDirect(pos.x, pos.z)\n                end\n            end\n        else\n            if M.M12S.ArmyInfo.SelfIdx == 1 then\n                local player = M.GetPlayer()\n                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                if buff.duration > 8.5 and TensorCore.getDistance2d(player.pos, boss.pos) < 13.8 then\n                    if player.pos.x > 100 then\n                        M.FrameDirect(114, 89)\n                    else\n                        M.FrameDirect(86, 89)\n                    end\n                elseif buff.duration > 5.5 then\n                    M.FrameDirect(100, 101.5)\n                end\n            else\n                if buff.duration > 5.5 then\n                    M.FrameDirect(100, 101.5)\n                end\n            end\n        end\n        if M.Config.Main.M12SExDraw and table.size(M.M12S.ArmyInfo.ids) == 8 then\n            if TimeSince(M.M12S.ArmyInfo.Timer) > 1200 then\n                local changed = false\n                for i, player in pairs(M.Party) do\n                    local debuff = TensorCore.getBuff(player.id, 3935)\n                    if debuff ~= nil and debuff.duration > 11 then\n                        changed = true\n                        break\n                    end\n                end\n                if changed then\n                    M.M12S.ArmyInfo.State = M.M12S.ArmyInfo.State + 1\n                    M.M12S.ArmyInfo.Timer = Now()\n                end\n            end\n            if M.M12S.ArmyInfo.State <= 4 then\n                local target1, target2\n                local ball1 = M.M12S.ArmyInfo.All[M.M12S.ArmyInfo.State * 2 - 1]\n                local ball2 = M.M12S.ArmyInfo.All[M.M12S.ArmyInfo.State * 2]\n                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                local distance = 10000\n                --找ball1的目标\n                for _, player in pairs(M.Party) do\n                    local curPlayer = TensorCore.mGetEntity(player.id)\n                    if (ball1.ent.pos.x > 100 and curPlayer.pos.x > 100)\n                            or (ball1.ent.pos.x < 100 and curPlayer.pos.x < 100)\n                    then\n                        local dis = TensorCore.getDistance2d(boss.pos, curPlayer.pos)\n                        if dis < distance then\n                            target1 = curPlayer\n                            distance = dis\n                        end\n                    end\n                end\n                distance = 10000\n                --找ball2的目标\n                for _, player in pairs(M.Party) do\n                    local curPlayer = TensorCore.mGetEntity(player.id)\n                    if curPlayer.id ~= target1.id and (\n                            (ball2.ent.pos.x > 100 and curPlayer.pos.x > 100)\n                                    or (ball2.ent.pos.x < 100 and curPlayer.pos.x < 100))\n                    then\n                        local dis = TensorCore.getDistance2d(boss.pos, curPlayer.pos)\n                        if dis < distance then\n                            target2 = curPlayer\n                            distance = dis\n                        end\n                    end\n                end\n                local greenDrawer = Argus2.ShapeDrawer:new(\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                        1\n                )\n                local purpleDrawer = Argus2.ShapeDrawer:new(\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                        1\n                )\n\n                if ball1.model == 19200 then\n                    purpleDrawer:addCircle(target1.pos.x, target1.pos.y, target1.pos.z, 6)\n                else\n                    greenDrawer:addCircle(target1.pos.x, target1.pos.y, target1.pos.z, 6)\n                end\n                if ball2.model == 19200 then\n                    purpleDrawer:addCircle(target2.pos.x, target2.pos.y, target2.pos.z, 6)\n                else\n                    greenDrawer:addCircle(target2.pos.x, target2.pos.y, target2.pos.z, 6)\n                end\n            end\n        end\n    end\nend\nself.used = true",
+						conditions = 
+						{
+							
+							{
+								"79695dbf-76bd-fb59-b4fc-c6c7b59db258",
+								true,
+							},
+							
+							{
+								"3b5a92e6-57ae-be17-86cc-738c6cb9d5f5",
+								true,
+							},
+						},
+						gVar = "ACR_RikuMNK3_CD",
+						name = "致命灾变主循环",
+						uuid = "49501902-5a85-0242-b59e-9c16a80420c1",
+						version = 2.1,
+					},
+				},
+			},
+			conditions = 
+			{
+				
+				{
+					data = 
+					{
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "79695dbf-76bd-fb59-b4fc-c6c7b59db258",
+						version = 2,
+					},
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M12S.ArmySlayer ~= nil and MuAiGuide.M12S.ArmySlayer == true",
+						name = "致命灾变",
+						uuid = "3b5a92e6-57ae-be17-86cc-738c6cb9d5f5",
+						version = 2,
+					},
+				},
+			},
+			enabled = false,
+			eventType = 12,
+			name = "M12S门神致命灾变-old",
+			uuid = "5c033546-267b-04d9-8c1f-cadb1ae80315",
+			version = 2,
+		},
+		inheritedIndex = 22,
 	}, 
 	inheritedProfiles = 
 	{
