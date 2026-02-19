@@ -58,7 +58,7 @@ local DrawMainUI = function(M)
             GUI:Button("分摊连线预览", 140, 20)
             if GUI:IsItemClicked(0) then
                 local entities = TensorCore.entityList("All")
-                if entities ~= nil and table.size(entities) > 0 then
+                if entities ~= nil then
                     local target
                     local dis = 100000
                     for _, ent in pairs(entities) do
