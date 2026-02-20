@@ -547,8 +547,6 @@ local DrawMainUI = function(M)
             GUI:Text(" ")
             GUI:SameLine()
             M.Config.Main.AttackRangeHelper = GUI:Checkbox("绘制原始攻击范围", M.Config.Main.AttackRangeHelper)
-            GUI:SameLine()
-            GUI:TextColored(1, 0, 1, 1, "  (目前仅支持M9S~M12S)")
             if M.Config.Main.AttackRangeHelper then
                 GUI:Text(" ")
                 GUI:SameLine()
@@ -574,6 +572,15 @@ local DrawMainUI = function(M)
                 GUI:PushItemWidth(80)
                 M.Config.Main.LineSize, LineSizeChange = GUI:SliderFloat("##LineSize", M.Config.Main.LineSize, 1, 10)
                 GUI:PopItemWidth()
+                GUI:SameLine(210,0)
+                GUI:Button("添加当前目标", 120, 20)
+                if GUI:IsItemClicked(0) then
+                    M.AddToAttackRange()
+                end
+                GUI:TextColored(1, 0, 1, 1, "本功能默认仅包含M9S~M12S数据")
+                GUI:TextColored(1, 1, 0, 1, "可以使用按钮[添加当前目标]添加新的目标圈数据")
+                GUI:TextColored(1, 1, 0, 1, "使用时请关闭IC, Sp等并将目标区改回原始大小, 如")
+                GUI:TextColored(1, 1, 0, 1, "BOSS有目标圈大小变化, 请在两种状态下各添加一次")
             end
         end
         if GUI:CollapsingHeader("调试工具") then

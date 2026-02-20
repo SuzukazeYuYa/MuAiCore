@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 245
+M.VERSION = 246
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -219,10 +219,17 @@ M.CreateDefMainCfg = function()
         MountSpeedHack = 9,
         DrawBlackListEnable = false,
         DrawBlackList = {},
-        AttackRangeHelper =  false,
+        AttackRangeHelper = false,
         OutRangeColor = { r = 1, g = 1, b = 0, a = 1 },
         InRangeColor = { r = 1, g = 1, b = 1, a = 1 },
         LineSize = 3,
+        AtkRangeData = {
+            [1321] = { [14300] = 4, [14301] = 10, [14302] = 3, [14303] = 3, [14304] = 4, },
+            [1323] = { [14369] = 4, [14370] = 4, [14373] = 4 },
+            [1325] = { [14305] = { range = 5, buff = 3808, onBuffRange = 10 } },
+            [1327] = { [14378] = 13.8, [14379] = { range = 5, buff = 3808, onBuffRange = 9 } },
+            -- [341] = { [541] = 1.5 },
+        },
         --------- M11S -----------
         M11SExDraw = false,
         -- 击飞方式 1 直 2斜
@@ -528,6 +535,69 @@ M.InitConfig = function()
     end
     M.Config.FruCustomList = M.LoadFileList(M.Config.FruGuidePath, { "GuideConfig.lua" })
     M.Config.FruCustomListIndex = 1
+end
+
+M.AddToAttackRange = function()
+    local target = TensorCore.mGetTarget()
+    if target == nil or target.contentid == 0 or target.attackable == false or target.type ~= 2 then
+        M.Info("请选择正确的目标！")
+        return
+    end
+    local radius = target.hitRadius
+    local contentid = target.contentid
+    local mapData = MuAiGuide.Config.Main.AtkRangeData[Player.localmapid]
+    if mapData == nil then
+        MuAiGuide.Config.Main.AtkRangeData[Player.localmapid] = {}
+        mapData = {}
+    end
+    local curBossData = mapData[contentid]
+    local newBossData
+    if TensorCore.hasBuff(target.id, 3808) then
+        newBossData = {}
+        if curBossData ~= nil then
+            if type(curBossData) == "number" then
+                newBossData.range = curBossData
+            elseif type(curBossData) == "table" then
+                newBossData.range = curBossData.range
+            end
+        end
+        newBossData.buff = 3808
+        newBossData.onBuffRange = radius
+    else
+        if curBossData ~= nil then
+            if type(curBossData) == "number" then
+                newBossData = radius
+            elseif type(curBossData) == "table" then
+                newBossData = {}
+                newBossData.range = curBossData.range
+                newBossData.buff = curBossData.buff
+                newBossData.onBuffRange = curBossData.onBuffRange
+            end
+        else
+            newBossData = radius
+        end
+    end
+    MuAiGuide.Config.Main.AtkRangeData[Player.localmapid][contentid] = newBossData
+    local msg
+    if type(curBossData) == "number" then
+        msg = "已添加数据，BOSS名称：" .. target.name .. "，ContentId：" .. contentid .. "，目标圈大小：" .. tostring(radius)
+    elseif type(curBossData) == "table" then
+        if curBossData.range ~= nil then
+            msg = "已添加数据，BOSS名称：" .. target.name
+                    .. "，ContentId：" .. contentid
+                    .. "，目标圈大小：" .. tostring(curBossData.range)
+                    .. "，目标扩大BUFF下，目标圈大小" .. tostring(curBossData.onBuffRange)
+        else
+            msg = "已添加数据，BOSS名称：" .. target.name
+                    .. "，ContentId：" .. contentid
+                    .. "，目标扩大BUFF下，目标圈大小" .. tostring(curBossData.onBuffRange)
+                    .. "，非扩大状态下目标圈数据为空，请添加！"
+        end
+
+    end
+    if msg ~= nil then
+        M.Info(msg)
+    end
 end
 
 ------------------------------- 游戏逻辑 -------------------------------

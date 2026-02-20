@@ -9,15 +9,6 @@ local updateNeedReLoad = false
 local lastVersion
 local downloadPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
 
--- 显示攻击距离的数据
-local atkRangeData = {
-    [1321] = { [14300] = 4, [14301] = 10, [14302] = 3, [14303] = 3, [14304] = 4, },
-    [1323] = { [14369] = 4, [14370] = 4, [14373] = 4 },
-    [1325] = { [14305] = { range = 5, buff = 3808, onBuffRange = 10 } },
-    [1327] = { [14378] = 13.8, [14379] = { range = 5, buff = 3808, onBuffRange = 9 } },
-   -- [341] = { [541] = 1.5 },
-}
-
 ReloadMuAiGuide = function()
     MuAiGuide = nil
     core.InitMuAiGuide()
@@ -119,7 +110,10 @@ local attackRangeHackHelper = function()
             or ((not MuAiGuide.IsTank(Player.job)) and (not MuAiGuide.IsMelee(Player.job))) then
         return
     end
-    local mapData = atkRangeData[Player.localmapid]
+    if MuAiGuide.Config.Main.AtkRangeData == nil or table.size(MuAiGuide.Config.Main.AtkRangeData) == 0 then
+        return
+    end
+    local mapData = MuAiGuide.Config.Main.AtkRangeData[Player.localmapid]
     if mapData == nil then
         return
     end
