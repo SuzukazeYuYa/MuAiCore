@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 246
+M.VERSION = 247
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -1051,7 +1051,7 @@ M.DirectTo = function(x, z, time, size, delay)
             (GUI:ColorConvertFloat4ToU32(255 / 255, 255 / 255, 255 / 255, 1)),
             2
     )
-    local guide1 = newDraw:addTimedCircle(time, x, drawY, z, size, delay, true)
+    local guide1 = newDraw:addTimedCircle(time, x, drawY, z, size, delay, true, true)
     local guide2 = Argus2.addTimedRectFilled(
             time,
             x,
@@ -1071,6 +1071,7 @@ M.DirectTo = function(x, z, time, size, delay)
             0.01,
             nil,
             nil,
+            true,
             true
     )
 
@@ -1082,7 +1083,7 @@ M.DirectTo = function(x, z, time, size, delay)
             1
     )
 
-    local guide3 = newDraw2:addTimedCircle(time, x, drawY, z, 0.03, delay, true)
+    local guide3 = newDraw2:addTimedCircle(time, x, drawY, z, 0.03, delay, true, true)
     if delay < 1 then
         table.insert(M.NotDelayGuides, guide1)
         table.insert(M.NotDelayGuides, guide2)
@@ -1126,6 +1127,7 @@ M.LinkToPlayer = function(id, time, size, r, g, b, a)
             0.01,
             nil,
             nil,
+            true,
             true
     )
 end
@@ -1171,6 +1173,7 @@ M.DirectToEnt = function(id, time, size)
             0.01,
             nil,
             nil,
+            true,
             true
     )
     local newDraw2 = Argus2.ShapeDrawer:new(
@@ -1181,7 +1184,7 @@ M.DirectToEnt = function(id, time, size)
             1
     )
 
-    local id3 = newDraw2:addTimedCircleOnEnt(time, id, 0.03, 0, true)
+    local id3 = newDraw2:addTimedCircleOnEnt(time, id, 0.03, 0, true,  true)
     table.insert(drawIds, id1)
     table.insert(drawIds, id2)
     table.insert(drawIds, id3)
