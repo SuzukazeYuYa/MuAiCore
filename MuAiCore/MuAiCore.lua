@@ -8,6 +8,7 @@ local lastMap, lastJob, updateTime
 local updateNeedReLoad = false
 local lastVersion
 local downloadPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
+local curDrawAttackRange
 
 ReloadMuAiGuide = function()
     MuAiGuide = nil
@@ -52,6 +53,7 @@ core.InitMuAiGuide = function(checkUpdate)
         MuAiGuide.LatestVersion = result
     end
     MuAiGuide.checkVersion(true)
+    curDrawAttackRange = MoogleTelegraphs.Settings.DrawAttackRange
 end
 
 core.DrawMainUI = function()
@@ -92,6 +94,9 @@ local isDrawBlackListOn = function()
 end
 
 local disableDrawCheck = function()
+    if MoogleTelegraphs == nil or MoogleTelegraphs.Settings == nil then
+        return
+    end
     if isDrawBlackListOn() then
         if lastMap ~= Player.localmapid then
             if table.contains(MuAiGuide.Config.Main.DrawBlackList, Player.localmapid) then
@@ -166,6 +171,66 @@ local attackRangeHackHelper = function()
     drawer:addCircle(curTarget.pos.x, curTarget.pos.y, curTarget.pos.z, radius)
 end
 
+local attackRangeReMake = function()
+    if MoogleTelegraphs ~= nil and MoogleTelegraphs.Settings == nil then
+        return
+    end
+    if Player == nil or (not MuAiGuide.Config.Main.AttackRangeHelper)
+            or ((not MuAiGuide.IsTank(Player.job)) and (not MuAiGuide.IsMelee(Player.job))) then
+        MoogleTelegraphs.Settings.DrawAttackRange = curDrawAttackRange
+        return
+    end
+    if not MuAiGuide.Config.Main.AttackRangeReplace then
+        MoogleTelegraphs.Settings.DrawAttackRange = true
+        return
+    end
+    MoogleTelegraphs.Settings.DrawAttackRange = not MuAiGuide.Config.Main.AttackRangeReplace
+    local curTarget = TensorCore.mGetTarget()
+    if curTarget == nil then
+        return
+    end
+    local curDistance = TensorCore.getDistance2d(Player.pos, curTarget.pos)
+    local hitRange = curTarget.hitRadius
+    local deltaDistance = curDistance - hitRange
+    local alpha, color
+    local radius = hitRange + 3.5
+ 
+    local inSideColor = MoogleTelegraphs.Settings.outlineRGB.rangeInside
+    local outSideColor = MoogleTelegraphs.Settings.outlineRGB.rangeOutside
+    if MoogleTelegraphs.Settings.AlwaysShowAttackRange then
+        if deltaDistance >= 3.5 then
+            alpha = outSideColor.a
+            color = outSideColor
+        else
+            alpha = inSideColor.a
+            color = inSideColor  
+        end
+    else
+        if deltaDistance >= 3.5 then
+            alpha = outSideColor.a
+            color = outSideColor
+        elseif deltaDistance >= 2 then
+            local sub = deltaDistance - 2
+            if sub < 1 then
+                alpha = inSideColor.a * sub
+            else
+                alpha = inSideColor.a
+            end
+            color = inSideColor
+        else
+            return
+        end
+    end
+    local drawer = Argus2.ShapeDrawer:new(
+            (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 0)),
+            (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 0)),
+            (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 0)),
+            (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, alpha)),
+            MoogleTelegraphs.Settings.outlineThickness.range
+    )
+    drawer:addCircle(curTarget.pos.x, curTarget.pos.y, curTarget.pos.z, radius)
+end
+
 local onMapChange = function()
     MuAiGuide.Party = nil
     MuAiGuide.SelfPos = nil
@@ -235,6 +300,7 @@ core.Draw = function()
             core.DrawFruMitigationUI()
         end
         attackRangeHackHelper()
+        attackRangeReMake()
     end
 end
 

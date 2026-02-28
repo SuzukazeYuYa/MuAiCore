@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 247
+M.VERSION = 248
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -220,6 +220,7 @@ M.CreateDefMainCfg = function()
         DrawBlackListEnable = false,
         DrawBlackList = {},
         AttackRangeHelper = false,
+        AttackRangeReplace = false,
         OutRangeColor = { r = 1, g = 1, b = 0, a = 1 },
         InRangeColor = { r = 1, g = 1, b = 1, a = 1 },
         LineSize = 3,
@@ -545,9 +546,9 @@ M.AddToAttackRange = function()
     end
     local radius = target.hitRadius
     local contentid = target.contentid
-    local mapData = MuAiGuide.Config.Main.AtkRangeData[Player.localmapid]
+    local mapData = M.Config.Main.AtkRangeData[Player.localmapid]
     if mapData == nil then
-        MuAiGuide.Config.Main.AtkRangeData[Player.localmapid] = {}
+        M.Config.Main.AtkRangeData[Player.localmapid] = {}
         mapData = {}
     end
     local curBossData = mapData[contentid]
