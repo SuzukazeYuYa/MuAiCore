@@ -194,7 +194,7 @@ local attackRangeReMake = function()
     local deltaDistance = curDistance - hitRange
     local alpha, color
     local radius = hitRange + 3.5
- 
+
     local inSideColor = MoogleTelegraphs.Settings.outlineRGB.rangeInside
     local outSideColor = MoogleTelegraphs.Settings.outlineRGB.rangeOutside
     if MoogleTelegraphs.Settings.AlwaysShowAttackRange then
@@ -203,7 +203,7 @@ local attackRangeReMake = function()
             color = outSideColor
         else
             alpha = inSideColor.a
-            color = inSideColor  
+            color = inSideColor
         end
     else
         if deltaDistance >= 3.5 then
@@ -239,6 +239,11 @@ local onMapChange = function()
             MuAiGuide.UI.open = true
         end
         MuAiGuide.LoadParty()
+        if MuAiGuide.UI.tabs ~= nil then
+            for i = 1, 6 do
+                MuAiGuide.UI.tabs.tabs[i].isselected = i == 1
+            end
+        end
     else
         MuAiGuide.UI.open = false
     end
