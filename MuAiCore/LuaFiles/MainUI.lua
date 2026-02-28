@@ -25,7 +25,7 @@ local DrawMainUI = function(M)
         GUI:AlignFirstTextHeightToWidgets()
         GUI:Text("|")
         GUI:SameLine()
-        local tabindex, tabname = GUI_DrawTabs(M.UI.tabs)
+        local tabindex, _ = GUI_DrawTabs(M.UI.tabs)
         GUI:Separator()
         GUI:Dummy(0, 3)
         if tabindex == 1 then
@@ -65,7 +65,9 @@ local DrawMainUI = function(M)
             GUI:Separator()
             GUI:Dummy(1, 1)
             GUI:Text("  | 职能 |职业|            角色名           |")
-
+            GUI:Dummy(6, 0)
+            GUI:SameLine()
+            GUI:PushItemWidth(303)
             if M.Party == nil or table.size(M.Party) == 0 then
                 M.Party = {}
                 M.Party.MT = nil
@@ -77,12 +79,21 @@ local DrawMainUI = function(M)
                 M.Party.D3 = nil
                 M.Party.D4 = nil
             end
-            GUI:Dummy(6, 0)
-            GUI:SameLine()
-            GUI:PushItemWidth(303)
+            if not M.Party.Count then
+                function M.Party:Count()
+                    local roleKeys = { "MT", "ST", "H1", "H2", "D1", "D2", "D3", "D4" }
+                    local count = 0
+                    for _, key in ipairs(roleKeys) do
+                        if self[key] ~= nil then
+                            count = count + 1
+                        end
+                    end
+                    return count
+                end
+            end
             local partyMembers
-            if table.size(M.Party) == 4 then
-                GUI:ListBoxHeader("##Jobs", 304, 200)
+            if M.Party:Count() == 4 then
+                GUI:ListBoxHeader("##Jobs", 304, 130)
                 partyMembers = {
                     { info = M.Party.MT, label = "MT" },
                     { info = M.Party.H1, label = "H1" },
@@ -139,7 +150,6 @@ local DrawMainUI = function(M)
                     local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\JobIcon\\" .. tostring(ptMember.info.job) .. ".png"
                     GUI:Image(path, 25, 25)
                     GUI:SameLine(0, 25)
-                    --GUI:AlignFirstTextHeightToWidgets()
                     GUI:Selectable(ptMember.info.name, IsSelected(), GUI.SelectableFlags_DontClosePopups, 0, 22)
                 else
                     local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\JobIcon\\00.png"
@@ -152,7 +162,6 @@ local DrawMainUI = function(M)
                     end
                     GUI:Image(path, 25, 25)
                     GUI:SameLine(0, 25)
-                    --GUI:AlignFirstTextHeightToWidgets()
                     GUI:Selectable("未知玩家" .. i, IsSelected(), GUI.SelectableFlags_DontClosePopups, 0, 22)
                 end
                 if GUI:IsItemHovered(GUI.HoveredFlags_AllowWhenBlockedByPopup + GUI.HoveredFlags_AllowWhenBlockedByActiveItem + GUI.HoveredFlags_AllowWhenOverlapped) then
@@ -191,7 +200,13 @@ local DrawMainUI = function(M)
                 if M.Party.selected ~= nil and (GUI:IsMouseReleased(0) or not GUI:IsMouseDown(0)) then
                     M.Party.selected = nil
                 end
-                if i < 8 then
+                local size
+                if M.Party ~= nil and (M.Party:Count() == 4 or M.Party:Count() == 8) then
+                    size = M.Party:Count()
+                else
+                    size = 8
+                end
+                if i < size then
                     GUI:Separator()
                 end
             end
@@ -212,13 +227,13 @@ local DrawMainUI = function(M)
             GUI:SameLine()
             M.Config.Main.AutoUpdate = GUI:Checkbox("开启自动更新", M.Config.Main.AutoUpdate)
             GUI:SameLine(0, 45)
-            GUI:TextColored(0, 255, 0, 1, "※需要网络状态良好！")
+            GUI:TextColored(0, 1, 0, 1, "※需要网络状态良好！")
             GUI:Separator()
             GUI:Dummy(6, 0)
             GUI:SameLine()
             M.Config.Main.AnyOneReactionOn = GUI:Checkbox("是否启用了Anyone", M.Config.Main.AnyOneReactionOn)
             GUI:SameLine(0, 19)
-            GUI:TextColored(0, 255, 0, 1, "")
+            GUI:TextColored(0, 1, 0, 1, "")
             GUI:Separator()
             GUI:Dummy(6, 0)
             GUI:SameLine()
@@ -313,13 +328,13 @@ local DrawMainUI = function(M)
             M.Config.Main.DrawBlackListEnable = GUI:Checkbox("开启绘制黑名单", M.Config.Main.DrawBlackListEnable)
             GUI:Dummy(6, 0)
             GUI:SameLine()
-            GUI:TextColored(0, 255, 0, 1, "※在某些地图关闭莫古力基础绘制")
+            GUI:TextColored(0, 1, 0, 1, "※在某些地图关闭莫古力基础绘制")
             GUI:Dummy(6, 0)
             GUI:SameLine()
             if M.Config.Main.DrawBlackListEnable then
                 M.AddLabel("黑名单地图ID：", false, 115)
                 GUI:SameLine(0, 19)
-                GUI:TextColored(0, 255, 0, 1, "※使用英文逗号分隔")
+                GUI:TextColored(0, 1, 0, 1, "※使用英文逗号分隔")
                 GUI:Dummy(6, 0)
                 GUI:SameLine()
                 GUI:PushItemWidth(315)
@@ -596,7 +611,7 @@ local DrawMainUI = function(M)
         elseif tabindex == 5 then
             GUI:Dummy(6, 0)
             GUI:SameLine()
-            GUI:TextColored(255, 0, 0, 1, "※不知道干嘛的千万别动！")
+            GUI:TextColored(1, 0, 0, 1, "※不知道干嘛的千万别动！")
             if not M.DebugMode then
                 GUI:PushItemWidth(40)
                 GUI:Dummy(6, 0)

@@ -718,10 +718,20 @@ M.GetPartyPlayers = function()
         table.insert(members, curPt[1])
         table.insert(checker, curPt[1].id)
         curPt = TensorCore.entityList("Party")
+    elseif #curPt == 3 or #curPt == 7 then
+        local hasSelf = false
+        for i, ent in pairs(curPt) do
+            if ent.id == Player.id then
+                hasSelf = true
+                break
+            end
+        end
+        if not hasSelf then
+            table.insert(curPt, Player)
+        end
     end
     for _, ent in pairs(curPt) do
         if M.IsPlayer(ent)
-                and ent.type == 1
                 and not table.contains(checker, ent.id)
                 and ent.name ~= nil and ent.name ~= ""
         then
@@ -759,7 +769,7 @@ M.LoadParty = function()
         M.GetSelfPos()
         return
     end
-    if members == nil or table.size(members) < 8 then
+    if members == nil or (table.size(members) < 8 and table.size(members) ~= 4) then
         M.Info("当前没有组队。")
         return
     end
@@ -1185,7 +1195,7 @@ M.DirectToEnt = function(id, time, size)
             1
     )
 
-    local id3 = newDraw2:addTimedCircleOnEnt(time, id, 0.03, 0, true,  true)
+    local id3 = newDraw2:addTimedCircleOnEnt(time, id, 0.03, 0, true, true)
     table.insert(drawIds, id1)
     table.insert(drawIds, id2)
     table.insert(drawIds, id3)
