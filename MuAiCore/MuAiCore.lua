@@ -186,7 +186,7 @@ local attackRangeReMake = function()
     end
     MoogleTelegraphs.Settings.DrawAttackRange = not MuAiGuide.Config.Main.AttackRangeReplace
     local curTarget = TensorCore.mGetTarget()
-    if curTarget == nil then
+    if curTarget == nil or not curTarget.attackable then
         return
     end
     local curDistance = TensorCore.getDistance2d(Player.pos, curTarget.pos)
