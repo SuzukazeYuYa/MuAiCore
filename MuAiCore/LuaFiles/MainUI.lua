@@ -68,8 +68,10 @@ local DrawMainUI = function(M)
             GUI:Dummy(6, 0)
             GUI:SameLine()
             GUI:PushItemWidth(303)
-            if M.Party == nil or table.size(M.Party) == 0 then
-                M.Party = {}
+            if M.GetPartyCnt() == 0 then
+                if M.Party == nil then
+                    M.Party = {}
+                end
                 M.Party.MT = nil
                 M.Party.ST = nil
                 M.Party.H1 = nil
@@ -79,20 +81,8 @@ local DrawMainUI = function(M)
                 M.Party.D3 = nil
                 M.Party.D4 = nil
             end
-            if not M.Party.Count then
-                function M.Party:Count()
-                    local roleKeys = { "MT", "ST", "H1", "H2", "D1", "D2", "D3", "D4" }
-                    local count = 0
-                    for _, key in ipairs(roleKeys) do
-                        if self[key] ~= nil then
-                            count = count + 1
-                        end
-                    end
-                    return count
-                end
-            end
             local partyMembers
-            if M.Party:Count() == 4 then
+            if M.GetPartyCnt() == 4 then
                 GUI:ListBoxHeader("##Jobs", 304, 130)
                 partyMembers = {
                     { info = M.Party.MT, label = "MT" },
@@ -115,7 +105,7 @@ local DrawMainUI = function(M)
             end
             for i, member in ipairs(partyMembers) do
                 local IsSelected = function()
-                    if member.label == M.Party.selected then
+                    if member.label == M.UI.selected then
                         return true
                     end
                     return false
@@ -125,7 +115,7 @@ local DrawMainUI = function(M)
                 GUI:SameLine()
                 GUI:AlignFirstTextHeightToWidgets()
                 GUI:SetWindowFontSize(1.3)
-                if table.size(M.Party) == 4 then
+                if M.GetPartyCnt() == 4 then
                     if i == 1 then
                         GUI:TextColored(0, 0.3, 1, 1, ptMember.label)
                     elseif i == 2 then
@@ -164,45 +154,46 @@ local DrawMainUI = function(M)
                     GUI:SameLine(0, 25)
                     GUI:Selectable("未知玩家" .. i, IsSelected(), GUI.SelectableFlags_DontClosePopups, 0, 22)
                 end
-                if GUI:IsItemHovered(GUI.HoveredFlags_AllowWhenBlockedByPopup + GUI.HoveredFlags_AllowWhenBlockedByActiveItem + GUI.HoveredFlags_AllowWhenOverlapped) then
+                if M.GetPartyCnt() > 0 and GUI:IsItemHovered(GUI.HoveredFlags_AllowWhenBlockedByPopup + GUI.HoveredFlags_AllowWhenBlockedByActiveItem + GUI.HoveredFlags_AllowWhenOverlapped) then
                     if GUI:IsMouseDown(0) then
-                        if M.Party.mousePosition == nil then
-                            if M.Party.mousePosition ~= ptMember.label then
-                                M.Party.mousePosition = ptMember.label
+                        if M.UI.mousePosition == nil then
+                            if M.UI.mousePosition ~= ptMember.label then
+                                M.UI.mousePosition = ptMember.label
                             end
-                            if M.Party.selected ~= ptMember.label then
-                                M.Party.selected = ptMember.label
+                            if M.UI.selected ~= ptMember.label then
+                                M.UI.selected = ptMember.label
                             end
-                        elseif M.Party.mousePosition ~= ptMember.label then
-                            d("[M]站位交换：" .. M.Party.mousePosition .. "<==>" .. ptMember.label)
-                            local temp = M.Party[M.Party.mousePosition]
-                            M.Party[M.Party.mousePosition] = M.Party[ptMember.label]
+                        elseif M.UI.mousePosition ~= ptMember.label then
+                            d("[M]站位交换：" .. M.UI.mousePosition .. "<==>" .. ptMember.label)
+                            local temp = M.Party[M.UI.mousePosition]
+                            M.Party[M.UI.mousePosition] = M.Party[ptMember.label]
                             M.Party[ptMember.label] = temp
-                            if M.Party ~= nil and M.Party[M.Party.mousePosition] ~= nil then
+                            if M.Party ~= nil and M.Party[M.UI.mousePosition] ~= nil then
                                 -- 职能调整
-                                if M.Party[M.Party.mousePosition].id == M.GetPlayer().id then
-                                    M.SelfPos = M.Party.mousePosition;
+                                if M.Party[M.UI.mousePosition].id == M.GetPlayer().id then
+                                    M.SelfPos = M.UI.mousePosition;
                                 elseif M.Party[ptMember.label].id == M.GetPlayer().id then
                                     M.SelfPos = ptMember.label;
                                 end
-                                M.Party.mousePosition = ptMember.label
-                                if M.Party.selected ~= ptMember.label then
-                                    M.Party.selected = ptMember.label
+                                M.UI.mousePosition = ptMember.label
+                                if M.UI.selected ~= ptMember.label then
+                                    M.UI.selected = ptMember.label
                                 end
                             end
                         end
                     end
                 end
 
-                if M.Party.mousePosition ~= nil and (GUI:IsMouseReleased(0) or not GUI:IsMouseDown(0)) then
-                    M.Party.mousePosition = nil
+                if M.UI.mousePosition ~= nil and (GUI:IsMouseReleased(0) or not GUI:IsMouseDown(0)) then
+                    M.UI.mousePosition = nil
                 end
-                if M.Party.selected ~= nil and (GUI:IsMouseReleased(0) or not GUI:IsMouseDown(0)) then
-                    M.Party.selected = nil
+                if M.UI.selected ~= nil and (GUI:IsMouseReleased(0) or not GUI:IsMouseDown(0)) then
+                    M.UI.selected = nil
                 end
+
                 local size
-                if M.Party ~= nil and (M.Party:Count() == 4 or M.Party:Count() == 8) then
-                    size = M.Party:Count()
+                if M.Party ~= nil and (M.GetPartyCnt() == 4 or M.GetPartyCnt() == 8) then
+                    size = M.GetPartyCnt()
                 else
                     size = 8
                 end
@@ -211,10 +202,10 @@ local DrawMainUI = function(M)
                 end
             end
             GUI:ListBoxFooter()
-            if M.Party.mousePosition ~= nil and
+            if M.UI.mousePosition ~= nil and
                     not GUI:IsItemHovered(GUI.HoveredFlags_AllowWhenBlockedByPopup + GUI.HoveredFlags_AllowWhenBlockedByActiveItem + GUI.HoveredFlags_AllowWhenOverlapped)
             then
-                M.Party.mousePosition = nil
+                M.UI.mousePosition = nil
             end
             GUI:Dummy(6, 0)
             GUI:SameLine()

@@ -1112,6 +1112,11 @@ local tbl =
 							},
 							
 							{
+								"1d4c2a5a-022a-ab0a-bf0c-75eb61bff152",
+								true,
+							},
+							
+							{
 								"73f59343-3c8e-4978-9544-35ffa6d1bc03",
 								true,
 							},
@@ -1143,6 +1148,11 @@ local tbl =
 							},
 							
 							{
+								"1d4c2a5a-022a-ab0a-bf0c-75eb61bff152",
+								true,
+							},
+							
+							{
 								"d47bff10-5a20-28a6-a170-7e8497075651",
 								true,
 							},
@@ -1165,6 +1175,11 @@ local tbl =
 							
 							{
 								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								true,
+							},
+							
+							{
+								"1d4c2a5a-022a-ab0a-bf0c-75eb61bff152",
 								true,
 							},
 							
@@ -1195,6 +1210,11 @@ local tbl =
 							},
 							
 							{
+								"1d4c2a5a-022a-ab0a-bf0c-75eb61bff152",
+								true,
+							},
+							
+							{
 								"ef15f100-4e7f-db3c-98aa-ed852eca7fed",
 								true,
 							},
@@ -1217,6 +1237,11 @@ local tbl =
 							
 							{
 								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								true,
+							},
+							
+							{
+								"1d4c2a5a-022a-ab0a-bf0c-75eb61bff152",
 								true,
 							},
 							
@@ -1245,6 +1270,16 @@ local tbl =
 								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
 								true,
 							},
+							
+							{
+								"1d4c2a5a-022a-ab0a-bf0c-75eb61bff152",
+								true,
+							},
+							
+							{
+								"e7db56cc-52d2-5ffd-ab7b-95f8c22002db",
+								true,
+							},
 						},
 						gVar = "ACR_RikuMNK3_CD",
 						name = "主循环-陨石狂奔",
@@ -1264,6 +1299,11 @@ local tbl =
 							
 							{
 								"16607308-c4ad-eb3e-ac3e-9036a0da5b58",
+								true,
+							},
+							
+							{
+								"1d4c2a5a-022a-ab0a-bf0c-75eb61bff152",
 								true,
 							},
 							
@@ -1293,6 +1333,18 @@ local tbl =
 						version = 3,
 					},
 					inheritedIndex = 1,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.M11S ~= nil",
+						name = "M11S数据初始化",
+						uuid = "1d4c2a5a-022a-ab0a-bf0c-75eb61bff152",
+						version = 3,
+					},
+					inheritedIndex = 2,
 				},
 				
 				{
@@ -2708,23 +2760,23 @@ local tbl =
 				{
 					data = 
 					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.Config.Main.M12SAutoFace1",
-						name = "Config",
-						uuid = "8785e636-0643-2c4a-877d-b941da280ccf",
-						version = 3,
-					},
-					inheritedIndex = 1,
-				},
-				
-				{
-					data = 
-					{
 						category = "Self",
 						conditionType = 8,
 						localmapid = 1327,
 						name = "M12S",
 						uuid = "6d035129-cd47-17cc-ae57-023df4037b1b",
+						version = 3,
+					},
+					inheritedIndex = 2,
+				},
+				
+				{
+					data = 
+					{
+						category = "Lua",
+						conditionLua = "return MuAiGuide.Config.Main.M12SAutoFace1",
+						name = "Config",
+						uuid = "8785e636-0643-2c4a-877d-b941da280ccf",
 						version = 3,
 					},
 					inheritedIndex = 2,

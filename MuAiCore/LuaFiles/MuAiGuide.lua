@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 250
+M.VERSION = 251
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -846,6 +846,20 @@ M.LoadParty = function()
     end
 
     M.GetSelfPos()
+end
+
+M.GetPartyCnt = function()
+    if M.Party == nil then
+        return 0
+    end
+    local roleKeys = { "MT", "ST", "H1", "H2", "D1", "D2", "D3", "D4" }
+    local count = 0
+    for _, key in ipairs(roleKeys) do
+        if M.Party[key] ~= nil then
+            count = count + 1
+        end
+    end
+    return count
 end
 
 --- 计算自己当前的职能
