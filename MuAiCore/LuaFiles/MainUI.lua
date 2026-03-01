@@ -310,7 +310,6 @@ local DrawMainUI = function(M)
                 else
                     M.Config.Main.KeyBindSecond = newIndex2 + 165
                 end
-
             end
             GUI:PopItemWidth()
             GUI:Separator()
@@ -567,7 +566,16 @@ local DrawMainUI = function(M)
                 M.Config.Main.AttackRangeHelper = GUI:Checkbox("绘制原始攻击范围", M.Config.Main.AttackRangeHelper)
                 if M.Config.Main.AttackRangeHelper then
                     GUI:SameLine(0, 25)
-                    M.Config.Main.AttackRangeReplace = GUI:Checkbox("接管攻击距离显示", M.Config.Main.AttackRangeReplace)
+                    local AttackRangeReplace = GUI:Checkbox("接管攻击距离显示", M.Config.Main.AttackRangeReplace)
+                    if AttackRangeReplace ~= M.Config.Main.AttackRangeReplace then
+                        M.Config.Main.AttackRangeReplace = AttackRangeReplace
+                        MoogleTelegraphs.Settings.DrawAttackRange = not MuAiGuide.Config.Main.AttackRangeReplace
+                        if AttackRangeReplace == true then
+                            MuAiGuide.Info("已接管攻击范围显示，[MoogleTelegraphs]的攻击范围显示已关闭。")
+                        else
+                            MuAiGuide.Info("已取消攻击范围显示接管，[MoogleTelegraphs]的攻击范围显示已开启。")
+                        end
+                    end
                     GUI:Dummy(8, 0)
                     GUI:SameLine()
                     local OutRangeColorChange, InRangeColorChange

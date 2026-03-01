@@ -53,7 +53,6 @@ core.InitMuAiGuide = function(checkUpdate)
         MuAiGuide.LatestVersion = result
     end
     MuAiGuide.checkVersion(true)
-    curDrawAttackRange = MoogleTelegraphs.Settings.DrawAttackRange
 end
 
 core.DrawMainUI = function()
@@ -172,23 +171,17 @@ local attackRangeHackHelper = function()
 end
 
 local attackRangeReMake = function()
-    if MoogleTelegraphs ~= nil and MoogleTelegraphs.Settings == nil then
+    if not MuAiGuide.Config.Main.AttackRangeReplace or not MuAiGuide.Config.Main.AttackRangeHelper
+            or MoogleTelegraphs == nil or MoogleTelegraphs.Settings == nil 
+            or Player == nil or ((not MuAiGuide.IsTank(Player.job)) and (not MuAiGuide.IsMelee(Player.job)))
+    then
         return
     end
-    if Player == nil or (not MuAiGuide.Config.Main.AttackRangeHelper)
-            or ((not MuAiGuide.IsTank(Player.job)) and (not MuAiGuide.IsMelee(Player.job))) then
-        MoogleTelegraphs.Settings.DrawAttackRange = curDrawAttackRange
-        return
-    end
-    if not MuAiGuide.Config.Main.AttackRangeReplace then
-        MoogleTelegraphs.Settings.DrawAttackRange = true
-        return
-    end
-    MoogleTelegraphs.Settings.DrawAttackRange = not MuAiGuide.Config.Main.AttackRangeReplace
     local curTarget = TensorCore.mGetTarget()
-    if curTarget == nil or not curTarget.attackable then
+    if curTarget == nil or not curTarget.attackable or curTarget.type == 1 then
         return
     end
+    MoogleTelegraphs.Settings.DrawAttackRange = false
     local curDistance = TensorCore.getDistance2d(Player.pos, curTarget.pos)
     local hitRange = curTarget.hitRadius
     local deltaDistance = curDistance - hitRange
