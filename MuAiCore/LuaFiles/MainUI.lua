@@ -349,6 +349,7 @@ local DrawMainUI = function(M)
                 M.Config.Main = M.CreateDefMainCfg()
                 M.Config.Main.DrawBlackList = oldConfig.DrawBlackList
                 M.Config.Main.M11SExDraw = oldConfig.M11SExDraw
+                M.Config.Main.M11SOrbitalOmenAllMelee = oldConfig.M11SOrbitalOmenAllMelee
                 M.Config.Main.M11SKickType = oldConfig.M11SKickType
                 M.Config.Main.M11SGatherType = oldConfig.M11SGatherType
                 M.Config.Main.M12SP4UpTime = oldConfig.M12SP4UpTime
@@ -396,6 +397,9 @@ local DrawMainUI = function(M)
                     GUI:TextColored(1, 0, 1, 1, "   建议使用时请注意关闭其他绘图, 并将地")
                     GUI:TextColored(1, 0, 1, 1, "   图ID 1325 添加到屏蔽黑名单！")
                 end
+                GUI:Dummy(6, 0)
+                GUI:SameLine()
+                M.Config.Main.M11SOrbitalOmenAllMelee = GUI:Checkbox("星轨链远程职业也场中处理", M.Config.Main.M11SOrbitalOmenAllMelee)
                 GUI:Dummy(6, 0)
                 GUI:SameLine()
                 GUI:AlignFirstTextHeightToWidgets()
@@ -550,61 +554,60 @@ local DrawMainUI = function(M)
                 gDevHackMountRunningSpeed = 9.0
                 Player:SetSpeed(2, gDevHackMountRunningSpeed, gDevHackMountBackwardsSpeed, gDevHackMountStrafeSpeed, gDevHackMountWalkingSpeed)
             end
-            if MuAiGuide.IsTank(Player.job) or MuAiGuide.IsMelee(Player.job) then
-                GUI:Separator()
-                GUI:Dummy(0, 2)
-                GUI:BulletText("目标圈HACK辅助功能")
 
-                GUI:TextColored(1, 0, 1, 1, "   本功能默认仅包含M9S~M12S数据")
-                GUI:TextColored(1, 1, 0, 1, "   可以使用按钮[添加当前目标]添加新的目标圈")
-                GUI:TextColored(1, 1, 0, 1, "   数据使用时请关闭IC, Sp等并将目标区改回原始")
-                GUI:TextColored(1, 1, 0, 1, "   大小, 如BOSS有目标圈大小变化, 请在两种状态")
-                GUI:TextColored(1, 1, 0, 1, "   下各添加一次")
+            GUI:Separator()
+            GUI:Dummy(0, 2)
+            GUI:BulletText("目标圈HACK辅助功能")
 
+            GUI:TextColored(1, 0, 1, 1, "   本功能默认仅包含M9S~M12S数据")
+            GUI:TextColored(1, 1, 0, 1, "   可以使用按钮[添加当前目标]添加新的目标圈")
+            GUI:TextColored(1, 1, 0, 1, "   数据使用时请关闭IC, Sp等并将目标区改回原始")
+            GUI:TextColored(1, 1, 0, 1, "   大小, 如BOSS有目标圈大小变化, 请在两种状态")
+            GUI:TextColored(1, 1, 0, 1, "   下各添加一次")
+
+            GUI:Dummy(8, 0)
+            GUI:SameLine()
+            M.Config.Main.AttackRangeHelper = GUI:Checkbox("绘制原始攻击范围", M.Config.Main.AttackRangeHelper)
+            GUI:SameLine(0, 25)
+            local AttackRangeReplace = GUI:Checkbox("接管攻击距离显示", M.Config.Main.AttackRangeReplace)
+            if AttackRangeReplace ~= M.Config.Main.AttackRangeReplace then
+                M.Config.Main.AttackRangeReplace = AttackRangeReplace
+                MoogleTelegraphs.Settings.DrawAttackRange = not MuAiGuide.Config.Main.AttackRangeReplace
+                if AttackRangeReplace == true then
+                    MuAiGuide.Info("已接管攻击范围显示，[MoogleTelegraphs]的攻击范围显示已关闭。")
+                else
+                    MuAiGuide.Info("已取消攻击范围显示接管，[MoogleTelegraphs]的攻击范围显示已开启。")
+                end
+            end
+            if M.Config.Main.AttackRangeHelper then
                 GUI:Dummy(8, 0)
                 GUI:SameLine()
-                M.Config.Main.AttackRangeHelper = GUI:Checkbox("绘制原始攻击范围", M.Config.Main.AttackRangeHelper)
-                if M.Config.Main.AttackRangeHelper then
-                    GUI:SameLine(0, 25)
-                    local AttackRangeReplace = GUI:Checkbox("接管攻击距离显示", M.Config.Main.AttackRangeReplace)
-                    if AttackRangeReplace ~= M.Config.Main.AttackRangeReplace then
-                        M.Config.Main.AttackRangeReplace = AttackRangeReplace
-                        MoogleTelegraphs.Settings.DrawAttackRange = not MuAiGuide.Config.Main.AttackRangeReplace
-                        if AttackRangeReplace == true then
-                            MuAiGuide.Info("已接管攻击范围显示，[MoogleTelegraphs]的攻击范围显示已关闭。")
-                        else
-                            MuAiGuide.Info("已取消攻击范围显示接管，[MoogleTelegraphs]的攻击范围显示已开启。")
-                        end
-                    end
-                    GUI:Dummy(8, 0)
-                    GUI:SameLine()
-                    local OutRangeColorChange, InRangeColorChange
-                    M.Config.Main.OutRangeColor.r, M.Config.Main.OutRangeColor.g, M.Config.Main.OutRangeColor.b, M.Config.Main.OutRangeColor.a, OutRangeColorChange = GUI:ColorEdit4("范围外颜色",
-                            M.Config.Main.OutRangeColor.r,
-                            M.Config.Main.OutRangeColor.g,
-                            M.Config.Main.OutRangeColor.b,
-                            M.Config.Main.OutRangeColor.a,
-                            GUI.ColorEditMode_NoInputs)
+                local OutRangeColorChange, InRangeColorChange
+                M.Config.Main.OutRangeColor.r, M.Config.Main.OutRangeColor.g, M.Config.Main.OutRangeColor.b, M.Config.Main.OutRangeColor.a, OutRangeColorChange = GUI:ColorEdit4("范围外颜色",
+                        M.Config.Main.OutRangeColor.r,
+                        M.Config.Main.OutRangeColor.g,
+                        M.Config.Main.OutRangeColor.b,
+                        M.Config.Main.OutRangeColor.a,
+                        GUI.ColorEditMode_NoInputs)
 
-                    GUI:SameLine(0, 69)
-                    M.Config.Main.InRangeColor.r, M.Config.Main.InRangeColor.g, M.Config.Main.InRangeColor.b, M.Config.Main.InRangeColor.a, InRangeColorChange = GUI:ColorEdit4("范围内颜色",
-                            M.Config.Main.InRangeColor.r,
-                            M.Config.Main.InRangeColor.g,
-                            M.Config.Main.InRangeColor.b,
-                            M.Config.Main.InRangeColor.a,
-                            GUI.ColorEditMode_NoInputs)
-                    local LineSizeChange
-                    GUI:AlignFirstTextHeightToWidgets()
-                    GUI:Text("  边缘线宽度 ")
-                    GUI:SameLine()
-                    GUI:PushItemWidth(80)
-                    M.Config.Main.LineSize, LineSizeChange = GUI:SliderFloat("##LineSize", M.Config.Main.LineSize, 1, 10)
-                    GUI:PopItemWidth()
-                    GUI:SameLine(210, 0)
-                    GUI:Button("添加当前目标", 120, 20)
-                    if GUI:IsItemClicked(0) then
-                        M.AddToAttackRange()
-                    end
+                GUI:SameLine(0, 69)
+                M.Config.Main.InRangeColor.r, M.Config.Main.InRangeColor.g, M.Config.Main.InRangeColor.b, M.Config.Main.InRangeColor.a, InRangeColorChange = GUI:ColorEdit4("范围内颜色",
+                        M.Config.Main.InRangeColor.r,
+                        M.Config.Main.InRangeColor.g,
+                        M.Config.Main.InRangeColor.b,
+                        M.Config.Main.InRangeColor.a,
+                        GUI.ColorEditMode_NoInputs)
+                local LineSizeChange
+                GUI:AlignFirstTextHeightToWidgets()
+                GUI:Text("  边缘线宽度 ")
+                GUI:SameLine()
+                GUI:PushItemWidth(80)
+                M.Config.Main.LineSize, LineSizeChange = GUI:SliderFloat("##LineSize", M.Config.Main.LineSize, 1, 10)
+                GUI:PopItemWidth()
+                GUI:SameLine(210, 0)
+                GUI:Button("添加当前目标", 120, 20)
+                if GUI:IsItemClicked(0) then
+                    M.AddToAttackRange()
                 end
             end
         elseif tabindex == 5 then

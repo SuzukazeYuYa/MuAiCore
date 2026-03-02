@@ -8,7 +8,6 @@ local lastMap, lastJob, updateTime
 local updateNeedReLoad = false
 local lastVersion
 local downloadPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
-local curDrawAttackRange
 
 ReloadMuAiGuide = function()
     MuAiGuide = nil
@@ -111,10 +110,7 @@ end
 
 local attackRangeHackHelper = function()
     if Player == nil or (not MuAiGuide.Config.Main.AttackRangeHelper)
-            or ((not MuAiGuide.IsTank(Player.job)) and (not MuAiGuide.IsMelee(Player.job))) then
-        return
-    end
-    if MuAiGuide.Config.Main.AtkRangeData == nil or table.size(MuAiGuide.Config.Main.AtkRangeData) == 0 then
+            or MuAiGuide.Config.Main.AtkRangeData == nil or table.size(MuAiGuide.Config.Main.AtkRangeData) == 0 then
         return
     end
     local mapData = MuAiGuide.Config.Main.AtkRangeData[Player.localmapid]
@@ -145,12 +141,20 @@ local attackRangeHackHelper = function()
     end
     local deltaDistance = curDistance - hitRange
     local alpha, color
-    local radius = hitRange + 3.5
-    if deltaDistance >= 3.5 then
+    local radius
+    local maxRange
+    if (not MuAiGuide.IsTank(Player.job)) and (not MuAiGuide.IsMelee(Player.job)) then
+        maxRange = 25.5
+    else
+        maxRange = 3.5
+    end
+    radius = hitRange + maxRange
+    local minRange = maxRange - 1.5
+    if deltaDistance >= maxRange then
         alpha = MuAiGuide.Config.Main.OutRangeColor.a
         color = MuAiGuide.Config.Main.OutRangeColor
-    elseif deltaDistance >= 2 then
-        local sub = deltaDistance - 2
+    elseif deltaDistance >= minRange then
+        local sub = deltaDistance - minRange
         if sub < 1 then
             alpha = MuAiGuide.Config.Main.InRangeColor.a * sub
         else
@@ -171,9 +175,9 @@ local attackRangeHackHelper = function()
 end
 
 local attackRangeReMake = function()
-    if not MuAiGuide.Config.Main.AttackRangeReplace or not MuAiGuide.Config.Main.AttackRangeHelper
-            or MoogleTelegraphs == nil or MoogleTelegraphs.Settings == nil 
-            or Player == nil or ((not MuAiGuide.IsTank(Player.job)) and (not MuAiGuide.IsMelee(Player.job)))
+    if not MuAiGuide.Config.Main.AttackRangeReplace
+            or MoogleTelegraphs == nil or MoogleTelegraphs.Settings == nil
+            or Player == nil
     then
         return
     end
@@ -186,12 +190,19 @@ local attackRangeReMake = function()
     local hitRange = curTarget.hitRadius
     local deltaDistance = curDistance - hitRange
     local alpha, color
-    local radius = hitRange + 3.5
-
+    local radius
+    local maxRange
+    if (not MuAiGuide.IsTank(Player.job)) and (not MuAiGuide.IsMelee(Player.job)) then
+        maxRange = 25.5
+    else
+        maxRange = 3.5
+    end
+    radius = hitRange + maxRange
+    local minRange = maxRange - 1.5
     local inSideColor = MoogleTelegraphs.Settings.outlineRGB.rangeInside
     local outSideColor = MoogleTelegraphs.Settings.outlineRGB.rangeOutside
     if MoogleTelegraphs.Settings.AlwaysShowAttackRange then
-        if deltaDistance >= 3.5 then
+        if deltaDistance >= maxRange then
             alpha = outSideColor.a
             color = outSideColor
         else
@@ -199,11 +210,11 @@ local attackRangeReMake = function()
             color = inSideColor
         end
     else
-        if deltaDistance >= 3.5 then
+        if deltaDistance >= maxRange then
             alpha = outSideColor.a
             color = outSideColor
-        elseif deltaDistance >= 2 then
-            local sub = deltaDistance - 2
+        elseif deltaDistance >= minRange then
+            local sub = deltaDistance - minRange
             if sub < 1 then
                 alpha = inSideColor.a * sub
             else
@@ -243,7 +254,7 @@ local onMapChange = function()
     lastMap = Player.localmapid
     if isDrawBlackListOn()
             and not table.contains(MuAiGuide.Config.Main.DrawBlackList, Player.localmapid)
-            and MoogleTelegraphs.Settings.DrawEnemyAoE == false
+            and MoogleTelegraphs and MoogleTelegraphs.Settings and MoogleTelegraphs.Settings.DrawEnemyAoE == false
     then
         MoogleTelegraphs.Settings.DrawEnemyAoE = true
         MuAiGuide.Info("当前已由MuAiGuide管理莫古力敌人范围开关，检测MoogleTelegraphs的[敌人范围]被关闭，已将其恢复到开启状态。")

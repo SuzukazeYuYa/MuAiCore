@@ -1,5 +1,5 @@
 ﻿local M = {}
-M.VERSION = 254
+M.VERSION = 255
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -233,6 +233,7 @@ M.CreateDefMainCfg = function()
         },
         --------- M11S -----------
         M11SExDraw = false,
+        M11SOrbitalOmenAllMelee = false,
         -- 击飞方式 1 直 2斜
         M11SKickType = 1,
         -- 22 分摊 1 X 2 十字
