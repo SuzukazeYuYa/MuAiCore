@@ -1,4 +1,3 @@
--- 测试内容
 local MuAiCore = {}
 local AddonName = "MuAiCore"
 local core = MuAiCore
@@ -16,7 +15,7 @@ end
 
 core.InitMuAiGuide = function(checkUpdate)
     MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
-    MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
+	MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
     local configDef = FileLoad(MuAiGuideRoot .. "FruOneKeyConfigs.lua")
     configDef(MuAiGuide)
     local mitigationDef = FileLoad(MuAiGuideRoot .. "FruMitigation.lua")
@@ -31,25 +30,6 @@ core.InitMuAiGuide = function(checkUpdate)
     end
     if FolderExists(downloadPath) then
         FolderDelete(downloadPath)
-    end
-    MuAiGuide.checkVersion = function(auto)
-        MuAiGuide.LatestVersion = nil
-        local url = string.format("https://gist.githubusercontent.com/SuzukazeYuYa/3967e5bc841aa3b28cea219d7da6c74c/raw/MuAiCoreVerson.txt?nocache=%d", Now())
-        local cmd = string.format('powershell -Command "(Invoke-WebRequest -Uri \'%s\' -UseBasicParsing).Content"', url)
-        local result = io.popen(cmd):read("*a"):gsub("%s+$", "")
-        if not auto then
-            if result ~= nil then
-                local verNumber = tonumber(result)
-                if verNumber == MuAiGuide.VERSION then
-                    MuAiGuide.Info("版本检查完毕：没有发现新的版本<se.3>！")
-                else
-                    MuAiGuide.Info("版本检查完毕：发现新的版本：ver." .. result .. "<se.1>!")
-                end
-            else
-                MuAiGuide.Info("版本检查失败，请检查网络或重新启动游戏后再次尝试。")
-            end
-        end
-        MuAiGuide.LatestVersion = result
     end
     MuAiGuide.checkVersion(true)
 end
