@@ -5,9 +5,6 @@ local _currentBoss
 local _lastBoss
 local _gridCenters = {}
 local _boss1Center = { x = 375, y = -29.5, z = 530 }
--- 洋流 45865  左上 右下 => 右上 左下
--- 洋流 45862   =>  地火洋流
--- Mark 20 = 十字 
 
 local _redDrawer = Argus2.ShapeDrawer:new(
 		(GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),
@@ -24,7 +21,7 @@ local OnEntityChannelFishSubDraw = function(entityID, spellID)
 	local drawerTime = 2200
 	local curEnt = TensorCore.mGetEntity(entityID)
 	if spellID == 45843 then
-		_redDrawer:addTimedCone(drawerTime, curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 45, math. pi / 3, curEnt.pos.h)
+		_redDrawer:addTimedCone(drawerTime, curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 45, math.pi / 3, curEnt.pos.h)
 	elseif spellID == 45841 or spellID == 45839 or spellID == 45840 then
 		_redDrawer:addTimedRect(drawerTime, curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 42, 8, curEnt.pos.h)
 	elseif spellID == 45842 then
@@ -59,7 +56,6 @@ local OnUpdateSpell45845 = function()
 			end
 		end
 	else
-		d("spell45845 被设置FALSE")
 		M.Merchant.spell45845 = false
 	end
 end
@@ -70,18 +66,20 @@ local OnUpdateSpell45849 = function()
 		return
 	end
 	if M.Merchant.SecondBall == nil then
-		if M.Merchant.FirstBall == nil then
+		for _, ent in pairs(TensorCore.entityList("contentid=2015004")) do
+			if ent.action == 256 then
+				M.Merchant.BallChanged = true
+				break
+			end
+		end
+		if M.Merchant.BallChanged then
+			M.Merchant.FirstBall = {}
+			M.Merchant.SecondBall = {}
 			for _, ent in pairs(TensorCore.entityList("contentid=2015004")) do
 				if ent.action == 256 then
-					M.Merchant.FirstBall = ent
-					break
-				end
-			end
-		else
-			for _, ent in pairs(TensorCore.entityList("contentid=2015004")) do
-				if M.Merchant.FirstBall.id ~= ent.id then
-					M.Merchant.SecondBall = ent
-					break
+					table.insert(M.Merchant.SecondBall, ent)
+				else
+					table.insert(M.Merchant.FirstBall, ent)
 				end
 			end
 			M.Merchant.Rings = {}
@@ -95,15 +93,16 @@ local OnUpdateSpell45849 = function()
 			for _, ent in pairs(M.Merchant.Rings) do
 				_redDrawer:addDonut(ent.pos.x, ent.pos.y, ent.pos.z, 4, 20)
 			end
-			local ball1 = M.Merchant.SecondBall
-			_redDrawer:addCircle(ball1.pos.x, ball1.pos.y, ball1.pos.z, 18)
+			for _, ent in pairs(M.Merchant.FirstBall) do
+				_redDrawer:addCircle(ent.pos.x, ent.pos.y, ent.pos.z, 18)
+			end
 		elseif TimeSince(M.Merchant.Timer) < 27000 then
-			local ball2 = M.Merchant.FirstBall
-			_redDrawer:addCircle(ball2.pos.x, ball2.pos.y, ball2.pos.z, 18)
+			for _, ent in pairs(M.Merchant.SecondBall) do
+				_redDrawer:addCircle(ent.pos.x, ent.pos.y, ent.pos.z, 18)
+			end
 		else
-			d(TimeSince(M.Merchant.Timer))
-			d("spell45849 被设置FALSE")
 			M.Merchant.spell45849 = false
+			M.Merchant.BallFinish = false
 		end
 	end
 end
@@ -138,7 +137,7 @@ local OnUpdateMark20 = function()
 	end
 end
 
-local Boss14291Update = function()
+local Boss_14291_Update = function()
 	if _currentBoss == nil or _currentBoss.contentid ~= 14291 or M.Merchant == nil then
 		return
 	end
@@ -147,51 +146,20 @@ local Boss14291Update = function()
 	OnUpdateMark20()
 end
 
-local Boss14291Init = function()
-	M.Info(_currentBoss.name .. "初始化完成！")
-end
-
-local OnBossChange = function(newBoss)
-	if newBoss.contentid == 14291 then
-		Boss14291Init()
-	end
-end
-
-local SetBoss = function()
-	local curTarget = TensorCore.mGetTarget()
-	if curTarget ~= nil and curTarget.attackable and (_currentBoss == nil or curTarget.contentid ~= _currentBoss.contentid) then
-		_currentBoss = curTarget
-		OnBossChange(curTarget)
-	end
+local initCurrent = function()
+	M.Merchant = {
+		Timer = 0,
+		spell45845 = false,
+		spell45849 = false,
+		mark20 = false,
+		mark22 = false,
+	}
 end
 
 local initMuAiGuide = function()
 	if M == nil then
 		M = MuAiGuide
-		M.Merchant = {
-			Timer = 0,
-			spell45845 = false,
-			spell45849 = false,
-			mark20 = false,
-		}
-	end
-end
------------------------------- 事件方法 ----------------------------------
-
-local OnEntityChannel = function(entityID, spellID, channelDuration)
-	if not M.Config.Main.Merchant then
-		return
-	end
-	OnEntityChannelStateChange(entityID, spellID)
-	OnEntityChannelFishSubDraw(entityID, spellID)
-end
-local OnMarkerAdd = function(entityID, markerID)
-	if markerID == 20 then
-		M.Merchant.Timer = Now()
-		M.Merchant.mark20 = true
-	elseif markerID == 22 then
-		M.Merchant.Timer = Now()
-		M.Merchant.mark22 = true
+		initCurrent()
 	end
 end
 
@@ -207,23 +175,73 @@ local initGroud = function()
 	end
 end
 
+local Boss14291Init = function()
+	initCurrent()
+	initGroud()
+	M.Info(_currentBoss.name .. "初始化完成！")
+end
+
+local OnBossChange = function(newBoss)
+	M.Merchant.Timer = 0
+	if newBoss.contentid == 14291 then
+		Boss14291Init()
+	end
+end
+
+local SetBoss = function()
+	local curTarget = TensorCore.mGetTarget()
+	if curTarget ~= nil and curTarget.attackable then
+		if _currentBoss == nil then
+			_currentBoss = curTarget
+			if curTarget.hp.percent >= 99.9 then
+				OnBossChange(curTarget)
+			end
+		elseif curTarget.contentid ~= _currentBoss.contentid then
+			_currentBoss = curTarget
+			OnBossChange(curTarget)
+		else
+			_currentBoss = curTarget
+		end
+	end
+end
+
 ----------------------------- MuAiCore Call -----------------------------
+G.OnEntityChannel = function(entityID, spellID, channelDuration)
+	if Player.localmapid ~= G.MapId or not M.Config.Main.Merchant then
+		return
+	end
+	OnEntityChannelStateChange(entityID, spellID)
+	OnEntityChannelFishSubDraw(entityID, spellID)
+end
+
+G.OnMarkerAdd = function(entityID, markerID)
+	if Player.localmapid ~= G.MapId then
+		return
+	end
+	if markerID == 20 then
+		M.Merchant.Timer = Now()
+		M.Merchant.mark20 = true
+	elseif markerID == 22 then
+		M.Merchant.Timer = Now()
+		M.Merchant.mark22 = true
+	end
+end
+
 --- 初始化
 G.Init = function()
-	Argus.registerOnEntityChannel(OnEntityChannel)
-	Argus.registerOnMarkerAdd(OnMarkerAdd)
 	MuAiGuide.Debug("异闻商客奇谭初始化完成")
-	initGroud()
 end
---- 没帧执行
+
+--- 每帧执行
 G.Update = function()
 	initMuAiGuide()
 	if not M.Config.Main.Merchant then
 		return
 	end
 	SetBoss()
-	Boss14291Update()
+	Boss_14291_Update()
 end
+
 --- 进入副本
 G.OnEnter = function()
 	_currentBoss = nil
@@ -235,6 +253,7 @@ end
 --- 脱离战斗
 G.OnLeaveBat = function()
 	_currentBoss = nil
+	M.Debug("脱离战斗")
 end
 
 return G

@@ -9,12 +9,70 @@ local lastVersion
 local downloadPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
 local raidScript, currentScript
 local lastInCombat
+local register = {}
+local registerOK = false
 
-ReloadMuAiGuide = function()
-	MuAiGuide = nil
-	core.InitMuAiGuide()
+--- 开始读条事件
+local OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
+	if currentScript ~= nil and currentScript.OnEntityChannel ~= nil then
+		currentScript.OnEntityChannel(entityID, spellID, targetID, channelTimeMax)
+	end
 end
-local function LoadScripts(isReload)
+
+--- 添加标记时间事件
+local OnMarkerAdd = function(entityID, markerID)
+	if currentScript ~= nil and currentScript.OnMarkerAdd ~= nil then
+		currentScript.OnMarkerAdd(entityID, markerID)
+	end
+end
+
+--- 注册阿古斯
+local registerArgus = function()
+	if Argus == nil then
+		register = nil
+		return
+	else
+		register = {}
+	end
+	if Argus.registerOnEntityChannel ~= nil and not register["OnEntityChannel"] then
+		Argus.registerOnEntityChannel(OnEntityChannel)
+		register["OnEntityChannel"] = true
+	else
+		register["OnEntityChannel"] = false
+	end
+	if Argus.registerOnMarkerAdd ~= nil and not register["OnMarkerAdd"] then
+		Argus.registerOnMarkerAdd(OnMarkerAdd)
+		register["OnMarkerAdd"] = true
+	else
+		register["OnMarkerAdd"] = false
+	end
+end
+
+local checkArgusRegister = function()
+	if registerOK then
+		return
+	end
+	if register == nil then
+		registerArgus()
+		return
+	end
+	local hasNotRegister = false
+	for _, state in pairs(register) do
+		if not state then
+			hasNotRegister = true
+			break
+		end
+	end
+	if hasNotRegister then
+		registerArgus()
+	else
+		registerOK = true
+		MuAiGuide.Debug("所有事件函数注册完成")
+	end
+end
+
+--- 读取副本脚本
+local LoadScripts = function(isReload)
 	raidScript = {}
 	local folderPath = MuAiGuideRoot .. "Scripts"
 	local list = FolderList(folderPath)
@@ -29,63 +87,6 @@ local function LoadScripts(isReload)
 			end
 		end
 	end
-end
-
-ReloadMuAiScripts = function()
-	LoadScripts(true)
-end
-
-core.InitMuAiGuide = function(checkUpdate)
-	MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
-	MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
-	local configDef = FileLoad(MuAiGuideRoot .. "FruOneKeyConfigs.lua")
-	configDef(MuAiGuide)
-	local mitigationDef = FileLoad(MuAiGuideRoot .. "FruMitigation.lua")
-	mitigationDef(MuAiGuide)
-	MuAiGuide.InitConfig()
-	MuAiGuide.FruMitigation.ChangeJob()
-	MuAiGuide.ForceUpdate = function()
-		core.ForceUpdate()
-	end
-	if checkUpdate and MuAiGuide.Config.Main.AutoUpdate then
-		core.ForceUpdate()
-	end
-	if FolderExists(downloadPath) then
-		FolderDelete(downloadPath)
-	end
-	LoadScripts()
-	MuAiGuide.checkVersion(true)
-end
-
-core.DrawMainUI = function()
-	if mainDrawer == nil or MuAiGuide.DevelopMode then
-		mainDrawer = FileLoad(MuAiGuideRoot .. "MainUI.lua")
-	end
-	mainDrawer(MuAiGuide)
-end
-
-core.DrawFriConfigUI = function()
-	if fruConfigDrawer == nil or MuAiGuide.DevelopMode then
-		fruConfigDrawer = FileLoad(MuAiGuideRoot .. "FruConfigUI.lua")
-	end
-	fruConfigDrawer(MuAiGuide)
-end
-
-core.DrawFruMitigationUI = function()
-	if fruMitigationDrawer == nil or MuAiGuide.DevelopMode then
-		fruMitigationDrawer = FileLoad(MuAiGuideRoot .. "FruMitigationUI.lua")
-	end
-	fruMitigationDrawer(MuAiGuide)
-end
-
-core.Initialize = function()
-	core.InitMuAiGuide(true)
-	lastVersion = MuAiGuide.VERSION
-	local Icon = GetLuaModsPath() .. "MuAiCore\\Image\\MainIcon.png"
-	local tooltip = "暮霭指路核心功能"
-	ml_gui.ui_mgr:AddMember({ id = "MuAiCore", name = "MuAiGuide", onClick = function()
-		MuAiGuide.UI.open = not MuAiGuide.UI.open
-	end, tooltip = tooltip, texture = Icon }, "FFXIVMINION##MENU_HEADER")
 end
 
 local isDrawBlackListOn = function()
@@ -255,10 +256,15 @@ local onMapChange = function()
 	else
 		MuAiGuide.UI.open = false
 	end
-	-- 进入副本
+
 	if raidScript[Player.localmapid] ~= nil then
+		-- 进入副本
 		currentScript = raidScript[Player.localmapid]
+	else
+		-- 退出副本
+		currentScript = nil
 	end
+
 	if isDrawBlackListOn()
 			and not table.contains(MuAiGuide.Config.Main.DrawBlackList, Player.localmapid)
 			and MoogleTelegraphs and MoogleTelegraphs.Settings and MoogleTelegraphs.Settings.DrawEnemyAoE == false
@@ -319,11 +325,77 @@ local checkHotKeyPress = function()
 		MuAiGuide.UI.open = not MuAiGuide.UI.open
 	end
 end
-
-core.Update = function()
+local checkMuAiGuide = function()
 	if MuAiGuide == nil then
 		core.InitMuAiGuide()
 	end
+end
+
+ReloadMuAiGuide = function()
+	MuAiGuide = nil
+	core.InitMuAiGuide()
+end
+
+ReloadMuAiScripts = function()
+	LoadScripts(true)
+end
+
+core.InitMuAiGuide = function(checkUpdate)
+	MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
+	MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
+	local configDef = FileLoad(MuAiGuideRoot .. "FruOneKeyConfigs.lua")
+	configDef(MuAiGuide)
+	local mitigationDef = FileLoad(MuAiGuideRoot .. "FruMitigation.lua")
+	mitigationDef(MuAiGuide)
+	MuAiGuide.InitConfig()
+	MuAiGuide.FruMitigation.ChangeJob()
+	MuAiGuide.ForceUpdate = function()
+		core.ForceUpdate()
+	end
+	if checkUpdate and MuAiGuide.Config.Main.AutoUpdate then
+		core.ForceUpdate()
+	end
+	if FolderExists(downloadPath) then
+		FolderDelete(downloadPath)
+	end
+	LoadScripts()
+	registerArgus()
+	MuAiGuide.checkVersion(true)
+end
+
+core.DrawMainUI = function()
+	if mainDrawer == nil or MuAiGuide.DevelopMode then
+		mainDrawer = FileLoad(MuAiGuideRoot .. "MainUI.lua")
+	end
+	mainDrawer(MuAiGuide)
+end
+
+core.DrawFriConfigUI = function()
+	if fruConfigDrawer == nil or MuAiGuide.DevelopMode then
+		fruConfigDrawer = FileLoad(MuAiGuideRoot .. "FruConfigUI.lua")
+	end
+	fruConfigDrawer(MuAiGuide)
+end
+
+core.DrawFruMitigationUI = function()
+	if fruMitigationDrawer == nil or MuAiGuide.DevelopMode then
+		fruMitigationDrawer = FileLoad(MuAiGuideRoot .. "FruMitigationUI.lua")
+	end
+	fruMitigationDrawer(MuAiGuide)
+end
+
+core.Initialize = function()
+	core.InitMuAiGuide(true)
+	lastVersion = MuAiGuide.VERSION
+	local Icon = GetLuaModsPath() .. "MuAiCore\\Image\\MainIcon.png"
+	local tooltip = "暮霭指路核心功能"
+	ml_gui.ui_mgr:AddMember({ id = "MuAiCore", name = "MuAiGuide", onClick = function()
+		MuAiGuide.UI.open = not MuAiGuide.UI.open
+	end, tooltip = tooltip, texture = Icon }, "FFXIVMINION##MENU_HEADER")
+end
+core.Update = function()
+	checkMuAiGuide()
+	checkArgusRegister()
 	checkHotKeyPress()
 	disableDrawCheck()
 	if lastInCombat ~= Player.incombat then
