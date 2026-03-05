@@ -1,5 +1,5 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
-M.VERSION = 257
+M.VERSION = 258
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -238,8 +238,7 @@ M.CreateDefMainCfg = function()
 		M11SKickType = 1,
 		-- 22 分摊 1 X 2 十字
 		M11SGatherType = 1,
-		---------
-		--- M12S -----------
+		--------- M12S -----------
 		M12SP4UpTime = false,
 		-- 4运打法，1 盗火改，2NOCCHH
 		M12SP4Type = 1,
@@ -251,8 +250,34 @@ M.CreateDefMainCfg = function()
 		M12SAutoFaceType = 1,
 		-- 添加一些关键性绘图
 		M12SExDraw = false,
+		--------- 商客奇谈 ---------
+		Merchant = true,
+		MerchantDraw = true,
+		MerchantGuide = true
 	}
 	return mainCfg
+end
+
+M.LoadDefWithOutRaidSetting = function()
+	local oldConfig = M.Config.Main
+	M.Config.Main = M.CreateDefMainCfg()
+	M.Config.Main.DrawBlackList = oldConfig.DrawBlackList
+	M.Config.Main.M11SExDraw = oldConfig.M11SExDraw
+	M.Config.Main.M11SOrbitalOmenAllMelee = oldConfig.M11SOrbitalOmenAllMelee
+	M.Config.Main.M11SKickType = oldConfig.M11SKickType
+	M.Config.Main.M11SGatherType = oldConfig.M11SGatherType
+	M.Config.Main.M12SP4UpTime = oldConfig.M12SP4UpTime
+	M.Config.Main.M12SP4Type = oldConfig.M12SP4Type
+	M.Config.Main.M12SP4SendMacro = oldConfig.M12SP4SendMacro
+	M.Config.Main.M12SP2is13 = oldConfig.M12SP2is13
+	M.Config.Main.M12SAutoFace1 = oldConfig.M12SAutoFace1
+	M.Config.Main.M12SAutoFace2 = oldConfig.M12SAutoFace2
+	M.Config.Main.M12SAutoFaceType = oldConfig.M12SAutoFaceType
+	M.Config.Main.M12SExDraw = oldConfig.M12SExDraw
+	M.Config.Main.Merchant = oldConfig.Merchant
+	M.Config.Main.MerchantDraw = oldConfig.MerchantDraw
+	M.Config.Main.MerchantGuide = oldConfig.MerchantGuide
+	M.Info("已恢复默认设置.")
 end
 
 --- 创建绝伊甸默认配置

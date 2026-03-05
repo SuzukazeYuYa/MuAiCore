@@ -345,28 +345,14 @@ local DrawMainUI = function(M)
             GUI:SameLine()
             GUI:Button("恢复默认设置", 150, 20)
             if GUI:IsItemClicked(0) then
-                local oldConfig = M.Config.Main
-                M.Config.Main = M.CreateDefMainCfg()
-                M.Config.Main.DrawBlackList = oldConfig.DrawBlackList
-                M.Config.Main.M11SExDraw = oldConfig.M11SExDraw
-                M.Config.Main.M11SOrbitalOmenAllMelee = oldConfig.M11SOrbitalOmenAllMelee
-                M.Config.Main.M11SKickType = oldConfig.M11SKickType
-                M.Config.Main.M11SGatherType = oldConfig.M11SGatherType
-                M.Config.Main.M12SP4UpTime = oldConfig.M12SP4UpTime
-                M.Config.Main.M12SP4Type = oldConfig.M12SP4Type
-                M.Config.Main.M12SP4SendMacro = oldConfig.M12SP4SendMacro
-                M.Config.Main.M12SP2is13 = oldConfig.M12SP2is13
-                M.Config.Main.M12SAutoFace1 = oldConfig.M12SAutoFace1
-                M.Config.Main.M12SAutoFace2 = oldConfig.M12SAutoFace2
-                M.Config.Main.M12SAutoFaceType = oldConfig.M12SAutoFaceType
-                M.Config.Main.M12SExDraw = oldConfig.M12SExDraw
-                MuAiGuide.Info("已恢复默认设置.")
+				M.LoadDefWithOutRaidSetting()
             end
         elseif tabindex == 3 then
             GUI:TextColored(0, 1, 0, 1, "支持的副本及对应的继承：")
             GUI:TextColored(1, 1, 0, 1, "  1.光暗未来绝境战, 时间轴: MuAi\\MuaiGuideFru")
             GUI:TextColored(1, 1, 0, 1, "  2.欧米茄绝境检定战, 时间轴: MuAi\\MuAiGuideTop")
             GUI:TextColored(1, 1, 0, 1, "  3.M11S|M12S, 【全局】: MuAi\\MuAiGeneral")
+            GUI:TextColored(1, 1, 0, 1, "  4.商客奇谭,只有绘制,打钩开启即可,不用继承")
             if GUI:CollapsingHeader("绝伊甸") then
                 GUI:Dummy(6, 0)
                 GUI:SameLine()
@@ -477,6 +463,24 @@ local DrawMainUI = function(M)
                     GUI:TextColored(1, 0, 1, 1, "    4.本体, 4运, 远近")
                 end
             end
+	        if GUI:CollapsingHeader("异闻商客奇谭") then
+		        GUI:Dummy(6, 0)
+		        GUI:SameLine()
+		        M.Config.Main.Merchant = GUI:Checkbox("全局开关##Merchant", M.Config.Main.Merchant)
+		        if M.Config.Main.Merchant  then
+			        GUI:Dummy(6, 0)
+			        GUI:SameLine()
+			        M.Config.Main.MerchantDraw = GUI:Checkbox("开启绘图##Merchant", M.Config.Main.MerchantDraw)
+			        GUI:SameLine(150, 0)
+			        M.Config.Main.MerchantGuide = GUI:Checkbox("开启指路（施工中）##Merchant", M.Config.Main.MerchantGuide)
+			        if  M.Config.Main.MerchantDraw then
+				        GUI:TextColored(1, 0, 1, 1, "  防止花眼请关闭其他绘图并将1317加")
+				        GUI:TextColored(1, 0, 1, 1, "  入到黑名单，并停用anyone相关绘图")
+				        GUI:TextColored(1, 1, 0, 1, "  目前仅完成老1绘图，如果开了黑名单")
+				        GUI:TextColored(1, 1, 0, 1, "  请打完老1后，在moogle中开启敌人范围")
+			        end
+		        end
+	        end
         elseif tabindex == 4 then
             GUI:BulletText("Mini内置Hack功能")
             GUI:Dummy(0, 3)
@@ -656,6 +660,12 @@ local DrawMainUI = function(M)
                 M.UI.open = false
                 M.FruConfigUI.open = false
                 ReloadMuAiGuide()
+            end
+	        GUI:Dummy(6, 0)
+	        GUI:SameLine()
+	        GUI:Button("重载副本脚本", 120, 20)
+            if GUI:IsItemClicked(0) then
+	            ReloadMuAiScripts()
             end
         elseif tabindex == 6 then
             local path = GetLuaModsPath() .. "\\MuAiCore\\Image\\QRCode.png"
