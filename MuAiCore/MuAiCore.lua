@@ -1,16 +1,16 @@
 local MuAiCore = {}
 local AddonName = "MuAiCore"
 local core = MuAiCore
-local autoPopMap = { 1238, 1122, 1325, 1327 }
+local autoPopMap = { 1238, 1122, 1325, 1327, 1317 }
 local mainDrawer, fruConfigDrawer, fruMitigationDrawer
 local lastMap, lastJob, updateTime
 local updateNeedReLoad = false
 local lastVersion
 local downloadPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
 local raidScript, currentScript
-local lastInCombat
 local register = {}
 local registerOK = false
+local wipeTime = 0
 
 --- 开始读条事件
 local OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
@@ -23,6 +23,12 @@ end
 local OnMarkerAdd = function(entityID, markerID)
 	if currentScript ~= nil and currentScript.OnMarkerAdd ~= nil then
 		currentScript.OnMarkerAdd(entityID, markerID)
+	end
+end
+--- 注册AOE生成
+local OnAOECreate = function(aoeInfo)
+	if currentScript ~= nil and currentScript.OnAOECreate ~= nil then
+		currentScript.OnAOECreate(aoeInfo)
 	end
 end
 
@@ -45,6 +51,12 @@ local registerArgus = function()
 		register["OnMarkerAdd"] = true
 	else
 		register["OnMarkerAdd"] = false
+	end
+	if Argus.registerOnAOECreateFunc ~= nil and not register["OnAOECreate"] then
+		Argus.registerOnAOECreateFunc(OnAOECreate)
+		register["OnAOECreate"] = true
+	else
+		register["OnAOECreate"] = false
 	end
 end
 
@@ -72,7 +84,7 @@ local checkArgusRegister = function()
 end
 
 --- 读取副本脚本
-local LoadScripts = function(isReload)
+local LoadScripts = function()
 	raidScript = {}
 	local folderPath = MuAiGuideRoot .. "Scripts"
 	local list = FolderList(folderPath)
@@ -82,10 +94,10 @@ local LoadScripts = function(isReload)
 		local script = FileLoad(filePath)
 		if script ~= nil then
 			raidScript[script.MapId] = script
-			if not isReload then
-				script.Init()
-			end
 		end
+	end
+	if currentScript ~= nil and raidScript[Player.localmapid] ~= nil then
+		currentScript = raidScript[Player.localmapid]
 	end
 end
 
@@ -311,9 +323,31 @@ local onPlayerChangeJob = function()
 	end
 end
 
-local onPlayerInCombatChange = function()
-	if lastInCombat ~= nil and not Player.incombat and currentScript ~= nil then
-		currentScript.OnLeaveBat()
+local onWipeCheck = function()
+	if not MuAiGuide or not MuAiGuide.Party or table.size(MuAiGuide.Party) ~= 4 and table.size(MuAiGuide.Party) ~= 8 then
+		return
+	end
+	local partyCnt = table.size(MuAiGuide.Party)
+	local deadCnt = 0
+	local outComBatCnt = 0
+	for _, ent in pairs(MuAiGuide.Party) do
+		local curEnt = TensorCore.mGetEntity(ent.id)
+		if curEnt == nil then
+			return
+		end
+		if not curEnt.alive then
+			deadCnt = deadCnt + 1
+		elseif not curEnt.incombat then
+			outComBatCnt = outComBatCnt + 1
+		end
+	end
+	if deadCnt >= partyCnt
+			or (deadCnt > 0 and outComBatCnt > 0 and deadCnt + outComBatCnt > partyCnt) then
+		if currentScript ~= nil then
+			currentScript.OnWipe()
+		end
+		--MuAiGuide.Debug("团灭")
+		wipeTime = Now()
 	end
 end
 
@@ -337,7 +371,7 @@ ReloadMuAiGuide = function()
 end
 
 ReloadMuAiScripts = function()
-	LoadScripts(true)
+	LoadScripts()
 end
 
 core.InitMuAiGuide = function(checkUpdate)
@@ -398,10 +432,7 @@ core.Update = function()
 	checkArgusRegister()
 	checkHotKeyPress()
 	disableDrawCheck()
-	if lastInCombat ~= Player.incombat then
-		onPlayerInCombatChange()
-		lastInCombat = Player.incombat
-	end
+	onWipeCheck()
 	if lastMap ~= Player.localmapid then
 		onMapChange()
 		lastMap = Player.localmapid

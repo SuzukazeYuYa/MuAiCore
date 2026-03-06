@@ -1,11 +1,12 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
-M.VERSION = 259
+M.VERSION = 260
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
 M.DebugPos = "MT"
 --- 是否开了UI开发模式
 M.DevelopMode = false
+M.GlobalGuideY = nil
 ------------------------------- UI -------------------------------
 --- UI定义
 M.UI = {}
@@ -1077,6 +1078,21 @@ M.GetRMPartner = function()
 	return partner
 end
 
+---查询给定实体或者实体id对应的实体是否有执行类型的线
+---@param  entityID number|table
+---@return boolean 是否存在
+M.HasLine = function(entityID, lineType)
+	local tethers = Argus.getTethersOnEnt(entityID)
+	if tethers == nil or table.size(tethers) == 0 then
+		return false
+	end
+	for _, tether in pairs(tethers) do
+		if tether.type == lineType then
+			return true
+		end
+	end
+	return false
+end
 --- 暂不支持
 M.MarkParty = function(marker, id)
 end
@@ -1113,7 +1129,11 @@ M.DirectTo = function(x, z, time, size, delay)
 	if table.contains(SupportMap, Player.localmapid) then
 		drawY = 0
 	else
-		drawY = curPlayer.pos.y
+		if M.GlobalGuideY ~= nil then
+			drawY = M.GlobalGuideY
+		else
+			drawY = curPlayer.pos.y
+		end
 	end
 	local newDraw = Argus2.ShapeDrawer:new(
 			(GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)),
@@ -1177,7 +1197,11 @@ M.LinkToPlayer = function(id, time, size, r, g, b, a)
 	if table.contains(SupportMap, Player.localmapid) then
 		drawY = 0
 	else
-		drawY = curPlayer.pos.y
+		if M.GlobalGuideY ~= nil then
+			drawY = M.GlobalGuideY
+		else
+			drawY = curPlayer.pos.y
+		end
 	end
 	Argus2.addTimedRectFilled(
 			time,
@@ -1222,7 +1246,11 @@ M.DirectToEnt = function(id, time, size)
 	if table.contains(SupportMap, Player.localmapid) then
 		drawY = 0
 	else
-		drawY = curPlayer.pos.y
+		if M.GlobalGuideY ~= nil then
+			drawY = M.GlobalGuideY
+		else
+			drawY = curPlayer.pos.y
+		end
 	end
 	local id1 = newDraw:addTimedCircleOnEnt(time, id, size, 0, true)
 	local id2 = Argus2.addTimedRectFilled(
@@ -1273,7 +1301,11 @@ M.FrameDirect = function(x, z, size)
 	if table.contains(SupportMap, Player.localmapid) then
 		drawY = 0
 	else
-		drawY = playerPos.y
+		if M.GlobalGuideY ~= nil then
+			drawY = M.GlobalGuideY
+		else
+			drawY = playerPos.y
+		end
 	end
 	local color = M.Config.Main.GuideColor
 	local newDraw = Argus2.ShapeDrawer:new(
@@ -1302,6 +1334,49 @@ M.FrameDirect = function(x, z, size)
 			1
 	)
 	newDraw3:addCircle(x, drawY, z, 0.03, true)
+end
+
+local getLinePos = function(A, B, P)
+	local ABx, ABz = B.x - A.x, B.z - A.z
+	local APx, APz = P.x - A.x, P.z - A.z
+	local abLenSq = ABx * ABx + ABz * ABz
+	if abLenSq == 0 then
+		return false, { x = A.x, z = A.z }
+	end
+	local t = (APx * ABx + APz * ABz) / abLenSq
+	local isOnSegment = t >= 0 and t <= 1
+	local point = {}
+	if t < 0 then
+		point = { x = A.x, z = A.z }
+	elseif t > 1 then
+		point = { x = B.x, z = B.z }
+	else
+		point = { x = A.x + ABx * t, z = A.z + ABz * t }
+	end
+	return isOnSegment, point
+end
+
+--- 帧指路接线
+--- @param pos1 table 线第1端位置(物)
+--- @param pos2 table 线第2端位置(人)
+--- @param playerPos table 玩家位置
+M.FrameTakeLine = function(pos1, pos2, playerPos)
+	local drawer = Argus2.ShapeDrawer:new(
+			(GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)),
+			(GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)),
+			(GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)),
+			(GUI:ColorConvertFloat4ToU32(1, 0, 0, 1)),
+			3
+	)
+	drawer:addLine(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z, 4, 0)
+	local isInLine, nearestPos = getLinePos(pos2, pos1, playerPos)
+	if isInLine then
+		M.FrameDirect(nearestPos.x, nearestPos.z)
+	else
+		local heading = TensorCore.getHeadingToTarget(pos2, pos1)
+		local guidePos = TensorCore.getPosInDirection(pos2, heading, 1)
+		M.FrameDirect(guidePos.x, guidePos.z)
+	end
 end
 
 --- 绘制一个圆（已废弃仿报错用）
