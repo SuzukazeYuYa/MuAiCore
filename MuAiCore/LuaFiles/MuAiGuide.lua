@@ -1,5 +1,5 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
-M.VERSION = 260
+M.VERSION = 261
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -163,9 +163,10 @@ end
 
 --- 判断点A到B的顺逆
 --- @return boolean true 顺时针，false 逆时针
-M.GetClock = function(posA, posB)
-	local OA = { x = posA.x - 100, z = posA.z - 100 }
-	local OB = { x = posB.x - 100, z = posB.z - 100 }
+M.GetClock = function(posA, posB, O)
+	O = O or { x = 100, z = 100 }
+	local OA = { x = posA.x - O.x, z = posA.z - O.z }
+	local OB = { x = posB.x - O.x, z = posB.z - O.z }
 	local crossProduct = OA.x * OB.z - OA.z * OB.x
 	-- 非标准坐标系，叉乘结果要反着来
 	if crossProduct > 0 then

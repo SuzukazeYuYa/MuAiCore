@@ -352,7 +352,7 @@ local DrawMainUI = function(M)
             GUI:TextColored(1, 1, 0, 1, "  1.光暗未来绝境战, 时间轴: MuAi\\MuaiGuideFru")
             GUI:TextColored(1, 1, 0, 1, "  2.欧米茄绝境检定战, 时间轴: MuAi\\MuAiGuideTop")
             GUI:TextColored(1, 1, 0, 1, "  3.M11S|M12S, 【全局】: MuAi\\MuAiGeneral")
-            GUI:TextColored(1, 1, 0, 1, "  4.商客奇谭,只有绘制,打钩开启即可,不用继承")
+            GUI:TextColored(1, 1, 0, 1, "  4.异闻商客奇谭,打钩开启即可,不用继承")
             if GUI:CollapsingHeader("绝伊甸") then
                 GUI:Dummy(6, 0)
                 GUI:SameLine()
@@ -472,12 +472,13 @@ local DrawMainUI = function(M)
 			        GUI:SameLine()
 			        M.Config.Main.MerchantDraw = GUI:Checkbox("开启绘图##Merchant", M.Config.Main.MerchantDraw)
 			        GUI:SameLine(150, 0)
-			        M.Config.Main.MerchantGuide = GUI:Checkbox("开启指路（施工中）##Merchant", M.Config.Main.MerchantGuide)
-			        if  M.Config.Main.MerchantDraw then
-				        GUI:TextColored(1, 0, 1, 1, "  防止花眼请关闭其他绘图并将1317加")
-				        GUI:TextColored(1, 0, 1, 1, "  入到黑名单，并停用anyone相关绘图")
-				        GUI:TextColored(1, 1, 0, 1, "  目前仅完成老1绘图，如果开了黑名单")
-				        GUI:TextColored(1, 1, 0, 1, "  请打完老1后，在moogle中开启敌人范围")
+			        M.Config.Main.MerchantGuide = GUI:Checkbox("开启指路##Merchant", M.Config.Main.MerchantGuide)
+			        if M.Config.Main.MerchantDraw then
+				        GUI:TextColored(1, 0, 1, 1, "  防止花眼请关闭其他绘图，并将1317加")
+				        GUI:TextColored(1, 0, 1, 1, "  入到黑名单，并停用Anyone相关绘图。")
+			        end
+			        if M.Config.Main.MerchantGuide then
+				        GUI:TextColored(1, 0, 1, 1, "  注意：唯一解机制的指路无法关闭！")
 			        end
 		        end
 	        end
@@ -679,8 +680,7 @@ local DrawMainUI = function(M)
             GUI:TextColored(1, 1, 0, 1, "感谢您的支持, 但是这并不能让您获得更多权益, ")
             GUI:TextColored(1, 1, 0, 1, "仅代表您对本人的支持, 所以请慎重打赏! ")
             GUI:TextColored(1, 0, 0, 1, "※郑重声明：本插件没有任何用户分级政策.")
-            GUI:TextColored(1, 0, 0, 1, "※请勿用付费说事, 全凭自愿打赏, 甚至您后悔打赏")
-            GUI:TextColored(1, 0, 0, 1, "可以选择退款（七日内凭打款记录）")
+            GUI:TextColored(1, 0, 0, 1, "※请勿用付费说事, 全凭自愿打赏!")
         end
         GUI:Separator()
         GUI:Separator()
