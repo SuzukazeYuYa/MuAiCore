@@ -1,5 +1,5 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
-M.VERSION = 261
+M.VERSION = 262
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -1313,7 +1313,7 @@ M.FrameDirect = function(x, z, size)
 			(GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)),
 			(GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)),
 			(GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)),
-			(GUI:ColorConvertFloat4ToU32(255 / 255, 255 / 255, 255 / 255, 1)),
+			(GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),
 			2
 	)
 	newDraw:addCircle(x, drawY, z, size, true)
@@ -1361,7 +1361,8 @@ end
 --- @param pos1 table 线第1端位置(物)
 --- @param pos2 table 线第2端位置(人)
 --- @param playerPos table 玩家位置
-M.FrameTakeLine = function(pos1, pos2, playerPos)
+M.FrameTakeLine = function(pos1, pos2, playerPos, size)
+	size = size or 5
 	local drawer = Argus2.ShapeDrawer:new(
 			(GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)),
 			(GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)),
@@ -1369,7 +1370,7 @@ M.FrameTakeLine = function(pos1, pos2, playerPos)
 			(GUI:ColorConvertFloat4ToU32(1, 0, 0, 1)),
 			3
 	)
-	drawer:addLine(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z, 4, 0)
+	drawer:addLine(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z, size, 0)
 	local isInLine, nearestPos = getLinePos(pos2, pos1, playerPos)
 	if isInLine then
 		M.FrameDirect(nearestPos.x, nearestPos.z)

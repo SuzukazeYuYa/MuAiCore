@@ -31,6 +31,12 @@ local OnAOECreate = function(aoeInfo)
 		currentScript.OnAOECreate(aoeInfo)
 	end
 end
+--- 注册OnEventObjectScriptFunc
+local OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
+	if currentScript ~= nil and currentScript.OnEventObjectScriptFunc ~= nil then
+		currentScript.OnEventObjectScriptFunc(entityID, a1, a2, a3)
+	end
+end
 
 --- 注册阿古斯
 local registerArgus = function()
@@ -57,6 +63,12 @@ local registerArgus = function()
 		register["OnAOECreate"] = true
 	else
 		register["OnAOECreate"] = false
+	end
+	if Argus.registerOnEventObjectScriptFunc ~= nil and not register["OnEventObjectScriptFunc"] then
+		Argus.registerOnEventObjectScriptFunc(OnEventObjectScriptFunc)
+		register["OnEventObjectScriptFunc"] = true
+	else
+		register["OnEventObjectScriptFunc"] = false
 	end
 end
 
@@ -324,7 +336,8 @@ local onPlayerChangeJob = function()
 end
 
 local onWipeCheck = function()
-	if not MuAiGuide or not MuAiGuide.Party or table.size(MuAiGuide.Party) ~= 4 and table.size(MuAiGuide.Party) ~= 8 then
+	if not MuAiGuide or not MuAiGuide.Party 
+			or table.size(MuAiGuide.Party) ~= 4 and table.size(MuAiGuide.Party) ~= 8 then
 		return
 	end
 	local partyCnt = table.size(MuAiGuide.Party)
@@ -342,7 +355,7 @@ local onWipeCheck = function()
 		end
 	end
 	if deadCnt >= partyCnt
-			or (deadCnt > 0 and outComBatCnt > 0 and deadCnt + outComBatCnt > partyCnt) then
+			or (deadCnt > 0 and outComBatCnt > 0 and deadCnt + outComBatCnt >= partyCnt) then
 		if currentScript ~= nil then
 			currentScript.OnWipe()
 		end

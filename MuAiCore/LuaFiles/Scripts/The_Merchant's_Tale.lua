@@ -1,13 +1,15 @@
 local G = {}
 G.MapId = 1317
 G.CurBoss = nil
-local _lastBoss
+
 local _gridCenters = {}
 local _boss1Center = { x = 375, y = -29.5, z = 530 }
 local _boss2Center = { x = 170, y = -16, z = -815 }
 local _boss3Center = { x = -760, y = -54, z = -805 }
 local _skillIdCircle = { 46658, 46660, 46687, 46689, 47562, 47564, 47566, 47568 }
 local _skillIdRing = { 46659, 46661, 46668, 46690, 47563, 47565, 47567, 47569 }
+local _order = { "MT", "ST", "D1", "D2" }
+local _lastRightMarkTime = 0
 
 local _redDrawer = Argus2.ShapeDrawer:new(
 		(GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)),
@@ -48,8 +50,159 @@ local _cyanDrawer = Argus2.ShapeDrawer:new(
 		1
 )
 
-local _order = { "MT", "ST", "D1", "D2" }
-local _lastRightMarkTime = 0
+local initGlobalData = function()
+	MuAiGuide.Merchant = {
+		State = {
+			Start = 0,
+			Boss1_Start = 1000,
+			-- 老2
+			Boss2_Start = 2000,
+			Boss2_P1_Start = 2100,
+			Boss2_P1_GetBuff = 2101,
+			Boss2_P1_GetLine = 2102,
+			Boss2_P1_LineEnd = 2103,
+			Boss2_P2_Start = 2200,
+			Boss2_P2_Put = 2202,
+			Boss2_P3_Start = 2300,
+			Boss2_P3_GetBuff1 = 2301,
+			Boss2_P3_GetBlade = 2302,
+			Boss2_P3_GetLine = 2303,
+			Boss2_P3_LineEnd = 2304,
+			Boss2_P3_4Blade1 = 2305,
+			Boss2_P3_4Blade2 = 2306,
+			Boss2_P3_4Blade3 = 2307,
+			Boss2_P3_4AddMark = 2308,
+			Boss2_P3_4Blade4 = 2309,
+			Boss2_P3_4BladeEnd = 2310,
+			Boss2_P3_End = 2399,
+			Boss2_P4_Start = 2400,
+			Boss2_P4_GetStone = 2401,
+			Boss2_P4_Linked = 2402,
+			Boss2_P4_GetBuff = 2403,
+			Boss2_P4_Blade1 = 2404,
+			Boss2_P4_Blade2 = 2405,
+			Boss2_P4_Blade3 = 2406,
+			Boss2_P4_Blade4 = 2407,
+			Boss2_P4_BladeEnd = 2408,
+			-- 老3
+			Boss3_Start = 3000,
+			Boss3_P1_Start = 3100,
+			Boss3_P1_FireDance = 3102,
+			Boss3_P1_End = 3199,
+			Boss3_P2_Start = 3200,
+			Boss3_P2_GetBuff = 3201,
+			Boss3_P2_Turn1 = 3202,
+			Boss3_P2_Turn2 = 3203,
+			Boss3_P2_Turn3 = 3204,
+			Boss3_P2_Turn4 = 3205,
+			Boss3_P2_StartCarry = 3206,
+			Boss3_P2_GetKeyBlanket = 3207,
+			Boss3_P2_CarryEnd = 3208,
+			Boss3_P2_End = 3299,
+			Boss3_P3_Start = 3300,
+			Boss3_P3_GetFirstFire = 3301,
+			Boss3_P3_FirstPillar = 3302,
+			Boss3_P3_GetPillar = 3303,
+			Boss3_P3_GetBuff = 3304,
+			Boss3_P3_End = 3399,
+
+			Boss3_P4_Start = 3400,
+			Boss3_P4_Tower1 = 3401,
+			Boss3_P4_Tower2 = 3402,
+			Boss3_P4_FireStone = 3403,
+			Boss3_P4_End = 3499,
+		},
+		CurrentState = 0,
+		Timer = 0,
+		mark20 = false,
+		mark22 = false,
+		Timer46574 = 0,
+		Timer47031 = 0,
+		spell45845 = false,
+		spell45849 = {
+			InState = false,
+			Timer = 0,
+			Ids = {},
+			FirstBallIds = {},
+			FirstBallFinish = false,
+			AllBalls = {},
+		},
+		spell46715 = false,
+		spellRingCircle = false,
+		spellRingData = {
+			spellId = 0,
+			spellType = 0,
+			spellMark1 = nil,
+			spellMark2 = nil,
+			spellMarkAim = nil,
+		},
+		spell45866 = {
+			InState = false,
+			Timer = 0,
+			AoeInfo1 = {},
+			AoeInfo2 = {},
+		},
+		B2P3Blade = nil,
+		fireDance = {
+			inState = false,
+			state = 0,
+			spellId = 0,
+			aoeHeading = 0,
+			tethers = {},
+			routeInfo = {}
+		},
+		B3P1Sub = {
+			entities = {},
+			ids = {},
+			marks = {},
+			AOEs = {},
+			spellId = 0
+		},
+		B3P2FireDance = {
+			marks = {},
+			auras = {},
+			aoeInfo = nil,
+			curDir = nil,
+			near = nil,
+			far = nil,
+			mid = nil,
+			Timer = 0,
+		},
+		B3P2Phantom = {
+			aoeInfo = nil,
+			entity = nil,
+			redOrb = {},
+			blanketIds = {},
+			blankets = {},
+			blueOrbOldPos = nil,
+			blueOrbNewPos = nil,
+			blanketWithBlueOrb = nil,
+			GuidePos = nil,
+		},
+		B3P3FireType = nil,
+		B3P3Fire = {},
+		B3P3FireLinkType = {},
+		B3P3Pillar = {},
+		B3P3FireGuidePos = nil,
+		B3P3FireGuidePos2 = nil,
+		B3P4Tower1 = {},
+		B3P4Tower2 = {},
+		B3P4BladeAoes = {},
+		B3P4FineStoneIndex = 1,
+		B3P4FineStoneIdsOld = {},
+		B3P4FineStoneIds = {},
+		B3P4FineStoneEnts = {},
+		B3P4FineStoneDirAoe = nil,
+		B3P4FineStoneMarks = {},
+		B3P4linkDirInfo = nil,
+		B3P4linkGuidePos = {},
+		B3P4linkGuideTable = {}
+	}
+end
+
+local guideCfg = function()
+	return MuAiGuide.Config.Main
+end
 
 local getCurBoss = function()
 	if G.CurBoss == nil then
@@ -77,7 +230,7 @@ local getTurnLineFrom = function(entityID)
 end
 
 local boss1SubDraw = function(entityID, spellID)
-	if not MuAiGuide.Config.Main.MerchantDraw then
+	if not guideCfg().MerchantDraw then
 		return
 	end
 	local drawerTime = 2200
@@ -91,17 +244,42 @@ local boss1SubDraw = function(entityID, spellID)
 	end
 end
 
+local OnUpdateSpell45866 = function()
+	local mmd = MuAiGuide.Merchant
+	if not guideCfg().MerchantDraw and not mmd.spell45866.InState then
+		return
+	end
+	if TimeSince(mmd.spell45866.Timer) < 6500 then
+		for _, aoe in pairs(mmd.spell45866.AoeInfo1) do
+			_purpleDrawer:addCone(_boss1Center.x, _boss1Center.y, _boss1Center.z, 30, math.pi / 2, aoe.heading)
+		end
+	elseif TimeSince(mmd.spell45866.Timer) < 10000 then
+		for _, aoe in pairs(mmd.spell45866.AoeInfo1) do
+			_purpleDrawer:addCone(_boss1Center.x, _boss1Center.y, _boss1Center.z, 30, math.pi / 2, aoe.heading + math.pi / 2)
+		end
+	else
+		mmd.spell45866 = {
+			InState = false,
+			Timer = 0,
+			AoeInfo1 = {},
+			AoeInfo2 = {},
+		}
+	end
+end
+
 --- 空中漫游画图
 local OnUpdateSpell45845 = function()
 	if not MuAiGuide.Merchant.spell45845 then
 		return
 	end
 	if TimeSince(MuAiGuide.Merchant.Timer) < 17000 then
-		if MuAiGuide.Config.Main.MerchantDraw then
-			_redDrawer:addCircle(_boss1Center.x, _boss1Center.y, _boss1Center.z, 12)
-			for _, ent in pairs(TensorCore.entityList("contentid=14291")) do
-				if TensorCore.getDistance2d(_boss1Center, ent.pos) > 10 then
-					_redDrawer:addCircle(ent.pos.x, ent.pos.y, ent.pos.z, 12)
+		if TimeSince(MuAiGuide.Merchant.Timer) > 4100 then
+			if guideCfg().MerchantDraw then
+				_redDrawer:addCircle(_boss1Center.x, _boss1Center.y, _boss1Center.z, 12)
+				for _, ent in pairs(TensorCore.entityList("contentid=14291")) do
+					if TensorCore.getDistance2d(_boss1Center, ent.pos) > 10 then
+						_redDrawer:addCircle(ent.pos.x, ent.pos.y, ent.pos.z, 12)
+					end
 				end
 			end
 		end
@@ -113,49 +291,52 @@ end
 
 --- 沉没的宝藏
 local OnUpdateSpell45849 = function()
-	if not MuAiGuide.Merchant.spell45849 then
+	local mmd = MuAiGuide.Merchant
+	if not mmd.spell45849.InState then
 		return
 	end
-	if MuAiGuide.Merchant.SecondBall == nil then
+	if TimeSince(mmd.spell45849.Timer) < 7500 then
 		for _, ent in pairs(TensorCore.entityList("contentid=2015004")) do
-			if ent.action ~= 0 then
-				MuAiGuide.Merchant.BallChanged = true
-				break
+			if not table.contains(mmd.spell45849.Ids, ent.id) then
+				table.insert(mmd.spell45849.Ids, ent.id)
+				table.insert(mmd.spell45849.AllBalls, { entity = ent, type = 1 })
 			end
 		end
-		if MuAiGuide.Merchant.BallChanged then
-			MuAiGuide.Merchant.FirstBall = {}
-			MuAiGuide.Merchant.SecondBall = {}
-			for _, ent in pairs(TensorCore.entityList("contentid=2015004")) do
-				if ent.action ~= 0 then
-					table.insert(MuAiGuide.Merchant.SecondBall, ent)
+		for _, ent in pairs(TensorCore.entityList("contentid=2015005")) do
+			if not table.contains(mmd.spell45849.Ids, ent.id) then
+				table.insert(mmd.spell45849.Ids, ent.id)
+				table.insert(mmd.spell45849.AllBalls, { entity = ent, type = 2 })
+			end
+		end
+	elseif TimeSince(mmd.spell45849.Timer) < 20000 then
+		if guideCfg().MerchantDraw and mmd.spell45849.FirstBallFinish then
+			for _, exEnt in pairs(mmd.spell45849.AllBalls) do
+				if exEnt.type == 2 then
+					_redDrawer:addDonut(exEnt.entity.pos.x, exEnt.entity.pos.y, exEnt.entity.pos.z, 4, 20)
 				else
-					table.insert(MuAiGuide.Merchant.FirstBall, ent)
+					if table.contains(mmd.spell45849.FirstBallIds, exEnt.entity.id) then
+						_yellowDrawer:addCircle(exEnt.entity.pos.x, exEnt.entity.pos.y, exEnt.entity.pos.z, 18)
+					end
 				end
 			end
-			MuAiGuide.Merchant.Rings = {}
-			for _, ent in pairs(TensorCore.entityList("contentid=2015005")) do
-				table.insert(MuAiGuide.Merchant.Rings, ent)
-				_redDrawer:addDonut(ent.pos.x, ent.pos.y, ent.pos.z, 4, 20)
+		end
+	elseif TimeSince(mmd.spell45849.Timer) < 27000 then
+		if guideCfg().MerchantDraw then
+			for _, exEnt in pairs(mmd.spell45849.AllBalls) do
+				if exEnt.type == 1 and not table.contains(mmd.spell45849.FirstBallIds, exEnt.entity.id) then
+					_redDrawer:addCircle(exEnt.entity.pos.x, exEnt.entity.pos.y, exEnt.entity.pos.z, 18)
+				end
 			end
 		end
 	else
-		if TimeSince(MuAiGuide.Merchant.Timer) < 20000 then
-			for _, ent in pairs(MuAiGuide.Merchant.Rings) do
-				_redDrawer:addDonut(ent.pos.x, ent.pos.y, ent.pos.z, 4, 20)
-			end
-			for _, ent in pairs(MuAiGuide.Merchant.FirstBall) do
-				_redDrawer:addCircle(ent.pos.x, ent.pos.y, ent.pos.z, 18)
-			end
-		elseif TimeSince(MuAiGuide.Merchant.Timer) < 27000 then
-			for _, ent in pairs(MuAiGuide.Merchant.SecondBall) do
-				_redDrawer:addCircle(ent.pos.x, ent.pos.y, ent.pos.z, 18)
-			end
-		else
-			MuAiGuide.Merchant.Timer = 0
-			MuAiGuide.Merchant.spell45849 = false
-			MuAiGuide.Merchant.BallFinish = false
-		end
+		mmd.spell45849 = {
+			InState = false,
+			Timer = 0,
+			Ids = {},
+			FirstBallIds = {},
+			FirstBallFinish = false,
+			AllBalls = {},
+		}
 	end
 end
 
@@ -185,12 +366,36 @@ local OnUpdateMark20 = function()
 		end
 	else
 		MuAiGuide.Merchant.mark20 = false
-		d("mark20 被设置FALSE")
 	end
 end
 
+local OnUpDateMoveChecker = function()
+	if not guideCfg().MerchantDraw then
+		return
+	end
+	local player = MuAiGuide.GetPlayer()
+	local heading
+	if TensorCore.hasBuff(player.id, 2161) then
+		-- 前
+		heading = player.pos.h
+	elseif TensorCore.hasBuff(player.id, 2162) then
+		heading = player.pos.h + math.pi
+		-- 后
+	elseif TensorCore.hasBuff(player.id, 2163) then
+		-- 左
+		heading = player.pos.h + math.pi / 2
+	elseif TensorCore.hasBuff(player.id, 2164) then
+		-- 右
+		heading = player.pos.h - math.pi / 2
+	else
+		return
+	end
+	local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.5), 1)
+	drawer:addArrow(player.pos.x, player.pos.y, player.pos.z, player.pos.h, 17, 0.05, 0.3, 0.15, true)
+end
+
 local OnUpdateSpellRingCircle = function()
-	if not MuAiGuide.Config.Main.MerchantDraw or not MuAiGuide.Merchant.spellRingCircle then
+	if not guideCfg().MerchantDraw or not MuAiGuide.Merchant.spellRingCircle then
 		return
 	end
 	local mmd = MuAiGuide.Merchant
@@ -262,7 +467,7 @@ local onJumpDraw = function()
 	else
 		local drawPos = curRouteInfo.drawPoint
 		local wide = TensorCore.getDistance2d(curRouteInfo.startEnt.pos, curRouteInfo.endEnt.pos)
-		if MuAiGuide.Config.Main.MerchantDraw then
+		if guideCfg().MerchantDraw then
 			_redDrawer:addRect(drawPos.x, drawPos.y, drawPos.z, 43, wide, curRouteInfo.drawHeading)
 		end
 	end
@@ -332,17 +537,17 @@ end
 local guide4Blade = function(wave)
 	local mmd = MuAiGuide.Merchant
 	local index = "Big" .. tostring(wave)
-	if mmd.P3Blade.BigIds == nil then
-		mmd.P3Blade.BigIds = {}
+	if mmd.B2P3Blade.BigIds == nil then
+		mmd.B2P3Blade.BigIds = {}
 	end
-	if mmd.P3Blade[index] == nil then
-		mmd.P3Blade[index] = {}
+	if mmd.B2P3Blade[index] == nil then
+		mmd.B2P3Blade[index] = {}
 	end
 	local limit = wave * 4
-	if table.size(mmd.P3Blade.BigIds) < limit then
-		getBladeTable(mmd.P3Blade[index], mmd.P3Blade.BigIds)
-	elseif table.size(mmd.P3Blade.BigIds) == limit then
-		drawGuide4Blade(mmd.P3Blade[index])
+	if table.size(mmd.B2P3Blade.BigIds) < limit then
+		getBladeTable(mmd.B2P3Blade[index], mmd.B2P3Blade.BigIds)
+	elseif table.size(mmd.B2P3Blade.BigIds) == limit then
+		drawGuide4Blade(mmd.B2P3Blade[index])
 	end
 end
 
@@ -455,7 +660,7 @@ local boss3FireDance2 = function(nextState, curWave)
 		if boss == nil then
 			return
 		end
-		if MuAiGuide.Config.Main.MerchantDraw then
+		if guideCfg().MerchantDraw then
 			table.sort(curPlayers, function(a, b)
 				local disA = TensorCore.getDistance2d(a.pos, boss.pos)
 				local disB = TensorCore.getDistance2d(b.pos, boss.pos)
@@ -479,7 +684,7 @@ local boss3FireDance2 = function(nextState, curWave)
 			--d(heading)
 			_redDrawer:addRect(_boss3Center.x, _boss3Center.y, _boss3Center.z, 20, 40, heading)
 		end
-		if MuAiGuide.Config.Main.MerchantGuide then
+		if guideCfg().MerchantGuide then
 			local heading
 			if curMark == 645 then
 				heading = mmd.B3P2FireDance.curDir - math.pi / 2
@@ -504,7 +709,7 @@ local boss3FireDance2 = function(nextState, curWave)
 end
 
 local OnUpdateSpell46715 = function()
-	if MuAiGuide.Config.Main.MerchantDraw and MuAiGuide.Merchant.spell46715 then
+	if guideCfg().MerchantDraw and MuAiGuide.Merchant.spell46715 then
 		if TimeSince(MuAiGuide.Merchant.Timer) < 5000 then
 			local curBoss = getCurBoss()
 			if curBoss == nil then
@@ -727,9 +932,11 @@ local Boss_14291_Update = function()
 	if G.CurBoss == nil or G.CurBoss.contentid ~= 14291 or MuAiGuide.Merchant == nil then
 		return
 	end
+	OnUpdateSpell45866()
 	OnUpdateSpell45845()
 	OnUpdateSpell45849()
 	OnUpdateMark20()
+	OnUpDateMoveChecker()
 end
 
 local Boss_14323_Update = function()
@@ -886,7 +1093,7 @@ local Boss_14323_Update = function()
 				break
 			end
 		end
-		if MuAiGuide.Config.Main.MerchantGuide then
+		if guideCfg().MerchantGuide then
 			local guidePos
 			if M.SelfPos == "MT" then
 				guidePos = { x = _boss2Center.x + 15, z = _boss2Center.z - 15 }
@@ -909,20 +1116,20 @@ local Boss_14323_Update = function()
 			end
 		end
 	elseif mmd.CurrentState == mmd.State.Boss2_P3_GetBuff1 then
-		if mmd.P3Blade == nil then
-			mmd.P3Blade = {}
-			mmd.P3Blade.SmallId = {}
-			mmd.P3Blade.Small = {}
+		if mmd.B2P3Blade == nil then
+			mmd.B2P3Blade = {}
+			mmd.B2P3Blade.SmallId = {}
+			mmd.B2P3Blade.Small = {}
 		end
-		if table.size(mmd.P3Blade.SmallId) < 4 then
+		if table.size(mmd.B2P3Blade.SmallId) < 4 then
 			for _, ent in pairs(TensorCore.entityList("contentid=14326")) do
 				local modelId = Argus.getEntityModel(ent.id)
-				if modelId == 19227 and not table.contains(mmd.P3Blade.SmallId, ent.id) then
-					table.insert(mmd.P3Blade.SmallId, ent.id)
-					table.insert(mmd.P3Blade.Small, ent)
+				if modelId == 19227 and not table.contains(mmd.B2P3Blade.SmallId, ent.id) then
+					table.insert(mmd.B2P3Blade.SmallId, ent.id)
+					table.insert(mmd.B2P3Blade.Small, ent)
 				end
 			end
-		elseif table.size(mmd.P3Blade.SmallId) == 4 then
+		elseif table.size(mmd.B2P3Blade.SmallId) == 4 then
 			changeState(mmd.State.Boss2_P3_GetBlade)
 		end
 	elseif mmd.CurrentState == mmd.State.Boss2_P3_GetBlade then
@@ -932,7 +1139,8 @@ local Boss_14323_Update = function()
 				break
 			end
 		end
-		if MuAiGuide.Config.Main.MerchantGuide then
+		--- 逻辑相同删除预站位代码以便于更好支持美式
+		--[[if guideCfg().MerchantGuide then
 			local guidePos
 			if TensorCore.hasBuff(player.id, 4784) then
 				guidePos = { x = _boss2Center.x + 10, z = _boss2Center.z - 5 }
@@ -942,7 +1150,7 @@ local Boss_14323_Update = function()
 			if guidePos ~= nil then
 				M.FrameDirect(guidePos.x, guidePos.z)
 			end
-		end
+		end]]
 	elseif mmd.CurrentState == mmd.State.Boss2_P3_GetLine then
 		if M.HasLine(player.id, 115) then
 			local linkFrom = getTurnLineFrom(player.id)
@@ -1027,12 +1235,12 @@ local Boss_14323_Update = function()
 		guide4Blade(3)
 	elseif mmd.CurrentState == mmd.State.Boss2_P3_4AddMark
 			or mmd.CurrentState == mmd.State.Boss2_P3_4Blade4 then
-		if mmd.P3Blade["Big4"] == nil then
-			mmd.P3Blade["Big4"] = {}
+		if mmd.B2P3Blade["Big4"] == nil then
+			mmd.B2P3Blade["Big4"] = {}
 		end
-		if table.size(mmd.P3Blade.BigIds) < 16 then
-			getBladeTable(mmd.P3Blade["Big4"], mmd.P3Blade.BigIds)
-		elseif table.size(mmd.P3Blade.BigIds) == 16 then
+		if table.size(mmd.B2P3Blade.BigIds) < 16 then
+			getBladeTable(mmd.B2P3Blade["Big4"], mmd.B2P3Blade.BigIds)
+		elseif table.size(mmd.B2P3Blade.BigIds) == 16 then
 			if TensorCore.hasBuff(player.id, 4781) then
 				-- 右上不能被攻击
 				if M.HasLine(player.id, 103) then
@@ -1064,7 +1272,7 @@ local Boss_14323_Update = function()
 			end
 			if mmd.B2P3SafePos ~= nil then
 				local takeBlade
-				for _, blade in pairs(mmd.P3Blade["Big4"]) do
+				for _, blade in pairs(mmd.B2P3Blade["Big4"]) do
 					if blade.dirType == mmd.B2P3SafePos then
 						takeBlade = blade.entity
 						break
@@ -1307,7 +1515,7 @@ local Boss_14274_Update = function()
 					else
 						drawer = _yellowDrawer
 					end
-					if MuAiGuide.Config.Main.MerchantDraw then
+					if guideCfg().MerchantDraw then
 						drawer:addCircle(player.pos.x, player.pos.y, player.pos.z, 4)
 					end
 				end
@@ -1450,7 +1658,7 @@ local Boss_14274_Update = function()
 				local curEnt = TensorCore.mGetEntity(mmd.B3P2Phantom.blanketWithBlueOrb.id)
 				mmd.B3P2Phantom.blueOrbNewPos = curEnt.pos
 			end
-			if mmd.B3P2Phantom.blueOrbNewPos ~= nil and MuAiGuide.Config.Main.MerchantGuide then
+			if mmd.B3P2Phantom.blueOrbNewPos ~= nil and guideCfg().MerchantGuide then
 				if mmd.B3P2Phantom.GuidePos == nil then
 					local _curBlankets = {}
 					for _, ent in pairs(mmd.B3P2Phantom.blankets) do
@@ -1699,8 +1907,8 @@ local Boss_14274_Update = function()
 			end
 		end
 	elseif mmd.CurrentState == mmd.State.Boss3_P4_FireStone then
-		if not MuAiGuide.Config.Main.MerchantDraw 
-				or (mmd.Timer47031 == 0 or TimeSince(mmd.Timer47031) < 2000)then
+		if not guideCfg().MerchantDraw
+				or (mmd.Timer47031 == 0 or TimeSince(mmd.Timer47031) < 2000) then
 			return
 		end
 		if table.size(mmd.B3P4FineStoneIds) < 8 then
@@ -1740,144 +1948,6 @@ local Boss_14274_Update = function()
 		end
 	end
 end
-
-local initGlobalData = function()
-	MuAiGuide.Merchant = {
-		State = {
-			Start = 0,
-			Boss1_Start = 1000,
-			-- 老2
-			Boss2_Start = 2000,
-			Boss2_P1_Start = 2100,
-			Boss2_P1_GetBuff = 2101,
-			Boss2_P1_GetLine = 2102,
-			Boss2_P1_LineEnd = 2103,
-			Boss2_P2_Start = 2200,
-			Boss2_P2_Put = 2202,
-			Boss2_P3_Start = 2300,
-			Boss2_P3_GetBuff1 = 2301,
-			Boss2_P3_GetBlade = 2302,
-			Boss2_P3_GetLine = 2303,
-			Boss2_P3_LineEnd = 2304,
-			Boss2_P3_4Blade1 = 2305,
-			Boss2_P3_4Blade2 = 2306,
-			Boss2_P3_4Blade3 = 2307,
-			Boss2_P3_4AddMark = 2308,
-			Boss2_P3_4Blade4 = 2309,
-			Boss2_P3_4BladeEnd = 2310,
-			Boss2_P3_End = 2399,
-			Boss2_P4_Start = 2400,
-			Boss2_P4_GetStone = 2401,
-			Boss2_P4_Linked = 2402,
-			Boss2_P4_GetBuff = 2403,
-			Boss2_P4_Blade1 = 2404,
-			Boss2_P4_Blade2 = 2405,
-			Boss2_P4_Blade3 = 2406,
-			Boss2_P4_Blade4 = 2407,
-			Boss2_P4_BladeEnd = 2408,
-			-- 老3
-			Boss3_Start = 3000,
-			Boss3_P1_Start = 3100,
-			Boss3_P1_FireDance = 3102,
-			Boss3_P1_End = 3199,
-			Boss3_P2_Start = 3200,
-			Boss3_P2_GetBuff = 3201,
-			Boss3_P2_Turn1 = 3202,
-			Boss3_P2_Turn2 = 3203,
-			Boss3_P2_Turn3 = 3204,
-			Boss3_P2_Turn4 = 3205,
-			Boss3_P2_StartCarry = 3206,
-			Boss3_P2_GetKeyBlanket = 3207,
-			Boss3_P2_CarryEnd = 3208,
-			Boss3_P2_End = 3299,
-			Boss3_P3_Start = 3300,
-			Boss3_P3_GetFirstFire = 3301,
-			Boss3_P3_FirstPillar = 3302,
-			Boss3_P3_GetPillar = 3303,
-			Boss3_P3_GetBuff = 3304,
-			Boss3_P3_End = 3399,
-
-			Boss3_P4_Start = 3400,
-			Boss3_P4_Tower1 = 3401,
-			Boss3_P4_Tower2 = 3402,
-			Boss3_P4_FireStone = 3403,
-			Boss3_P4_End = 3499,
-		},
-		CurrentState = 0,
-		Timer = 0,
-		Timer46574 = 0,
-		Timer47031 = 0,
-		spell45845 = false,
-		spell45849 = false,
-		spell46715 = false,
-		spellRingCircle = false,
-		spellRingData = {
-			spellId = 0,
-			spellType = 0,
-			spellMark1 = nil,
-			spellMark2 = nil,
-			spellMarkAim = nil,
-		},
-		fireDance = {
-			inState = false,
-			state = 0,
-			spellId = 0,
-			aoeHeading = 0,
-			tethers = {},
-			routeInfo = {}
-		},
-		B3P1Sub = {
-			entities = {},
-			ids = {},
-			marks = {},
-			AOEs = {},
-			spellId = 0
-		},
-		B3P2FireDance = {
-			marks = {},
-			auras = {},
-			aoeInfo = nil,
-			curDir = nil,
-			near = nil,
-			far = nil,
-			mid = nil,
-			Timer = 0,
-		},
-		B3P2Phantom = {
-			aoeInfo = nil,
-			entity = nil,
-			redOrb = {},
-			blanketIds = {},
-			blankets = {},
-			blueOrbOldPos = nil,
-			blueOrbNewPos = nil,
-			blanketWithBlueOrb = nil,
-			GuidePos = nil,
-		},
-		B3P3FireType = nil,
-		B3P3Fire = {},
-		B3P3FireLinkType = {},
-		B3P3Pillar = {},
-		B3P3FireGuidePos = nil,
-		B3P3FireGuidePos2 = nil,
-		mark20 = false,
-		mark22 = false,
-		P3Blade = nil,
-		B3P4Tower1 = {},
-		B3P4Tower2 = {},
-		B3P4BladeAoes = {},
-		B3P4FineStoneIndex = 1,
-		B3P4FineStoneIdsOld = {},
-		B3P4FineStoneIds = {},
-		B3P4FineStoneEnts = {},
-		B3P4FineStoneDirAoe = nil,
-		B3P4FineStoneMarks = {},
-		B3P4linkDirInfo = nil,
-		B3P4linkGuidePos = {},
-		B3P4linkGuideTable = {}
-	}
-end
-
 local initGroud = function()
 	_gridCenters = {}
 	for row = 1, 5 do
@@ -1966,89 +2036,17 @@ end
 
 ----------------------------- MuAiCore Call -----------------------------
 G.OnEntityChannel = function(entityID, spellID, channelDuration)
-	if Player.localmapid ~= G.MapId or not MuAiGuide.Config.Main.Merchant then
+	if not guideCfg().Merchant then
 		return
 	end
 	local mmd = MuAiGuide.Merchant
-	if spellID == 45773 then
-		--小夜曲
-	elseif spellID == 45551 then
-		--- 火灵的诅咒
-
-	elseif spellID == 45845 then
-		-- 空中漫游
-		mmd.Timer = Now()
-		mmd.spell45845 = true
-	elseif spellID == 45849 then
-		-- 沉没宝藏
-		mmd.Timer = Now()
-		mmd.spell45849 = true
-	elseif 45839 <= spellID and spellID <= 45843 then
-		boss1SubDraw(entityID, spellID)
-	elseif spellID == 46700 then
-		-- 变转光波	
-		-- 变转光波
-	elseif spellID == 46704 then
-		-- 转轮残响
-		MuAiGuide.DirectTo(_boss2Center.x, _boss2Center.z, 3600)
-	elseif spellID == 46707 then
-
-	elseif spellID == 46711 then
-		-- 八叶回响
-	elseif spellID == 46713 then
-		-- 时差剑波
-	elseif spellID == 46720 then
-		-- 剑气释放
-		if mmd.CurrentState > mmd.State.Boss2_P3_Start then
-			changeState(mmd.State.Boss2_P4_Start)
-		end
-	elseif spellID == 46693 then
-		-- 四方凶兆
-		if mmd.CurrentState == mmd.State.Boss2_Start then
-			changeState(mmd.State.Boss2_P1_Start)
-		elseif mmd.CurrentState >= mmd.State.Boss2_P2_Put
-				and mmd.CurrentState < mmd.State.Boss2_P3_Start then
-			changeState(mmd.State.Boss2_P3_Start)
-		elseif mmd.CurrentState >= mmd.State.Boss2_P3_LineEnd
-				and mmd.CurrentState < mmd.State.Boss2_P4_Start
-		then
-			changeState(mmd.State.Boss2_P3_4Blade1)
-		end
-	elseif spellID == 46698 then
-		-- 缚链凶兆击
-
-	elseif spellID == 46754 then
-		if mmd.CurrentState < mmd.State.Boss3_P2_End then
-			changeState(mmd.State.Boss3_P2_StartCarry)
-		end
-	elseif spellID == 46733 then
-		-- 四联幻影光波
-	elseif spellID == 46721 then
-		-- 光波钢剑舞
-	elseif spellID == 46715 then
-		-- 防击古狼闪
-		mmd.Timer = Now()
-		mmd.spell46715 = true
-	elseif spellID == 46752 then
-		-- 灼热回响
-	elseif spellID == 47763 then
-		-- 冥界灵击波
-	elseif spellID == 45434 or spellID == 45435 or spellID == 45444
-			--火粉分散
-			or spellID == 45436 or spellID == 45437 or spellID == 45445
-	--集火分摊
+	if spellID == 45434 or spellID == 45435 or spellID == 45444    --火粉分散
+			or spellID == 45436 or spellID == 45437 or spellID == 45445 --集火分摊
 	then
 		if mmd.CurrentState < mmd.State.Boss3_P1_Start then
 			changeState(mmd.State.Boss3_P1_Start)
 			mmd.fireDance.spellId = spellID
 			mmd.fireDance.inState = true
-		end
-	elseif 45538 <= spellID and spellID <= 45540 -- 对火花
-			or (spellID == 45536 or spellID == 45537) --散火花
-	then
-		if mmd.CurrentState <= mmd.State.Boss3_P2_Start then
-			mmd.B3P1Sub.spellId = spellID
-			mmd.Timer = Now()
 		end
 	elseif spellID == 45448 then
 		-- 火环
@@ -2070,22 +2068,88 @@ G.OnEntityChannel = function(entityID, spellID, channelDuration)
 		if mmd.CurrentState < mmd.State.Boss3_P2_CarryEnd then
 			changeState(mmd.State.Boss3_P2_CarryEnd)
 		end
+	elseif spellID == 45551 then
+		--- 火灵的诅咒
+	elseif 45538 <= spellID and spellID <= 45540 -- 对火花
+			or (spellID == 45536 or spellID == 45537) --散火花
+	then
+		if mmd.CurrentState <= mmd.State.Boss3_P2_Start then
+			mmd.B3P1Sub.spellId = spellID
+			mmd.Timer = Now()
+		end
+	elseif 45839 <= spellID and spellID <= 45843 then
+		boss1SubDraw(entityID, spellID)
+	elseif spellID == 45845 then
+		-- 空中漫游
+		mmd.Timer = Now()
+		mmd.spell45845 = true
+	elseif spellID == 45849 then
+		-- 沉没宝藏
+		mmd.spell45849.Timer = Now()
+		mmd.spell45849.InState = true
+	elseif spellID == 45773 then
+		--小夜曲
+	elseif spellID == 46693 then
+		-- 四方凶兆
+		if mmd.CurrentState == mmd.State.Boss2_Start then
+			changeState(mmd.State.Boss2_P1_Start)
+		elseif mmd.CurrentState >= mmd.State.Boss2_P2_Put
+				and mmd.CurrentState < mmd.State.Boss2_P3_Start then
+			changeState(mmd.State.Boss2_P3_Start)
+		elseif mmd.CurrentState >= mmd.State.Boss2_P3_LineEnd
+				and mmd.CurrentState < mmd.State.Boss2_P4_Start
+		then
+			changeState(mmd.State.Boss2_P3_4Blade1)
+		end
+	elseif spellID == 46698 then
+		-- 缚链凶兆击
+	elseif spellID == 46700 then
+		-- 变转光波
+	elseif spellID == 46704 then
+		-- 转轮残响
+		MuAiGuide.DirectTo(_boss2Center.x, _boss2Center.z, 3600)
+	elseif spellID == 46707 then
+		-- 八叶残响
+	elseif spellID == 46711 then
+		-- 八叶回响
+	elseif spellID == 46713 then
+		-- 时差剑波
+	elseif spellID == 46715 or spellID == 46716 or spellID == 46642 or spellID == 46679 or spellID == 46680 then
+		-- 咬击古狼闪
+		mmd.Timer = Now()
+		mmd.spell46715 = true
+	elseif spellID == 46720 then
+		-- 剑气释放
+		if mmd.CurrentState > mmd.State.Boss2_P3_Start then
+			changeState(mmd.State.Boss2_P4_Start)
+		end
+	elseif spellID == 46721 then
+		-- 光波钢剑舞
+	elseif spellID == 46733 then
+		-- 四联幻影光波
+	elseif spellID == 46752 then
+		-- 灼热回响
+	elseif spellID == 46754 then
+		if mmd.CurrentState < mmd.State.Boss3_P2_End then
+			changeState(mmd.State.Boss3_P2_StartCarry)
+		end
 	elseif table.contains(_skillIdCircle, spellID) or table.contains(_skillIdRing, spellID) then
 		--天界交叉斩·圆          --天界交叉斩·环
 		mmd.Timer = Now()
 		mmd.spellRingCircle = true
 		mmd.spellRingData.spellId = spellID
+	elseif spellID == 47031 or spellID == 47032 then
+		mmd.Timer47031 = Now()
 	elseif spellID == 47041 then
 		-- 幻影生成
 		changeState(mmd.State.Boss3_P4_Start)
-
-	elseif spellID == 47031 or spellID == 47032 then
-		mmd.Timer47031 = Now()
+	elseif spellID == 47763 then
+		-- 冥界灵击波
 	end
 end
 
 G.OnMarkerAdd = function(entityID, markerID)
-	if Player.localmapid ~= G.MapId then
+	if guideCfg().Merchant then
 		return
 	end
 	local mmd = MuAiGuide.Merchant
@@ -2095,47 +2159,6 @@ G.OnMarkerAdd = function(entityID, markerID)
 	elseif markerID == 22 then
 		mmd.Timer = Now()
 		mmd.mark22 = true
-	elseif markerID == 499 then
-		mmd.Timer = Now()
-		mmd.mark499 = true
-		if mmd.CurrentState <= mmd.State.Boss2_P2_Start then
-			changeState(mmd.State.Boss2_P2_Start)
-		end
-	elseif markerID == 332 then
-		mmd.spellRingData.spellMark1 = TensorCore.mGetEntity(entityID)
-	elseif markerID == 333 then
-		mmd.spellRingData.spellMark2 = TensorCore.mGetEntity(entityID)
-	elseif markerID == 631 then
-		-- 飞毯标记
-
-	elseif markerID == 652 then
-		mmd.spellRingData.spellMarkAim = TensorCore.mGetEntity(entityID)
-	elseif markerID == 644 then
-		-- 黄
-		if mmd.CurrentState <= mmd.State.Boss3_P2_Turn4 then
-			table.insert(mmd.B3P2FireDance.marks, markerID)
-			mmd.Timer = Now()
-		elseif mmd.CurrentState > mmd.State.Boss3_P4_Start then
-			table.insert(mmd.B3P4FineStoneMarks, markerID)
-		end
-	elseif markerID == 645 then
-		-- 蓝
-		if mmd.CurrentState <= mmd.State.Boss3_P2_Turn4 then
-			table.insert(mmd.B3P2FireDance.marks, markerID)
-			mmd.Timer = Now()
-		elseif mmd.CurrentState > mmd.State.Boss3_P4_Start then
-			table.insert(mmd.B3P4FineStoneMarks, markerID)
-		end
-	elseif markerID == 646 then
-		if mmd.CurrentState < mmd.State.Boss3_P2_Start then
-			mmd.B3P1Sub.marks[entityID] = markerID
-		end
-	elseif markerID == 647 then
-		if mmd.CurrentState < mmd.State.Boss3_P2_Start then
-			mmd.B3P1Sub.marks[entityID] = markerID
-		end
-	elseif markerID == 161 then
-		-- 对火花
 	elseif markerID == 136 or markerID == 137 then
 		if _lastRightMarkTime == 0 or TimeSince(_lastRightMarkTime) > 700 then
 			_lastRightMarkTime = Now()
@@ -2167,47 +2190,79 @@ G.OnMarkerAdd = function(entityID, markerID)
 				changeState(mmd.State.Boss2_P4_BladeEnd)
 			end
 		end
+	elseif markerID == 161 then
+		-- 对火花
+	elseif markerID == 332 then
+		mmd.spellRingData.spellMark1 = TensorCore.mGetEntity(entityID)
+	elseif markerID == 333 then
+		mmd.spellRingData.spellMark2 = TensorCore.mGetEntity(entityID)
+	elseif markerID == 499 then
+		mmd.Timer = Now()
+		mmd.mark499 = true
+		if mmd.CurrentState <= mmd.State.Boss2_P2_Start then
+			changeState(mmd.State.Boss2_P2_Start)
+		end
+	elseif markerID == 631 then
+		-- 飞毯标记
+
+	elseif markerID == 644 then
+		-- 黄
+		if mmd.CurrentState <= mmd.State.Boss3_P2_Turn4 then
+			table.insert(mmd.B3P2FireDance.marks, markerID)
+			mmd.Timer = Now()
+		elseif mmd.CurrentState > mmd.State.Boss3_P4_Start then
+			table.insert(mmd.B3P4FineStoneMarks, markerID)
+		end
+	elseif markerID == 645 then
+		-- 蓝
+		if mmd.CurrentState <= mmd.State.Boss3_P2_Turn4 then
+			table.insert(mmd.B3P2FireDance.marks, markerID)
+			mmd.Timer = Now()
+		elseif mmd.CurrentState > mmd.State.Boss3_P4_Start then
+			table.insert(mmd.B3P4FineStoneMarks, markerID)
+		end
+	elseif markerID == 646 then
+		if mmd.CurrentState < mmd.State.Boss3_P2_Start then
+			mmd.B3P1Sub.marks[entityID] = markerID
+		end
+	elseif markerID == 647 then
+		if mmd.CurrentState < mmd.State.Boss3_P2_Start then
+			mmd.B3P1Sub.marks[entityID] = markerID
+		end
+	elseif markerID == 652 then
+		mmd.spellRingData.spellMarkAim = TensorCore.mGetEntity(entityID)
 	end
 end
 
 --- @param aoeInfo GroundAOE|DirectionalAOE
 G.OnAOECreate = function(aoeInfo)
-	if not MuAiGuide.Config.Main.Merchant then
+	if not guideCfg().Merchant then
 		return
 	end
 	local mmd = MuAiGuide.Merchant
-	if aoeInfo.aoeID == 45478 then
+	if aoeInfo.aoeID == 45434 or aoeInfo.aoeID == 45435 or aoeInfo.aoeID == 45436
+			or aoeInfo.aoeID == 45437 or aoeInfo.aoeID == 45444 or aoeInfo.aoeID == 45445 then
 		if mmd.CurrentState < mmd.State.Boss3_P2_Start then
-			mmd.B3P1Sub.AOEs[aoeInfo.entityID] = aoeInfo
+			-- P1
+			mmd.fireDance.aoeHeading = aoeInfo.heading
 		end
 	elseif aoeInfo.aoeID == 45439 then
 		--幻影炎舞
 		if mmd.CurrentState < mmd.State.Boss3_P3_Start then
 			mmd.B3P2Phantom.aoeInfo = aoeInfo
 		end
-	elseif aoeInfo.aoeID == 45866 then
-		--激涌的洋流
-	elseif aoeInfo.aoeID == 46708 then
-		if MuAiGuide.Config.Main.MerchantDraw then
-			_redDrawer:addTimedCross(3000, aoeInfo.x, aoeInfo.y, aoeInfo.z, 60, 8, aoeInfo.heading)
-		end
-	elseif aoeInfo.aoeID == 46705 and mmd.CurrentState > mmd.State.Boss2_P4_Start then
-		if MuAiGuide.Config.Main.MerchantDraw then
-			_redDrawer:addTimedCross(5000, aoeInfo.x, aoeInfo.y, aoeInfo.z, 60, 8, 0)
-			_redDrawer:addTimedCross(5000, aoeInfo.x, aoeInfo.y, aoeInfo.z, 60, 8, math.pi / 4)
-		end
-	elseif aoeInfo.aoeID == 45434 or aoeInfo.aoeID == 45435 or aoeInfo.aoeID == 45444
-			or aoeInfo.aoeID == 45436 or aoeInfo.aoeID == 45437 or aoeInfo.aoeID == 45445 then
-		if mmd.CurrentState < mmd.State.Boss3_P2_Start then
-			-- P1
-			mmd.fireDance.aoeHeading = aoeInfo.heading
-		end
+	elseif aoeInfo.aoeID == 45450 or aoeInfo.aoeID == 45451 then
+		mmd.B3P4BladeAoes[aoeInfo.entityID] = aoeInfo
 	elseif aoeInfo.aoeID == 45467 then
 		if mmd.CurrentState < mmd.State.Boss3_P3_Start then
 			mmd.B3P2FireDance.aoeInfo = aoeInfo
 		end
+	elseif aoeInfo.aoeID == 45478 then
+		if mmd.CurrentState < mmd.State.Boss3_P2_Start then
+			mmd.B3P1Sub.AOEs[aoeInfo.entityID] = aoeInfo
+		end
 	elseif aoeInfo.aoeID == 45488 then
-		if MuAiGuide.Config.Main.MerchantDraw then
+		if guideCfg().MerchantDraw then
 			_redDrawer:addTimedCircle(5700, aoeInfo.x, aoeInfo.y, aoeInfo.z, aoeInfo.aoeLength)
 		end
 		if table.size(mmd.B3P3Fire) < 4 then
@@ -2248,8 +2303,6 @@ G.OnAOECreate = function(aoeInfo)
 		if table.size(mmd.B3P3Pillar) >= 8 then
 			changeState(mmd.State.Boss3_P3_GetPillar)
 		end
-	elseif aoeInfo.aoeID == 45451 or aoeInfo.aoeID == 45450 then
-		mmd.B3P4BladeAoes[aoeInfo.entityID] = aoeInfo
 	elseif aoeInfo.aoeID == 45532 then
 		--塔
 		if table.size(mmd.B3P4Tower1) < 4 then
@@ -2257,16 +2310,56 @@ G.OnAOECreate = function(aoeInfo)
 		else
 			table.insert(mmd.B3P4Tower2, aoeInfo)
 		end
-	elseif aoeInfo.aoeID == 46574 or aoeInfo.aoeID == 46573 then
+	elseif aoeInfo.aoeID == 45866 then
+		if mmd.spell45866.Timer == 0 then
+			mmd.spell45866.InState = true
+			mmd.spell45866.Timer = Now()
+		end
+		if table.size(mmd.spell45866.AoeInfo1) < 2 then
+			table.insert(mmd.spell45866.AoeInfo1, aoeInfo)
+		elseif table.size(mmd.spell45866.AoeInfo1) == 2 then
+			table.insert(mmd.spell45866.AoeInfo2, aoeInfo)
+		end
+	elseif aoeInfo.aoeID == 46573 or aoeInfo.aoeID == 46574 then
 		mmd.Timer46574 = Now()
+	elseif aoeInfo.aoeID == 46705 and mmd.CurrentState > mmd.State.Boss2_P4_Start then
+		if guideCfg().MerchantDraw then
+			_redDrawer:addTimedCross(5000, aoeInfo.x, aoeInfo.y, aoeInfo.z, 60, 8, 0)
+			_redDrawer:addTimedCross(5000, aoeInfo.x, aoeInfo.y, aoeInfo.z, 60, 8, math.pi / 4)
+		end
+	elseif aoeInfo.aoeID == 46708 then
+		if guideCfg().MerchantDraw then
+			_redDrawer:addTimedCross(3000, aoeInfo.x, aoeInfo.y, aoeInfo.z, 60, 8, aoeInfo.heading)
+		end
 	elseif aoeInfo.aoeID == 47031 or aoeInfo.aoeID == 47032 then
 		mmd.B3P4FineStoneDirAoe = aoeInfo
 	end
 end
 
+G.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
+	local mmd = MuAiGuide.Merchant
+	if not guideCfg().Merchant then
+		return
+	end
+	local curEnt = TensorCore.mGetEntity(entityID)
+	if curEnt.contentid == 2015004 then
+		local maxSize = 1
+		if table.size(mmd.spell45849.AllBalls) == 6 then
+			maxSize = 1
+		elseif table.size(mmd.spell45849.AllBalls) == 6 then
+			maxSize = 2
+		end
+		if table.size(mmd.spell45849.FirstBallIds) < maxSize then
+			table.insert(mmd.spell45849.FirstBallIds, entityID)
+			if table.size(mmd.spell45849.FirstBallIds) == maxSize then
+				mmd.spell45849.FirstBallFinish = true
+			end
+		end
+	end
+end
 --- 每帧执行
 G.Update = function()
-	if not MuAiGuide.Config.Main.Merchant then
+	if not guideCfg().Merchant then
 		return
 	end
 	if MuAiGuide.Merchant == nil then
@@ -2280,17 +2373,16 @@ end
 
 --- 进入副本
 G.OnEnter = function()
-	if not MuAiGuide.Config.Main.Merchant then
+	if not guideCfg().Merchant then
 		return
 	end
 	G.CurBoss = nil
-	_lastBoss = nil
 	MuAiGuide.Debug("进入副本：异闻商客奇谭")
 end
 
 --- 脱离战斗
 G.OnWipe = function()
-	if not MuAiGuide.Config.Main.Merchant then
+	if not guideCfg().Merchant then
 		return
 	end
 	G.CurBoss = nil
