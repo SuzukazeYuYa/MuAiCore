@@ -476,6 +476,7 @@ local DrawMainUI = function(M)
 					if M.Config.Main.MerchantDraw then
 						GUI:TextColored(1, 0, 1, 1, "  防止花眼请关闭其他绘图，并将1317加")
 						GUI:TextColored(1, 0, 1, 1, "  入到黑名单，并停用Anyone相关绘图。")
+						GUI:TextColored(1, 0, 1, 1, "  A+用户建议关闭加亮！")
 					end
 					GUI:Separator()
 					GUI:Dummy(6, 5)

@@ -162,6 +162,12 @@ local initGlobalData = function()
 			FirstBallIds = {},
 			FirstBallFinish = false,
 			AllBalls = {},
+			P1TargetPos = nil,
+			P1GuidePos1 = nil,
+			P1GuidePos2 = nil,
+			P1OffsetH = nil,
+			P1BuffType = nil,
+			P1LockingFace = nil
 		},
 		spell46715 = false,
 		spellRingCircle = false,
@@ -342,15 +348,6 @@ local OnUpdateSpell45849 = function()
 				end
 			end
 		end
-	else
-		mmd.spell45849 = {
-			InState = false,
-			Timer = 0,
-			Ids = {},
-			FirstBallIds = {},
-			FirstBallFinish = false,
-			AllBalls = {},
-		}
 	end
 end
 
@@ -942,6 +939,54 @@ local drawStoneDir = function(curWave)
 	_redDrawer:addRect(_boss3Center.x, _boss3Center.y, _boss3Center.z, 20, 40, heading)
 end
 
+local getP1Higher = function()
+	local player = MuAiGuide.GetPlayer()
+	local cuBuff = TensorCore.hasBuff(player.id, 4726)
+	local partner
+	for Job, ent in pairs(MuAiGuide.Party) do
+		if ent.id ~= player.id then
+			if cuBuff then
+				if TensorCore.hasBuff(ent.id, 4726) then
+					partner = Job
+					break
+				end
+			else
+				if not TensorCore.hasBuff(ent.id, 4726) then
+					partner = Job
+					break
+				end
+			end
+		end
+	end
+	local selfIndex = MuAiGuide.IndexOf(_order, MuAiGuide.SelfPos)
+	local otherIndex = MuAiGuide.IndexOf(_order, partner)
+	return selfIndex < otherIndex
+end
+
+local changeStateByForceMoveEnd = function(state)
+	local hasBuff = false
+	for _, ent in pairs(MuAiGuide.Party) do
+		if TensorCore.hasBuff(ent.id, 1257) then
+			hasBuff = true
+			break
+		end
+		for i = 2161, 2164 do
+			if TensorCore.hasBuff(ent.id, i) then
+				hasBuff = true
+				break
+			end
+		end
+		if hasBuff then
+			break
+		end
+	end
+	if not hasBuff then
+		changeState(state)
+		return true
+	end
+	return false
+end
+
 local Boss_14291_Update = function()
 	local mmd = MuAiGuide.Merchant
 	OnUpdateSpell45866()
@@ -953,24 +998,7 @@ local Boss_14291_Update = function()
 		if getCfg().MerchantAimTool then
 			OnUpDateMoveChecker()
 		end
-		local hasBuff = false
-		for _, ent in pairs(MuAiGuide.Party) do
-			if TensorCore.hasBuff(ent.id, 1257) then
-				hasBuff = true
-				break
-			end
-			for i = 2161, 2164 do
-				if TensorCore.hasBuff(ent.id, i) then
-					hasBuff = true
-					break
-				end
-			end
-			if hasBuff then
-				break
-			end
-		end
-		if not hasBuff then
-			changeState(mmd.State.Boss1_P1_End)
+		if changeStateByForceMoveEnd(mmd.State.Boss1_P1_End) then
 			return
 		end
 		--- 强制移动1 空中漫游
@@ -1046,26 +1074,8 @@ local Boss_14291_Update = function()
 							end
 						end
 					else
-						local cuBuff = TensorCore.hasBuff(player.id, 4726)
-						local partner
-						for Job, ent in pairs(MuAiGuide.Party) do
-							if ent.id ~= player.id then
-								if cuBuff then
-									if TensorCore.hasBuff(ent.id, 4726) then
-										partner = Job
-										break
-									end
-								else
-									if not TensorCore.hasBuff(ent.id, 4726) then
-										partner = Job
-										break
-									end
-								end
-							end
-						end
-						local selfIndex = MuAiGuide.IndexOf(_order, MuAiGuide.SelfPos)
-						local otherIndex = MuAiGuide.IndexOf(_order, partner)
-						if selfIndex < otherIndex then
+						local isHigher = getP1Higher()
+						if isHigher then
 							mmd.spell45845.GuidePos2 = mmd.spell45845.SafePoint[1]
 						else
 							mmd.spell45845.GuidePos2 = mmd.spell45845.SafePoint[2]
@@ -1081,14 +1091,16 @@ local Boss_14291_Update = function()
 							if curBuff.duration < 2 and not mmd.spell45845.LockingFace then
 								local distanceTo1 = TensorCore.getDistance2d(player.pos, mmd.spell45845.GuidePos1)
 								if distanceTo1 < 1 then
-									local curHeading = TensorCore.getHeadingToTarget(player, mmd.spell45845.GuidePos2) + mmd.spell45845.offsetH
+									local curHeading = TensorCore.getHeadingToTarget(player.pos, mmd.spell45845.GuidePos2)
+											+ mmd.spell45845.offsetH
 									TensorCore.API.TensorACR.setLockFaceHeading(curHeading)
 									TensorCore.API.TensorACR.toggleLockFace(true)
+									mmd.spell45845.LockingFace = true
 								end
 							end
 						else
 							if mmd.spell45845.LockingFace then
-								local moveBuff = TensorCore.hasBuff(player.id, 1257)
+								local moveBuff = TensorCore.getBuff(player.id, 1257)
 								if moveBuff ~= nil and moveBuff.duration < 2 then
 									TensorCore.API.TensorACR.toggleLockFace(false)
 									mmd.spell45845.LockingFace = false
@@ -1183,7 +1195,122 @@ local Boss_14291_Update = function()
 			end
 		end
 	elseif mmd.CurrentState == mmd.State.Boss1_P2_Treasure then
-
+		if getCfg().MerchantAimTool then
+			OnUpDateMoveChecker()
+		end
+		if not getCfg().MerchantGuide and
+				not mmd.spell45849.FirstBallFinish
+				or changeStateByForceMoveEnd(mmd.State.Boss1_P2_End)
+		then
+			return
+		end
+		if mmd.spell45849.P1GuidePos1 == nil then
+			local dangerBall = TensorCore.mGetEntity(mmd.spell45849.FirstBallIds[1])
+			local dir = TensorCore.getHeadingToTarget(_boss1Center, dangerBall.pos) + math.pi
+			local NewDir
+			local isHigher = getP1Higher()
+			if isHigher then
+				NewDir = dir + math.pi / 4
+			else
+				NewDir = dir - math.pi / 4
+			end
+			local targetMid = TensorCore.getPosInDirection(_boss1Center, NewDir, 8 * 1.5 * math.sqrt(2))
+			local startDir = TensorCore.getHeadingToTarget(targetMid, _boss1Center)
+			mmd.spell45849.P1GuidePos1 = TensorCore.getPosInDirection(targetMid, startDir, 18)
+		end
+		if mmd.spell45849.P1GuidePos2 == nil then
+			if table.size(mmd.spell45866.AoeInfo1) >= 2 then
+				local dangerBall = TensorCore.mGetEntity(mmd.spell45849.FirstBallIds[1])
+				local dir = TensorCore.getHeadingToTarget(_boss1Center, dangerBall.pos) + math.pi
+				local NewDir, startDir
+				local isSame = false
+				for _, aoe in pairs(mmd.spell45866.AoeInfo1) do
+					if MuAiGuide.IsSameDirection(aoe.heading, dir) then
+						isSame = true
+						break
+					end
+				end
+				local isHigher = getP1Higher()
+				local delta = 0.06
+				if isSame then
+					if isHigher then
+						NewDir = dir + math.pi / 4 + delta
+						startDir = dir + math.pi / 4 + math.pi
+					else
+						NewDir = dir - math.pi / 4 - delta
+						startDir = dir - math.pi / 4 + math.pi
+					end
+				else
+					if isHigher then
+						NewDir = dir + math.pi / 4 - delta
+						startDir = dir + math.pi / 4 + math.pi
+					else
+						NewDir = dir - math.pi / 4 + delta
+						startDir = dir - math.pi / 4 + math.pi
+					end
+				end
+				local targetMid = TensorCore.getPosInDirection(_boss1Center, NewDir, 8 * 1.5 * math.sqrt(2))
+				mmd.spell45849.P1GuidePos2 = TensorCore.getPosInDirection(targetMid, startDir, 18)
+				mmd.spell45849.P1TargetPos = targetMid
+			end
+		end
+		if mmd.spell45849.P1BuffType == nil then
+			if TensorCore.hasBuff(player.id, 2161) then
+				-- 前
+				mmd.spell45849.P1OffsetH = 0
+				mmd.spell45849.P1BuffType = 2161
+			elseif TensorCore.hasBuff(player.id, 2162) then
+				-- 后
+				mmd.spell45849.P1OffsetH = math.pi
+				mmd.spell45849.P1BuffType = 2162
+			elseif TensorCore.hasBuff(player.id, 2163) then
+				-- 左 
+				mmd.spell45849.P1OffsetH = -math.pi / 2
+				mmd.spell45849.P1BuffType = 2163
+			elseif TensorCore.hasBuff(player.id, 2164) then
+				-- 右
+				mmd.spell45849.P1OffsetH = math.pi / 2
+				mmd.spell45849.P1BuffType = 2164
+			end
+		end
+		if mmd.spell45849.P1GuidePos2 == nil then
+			if mmd.spell45849.P1GuidePos1 ~= nil then
+				MuAiGuide.FrameDirect(mmd.spell45849.P1GuidePos1.x, mmd.spell45849.P1GuidePos1.z)
+			end
+			return
+		end
+		local guidePos
+		if getCfg().MerchantLockFace then
+			local curBuff = TensorCore.getBuff(player.id, mmd.spell45849.P1BuffType)
+			if curBuff ~= nil then
+				if curBuff.duration < 1.3 and not mmd.spell45849.P1LockingFace then
+					local distanceTo1 = TensorCore.getDistance2d(player.pos, mmd.spell45849.P1GuidePos2)
+					if distanceTo1 < 1 then
+						-- 严格在指路范围内
+						local curHeading = TensorCore.getHeadingToTarget(player.pos, mmd.spell45849.P1TargetPos)
+								+ mmd.spell45849.P1OffsetH
+						TensorCore.API.TensorACR.setLockFaceHeading(curHeading)
+						TensorCore.API.TensorACR.toggleLockFace(true)
+						mmd.spell45849.P1LockingFace = true
+					end
+				end
+				guidePos = mmd.spell45849.P1GuidePos2
+			else
+				if mmd.spell45849.P1LockingFace then
+					local moveBuff = TensorCore.getBuff(player.id, 1257)
+					if moveBuff ~= nil and moveBuff.duration < 2 then
+						TensorCore.API.TensorACR.toggleLockFace(false)
+						mmd.spell45849.P1LockingFace = false
+					end
+				end
+				guidePos = mmd.spell45849.P1TargetPos
+			end
+		else
+			guidePos = mmd.spell45849.P1TargetPos
+		end
+		if guidePos ~= nil then
+			MuAiGuide.FrameDirect(guidePos.x, guidePos.z)
+		end
 	end
 end
 
@@ -2333,6 +2460,22 @@ G.OnEntityChannel = function(entityID, spellID, _)
 		--小夜曲
 	elseif spellID == 45849 then
 		-- 沉没宝藏
+		if mmd.CurrentState > mmd.State.Boss1_P2_End then
+			mmd.spell45849 = {
+				InState = false,
+				Timer = 0,
+				Ids = {},
+				FirstBallIds = {},
+				FirstBallFinish = false,
+				AllBalls = {},
+				P1TargetPos = nil,
+				P1GuidePos1 = nil,
+				P1GuidePos2 = nil,
+				P1OffsetH = nil,
+				P1BuffType = nil,
+				P1LockingFace = nil
+			}
+		end
 		mmd.spell45849.Timer = Now()
 		mmd.spell45849.InState = true
 	elseif spellID == 46693 then
@@ -2611,6 +2754,9 @@ G.OnEventObjectScriptFunc = function(entityID, _, _, _)
 			if table.size(mmd.spell45849.FirstBallIds) == maxSize then
 				mmd.spell45849.FirstBallFinish = true
 			end
+		end
+		if mmd.CurrentState < mmd.State.Boss1_P2_Treasure then
+			changeState(mmd.State.Boss1_P2_Treasure)
 		end
 	end
 end
