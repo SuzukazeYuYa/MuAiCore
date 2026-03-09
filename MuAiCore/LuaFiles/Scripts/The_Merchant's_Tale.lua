@@ -8,7 +8,8 @@ local _boss2Center = { x = 170, y = -16, z = -815 }
 local _boss3Center = { x = -760, y = -54, z = -805 }
 local _skillIdCircle = { 46658, 46660, 46687, 46689, 47562, 47564, 47566, 47568 }
 local _skillIdRing = { 46659, 46661, 46668, 46690, 47563, 47565, 47567, 47569 }
-local _order = { "MT", "ST", "D1", "D2" }
+local _order = { "MT", "H1", "D1", "D2" }
+local _order2 = { "H1", "MT", "D1", "D2" }
 local _lastRightMarkTime = 0
 
 local _redDrawer = Argus2.ShapeDrawer:new(
@@ -26,6 +27,15 @@ local _yellowDrawer = Argus2.ShapeDrawer:new(
 		(GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),
 		1
 )
+
+local _blueDrawer = Argus2.ShapeDrawer:new(
+		(GUI:ColorConvertFloat4ToU32(0, 0, 1, 0.3)),
+		(GUI:ColorConvertFloat4ToU32(0, 0, 1, 0.3)),
+		(GUI:ColorConvertFloat4ToU32(0, 0, 1, 0.3)),
+		(GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),
+		1
+)
+
 local _greenDrawer = Argus2.ShapeDrawer:new(
 		(GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.3)),
 		(GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.3)),
@@ -57,6 +67,11 @@ local initGlobalData = function()
 			Boss1_Start = 1000,
 			Boss1_P1_ForceMove = 1101,
 			Boss1_P1_End = 1199,
+			Boss1_P2_GroudWater = 1201,
+			Boss1_P2_GroudWaterEnd = 1202,
+			Boss1_P2_Treasure = 1203,
+
+			Boss1_P2_End = 1299,
 			-- 老2
 			Boss2_Start = 2000,
 			Boss2_P1_Start = 2100,
@@ -116,7 +131,8 @@ local initGlobalData = function()
 		},
 		CurrentState = 0,
 		Timer = 0,
-		mark20 = false,
+		mark20InState = false,
+		mark20Timer = 0,
 		mark22 = false,
 		Timer46574 = 0,
 		Timer47031 = 0,
@@ -130,6 +146,14 @@ local initGlobalData = function()
 			GuidePos2 = nil,
 			BuffType = nil,
 			offsetH = nil,
+		},
+		aoeGroudWater = {
+			Timer = 0,
+			aoe = {},
+			GuidePos1 = nil,
+			GuidePos2 = nil,
+			WaitTime = 0,
+			DrawPos = nil,
 		},
 		spell45849 = {
 			InState = false,
@@ -331,12 +355,11 @@ local OnUpdateSpell45849 = function()
 end
 
 local OnUpdateMark20 = function()
-	if not MuAiGuide.Merchant.mark20 then
+	if not MuAiGuide.Merchant.mark20InState then
 		return
 	end
-	if TimeSince(MuAiGuide.Merchant.Timer) < 8000 then
-		local players = MuAiGuide.GetPartyPlayers()
-		for _, ent in pairs(players) do
+	if TimeSince(MuAiGuide.Merchant.mark20Timer) < 7700 then
+		for _, ent in pairs(MuAiGuide.Party) do
 			if ent.id ~= Player.id then
 				local dis = 100000000
 				local curPoint
@@ -350,12 +373,13 @@ local OnUpdateMark20 = function()
 					end
 				end
 				if curPoint ~= nil then
-					_redDrawer:addCross(curPoint.x, _boss1Center.y, curPoint.z, 40, 8, math.pi)
+					_blueDrawer:addCross(curPoint.x, _boss1Center.y, curPoint.z, 40, 8, math.pi)
 				end
 			end
 		end
 	else
-		MuAiGuide.Merchant.mark20 = false
+		MuAiGuide.Merchant.mark20InState = false
+		MuAiGuide.Merchant.mark20Timer = 0
 	end
 end
 
@@ -380,7 +404,7 @@ local OnUpDateMoveChecker = function()
 	else
 		return
 	end
-	local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.5), 1)
+	local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.7), 0)
 	drawer:addArrow(player.pos.x, player.pos.y, player.pos.z, heading, 18, 0.05, 0.3, 0.15, true)
 end
 
@@ -950,16 +974,19 @@ local Boss_14291_Update = function()
 			return
 		end
 		--- 强制移动1 空中漫游
-		if mmd.spell45845.DangerPoints == nil and TimeSince(mmd.spell45845.Timer) > 4100 then
-			mmd.spell45845.DangerPoints = {}
-			table.insert(mmd.spell45845.DangerPoints, _boss1Center)
-		end
-		for _, ent in pairs(TensorCore.entityList("contentid=14291")) do
-			if TensorCore.getDistance2d(_boss1Center, ent.pos) > 14
-					and not table.contains(mmd.spell45845.Ids, ent.id)
-			then
-				table.insert(mmd.spell45845.Ids, ent.id)
-				table.insert(mmd.spell45845.DangerPoints, ent.pos)
+		if TimeSince(mmd.spell45845.Timer) > 4100 then
+			if mmd.spell45845.DangerPoints == nil then
+				mmd.spell45845.DangerPoints = {}
+				table.insert(mmd.spell45845.DangerPoints, _boss1Center)
+			else
+				for _, ent in pairs(TensorCore.entityList("contentid=14291")) do
+					if TensorCore.getDistance2d(_boss1Center, ent.pos) > 14
+							and not table.contains(mmd.spell45845.Ids, ent.id)
+					then
+						table.insert(mmd.spell45845.Ids, ent.id)
+						table.insert(mmd.spell45845.DangerPoints, ent.pos)
+					end
+				end
 			end
 		end
 		if mmd.spell45845.BuffType == nil then
@@ -1078,6 +1105,85 @@ local Boss_14291_Update = function()
 				end
 			end
 		end
+	elseif mmd.CurrentState == mmd.State.Boss1_P2_GroudWater then
+		if table.size(mmd.aoeGroudWater.aoe) < 2 then
+			return
+		end
+		if TimeSince(mmd.aoeGroudWater.Timer) > 15000 then
+			changeState(mmd.State.Boss1_P2_GroudWaterEnd)
+			return
+		end
+		local aoe = mmd.aoeGroudWater.aoe
+		local timer = TimeSince(mmd.aoeGroudWater.Timer)
+		if getCfg().MerchantDraw then
+			if mmd.aoeGroudWater.DrawPos == nil then
+				mmd.aoeGroudWater.DrawPos = {}
+				for i = 1, 5 do
+					mmd.aoeGroudWater.DrawPos[i] = {}
+					for _, curAoe in pairs(aoe) do
+						local curPos = { x = curAoe.x, y = curAoe.y, z = curAoe.z }
+						local heading = TensorCore.getHeadingToTarget(curPos, _boss1Center)
+						local distance = (i - 1) * 8 + 4
+						curPos = TensorCore.getPosInDirection(curPos, heading, distance)
+						curPos.h = heading + math.pi / 2
+						table.insert(mmd.aoeGroudWater.DrawPos[i], curPos)
+					end
+				end
+			else
+				local pos
+				if timer < 5000 then
+					pos = mmd.aoeGroudWater.DrawPos[1]
+				elseif timer < 7000 then
+					pos = mmd.aoeGroudWater.DrawPos[2]
+				elseif timer < 9000 then
+					pos = mmd.aoeGroudWater.DrawPos[3]
+				elseif timer < 11000 then
+					pos = mmd.aoeGroudWater.DrawPos[4]
+				elseif timer < 13000 then
+					pos = mmd.aoeGroudWater.DrawPos[5]
+				end
+				if pos ~= nil then
+					for _, curPos in pairs(pos) do
+						_redDrawer:addCenteredRect(curPos.x, curPos.y, curPos.z, 40, 8, curPos.h)
+					end
+				end
+			end
+		end
+		if getCfg().MerchantGuide then
+			if mmd.aoeGroudWater.GuidePos1 == nil then
+				local mid = {
+					x = (aoe[1].x + aoe[2].x) / 2,
+					y = (aoe[1].y + aoe[2].y) / 2,
+					z = (aoe[1].z + aoe[2].z) / 2,
+				}
+				local posDis = {
+					16.26345596729059,
+					4.949747468305833,
+					6.363961030678928,
+					17.67766952966369,
+				}
+				local dir = TensorCore.getHeadingToTarget(_boss1Center, mid)
+				local selfOrder = MuAiGuide.IndexOf(_order2, MuAiGuide.SelfPos)
+				local deltaDis = 1.414213562373095
+				if selfOrder >= 3 then
+					dir = dir + math.pi
+					deltaDis = -1.414213562373095
+				end
+				mmd.aoeGroudWater.GuidePos1 = TensorCore.getPosInDirection(_boss1Center, dir, posDis[selfOrder])
+				mmd.aoeGroudWater.GuidePos2 = TensorCore.getPosInDirection(_boss1Center, dir, posDis[selfOrder] + deltaDis)
+				mmd.aoeGroudWater.WaitTime = 5000 + (selfOrder - 1) * 2000
+			else
+				local guidePos
+				if timer < mmd.aoeGroudWater.WaitTime then
+					guidePos = mmd.aoeGroudWater.GuidePos1
+				else
+					guidePos = mmd.aoeGroudWater.GuidePos2
+				end
+				MuAiGuide.FrameDirect(guidePos.x, guidePos.z)
+			end
+		end
+	elseif mmd.CurrentState == mmd.State.Boss1_P2_Treasure then
+
 	end
 end
 
@@ -2223,12 +2329,12 @@ G.OnEntityChannel = function(entityID, spellID, _)
 		if mmd.CurrentState < mmd.State.Boss1_P1_ForceMove then
 			changeState(mmd.State.Boss1_P1_ForceMove)
 		end
+	elseif spellID == 45773 then
+		--小夜曲
 	elseif spellID == 45849 then
 		-- 沉没宝藏
 		mmd.spell45849.Timer = Now()
 		mmd.spell45849.InState = true
-	elseif spellID == 45773 then
-		--小夜曲
 	elseif spellID == 46693 then
 		-- 四方凶兆
 		if mmd.CurrentState == mmd.State.Boss2_Start then
@@ -2289,13 +2395,13 @@ G.OnEntityChannel = function(entityID, spellID, _)
 end
 
 G.OnMarkerAdd = function(entityID, markerID)
-	if getCfg().Merchant then
+	if not getCfg().Merchant then
 		return
 	end
 	local mmd = MuAiGuide.Merchant
 	if markerID == 20 then
-		mmd.Timer = Now()
-		mmd.mark20 = true
+		mmd.mark20Timer = Now()
+		mmd.mark20InState = true
 	elseif markerID == 22 then
 		mmd.Timer = Now()
 		mmd.mark22 = true
@@ -2450,6 +2556,17 @@ G.OnAOECreate = function(aoeInfo)
 		else
 			table.insert(mmd.B3P4Tower2, aoeInfo)
 		end
+	elseif 45788 <= aoeInfo.aoeID and aoeInfo.aoeID < 45790
+			or 45823 <= aoeInfo.aoeID and aoeInfo.aoeID < 45825
+			or 45862 <= aoeInfo.aoeID and aoeInfo.aoeID < 45864
+	then
+		if mmd.aoeGroudWater.Timer == 0 then
+			mmd.aoeGroudWater.Timer = Now()
+		end
+		if mmd.CurrentState < mmd.State.Boss1_P2_GroudWater then
+			changeState(mmd.State.Boss1_P2_GroudWater)
+		end
+		table.insert(mmd.aoeGroudWater.aoe, aoeInfo)
 	elseif aoeInfo.aoeID == 45866 then
 		if mmd.spell45866.Timer == 0 then
 			mmd.spell45866.InState = true
