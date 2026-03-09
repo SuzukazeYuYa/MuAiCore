@@ -1,11 +1,17 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
-M.VERSION = 262
+M.VERSION = 263
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
 M.DebugPos = "MT"
 --- 是否开了UI开发模式
 M.DevelopMode = false
+M.ScriptDevelopMode = false
+M.ScriptDevelopState = nil
+M.ScriptDataTableName = nil
+M.ScriptDevelopTableReg = function(key)
+	M.ScriptDataTableName = key
+end
 M.GlobalGuideY = nil
 ------------------------------- UI -------------------------------
 --- UI定义
@@ -255,7 +261,9 @@ M.CreateDefMainCfg = function()
 		--------- 商客奇谈 ---------
 		Merchant = true,
 		MerchantDraw = true,
-		MerchantGuide = true
+		MerchantGuide = true,
+		MerchantLockFace = true,
+		MerchantAimTool = true
 	}
 	return mainCfg
 end
@@ -279,6 +287,8 @@ M.LoadDefWithOutRaidSetting = function()
 	M.Config.Main.Merchant = oldConfig.Merchant
 	M.Config.Main.MerchantDraw = oldConfig.MerchantDraw
 	M.Config.Main.MerchantGuide = oldConfig.MerchantGuide
+	M.Config.Main.MerchantLockFace = oldConfig.MerchantLockFace
+	M.Config.Main.MerchantAimTool = oldConfig.MerchantAimTool
 	M.Info("已恢复默认设置.")
 end
 

@@ -284,9 +284,15 @@ local onMapChange = function()
 	if raidScript[Player.localmapid] ~= nil then
 		-- 进入副本
 		currentScript = raidScript[Player.localmapid]
+		currentScript.OnEnter()
 	else
 		-- 退出副本
-		currentScript = nil
+		if currentScript ~= nil then
+			if currentScript.OnLeave ~= nil then
+				currentScript.OnLeave()
+			end
+			currentScript = nil
+		end
 	end
 
 	if isDrawBlackListOn()
@@ -336,7 +342,7 @@ local onPlayerChangeJob = function()
 end
 
 local onWipeCheck = function()
-	if not MuAiGuide or not MuAiGuide.Party 
+	if not MuAiGuide or not MuAiGuide.Party
 			or table.size(MuAiGuide.Party) ~= 4 and table.size(MuAiGuide.Party) ~= 8 then
 		return
 	end

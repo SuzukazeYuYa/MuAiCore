@@ -55,6 +55,8 @@ local initGlobalData = function()
 		State = {
 			Start = 0,
 			Boss1_Start = 1000,
+			Boss1_P1_ForceMove = 1101,
+			Boss1_P1_End = 1199,
 			-- 老2
 			Boss2_Start = 2000,
 			Boss2_P1_Start = 2100,
@@ -118,7 +120,17 @@ local initGlobalData = function()
 		mark22 = false,
 		Timer46574 = 0,
 		Timer47031 = 0,
-		spell45845 = false,
+		spell45845 = {
+			Timer = 0,
+			Ids = {},
+			SafePoint = {},
+			DangerPoints = nil,
+			LockingFace = false,
+			GuidePos1 = nil,
+			GuidePos2 = nil,
+			BuffType = nil,
+			offsetH = nil,
+		},
 		spell45849 = {
 			InState = false,
 			Timer = 0,
@@ -200,7 +212,7 @@ local initGlobalData = function()
 	}
 end
 
-local guideCfg = function()
+local getCfg = function()
 	return MuAiGuide.Config.Main
 end
 
@@ -230,7 +242,7 @@ local getTurnLineFrom = function(entityID)
 end
 
 local boss1SubDraw = function(entityID, spellID)
-	if not guideCfg().MerchantDraw then
+	if not getCfg().MerchantDraw then
 		return
 	end
 	local drawerTime = 2200
@@ -246,7 +258,7 @@ end
 
 local OnUpdateSpell45866 = function()
 	local mmd = MuAiGuide.Merchant
-	if not guideCfg().MerchantDraw and not mmd.spell45866.InState then
+	if not getCfg().MerchantDraw and not mmd.spell45866.InState then
 		return
 	end
 	if TimeSince(mmd.spell45866.Timer) < 6500 then
@@ -264,28 +276,6 @@ local OnUpdateSpell45866 = function()
 			AoeInfo1 = {},
 			AoeInfo2 = {},
 		}
-	end
-end
-
---- 空中漫游画图
-local OnUpdateSpell45845 = function()
-	if not MuAiGuide.Merchant.spell45845 then
-		return
-	end
-	if TimeSince(MuAiGuide.Merchant.Timer) < 17000 then
-		if TimeSince(MuAiGuide.Merchant.Timer) > 4100 then
-			if guideCfg().MerchantDraw then
-				_redDrawer:addCircle(_boss1Center.x, _boss1Center.y, _boss1Center.z, 12)
-				for _, ent in pairs(TensorCore.entityList("contentid=14291")) do
-					if TensorCore.getDistance2d(_boss1Center, ent.pos) > 10 then
-						_redDrawer:addCircle(ent.pos.x, ent.pos.y, ent.pos.z, 12)
-					end
-				end
-			end
-		end
-	else
-		MuAiGuide.Merchant.Timer = 0
-		MuAiGuide.Merchant.spell45845 = false
 	end
 end
 
@@ -309,7 +299,7 @@ local OnUpdateSpell45849 = function()
 			end
 		end
 	elseif TimeSince(mmd.spell45849.Timer) < 20000 then
-		if guideCfg().MerchantDraw and mmd.spell45849.FirstBallFinish then
+		if getCfg().MerchantDraw and mmd.spell45849.FirstBallFinish then
 			for _, exEnt in pairs(mmd.spell45849.AllBalls) do
 				if exEnt.type == 2 then
 					_redDrawer:addDonut(exEnt.entity.pos.x, exEnt.entity.pos.y, exEnt.entity.pos.z, 4, 20)
@@ -321,7 +311,7 @@ local OnUpdateSpell45849 = function()
 			end
 		end
 	elseif TimeSince(mmd.spell45849.Timer) < 27000 then
-		if guideCfg().MerchantDraw then
+		if getCfg().MerchantDraw then
 			for _, exEnt in pairs(mmd.spell45849.AllBalls) do
 				if exEnt.type == 1 and not table.contains(mmd.spell45849.FirstBallIds, exEnt.entity.id) then
 					_redDrawer:addCircle(exEnt.entity.pos.x, exEnt.entity.pos.y, exEnt.entity.pos.z, 18)
@@ -349,7 +339,7 @@ local OnUpdateMark20 = function()
 		for _, ent in pairs(players) do
 			if ent.id ~= Player.id then
 				local dis = 100000000
-				local curPoint = nil
+				local curPoint
 				for _, row in pairs(_gridCenters) do
 					for _, point in pairs(row) do
 						local curDis = TensorCore.getDistance2d(ent.pos, { x = point.x, y = _boss1Center.y, z = point.z })
@@ -370,7 +360,7 @@ local OnUpdateMark20 = function()
 end
 
 local OnUpDateMoveChecker = function()
-	if not guideCfg().MerchantDraw then
+	if not getCfg().MerchantDraw then
 		return
 	end
 	local player = MuAiGuide.GetPlayer()
@@ -390,12 +380,12 @@ local OnUpDateMoveChecker = function()
 	else
 		return
 	end
-	local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.5), 1)
-	drawer:addArrow(player.pos.x, player.pos.y, player.pos.z, player.pos.h, 17, 0.05, 0.3, 0.15, true)
+	local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.5), 1)
+	drawer:addArrow(player.pos.x, player.pos.y, player.pos.z, heading, 18, 0.05, 0.3, 0.15, true)
 end
 
 local OnUpdateSpellRingCircle = function()
-	if not guideCfg().MerchantDraw or not MuAiGuide.Merchant.spellRingCircle then
+	if not getCfg().MerchantDraw or not MuAiGuide.Merchant.spellRingCircle then
 		return
 	end
 	local mmd = MuAiGuide.Merchant
@@ -467,7 +457,7 @@ local onJumpDraw = function()
 	else
 		local drawPos = curRouteInfo.drawPoint
 		local wide = TensorCore.getDistance2d(curRouteInfo.startEnt.pos, curRouteInfo.endEnt.pos)
-		if guideCfg().MerchantDraw then
+		if getCfg().MerchantDraw then
 			_redDrawer:addRect(drawPos.x, drawPos.y, drawPos.z, 43, wide, curRouteInfo.drawHeading)
 		end
 	end
@@ -660,7 +650,7 @@ local boss3FireDance2 = function(nextState, curWave)
 		if boss == nil then
 			return
 		end
-		if guideCfg().MerchantDraw then
+		if getCfg().MerchantDraw then
 			table.sort(curPlayers, function(a, b)
 				local disA = TensorCore.getDistance2d(a.pos, boss.pos)
 				local disB = TensorCore.getDistance2d(b.pos, boss.pos)
@@ -684,7 +674,7 @@ local boss3FireDance2 = function(nextState, curWave)
 			--d(heading)
 			_redDrawer:addRect(_boss3Center.x, _boss3Center.y, _boss3Center.z, 20, 40, heading)
 		end
-		if guideCfg().MerchantGuide then
+		if getCfg().MerchantGuide then
 			local heading
 			if curMark == 645 then
 				heading = mmd.B3P2FireDance.curDir - math.pi / 2
@@ -709,7 +699,7 @@ local boss3FireDance2 = function(nextState, curWave)
 end
 
 local OnUpdateSpell46715 = function()
-	if guideCfg().MerchantDraw and MuAiGuide.Merchant.spell46715 then
+	if getCfg().MerchantDraw and MuAiGuide.Merchant.spell46715 then
 		if TimeSince(MuAiGuide.Merchant.Timer) < 5000 then
 			local curBoss = getCurBoss()
 			if curBoss == nil then
@@ -929,20 +919,169 @@ local drawStoneDir = function(curWave)
 end
 
 local Boss_14291_Update = function()
-	if G.CurBoss == nil or G.CurBoss.contentid ~= 14291 or MuAiGuide.Merchant == nil then
-		return
-	end
+	local mmd = MuAiGuide.Merchant
 	OnUpdateSpell45866()
-	OnUpdateSpell45845()
 	OnUpdateSpell45849()
 	OnUpdateMark20()
-	OnUpDateMoveChecker()
+	local player = MuAiGuide.GetPlayer()
+	if mmd.State.Boss1_P1_ForceMove <= mmd.CurrentState
+			and mmd.CurrentState < mmd.State.Boss1_P1_End then
+		if getCfg().MerchantAimTool then
+			OnUpDateMoveChecker()
+		end
+		local hasBuff = false
+		for _, ent in pairs(MuAiGuide.Party) do
+			if TensorCore.hasBuff(ent.id, 1257) then
+				hasBuff = true
+				break
+			end
+			for i = 2161, 2164 do
+				if TensorCore.hasBuff(ent.id, i) then
+					hasBuff = true
+					break
+				end
+			end
+			if hasBuff then
+				break
+			end
+		end
+		if not hasBuff then
+			changeState(mmd.State.Boss1_P1_End)
+			return
+		end
+		--- 强制移动1 空中漫游
+		if mmd.spell45845.DangerPoints == nil and TimeSince(mmd.spell45845.Timer) > 4100 then
+			mmd.spell45845.DangerPoints = {}
+			table.insert(mmd.spell45845.DangerPoints, _boss1Center)
+		end
+		for _, ent in pairs(TensorCore.entityList("contentid=14291")) do
+			if TensorCore.getDistance2d(_boss1Center, ent.pos) > 14
+					and not table.contains(mmd.spell45845.Ids, ent.id)
+			then
+				table.insert(mmd.spell45845.Ids, ent.id)
+				table.insert(mmd.spell45845.DangerPoints, ent.pos)
+			end
+		end
+		if mmd.spell45845.BuffType == nil then
+			if TensorCore.hasBuff(player.id, 2161) then
+				-- 前
+				mmd.spell45845.offsetH = 0
+				mmd.spell45845.BuffType = 2161
+			elseif TensorCore.hasBuff(player.id, 2162) then
+				-- 后
+				mmd.spell45845.offsetH = math.pi
+				mmd.spell45845.BuffType = 2162
+			elseif TensorCore.hasBuff(player.id, 2163) then
+				-- 左 
+				mmd.spell45845.offsetH = -math.pi / 2
+				mmd.spell45845.BuffType = 2163
+			elseif TensorCore.hasBuff(player.id, 2164) then
+				-- 右
+				mmd.spell45845.offsetH = math.pi / 2
+				mmd.spell45845.BuffType = 2164
+			end
+		end
+		if mmd.spell45845.DangerPoints ~= nil then
+			if getCfg().MerchantDraw then
+				for _, pos in pairs(mmd.spell45845.DangerPoints) do
+					_redDrawer:addCircle(pos.x, pos.y, pos.z, 12)
+				end
+			end
+			if not getCfg().MerchantGuide then
+				return
+			end
+
+			if table.size(mmd.spell45845.DangerPoints) == 7 then
+				if mmd.spell45845.GuidePos1 == nil then
+					if table.size(mmd.spell45845.SafePoint) < 2 then
+						local curBoss = TensorCore.mGetEntity(G.CurBoss.id)
+						for i = 1, 4 do
+							local curHeading = MuAiGuide.SetHeading2Pi(curBoss.pos.h + (2 * i - 1) * math.pi / 4)
+							local curPoint = TensorCore.getPosInDirection(_boss1Center, curHeading, 22.624)
+							_yellowDrawer:addCircle(curPoint.x, curPoint.y, curPoint.z, 2, true)
+							local inDanger = false
+							for _, point in pairs(mmd.spell45845.DangerPoints) do
+								if TensorCore.getDistance2d(point, curPoint) < 12 then
+									inDanger = true
+									break
+								end
+							end
+							if not inDanger then
+								table.insert(mmd.spell45845.SafePoint, {
+									x = curPoint.x,
+									y = curPoint.y,
+									z = curPoint.z,
+									h = curHeading,
+								})
+								if table.size(mmd.spell45845.SafePoint) == 2 then
+									break
+								end
+							end
+						end
+					else
+						local cuBuff = TensorCore.hasBuff(player.id, 4726)
+						local partner
+						for Job, ent in pairs(MuAiGuide.Party) do
+							if ent.id ~= player.id then
+								if cuBuff then
+									if TensorCore.hasBuff(ent.id, 4726) then
+										partner = Job
+										break
+									end
+								else
+									if not TensorCore.hasBuff(ent.id, 4726) then
+										partner = Job
+										break
+									end
+								end
+							end
+						end
+						local selfIndex = MuAiGuide.IndexOf(_order, MuAiGuide.SelfPos)
+						local otherIndex = MuAiGuide.IndexOf(_order, partner)
+						if selfIndex < otherIndex then
+							mmd.spell45845.GuidePos2 = mmd.spell45845.SafePoint[1]
+						else
+							mmd.spell45845.GuidePos2 = mmd.spell45845.SafePoint[2]
+						end
+						mmd.spell45845.GuidePos1 = TensorCore.getPosInDirection(_boss1Center, mmd.spell45845.GuidePos2.h, 3)
+					end
+				else
+					local curBuff = TensorCore.getBuff(player.id, mmd.spell45845.BuffType)
+					local guidePos
+					if getCfg().MerchantLockFace then
+						if curBuff ~= nil then
+							guidePos = mmd.spell45845.GuidePos1
+							if curBuff.duration < 2 and not mmd.spell45845.LockingFace then
+								local distanceTo1 = TensorCore.getDistance2d(player.pos, mmd.spell45845.GuidePos1)
+								if distanceTo1 < 1 then
+									local curHeading = TensorCore.getHeadingToTarget(player, mmd.spell45845.GuidePos2) + mmd.spell45845.offsetH
+									TensorCore.API.TensorACR.setLockFaceHeading(curHeading)
+									TensorCore.API.TensorACR.toggleLockFace(true)
+								end
+							end
+						else
+							if mmd.spell45845.LockingFace then
+								local moveBuff = TensorCore.hasBuff(player.id, 1257)
+								if moveBuff ~= nil and moveBuff.duration < 2 then
+									TensorCore.API.TensorACR.toggleLockFace(false)
+									mmd.spell45845.LockingFace = false
+								end
+							end
+							guidePos = mmd.spell45845.GuidePos2
+						end
+					else
+						guidePos = mmd.spell45845.GuidePos2
+					end
+					if guidePos ~= nil then
+						MuAiGuide.FrameDirect(guidePos.x, guidePos.z)
+					end
+				end
+			end
+		end
+	end
 end
 
 local Boss_14323_Update = function()
-	if G.CurBoss == nil or G.CurBoss.contentid ~= 14323 or MuAiGuide.Merchant == nil then
-		return
-	end
 	OnUpdateSpell46715()
 	OnUpdateSpellRingCircle()
 	local player = MuAiGuide.GetPlayer()
@@ -976,7 +1115,7 @@ local Boss_14323_Update = function()
 			local linkFromEnt = getTurnLineFrom(player.id)
 			if linkFromEnt ~= nil then
 				local linkFrom = linkFromEnt.pos
-				local guidePos = nil
+				local guidePos
 				-- 看看身上是什么buff
 				if TensorCore.hasBuff(player.id, 4785) then
 					-- 左
@@ -1076,7 +1215,7 @@ local Boss_14323_Update = function()
 			if targetLinkType ~= nil then
 				if not M.HasLine(player.id, targetLinkType) then
 					local boss = getCurBoss()
-					for i, ent in pairs(M.Party) do
+					for _, ent in pairs(M.Party) do
 						if M.HasLine(ent.id, targetLinkType) then
 							M.FrameTakeLine(boss.pos, ent.pos, player.pos)
 							break
@@ -1093,7 +1232,7 @@ local Boss_14323_Update = function()
 				break
 			end
 		end
-		if guideCfg().MerchantGuide then
+		if getCfg().MerchantGuide then
 			local guidePos
 			if M.SelfPos == "MT" then
 				guidePos = { x = _boss2Center.x + 15, z = _boss2Center.z - 15 }
@@ -1157,7 +1296,7 @@ local Boss_14323_Update = function()
 			if mmd.P3GetLineGuidePos == nil then
 				if TensorCore.hasBuff(player.id, 4784) then
 					--可以打左右
-					local partnerFrom = nil
+					local partnerFrom
 					for _, ent in pairs(M.Party) do
 						if ent.id ~= player.id and TensorCore.hasBuff(ent.id, 4784) then
 							partnerFrom = getTurnLineFrom(ent.id)
@@ -1429,9 +1568,6 @@ local Boss_14323_Update = function()
 end
 
 local Boss_14274_Update = function()
-	if G.CurBoss == nil or G.CurBoss.contentid ~= 14274 or MuAiGuide.Merchant == nil then
-		return
-	end
 	local mmd = MuAiGuide.Merchant
 	if mmd.CurrentState == mmd.State.Boss3_P1_Start then
 		local mmdd = MuAiGuide.Merchant.fireDance
@@ -1515,7 +1651,7 @@ local Boss_14274_Update = function()
 					else
 						drawer = _yellowDrawer
 					end
-					if guideCfg().MerchantDraw then
+					if getCfg().MerchantDraw then
 						drawer:addCircle(player.pos.x, player.pos.y, player.pos.z, 4)
 					end
 				end
@@ -1642,7 +1778,7 @@ local Boss_14274_Update = function()
 						table.insert(mmd.B3P2Phantom.blankets, ent)
 					end
 					if table.size(mmd.B3P2Phantom.blanketIds) == 3 then
-						for i, blanket in pairs(mmd.B3P2Phantom.blankets) do
+						for _, blanket in pairs(mmd.B3P2Phantom.blankets) do
 							if TensorCore.getDistance2d(blanket.pos, mmd.B3P2Phantom.blueOrbOldPos) < 0.5 then
 								mmd.B3P2Phantom.blanketWithBlueOrb = blanket
 								break
@@ -1658,7 +1794,7 @@ local Boss_14274_Update = function()
 				local curEnt = TensorCore.mGetEntity(mmd.B3P2Phantom.blanketWithBlueOrb.id)
 				mmd.B3P2Phantom.blueOrbNewPos = curEnt.pos
 			end
-			if mmd.B3P2Phantom.blueOrbNewPos ~= nil and guideCfg().MerchantGuide then
+			if mmd.B3P2Phantom.blueOrbNewPos ~= nil and getCfg().MerchantGuide then
 				if mmd.B3P2Phantom.GuidePos == nil then
 					local _curBlankets = {}
 					for _, ent in pairs(mmd.B3P2Phantom.blankets) do
@@ -1907,7 +2043,7 @@ local Boss_14274_Update = function()
 			end
 		end
 	elseif mmd.CurrentState == mmd.State.Boss3_P4_FireStone then
-		if not guideCfg().MerchantDraw
+		if not getCfg().MerchantDraw
 				or (mmd.Timer47031 == 0 or TimeSince(mmd.Timer47031) < 2000) then
 			return
 		end
@@ -1974,7 +2110,9 @@ local Boss14274Init = function()
 end
 
 local OnBossChange = function(newBoss)
-	--initGlobalData()
+	if not MuAiGuide.ScriptDevelopMode then
+		initGlobalData()
+	end
 	if newBoss.contentid == 14291 then
 		MuAiGuide.GlobalGuideY = _boss1Center.y
 		Boss14291Init()
@@ -2035,8 +2173,8 @@ local SetBoss = function()
 end
 
 ----------------------------- MuAiCore Call -----------------------------
-G.OnEntityChannel = function(entityID, spellID, channelDuration)
-	if not guideCfg().Merchant then
+G.OnEntityChannel = function(entityID, spellID, _)
+	if not getCfg().Merchant then
 		return
 	end
 	local mmd = MuAiGuide.Merchant
@@ -2081,8 +2219,10 @@ G.OnEntityChannel = function(entityID, spellID, channelDuration)
 		boss1SubDraw(entityID, spellID)
 	elseif spellID == 45845 then
 		-- 空中漫游
-		mmd.Timer = Now()
-		mmd.spell45845 = true
+		mmd.spell45845.Timer = Now()
+		if mmd.CurrentState < mmd.State.Boss1_P1_ForceMove then
+			changeState(mmd.State.Boss1_P1_ForceMove)
+		end
 	elseif spellID == 45849 then
 		-- 沉没宝藏
 		mmd.spell45849.Timer = Now()
@@ -2149,7 +2289,7 @@ G.OnEntityChannel = function(entityID, spellID, channelDuration)
 end
 
 G.OnMarkerAdd = function(entityID, markerID)
-	if guideCfg().Merchant then
+	if getCfg().Merchant then
 		return
 	end
 	local mmd = MuAiGuide.Merchant
@@ -2236,7 +2376,7 @@ end
 
 --- @param aoeInfo GroundAOE|DirectionalAOE
 G.OnAOECreate = function(aoeInfo)
-	if not guideCfg().Merchant then
+	if not getCfg().Merchant then
 		return
 	end
 	local mmd = MuAiGuide.Merchant
@@ -2262,7 +2402,7 @@ G.OnAOECreate = function(aoeInfo)
 			mmd.B3P1Sub.AOEs[aoeInfo.entityID] = aoeInfo
 		end
 	elseif aoeInfo.aoeID == 45488 then
-		if guideCfg().MerchantDraw then
+		if getCfg().MerchantDraw then
 			_redDrawer:addTimedCircle(5700, aoeInfo.x, aoeInfo.y, aoeInfo.z, aoeInfo.aoeLength)
 		end
 		if table.size(mmd.B3P3Fire) < 4 then
@@ -2323,12 +2463,12 @@ G.OnAOECreate = function(aoeInfo)
 	elseif aoeInfo.aoeID == 46573 or aoeInfo.aoeID == 46574 then
 		mmd.Timer46574 = Now()
 	elseif aoeInfo.aoeID == 46705 and mmd.CurrentState > mmd.State.Boss2_P4_Start then
-		if guideCfg().MerchantDraw then
+		if getCfg().MerchantDraw then
 			_redDrawer:addTimedCross(5000, aoeInfo.x, aoeInfo.y, aoeInfo.z, 60, 8, 0)
 			_redDrawer:addTimedCross(5000, aoeInfo.x, aoeInfo.y, aoeInfo.z, 60, 8, math.pi / 4)
 		end
 	elseif aoeInfo.aoeID == 46708 then
-		if guideCfg().MerchantDraw then
+		if getCfg().MerchantDraw then
 			_redDrawer:addTimedCross(3000, aoeInfo.x, aoeInfo.y, aoeInfo.z, 60, 8, aoeInfo.heading)
 		end
 	elseif aoeInfo.aoeID == 47031 or aoeInfo.aoeID == 47032 then
@@ -2336,9 +2476,9 @@ G.OnAOECreate = function(aoeInfo)
 	end
 end
 
-G.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
+G.OnEventObjectScriptFunc = function(entityID, _, _, _)
 	local mmd = MuAiGuide.Merchant
-	if not guideCfg().Merchant then
+	if not getCfg().Merchant then
 		return
 	end
 	local curEnt = TensorCore.mGetEntity(entityID)
@@ -2359,30 +2499,42 @@ G.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
 end
 --- 每帧执行
 G.Update = function()
-	if not guideCfg().Merchant then
+	if not getCfg().Merchant then
 		return
 	end
 	if MuAiGuide.Merchant == nil then
 		initGlobalData()
 	end
 	SetBoss()
-	Boss_14291_Update()
-	Boss_14323_Update()
-	Boss_14274_Update()
+	if G.CurBoss == nil or MuAiGuide.Merchant == nil then
+		return
+	end
+	if G.CurBoss.contentid == 14291 then
+		Boss_14291_Update()
+	elseif G.CurBoss.contentid == 14323 then
+		Boss_14323_Update()
+	elseif G.CurBoss.contentid == 14274 then
+		Boss_14274_Update()
+	end
 end
 
 --- 进入副本
 G.OnEnter = function()
-	if not guideCfg().Merchant then
-		return
+	if MuAiGuide.ScriptDevelopMode then
+		MuAiGuide.ScriptDevelopTableReg("Merchant")
+		MuAiGuide.Debug("进入副本：异闻商客奇谭(已进入开发模式)")
+	else
+		MuAiGuide.Debug("进入副本：异闻商客奇谭")
 	end
 	G.CurBoss = nil
-	MuAiGuide.Debug("进入副本：异闻商客奇谭")
 end
 
+G.OnLeave = function()
+	MuAiGuide.Debug("离开副本：异闻商客奇谭")
+end
 --- 脱离战斗
 G.OnWipe = function()
-	if not guideCfg().Merchant then
+	if not getCfg().Merchant then
 		return
 	end
 	G.CurBoss = nil
