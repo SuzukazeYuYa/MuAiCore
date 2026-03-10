@@ -579,13 +579,6 @@ local DrawMainUI = function(M)
 			GUI:Separator()
 			GUI:Dummy(0, 2)
 			GUI:BulletText("目标圈HACK辅助功能")
-
-			GUI:TextColored(1, 0, 1, 1, "   本功能默认仅包含M9S~M12S数据")
-			GUI:TextColored(1, 1, 0, 1, "   可以使用按钮[添加当前目标]添加新的目标圈")
-			GUI:TextColored(1, 1, 0, 1, "   数据使用时请关闭IC, Sp等并将目标区改回原始")
-			GUI:TextColored(1, 1, 0, 1, "   大小, 如BOSS有目标圈大小变化, 请在两种状态")
-			GUI:TextColored(1, 1, 0, 1, "   下各添加一次")
-
 			GUI:Dummy(8, 0)
 			GUI:SameLine()
 			M.Config.Main.AttackRangeHelper = GUI:Checkbox("绘制原始攻击范围", M.Config.Main.AttackRangeHelper)

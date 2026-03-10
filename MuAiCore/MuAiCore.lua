@@ -138,46 +138,26 @@ local disableDrawCheck = function()
 end
 
 local attackRangeHackHelper = function()
-	if Player == nil or (not MuAiGuide.Config.Main.AttackRangeHelper)
-			or MuAiGuide.Config.Main.AtkRangeData == nil or table.size(MuAiGuide.Config.Main.AtkRangeData) == 0 then
+	if Player == nil or (not MuAiGuide.Config.Main.AttackRangeHelper) then
 		return
 	end
-	local mapData = MuAiGuide.Config.Main.AtkRangeData[Player.localmapid]
-	if mapData == nil then
+	local addRange = Player.hitradius - 0.5
+	if math.abs(addRange) <= 0.001 then
 		return
 	end
 	local curTarget = TensorCore.mGetTarget()
-	if curTarget == nil then
-		return
-	end
-	local bossInfo = mapData[curTarget.contentid]
-	if bossInfo == nil then
+	if curTarget == nil or not curTarget.attackable then
 		return
 	end
 	local curDistance = TensorCore.getDistance2d(Player.pos, curTarget.pos)
-	local hitRange
-	if type(bossInfo) == "number" then
-		hitRange = bossInfo
-	elseif type(bossInfo) == "table" then
-		if bossInfo.buff == nil then
-			return
-		end
-		if TensorCore.hasBuff(curTarget.id, bossInfo.buff) then
-			hitRange = bossInfo.onBuffRange
-		else
-			hitRange = bossInfo.range
-		end
-	end
-	local deltaDistance = curDistance - hitRange
-	local alpha, color
-	local radius
-	local maxRange
+	local deltaDistance = curDistance - curTarget.hitradius + addRange
+	local alpha, color, radius, maxRange
 	if (not MuAiGuide.IsTank(Player.job)) and (not MuAiGuide.IsMelee(Player.job)) then
 		maxRange = 25.5
 	else
 		maxRange = 3.5
 	end
-	radius = hitRange + maxRange
+	radius = curTarget.hitradius - addRange + maxRange
 	local minRange = maxRange - 1.5
 	if deltaDistance >= maxRange then
 		alpha = MuAiGuide.Config.Main.OutRangeColor.a
