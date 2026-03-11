@@ -1,5 +1,6 @@
 local G = {}
 G.MapId = 1317
+G.NameCN = '异闻商客奇谭'
 G.CurBoss = nil
 
 local _gridCenters = {}
@@ -398,7 +399,8 @@ local OnUpdateMark20 = function()
 				local curPoint
 				for _, row in pairs(_gridCenters) do
 					for _, point in pairs(row) do
-						local curDis = TensorCore.getDistance2d(ent.pos, { x = point.x, y = _boss1Center.y, z = point.z })
+						local curEnt = TensorCore.mGetEntity(ent.id)
+						local curDis = TensorCore.getDistance2d(curEnt.pos, { x = point.x, y = _boss1Center.y, z = point.z })
 						if curDis < dis then
 							dis = curDis
 							curPoint = point
@@ -406,7 +408,7 @@ local OnUpdateMark20 = function()
 					end
 				end
 				if curPoint ~= nil then
-					_blueDrawer:addCross(curPoint.x, _boss1Center.y, curPoint.z, 40, 8, math.pi)
+					_yellowDrawer:addCross(curPoint.x, _boss1Center.y, curPoint.z, 40, 8, math.pi)
 				end
 			end
 		end
@@ -473,15 +475,15 @@ local OnUpdateSpellRingCircle = function()
 			guidePos = { x = 170, z = -823.5 }
 		elseif player.id == mmd.spellRingData.spellMark1.id then
 			if table.contains(_skillIdCircle, mmd.spellRingData.spellId) then
-				guidePos = { x = 170, z = -815 }
-			else
 				guidePos = { x = 170, z = -806.5 }
+			else
+				guidePos = { x = 170, z = -815 }
 			end
 		elseif player.id == mmd.spellRingData.spellMark2.id then
 			if table.contains(_skillIdCircle, mmd.spellRingData.spellId) then
-				guidePos = { x = 170, z = -806.5 }
-			else
 				guidePos = { x = 170, z = -815 }
+			else
+				guidePos = { x = 170, z = -806.5 }
 			end
 		end
 		if guidePos ~= nil then
@@ -2533,8 +2535,6 @@ local SetBoss = function()
 		elseif curTarget.contentid ~= G.CurBoss.contentid then
 			G.CurBoss = TensorCore.mGetEntity(curTarget.id)
 			OnBossChange(curTarget)
-		else
-			G.CurBoss = TensorCore.mGetEntity(curTarget.id)
 		end
 	end
 end
@@ -2920,17 +2920,11 @@ end
 
 --- 进入副本
 G.OnEnter = function()
-	if MuAiGuide.ScriptDevelopMode then
-		MuAiGuide.ScriptDevelopTableReg("Merchant")
-		MuAiGuide.Debug("进入副本：异闻商客奇谭(已进入开发模式)")
-	else
-		MuAiGuide.Debug("进入副本：异闻商客奇谭")
-	end
 	G.CurBoss = nil
 end
 
 G.OnLeave = function()
-	MuAiGuide.Debug("离开副本：异闻商客奇谭")
+	-- TODO Nothing
 end
 --- 脱离战斗
 G.OnWipe = function()

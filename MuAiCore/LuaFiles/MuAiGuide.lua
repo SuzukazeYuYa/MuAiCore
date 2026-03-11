@@ -1,5 +1,5 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
-M.VERSION = 267
+M.VERSION = 268
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -778,7 +778,7 @@ M.GetPartyPlayers = function()
 		curPt = TensorCore.entityList("Party")
 	elseif #curPt == 3 or #curPt == 7 then
 		local hasSelf = false
-		for i, ent in pairs(curPt) do
+		for _, ent in pairs(curPt) do
 			if ent.id == Player.id then
 				hasSelf = true
 				break
@@ -1104,6 +1104,7 @@ M.HasLine = function(entityID, lineType)
 	end
 	return false
 end
+
 --- 暂不支持
 M.MarkParty = function(marker, id)
 end
@@ -1114,7 +1115,7 @@ M.NotDelayGuides = {}
 --- 取消已注册的所有指路
 M.CancelDir = function()
 	if table.size(M.NotDelayGuides) > 0 then
-		for i, uuid in pairs(M.NotDelayGuides) do
+		for _, uuid in pairs(M.NotDelayGuides) do
 			Argus.deleteTimedShape(uuid)
 		end
 		M.NotDelayGuides = {}
@@ -1392,11 +1393,11 @@ M.FrameTakeLine = function(pos1, pos2, playerPos, size)
 end
 
 --- 绘制一个圆（已废弃仿报错用）
-M.DrawCircleUI = function(x, z, time, size, r, g, b, a, delay)
+M.DrawCircleUI = function()
 end
 
 --- 绘制一个地面圆（已废弃仿报错用）
-M.DrawCircleFloor = function(x, z, time, size, r, g, b, a, delay)
+M.DrawCircleFloor = function()
 end
 
 M.Debug("MuAiGuide初始化成功!")

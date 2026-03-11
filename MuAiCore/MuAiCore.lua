@@ -38,7 +38,7 @@ local OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
 	end
 end
 
---- 注册阿古斯
+--- 安全注册阿古斯（防止加载失败导致报错）
 local registerArgus = function()
 	if Argus == nil then
 		register = nil
@@ -121,7 +121,6 @@ end
 
 --- 绘图黑名单控制
 local disableDrawCheck = function()
-
 	if isDrawBlackListOn() then
 		if lastMap ~= Player.localmapid then
 			if table.contains(MuAiGuide.Config.Main.DrawBlackList, Player.localmapid) then
@@ -263,11 +262,19 @@ local onMapChange = function()
 		-- 进入副本
 		currentScript = raidScript[Player.localmapid]
 		currentScript.OnEnter()
+		if MuAiGuide.ScriptDevelopMode then
+			MuAiGuide.ScriptDevelopTableReg("Merchant")
+			MuAiGuide.Debug("进入副本：" .. currentScript.NameCN .. "(开发模式)")
+		else
+			MuAiGuide.Debug("进入副本：" .. currentScript.NameCN)
+		end
+
 	else
 		-- 退出副本
 		if currentScript ~= nil then
 			if currentScript.OnLeave ~= nil then
 				currentScript.OnLeave()
+				MuAiGuide.Debug("离开副本：" .. currentScript.NameCN)
 			end
 			currentScript = nil
 		end
@@ -323,8 +330,8 @@ local onPlayerChangeJob = function()
 end
 
 local onWipeCheck = function()
-	if IsLoading() or not MuAiGuide or not MuAiGuide.Party
-			or table.size(MuAiGuide.Party) ~= 4 and table.size(MuAiGuide.Party) ~= 8 then
+	if not MuAiGuide or not MuAiGuide.Party
+			or table.size(MuAiGuide.Party) ~= 4 and table.size(MuAiGuide.Party) ~= 8 or TimeSince(wipeTime) < 2000 then
 		return
 	end
 	local partyCnt = table.size(MuAiGuide.Party)
@@ -346,7 +353,6 @@ local onWipeCheck = function()
 		if currentScript ~= nil then
 			currentScript.OnWipe()
 		end
-		--MuAiGuide.Debug("团灭")
 		wipeTime = Now()
 	end
 end
@@ -532,14 +538,12 @@ core.ForceUpdate = function()
 				-- 获取源文件的完整路径
 				local srcFile = srcFolder .. "\\" .. fileName
 				local destFile = destFolder .. "\\" .. fileName
-
 				-- 如果是文件夹
 				if FolderExists(srcFile) then
 					-- 如果目标文件夹不存在，创建它
 					if not FolderExists(destFile) then
 						FolderCreate(destFile)
 					end
-
 					-- 递归复制该子文件夹中的内容
 					copyFiles(srcFile, destFile)  -- 递归调用
 					-- 如果是文件
