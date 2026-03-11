@@ -121,9 +121,7 @@ end
 
 --- 绘图黑名单控制
 local disableDrawCheck = function()
-	if MoogleTelegraphs == nil or MoogleTelegraphs.Settings == nil then
-		return
-	end
+
 	if isDrawBlackListOn() then
 		if lastMap ~= Player.localmapid then
 			if table.contains(MuAiGuide.Config.Main.DrawBlackList, Player.localmapid) then
@@ -138,7 +136,7 @@ local disableDrawCheck = function()
 end
 
 local attackRangeHackHelper = function()
-	if Player == nil or (not MuAiGuide.Config.Main.AttackRangeHelper) then
+	if Player == nil or Player.hitradius == nil or (not MuAiGuide.Config.Main.AttackRangeHelper) then
 		return
 	end
 	local addRange = Player.hitradius - 0.5
@@ -274,7 +272,10 @@ local onMapChange = function()
 			currentScript = nil
 		end
 	end
-
+	if MoogleTelegraphs == nil or MoogleTelegraphs.Settings == nil then
+		return
+	end
+	disableDrawCheck()
 	if isDrawBlackListOn()
 			and not table.contains(MuAiGuide.Config.Main.DrawBlackList, Player.localmapid)
 			and MoogleTelegraphs and MoogleTelegraphs.Settings and MoogleTelegraphs.Settings.DrawEnemyAoE == false
@@ -322,7 +323,7 @@ local onPlayerChangeJob = function()
 end
 
 local onWipeCheck = function()
-	if not MuAiGuide or not MuAiGuide.Party
+	if IsLoading() or not MuAiGuide or not MuAiGuide.Party
 			or table.size(MuAiGuide.Party) ~= 4 and table.size(MuAiGuide.Party) ~= 8 then
 		return
 	end
@@ -430,9 +431,8 @@ core.Update = function()
 	checkMuAiGuide()
 	checkArgusRegister()
 	checkHotKeyPress()
-	disableDrawCheck()
 	onWipeCheck()
-	if lastMap ~= Player.localmapid then
+	if Player.localmapid ~= 0 and lastMap ~= Player.localmapid then
 		onMapChange()
 		lastMap = Player.localmapid
 	end
