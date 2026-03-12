@@ -539,6 +539,20 @@ local onJumpDraw = function()
 		local wide = TensorCore.getDistance2d(curRouteInfo.startEnt.pos, curRouteInfo.endEnt.pos)
 		if getCfg().MerchantDraw then
 			_redDrawer:addRect(drawPos.x, drawPos.y, drawPos.z, 43, wide, curRouteInfo.drawHeading)
+			if mmdd.state < 3 then
+				local curRouteInfo2 = mmdd.routeInfo[mmdd.state + 1]
+				local drawPos2 = curRouteInfo2.drawPoint
+				local wide2 = TensorCore.getDistance2d(curRouteInfo2.startEnt.pos, curRouteInfo2.endEnt.pos)
+				_yellowDrawer:addRect(drawPos2.x, drawPos2.y, drawPos2.z, 43, wide2, curRouteInfo2.drawHeading)
+			end
+			for i = mmdd.state, #mmdd.routeInfo do
+				local info = mmdd.routeInfo[i]
+				local heading = TensorCore.getHeadingToTarget(info.startEnt.pos, info.endEnt.pos)
+				local distance = TensorCore.getDistance2d(info.startEnt.pos, info.endEnt.pos)
+				local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(0, 1, 0, 1), 0)
+				local guidePos = info.startEnt.pos
+				drawer:addArrow(guidePos.x, guidePos.y, guidePos.z, heading, distance - 1, 0.2, 1, 0.5, true)
+			end
 		end
 	end
 end

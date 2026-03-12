@@ -1,5 +1,5 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
-M.VERSION = 268
+M.VERSION = 269
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
