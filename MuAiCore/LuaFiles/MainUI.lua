@@ -474,9 +474,13 @@ local DrawMainUI = function(M)
 					GUI:SameLine()
 					M.Config.Main.MerchantDraw = GUI:Checkbox("开启绘图##Merchant", M.Config.Main.MerchantDraw)
 					if M.Config.Main.MerchantDraw then
-						GUI:TextColored(1, 0, 1, 1, "  防止花眼请关闭其他绘图，并将1317加")
-						GUI:TextColored(1, 0, 1, 1, "  入到黑名单，并停用Anyone相关绘图。")
-						GUI:TextColored(1, 0, 1, 1, "  A+用户建议关闭加亮！")
+						GUI:TextColored(1, 0, 1, 1, "  防止花眼请关闭其他绘图, 并将1317加入到")
+						GUI:TextColored(1, 0, 1, 1, "  黑名单, 并停用Anyone全局")
+						GUI:SameLine()
+						GUI:TextColored(1, 1, 0, 1, "[AMT]")					
+						GUI:SameLine()
+						GUI:TextColored(1, 0, 1, 1, "开头全部")
+						GUI:TextColored(1, 0, 1, 1, "  ArgusDraws+用户请一定关闭加亮！")
 					end
 					GUI:Separator()
 					GUI:Dummy(6, 5)
@@ -494,7 +498,7 @@ local DrawMainUI = function(M)
 					GUI:SameLine()
 					M.Config.Main.MerchantLockFace = GUI:Checkbox("老1强制移动自动面向##Merchant", M.Config.Main.MerchantLockFace)
 					if M.Config.Main.MerchantGuide then
-						GUI:TextColored(1, 0, 1, 1, "  需要严格站在指路位置，仅支持解法2")
+						GUI:TextColored(1, 0, 1, 1, "  需要严格站在指路位置圈内！")
 					end
 				end
 			end

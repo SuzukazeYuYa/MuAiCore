@@ -7,7 +7,8 @@ local lastMap, lastJob, updateTime
 local updateNeedReLoad = false
 local lastVersion
 local downloadPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
-local raidScript, currentScript
+local raidScript = {}
+local currentScript
 local register = {}
 local registerOK = false
 local wipeTime = 0
@@ -258,7 +259,7 @@ local onMapChange = function()
 		MuAiGuide.UI.open = false
 	end
 
-	if raidScript[Player.localmapid] ~= nil then
+	if raidScript ~= nil and raidScript[Player.localmapid] ~= nil then
 		-- 进入副本
 		currentScript = raidScript[Player.localmapid]
 		currentScript.OnEnter()
@@ -268,7 +269,6 @@ local onMapChange = function()
 		else
 			MuAiGuide.Debug("进入副本：" .. currentScript.NameCN)
 		end
-
 	else
 		-- 退出副本
 		if currentScript ~= nil then

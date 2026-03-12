@@ -259,20 +259,7 @@ local changeState = function(state)
 	MuAiGuide.Merchant.CurrentState = state
 	MuAiGuide.Debug("阶段切换：" .. tostring(state))
 end
-
-local getTurnLineFrom = function(entityID)
-	for _, tether in pairs(Argus.getTethersOnEnt(entityID)) do
-		if tether.type == 115 then
-			for _, pTether in pairs(Argus.getTethersOnEnt(tether.partnerid)) do
-				if pTether.partnerid ~= entityID then
-					return TensorCore.mGetEntity(pTether.partnerid)
-				end
-			end
-		end
-	end
-	return nil
-end
-local getTurnLineFrom2 = function(entity, buffType)
+local getTurnLineFrom = function(entity, buffType)
 	local entityID = entity.id
 	local tethers = Argus.getTethersOnEnt(entityID)
 	if tethers ~= nil and table.size(tethers) > 0 then
@@ -291,13 +278,13 @@ local getTurnLineFrom2 = function(entity, buffType)
 			if model == 19228 then
 				if buffType == 4775 then
 					if ent.pos.z > _boss2Center.z + 18 or ent.pos.z < _boss2Center.z - 18 then
-						if ent.pos.x - 2 < entity.pos.x and entity.pos.x < ent.pos.x + 2 then
+						if ent.pos.x - 2 < entity.pos.x and entity.pos.x < ent.pos.x + 2 and MuAiGuide.HasLine(ent.id , 115) then
 							return ent
 						end
 					end
 				else
 					if ent.pos.x > _boss2Center.x + 18 or ent.pos.x < _boss2Center.x - 18 then
-						if ent.pos.z - 2 < entity.pos.z and entity.pos.z < ent.pos.z + 2 then
+						if ent.pos.z - 2 < entity.pos.z and entity.pos.z < ent.pos.z + 2 and MuAiGuide.HasLine(ent.id , 115) then
 							return ent
 						end
 					end
@@ -765,7 +752,6 @@ local boss3FireDance2 = function(nextState, curWave)
 			else
 				heading = mmd.B3P2FireDance.curDir - math.pi / 2
 			end
-			--d(heading)
 			_redDrawer:addRect(_boss3Center.x, _boss3Center.y, _boss3Center.z, 20, 40, heading)
 		end
 		if getCfg().MerchantGuide then
@@ -786,7 +772,16 @@ local boss3FireDance2 = function(nextState, curWave)
 			else
 				basePos = mmd.B3P2FireDance.mid
 			end
-			local guidePos = TensorCore.getPosInDirection(basePos, heading, 0.5)
+			local offset
+			if curWave == 1 and MuAiGuide.IsSameDirection(mmd.B3P2FireDance.aoeInfo.heading, math.pi / 2) then
+				offset = 2.5
+			else
+				offset = 0.5
+			end
+			if curWave == 1 and MuAiGuide.IsSameDirection(mmd.B3P2FireDance.aoeInfo.heading, math.pi * 3 / 2) then
+				basePos = { x = basePos.x + 0.5, y = basePos.y, z = basePos.z }
+			end
+			local guidePos = TensorCore.getPosInDirection(basePos, heading, offset)
 			MuAiGuide.FrameDirect(guidePos.x, guidePos.z)
 		end
 	end
@@ -871,12 +866,14 @@ local guideToTower = function(curTowers, wave)
 				end
 			end
 			local buff = TensorCore.getBuff(ent.id, 2939)
-			mmd.B3P4linkDirInfo[job] = {
-				LinkedPos = position,
-				LinkedDir = dir,
-				IsFirst = buff.duration < 7,
-				PartnerPos = pPos
-			}
+			if buff ~= nil then
+				mmd.B3P4linkDirInfo[job] = {
+					LinkedPos = position,
+					LinkedDir = dir,
+					IsFirst = buff.duration < 7,
+					PartnerPos = pPos
+				}
+			end
 		end
 	end
 	local linkDirInfo = mmd.B3P4linkDirInfo
@@ -1590,7 +1587,7 @@ local Boss_14323_Update = function()
 			elseif TensorCore.hasBuff(ent.id, 4775) then
 				buffType = 4775
 			end
-			local linkFrom = getTurnLineFrom2(ent, buffType)
+			local linkFrom = getTurnLineFrom(ent, buffType)
 			if linkFrom ~= nil then
 				changeState(mmd.State.Boss2_P3_GetLine)
 				return
@@ -1632,7 +1629,7 @@ local Boss_14323_Update = function()
 			elseif TensorCore.hasBuff(player.id, 4775) then
 				buffType = 4775
 			end
-			local linkFrom = getTurnLineFrom2(player, buffType)
+			local linkFrom = getTurnLineFrom(player, buffType)
 			if linkFrom ~= nil then
 				if TensorCore.hasBuff(player.id, 4784) then
 					--可以打左右
@@ -1647,7 +1644,7 @@ local Boss_14323_Update = function()
 						for _, ent in pairs(M.Party) do
 							if ent.id ~= player.id and TensorCore.hasBuff(ent.id, 4784) then
 								local curEnt = TensorCore.mGetEntity(ent.id)
-								partnerFrom = getTurnLineFrom2(curEnt, 4784)
+								partnerFrom = getTurnLineFrom(curEnt, 4784)
 							end
 						end
 						if partnerFrom ~= nil then
@@ -1679,7 +1676,7 @@ local Boss_14323_Update = function()
 						for _, ent in pairs(M.Party) do
 							if ent.id ~= player.id and TensorCore.hasBuff(ent.id, 4775) then
 								local curEnt = TensorCore.mGetEntity(ent.id)
-								partnerFrom = getTurnLineFrom2(curEnt, 4775)
+								partnerFrom = getTurnLineFrom(curEnt, 4775)
 							end
 						end
 						if partnerFrom ~= nil then
@@ -2031,7 +2028,8 @@ local Boss_14274_Update = function()
 					local allInRange = true
 					local player = MuAiGuide.GetPlayer()
 					for _, ent in pairs(MuAiGuide.Party) do
-						if ent.id ~= player.id and TensorCore.getDistance2d(ent.pos, player.pos) > 4 then
+						local curEnt = TensorCore.mGetEntity(ent.id)
+						if ent.id ~= player.id and TensorCore.getDistance2d(curEnt.pos, player.pos) > 4 then
 							allInRange = false
 							break
 						end
@@ -2057,45 +2055,50 @@ local Boss_14274_Update = function()
 				end
 			end
 		end
-		if mmd.B3P1Sub.Timer == 0 or TimeSince(mmd.B3P1Sub.Timer) < 8000 then
-			if table.size(mmd.B3P1Sub.ids) == 4
-					and table.size(mmd.B3P1Sub.AOEs) == 4
-					and table.size(mmd.B3P1Sub.marks) == 4
-			then
-				for _, ent in pairs(mmd.B3P1Sub.entities) do
-					local mark = mmd.B3P1Sub.marks[ent.id]
-					local heading = mmd.B3P1Sub.AOEs[ent.id].heading
-					if mark == 646 or mark == 628 then
-						heading = heading - math.pi / 2
-					elseif mark == 647 or mark == 629 then
-						heading = heading + math.pi / 2
-					end
-
+		if mmd.B3P1Sub.Timer > 0 and TimeSince(mmd.B3P1Sub.Timer) > 5000 then
+			for _, ent in pairs(MuAiGuide.Party) do
+				if TensorCore.getBuff(ent.id, 2937) then
+					changeState(mmd.State.Boss3_P1_End)
+					return
+				end
+			end
+		end
+		if table.size(mmd.B3P1Sub.ids) == 4
+				and table.size(mmd.B3P1Sub.AOEs) == 4
+				and table.size(mmd.B3P1Sub.marks) == 4
+		then
+			for _, ent in pairs(mmd.B3P1Sub.entities) do
+				local mark = mmd.B3P1Sub.marks[ent.id]
+				local heading = mmd.B3P1Sub.AOEs[ent.id].heading
+				if mark == 646 or mark == 628 then
+					heading = heading - math.pi / 2
+				elseif mark == 647 or mark == 629 then
+					heading = heading + math.pi / 2
+				end
+				if getCfg().MerchantDraw then
 					_redDrawer:addRect(ent.pos.x, ent.pos.y, ent.pos.z, 40, 60, heading)
 				end
 			end
-			if mmd.B3P1Sub.spellId ~= 0 then
-				local player = MuAiGuide.GetPlayer()
-				if 45538 <= mmd.B3P1Sub.spellId and mmd.B3P1Sub.spellId <= 45540 then
-					-- 对火花
-					for _, ent in pairs(MuAiGuide.Party) do
-						if MuAiGuide.IsDps(player.job) and not MuAiGuide.IsDps(ent.job)
-								or not MuAiGuide.IsDps(player.job) and MuAiGuide.IsDps(ent.job)
-						then
-							local curMember = TensorCore.mGetEntity(ent.id)
-							_greenDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 6)
-						end
-					end
-				elseif (mmd.B3P1Sub.spellId == 45536 or mmd.B3P1Sub.spellId == 45537) then
-					--散火花 
-					for _, ent in pairs(MuAiGuide.Party) do
+		end
+		if mmd.B3P1Sub.spellId ~= 0 and getCfg().MerchantDraw then
+			local player = MuAiGuide.GetPlayer()
+			if 45538 <= mmd.B3P1Sub.spellId and mmd.B3P1Sub.spellId <= 45540 then
+				-- 对火花
+				for _, ent in pairs(MuAiGuide.Party) do
+					if MuAiGuide.IsDps(player.job) and not MuAiGuide.IsDps(ent.job)
+							or not MuAiGuide.IsDps(player.job) and MuAiGuide.IsDps(ent.job)
+					then
 						local curMember = TensorCore.mGetEntity(ent.id)
-						_redDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 6)
+						_greenDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 6)
 					end
 				end
+			elseif (mmd.B3P1Sub.spellId == 45536 or mmd.B3P1Sub.spellId == 45537) then
+				--散火花 
+				for _, ent in pairs(MuAiGuide.Party) do
+					local curMember = TensorCore.mGetEntity(ent.id)
+					_purpleDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 6)
+				end
 			end
-		elseif mmd.MuAiGuide.Merchant ~= 0 then
-			changeState(mmd.State.Boss3_P1_End)
 		end
 	elseif mmd.State.Boss3_P2_Start <= mmd.CurrentState and mmd.CurrentState <= mmd.State.Boss3_P2_Turn4 then
 		if table.size(mmd.B3P2FireDance.auras) < 4 then
@@ -2117,10 +2120,9 @@ local Boss_14274_Update = function()
 					and MuAiGuide.Merchant.B3P2FireDance.aoeInfo ~= nil
 			then
 				mmd.B3P2FireDance.curDir = mmd.B3P2FireDance.aoeInfo.heading
-				local dir = mmd.B3P2FireDance.curDir + math.pi
-				mmd.B3P2FireDance.near = TensorCore.getPosInDirection(_boss3Center, dir, 0.5)
-				mmd.B3P2FireDance.far = TensorCore.getPosInDirection(_boss3Center, dir, 10.5)
-				mmd.B3P2FireDance.mid = TensorCore.getPosInDirection(_boss3Center, dir, 5)
+				mmd.B3P2FireDance.near = _boss3Center
+				mmd.B3P2FireDance.far = { x = _boss3Center.x + 10, y = _boss3Center.y, z = _boss3Center.z }
+				mmd.B3P2FireDance.mid = { x = _boss3Center.x + 5, y = _boss3Center.y, z = _boss3Center.z }
 				changeState(mmd.State.Boss3_P2_GetBuff)
 			end
 		elseif mmd.CurrentState == mmd.State.Boss3_P2_GetBuff then
@@ -2285,7 +2287,7 @@ local Boss_14274_Update = function()
 			local disBuff = TensorCore.getBuff(ent.id, 4615)
 			if disBuff ~= nil and disBuff.duration < 6 then
 				local curEnt = TensorCore.mGetEntity(ent.id)
-				_cyanDrawer:addCircle(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 13)
+				_blueDrawer:addCircle(curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 13)
 			end
 		end
 	elseif mmd.CurrentState == mmd.State.Boss3_P3_GetFirstFire then
@@ -2549,6 +2551,9 @@ local SetBoss = function()
 		elseif curTarget.contentid ~= G.CurBoss.contentid then
 			G.CurBoss = TensorCore.mGetEntity(curTarget.id)
 			OnBossChange(curTarget)
+		elseif G.CurBoss.incombat and not curTarget.incombat then
+			G.CurBoss = TensorCore.mGetEntity(curTarget.id)
+			OnBossChange(curTarget)
 		end
 	end
 end
@@ -2587,6 +2592,10 @@ G.OnEntityChannel = function(entityID, spellID, _)
 		if mmd.CurrentState < mmd.State.Boss3_P2_CarryEnd then
 			changeState(mmd.State.Boss3_P2_CarryEnd)
 		end
+	elseif spellID == 45519 then
+		if mmd.CurrentState < mmd.State.Boss3_P1_End then
+			changeState(mmd.State.Boss3_P1_End)
+		end
 	elseif spellID == 45551 then
 		--- 火灵的诅咒
 	elseif 45538 <= spellID and spellID <= 45540 -- 对火花
@@ -2594,7 +2603,7 @@ G.OnEntityChannel = function(entityID, spellID, _)
 	then
 		if mmd.CurrentState <= mmd.State.Boss3_P2_Start then
 			mmd.B3P1Sub.spellId = spellID
-			mmd.Timer = Now()
+			mmd.B3P1Sub.Timer = Now()
 		end
 	elseif 45839 <= spellID and spellID <= 45843 then
 		boss1SubDraw(entityID, spellID)
@@ -2947,6 +2956,7 @@ G.OnWipe = function()
 	end
 	G.CurBoss = nil
 	initGlobalData()
+	MuAiGuide.Debug("团灭了！")
 end
 
 return G
