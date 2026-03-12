@@ -1001,6 +1001,9 @@ end
 
 local drawStoneDir = function(curWave)
 	local mmd = MuAiGuide.Merchant
+	if mmd.B3P4FineStoneEnts[curWave] == nil then
+		return
+	end
 	for _, ent in pairs(mmd.B3P4FineStoneEnts[curWave]) do
 		_redDrawer:addCross(ent.pos.x, ent.pos.y, ent.pos.z, 40, 10, 0)
 	end
@@ -1414,7 +1417,7 @@ local Boss_14323_Update = function()
 			end
 		end
 		if M.HasLine(player.id, 115) then
-			local linkFromEnt = getTurnLineFrom(player.id)
+			local linkFromEnt = getTurnLineFrom(player)
 			if linkFromEnt ~= nil then
 				local linkFrom = linkFromEnt.pos
 				local guidePos
