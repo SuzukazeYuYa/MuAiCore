@@ -185,6 +185,7 @@ local initGlobalData = function()
 			AoeInfo1 = {},
 			AoeInfo2 = {},
 		},
+		B2P1SmallBlade = nil,
 		B2P3Blade = nil,
 		fireDance = {
 			inState = false,
@@ -278,13 +279,13 @@ local getTurnLineFrom = function(entity, buffType)
 			if model == 19228 then
 				if buffType == 4775 then
 					if ent.pos.z > _boss2Center.z + 18 or ent.pos.z < _boss2Center.z - 18 then
-						if ent.pos.x - 2 < entity.pos.x and entity.pos.x < ent.pos.x + 2 and MuAiGuide.HasLine(ent.id , 115) then
+						if ent.pos.x - 2 < entity.pos.x and entity.pos.x < ent.pos.x + 2 and MuAiGuide.HasLine(ent.id, 115) then
 							return ent
 						end
 					end
 				else
 					if ent.pos.x > _boss2Center.x + 18 or ent.pos.x < _boss2Center.x - 18 then
-						if ent.pos.z - 2 < entity.pos.z and entity.pos.z < ent.pos.z + 2 and MuAiGuide.HasLine(ent.id , 115) then
+						if ent.pos.z - 2 < entity.pos.z and entity.pos.z < ent.pos.z + 2 and MuAiGuide.HasLine(ent.id, 115) then
 							return ent
 						end
 					end
@@ -299,7 +300,7 @@ local boss1SubDraw = function(entityID, spellID)
 	if not getCfg().MerchantDraw then
 		return
 	end
-	local drawerTime = 2200
+	local drawerTime = 1800
 	local curEnt = TensorCore.mGetEntity(entityID)
 	if spellID == 45843 then
 		_redDrawer:addTimedCone(drawerTime, curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 45, math.pi / 3, curEnt.pos.h)
@@ -1061,10 +1062,18 @@ local changeStateByForceMoveEnd = function(state)
 end
 
 local Boss_14291_Update = function()
+	local curBoss = getCurBoss()
+	if curBoss ~= nil and not curBoss.alive then
+		changeState(MuAiGuide.Merchant.State.Boss2_Start)
+		return
+	end
 	local mmd = MuAiGuide.Merchant
 	OnUpdateSpell45866()
 	OnUpdateSpell45849()
 	OnUpdateMark20()
+	if mmd == nil or mmd.CurrentState == nil then
+		return
+	end
 	local player = MuAiGuide.GetPlayer()
 	if mmd.State.Boss1_P1_ForceMove <= mmd.CurrentState
 			and mmd.CurrentState < mmd.State.Boss1_P1_End then
@@ -1122,7 +1131,6 @@ local Boss_14291_Update = function()
 			if table.size(mmd.spell45845.DangerPoints) == 7 then
 				if mmd.spell45845.GuidePos1 == nil then
 					if table.size(mmd.spell45845.SafePoint) < 2 then
-						local curBoss = TensorCore.mGetEntity(G.CurBoss.id)
 						for i = 1, 4 do
 							local curHeading = MuAiGuide.SetHeading2Pi(curBoss.pos.h - (2 * i - 1) * math.pi / 4)
 							local curPoint = TensorCore.getPosInDirection(_boss1Center, curHeading, 22.624)
@@ -1387,11 +1395,19 @@ local Boss_14291_Update = function()
 end
 
 local Boss_14323_Update = function()
+	local curBoss = getCurBoss()
+	if curBoss ~= nil and not curBoss.alive then
+		changeState(MuAiGuide.Merchant.State.Boss3_Start)
+		return
+	end
 	OnUpdateSpell46715()
 	OnUpdateSpellRingCircle()
 	local player = MuAiGuide.GetPlayer()
 	local M = MuAiGuide
 	local mmd = M.Merchant
+	if mmd == nil or mmd.CurrentState == nil then
+		return
+	end
 	if mmd.CurrentState == mmd.State.Boss2_P1_Start then
 		if TensorCore.hasBuff(player.id, 4785)
 				or TensorCore.hasBuff(player.id, 4786)
@@ -1402,9 +1418,12 @@ local Boss_14323_Update = function()
 		end
 	elseif mmd.CurrentState == mmd.State.Boss2_P1_GetBuff then
 		for _, ent in pairs(M.Party) do
-			if M.HasLine(ent.id, 115) then
-				changeState(mmd.State.Boss2_P1_GetLine)
-				break
+			local tethers = Argus.getTethersOnEnt(ent.id)
+			for _, tether in pairs(tethers) do
+				if tether.type >= 101 and tether.type <= 104 then
+					changeState(mmd.State.Boss2_P1_GetLine)
+					return
+				end
 			end
 		end
 	elseif mmd.CurrentState == mmd.State.Boss2_P1_GetLine then
@@ -1417,9 +1436,11 @@ local Boss_14323_Update = function()
 			end
 		end
 		if M.HasLine(player.id, 115) then
-			local linkFromEnt = getTurnLineFrom(player)
-			if linkFromEnt ~= nil then
-				local linkFrom = linkFromEnt.pos
+			if mmd.B2P1SmallBlade == nil then
+				mmd.B2P1SmallBlade = getTurnLineFrom(player)
+			end
+			if mmd.B2P1SmallBlade ~= nil then
+				local linkFrom = mmd.B2P1SmallBlade.pos
 				local guidePos
 				-- 看看身上是什么buff
 				if TensorCore.hasBuff(player.id, 4785) then
@@ -1597,29 +1618,28 @@ local Boss_14323_Update = function()
 			end
 		end
 		if getCfg().MerchantGuide then
-			if mmd.P3GetLineGuidePos0 == nil then
-				if TensorCore.hasBuff(player.id, 4784) then
-					local guidePos1 = { x = _boss2Center.x, z = _boss2Center.z - 5 }
-					local guidePos2 = { x = _boss2Center.x, z = _boss2Center.z + 5 }
-					local dis1 = TensorCore.getDistance2d(player.pos, guidePos1)
-					local dis2 = TensorCore.getDistance2d(player.pos, guidePos2)
-					if dis1 < dis2 then
-						mmd.P3GetLineGuidePos0 = guidePos1
-					else
-						mmd.P3GetLineGuidePos0 = guidePos2
-					end
-				elseif TensorCore.hasBuff(player.id, 4775) then
-					local guidePos1 = { x = _boss2Center.x - 5, z = _boss2Center.z }
-					local guidePos2 = { x = _boss2Center.x + 5, z = _boss2Center.z }
-					local dis1 = TensorCore.getDistance2d(player.pos, guidePos1)
-					local dis2 = TensorCore.getDistance2d(player.pos, guidePos2)
-					if dis1 < dis2 then
-						mmd.P3GetLineGuidePos0 = guidePos1
-					else
-						mmd.P3GetLineGuidePos0 = guidePos2
-					end
+			if TensorCore.hasBuff(player.id, 4784) then
+				local guidePos1 = { x = _boss2Center.x, z = _boss2Center.z - 5 }
+				local guidePos2 = { x = _boss2Center.x, z = _boss2Center.z + 5 }
+				local dis1 = TensorCore.getDistance2d(player.pos, guidePos1)
+				local dis2 = TensorCore.getDistance2d(player.pos, guidePos2)
+				if dis1 < dis2 then
+					mmd.P3GetLineGuidePos0 = guidePos1
+				else
+					mmd.P3GetLineGuidePos0 = guidePos2
 				end
-			else
+			elseif TensorCore.hasBuff(player.id, 4775) then
+				local guidePos1 = { x = _boss2Center.x - 5, z = _boss2Center.z }
+				local guidePos2 = { x = _boss2Center.x + 5, z = _boss2Center.z }
+				local dis1 = TensorCore.getDistance2d(player.pos, guidePos1)
+				local dis2 = TensorCore.getDistance2d(player.pos, guidePos2)
+				if dis1 < dis2 then
+					mmd.P3GetLineGuidePos0 = guidePos1
+				else
+					mmd.P3GetLineGuidePos0 = guidePos2
+				end
+			end
+			if mmd.P3GetLineGuidePos0 ~= nil then
 				local guidePos = mmd.P3GetLineGuidePos0
 				M.FrameDirect(guidePos.x, guidePos.z)
 			end
@@ -1653,14 +1673,14 @@ local Boss_14323_Update = function()
 						if partnerFrom ~= nil then
 							if partnerFrom.pos.x > _boss2Center.x + 18 then
 								-- 如果队友连线在右边
-								mmd.P3GetLineGuidePos = { x = _boss2Center.x - 19, z = _boss2Center.z + 5 }
-							elseif partnerFrom.pos.x < _boss2Center.x - 18 then
 								mmd.P3GetLineGuidePos = { x = _boss2Center.x + 19, z = _boss2Center.z - 5 }
+							elseif partnerFrom.pos.x < _boss2Center.x - 18 then
+								mmd.P3GetLineGuidePos = { x = _boss2Center.x - 19, z = _boss2Center.z + 5 }
 							else
 								if partnerFrom.pos.z > linkFrom.pos.z then
-									mmd.P3GetLineGuidePos = { x = _boss2Center.x - 19, z = _boss2Center.z + 5 }
-								else
 									mmd.P3GetLineGuidePos = { x = _boss2Center.x + 19, z = _boss2Center.z - 5 }
+								else
+									mmd.P3GetLineGuidePos = { x = _boss2Center.x - 19, z = _boss2Center.z + 5 }
 								end
 							end
 						end
@@ -1692,9 +1712,9 @@ local Boss_14323_Update = function()
 							else
 								--都不是，看相对位置
 								if partnerFrom.pos.x > linkFrom.pos.x then
-									mmd.P3GetLineGuidePos = { x = _boss2Center.x + 5, z = _boss2Center.z + 19 }
-								else
 									mmd.P3GetLineGuidePos = { x = _boss2Center.x - 5, z = _boss2Center.z - 19 }
+								else
+									mmd.P3GetLineGuidePos = { x = _boss2Center.x + 5, z = _boss2Center.z + 19 }
 								end
 							end
 						end
@@ -1911,10 +1931,17 @@ local Boss_14323_Update = function()
 end
 
 local Boss_14274_Update = function()
+	local curBoss = getCurBoss()
+	if curBoss ~= nil and not curBoss.alive then
+		changeState(MuAiGuide.Merchant.State.Boss3_P4_End)
+		return
+	end
 	local mmd = MuAiGuide.Merchant
+	if mmd == nil or mmd.CurrentState == nil then
+		return
+	end
 	if mmd.CurrentState == mmd.State.Boss3_P1_Start then
 		local mmdd = MuAiGuide.Merchant.fireDance
-		local curBoss = getCurBoss()
 		if curBoss == nil then
 			return
 		end
