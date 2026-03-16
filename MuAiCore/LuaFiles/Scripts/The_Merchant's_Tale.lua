@@ -2052,7 +2052,7 @@ local Boss_14274_Update = function()
 				if mmdd.spellId == 45434 or mmdd.spellId == 45435 or mmdd.spellId == 45444 then
 					for _, ent in pairs(MuAiGuide.Party) do
 						local curMember = TensorCore.mGetEntity(ent.id)
-						_redDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 4)
+						_purpleDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 4)
 					end
 				else
 					local allInRange = true
@@ -2647,7 +2647,7 @@ G.OnEntityChannel = function(entityID, spellID, _)
 		--小夜曲
 	elseif spellID == 45849 then
 		-- 沉没宝藏
-		if mmd.CurrentState > mmd.State.Boss1_P2_End then
+		--if mmd.CurrentState > mmd.State.Boss1_P2_End then
 			mmd.spell45849 = {
 				InState = false,
 				Timer = 0,
@@ -2662,7 +2662,7 @@ G.OnEntityChannel = function(entityID, spellID, _)
 				P1BuffType = nil,
 				P1LockingFace = nil
 			}
-		end
+		--end
 		mmd.spell45849.Timer = Now()
 		mmd.spell45849.InState = true
 	elseif spellID == 46693 then
@@ -2936,7 +2936,7 @@ G.OnEventObjectScriptFunc = function(entityID, _, _, _)
 		local maxSize = 1
 		if table.size(mmd.spell45849.AllBalls) == 6 then
 			maxSize = 1
-		elseif table.size(mmd.spell45849.AllBalls) == 6 then
+		elseif table.size(mmd.spell45849.AllBalls) == 8 then
 			maxSize = 2
 		end
 		if table.size(mmd.spell45849.FirstBallIds) < maxSize then
