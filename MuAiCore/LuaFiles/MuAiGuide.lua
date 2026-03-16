@@ -1,5 +1,4 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
-M.VERSION = 274
 --- 是否开启测试模式
 M.DebugMode = false
 --- 测试模式玩家职能
@@ -13,6 +12,27 @@ M.ScriptDevelopTableReg = function(key)
 	M.ScriptDataTableName = key
 end
 M.GlobalGuideY = nil
+
+---获取本地版本号
+M.getCurVer = function()
+	if M.Config.Main.LocalVer ~= nil then
+		return M.Config.Main.LocalVer
+	end
+	return 274
+end
+
+---更新版本号
+M.updateVerNumber = function()
+	if M.LatestVersion == nil then
+		return
+	end
+	local ver = tonumber(M.LatestVersion)
+	if ver == nil or ver == 0 then
+		return
+	end
+	M.Config.Main.LocalVer = ver
+	M.SaveConfig(M.Config.MainPath, M.Config.MainFile, 'Main')
+end
 ------------------------------- UI -------------------------------
 --- UI定义
 M.UI = {}
@@ -35,7 +55,8 @@ M.Info = function(msg, ttsOn)
 		return
 	end
 	local info = "/e  " .. msg
-	SendTextCommand(info)
+	TensorCore.sendParsedChatMessage("/e {color:0,255,0}{resetcolor}"..msg)
+	--SendTextCommand(info)
 	if ttsOn and M.Config.Main.TTS == true then
 		TensorCore.addAlertText(0, msg, 1, 2, true)
 	end
@@ -68,6 +89,7 @@ end
 M.StringSplit = function(str, mark)
 	mark = mark or ","
 	local input = string.gsub(str, "，", ",")
+	input = string.gsub(input, "%s", "")
 	local t = {}
 	if input == "" then
 		return t
@@ -208,10 +230,16 @@ end
 --- 创建默认配置
 M.CreateDefMainCfg = function()
 	local mainCfg = {
+		LocalVer = 274,
 		--- 指路工具颜色
 		GuideColor = { r = 0, g = 1, b = 1, a = 0.5 },
 		--- 指路工具颜色（分摊）
 		GuidePairColor = { r = 0, g = 0, b = 1, a = 0.5 },
+		ShowTargetPos = true,
+		ShowTargetPosTank = false,
+		--- 目标脚下点颜色
+		TargetPosColor = { r = 1, g = 1, b = 0, a = 1 },
+		TargetPosSize = 4,
 		--- 是否启用了Anyone
 		AnyOneReactionOn = true,
 		--- 是否输出提示信息到消息栏
@@ -437,10 +465,10 @@ M.checkVersion = function(auto)
 	if not auto then
 		if result ~= nil then
 			local verNumber = tonumber(result)
-			if verNumber == M.VERSION then
-				M.Info("版本检查完毕：没有发现新的版本<se.3>！")
+			if verNumber == M.getCurVer() then
+				M.Info("版本检查完毕：没有发现新的版本！")
 			else
-				M.Info("版本检查完毕：发现新的版本：ver." .. result .. "<se.1>!")
+				M.Info("版本检查完毕：发现新的版本：ver." .. result .. "!")
 			end
 		else
 			M.Info("版本检查失败，请检查网络或重新启动游戏后再次尝试。")
@@ -594,69 +622,6 @@ M.InitConfig = function()
 	end
 	M.Config.FruCustomList = M.LoadFileList(M.Config.FruGuidePath, { "GuideConfig.lua" })
 	M.Config.FruCustomListIndex = 1
-end
-
-M.AddToAttackRange = function()
-	local target = TensorCore.mGetTarget()
-	if target == nil or target.contentid == 0 or target.attackable == false or target.type ~= 2 then
-		M.Info("请选择正确的目标！")
-		return
-	end
-	local radius = target.hitRadius
-	local contentid = target.contentid
-	local mapData = M.Config.Main.AtkRangeData[Player.localmapid]
-	if mapData == nil then
-		M.Config.Main.AtkRangeData[Player.localmapid] = {}
-		mapData = {}
-	end
-	local curBossData = mapData[contentid]
-	local newBossData
-	if TensorCore.hasBuff(target.id, 3808) then
-		newBossData = {}
-		if curBossData ~= nil then
-			if type(curBossData) == "number" then
-				newBossData.range = curBossData
-			elseif type(curBossData) == "table" then
-				newBossData.range = curBossData.range
-			end
-		end
-		newBossData.buff = 3808
-		newBossData.onBuffRange = radius
-	else
-		if curBossData ~= nil then
-			if type(curBossData) == "number" then
-				newBossData = radius
-			elseif type(curBossData) == "table" then
-				newBossData = {}
-				newBossData.range = curBossData.range
-				newBossData.buff = curBossData.buff
-				newBossData.onBuffRange = curBossData.onBuffRange
-			end
-		else
-			newBossData = radius
-		end
-	end
-	M.Config.Main.AtkRangeData[Player.localmapid][contentid] = newBossData
-	local msg
-	if type(curBossData) == "number" then
-		msg = "已添加数据，BOSS名称：" .. target.name .. "，ContentId：" .. contentid .. "，目标圈大小：" .. tostring(radius)
-	elseif type(curBossData) == "table" then
-		if curBossData.range ~= nil then
-			msg = "已添加数据，BOSS名称：" .. target.name
-					.. "，ContentId：" .. contentid
-					.. "，目标圈大小：" .. tostring(curBossData.range)
-					.. "，目标扩大BUFF下，目标圈大小" .. tostring(curBossData.onBuffRange)
-		else
-			msg = "已添加数据，BOSS名称：" .. target.name
-					.. "，ContentId：" .. contentid
-					.. "，目标扩大BUFF下，目标圈大小" .. tostring(curBossData.onBuffRange)
-					.. "，非扩大状态下目标圈数据为空，请添加！"
-		end
-
-	end
-	if msg ~= nil then
-		M.Info(msg)
-	end
 end
 
 ------------------------------- 游戏逻辑 -------------------------------
@@ -1107,6 +1072,7 @@ end
 
 --- 暂不支持
 M.MarkParty = function(marker, id)
+
 end
 
 ------------------------------- 绘图工具 -------------------------------
@@ -1372,6 +1338,7 @@ end
 --- @param pos1 table 线第1端位置(物)
 --- @param pos2 table 线第2端位置(人)
 --- @param playerPos table 玩家位置
+--- @param size number 线粗(可缺省)
 M.FrameTakeLine = function(pos1, pos2, playerPos, size)
 	size = size or 5
 	local drawer = Argus2.ShapeDrawer:new(
@@ -1389,6 +1356,49 @@ M.FrameTakeLine = function(pos1, pos2, playerPos, size)
 		local heading = TensorCore.getHeadingToTarget(pos2, pos1)
 		local guidePos = TensorCore.getPosInDirection(pos2, heading, 1)
 		M.FrameDirect(guidePos.x, guidePos.z)
+	end
+end
+
+M.DrawTargetPos = function()
+	local target = TensorCore.mGetTarget()
+	if not M.Config.Main.ShowTargetPos
+			or target == nil
+			or not target.attackable
+			or (M.IsTank(TensorCore.mGetPlayer().job) and not M.Config.Main.ShowTargetPosTank)
+	then
+		return
+	end
+	local color = M.Config.Main.TargetPosColor
+	local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a), 1)
+	drawer:addCircle(target.pos.x, target.pos.y, target.pos.z, 0.01 * M.Config.Main.TargetPosSize, true)
+end
+
+M.DrawGuidePreView = function()
+	local testPos = TensorCore.getPosInDirection(Player.pos, Player.pos.h, 2)
+	M.DirectTo(testPos.x, testPos .z, 5000)
+end
+
+M.DrawGuidePreViewGather = function()
+	local entities = TensorCore.entityList("All")
+	if entities ~= nil then
+		local target
+		local dis = 100000
+		for _, ent in pairs(entities) do
+			if Argus.isEntityVisible(ent) and ent.name ~= nil and ent.job ~= 0 and ent.charType == 4 then
+				local distance = TensorCore.getDistance2d(Player.pos, ent.pos)
+				if target == nil or distance < dis then
+					dis = distance
+					target = ent
+				end
+			end
+		end
+		if target ~= nil then
+			M.DirectToEnt(target.id, 5000)
+		else
+			M.Info("附近没有任何玩家！")
+		end
+	else
+		M.Info("附近没有任何玩家！")
 	end
 end
 

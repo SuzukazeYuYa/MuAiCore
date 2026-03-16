@@ -293,25 +293,22 @@ local onMapChange = function()
 end
 
 local checkNeedReload = function()
-	if updateNeedReLoad and updateTime then
-		if TimeSince(updateTime) > 2000 then
-			updateNeedReLoad = false
-			if MuAiGuide.UI.open then
-				MuAiGuide.UI.open = false
-				MuAiGuide.FruConfigUI.open = false
-				MuAiGuide.FruMitigationUI.open = false
-				mainDrawer = FileLoad(MuAiGuideRoot .. "MainUI.lua")
-				fruConfigDrawer = FileLoad(MuAiGuideRoot .. "FruConfigUI.lua")
-				fruMitigationDrawer = FileLoad(MuAiGuideRoot .. "FruMitigationUI.lua")
-
-			end
-			core.InitMuAiGuide()
-			if lastVersion ~= MuAiGuide.VERSION then
-				lastVersion = MuAiGuide.VERSION
-				MuAiGuide.Info("MuAiCore已更新，当前版本：ver." .. MuAiGuide.VERSION)
-			end
-		end
+	if not updateNeedReLoad
+			or updateTime == nil or updateTime == 0
+			or TimeSince(updateTime) < 3000
+	then
+		return
 	end
+	if MuAiGuide.UI.open then
+		MuAiGuide.UI.open = false
+		MuAiGuide.FruConfigUI.open = false
+		MuAiGuide.FruMitigationUI.open = false
+	end
+	if MuAiGuide.LatestVersion ~= nil then
+		MuAiGuide.updateVerNumber()
+		MuAiGuide.Info("MuAiCore已更新，当前版本：ver." .. MuAiGuide.LatestVersion)
+	end
+	Reload()
 end
 
 local onRaidUpdate = function()
@@ -426,7 +423,7 @@ end
 
 core.Initialize = function()
 	core.InitMuAiGuide(true)
-	lastVersion = MuAiGuide.VERSION
+	lastVersion = MuAiGuide.getCurVer()
 	local Icon = GetLuaModsPath() .. "MuAiCore\\Image\\MainIcon.png"
 	local tooltip = "暮霭指路核心功能"
 	ml_gui.ui_mgr:AddMember({ id = "MuAiCore", name = "MuAiGuide", onClick = function()
@@ -448,6 +445,11 @@ core.Update = function()
 	end
 	onRaidUpdate()
 	checkNeedReload()
+	attackRangeHackHelper()
+	attackRangeReMake()
+	if MuAiGuide then
+		MuAiGuide.DrawTargetPos()
+	end
 end
 
 core.Draw = function()
@@ -461,8 +463,6 @@ core.Draw = function()
 		if MuAiGuide.FruMitigationUI.open and not MuAiGuide.IsHealer(Player.job) then
 			core.DrawFruMitigationUI()
 		end
-		attackRangeHackHelper()
-		attackRangeReMake()
 	end
 end
 

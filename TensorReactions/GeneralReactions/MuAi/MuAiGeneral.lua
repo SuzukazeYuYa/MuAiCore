@@ -6,42 +6,13 @@ local tbl =
 		{
 			actions = 
 			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local target = TensorCore.mGetTarget()\nlocal drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(255 / 255, 255 / 255, 1 / 255, 1), 1)\ndrawer:addCircle(target.pos.x, target.pos.y, target.pos.z, 0.04, true)\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"e882c803-8a68-c906-b70f-afbc3e6d7bf3",
-								true,
-							},
-						},
-						gVar = "ACR_RikuMNK3_CD",
-						uuid = "659945ac-70c9-be8f-8d1e-d4497eb55c3d",
-						version = 2.1,
-					},
-				},
 			},
 			conditions = 
 			{
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "local curTarget = TensorCore.mGetTarget() \nreturn curTarget ~= nil \n\t\tand curTarget.attackable\n\t\tand not MuAiGuide.IsTank(TensorCore.mGetPlayer())",
-						uuid = "e882c803-8a68-c906-b70f-afbc3e6d7bf3",
-						version = 3,
-					},
-				},
 			},
-			eventType = 12,
-			name = "目标位置",
-			uuid = "f6607c59-fc75-1a2f-b73e-8825dbe3d5b3",
+			enabled = false,
+			name = "------------ MuAiDraw ---------------------------",
+			uuid = "4c04d325-7712-422b-be39-a892f38c3b0d",
 			version = 2,
 		},
 		inheritedIndex = 1,
@@ -124,7 +95,7 @@ local tbl =
 			uuid = "bf9901dd-97b7-8cf7-b53d-9c6eadc3968a",
 			version = 2,
 		},
-		inheritedIndex = 2,
+		inheritedIndex = 3,
 	},
 	
 	{
@@ -239,23 +210,6 @@ local tbl =
 			eventType = 9,
 			name = "团灭重置",
 			uuid = "b610ef51-6410-2e2c-8cd0-fff9d16334a8",
-			version = 2,
-		},
-		inheritedIndex = 3,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-			},
-			conditions = 
-			{
-			},
-			enabled = false,
-			name = "------------ MuAiDraw ---------------------------",
-			uuid = "4c04d325-7712-422b-be39-a892f38c3b0d",
 			version = 2,
 		},
 		inheritedIndex = 4,
@@ -534,23 +488,6 @@ local tbl =
 		{
 			actions = 
 			{
-			},
-			conditions = 
-			{
-			},
-			enabled = false,
-			name = "-------- m11s --------",
-			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
-			version = 2,
-		},
-		inheritedIndex = 9,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
 				
 				{
 					data = 
@@ -593,7 +530,24 @@ local tbl =
 			uuid = "15ffb251-5885-55b5-adf0-15a00a7fcba5",
 			version = 2,
 		},
-		inheritedIndex = 13,
+		inheritedIndex = 9,
+	},
+	
+	{
+		data = 
+		{
+			actions = 
+			{
+			},
+			conditions = 
+			{
+			},
+			enabled = false,
+			name = "-------- m11s --------",
+			uuid = "0022e2e8-45db-6edb-a69f-77507c8e294e",
+			version = 2,
+		},
+		inheritedIndex = 10,
 	},
 	
 	{
@@ -5366,141 +5320,6 @@ local tbl =
 			version = 2,
 		},
 		inheritedIndex = 37,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local drawTime = 40000\n\nAnyoneCore.addTimedWorldText(drawTime , \"H1\", {x = 85, y = 0 ,z =  115}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"H2/D2\", {x = 105, y = 0 ,z =  95}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\n\nAnyoneCore.addTimedWorldText(drawTime , \"D3\", {x = 90, y = 0 ,z =  110}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D4\", {x = 105, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nAnyoneCore.addTimedWorldText(drawTime , \"D1\", {x = 95, y = 0 ,z =  105}, \nGUI:ColorConvertFloat4ToU32(1, 1, 1, 1), true, 1)\n\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"089e6374-6111-897d-8af0-fcd0c72e28ac",
-								true,
-							},
-							
-							{
-								"36552ff7-f62a-b95c-9b3e-6ec090ee0398",
-								true,
-							},
-						},
-						gVar = "ACR_RikuNIN3_CD",
-						uuid = "b71e5591-3e6b-758b-b52e-84b8c6cbeccb",
-						version = 2.1,
-					},
-					inheritedIndex = 1,
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1325,
-						name = "M11S",
-						uuid = "36552ff7-f62a-b95c-9b3e-6ec090ee0398",
-						version = 3,
-					},
-					inheritedIndex = 1,
-				},
-				
-				{
-					data = 
-					{
-						category = "Event",
-						eventArgType = 2,
-						eventSpellID = 46132,
-						name = "46132-流星雨",
-						uuid = "089e6374-6111-897d-8af0-fcd0c72e28ac",
-						version = 3,
-					},
-					inheritedIndex = 2,
-				},
-			},
-			enabled = false,
-			eventType = 2,
-			name = "M11S陨石位置",
-			uuid = "74d161a0-ce78-a135-a5df-53829b8f7124",
-			version = 2,
-		},
-		inheritedIndex = 38,
-	},
-	
-	{
-		data = 
-		{
-			actions = 
-			{
-				
-				{
-					data = 
-					{
-						aType = "Lua",
-						actionLua = "local M = MuAiGuide\n\nif TimeSince(M.M12S.Timer) > 22000 then\n    M.M12S.ArmySlayer = false\n    M.M12S.ArmyInfo = nil\nelse\n    if M.M12S.ArmyInfo == nil then\n        M.M12S.ArmyInfo = {}\n        M.M12S.ArmyInfo.ids = {}\n        M.M12S.ArmyInfo.LeftCnt = 1\n        M.M12S.ArmyInfo.RightCnt = 1\n        M.M12S.ArmyInfo.State = 1\n        M.M12S.ArmyInfo.Left = {}\n        M.M12S.ArmyInfo.Right = {}\n        M.M12S.ArmyInfo.All = {}\n        M.M12S.ArmyInfo.FirstPurple = nil\n        M.M12S.ArmyInfo.PositionLeft = {\n            [1] = { x = 95, y = 0, z = 85.5 },\n            [2] = { x = 97, y = 0, z = 93 },\n            [3] = { x = 87, y = 0, z = 86 },\n            [4] = { x = 90, y = 0, z = 95 },\n        }\n        M.M12S.ArmyInfo.PositionRight = {\n            [1] = { x = 105, y = 0, z = 85.5 },\n            [2] = { x = 103, y = 0, z = 93 },\n            [3] = { x = 113, y = 0, z = 86 },\n            [4] = { x = 110, y = 0, z = 95 },\n        }\n        M.M12S.ArmyInfo.GotPos = {\n            [\"MT\"] = false,\n            [\"ST\"] = false,\n            [\"H1\"] = false,\n            [\"H2\"] = false,\n        }\n        M.M12S.ArmyInfo.THOrder = nil\n        M.M12S.ArmyInfo.Timer = 0\n        M.M12S.ArmyInfo.Temp = {}\n    end\n\n    if table.size(M.M12S.ArmyInfo.ids) < 8 then\n        for _, ent in pairs(TensorCore.entityList(\"contentid=14378\")) do\n            if Argus.isEntityVisible(ent) then\n                local model = Argus.getEntityModel(ent.id)\n                if model == 19200 or model == 19201 then\n                    if not table.contains(M.M12S.ArmyInfo.ids, ent.id) then\n                        table.insert(M.M12S.ArmyInfo.ids, ent.id)\n                        if table.size(M.M12S.ArmyInfo.Temp) < 2 then\n                            table.insert(M.M12S.ArmyInfo.Temp, ent)\n                        end\n                    end\n                end\n            end\n        end\n        if table.size(M.M12S.ArmyInfo.Temp) == 2 then\n            if M.M12S.ArmyInfo.Temp[1].pos.y < M.M12S.ArmyInfo.Temp[2].pos.y\n                    or M.M12S.ArmyInfo.Temp[1].pos.x < 100 and M.M12S.ArmyInfo.Temp[2].pos.x < 100 and M.M12S.ArmyInfo.Temp[1].pos.x > M.M12S.ArmyInfo.Temp[2].pos.x\n                    or M.M12S.ArmyInfo.Temp[1].pos.x > 100 and M.M12S.ArmyInfo.Temp[2].pos.x > 100 and M.M12S.ArmyInfo.Temp[1].pos.x < M.M12S.ArmyInfo.Temp[2].pos.x\n            then\n                M.M12S.ArmyInfo.Temp[1], M.M12S.ArmyInfo.Temp[2] = M.M12S.ArmyInfo.Temp[2], M.M12S.ArmyInfo.Temp[1]\n            end\n            for i = 1, #M.M12S.ArmyInfo.Temp do\n                local curEnt = M.M12S.ArmyInfo.Temp[i]\n                local modelTemp = Argus.getEntityModel(curEnt.id)\n                table.insert(M.M12S.ArmyInfo.All, { ent = curEnt, model = modelTemp })\n                if curEnt.pos.x > 100 then\n                    M.M12S.ArmyInfo.Right[M.M12S.ArmyInfo.RightCnt] = curEnt\n                    M.M12S.ArmyInfo.RightCnt = M.M12S.ArmyInfo.RightCnt + 1\n                else\n                    M.M12S.ArmyInfo.Left[M.M12S.ArmyInfo.LeftCnt] = curEnt\n                    M.M12S.ArmyInfo.LeftCnt = M.M12S.ArmyInfo.LeftCnt + 1\n                end\n                if modelTemp == 19200 and M.M12S.ArmyInfo.FirstPurple == nil then\n                    M.M12S.ArmyInfo.FirstPurple = curEnt\n                end\n            end\n            M.M12S.ArmyInfo.Temp = {}\n        end\n        if table.size(M.M12S.ArmyInfo.ids) == 8 then\n            M.M12S.ArmyInfo.Timer = Now()\n        end\n    end\n    if M.M12S.ArmyInfo.FirstPurple ~= nil then\n        local buff = TensorCore.getBuff(M.GetPlayer().id, 3935)\n        if buff == nil then\n            local dps = { \"D1\", \"D2\", \"D3\", \"D4\" }\n            local posListTh, posListDps\n            local entListTh\n            if M.M12S.ArmyInfo.FirstPurple.pos.x > 100 then\n                posListDps = M.M12S.ArmyInfo.PositionLeft\n                posListTh = M.M12S.ArmyInfo.PositionRight\n                entListTh = M.M12S.ArmyInfo.Right\n            else\n                posListDps = M.M12S.ArmyInfo.PositionRight\n                posListTh = M.M12S.ArmyInfo.PositionLeft\n                entListTh = M.M12S.ArmyInfo.Left\n            end\n            if table.contains(dps, M.SelfPos) then\n                local index = M.IndexOf(dps, M.SelfPos)\n                local pos = posListDps[index]\n                M.M12S.ArmyInfo.SelfIdx = index\n                M.FrameDirect(pos.x, pos.z)\n            elseif table.size(M.M12S.ArmyInfo.ids) == 8 then\n                if M.M12S.ArmyInfo.THOrder == nil then\n                    M.M12S.ArmyInfo.THOrder = {}\n                    for i = 1, 4 do\n                        local ball = entListTh[i]\n                        local model = Argus.getEntityModel(ball.id)\n                        if model == 19200 then\n                            if not M.M12S.ArmyInfo.GotPos[\"MT\"] then\n                                M.M12S.ArmyInfo.THOrder[\"MT\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"MT\"] = true\n                            else\n                                M.M12S.ArmyInfo.THOrder[\"ST\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"ST\"] = true\n                            end\n                        else\n                            if not M.M12S.ArmyInfo.GotPos[\"H1\"] then\n                                M.M12S.ArmyInfo.THOrder[\"H1\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"H1\"] = true\n                            else\n                                M.M12S.ArmyInfo.THOrder[\"H2\"] = i\n                                M.M12S.ArmyInfo.GotPos[\"H2\"] = true\n                            end\n                        end\n                    end\n                    M.M12S.ArmyInfo.SelfIdx = M.M12S.ArmyInfo.THOrder[M.SelfPos]\n                    d(M.M12S.ArmyInfo.THOrder)\n                else\n                    local pos = posListTh[M.M12S.ArmyInfo.SelfIdx]\n                    M.FrameDirect(pos.x, pos.z)\n                end\n            end\n        else\n            if M.M12S.ArmyInfo.SelfIdx == 1 then\n                local player = M.GetPlayer()\n                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                if buff.duration > 8.5 and TensorCore.getDistance2d(player.pos, boss.pos) < 13.8 then\n                    if player.pos.x > 100 then\n                        M.FrameDirect(114, 89)\n                    else\n                        M.FrameDirect(86, 89)\n                    end\n                elseif buff.duration > 5.5 then\n                    M.FrameDirect(100, 101.5)\n                end\n            else\n                if buff.duration > 5.5 then\n                    M.FrameDirect(100, 101.5)\n                end\n            end\n        end\n        if M.Config.Main.M12SExDraw and table.size(M.M12S.ArmyInfo.ids) == 8 then\n            if TimeSince(M.M12S.ArmyInfo.Timer) > 1200 then\n                local changed = false\n                for i, player in pairs(M.Party) do\n                    local debuff = TensorCore.getBuff(player.id, 3935)\n                    if debuff ~= nil and debuff.duration > 11 then\n                        changed = true\n                        break\n                    end\n                end\n                if changed then\n                    M.M12S.ArmyInfo.State = M.M12S.ArmyInfo.State + 1\n                    M.M12S.ArmyInfo.Timer = Now()\n                end\n            end\n            if M.M12S.ArmyInfo.State <= 4 then\n                local target1, target2\n                local ball1 = M.M12S.ArmyInfo.All[M.M12S.ArmyInfo.State * 2 - 1]\n                local ball2 = M.M12S.ArmyInfo.All[M.M12S.ArmyInfo.State * 2]\n                local boss = TensorCore.mGetEntity(M.M12S.CurrentBoss.id)\n                local distance = 10000\n                --找ball1的目标\n                for _, player in pairs(M.Party) do\n                    local curPlayer = TensorCore.mGetEntity(player.id)\n                    if (ball1.ent.pos.x > 100 and curPlayer.pos.x > 100)\n                            or (ball1.ent.pos.x < 100 and curPlayer.pos.x < 100)\n                    then\n                        local dis = TensorCore.getDistance2d(boss.pos, curPlayer.pos)\n                        if dis < distance then\n                            target1 = curPlayer\n                            distance = dis\n                        end\n                    end\n                end\n                distance = 10000\n                --找ball2的目标\n                for _, player in pairs(M.Party) do\n                    local curPlayer = TensorCore.mGetEntity(player.id)\n                    if curPlayer.id ~= target1.id and (\n                            (ball2.ent.pos.x > 100 and curPlayer.pos.x > 100)\n                                    or (ball2.ent.pos.x < 100 and curPlayer.pos.x < 100))\n                    then\n                        local dis = TensorCore.getDistance2d(boss.pos, curPlayer.pos)\n                        if dis < distance then\n                            target2 = curPlayer\n                            distance = dis\n                        end\n                    end\n                end\n                local greenDrawer = Argus2.ShapeDrawer:new(\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                        1\n                )\n                local purpleDrawer = Argus2.ShapeDrawer:new(\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.1)),\n                        (GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)),\n                        1\n                )\n\n                if ball1.model == 19200 then\n                    purpleDrawer:addCircle(target1.pos.x, target1.pos.y, target1.pos.z, 6)\n                else\n                    greenDrawer:addCircle(target1.pos.x, target1.pos.y, target1.pos.z, 6)\n                end\n                if ball2.model == 19200 then\n                    purpleDrawer:addCircle(target2.pos.x, target2.pos.y, target2.pos.z, 6)\n                else\n                    greenDrawer:addCircle(target2.pos.x, target2.pos.y, target2.pos.z, 6)\n                end\n            end\n        end\n    end\nend\nself.used = true",
-						conditions = 
-						{
-							
-							{
-								"79695dbf-76bd-fb59-b4fc-c6c7b59db258",
-								true,
-							},
-							
-							{
-								"3b5a92e6-57ae-be17-86cc-738c6cb9d5f5",
-								true,
-							},
-						},
-						gVar = "ACR_RikuMNK3_CD",
-						name = "致命灾变主循环",
-						uuid = "49501902-5a85-0242-b59e-9c16a80420c1",
-						version = 2.1,
-					},
-				},
-			},
-			conditions = 
-			{
-				
-				{
-					data = 
-					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "79695dbf-76bd-fb59-b4fc-c6c7b59db258",
-						version = 3,
-					},
-				},
-				
-				{
-					data = 
-					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.ArmySlayer ~= nil and MuAiGuide.M12S.ArmySlayer == true",
-						name = "致命灾变",
-						uuid = "3b5a92e6-57ae-be17-86cc-738c6cb9d5f5",
-						version = 3,
-					},
-				},
-			},
-			enabled = false,
-			eventType = 12,
-			name = "M12S门神致命灾变-old",
-			uuid = "5c033546-267b-04d9-8c1f-cadb1ae80315",
-			version = 2,
-		},
-		inheritedIndex = 23,
 	}, 
 	inheritedProfiles = 
 	{

@@ -9,8 +9,11 @@ local DrawFruConfigUI = function(M)
         GUI:SetNextWindowPos(M.FruConfigUI.x, M.FruConfigUI.y, GUI.SetCond_Appearing)
         M.FruConfigUI.visible, M.FruConfigUI.open = GUI:Begin("MuAiGuide Fru Setting", M.FruConfigUI.open)
         if M.FruConfigUI.visible then
+	        M.Config.Main.AnyOneReactionOn = GUI:Checkbox("关闭一些本插件和Anyone重复功能", M.Config.Main.AnyOneReactionOn)
+            GUI:TextColored(0, 1, 0, 1, "※包含：P2滑冰瞄准器，P3自动背对，引导灯画图")
+	        GUI:Separator()
             GUI:SetNextWindowPos(M.FruConfigUI.x, M.FruConfigUI.y, GUI.SetCond_Appearing)
-            GUI:TextColored(255, 0, 0, 1, "※所有非优先级八方均按照C开始逆时针一周填写")
+            GUI:TextColored(1, 0, 0, 1, "※所有非优先级八方均按照C开始逆时针一周填写")
             if GUI:CollapsingHeader("全局设置") then
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("1.一键默认") then
