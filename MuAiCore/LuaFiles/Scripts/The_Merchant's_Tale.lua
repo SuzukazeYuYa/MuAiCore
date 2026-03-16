@@ -1063,11 +1063,11 @@ end
 
 local Boss_14291_Update = function()
 	local curBoss = getCurBoss()
-	if curBoss ~= nil and not curBoss.alive then
-		changeState(MuAiGuide.Merchant.State.Boss2_Start)
+	local mmd = MuAiGuide.Merchant
+	if curBoss ~= nil and not curBoss.alive and mmd.CurrentState < mmd.State.Boss2_Start then
+		changeState(mmd.State.Boss2_Start)
 		return
 	end
-	local mmd = MuAiGuide.Merchant
 	OnUpdateSpell45866()
 	OnUpdateSpell45849()
 	OnUpdateMark20()
@@ -1396,7 +1396,7 @@ end
 
 local Boss_14323_Update = function()
 	local curBoss = getCurBoss()
-	if curBoss ~= nil and not curBoss.alive then
+	if curBoss ~= nil and not curBoss.alive and MuAiGuide.Merchant.CurrentState < MuAiGuide.Merchant.State.Boss3_Start then
 		changeState(MuAiGuide.Merchant.State.Boss3_Start)
 		return
 	end
@@ -1932,11 +1932,11 @@ end
 
 local Boss_14274_Update = function()
 	local curBoss = getCurBoss()
-	if curBoss ~= nil and not curBoss.alive then
-		changeState(MuAiGuide.Merchant.State.Boss3_P4_End)
+	local mmd = MuAiGuide.Merchant
+	if curBoss ~= nil and not curBoss.alive and mmd.CurrentState <  mmd.State.Boss3_P4_End then
+		changeState(mmd.State.Boss3_P4_End)
 		return
 	end
-	local mmd = MuAiGuide.Merchant
 	if mmd == nil or mmd.CurrentState == nil then
 		return
 	end
