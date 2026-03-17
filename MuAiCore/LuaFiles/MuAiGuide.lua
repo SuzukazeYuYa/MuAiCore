@@ -473,6 +473,7 @@ M.checkVersion = function(auto)
     local url = string.format("https://gist.githubusercontent.com/SuzukazeYuYa/3967e5bc841aa3b28cea219d7da6c74c/raw/MuAiCoreVerson.txt?nocache=%d", Now())
     local cmd = string.format('powershell -Command "(Invoke-WebRequest -Uri \'%s\' -UseBasicParsing).Content"', url)
     local result = io.popen(cmd):read("*a"):gsub("%s+$", "")
+    M.LatestVersion = result
     if not auto then
         if result ~= nil then
             local verNumber = tonumber(result)
@@ -481,16 +482,16 @@ M.checkVersion = function(auto)
             else
                 M.MsgUI.Show(2, {
                     "版本检查完毕：",
-                    "   当前版本：" .. (M.getCurVer())
-                    "   最新版本：" .. verNumber
-                    "是否立刻进行更新？"
+                    "   当前版本：" .. (M.getCurVer()),
+                    "   最新版本：" .. tostring(verNumber),
+                    "是否立刻进行更新？",
+                    "如进行更新，在更新过程中会短暂卡屏，请耐心等待。"
                 })
             end
         else
             M.MsgUI.Show(3, {"版本检查失败，请检查网络或重新启动游戏后再次尝试。"})
         end
     end
-    M.LatestVersion = result
 end
 
 --- 同步配置字段

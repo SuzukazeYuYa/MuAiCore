@@ -763,7 +763,6 @@ local DrawMainUI = function(M)
                 if GUI:IsItemClicked(0) then
                     M.UI.open = false
                     M.FruConfigUI.open = false
-                    M.Info('更新过程中会短暂卡屏, 请耐心等待.')
                     M.ForceUpdate()
                 end
                 GUI:TextColored(1, 1, 0, 1, '提示：如无法正常更新，请点击上方链接手动覆盖！')

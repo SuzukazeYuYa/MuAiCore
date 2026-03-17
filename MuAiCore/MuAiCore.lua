@@ -306,7 +306,7 @@ local checkNeedReload = function()
 	end
 	if MuAiGuide.LatestVersion ~= nil then
 		MuAiGuide.updateVerNumber()
-		MuAiGuide.Info("MuAiCore已更新，当前版本：ver." .. MuAiGuide.LatestVersion)
+        MuAiGuide.MsgUI.Show(3, {"MuAiCore已更新，当前版本：ver." .. MuAiGuide.LatestVersion})
 	end
 	Reload()
 end
