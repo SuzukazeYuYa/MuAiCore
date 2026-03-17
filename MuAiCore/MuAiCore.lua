@@ -2,7 +2,7 @@ local MuAiCore = {}
 local AddonName = "MuAiCore"
 local core = MuAiCore
 local autoPopMap = { 1238, 1122, 1325, 1327, 1317 }
-local mainDrawer, fruConfigDrawer, fruMitigationDrawer
+local mainDrawer, fruConfigDrawer, fruMitigationDrawer, messageBoxDrawer
 local lastMap, lastJob, updateTime
 local updateNeedReLoad = false
 local lastVersion
@@ -421,6 +421,13 @@ core.DrawFruMitigationUI = function()
 	fruMitigationDrawer(MuAiGuide)
 end
 
+core.DrawMessageBoxUI = function()
+    if messageBoxDrawer == nil or MuAiGuide.DevelopMode then
+        messageBoxDrawer = FileLoad(MuAiGuideRoot .. "MessageBoxUI.lua")
+    end
+    messageBoxDrawer(MuAiGuide)
+end
+
 core.Initialize = function()
 	core.InitMuAiGuide(true)
 	lastVersion = MuAiGuide.getCurVer()
@@ -463,6 +470,9 @@ core.Draw = function()
 		if MuAiGuide.FruMitigationUI.open and not MuAiGuide.IsHealer(Player.job) then
 			core.DrawFruMitigationUI()
 		end
+        if MuAiGuide.MsgUI.open then
+            core.DrawMessageBoxUI()
+        end
 	end
 end
 
