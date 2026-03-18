@@ -12,7 +12,15 @@ local DrawMsgBox = function(M)
         end
         GUI:Dummy(0, lineSpace)
         for i = 1, #M.MsgUI.MsgTable do
-            GUI:TextWrapped(M.MsgUI.MsgTable[i])
+            local curLine = M.MsgUI.MsgTable[i]
+            if string.find(curLine, "Tab") then
+                local data = MuAiGuide.StringSplit(curLine, "|")
+                GUI:Dummy(20, 0)
+                GUI:SameLine()
+                GUI:TextWrapped(data[2])
+            else
+                GUI:TextWrapped(curLine)
+            end
         end
         GUI:Dummy(0, lineSpace)
         GUI:Separator()
@@ -71,16 +79,30 @@ local DrawMsgBox = function(M)
     local screenWidth, screenHeight = GUI:GetScreenSize()
     local tempWidth, tempHeight = 0, 0
     GUI:SetNextWindowPos(-9999, -9999, GUI.SetCond_Always)
+    --数据采集用窗口
     local visible = GUI:Begin("居中使用的隐藏窗口", true, GUI.WindowFlags_NoInputs)
     if visible then
         drawWindow()
     end
     GUI:End()
     tempWidth, tempHeight = GUI:GetWindowSize()
+    GUI:PushStyleColor(GUI.Col_WindowBg, 0.0, 0, 0, 0.3)
+    GUI:SetNextWindowPos(0, 0, GUI.SetCond_Always)
+    GUI:SetNextWindowSize(screenWidth, screenHeight, GUI.SetCond_Appearing) 
+    -- 背景窗口
+    GUI:Begin("MuAiMsgBoxBgWindow", true,
+            GUI.WindowFlags_NoTitleBar
+                    + GUI.WindowFlags_NoMove
+                    + GUI.WindowFlags_NoScrollbar
+                    + GUI.WindowFlags_NoCollapse
+                    + GUI.WindowFlags_NoBringToFrontOnFocus
+    )
     GUI:End()
+    GUI:PopStyleColor(1)
+    -- 实际窗口
     GUI:SetNextWindowPos((screenWidth - 350) / 2, (screenHeight - tempHeight) / 2 - 50, GUI.SetCond_Always)
     GUI:SetNextWindowSize(350, 0, GUI.SetCond_Appearing)
-    M.MsgUI.visible, M.MsgUI.open = GUI:Begin('提示##MuAiGuideHit', M.MsgUI.open,
+    M.MsgUI.visible, M.MsgUI.open = GUI:Begin('MuAiMsgBoxTopWindow', M.MsgUI.open,
             GUI.WindowFlags_NoTitleBar
                     + GUI.WindowFlags_NoResize
                     + GUI.WindowFlags_NoMove

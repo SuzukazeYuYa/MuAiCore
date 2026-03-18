@@ -489,19 +489,21 @@ M.checkVersion = function(auto)
                 handle2:close()
                 if logs ~= nil and logs ~= '' then
                     local infoTable = { "版本检查完毕：",
-                                        "   当前版本：" .. (M.getCurVer()),
-                                        "   最新版本：" .. tostring(verNumber)
+                                        "Tab|当前版本：" .. (M.getCurVer()),
+                                        "Tab|最新版本：" .. tostring(verNumber)
                     }
                     local logsData = M.StringSplit(logs, "|")
                     local logVer = tonumber(logsData[1])
                     if logVer ~= nil and logVer == verNumber then
+                        table.insert(infoTable, "")
                         table.insert(infoTable, logVer .. "版本更新内容：")
                         for i = 2, #logsData do
-                            table.insert(infoTable, "  " .. logsData[i])
+                            table.insert(infoTable, ("Tab|" .. logsData[i]))
                         end
+                        table.insert(infoTable, "")
                     end
                     table.insert(infoTable, "是否立刻进行更新？")
-                    table.insert(infoTable, " 如进行更新，在更新过程中会短暂卡屏，请耐心等待。")
+                    table.insert(infoTable, "如进行更新，过程中会短暂卡屏，请耐心等待。")
                     M.MsgUI.Show(2, infoTable)
                 else
                     M.MsgUI.Show(2, {

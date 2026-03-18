@@ -15,10 +15,10 @@ local DrawMainUI = function(M)
         end
     end
     if M.UI.tabs == nil then
-        M.UI.tabs = GUI_CreateTabs('职能,基本,副本,辅助,调试,支持一下')
+        M.UI.tabs = GUI_CreateTabs('职能,基本,副本,辅助,开发,支持')
     end
     GUI:SetNextWindowSize(200, 0, GUI.SetCond_Appearing)
-    M.UI.visible, M.UI.open = GUI:Begin('MuAiGuide Setting', M.UI.open)
+    M.UI.visible, M.UI.open = GUI:Begin('MuAiGuide Setting', M.UI.open, GUI.WindowFlags_NoCollapse)
     if M.UI.visible then
         GUI:Separator()
         GUI:Dummy(3, 2)
@@ -638,7 +638,10 @@ local DrawMainUI = function(M)
         elseif tabindex == 5 then
             GUI:Dummy(6, 0)
             GUI:SameLine()
-            GUI:TextColored(1, 0, 0, 1, '※不知道干嘛的千万别动！')
+            GUI:TextColored(1, 0, 0, 1, '※本页内容为开发工具！')
+            GUI:Dummy(6, 0)
+            GUI:SameLine()
+            GUI:TextColored(1, 0, 0, 1, '※不知道具体作用请勿乱动！')
             if not M.DebugMode then
                 GUI:PushItemWidth(40)
                 GUI:Dummy(6, 0)
@@ -652,7 +655,6 @@ local DrawMainUI = function(M)
                 GUI:SameLine(0, 50)
                 GUI:Button('开始调试', 120, 20)
                 if GUI:IsItemClicked(0) then
-                    d(M.IndexOf(M.JobPosName, M.DebugPos))
                     if not table.contains(M.JobPosName, M.DebugPos) then
                         M.Info('填写有误!')
                         M.Debug('填写有误!')
@@ -675,16 +677,24 @@ local DrawMainUI = function(M)
             GUI:Dummy(6, 0)
             GUI:SameLine()
             M.DevelopMode = GUI:Checkbox('UI开发模式', M.DevelopMode)
-            GUI:SameLine(125, 81)
+            GUI:Dummy(6, 0)
+            GUI:SameLine()
             GUI:Button('重载MuAiGuide', 120, 20)
             if GUI:IsItemClicked(0) then
                 M.UI.open = false
                 M.FruConfigUI.open = false
                 ReloadMuAiGuide()
             end
+            GUI:SameLine(205, 0)
+            GUI:Button('刷新版本号', 120, 20)
+            if GUI:IsItemClicked(0) then
+                if M.LatestVersion ~= nil then
+                    MuAiGuide.updateVerNumber()
+                end
+            end
             GUI:Dummy(6, 0)
             GUI:SameLine()
-            M.ScriptDevelopMode = GUI:Checkbox('副本调试', M.ScriptDevelopMode)
+            M.ScriptDevelopMode = GUI:Checkbox('副本脚本调试', M.ScriptDevelopMode)
             if M.ScriptDevelopMode then
                 GUI:Dummy(6, 0)
                 GUI:SameLine()
@@ -752,6 +762,8 @@ local DrawMainUI = function(M)
             GUI:SameLine(0, 0)
             GUI:Button('尝试检查版本', 120, 20)
             if GUI:IsItemClicked(0) then
+                M.UI.open = false
+                M.FruConfigUI.open = false
                 M.checkVersion()
             end
         else
@@ -768,10 +780,12 @@ local DrawMainUI = function(M)
                 GUI:TextColored(1, 1, 0, 1, '提示：如无法正常更新，请点击上方链接手动覆盖！')
             else
                 GUI:AlignFirstTextHeightToWidgets()
-                GUI:TextColored(0, 1, 0, 1, '   当前已是最新版本: ver.' .. M.LatestVersion .. '   ')
+                GUI:TextColored(0, 1, 0, 1, '   当前已是最新版本: ver.' .. M.getCurVer() .. '   ')
                 GUI:SameLine(0, 0)
                 GUI:Button('检查更新', 100, 20)
                 if GUI:IsItemClicked(0) then
+                    M.UI.open = false
+                    M.FruConfigUI.open = false
                     M.checkVersion()
                 end
             end
