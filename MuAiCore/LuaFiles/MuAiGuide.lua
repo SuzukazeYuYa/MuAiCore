@@ -472,24 +472,49 @@ M.checkVersion = function(auto)
     M.LatestLog = nil
     local url = string.format("https://gist.githubusercontent.com/SuzukazeYuYa/3967e5bc841aa3b28cea219d7da6c74c/raw/MuAiCoreVerson.txt?nocache=%d", Now())
     local cmd = string.format('powershell -Command "(Invoke-WebRequest -Uri \'%s\' -UseBasicParsing).Content"', url)
-    local result = io.popen(cmd):read("*a"):gsub("%s+$", "")
+    local handle1 = io.popen(cmd)
+    local result = handle1:read("*a"):gsub("%s+$", "")
+    handle1:close()
     M.LatestVersion = result
     if not auto then
         if result ~= nil then
             local verNumber = tonumber(result)
             if verNumber == M.getCurVer() then
-                M.MsgUI.Show(3, {"版本检查完毕：没有发现新的版本！"})
+                M.MsgUI.Show(3, { "版本检查完毕：没有发现新的版本！" })
             else
-                M.MsgUI.Show(2, {
-                    "版本检查完毕：",
-                    "   当前版本：" .. (M.getCurVer()),
-                    "   最新版本：" .. tostring(verNumber),
-                    "是否立刻进行更新？",
-                    "如进行更新，在更新过程中会短暂卡屏，请耐心等待。"
-                })
+                local urlLog = string.format("https://gist.githubusercontent.com/SuzukazeYuYa/cb01eb35b958b57d7d962235262ea05d/raw/MuAiCoreChangeLog.txt?nocache=%d", Now())
+                local cmd2 = string.format('powershell -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; (Invoke-WebRequest -Uri \'%s\' -UseBasicParsing).Content"', urlLog)
+                local handle2 = io.popen(cmd2)
+                local logs = handle2:read("*a"):gsub("%s+$", "")
+                handle2:close()
+                if logs ~= nil and logs ~= '' then
+                    local infoTable = { "版本检查完毕：",
+                                        "   当前版本：" .. (M.getCurVer()),
+                                        "   最新版本：" .. tostring(verNumber)
+                    }
+                    local logsData = M.StringSplit(logs, "|")
+                    local logVer = tonumber(logsData[1])
+                    if logVer ~= nil and logVer == verNumber then
+                        table.insert(infoTable, logVer .. "版本更新内容：")
+                        for i = 2, #logsData do
+                            table.insert(infoTable, "  " .. logsData[i])
+                        end
+                    end
+                    table.insert(infoTable, "是否立刻进行更新？")
+                    table.insert(infoTable, " 如进行更新，在更新过程中会短暂卡屏，请耐心等待。")
+                    M.MsgUI.Show(2, infoTable)
+                else
+                    M.MsgUI.Show(2, {
+                        "版本检查完毕：",
+                        "   当前版本：" .. (M.getCurVer()),
+                        "   最新版本：" .. tostring(verNumber),
+                        "是否立刻进行更新？",
+                        "如进行更新，在更新过程中会短暂卡屏，请耐心等待。"
+                    })
+                end
             end
         else
-            M.MsgUI.Show(3, {"版本检查失败，请检查网络或重新启动游戏后再次尝试。"})
+            M.MsgUI.Show(3, { "版本检查失败，请检查网络或重新启动游戏后再次尝试。" })
         end
     end
 end
