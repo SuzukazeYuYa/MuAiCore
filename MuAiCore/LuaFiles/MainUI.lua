@@ -14,12 +14,18 @@ local DrawMainUI = function(M)
             end
         end
     end
+    local IsSelected = function(member)
+        if member.label == M.UI.selected then
+            return true
+        end
+        return false
+    end
     if M.UI.tabs == nil then
         M.UI.tabs = GUI_CreateTabs('职能,基本,副本,辅助,开发,支持')
     end
-    GUI:SetNextWindowSize(200, 0, GUI.SetCond_Appearing)
-    M.UI.visible, M.UI.open = GUI:Begin('MuAiGuide Setting', M.UI.open, GUI.WindowFlags_NoCollapse)
-    if M.UI.visible then
+    GUI:SetNextWindowSize(355, 0, GUI.SetCond_Appearing)
+    M.UI.visible, M.UI.open = GUI:Begin('MuAiGuide Setting', M.UI.open)
+    if M.UI.visible and not GUI:IsWindowCollapsed() then
         GUI:Separator()
         GUI:Dummy(3, 2)
         GUI:AlignFirstTextHeightToWidgets()
@@ -81,9 +87,9 @@ local DrawMainUI = function(M)
                 M.Party.D3 = nil
                 M.Party.D4 = nil
             end
-            local partyMembers
+            local partyMembers, listHeight
             if M.GetPartyCnt() == 4 then
-                GUI:ListBoxHeader('##Jobs', 304, 130)
+                listHeight = 130
                 partyMembers = {
                     { info = M.Party.MT, label = 'MT' },
                     { info = M.Party.H1, label = 'H1' },
@@ -91,7 +97,7 @@ local DrawMainUI = function(M)
                     { info = M.Party.D2, label = 'D2' },
                 }
             else
-                GUI:ListBoxHeader('##Jobs', 304, 262)
+                listHeight = 262
                 partyMembers = {
                     { info = M.Party.MT, label = 'MT' },
                     { info = M.Party.ST, label = 'ST' },
@@ -103,13 +109,8 @@ local DrawMainUI = function(M)
                     { info = M.Party.D4, label = 'D4' }
                 }
             end
+            GUI:ListBoxHeader('##Jobs', 304, listHeight)
             for i, member in ipairs(partyMembers) do
-                local IsSelected = function()
-                    if member.label == M.UI.selected then
-                        return true
-                    end
-                    return false
-                end
                 local ptMember = partyMembers[i]
                 GUI:Dummy(7, 0)
                 GUI:SameLine()
@@ -140,7 +141,7 @@ local DrawMainUI = function(M)
                     local path = GetLuaModsPath() .. '\\MuAiCore\\Image\\JobIcon\\' .. tostring(ptMember.info.job) .. '.png'
                     GUI:Image(path, 25, 25)
                     GUI:SameLine(0, 25)
-                    GUI:Selectable(ptMember.info.name, IsSelected(), GUI.SelectableFlags_DontClosePopups, 0, 22)
+                    GUI:Selectable(ptMember.info.name, IsSelected(member), GUI.SelectableFlags_DontClosePopups, 0, 22)
                 else
                     local path = GetLuaModsPath() .. '\\MuAiCore\\Image\\JobIcon\\00.png'
                     if i <= 2 then
@@ -152,7 +153,7 @@ local DrawMainUI = function(M)
                     end
                     GUI:Image(path, 25, 25)
                     GUI:SameLine(0, 25)
-                    GUI:Selectable('未知玩家' .. i, IsSelected(), GUI.SelectableFlags_DontClosePopups, 0, 22)
+                    GUI:Selectable('未知玩家' .. i, IsSelected(member), GUI.SelectableFlags_DontClosePopups, 0, 22)
                 end
                 if M.GetPartyCnt() > 0 and GUI:IsItemHovered(GUI.HoveredFlags_AllowWhenBlockedByPopup + GUI.HoveredFlags_AllowWhenBlockedByActiveItem + GUI.HoveredFlags_AllowWhenOverlapped) then
                     if GUI:IsMouseDown(0) then
@@ -183,7 +184,6 @@ local DrawMainUI = function(M)
                         end
                     end
                 end
-
                 if M.UI.mousePosition ~= nil and (GUI:IsMouseReleased(0) or not GUI:IsMouseDown(0)) then
                     M.UI.mousePosition = nil
                 end
