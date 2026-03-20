@@ -37,13 +37,13 @@ local DrawFruConfigUI = function(M)
                     if GUI:IsItemClicked(0) then
                         M.FastMLM()
                     end
-                    GUI:TextColored(255, 255, 0, 1, "※一键配置说明※")
-                    GUI:TextColored(255, 255, 0, 1, "1.国服野队为当前主流，细节自行查看和修改。")
-                    GUI:TextColored(255, 255, 0, 1, "2.基本上mmw仅需改动P2光爆和P3地火，默认为六芒星、")
-                    GUI:TextColored(255, 255, 0, 1, "车头法原版。其他均已自动调好，不需要修改设置。")
-                    GUI:TextColored(255, 255, 0, 1, "3.MLM攻略目前在适配中，大体上已经完成，如果有问题")
-                    GUI:TextColored(255, 255, 0, 1, "请反馈时候帮忙提供一个卫月回放！")
-                    GUI:TextColored(255, 255, 0, 1, "4.各类繁杂的设置仅供缝合攻略使用，能不动尽量别动。")
+                    GUI:TextColored(1, 1, 0, 1, "※一键配置说明※")
+                    GUI:TextColored(1, 1, 0, 1, "1.国服野队为当前主流，细节自行查看和修改。")
+                    GUI:TextColored(1, 1, 0, 1, "2.基本上mmw仅需改动P2光爆和P3地火，默认为六芒星、")
+                    GUI:TextColored(1, 1, 0, 1, "车头法原版。其他均已自动调好，不需要修改设置。")
+                    GUI:TextColored(1, 1, 0, 1, "3.MLM攻略目前在适配中，大体上已经完成，如果有问题")
+                    GUI:TextColored(1, 1, 0, 1, "请反馈时候帮忙提供一个卫月回放！")
+                    GUI:TextColored(1, 1, 0, 1, "4.各类繁杂的设置仅供缝合攻略使用，能不动尽量别动。")
                     GUI:TreePop()
                 end
                 GUI:Separator()
@@ -139,7 +139,7 @@ local DrawFruConfigUI = function(M)
                     end
                     GUI:PopItemWidth()
                     GUI:SameLine()
-                    GUI:TextColored(255, 255, 0, 1, "※影响UI显示")
+                    GUI:TextColored(1, 1, 0, 1, "※影响UI显示")
                     GUI:TreePop()
                 end
             end
@@ -165,7 +165,7 @@ local DrawFruConfigUI = function(M)
                 GUI:Separator()
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("2.双分组") then
-                    GUI:TextColored(255, 255, 0, 1, "※含优先级设置，如高换反着写即可")
+                    GUI:TextColored(1, 1, 0, 1, "※含优先级设置，如高换反着写即可")
                     M.AddLabel("上方分组：", false, 127)
                     GUI:PushItemWidth(90)
                     local inputGroupUp, inputGroupUpChanged = GUI:InputText("##CatchTwoUp", M.StringJoin(M.Config.FruCfg.CatchTwoUp, ","), GUI.InputTextFlags_CharsNoBlank)
@@ -214,7 +214,7 @@ local DrawFruConfigUI = function(M)
                         end
                     else
                         M.Config.FruCfg.FruLightFireType = 1
-                        GUI:TextColored(0, 255, 0, 1, "   ※仅支持内外互换")
+                        GUI:TextColored(0, 1, 0, 1, "   ※仅支持内外互换")
                     end
 
                     if M.Config.FruCfg.FruLightFireType == 1 then
@@ -226,9 +226,9 @@ local DrawFruConfigUI = function(M)
                             M.Config.FruCfg.FruLightFireRestPos = M.StringSplit(restPos, ",")
                         end
                         if FruLightFireDir == 1 then
-                            GUI:TextColored(0, 255, 0, 1, "   ※左上、右上、左下、右下分别对应几号闲人")
+                            GUI:TextColored(0, 1, 0, 1, "   ※左上、右上、左下、右下分别对应几号闲人")
                         else
-                            GUI:TextColored(0, 255, 0, 1, "   ※左上、左下、右上、右下分别对应几号闲人")
+                            GUI:TextColored(0, 1, 0, 1, "   ※左上、左下、右上、右下分别对应几号闲人")
                         end
                     end
                     GUI:TreePop()
@@ -255,7 +255,7 @@ local DrawFruConfigUI = function(M)
                     elseif M.Config.FruCfg.TakeTowerType == 2 then
                         GUI:BulletText("成员设置：")
                         GUI:SameLine()
-                        GUI:TextColored(0, 255, 0, 1, "※第一个是固定，第二个是补位")
+                        GUI:TextColored(0, 1, 0, 1, "※第一个是固定，第二个是补位")
                         GUI:PushItemWidth(45)
                         GUI:Dummy(10, 0)
                         GUI:SameLine()
@@ -277,7 +277,7 @@ local DrawFruConfigUI = function(M)
                     elseif M.Config.FruCfg.TakeTowerType == 3 then
                         GUI:BulletText("成员设置：")
                         GUI:SameLine()
-                        GUI:TextColored(0, 255, 0, 1, "※对应位置以及优先级")
+                        GUI:TextColored(0, 1, 0, 1, "※对应位置以及优先级")
                         GUI:Dummy(10, 0)
                         GUI:SameLine()
                         GUI:PushItemWidth(65)
@@ -347,7 +347,7 @@ local DrawFruConfigUI = function(M)
                         M.Config.FruCfg.MirrorPosRange = M.StringSplit(inputRange, ",")
                     end
                     GUI:SameLine()
-                    GUI:TextColored(255, 0, 0, 1, "※面向红镜子")
+                    GUI:TextColored(1, 0, 0, 1, "※面向红镜子")
                     GUI:BulletText("近战站位：")
                     M.AddLabel("    第一波：", true, 115)
                     local inputMelee1, inputMelee1Changed = GUI:InputText("##MirrorPosMelee1", M.StringJoin(M.Config.FruCfg.MirrorPosMelee1, ","), GUI.InputTextFlags_CharsNoBlank)
@@ -355,14 +355,14 @@ local DrawFruConfigUI = function(M)
                         M.Config.FruCfg.MirrorPosMelee1 = M.StringSplit(inputMelee1, ",")
                     end
                     GUI:SameLine()
-                    GUI:TextColored(0, 255, 255, 1, "※背对蓝镜子")
+                    GUI:TextColored(0, 1, 1, 1, "※背对蓝镜子")
                     M.AddLabel("    第二波：", true, 115)
                     local inputMelee2, inputMelee2Changed = GUI:InputText("##MirrorPosMelee2", M.StringJoin(M.Config.FruCfg.MirrorPosMelee2, ","), GUI.InputTextFlags_CharsNoBlank)
                     if inputMelee2Changed then
                         M.Config.FruCfg.MirrorPosMelee2 = M.StringSplit(inputMelee2, ",")
                     end
                     GUI:SameLine()
-                    GUI:TextColored(255, 0, 0, 1, "※面向红镜子")
+                    GUI:TextColored(1, 0, 0, 1, "※面向红镜子")
                     GUI:PopItemWidth()
                     GUI:TreePop()
                 end
@@ -404,9 +404,9 @@ local DrawFruConfigUI = function(M)
                         M.Config.FruCfg.UltimateRelativityType = UltimateRelativityType
                     end
                     if M.Config.FruCfg.UltimateRelativityType == 1 then
-                        GUI:TextColored(0, 255, 255, 1, "   ※看小队列表获取优先级")
+                        GUI:TextColored(0, 1, 1, 1, "   ※看小队列表获取优先级")
                     elseif M.Config.FruCfg.UltimateRelativityType == 2 then
-                        GUI:TextColored(0, 255, 255, 1, "   ※日基自动摇号，根据摇到的号确定优先级")
+                        GUI:TextColored(0, 1, 1, 1, "   ※日基自动摇号，根据摇到的号确定优先级")
                     end
                     GUI:PopItemWidth()
                     GUI:TreePop()
@@ -422,13 +422,13 @@ local DrawFruConfigUI = function(M)
                     end
                     GUI:PopItemWidth()
                     if M.Config.FruCfg.ApocalypseGroupType == 1 then
-                        GUI:TextColored(0, 255, 255, 1, "   ※左右预站位，低优先级交换，包含车头法等")
+                        GUI:TextColored(0, 1, 1, 1, "   ※左右预站位，低优先级交换，包含车头法等")
                     elseif M.Config.FruCfg.ApocalypseGroupType == 3 then
-                        GUI:TextColored(0, 255, 255, 1, "   ※上下预站位，高优先级交换")
+                        GUI:TextColored(0, 1, 1, 1, "   ※上下预站位，高优先级交换")
                     elseif M.Config.FruCfg.ApocalypseGroupType == 2 then
-                        GUI:TextColored(0, 255, 255, 1, "   ※莫灵喵标记攻击左非攻击右")
+                        GUI:TextColored(0, 1, 1, 1, "   ※莫灵喵标记攻击左非攻击右")
                     else
-                        GUI:TextColored(0, 255, 255, 1, "   ※双分组固定站位")
+                        GUI:TextColored(0, 1, 1, 1, "   ※双分组固定站位")
                     end
                     if M.Config.FruCfg.ApocalypseGroupType <= 2 then
                         if M.Config.FruCfg.ApocalypseGroupType == 1 then
@@ -440,7 +440,7 @@ local DrawFruConfigUI = function(M)
                             end
                             GUI:PopItemWidth()
                             if M.Config.FruCfg.ApocalypseChangePos == 2 then
-                                GUI:TextColored(0, 255, 255, 1, "   ※根据第1次分摊时相对位置处理分散")
+                                GUI:TextColored(0, 1, 1, 1, "   ※根据第1次分摊时相对位置处理分散")
                             end
                         end
                         GUI:PushItemWidth(80)
@@ -451,11 +451,11 @@ local DrawFruConfigUI = function(M)
                         end
                         GUI:PopItemWidth()
                         if M.Config.FruCfg.ApocalypseType == 1 then
-                            GUI:TextColored(0, 255, 255, 1, "   ※车头固定，其他人去车头顺/逆下一个点")
+                            GUI:TextColored(0, 1, 1, 1, "   ※车头固定，其他人去车头顺/逆下一个点")
                         elseif M.Config.FruCfg.ApocalypseType == 2 then
-                            GUI:TextColored(0, 255, 255, 1, "   ※人群固定，车头去人群顺/逆上一个点")
+                            GUI:TextColored(0, 1, 1, 1, "   ※人群固定，车头去人群顺/逆上一个点")
                         elseif M.Config.FruCfg.ApocalypseType == 3 then
-                            GUI:TextColored(0, 255, 255, 1, "   ※地火起点固定，人群去自己起点最近的一个点")
+                            GUI:TextColored(0, 1, 1, 1, "   ※地火起点固定，人群去自己起点最近的一个点")
                         end
                     elseif M.Config.FruCfg.ApocalypseGroupType == 3 then
                         if M.Config.FruCfg.ApocalypseType > 2 then
@@ -477,7 +477,7 @@ local DrawFruConfigUI = function(M)
                         M.Config.FruCfg.P3DarkestDanceTaker = P3DarkestDanceTaker
                     end
                     GUI:SameLine()
-                    GUI:TextColored(255, 0, 0, 1, "※T玩家必填，其他人随意！")
+                    GUI:TextColored(1, 0, 0, 1, "※T玩家必填，其他人随意！")
                     GUI:PopItemWidth()
                     GUI:TreePop()
                 end
@@ -506,7 +506,7 @@ local DrawFruConfigUI = function(M)
                         M.Config.FruCfg.P4DarkestDanceTaker = P4DarkestDanceTaker
                     end
                     GUI:SameLine()
-                    GUI:TextColored(255, 0, 0, 1, "※T玩家必填，其他人随意！")
+                    GUI:TextColored(1, 0, 0, 1, "※T玩家必填，其他人随意！")
                     GUI:PopItemWidth()
                     GUI:TreePop()
                 end
@@ -590,7 +590,7 @@ local DrawFruConfigUI = function(M)
                         GUI:PopItemWidth()
                     else
                         GUI:SameLine()
-                        GUI:TextColored(0, 255, 0, 1, "※攻击1到4标记位置")
+                        GUI:TextColored(0, 1, 0, 1, "※攻击1到4标记位置")
                         GUI:PushItemWidth(20)
                         M.FruConfigUI.MarkInputRight = true
                         GUI:Dummy(10, 0)
@@ -636,7 +636,7 @@ local DrawFruConfigUI = function(M)
                             end
                         end
                         if not M.FruConfigUI.MarkInputRight then
-                            GUI:TextColored(255, 0, 0, 1, "错误，请检查填写的内容!")
+                            GUI:TextColored(1, 0, 0, 1, "错误，请检查填写的内容!")
                         end
                         GUI:PopItemWidth()
                     end
@@ -650,7 +650,7 @@ local DrawFruConfigUI = function(M)
                     end
                     GUI:PopItemWidth()
                     if M.Config.FruCfg.CrystallizeTimeKnockBack == 1 then
-                        GUI:TextColored(0, 255, 255, 1, "   ※Y字击退自动开启防击退")
+                        GUI:TextColored(0, 1, 1, 1, "   ※Y字击退自动开启防击退")
                     elseif M.Config.FruCfg.CrystallizeTimeKnockBack then
                         GUI:PushItemWidth(80)
                         M.AddLabel("回返位置：", false, 140)
@@ -808,7 +808,7 @@ local DrawFruConfigUI = function(M)
                 end
             end
             if GUI:CollapsingHeader("特别鸣谢") then
-                GUI:TextColored(0, 255, 255, 1, "※顺序不代表排名")
+                GUI:TextColored(0, 1, 1, 1, "※顺序不代表排名")
                 GUI:Dummy(20, 3)
                 GUI:SameLine()
                 GUI:Text("megaminx、ppu、Shippo、kaze")

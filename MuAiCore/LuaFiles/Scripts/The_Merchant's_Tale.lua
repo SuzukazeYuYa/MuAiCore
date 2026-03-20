@@ -1663,11 +1663,11 @@ local Boss_14323_Update = function()
                         --如果连线来源在左边
                         mmd.P3GetLineGuidePos = { x = _boss2Center.x + 19, z = linkFrom.pos.z }
                     else
-                        local partnerFrom
+                        local partnerFrom, partner
                         for _, ent in pairs(M.Party) do
                             if ent.id ~= player.id and TensorCore.hasBuff(ent.id, 4784) then
-                                local curEnt = TensorCore.mGetEntity(ent.id)
-                                partnerFrom = getTurnLineFrom(curEnt, 4784)
+                                partner = TensorCore.mGetEntity(ent.id)
+                                partnerFrom = getTurnLineFrom(partner, 4784)
                             end
                         end
                         if partnerFrom ~= nil then
@@ -1677,10 +1677,10 @@ local Boss_14323_Update = function()
                             elseif partnerFrom.pos.x < _boss2Center.x - 18 then
                                 mmd.P3GetLineGuidePos = { x = _boss2Center.x - 19, z = _boss2Center.z + 5 }
                             else
-                                if partnerFrom.pos.z > linkFrom.pos.z then
-                                    mmd.P3GetLineGuidePos = { x = _boss2Center.x + 19, z = _boss2Center.z - 5 }
-                                else
+                                if player.pos.z > partner.pos.z then
                                     mmd.P3GetLineGuidePos = { x = _boss2Center.x - 19, z = _boss2Center.z + 5 }
+                                else
+                                    mmd.P3GetLineGuidePos = { x = _boss2Center.x + 19, z = _boss2Center.z - 5 }
                                 end
                             end
                         end
@@ -1695,11 +1695,11 @@ local Boss_14323_Update = function()
                         --如果我的连线在下
                         mmd.P3GetLineGuidePos = { x = linkFrom.pos.x, z = _boss2Center.z - 19 }
                     else
-                        local partnerFrom
+                        local partnerFrom, partner
                         for _, ent in pairs(M.Party) do
                             if ent.id ~= player.id and TensorCore.hasBuff(ent.id, 4775) then
-                                local curEnt = TensorCore.mGetEntity(ent.id)
-                                partnerFrom = getTurnLineFrom(curEnt, 4775)
+                                partner = TensorCore.mGetEntity(ent.id)
+                                partnerFrom = getTurnLineFrom(partner, 4775)
                             end
                         end
                         if partnerFrom ~= nil then
@@ -1711,10 +1711,10 @@ local Boss_14323_Update = function()
                                 mmd.P3GetLineGuidePos = { x = _boss2Center.x + 5, z = _boss2Center.z + 19 }
                             else
                                 --都不是，看相对位置
-                                if partnerFrom.pos.x > linkFrom.pos.x then
-                                    mmd.P3GetLineGuidePos = { x = _boss2Center.x - 5, z = _boss2Center.z - 19 }
-                                else
+                                if player.pos.x > partner.pos.x then
                                     mmd.P3GetLineGuidePos = { x = _boss2Center.x + 5, z = _boss2Center.z + 19 }
+                                else
+                                    mmd.P3GetLineGuidePos = { x = _boss2Center.x - 5, z = _boss2Center.z - 19 }
                                 end
                             end
                         end
