@@ -826,10 +826,20 @@ M.LoadParty = function()
                     M.Party.H1 = members[i]
                 end
             else
-                if M.Party.D1 == nil then
-                    M.Party.D1 = members[i]
-                elseif M.Party.H2 == nil then
-                    M.Party.D2 = members[i]
+                if M.IsMelee(members[i].job) or M.IsMagic(members[i].job) then
+                    -- 近法优先分配近战
+                    if M.Party.D1 == nil then
+                        M.Party.D1 = members[i]
+                    elseif M.Party.D2 == nil then
+                        M.Party.D2 = members[i]
+                    end
+                elseif M.IsRange(members[i].job) then
+                    --远敏优先分配远程
+                    if M.Party.D2 == nil then
+                        M.Party.D2 = members[i]
+                    elseif M.Party.D1 == nil then
+                        M.Party.D1 = members[i]
+                    end
                 end
             end
         end

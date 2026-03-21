@@ -185,6 +185,7 @@ local initGlobalData = function()
             AoeInfo1 = {},
             AoeInfo2 = {},
         },
+        B2P1HasTurnLink = nil,
         B2P1SmallBlade = nil,
         B2P3Blade = nil,
         fireDance = {
@@ -774,13 +775,20 @@ local boss3FireDance2 = function(nextState, curWave)
                 basePos = mmd.B3P2FireDance.mid
             end
             local offset
-            if curWave == 1 and MuAiGuide.IsSameDirection(mmd.B3P2FireDance.aoeInfo.heading, math.pi / 2) then
-                offset = 2.5
+            if curWave == 1 then
+                -- 同侧
+                if MuAiGuide.IsSameDirection(mmd.B3P2FireDance.aoeInfo.heading, mmd.B3P2FireDance.guideDir) then
+                    offset = 2.5
+                else
+                    offset = 0.5
+                    if MuAiGuide.IsSameDirection(mmd.B3P2FireDance.guideDir, math.pi / 2) then
+                        basePos = { x = basePos.x + 0.5, y = basePos.y, z = basePos.z }
+                    elseif MuAiGuide.IsSameDirection(mmd.B3P2FireDance.guideDir, math.pi * 3 / 2) then
+                        basePos = { x = basePos.x - 0.5, y = basePos.y, z = basePos.z }
+                    end
+                end
             else
                 offset = 0.5
-            end
-            if curWave == 1 and MuAiGuide.IsSameDirection(mmd.B3P2FireDance.aoeInfo.heading, math.pi * 3 / 2) then
-                basePos = { x = basePos.x + 0.5, y = basePos.y, z = basePos.z }
             end
             local guidePos = TensorCore.getPosInDirection(basePos, heading, offset)
             MuAiGuide.FrameDirect(guidePos.x, guidePos.z)
@@ -1435,7 +1443,11 @@ local Boss_14323_Update = function()
                 break
             end
         end
-        if M.HasLine(player.id, 115) then
+        if mmd.B2P1HasTurnLink == nil and M.HasLine(player.id, 115) then
+            mmd.B2P1HasTurnLink = true
+        end 
+ 
+        if mmd.B2P1HasTurnLink then
             if mmd.B2P1SmallBlade == nil then
                 mmd.B2P1SmallBlade = getTurnLineFrom(player)
             end
@@ -2153,9 +2165,29 @@ local Boss_14274_Update = function()
                 mmd.B3P2FireDance.near = _boss3Center
                 mmd.B3P2FireDance.far = { x = _boss3Center.x + 10, y = _boss3Center.y, z = _boss3Center.z }
                 mmd.B3P2FireDance.mid = { x = _boss3Center.x + 5, y = _boss3Center.y, z = _boss3Center.z }
+                mmd.B3P2FireDance.guideDir = math.pi / 2
                 changeState(mmd.State.Boss3_P2_GetBuff)
             end
         elseif mmd.CurrentState == mmd.State.Boss3_P2_GetBuff then
+            if MuAiGuide.IsSameDirection(mmd.B3P2FireDance.aoeInfo.heading, math.pi / 2) then
+                local bCnt = 0
+                local dCnt = 0
+                for i, ent in pairs(MuAiGuide.Party) do
+                    local curPlayer = TensorCore.mGetEntity(ent.id)
+                    if curPlayer.pos.x > _boss3Center.x then
+                        bCnt = bCnt + 1
+                    else
+                        dCnt = dCnt + 1
+                    end
+                end
+                -- 检查到D侧人多
+                if dCnt > bCnt then
+                    -- 修正到D点处理
+                    mmd.B3P2FireDance.far = { x = _boss3Center.x - 10, y = _boss3Center.y, z = _boss3Center.z }
+                    mmd.B3P2FireDance.mid = { x = _boss3Center.x - 5, y = _boss3Center.y, z = _boss3Center.z }
+                    mmd.B3P2FireDance.guideDir = math.pi * 3 / 2
+                end
+            end
             boss3FireDance2(mmd.State.Boss3_P2_Turn1, 1)
         elseif mmd.CurrentState == mmd.State.Boss3_P2_Turn1 then
             boss3FireDance2(mmd.State.Boss3_P2_Turn2, 2)
