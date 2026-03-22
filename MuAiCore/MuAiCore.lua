@@ -19,7 +19,7 @@ local OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
     end
     if MuAiGuide then
         local ent = TensorCore.mGetEntity(entityID)
-        if ent == nil then
+        if ent == nil or ent.type == 1 then
             return
         end
         if MuAiGuide.Develop.ShowSkillId then
@@ -379,7 +379,11 @@ local checkNeedReload = function()
         MuAiGuide.FruMitigationUI.open = false
     end
     if MuAiGuide.LatestVersion ~= nil then
-        MuAiGuide.updateVerNumber()
+        local ver = tonumber(MuAiGuide.LatestVersion)
+        if ver == nil or ver == 0 then
+            return
+        end
+        MuAiGuide.VERSION = ver
         MuAiGuide.MsgUI.Show(3, { "MuAiCore已更新，当前版本：ver." .. MuAiGuide.LatestVersion })
     end
     Reload()
@@ -479,7 +483,7 @@ core.InitMuAiGuide = function(checkUpdate)
         MuAiGuide.checkVersion(true)
         if MuAiGuide.LatestVersion ~= nil and MuAiGuide.Config.Main.AutoUpdate then
             local latestVer = tonumber(MuAiGuide.LatestVersion)
-            if latestVer ~= nil and latestVer > MuAiGuide.getCurVer() then
+            if latestVer ~= nil and latestVer > MuAiGuide.VERSION then
                 core.ForceUpdate()
             end
         end

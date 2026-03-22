@@ -751,7 +751,7 @@ local DrawMainUI = function(M)
             GUI:Dummy(6, 0)
             GUI:SameLine()
             M.Develop.PrintAoeInfo = GUI:Checkbox('当AOE生成时将信息输出到聊天栏', M.Develop.PrintAoeInfo)
-           
+
             GUI:Dummy(3, 0)
             GUI:SameLine()
             GUI:Text('4.OnMapEffect')
@@ -772,16 +772,9 @@ local DrawMainUI = function(M)
                 M.FruConfigUI.open = false
                 ReloadMuAiGuide()
             end
-            GUI:SameLine(205, 0)
-            GUI:Button('刷新版本号', 120, 20)
-            if GUI:IsItemClicked(0) then
-                if M.LatestVersion ~= nil then
-                    MuAiGuide.updateVerNumber()
-                end
-            end
         elseif tabindex == 6 then
             local path = GetLuaModsPath() .. '\\MuAiCore\\Image\\QRCode.png'
-            GUI:TextColored(0, 1, 0, 1, '如果您觉得我做的很好, 可以支持一下.')
+            GUI:TextColored(0, 1, 0, 1, '如果您觉得本插件还不错, 可以支持一下.')
             GUI:Image(path, 340, 170)
             GUI:TextColored(0, 1, 0, 1, '        微  信')
             GUI:SameLine()
@@ -822,7 +815,7 @@ local DrawMainUI = function(M)
             GUI:TextColored(1, 1, 0, 1, '   获取在线版本信息失败！请检查网络状态，')
             GUI:TextColored(1, 1, 0, 1, '   或点击上方链接查看版本状态！')
             GUI:AlignFirstTextHeightToWidgets()
-            GUI:Text('                      ver.' .. M.getCurVer() .. ' ')
+            GUI:Text('                      ver.' .. M.VERSION)
             GUI:SameLine(0, 0)
             GUI:Button('尝试检查版本', 120, 20)
             if GUI:IsItemClicked(0) then
@@ -831,10 +824,10 @@ local DrawMainUI = function(M)
                 M.checkVersion()
             end
         else
-            if ver > M.getCurVer() then
+            if ver > M.VERSION then
                 GUI:TextColored(0, 1, 0, 1, '  有新的版本: ver.' .. M.LatestVersion)
                 GUI:SameLine(0, 20)
-                GUI:TextColored(1, 0, 0, 1, ' 当前版本: ver.' .. M.getCurVer() .. ' ')
+                GUI:TextColored(1, 0, 0, 1, ' 当前版本: ver.' .. M.VERSION .. ' ')
                 GUI:Button('点击此处进行更新', 335, 20)
                 if GUI:IsItemClicked(0) then
                     M.UI.open = false
@@ -844,7 +837,7 @@ local DrawMainUI = function(M)
                 GUI:TextColored(1, 1, 0, 1, '提示：如无法正常更新，请点击上方链接手动覆盖！')
             else
                 GUI:AlignFirstTextHeightToWidgets()
-                GUI:TextColored(0, 1, 0, 1, '   当前已是最新版本: ver.' .. M.getCurVer() .. '   ')
+                GUI:TextColored(0, 1, 0, 1, '   当前已是最新版本: ver.' .. M.VERSION .. '   ')
                 GUI:SameLine(0, 0)
                 GUI:Button('检查更新', 100, 20)
                 if GUI:IsItemClicked(0) then

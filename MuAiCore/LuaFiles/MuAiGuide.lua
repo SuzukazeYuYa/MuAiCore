@@ -1,4 +1,5 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
+M.VERSION = 281
 M.GlobalGuideY = nil
 M.Develop = {
     JobView = false,
@@ -22,26 +23,6 @@ M.Develop = {
     PrintMapEffect = false,
     ShowTetherInfo = false,
 }
----获取本地版本号
-M.getCurVer = function()
-    if M.Config.Main.LocalVer ~= nil then
-        return M.Config.Main.LocalVer
-    end
-    return 274
-end
-
----更新版本号
-M.updateVerNumber = function()
-    if M.LatestVersion == nil then
-        return
-    end
-    local ver = tonumber(M.LatestVersion)
-    if ver == nil or ver == 0 then
-        return
-    end
-    M.Config.Main.LocalVer = ver
-    M.SaveConfig(M.Config.MainPath, M.Config.MainFile, 'Main')
-end
 ------------------------------- UI -------------------------------
 --- UI定义
 M.UI = {}
@@ -249,7 +230,6 @@ end
 --- 创建默认配置
 M.CreateDefMainCfg = function()
     local mainCfg = {
-        LocalVer = 274,
         --- 指路工具颜色
         GuideColor = { r = 0, g = 1, b = 1, a = 0.5 },
         --- 指路工具颜色（分摊）
@@ -488,7 +468,7 @@ M.checkVersion = function(auto)
     if not auto then
         if result ~= nil then
             local verNumber = tonumber(result)
-            if verNumber == M.getCurVer() then
+            if verNumber == M.VERSION then
                 M.MsgUI.Show(3, { "版本检查完毕：没有发现新的版本！" })
             else
                 local urlLog = string.format("https://gist.githubusercontent.com/SuzukazeYuYa/cb01eb35b958b57d7d962235262ea05d/raw/MuAiCoreChangeLog.txt?nocache=%d", Now())
@@ -498,7 +478,7 @@ M.checkVersion = function(auto)
                 handle2:close()
                 if logs ~= nil and logs ~= '' then
                     local infoTable = { "版本检查完毕：",
-                                        "Tab|当前版本：" .. (M.getCurVer()),
+                                        "Tab|当前版本：" .. M.VERSION,
                                         "Tab|最新版本：" .. tostring(verNumber)
                     }
                     local logsData = M.StringSplit(logs, "|")
@@ -517,7 +497,7 @@ M.checkVersion = function(auto)
                 else
                     M.MsgUI.Show(2, {
                         "版本检查完毕：",
-                        "   当前版本：" .. (M.getCurVer()),
+                        "   当前版本：" .. M.VERSION,
                         "   最新版本：" .. tostring(verNumber),
                         "是否立刻进行更新？",
                         "如进行更新，在更新过程中会短暂卡屏，请耐心等待。"
@@ -1438,7 +1418,7 @@ end
 
 M.DrawGuidePreView = function()
     local testPos = TensorCore.getPosInDirection(Player.pos, Player.pos.h, 2)
-    M.DirectTo(testPos.x, testPos .z, 5000)
+    M.DirectTo(testPos.x, testPos.z, 5000)
 end
 
 M.DrawGuidePreViewGather = function()
