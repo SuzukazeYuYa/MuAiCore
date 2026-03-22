@@ -58,7 +58,7 @@ local DrawMainUI = function(M)
                     end
                 end
 
-                if M.DebugMode then
+                if M.Develop.JobView then
                     GUI:SameLine()
                     GUI:TextColored(1, 0, 0, 1, '[DEBUG]')
                 end
@@ -442,7 +442,6 @@ local DrawMainUI = function(M)
                 GUI:Dummy(6, 0)
                 GUI:SameLine()
                 M.Config.Main.M12SP2is13 = GUI:Checkbox('本体3运1|3分组撞球（仅奶妈有用）', M.Config.Main.M12SP2is13)
-
                 GUI:Dummy(6, 0)
                 GUI:SameLine()
                 GUI:AlignFirstTextHeightToWidgets()
@@ -638,45 +637,133 @@ local DrawMainUI = function(M)
         elseif tabindex == 5 then
             GUI:Dummy(6, 0)
             GUI:SameLine()
-            GUI:TextColored(1, 0, 0, 1, '※本页内容为开发工具！')
-            GUI:Dummy(6, 0)
-            GUI:SameLine()
-            GUI:TextColored(1, 0, 0, 1, '※不知道具体作用请勿乱动！')
-            if not M.DebugMode then
+            GUI:TextColored(1, 0, 0, 1, '※本页内容为开发工具，请勿乱动！')
+            GUI:Separator()
+            GUI:Dummy(0, 0)
+            GUI:BulletText('指路视角')
+            if not M.Develop.JobView then
                 GUI:PushItemWidth(40)
                 GUI:Dummy(6, 0)
                 GUI:SameLine()
-                local index = M.IndexOf(M.JobPosName, M.DebugPos)
+                local index = M.IndexOf(M.JobPosName, M.Develop.ViewedJob)
                 local debugJob, debugJobChange = GUI:Combo('作为第一视角', index, M.JobPosName, 10)
                 if debugJobChange then
-                    M.DebugPos = M.JobPosName[debugJob]
+                    M.Develop.ViewedJob = M.JobPosName[debugJob]
                 end
                 GUI:PopItemWidth()
                 GUI:SameLine(0, 50)
-                GUI:Button('开始调试', 120, 20)
+                GUI:Button('开始', 120, 20)
                 if GUI:IsItemClicked(0) then
-                    if not table.contains(M.JobPosName, M.DebugPos) then
-                        M.Info('填写有误!')
-                        M.Debug('填写有误!')
+                    if M.SelfPos then
+                        if not table.contains(M.JobPosName, M.Develop.ViewedJob) then
+                            M.MsgUI.Show(3, { '填写有误！请重新填写' })
+                        else
+                            M.Develop.JobView = true
+                            M.GetSelfPos()
+                            M.Info('进入视角调试模式, 当前视角：' .. M.SelfPos)
+                        end
                     else
-                        M.DebugMode = true
-                        M.GetSelfPos()
-                        M.Info('进入视角调试模式, 当前视角：' .. M.SelfPos)
+                        M.MsgUI.Show(3, { '当前没有加入小队！' })
                     end
                 end
             else
                 GUI:Dummy(6, 0)
                 GUI:SameLine()
-                GUI:Button('取消调试视角', 280, 20)
+                GUI:Button('取消视角', 280, 20)
                 if GUI:IsItemClicked(0) then
-                    M.DebugMode = false
+                    M.Develop.JobView = false
                     M.GetSelfPos()
                     M.Info('退出视角调试, 视角还原到：' .. M.SelfPos)
                 end
             end
+            GUI:Separator()
+            GUI:Dummy(0, 0)
+            GUI:BulletText('UI调试')
             GUI:Dummy(6, 0)
             GUI:SameLine()
-            M.DevelopMode = GUI:Checkbox('UI开发模式', M.DevelopMode)
+            GUI:Button('刷新UI', 120, 20)
+            if GUI:IsItemClicked(0) then
+                RefreshMuAiUI()
+            end
+            GUI:SameLine(205, 0)
+            M.Develop.UIRefresh = GUI:Checkbox('持续刷新', M.Develop.UIRefresh)
+            GUI:Separator()
+            GUI:Dummy(0, 0)
+            GUI:BulletText('脚本调试')
+            GUI:Dummy(6, 0)
+            GUI:SameLine()
+            M.Develop.ScRefresh = GUI:Checkbox('开启脚本调试', M.Develop.ScRefresh)
+            if M.Develop.ScRefresh then
+                GUI:Dummy(6, 0)
+                GUI:SameLine()
+                GUI:Button('重载副本脚本', 120, 20)
+                if GUI:IsItemClicked(0) then
+                    if (M[M.Develop.DateTable]) ~= nil then
+                        M.Develop.State = M[M.Develop.DateTable].CurrentState
+                        M.Debug('已缓存[' .. M.Develop.DateTable .. ']进度：' .. M[M.Develop.DateTable].CurrentState)
+                    end
+                    ReloadMuAiScripts()
+                end
+                GUI:SameLine(205, 0)
+                GUI:Button('恢复重载阶段', 120, 20)
+                if GUI:IsItemClicked(0) then
+                    if (M[M.Develop.DateTable]) ~= nil then
+                        M[M.Develop.DateTable].CurrentState = M.Develop.State
+                        M.Debug('恢复[' .. M.Develop.DateTable .. ']进度：' .. M.Develop.State)
+                    end
+                end
+            end
+            GUI:Separator()
+            GUI:Dummy(0, 0)
+            GUI:BulletText('Event工具')
+            GUI:Dummy(6, 0)
+            GUI:SameLine()
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text('公共显示时间(s) ')
+            GUI:SameLine()
+            GUI:PushItemWidth(180)
+            GUI:SliderInt('##ShowAddMarkTime', M.Develop.ShowTime, 1, 100)
+            GUI:PopItemWidth()
+            GUI:Dummy(3, 0)
+            GUI:SameLine()
+            GUI:Text('1.OnMarkerAdd')
+            GUI:Dummy(6, 0)
+            GUI:SameLine()
+            M.Develop.ShowMarkId = GUI:Checkbox('实体上显示MarkId', M.Develop.ShowMarkId)
+            GUI:Dummy(6, 0)
+            GUI:SameLine()
+            M.Develop.PrintMarkId = GUI:Checkbox('当实体AddMark时将信息输出到聊天栏', M.Develop.PrintMarkId)
+            GUI:Dummy(3, 0)
+            GUI:SameLine()
+            GUI:Text('2.OnEntityChannel')
+            GUI:Dummy(6, 0)
+            GUI:SameLine()
+            M.Develop.ShowSkillId = GUI:Checkbox('实体上显示读条ID', M.Develop.ShowSkillId)
+            GUI:Dummy(6, 0)
+            GUI:SameLine()
+            M.Develop.PrintChannelInfo = GUI:Checkbox('当实体读条时将信息输出到聊天栏', M.Develop.PrintChannelInfo)
+            GUI:Dummy(3, 0)
+            GUI:SameLine()
+            GUI:Text('3.OnAOECreate')
+            GUI:Dummy(6, 0)
+            GUI:SameLine()
+            M.Develop.CacheAoeInfo = GUI:Checkbox('缓存AOE信息', M.Develop.CacheAoeInfo)
+            GUI:Dummy(6, 0)
+            GUI:SameLine()
+            M.Develop.PrintAoeInfo = GUI:Checkbox('当AOE生成时将信息输出到聊天栏', M.Develop.PrintAoeInfo)
+           
+            GUI:Dummy(3, 0)
+            GUI:SameLine()
+            GUI:Text('4.OnMapEffect')
+            GUI:Dummy(6, 0)
+            GUI:SameLine()
+            M.Develop.PrintMapEffect = GUI:Checkbox('将OnMapEffect信息输出到聊天栏', M.Develop.PrintMapEffect)
+            GUI:Separator()
+            GUI:Dummy(0, 0)
+            GUI:BulletText('其他')
+            GUI:Dummy(6, 0)
+            GUI:SameLine()
+            M.Develop.ShowTetherInfo = GUI:Checkbox('显示所有实体连线信息', M.Develop.ShowTetherInfo)
             GUI:Dummy(6, 0)
             GUI:SameLine()
             GUI:Button('重载MuAiGuide', 120, 20)
@@ -690,29 +777,6 @@ local DrawMainUI = function(M)
             if GUI:IsItemClicked(0) then
                 if M.LatestVersion ~= nil then
                     MuAiGuide.updateVerNumber()
-                end
-            end
-            GUI:Dummy(6, 0)
-            GUI:SameLine()
-            M.ScriptDevelopMode = GUI:Checkbox('副本脚本调试', M.ScriptDevelopMode)
-            if M.ScriptDevelopMode then
-                GUI:Dummy(6, 0)
-                GUI:SameLine()
-                GUI:Button('重载副本脚本', 120, 20)
-                if GUI:IsItemClicked(0) then
-                    if (M[M.ScriptDataTableName]) ~= nil then
-                        M.ScriptDevelopState = M[M.ScriptDataTableName].CurrentState
-                        M.Debug('已缓存[' .. M.ScriptDataTableName .. ']进度：' .. M[M.ScriptDataTableName].CurrentState)
-                    end
-                    ReloadMuAiScripts()
-                end
-                GUI:SameLine(205, 0)
-                GUI:Button('恢复重载阶段', 120, 20)
-                if GUI:IsItemClicked(0) then
-                    if (M[M.ScriptDataTableName]) ~= nil then
-                        M[M.ScriptDataTableName].CurrentState = M.ScriptDevelopState
-                        M.Debug('恢复[' .. M.ScriptDataTableName .. ']进度：' .. M.ScriptDevelopState)
-                    end
                 end
             end
         elseif tabindex == 6 then

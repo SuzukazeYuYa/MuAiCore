@@ -1,18 +1,27 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
---- 是否开启测试模式
-M.DebugMode = false
---- 测试模式玩家职能
-M.DebugPos = "MT"
---- 是否开了UI开发模式
-M.DevelopMode = false
-M.ScriptDevelopMode = false
-M.ScriptDevelopState = nil
-M.ScriptDataTableName = nil
-M.ScriptDevelopTableReg = function(key)
-    M.ScriptDataTableName = key
-end
 M.GlobalGuideY = nil
-
+M.Develop = {
+    JobView = false,
+    ViewedJob = "MT",
+    UIRefresh = false,
+    ScRefresh = false,
+    State = nil,
+    DateTable = nil,
+    DateCatch = false,
+    Reg = function(key)
+        M.Develop.DateTable = key
+    end,
+    ShowMarkId = false,
+    ShowTime = 10,
+    PrintMarkId = false,
+    ShowSkillId = false,
+    PrintChannelInfo = false,
+    CacheAoeInfo = false,
+    PrintAoeInfo = false,
+    AoeInfo = {},
+    PrintMapEffect = false,
+    ShowTetherInfo = false,
+}
 ---获取本地版本号
 M.getCurVer = function()
     if M.Config.Main.LocalVer ~= nil then
@@ -959,8 +968,8 @@ M.GetPlayer = function()
     if M.Party == nil then
         return TensorCore.mGetPlayer()
     end
-    if M.DebugMode then
-        local testPlayer = M.Party[M.DebugPos]
+    if M.Develop.JobView then
+        local testPlayer = M.Party[M.Develop.ViewedJob]
         if testPlayer == nil then
             return TensorCore.mGetPlayer()
         end
@@ -1453,6 +1462,55 @@ M.DrawGuidePreViewGather = function()
         end
     else
         M.Info("附近没有任何玩家！")
+    end
+end
+
+local fromIndex = {}
+M.DrawAllLink = function()
+    if not MuAiGuide.Develop.ShowTetherInfo then
+        return
+    end
+    local allTethers = Argus.getCurrentTethers()
+    if allTethers == nil or table.size(allTethers) == 0 then
+        return
+    end
+    local colors = {
+        { r = 1, g = 0, b = 0 },
+        { r = 0, g = 1, b = 0 },
+        { r = 0, g = 0, b = 1 },
+        { r = 0, g = 1, b = 1 },
+        { r = 1, g = 0, b = 1 },
+        { r = 1, g = 1, b = 0 },
+    }
+    local colorIdx = 1
+    for fromId, tethers in pairs(allTethers) do
+        if fromIndex[fromId] == nil then
+            fromIndex[fromId] = {}
+        end
+        for _, tether in pairs(tethers) do
+            local fromEnt = TensorCore.mGetEntity(fromId)
+            local entEnt = TensorCore.mGetEntity(tether.targetid)
+            if fromEnt == nil or entEnt == nil then
+                return
+            end
+            if fromIndex[fromId][tether.targetid] == nil then
+                if colorIdx > 6 then
+                    colorIdx = 1
+                end
+                fromIndex[fromId][tether.targetid] = colorIdx
+            end
+            local curFromIdx =  fromIndex[fromId][tether.targetid]
+            local curColor = colors[curFromIdx]
+            local curColorValue = GUI:ColorConvertFloat4ToU32(curColor.r, curColor.g, curColor.b, 1)
+            local drawer = TensorCore.getStaticDrawer(curColorValue, 1)
+            local formPos = { x = fromEnt.pos.x, y = fromEnt.pos.y + 0.2 * (curFromIdx - 1), z = fromEnt.pos.z }
+            local endPos = { x = entEnt.pos.x, y = entEnt.pos.y + 0.2 * (curFromIdx - 1), z = entEnt.pos.z }
+            local distance = TensorCore.getDistance2d(formPos, endPos)
+            local heading = TensorCore.getHeadingToTarget(formPos, endPos)
+            drawer:addArrow(formPos.x, formPos.y, formPos.z, heading, distance - 0.5, 0.1, 0.5, 0.25, true)
+            AnyoneCore.renderWorldText(tostring(tether.type), formPos, curColorValue, true, 1)
+            colorIdx = colorIdx + 1
+        end
     end
 end
 

@@ -17,6 +17,27 @@ local OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
     if currentScript ~= nil and currentScript.OnEntityChannel ~= nil then
         currentScript.OnEntityChannel(entityID, spellID, targetID, channelTimeMax)
     end
+    if MuAiGuide then
+        local ent = TensorCore.mGetEntity(entityID)
+        if ent == nil then
+            return
+        end
+        if MuAiGuide.Develop.ShowSkillId then
+            AnyoneCore.addTimedWorldTextOnEnt(
+                    MuAiGuide.Develop.ShowTime * 1000,
+                    'Spell:' .. tostring(spellID),
+                    entityID,
+                    GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
+                    true,
+                    3,
+                    4
+            )
+        end
+        if MuAiGuide.Develop.PrintChannelInfo then
+            MuAiGuide.Info('[' .. tostring(TensorReactions_CurrentCombatTimer)
+                    .. ']开始读条，实体名称：' .. ent.name .. ', 技能ID：' .. spellID .. "，判定时间：" .. channelTimeMax)
+        end
+    end
 end
 
 --- 添加标记时间事件
@@ -24,17 +45,66 @@ local OnMarkerAdd = function(entityID, markerID)
     if currentScript ~= nil and currentScript.OnMarkerAdd ~= nil then
         currentScript.OnMarkerAdd(entityID, markerID)
     end
+    if MuAiGuide then
+        local ent = TensorCore.mGetEntity(entityID)
+        if ent == nil then
+            return
+        end
+        if MuAiGuide.Develop.ShowMarkId then
+            AnyoneCore.addTimedWorldTextOnEnt(
+                    MuAiGuide.Develop.ShowTime * 1000,
+                    'Mark:' .. tostring(markerID),
+                    entityID,
+                    GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
+                    true,
+                    3,
+                    2
+            )
+        end
+        if MuAiGuide.Develop.PrintMarkId then
+            MuAiGuide.Info('[' .. tostring(TensorReactions_CurrentCombatTimer)
+                    .. ']添加标记，实体名称：' .. ent.name .. ', 标记ID：' .. markerID .. "。")
+        end
+    end
 end
+
 --- 注册AOE生成
 local OnAOECreate = function(aoeInfo)
     if currentScript ~= nil and currentScript.OnAOECreate ~= nil then
         currentScript.OnAOECreate(aoeInfo)
     end
+    if MuAiGuide then
+        if MuAiGuide.Develop.CacheAoeInfo then
+            if MuAiGuide.Develop.AoeInfo[aoeInfo.aoeID] == nil then
+                MuAiGuide.Develop.AoeInfo[aoeInfo.aoeID] = {}
+            end
+            table.insert(MuAiGuide.Develop.AoeInfo[aoeInfo.aoeID], aoeInfo)
+        end
+        if MuAiGuide.Develop.PrintAoeInfo then
+            MuAiGuide.Info('[' .. tostring(TensorReactions_CurrentCombatTimer)
+                    .. ']AOE生成，名称：' .. aoeInfo.aoeName
+                    .. ', ID：' .. aoeInfo.aoeID
+                    .. "，类型：" .. aoeInfo.aoeCastType
+                    .. "，朝向：" .. aoeInfo.heading
+            )
+        end
+    end
 end
+
 --- 注册OnEventObjectScriptFunc
 local OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
     if currentScript ~= nil and currentScript.OnEventObjectScriptFunc ~= nil then
         currentScript.OnEventObjectScriptFunc(entityID, a1, a2, a3)
+    end
+end
+
+local OnMapEffect = function(a1, a2, a3)
+    if currentScript ~= nil and currentScript.OnMapEffect ~= nil then
+        currentScript.OnMapEffect(a1, a2, a3)
+    end
+    if MuAiGuide and MuAiGuide.Develop.PrintAoeInfo then
+        MuAiGuide.Info('[' .. tostring(TensorReactions_CurrentCombatTimer)
+                .. ']OnMapEffect: |' .. a1 .. '|' .. a2 .. '|' .. a3 .. '|。')
     end
 end
 
@@ -69,6 +139,12 @@ local registerArgus = function()
         register["OnEventObjectScriptFunc"] = true
     else
         register["OnEventObjectScriptFunc"] = false
+    end
+    if Argus.registerOnMapEffect ~= nil and not register["OnMapEffect"] then
+        Argus.registerOnMapEffect(OnMapEffect)
+        register["OnMapEffect"] = true
+    else
+        register["OnMapEffect"] = false
     end
 end
 
@@ -262,8 +338,7 @@ local onMapChange = function()
         -- 进入副本
         currentScript = raidScript[Player.localmapid]
         currentScript.OnEnter()
-        if MuAiGuide.ScriptDevelopMode then
-            MuAiGuide.ScriptDevelopTableReg("Merchant")
+        if MuAiGuide.Develop.ScRefresh then
             MuAiGuide.Debug("进入副本：" .. currentScript.NameCN .. "(开发模式)")
         else
             MuAiGuide.Debug("进入副本：" .. currentScript.NameCN)
@@ -376,6 +451,13 @@ ReloadMuAiScripts = function()
     LoadScripts()
 end
 
+RefreshMuAiUI = function()
+    mainDrawer = FileLoad(MuAiGuideRoot .. "MainUI.lua")
+    fruConfigDrawer = FileLoad(MuAiGuideRoot .. "FruConfigUI.lua")
+    fruMitigationDrawer = FileLoad(MuAiGuideRoot .. "FruMitigationUI.lua")
+    messageBoxDrawer = FileLoad(MuAiGuideRoot .. "MessageBoxUI.lua")
+end
+
 core.InitMuAiGuide = function(checkUpdate)
     MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
     MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
@@ -405,28 +487,28 @@ core.InitMuAiGuide = function(checkUpdate)
 end
 
 core.DrawMainUI = function()
-    if mainDrawer == nil or MuAiGuide.DevelopMode then
+    if mainDrawer == nil or MuAiGuide.Develop.UIRefresh then
         mainDrawer = FileLoad(MuAiGuideRoot .. "MainUI.lua")
     end
     mainDrawer(MuAiGuide)
 end
 
 core.DrawFriConfigUI = function()
-    if fruConfigDrawer == nil or MuAiGuide.DevelopMode then
+    if fruConfigDrawer == nil or MuAiGuide.Develop.UIRefresh then
         fruConfigDrawer = FileLoad(MuAiGuideRoot .. "FruConfigUI.lua")
     end
     fruConfigDrawer(MuAiGuide)
 end
 
 core.DrawFruMitigationUI = function()
-    if fruMitigationDrawer == nil or MuAiGuide.DevelopMode then
+    if fruMitigationDrawer == nil or MuAiGuide.Develop.UIRefresh then
         fruMitigationDrawer = FileLoad(MuAiGuideRoot .. "FruMitigationUI.lua")
     end
     fruMitigationDrawer(MuAiGuide)
 end
 
 core.DrawMessageBoxUI = function()
-    if messageBoxDrawer == nil or MuAiGuide.DevelopMode then
+    if messageBoxDrawer == nil or MuAiGuide.Develop.UIRefresh then
         messageBoxDrawer = FileLoad(MuAiGuideRoot .. "MessageBoxUI.lua")
     end
     messageBoxDrawer(MuAiGuide)
@@ -464,6 +546,7 @@ core.Update = function()
     attackRangeReMake()
     if MuAiGuide then
         MuAiGuide.DrawTargetPos()
+        MuAiGuide.DrawAllLink()
     end
 end
 

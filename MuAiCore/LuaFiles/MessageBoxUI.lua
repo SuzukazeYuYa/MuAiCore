@@ -95,7 +95,6 @@ local DrawMsgBox = function(M)
                     + GUI.WindowFlags_NoMove
                     + GUI.WindowFlags_NoScrollbar
                     + GUI.WindowFlags_NoCollapse
-                    + GUI.WindowFlags_NoBringToFrontOnFocus
     )
     GUI:End()
     GUI:PopStyleColor(1)
@@ -112,6 +111,8 @@ local DrawMsgBox = function(M)
     )
     if M.MsgUI.visible and M.MsgUI.MsgTable ~= nil then
         drawWindow()
+        GUI:SetWindowFocus('MuAiMsgBoxBgWindow')
+        GUI:SetWindowFocus('MuAiMsgBoxTopWindow')
     end
     GUI:End()
 end

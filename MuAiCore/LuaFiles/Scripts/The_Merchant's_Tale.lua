@@ -1657,7 +1657,7 @@ local Boss_14323_Update = function()
             end
         end
     elseif mmd.CurrentState == mmd.State.Boss2_P3_GetLine then
-        if mmd.P3GetLineGuidePos == nil or MuAiGuide.ScriptDevelopMode then
+        if mmd.P3GetLineGuidePos == nil or MuAiGuide.Develop.ScRefresh then
             local buffType
             if TensorCore.hasBuff(player.id, 4784) then
                 buffType = 4784
@@ -2385,7 +2385,7 @@ local Boss_14274_Update = function()
                 return
             end
         end
-        if mmd.B3P3FireGuidePos2 == nil or MuAiGuide.ScriptDevelopMode then
+        if mmd.B3P3FireGuidePos2 == nil or MuAiGuide.Develop.ScRefresh then
             local firstFire, LastFire
             if mmd.B3P3FireType == "up" then
                 if mmd.B3P3Pillar[1].z > mmd.B3P3Pillar[2].z then
@@ -2564,7 +2564,7 @@ local Boss14274Init = function()
 end
 
 local OnBossChange = function(newBoss)
-    if not MuAiGuide.ScriptDevelopMode then
+    if not MuAiGuide.Develop.ScRefresh then
         initGlobalData()
     end
     if newBoss.contentid == 14291 then
@@ -3016,6 +3016,7 @@ end
 --- 进入副本
 G.OnEnter = function()
     G.CurBoss = nil
+    MuAiGuide.Develop.Reg("Merchant")
 end
 
 G.OnLeave = function()
