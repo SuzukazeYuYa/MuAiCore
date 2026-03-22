@@ -227,7 +227,7 @@ local initGlobalData = function()
         },
         B3P3FireType = nil,
         B3P3Fire = {},
-        B3P3FireLinkType = {},
+        B3P3FireLink = {},
         B3P3Pillar = {},
         B3P3FireGuidePos = nil,
         B3P3FireGuidePos2 = nil,
@@ -2385,7 +2385,7 @@ local Boss_14274_Update = function()
                 return
             end
         end
-        if mmd.B3P3FireGuidePos2 == nil then
+        if mmd.B3P3FireGuidePos2 == nil or MuAiGuide.ScriptDevelopMode then
             local firstFire, LastFire
             if mmd.B3P3FireType == "up" then
                 if mmd.B3P3Pillar[1].z > mmd.B3P3Pillar[2].z then
@@ -2398,8 +2398,11 @@ local Boss_14274_Update = function()
                 else
                     LastFire = mmd.B3P3Pillar[8]
                 end
-                if mmd.B3P3FireLinkType.buff == 4845 then
-                    if mmd.B3P3FireLinkType.isHigh then
+                if LastFire.x < _boss3Center.x + 10 then
+                    LastFire = firstFire
+                end
+                if mmd.B3P3FireLink.buff == 4845 then
+                    if mmd.B3P3FireLink.isHigh then
                         mmd.B3P3FireGuidePos2 = {
                             x = _boss3Center.x - 19,
                             z = _boss3Center.z + 19
@@ -2411,7 +2414,7 @@ local Boss_14274_Update = function()
                         }
                     end
                 else
-                    if mmd.B3P3FireLinkType.isHigh then
+                    if mmd.B3P3FireLink.isHigh then
                         mmd.B3P3FireGuidePos2 = {
                             x = _boss3Center.x - 19,
                             z = firstFire.z + 10.5
@@ -2434,8 +2437,11 @@ local Boss_14274_Update = function()
                 else
                     LastFire = mmd.B3P3Pillar[8]
                 end
-                if mmd.B3P3FireLinkType.buff == 4845 then
-                    if mmd.B3P3FireLinkType.isHigh then
+                if LastFire.x > _boss3Center.x - 10 then
+                    LastFire = firstFire
+                end
+                if mmd.B3P3FireLink.buff == 4845 then
+                    if mmd.B3P3FireLink.isHigh then
                         mmd.B3P3FireGuidePos2 = {
                             x = _boss3Center.x + 19,
                             z = _boss3Center.z - 19
@@ -2447,7 +2453,7 @@ local Boss_14274_Update = function()
                         }
                     end
                 else
-                    if mmd.B3P3FireLinkType.isHigh then
+                    if mmd.B3P3FireLink.isHigh then
                         mmd.B3P3FireGuidePos2 = {
                             x = _boss3Center.x + 19,
                             z = firstFire.z - 10.5
@@ -2460,7 +2466,8 @@ local Boss_14274_Update = function()
                     end
                 end
             end
-        else
+        end
+        if mmd.B3P3FireGuidePos2 ~= nil then
             local guidePos = mmd.B3P3FireGuidePos2
             MuAiGuide.FrameDirect(guidePos.x, guidePos.z)
         end
@@ -2907,8 +2914,8 @@ G.OnAOECreate = function(aoeInfo)
             end
             local selfIndex = MuAiGuide.IndexOf(_order, MuAiGuide.SelfPos)
             local otherIndex = MuAiGuide.IndexOf(_order, otherJob)
-            mmd.B3P3FireLinkType.isHigh = selfIndex < otherIndex
-            mmd.B3P3FireLinkType.buff = selfBuff
+            mmd.B3P3FireLink.isHigh = selfIndex < otherIndex
+            mmd.B3P3FireLink.buff = selfBuff
             changeState(mmd.State.Boss3_P3_FirstPillar)
         end
         if table.size(mmd.B3P3Pillar) >= 8 then
