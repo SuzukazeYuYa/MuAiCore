@@ -28,6 +28,7 @@
 <br>4、M12S，使用联合文档攻略，4运盗火改，参考下面链接，继承全局 MuAi\MuAiGeneral
 <br>    门神：https://docs.qq.com/doc/DUHZiZU54ZGx5eGZV?nlc=1
 <br>    本体：https://docs.qq.com/doc/DUEVnSkFnU0hqdHRt
+<br>5、异闻商客奇谭，野队一套攻略
 ## 免责声明
 本仓库内容仅供交流学习使用，如侵犯到您的权益，请及时联系！收到联系并确认有相关问题后，会在24小时内删除本页内容。
 
