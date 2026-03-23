@@ -10,7 +10,9 @@ local raidScript = {}
 local currentScript
 local register = {}
 local registerOK = false
-local wipeTime = 0
+local infoTime = function()
+    return string.format("%.3f", TensorReactions_CurrentCombatTimer)
+end
 
 --- 开始读条事件
 local OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
@@ -34,7 +36,7 @@ local OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
             )
         end
         if MuAiGuide.Develop.PrintChannelInfo then
-            MuAiGuide.Info('[' .. tostring(TensorReactions_CurrentCombatTimer)
+            MuAiGuide.Info('[' .. infoTime()
                     .. ']开始读条，实体名称：' .. ent.name .. ', 技能ID：' .. spellID .. "，判定时间：" .. channelTimeMax)
         end
     end
@@ -62,7 +64,7 @@ local OnMarkerAdd = function(entityID, markerID)
             )
         end
         if MuAiGuide.Develop.PrintMarkId then
-            MuAiGuide.Info('[' .. tostring(TensorReactions_CurrentCombatTimer)
+            MuAiGuide.Info('[' .. infoTime()
                     .. ']添加标记，实体名称：' .. ent.name .. ', 标记ID：' .. markerID .. "。")
         end
     end
@@ -81,7 +83,7 @@ local OnAOECreate = function(aoeInfo)
             table.insert(MuAiGuide.Develop.AoeInfo[aoeInfo.aoeID], aoeInfo)
         end
         if MuAiGuide.Develop.PrintAoeInfo then
-            MuAiGuide.Info('[' .. tostring(TensorReactions_CurrentCombatTimer)
+            MuAiGuide.Info('[' .. infoTime()
                     .. ']AOE生成，名称：' .. aoeInfo.aoeName
                     .. ', ID：' .. aoeInfo.aoeID
                     .. "，类型：" .. aoeInfo.aoeCastType
@@ -103,8 +105,29 @@ local OnMapEffect = function(a1, a2, a3)
         currentScript.OnMapEffect(a1, a2, a3)
     end
     if MuAiGuide and MuAiGuide.Develop.PrintAoeInfo then
-        MuAiGuide.Info('[' .. tostring(TensorReactions_CurrentCombatTimer)
+        MuAiGuide.Info('[' .. infoTime()
                 .. ']OnMapEffect: |' .. a1 .. '|' .. a2 .. '|' .. a3 .. '|。')
+    end
+end
+
+local OnAddEntityVFX = function(vfxID, vfxName, primaryEntityID, secondaryEntityID, time, a5, a6)
+    if currentScript ~= nil and currentScript.OnAddEntityVFX ~= nil then
+        currentScript.OnAddEntityVFX(vfxID, vfxName, primaryEntityID, secondaryEntityID, time, a5, a6)
+    end
+    if MuAiGuide and MuAiGuide.Develop.PrintVFXInfo then
+        if MuAiGuide.Develop.VFXFilter then
+            if vfxID > MuAiGuide.Develop.VFXFilterMax or vfxID < MuAiGuide.Develop.VFXFilterMin then
+                return
+            end
+        end
+        MuAiGuide.Info('[' .. infoTime()
+                .. ']OnAddVFX，vfxID：' .. vfxID .. '，vfxName：' .. vfxName
+                .. '，Other：|' .. primaryEntityID
+                .. '|' .. secondaryEntityID
+                .. '|' .. time
+                .. '|' .. a5
+                .. '|' .. a6 .. '|'
+        )
     end
 end
 
@@ -145,6 +168,12 @@ local registerArgus = function()
         register["OnMapEffect"] = true
     else
         register["OnMapEffect"] = false
+    end
+    if Argus.registerOnAddEntityVFXFunc ~= nil and not register["OnAddEntityVFX"] then
+        Argus.registerOnAddEntityVFXFunc(OnAddEntityVFX)
+        register["OnAddEntityVFX"] = true
+    else
+        register["OnAddEntityVFX"] = false
     end
 end
 
@@ -338,21 +367,13 @@ local onMapChange = function()
         -- 进入副本
         currentScript = raidScript[Player.localmapid]
         currentScript.OnEnter()
-        if MuAiGuide.Develop.ScRefresh then
-            MuAiGuide.Debug("进入副本：" .. currentScript.NameCN .. "(开发模式)")
-        else
-            MuAiGuide.Debug("进入副本：" .. currentScript.NameCN)
-        end
-    else
-        -- 退出副本
-        if currentScript ~= nil then
-            if currentScript.OnLeave ~= nil then
-                currentScript.OnLeave()
-                MuAiGuide.Debug("离开副本：" .. currentScript.NameCN)
-            end
-            currentScript = nil
-        end
+        MuAiGuide.Debug("进入副本：" .. currentScript.NameCN)
+    elseif currentScript ~= nil then
+        MuAiGuide.Debug("离开副本：" .. currentScript.NameCN)
+        currentScript = nil
+        MuAiGuide.CurRaidBoss = nil
     end
+
     if MoogleTelegraphs == nil or MoogleTelegraphs.Settings == nil then
         return
     end
@@ -401,34 +422,6 @@ end
 local onPlayerChangeJob = function()
     if MuAiGuide and MuAiGuide.Config and MuAiGuide.FruMitigation then
         MuAiGuide.FruMitigation.ChangeJob()
-    end
-end
-
-local onWipeCheck = function()
-    if not MuAiGuide or not MuAiGuide.Party
-            or table.size(MuAiGuide.Party) ~= 4 and table.size(MuAiGuide.Party) ~= 8 or TimeSince(wipeTime) < 2000 then
-        return
-    end
-    local partyCnt = table.size(MuAiGuide.Party)
-    local deadCnt, outComBatCnt, offlineCnt = 0, 0, 0
-    for _, ent in pairs(MuAiGuide.Party) do
-        local curEnt = TensorCore.mGetEntity(ent.id)
-        if curEnt == nil then
-            offlineCnt = offlineCnt + 1
-        elseif not curEnt.alive then
-            deadCnt = deadCnt + 1
-        elseif not curEnt.incombat then
-            outComBatCnt = outComBatCnt + 1
-        end
-    end
-    if deadCnt >= partyCnt
-            or (deadCnt > 0 and outComBatCnt > 0 and offlineCnt + deadCnt + outComBatCnt >= partyCnt) 
-            or (deadCnt > 0 and offlineCnt > 0 and offlineCnt + deadCnt + outComBatCnt >= partyCnt) 
-    then
-        if currentScript ~= nil then
-            currentScript.OnWipe()
-        end
-        wipeTime = Now()
     end
 end
 
@@ -535,7 +528,6 @@ core.Update = function()
     checkMuAiGuide()
     checkArgusRegister()
     checkHotKeyPress()
-    onWipeCheck()
     if Player.localmapid ~= 0 and lastMap ~= Player.localmapid then
         onMapChange()
         lastMap = Player.localmapid

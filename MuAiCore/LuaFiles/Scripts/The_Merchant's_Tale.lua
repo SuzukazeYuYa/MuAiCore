@@ -1,7 +1,6 @@
 local G = {}
 G.MapId = 1317
 G.NameCN = '异闻商客奇谭'
-G.CurBoss = nil
 
 local _gridCenters = {}
 local _boss1Center = { x = 375, y = -29.5, z = 530 }
@@ -66,13 +65,22 @@ local initGlobalData = function()
         State = {
             Start = 0,
             Boss1_Start = 1000,
-            Boss1_P1_ForceMove = 1101,
+            Boss1_P1_Song = 1101,
+            Boss1_P1_SongEnd = 1102,
+            Boss1_P1_ForceMove = 1103,
             Boss1_P1_End = 1199,
             Boss1_P2_GroudWater = 1201,
             Boss1_P2_GroudWaterEnd = 1202,
             Boss1_P2_Treasure = 1203,
-
             Boss1_P2_End = 1299,
+            Boss1_P3_Start = 1300,
+            Boss1_P3_PutMark = 1301,
+            Boss1_P3_Song = 1302,
+            Boss1_P3_SongEnd = 1303,
+            Boss1_P3_Song2 = 1304,
+            Boss1_P3_Song2End = 1305,
+            Boss1_P3_End = 1306,
+
             -- 老2
             Boss2_Start = 2000,
             Boss2_P1_Start = 2100,
@@ -137,6 +145,11 @@ local initGlobalData = function()
         mark22 = false,
         Timer46574 = 0,
         Timer47031 = 0,
+        SongStartTime1 = 0,
+        SongStartTime2 = 0,
+        SongStartTime3 = 0,
+        B1P1SongData = {},
+        B1P3SongData = {},
         spell45845 = {
             Timer = 0,
             Ids = {},
@@ -244,6 +257,7 @@ local initGlobalData = function()
         B3P4linkGuidePos = {},
         B3P4linkGuideTable = {}
     }
+    MuAiGuide.Info('异闻商客奇谭数据已初始化！')
 end
 
 local getCfg = function()
@@ -251,16 +265,17 @@ local getCfg = function()
 end
 
 local getCurBoss = function()
-    if G.CurBoss == nil then
+    if MuAiGuide.CurRaidBoss == nil then
         return nil
     end
-    return TensorCore.mGetEntity(G.CurBoss.id)
+    return TensorCore.mGetEntity(MuAiGuide.CurRaidBoss.id)
 end
 
 local changeState = function(state)
     MuAiGuide.Merchant.CurrentState = state
     MuAiGuide.Debug("阶段切换：" .. tostring(state))
 end
+
 local getTurnLineFrom = function(entity, buffType)
     local entityID = entity.id
     local tethers = Argus.getTethersOnEnt(entityID)
@@ -381,7 +396,7 @@ local OnUpdateMark20 = function()
     if not MuAiGuide.Merchant.mark20InState then
         return
     end
-    if TimeSince(MuAiGuide.Merchant.mark20Timer) < 7700 then
+    if TimeSince(MuAiGuide.Merchant.mark20Timer) < 7000 then
         for _, ent in pairs(MuAiGuide.Party) do
             if ent.id ~= Player.id then
                 local dis = 100000000
@@ -1069,6 +1084,38 @@ local changeStateByForceMoveEnd = function(state)
     return false
 end
 
+local drawSongAoe = function(vfxId)
+    if vfxId == 2746 then
+        for _, ent in pairs(TensorCore.entityList("contentid=14297")) do
+            if Argus.isEntityVisible(ent) then
+                _redDrawer:addCone(ent.pos.x, ent.pos.y, ent.pos.z, 45, math.pi / 3, ent.pos.h)
+            end
+        end
+    elseif vfxId == 2745 then
+        for _, ent in pairs(TensorCore.entityList("contentid=14296")) do
+            if Argus.isEntityVisible(ent) then
+                _redDrawer:addCone(ent.pos.x, ent.pos.y, ent.pos.z, 20, math.pi, ent.pos.h)
+            end
+        end
+    else
+        local searchStr
+        if vfxId == 2741 then
+            searchStr = "contentid=14292"
+        elseif vfxId == 2742 then
+            searchStr = "contentid=14293"
+        elseif vfxId == 2743 then
+            searchStr = "contentid=14294"
+        elseif vfxId == 2744 then
+            searchStr = "contentid=14295"
+        end
+        for _, ent in pairs(TensorCore.entityList(searchStr)) do
+            if Argus.isEntityVisible(ent) then
+                _redDrawer:addRect(ent.pos.x, ent.pos.y, ent.pos.z, 42, 8, ent.pos.h)
+            end
+        end
+    end
+end
+
 local Boss_14291_Update = function()
     local curBoss = getCurBoss()
     local mmd = MuAiGuide.Merchant
@@ -1076,14 +1123,38 @@ local Boss_14291_Update = function()
         changeState(mmd.State.Boss2_Start)
         return
     end
+    OnUpdateMark20()
     OnUpdateSpell45866()
     OnUpdateSpell45849()
-    OnUpdateMark20()
     if mmd == nil or mmd.CurrentState == nil then
         return
     end
     local player = MuAiGuide.GetPlayer()
-    if mmd.State.Boss1_P1_ForceMove <= mmd.CurrentState
+    if mmd.State.Boss1_P1_Song == mmd.CurrentState then
+        if table.size(mmd.B1P1SongData) < 4
+                or mmd.SongStartTime1 == 0
+                or TimeSince(mmd.SongStartTime1) < 7000
+        then
+            return
+        end
+        if getCfg().MerchantDraw then
+            if TimeSince(mmd.SongStartTime1) < 21600 then
+                local vfxId
+                if TimeSince(mmd.SongStartTime1) < 12600 then
+                    vfxId = MuAiGuide.Merchant.B1P1SongData[1]
+                elseif TimeSince(mmd.SongStartTime1) < 15600 then
+                    vfxId = MuAiGuide.Merchant.B1P1SongData[2]
+                elseif TimeSince(mmd.SongStartTime1) < 18600 then
+                    vfxId = MuAiGuide.Merchant.B1P1SongData[3]
+                else
+                    vfxId = MuAiGuide.Merchant.B1P1SongData[4]
+                end
+                drawSongAoe(vfxId)
+            else
+                changeState(mmd.State.Boss1_P1_SongEnd)
+            end
+        end
+    elseif mmd.State.Boss1_P1_ForceMove <= mmd.CurrentState
             and mmd.CurrentState < mmd.State.Boss1_P1_End then
         if getCfg().MerchantAimTool then
             OnUpDateMoveChecker()
@@ -1399,6 +1470,76 @@ local Boss_14291_Update = function()
         if guidePos ~= nil then
             MuAiGuide.FrameDirect(guidePos.x, guidePos.z)
         end
+    elseif mmd.CurrentState == mmd.State.Boss1_P3_Start then
+
+        for _, ent in pairs(MuAiGuide.Party) do
+            if TensorCore.hasBuff(ent.id, 2941)
+            then
+                changeState(mmd.State.Boss1_P3_PutMark)
+                return
+            end
+        end
+        local guidePos
+        if MuAiGuide.SelfPos == "MT" then
+            guidePos = { x = _boss1Center.x + 6, z = _boss1Center.z - 14 }
+        elseif MuAiGuide.SelfPos == "H1" then
+            guidePos = { x = _boss1Center.x - 14, z = _boss1Center.z - 6 }
+        elseif MuAiGuide.SelfPos == "D1" then
+            guidePos = { x = _boss1Center.x - 6, z = _boss1Center.z + 14 }
+        elseif MuAiGuide.SelfPos == "D2" then
+            guidePos = { x = _boss1Center.x + 14, z = _boss1Center.z + 6 }
+        end
+        if guidePos ~= nil then
+            MuAiGuide.FrameDirect(guidePos.x, guidePos.z)
+        end
+    elseif mmd.CurrentState == mmd.State.Boss1_P3_Song then
+        if table.size(mmd.B1P3SongData) < 4
+                or mmd.SongStartTime2 == 0
+                or TimeSince(mmd.SongStartTime2) < 7000
+        then
+            return
+        end
+        if getCfg().MerchantDraw then
+            if TimeSince(mmd.SongStartTime2) < 21600 then
+                local vfxId
+                if TimeSince(mmd.SongStartTime2) < 12600 then
+                    vfxId = MuAiGuide.Merchant.B1P3SongData[1]
+                elseif TimeSince(mmd.SongStartTime2) < 15600 then
+                    vfxId = MuAiGuide.Merchant.B1P3SongData[2]
+                elseif TimeSince(mmd.SongStartTime2) < 18600 then
+                    vfxId = MuAiGuide.Merchant.B1P3SongData[3]
+                else
+                    vfxId = MuAiGuide.Merchant.B1P3SongData[4]
+                end
+                drawSongAoe(vfxId)
+            else
+                changeState(mmd.State.Boss1_P3_SongEnd)
+            end
+        end
+    elseif mmd.CurrentState == mmd.State.Boss1_P3_Song2 then
+        if table.size(mmd.B1P3SongData) < 4
+                or mmd.SongStartTime3 == 0
+                or TimeSince(mmd.SongStartTime3) < 1000
+        then
+            return
+        end
+        if getCfg().MerchantDraw then
+            if TimeSince(mmd.SongStartTime2) < 17000 then
+                local vfxId
+                if TimeSince(mmd.SongStartTime2) < 8000 then
+                    vfxId = MuAiGuide.Merchant.B1P3SongData[1]
+                elseif TimeSince(mmd.SongStartTime2) < 11000 then
+                    vfxId = MuAiGuide.Merchant.B1P3SongData[2]
+                elseif TimeSince(mmd.SongStartTime2) < 14000 then
+                    vfxId = MuAiGuide.Merchant.B1P3SongData[3]
+                else
+                    vfxId = MuAiGuide.Merchant.B1P3SongData[4]
+                end
+                drawSongAoe(vfxId)
+            else
+                changeState(mmd.State.Boss1_P3_Song2End)
+            end
+        end
     end
 end
 
@@ -1445,8 +1586,8 @@ local Boss_14323_Update = function()
         end
         if mmd.B2P1HasTurnLink == nil and M.HasLine(player.id, 115) then
             mmd.B2P1HasTurnLink = true
-        end 
- 
+        end
+
         if mmd.B2P1HasTurnLink then
             if mmd.B2P1SmallBlade == nil then
                 mmd.B2P1SmallBlade = getTurnLineFrom(player)
@@ -2538,6 +2679,7 @@ local Boss_14274_Update = function()
         end
     end
 end
+
 local initGroud = function()
     _gridCenters = {}
     for row = 1, 5 do
@@ -2550,89 +2692,45 @@ local initGroud = function()
     end
 end
 
-local Boss14291Init = function()
-    initGroud()
-    changeState(MuAiGuide.Merchant.State.Boss1_Start)
-end
-
-local Boss14323Init = function()
-    changeState(MuAiGuide.Merchant.State.Boss2_Start)
-end
-
-local Boss14274Init = function()
-    changeState(MuAiGuide.Merchant.State.Boss3_Start)
-end
-
-local OnBossChange = function(newBoss)
-    if not MuAiGuide.Develop.ScRefresh then
-        initGlobalData()
+local InitBoss = function(entityID)
+    local ent = TensorCore.mGetEntity(entityID)
+    if ent == nil then
+        return
     end
-    if newBoss.contentid == 14291 then
+    initGlobalData()
+    MuAiGuide.CurRaidBoss = ent
+    if ent.contentid == 14291 then
+        initGroud()
         MuAiGuide.GlobalGuideY = _boss1Center.y
-        Boss14291Init()
-    elseif newBoss.contentid == 14323 then
+        changeState(MuAiGuide.Merchant.State.Boss1_Start)
+    elseif ent.contentid == 14323 then
         MuAiGuide.GlobalGuideY = _boss2Center.y
-        Boss14323Init()
-    elseif newBoss.contentid == 14274 then
+        changeState(MuAiGuide.Merchant.State.Boss2_Start)
+    elseif ent.contentid == 14274 then
         MuAiGuide.GlobalGuideY = _boss3Center.y
-        Boss14274Init()
-    end
-    if G.CurBoss ~= nil then
-        MuAiGuide.Info(G.CurBoss.name .. "初始化完成！")
+        changeState(MuAiGuide.Merchant.State.Boss3_Start)
     end
 end
 
-local SetBoss = function()
-    local curTarget = TensorCore.mGetTarget()
-    if curTarget == nil or not curTarget.attackable then
-        if (G.CurBoss == nil or not G.CurBoss.alive) and Player.alive then
-            local searchBoss
-            for _, ent in pairs(TensorCore.entityList("contentid=14323")) do
-                if Argus.isEntityVisible(ent) and (not ent.incombat or ent.charType == 5) and ent.alive then
-                    searchBoss = ent
-                    break
-                end
-            end
-            for _, ent in pairs(TensorCore.entityList("contentid=14274")) do
-                if Argus.isEntityVisible(ent) and (not ent.incombat or ent.charType == 5) and ent.alive then
-                    searchBoss = ent
-                    break
-                end
-            end
-            for _, ent in pairs(TensorCore.entityList("contentid=14291")) do
-                if Argus.isEntityVisible(ent) and (not ent.incombat or ent.charType == 5) and ent.alive then
-                    searchBoss = ent
-                    break
-                end
-            end
-            if searchBoss ~= nil then
-                G.CurBoss = TensorCore.mGetEntity(searchBoss.id)
-                OnBossChange(searchBoss)
-                MuAiGuide.Debug("当前目标不正确，已自动搜索BOSS" .. searchBoss.name)
-            end
-        end
-    else
-        if G.CurBoss == nil then
-            G.CurBoss = TensorCore.mGetEntity(curTarget.id)
-            if not curTarget.incombat or curTarget.hp.percent >= 99.9 then
-                OnBossChange(curTarget)
-            end
-        elseif curTarget.contentid ~= G.CurBoss.contentid then
-            G.CurBoss = TensorCore.mGetEntity(curTarget.id)
-            OnBossChange(curTarget)
-        elseif G.CurBoss.incombat and not curTarget.incombat then
-            G.CurBoss = TensorCore.mGetEntity(curTarget.id)
-            OnBossChange(curTarget)
-        end
-    end
-end
-
------------------------------ MuAiCore Call -----------------------------
+----------------------------- Internal Call -----------------------------
 G.OnEntityChannel = function(entityID, spellID, _)
     if not getCfg().Merchant then
         return
     end
     local mmd = MuAiGuide.Merchant
+    if spellID == 45803 or spellID == 45837 or spellID == 45870 or spellID == 45872 or spellID == 45873 --尖声坠刺
+            or spellID == 46632 or spellID == 46638 or spellID == 46681 or spellID == 46686 or spellID == 46720 or spellID == 48136 --剑气解放
+            or 45515 <= spellID and spellID <= 45517 -- 热波
+    then
+        if TensorReactions_CurrentCombatTimer < 15 then
+            InitBoss(entityID)
+            return
+        elseif spellID == 46720 then
+            if mmd.CurrentState > mmd.State.Boss2_P3_Start then
+                changeState(mmd.State.Boss2_P4_Start)
+            end
+        end
+    end
     if spellID == 45434 or spellID == 45435 or spellID == 45444    --火粉分散
             or spellID == 45436 or spellID == 45437 or spellID == 45445 --集火分摊
     then
@@ -2675,15 +2773,22 @@ G.OnEntityChannel = function(entityID, spellID, _)
             mmd.B3P1Sub.Timer = Now()
         end
     elseif 45839 <= spellID and spellID <= 45843 then
-        boss1SubDraw(entityID, spellID)
+        --boss1SubDraw(entityID, spellID)
     elseif spellID == 45845 or spellID == 45809 or spellID == 45776 then
         -- 空中漫游
         mmd.spell45845.Timer = Now()
         if mmd.CurrentState < mmd.State.Boss1_P1_ForceMove then
             changeState(mmd.State.Boss1_P1_ForceMove)
         end
-    elseif spellID == 45773 then
-        --小夜曲
+    elseif spellID == 45772 or spellID == 45773 or spellID == 45844 then
+        --和声小夜曲
+        if mmd.CurrentState < mmd.State.Boss1_P1_Song then
+            changeState(mmd.State.Boss1_P1_Song)
+            mmd.SongStartTime1 = Now()
+        else
+            changeState(mmd.State.Boss1_P3_Song)
+            mmd.SongStartTime2 = Now()
+        end
     elseif spellID == 45849 then
         -- 沉没宝藏
         --if mmd.CurrentState > mmd.State.Boss1_P2_End then
@@ -2704,6 +2809,8 @@ G.OnEntityChannel = function(entityID, spellID, _)
         --end
         mmd.spell45849.Timer = Now()
         mmd.spell45849.InState = true
+    elseif spellID == 45852 or spellID == 45783 or spellID == 45784 or spellID == 45817 or spellID == 45818 or spellID == 45855 then
+        changeState(mmd.State.Boss1_P3_Start)
     elseif spellID == 46693 then
         -- 四方凶兆
         if mmd.CurrentState == mmd.State.Boss2_Start then
@@ -2733,11 +2840,6 @@ G.OnEntityChannel = function(entityID, spellID, _)
         -- 咬击古狼闪
         mmd.Timer = Now()
         mmd.spell46715 = true
-    elseif spellID == 46720 then
-        -- 剑气释放
-        if mmd.CurrentState > mmd.State.Boss2_P3_Start then
-            changeState(mmd.State.Boss2_P4_Start)
-        end
     elseif spellID == 46721 then
         -- 光波钢剑舞
     elseif spellID == 46733 then
@@ -2939,6 +3041,10 @@ G.OnAOECreate = function(aoeInfo)
             changeState(mmd.State.Boss1_P2_GroudWater)
         end
         table.insert(mmd.aoeGroudWater.aoe, aoeInfo)
+    elseif aoeInfo.aoeID == 45844 then
+        -- 和声重奏曲
+        changeState(mmd.State.Boss1_P3_Song2)
+        mmd.SongStartTime3 = Now()
     elseif aoeInfo.aoeID == 45865 or aoeInfo.aoeID == 45866 then
         if mmd.spell45866.Timer == 0 then
             mmd.spell45866.InState = true
@@ -2969,6 +3075,9 @@ G.OnAOECreate = function(aoeInfo)
 end
 
 G.OnEventObjectScriptFunc = function(entityID, _, _, _)
+    if not getCfg().Merchant then
+        return
+    end
     local mmd = MuAiGuide.Merchant
     if not getCfg().Merchant then
         return
@@ -2992,44 +3101,40 @@ G.OnEventObjectScriptFunc = function(entityID, _, _, _)
         end
     end
 end
---- 每帧执行
-G.Update = function()
+
+G.OnAddEntityVFX = function(vfxID, vfxName, primaryEntityID, secondaryEntityID, time, a5, a6)
     if not getCfg().Merchant then
         return
     end
-    if MuAiGuide.Merchant == nil then
-        initGlobalData()
+    local mmd = MuAiGuide.Merchant
+    if vfxID == 2740 then
+        --小夜曲
+    elseif 2741 <= vfxID and vfxID <= 2746 then
+        if mmd.CurrentState < mmd.State.Boss1_P1_End then
+            table.insert(mmd.B1P1SongData, vfxID)
+        else
+            table.insert(mmd.B1P3SongData, vfxID)
+        end
     end
-    SetBoss()
-    if G.CurBoss == nil or MuAiGuide.Merchant == nil then
+end
+
+--- 每帧执行
+G.Update = function()
+    if not getCfg().Merchant or MuAiGuide.CurRaidBoss == nil or MuAiGuide.Merchant == nil then
         return
     end
-    if G.CurBoss.contentid == 14291 then
+    if MuAiGuide.CurRaidBoss.contentid == 14291 then
         Boss_14291_Update()
-    elseif G.CurBoss.contentid == 14323 then
+    elseif MuAiGuide.CurRaidBoss.contentid == 14323 then
         Boss_14323_Update()
-    elseif G.CurBoss.contentid == 14274 then
+    elseif MuAiGuide.CurRaidBoss.contentid == 14274 then
         Boss_14274_Update()
     end
 end
 
 --- 进入副本
 G.OnEnter = function()
-    G.CurBoss = nil
     MuAiGuide.Develop.Reg("Merchant")
-end
-
-G.OnLeave = function()
-    -- TODO Nothing
-end
---- 脱离战斗
-G.OnWipe = function()
-    if not getCfg().Merchant then
-        return
-    end
-    G.CurBoss = nil
-    initGlobalData()
-    MuAiGuide.Debug("团灭了！")
 end
 
 return G

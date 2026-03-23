@@ -1,5 +1,5 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
-M.VERSION = 281
+M.VERSION = 282
 M.GlobalGuideY = nil
 M.Develop = {
     JobView = false,
@@ -22,6 +22,10 @@ M.Develop = {
     AoeInfo = {},
     PrintMapEffect = false,
     ShowTetherInfo = false,
+    PrintVFXInfo = false,
+    VFXFilter = false,
+    VFXFilterMax = 65535,
+    VFXFilterMin = 0,
 }
 ------------------------------- UI -------------------------------
 --- UI定义
