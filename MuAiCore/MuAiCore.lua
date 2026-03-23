@@ -410,21 +410,21 @@ local onWipeCheck = function()
         return
     end
     local partyCnt = table.size(MuAiGuide.Party)
-    local deadCnt = 0
-    local outComBatCnt = 0
+    local deadCnt, outComBatCnt, offlineCnt = 0, 0, 0
     for _, ent in pairs(MuAiGuide.Party) do
         local curEnt = TensorCore.mGetEntity(ent.id)
         if curEnt == nil then
-            return
-        end
-        if not curEnt.alive then
+            offlineCnt = offlineCnt + 1
+        elseif not curEnt.alive then
             deadCnt = deadCnt + 1
         elseif not curEnt.incombat then
             outComBatCnt = outComBatCnt + 1
         end
     end
     if deadCnt >= partyCnt
-            or (deadCnt > 0 and outComBatCnt > 0 and deadCnt + outComBatCnt >= partyCnt) then
+            or (deadCnt > 0 and outComBatCnt > 0 and offlineCnt + deadCnt + outComBatCnt >= partyCnt) 
+            or (deadCnt > 0 and offlineCnt > 0 and offlineCnt + deadCnt + outComBatCnt >= partyCnt) 
+    then
         if currentScript ~= nil then
             currentScript.OnWipe()
         end
