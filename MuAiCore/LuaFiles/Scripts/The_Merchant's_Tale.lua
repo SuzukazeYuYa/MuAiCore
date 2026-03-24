@@ -312,7 +312,7 @@ local getTurnLineFrom = function(entity, buffType)
     return nil
 end
 
-local boss1SubDraw = function(entityID, spellID)
+--[[local boss1SubDraw = function(entityID, spellID)
     if not getCfg().MerchantDraw then
         return
     end
@@ -325,7 +325,7 @@ local boss1SubDraw = function(entityID, spellID)
     elseif spellID == 45842 then
         _redDrawer:addTimedCone(drawerTime, curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 20, math.pi, curEnt.pos.h)
     end
-end
+end]]
 
 local OnUpdateSpell45866 = function()
     local mmd = MuAiGuide.Merchant
@@ -2313,7 +2313,7 @@ local Boss_14274_Update = function()
             if MuAiGuide.IsSameDirection(mmd.B3P2FireDance.aoeInfo.heading, math.pi / 2) then
                 local bCnt = 0
                 local dCnt = 0
-                for i, ent in pairs(MuAiGuide.Party) do
+                for _, ent in pairs(MuAiGuide.Party) do
                     local curPlayer = TensorCore.mGetEntity(ent.id)
                     if curPlayer.pos.x > _boss3Center.x then
                         bCnt = bCnt + 1
@@ -3074,7 +3074,7 @@ G.OnAOECreate = function(aoeInfo)
     end
 end
 
-G.OnEventObjectScriptFunc = function(entityID, _, _, _)
+G.OnEventObjectScriptFunc = function(entityID)
     if not getCfg().Merchant then
         return
     end
@@ -3102,7 +3102,7 @@ G.OnEventObjectScriptFunc = function(entityID, _, _, _)
     end
 end
 
-G.OnAddEntityVFX = function(vfxID, vfxName, primaryEntityID, secondaryEntityID, time, a5, a6)
+G.OnAddEntityVFX = function(vfxID)
     if not getCfg().Merchant then
         return
     end
@@ -3120,7 +3120,11 @@ end
 
 --- 每帧执行
 G.Update = function()
-    if not getCfg().Merchant or MuAiGuide.CurRaidBoss == nil or MuAiGuide.Merchant == nil then
+    if not getCfg().Merchant 
+            or MuAiGuide.CurRaidBoss == nil 
+            or MuAiGuide.CurRaidBoss.contentid == nil 
+            or MuAiGuide.Merchant == nil
+    then
         return
     end
     if MuAiGuide.CurRaidBoss.contentid == 14291 then
