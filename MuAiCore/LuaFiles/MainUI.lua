@@ -841,12 +841,11 @@ local DrawMainUI = function(M)
         GUI:Separator()
         GUI:Dummy(10, 2)
         GUI:BulletText('版本信息')
-        local ver = tonumber(M.LatestVersion)
-        if ver == nil or M.LatestVersion == nil then
+        if M.LatestVer == nil then
             GUI:TextColored(1, 1, 0, 1, '   获取在线版本信息失败！请检查网络状态，')
             GUI:TextColored(1, 1, 0, 1, '   或点击上方链接查看版本状态！')
             GUI:AlignFirstTextHeightToWidgets()
-            GUI:Text('                      ver.' .. M.VERSION)
+            GUI:Text('                      ver.' .. M.VERSION .. ' ')
             GUI:SameLine(0, 0)
             GUI:Button('尝试检查版本', 120, 20)
             if GUI:IsItemClicked(0) then
@@ -855,15 +854,19 @@ local DrawMainUI = function(M)
                 M.checkVersion()
             end
         else
-            if ver > M.VERSION then
-                GUI:TextColored(0, 1, 0, 1, '  有新的版本: ver.' .. M.LatestVersion)
+            if M.LatestVer > M.VERSION then
+                GUI:TextColored(0, 1, 0, 1, '  有新的版本: ver.' .. M.LatestVer)
                 GUI:SameLine(0, 20)
                 GUI:TextColored(1, 0, 0, 1, ' 当前版本: ver.' .. M.VERSION .. ' ')
                 GUI:Button('点击此处进行更新', 335, 20)
                 if GUI:IsItemClicked(0) then
                     M.UI.open = false
                     M.FruConfigUI.open = false
-                    M.ForceUpdate()
+                    if M.LogInfo ~= nil then
+                        M.MsgUI.Show(2, M.LogInfo)
+                    else
+                        M.ForceUpdate()
+                    end
                 end
                 GUI:TextColored(1, 1, 0, 1, '提示：如无法正常更新，请点击上方链接手动覆盖！')
             else

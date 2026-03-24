@@ -231,6 +231,18 @@ M.ContainsIgnoreCase = function(tbl, target)
     return false
 end
 
+---使用系统CMD请求网络数据
+---@param url string 地址
+---@return string 获取的值
+M.WebRequest = function(url)
+    local urlStr = string.format("%s?nocache=%d", url, Now())
+    local cmd = string.format('powershell -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; (Invoke-WebRequest -Uri \'%s\' -UseBasicParsing).Content"', urlStr)
+    local handle = io.popen(cmd)
+    local resp = handle:read("*a"):gsub("%s+$", "")
+    handle:close()
+    return resp
+end
+
 --- 创建默认配置
 M.CreateDefMainCfg = function()
     local mainCfg = {
@@ -460,53 +472,35 @@ M.CreateFruDefaultCfg = function()
     }
 end
 
-M.checkVersion = function(auto)
-    M.LatestVersion = nil
-    M.LatestLog = nil
-    local url = string.format("https://gist.githubusercontent.com/SuzukazeYuYa/3967e5bc841aa3b28cea219d7da6c74c/raw/MuAiCoreVerson.txt?nocache=%d", Now())
-    local cmd = string.format('powershell -Command "(Invoke-WebRequest -Uri \'%s\' -UseBasicParsing).Content"', url)
-    local handle1 = io.popen(cmd)
-    local result = handle1:read("*a"):gsub("%s+$", "")
-    handle1:close()
-    M.LatestVersion = result
-    if not auto then
-        if result ~= nil then
-            local verNumber = tonumber(result)
-            if verNumber == M.VERSION then
+M.checkVersion = function(isAuto)
+    M.LatestVer = nil
+    M.LogInfo = nil
+    local resp = M.WebRequest('https://gist.githubusercontent.com/SuzukazeYuYa/cb01eb35b958b57d7d962235262ea05d/raw/MuAiCoreChangeLog.txt')
+    if resp ~= nil and resp ~= '' then
+        local logsData = M.StringSplit(resp, "|")
+        if logsData ~= nil and table.size(logsData) >= 0 then
+            M.LatestVer = tonumber(logsData[1])
+            local infoTable = { "版本检查完毕：",
+                                "Tab|当前版本：" .. M.VERSION,
+                                "Tab|最新版本：" .. tostring(M.LatestVer)
+            }
+            table.insert(infoTable, "")
+            table.insert(infoTable, tostring(M.LatestVer).. "版本更新内容：")
+            for i = 2, #logsData do
+                table.insert(infoTable, ("Tab|" .. logsData[i]))
+            end
+            table.insert(infoTable, "")
+            table.insert(infoTable, "是否立刻进行更新？")
+            table.insert(infoTable, "如进行更新，过程中会短暂卡屏，请耐心等待。")
+            M.LogInfo = infoTable
+        end
+    end
+    if not isAuto then
+        if M.LatestVer ~= nil then
+            if M.LatestVer == M.VERSION then
                 M.MsgUI.Show(3, { "版本检查完毕：没有发现新的版本！" })
             else
-                local urlLog = string.format("https://gist.githubusercontent.com/SuzukazeYuYa/cb01eb35b958b57d7d962235262ea05d/raw/MuAiCoreChangeLog.txt?nocache=%d", Now())
-                local cmd2 = string.format('powershell -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; (Invoke-WebRequest -Uri \'%s\' -UseBasicParsing).Content"', urlLog)
-                local handle2 = io.popen(cmd2)
-                local logs = handle2:read("*a"):gsub("%s+$", "")
-                handle2:close()
-                if logs ~= nil and logs ~= '' then
-                    local infoTable = { "版本检查完毕：",
-                                        "Tab|当前版本：" .. M.VERSION,
-                                        "Tab|最新版本：" .. tostring(verNumber)
-                    }
-                    local logsData = M.StringSplit(logs, "|")
-                    local logVer = tonumber(logsData[1])
-                    if logVer ~= nil and logVer == verNumber then
-                        table.insert(infoTable, "")
-                        table.insert(infoTable, logVer .. "版本更新内容：")
-                        for i = 2, #logsData do
-                            table.insert(infoTable, ("Tab|" .. logsData[i]))
-                        end
-                        table.insert(infoTable, "")
-                    end
-                    table.insert(infoTable, "是否立刻进行更新？")
-                    table.insert(infoTable, "如进行更新，过程中会短暂卡屏，请耐心等待。")
-                    M.MsgUI.Show(2, infoTable)
-                else
-                    M.MsgUI.Show(2, {
-                        "版本检查完毕：",
-                        "   当前版本：" .. M.VERSION,
-                        "   最新版本：" .. tostring(verNumber),
-                        "是否立刻进行更新？",
-                        "如进行更新，在更新过程中会短暂卡屏，请耐心等待。"
-                    })
-                end
+                M.MsgUI.Show(2, M.LogInfo)
             end
         else
             M.MsgUI.Show(3, { "版本检查失败，请检查网络或重新启动游戏后再次尝试。" })
@@ -1483,7 +1477,7 @@ M.DrawAllLink = function()
                 end
                 fromIndex[fromId][tether.targetid] = colorIdx
             end
-            local curFromIdx =  fromIndex[fromId][tether.targetid]
+            local curFromIdx = fromIndex[fromId][tether.targetid]
             local curColor = colors[curFromIdx]
             local curColorValue = GUI:ColorConvertFloat4ToU32(curColor.r, curColor.g, curColor.b, 1)
             local drawer = TensorCore.getStaticDrawer(curColorValue, 1)

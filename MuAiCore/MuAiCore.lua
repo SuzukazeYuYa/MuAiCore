@@ -399,13 +399,9 @@ local checkNeedReload = function()
         MuAiGuide.FruConfigUI.open = false
         MuAiGuide.FruMitigationUI.open = false
     end
-    if MuAiGuide.LatestVersion ~= nil then
-        local ver = tonumber(MuAiGuide.LatestVersion)
-        if ver == nil or ver == 0 then
-            return
-        end
-        MuAiGuide.VERSION = ver
-        MuAiGuide.MsgUI.Show(3, { "MuAiCore已更新，当前版本：ver." .. MuAiGuide.LatestVersion })
+    if MuAiGuide.LatestVer ~= nil then
+        MuAiGuide.VERSION = MuAiGuide.LatestVer
+        MuAiGuide.Info( "MuAiCore已更新，当前版本：ver." .. MuAiGuide.LatestVer )
     end
     Reload()
 end
@@ -474,9 +470,8 @@ core.InitMuAiGuide = function(checkUpdate)
     registerArgus()
     if checkUpdate then
         MuAiGuide.checkVersion(true)
-        if MuAiGuide.LatestVersion ~= nil and MuAiGuide.Config.Main.AutoUpdate then
-            local latestVer = tonumber(MuAiGuide.LatestVersion)
-            if latestVer ~= nil and latestVer > MuAiGuide.VERSION then
+        if MuAiGuide.LatestVer ~= nil and MuAiGuide.Config.Main.AutoUpdate then
+            if MuAiGuide.LatestVer > MuAiGuide.VERSION then
                 core.ForceUpdate()
             end
         end
