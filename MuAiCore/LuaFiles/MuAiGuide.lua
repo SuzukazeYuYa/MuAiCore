@@ -1,5 +1,5 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
-M.VERSION = 282
+M.VERSION = 283
 M.GlobalGuideY = nil
 M.Develop = {
     JobView = false,
@@ -24,6 +24,7 @@ M.Develop = {
     ShowTetherInfo = false,
     PrintVFXInfo = false,
     VFXFilter = false,
+    VFXFilterNoPlayer = false,
     VFXFilterMax = 65535,
     VFXFilterMin = 0,
 }
@@ -78,6 +79,7 @@ end
 --- @param value any 元素成员
 --- @return number index 索引
 M.IndexOf = function(orderTable, value)
+    value = value or M.SelfPos
     for i = 1, #orderTable, 1 do
         if value == orderTable[i] then
             return i
@@ -656,7 +658,7 @@ M.InitConfig = function()
 end
 
 ------------------------------- 游戏逻辑 -------------------------------
-local SupportMap = { 1238, 1122, 1325, 1327 }
+local ZeroYMap = { 1238, 1122, 1325, 1327 }
 local TankJobs = { 19, 21, 32, 37 }
 local HealerJobs = { 24, 28, 33, 40 }
 local MeleeJob = { 20, 22, 30, 34, 39, 41 }
@@ -1145,7 +1147,7 @@ M.DirectTo = function(x, z, time, size, delay)
     local curPlayer = M.GetPlayer()
     curPlayer = curPlayer or Player
     local drawY
-    if table.contains(SupportMap, Player.localmapid) then
+    if table.contains(ZeroYMap, Player.localmapid) then
         drawY = 0
     else
         if M.GlobalGuideY ~= nil then
@@ -1213,7 +1215,7 @@ M.LinkToPlayer = function(id, time, size, r, g, b, a)
     end
     local curPlayer = M.GetPlayer()
     local drawY
-    if table.contains(SupportMap, Player.localmapid) then
+    if table.contains(ZeroYMap, Player.localmapid) then
         drawY = 0
     else
         if M.GlobalGuideY ~= nil then
@@ -1262,7 +1264,7 @@ M.DirectToEnt = function(id, time, size)
     )
     local curPlayer = M.GetPlayer()
     local drawY
-    if table.contains(SupportMap, Player.localmapid) then
+    if table.contains(ZeroYMap, Player.localmapid) then
         drawY = 0
     else
         if M.GlobalGuideY ~= nil then
@@ -1317,7 +1319,7 @@ M.FrameDirect = function(x, z, size)
     size = size or 0.5
     local playerPos = TensorCore.mGetEntity((M.GetPlayer() or Player).id).pos
     local drawY
-    if table.contains(SupportMap, Player.localmapid) then
+    if table.contains(ZeroYMap, Player.localmapid) then
         drawY = 0
     else
         if M.GlobalGuideY ~= nil then

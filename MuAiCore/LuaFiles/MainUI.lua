@@ -727,6 +727,13 @@ local DrawMainUI = function(M)
                 M.FruConfigUI.open = false
                 ReloadMuAiGuide()
             end
+            GUI:SameLine(205, 0)
+            GUI:Button('显示日志弹窗', 120, 20)
+            if GUI:IsItemClicked(0) then
+                if M.LogInfo ~= nil and table.size(M.LogInfo) > 0 then
+                    M.MsgUI.Show(2, M.LogInfo)
+                end
+            end
             GUI:Separator()
             GUI:Dummy(0, 0)
             if GUI:CollapsingHeader('Event工具') then
@@ -800,6 +807,9 @@ local DrawMainUI = function(M)
                         if vfxFilterChange2 then
                             M.Develop.VFXFilterMin = vfxFilterValue2
                         end
+                        GUI:Dummy(6, 0)
+                        GUI:SameLine()
+                        M.Develop.VFXFilterNoPlayer = GUI:Checkbox('不显示玩家角色VFX', M.Develop.VFXFilterNoPlayer)
                     end
                 end
             end

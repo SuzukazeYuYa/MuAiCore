@@ -115,13 +115,17 @@ local OnAddEntityVFX = function(vfxID, vfxName, primaryEntityID, secondaryEntity
         currentScript.OnAddEntityVFX(vfxID, vfxName, primaryEntityID, secondaryEntityID, time, a5, a6)
     end
     if MuAiGuide and MuAiGuide.Develop.PrintVFXInfo then
+        local ent = TensorCore.mGetEntity(primaryEntityID)
         if MuAiGuide.Develop.VFXFilter then
             if vfxID > MuAiGuide.Develop.VFXFilterMax or vfxID < MuAiGuide.Develop.VFXFilterMin then
                 return
             end
+            if ent.type == 1 and MuAiGuide.Develop.VFXFilterNoPlayer then
+                return
+            end
         end
         MuAiGuide.Info('[' .. infoTime()
-                .. ']OnAddVFX，vfxID：' .. vfxID .. '，vfxName：' .. vfxName
+                .. ']' .. ent.name .. 'AddVFX，vfxID：' .. vfxID .. '，vfxName：' .. vfxName
                 .. '，Other：|' .. primaryEntityID
                 .. '|' .. secondaryEntityID
                 .. '|' .. time
@@ -401,7 +405,7 @@ local checkNeedReload = function()
     end
     if MuAiGuide.LatestVer ~= nil then
         MuAiGuide.VERSION = MuAiGuide.LatestVer
-        MuAiGuide.Info( "MuAiCore已更新，当前版本：ver." .. MuAiGuide.LatestVer )
+        MuAiGuide.Info("MuAiCore已更新，当前版本：ver." .. MuAiGuide.LatestVer)
     end
     Reload()
 end

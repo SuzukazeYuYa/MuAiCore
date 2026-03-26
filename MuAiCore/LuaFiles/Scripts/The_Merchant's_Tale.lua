@@ -166,6 +166,11 @@ local initGlobalData = function()
             aoe = {},
             GuidePos1 = nil,
             GuidePos2 = nil,
+            GuideDir = nil,
+            GuidePosOffset1 = nil,
+            GuidePosOffset2 = nil,
+            GuidePos2Offset1 = nil,
+            GuidePos2Offset2 = nil,
             WaitTime = 0,
             DrawPos = nil,
         },
@@ -194,6 +199,7 @@ local initGlobalData = function()
         },
         spell45866 = {
             InState = false,
+            CurState = 0,
             Timer = 0,
             AoeInfo1 = {},
             AoeInfo2 = {},
@@ -312,21 +318,6 @@ local getTurnLineFrom = function(entity, buffType)
     return nil
 end
 
---[[local boss1SubDraw = function(entityID, spellID)
-    if not getCfg().MerchantDraw then
-        return
-    end
-    local drawerTime = 1800
-    local curEnt = TensorCore.mGetEntity(entityID)
-    if spellID == 45843 then
-        _redDrawer:addTimedCone(drawerTime, curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 45, math.pi / 3, curEnt.pos.h)
-    elseif spellID == 45841 or spellID == 45839 or spellID == 45840 then
-        _redDrawer:addTimedRect(drawerTime, curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 42, 8, curEnt.pos.h)
-    elseif spellID == 45842 then
-        _redDrawer:addTimedCone(drawerTime, curEnt.pos.x, curEnt.pos.y, curEnt.pos.z, 20, math.pi, curEnt.pos.h)
-    end
-end]]
-
 local OnUpdateSpell45866 = function()
     local mmd = MuAiGuide.Merchant
     if not getCfg().MerchantDraw and not mmd.spell45866.InState then
@@ -334,15 +325,18 @@ local OnUpdateSpell45866 = function()
     end
     if TimeSince(mmd.spell45866.Timer) < 6500 then
         for _, aoe in pairs(mmd.spell45866.AoeInfo1) do
+            mmd.spell45866.CurState = 1
             _purpleDrawer:addCone(_boss1Center.x, _boss1Center.y, _boss1Center.z, 30, math.pi / 2, aoe.heading)
         end
     elseif TimeSince(mmd.spell45866.Timer) < 10000 then
+        mmd.spell45866.CurState = 2
         for _, aoe in pairs(mmd.spell45866.AoeInfo1) do
             _purpleDrawer:addCone(_boss1Center.x, _boss1Center.y, _boss1Center.z, 30, math.pi / 2, aoe.heading + math.pi / 2)
         end
     else
         mmd.spell45866 = {
             InState = false,
+            CurState = 0,
             Timer = 0,
             AoeInfo1 = {},
             AoeInfo2 = {},
@@ -448,7 +442,7 @@ local OnUpDateMoveChecker = function()
 end
 
 local OnUpdateSpellRingCircle = function()
-    if not getCfg().MerchantDraw or not MuAiGuide.Merchant.spellRingCircle then
+    if not MuAiGuide.Merchant.spellRingCircle then
         return
     end
     local mmd = MuAiGuide.Merchant
@@ -459,35 +453,28 @@ local OnUpdateSpellRingCircle = function()
     then
         return
     end
-
-    --[[if mmd.spellRingData.spellType == 0 then
-        local _curBoss = getCurBoss()
-        if _curBoss ~= nil then
-            if _curBoss.lastAction == 34 then
-                -- 分摊
-                mmd.spellRingData.spellType = 1
-            elseif _curBoss.lastAction == 35 then
-                -- 小钢铁
-                mmd.spellRingData.spellType = 2
-            end
-        end
-    end]]
+    local player = MuAiGuide.GetPlayer()
     if getCfg().MerchantGuide then
-        local player = MuAiGuide.GetPlayer()
         local guidePos
         if player.id == mmd.spellRingData.spellMarkAim.id then
-            guidePos = { x = 170, z = -823.5 }
+            guidePos = { x = _boss2Center.x, z = _boss2Center.z - 7.5 }
         elseif player.id == mmd.spellRingData.spellMark1.id then
             if table.contains(_skillIdCircle, mmd.spellRingData.spellId) then
-                guidePos = { x = 170, z = -806.5 }
+                guidePos = { x = _boss2Center.x, z = _boss2Center.z + 7.5 }
             else
-                guidePos = { x = 170, z = -815 }
+                guidePos = _boss2Center
             end
         elseif player.id == mmd.spellRingData.spellMark2.id then
             if table.contains(_skillIdCircle, mmd.spellRingData.spellId) then
-                guidePos = { x = 170, z = -815 }
+                guidePos = _boss2Center
             else
-                guidePos = { x = 170, z = -806.5 }
+                guidePos = { x = _boss2Center.x, z = _boss2Center.z + 7.5 }
+            end
+        else
+            if mmd.spellRingData.spellType == 1 then
+                guidePos = { x = _boss2Center.x, z = _boss2Center.z - 7.5 }
+            elseif mmd.spellRingData.spellType == 2 then
+                guidePos = _boss2Center
             end
         end
         if guidePos ~= nil then
@@ -496,25 +483,53 @@ local OnUpdateSpellRingCircle = function()
     end
     local aimEnt = TensorCore.mGetEntity(mmd.spellRingData.spellMarkAim.id)
     if TimeSince(MuAiGuide.Merchant.Timer) < 5000 then
-        local drawPosYellow = TensorCore.mGetEntity(mmd.spellRingData.spellMark2.id)
-        local drawPosRed = TensorCore.mGetEntity(mmd.spellRingData.spellMark1.id)
-        if table.contains(_skillIdCircle, mmd.spellRingData.spellId) then
-            _yellowDrawer:addDonut(drawPosYellow.pos.x, drawPosYellow.pos.y, drawPosYellow.pos.z, 8, 60)
-            _redDrawer:addCircle(drawPosRed.pos.x, drawPosRed.pos.y, drawPosRed.pos.z, 8)
-        else
-            _redDrawer:addDonut(drawPosRed.pos.x, drawPosRed.pos.y, drawPosRed.pos.z, 8, 40)
-            _yellowDrawer:addCircle(drawPosYellow.pos.x, drawPosYellow.pos.y, drawPosYellow.pos.z, 8)
+        if getCfg().MerchantDraw then
+            local drawPosYellow = TensorCore.mGetEntity(mmd.spellRingData.spellMark2.id)
+            local drawPosRed = TensorCore.mGetEntity(mmd.spellRingData.spellMark1.id)
+            if table.contains(_skillIdCircle, mmd.spellRingData.spellId) then
+                _yellowDrawer:addDonut(drawPosYellow.pos.x, drawPosYellow.pos.y, drawPosYellow.pos.z, 8, 60)
+                _redDrawer:addCircle(drawPosRed.pos.x, drawPosRed.pos.y, drawPosRed.pos.z, 8)
+            else
+                _redDrawer:addDonut(drawPosRed.pos.x, drawPosRed.pos.y, drawPosRed.pos.z, 8, 40)
+                _yellowDrawer:addCircle(drawPosYellow.pos.x, drawPosYellow.pos.y, drawPosYellow.pos.z, 8)
+            end
+            if mmd.spellRingData.spellType == 1 then
+                if player.id == mmd.spellRingData.spellMarkAim.id
+                        or (player.id ~= mmd.spellRingData.spellMark1.id
+                        and player.id ~= mmd.spellRingData.spellMark2.id
+                        and player.id ~= mmd.spellRingData.spellMarkAim.id)
+                then
+                    _greenDrawer:addCircle(aimEnt.pos.x, aimEnt.pos.y, aimEnt.pos.z, 5)
+                else
+                    _purpleDrawer:addCircle(aimEnt.pos.x, aimEnt.pos.y, aimEnt.pos.z, 5)
+                end
+            else
+                _purpleDrawer:addCircle(aimEnt.pos.x, aimEnt.pos.y, aimEnt.pos.z, 5)
+            end
         end
-        _purpleDrawer:addCircle(aimEnt.pos.x, aimEnt.pos.y, aimEnt.pos.z, 5)
     elseif TimeSince(MuAiGuide.Merchant.Timer) < 7000 then
-        local drawPosRed = TensorCore.mGetEntity(mmd.spellRingData.spellMark2.id)
-        if table.contains(_skillIdCircle, mmd.spellRingData.spellId) then
-            _redDrawer:addDonut(drawPosRed.pos.x, drawPosRed.pos.y, drawPosRed.pos.z, 8, 60)
-        else
-            _redDrawer:addCircle(drawPosRed.pos.x, drawPosRed.pos.y, drawPosRed.pos.z, 8)
-        end
-        if TimeSince(MuAiGuide.Merchant.Timer) < 5500 then
-            _purpleDrawer:addCircle(aimEnt.pos.x, aimEnt.pos.y, aimEnt.pos.z, 5)
+        if getCfg().MerchantDraw then
+            local drawPosRed = TensorCore.mGetEntity(mmd.spellRingData.spellMark2.id)
+            if table.contains(_skillIdCircle, mmd.spellRingData.spellId) then
+                _redDrawer:addDonut(drawPosRed.pos.x, drawPosRed.pos.y, drawPosRed.pos.z, 8, 60)
+            else
+                _redDrawer:addCircle(drawPosRed.pos.x, drawPosRed.pos.y, drawPosRed.pos.z, 8)
+            end
+            if TimeSince(MuAiGuide.Merchant.Timer) < 5500 then
+                if mmd.spellRingData.spellType == 1 then
+                    if player.id == mmd.spellRingData.spellMarkAim.id
+                            or (player.id ~= mmd.spellRingData.spellMark1.id
+                            and player.id ~= mmd.spellRingData.spellMark2.id
+                            and player.id ~= mmd.spellRingData.spellMarkAim.id)
+                    then
+                        _greenDrawer:addCircle(aimEnt.pos.x, aimEnt.pos.y, aimEnt.pos.z, 5)
+                    else
+                        _purpleDrawer:addCircle(aimEnt.pos.x, aimEnt.pos.y, aimEnt.pos.z, 5)
+                    end
+                else
+                    _purpleDrawer:addCircle(aimEnt.pos.x, aimEnt.pos.y, aimEnt.pos.z, 5)
+                end
+            end
         end
     else
         mmd.Timer = 0
@@ -1327,28 +1342,87 @@ local Boss_14291_Update = function()
                     y = (aoe[1].y + aoe[2].y) / 2,
                     z = (aoe[1].z + aoe[2].z) / 2,
                 }
-                local posDis = {
-                    16.26345596729059,
-                    4.949747468305833,
-                    6.363961030678928,
-                    17.67766952966369,
-                }
+                local posDis = { 16.26345596729059, 4.949747468305833, 6.363961030678928, 17.67766952966369 }
                 local dir = TensorCore.getHeadingToTarget(_boss1Center, mid)
-                local selfOrder = MuAiGuide.IndexOf(_order2, MuAiGuide.SelfPos)
+                local selfOrder = MuAiGuide.IndexOf(_order2)
                 local deltaDis = 1.414213562373095
                 if selfOrder >= 3 then
                     dir = dir + math.pi
                     deltaDis = -1.414213562373095
                 end
+                mmd.aoeGroudWater.GuideDir = dir
                 mmd.aoeGroudWater.GuidePos1 = TensorCore.getPosInDirection(_boss1Center, dir, posDis[selfOrder])
                 mmd.aoeGroudWater.GuidePos2 = TensorCore.getPosInDirection(_boss1Center, dir, posDis[selfOrder] + deltaDis)
                 mmd.aoeGroudWater.WaitTime = 5000 + (selfOrder - 1) * 2000
             else
+                if mmd.aoeGroudWater.GuidePosOffset1 == nil or MuAiGuide.Develop.ScRefresh then
+                    if table.size(mmd.spell45866.AoeInfo1) >= 2 then
+                        local nearestDir
+                        for _, aoeInfo in pairs(mmd.spell45866.AoeInfo1) do
+                            local curTo2Pi = MuAiGuide.SetHeading2Pi(aoeInfo.heading)
+                            local gDirTo2Pi = MuAiGuide.SetHeading2Pi(mmd.aoeGroudWater.GuideDir)
+                            if MuAiGuide.IsSameDirection(gDirTo2Pi + math.pi / 4, curTo2Pi) then
+                                nearestDir = gDirTo2Pi
+                                break
+                            elseif MuAiGuide.IsSameDirection(gDirTo2Pi - math.pi / 4, curTo2Pi) then
+                                nearestDir = -gDirTo2Pi
+                                break
+                            end
+                        end
+                        if nearestDir ~= nil then
+                            local basePos
+                            if MuAiGuide.SelfPos == "MT" or MuAiGuide.SelfPos == "D1" then
+                                basePos = TensorCore.getPosInDirection(_boss1Center, mmd.aoeGroudWater.GuideDir, 5.65685424949238)
+                            else
+                                basePos = TensorCore.getPosInDirection(_boss1Center, mmd.aoeGroudWater.GuideDir, 16.97056274847714)
+                            end
+                            local offset
+                            if nearestDir > 0 then
+                                offset = -math.pi / 8
+                            else
+                                offset = math.pi / 8
+                            end
+                            local curHeading = mmd.aoeGroudWater.GuideDir + offset
+                            local curHeading2 = mmd.aoeGroudWater.GuideDir - offset
+                            if MuAiGuide.SelfPos == "MT" or MuAiGuide.SelfPos == "H1" then
+                                mmd.aoeGroudWater.GuidePos2Offset1 = TensorCore.getPosInDirection(basePos, curHeading, 1.5)
+                                mmd.aoeGroudWater.GuidePos2Offset2 = TensorCore.getPosInDirection(basePos, curHeading2, 1.5)
+                                mmd.aoeGroudWater.GuidePosOffset1 = TensorCore.getPosInDirection(basePos, curHeading2 + math.pi, 1.5)
+                                mmd.aoeGroudWater.GuidePosOffset2 = TensorCore.getPosInDirection(basePos, curHeading + math.pi, 1.5)
+                            else
+                                mmd.aoeGroudWater.GuidePosOffset1 = TensorCore.getPosInDirection(basePos, curHeading, 1.5)
+                                mmd.aoeGroudWater.GuidePosOffset2 = TensorCore.getPosInDirection(basePos, curHeading2, 1.5)
+                                mmd.aoeGroudWater.GuidePos2Offset1 = TensorCore.getPosInDirection(basePos, curHeading2 + math.pi, 1.5)
+                                mmd.aoeGroudWater.GuidePos2Offset2 = TensorCore.getPosInDirection(basePos, curHeading + math.pi, 1.5)
+                            end
+                        end
+                    end
+                end
                 local guidePos
-                if timer < mmd.aoeGroudWater.WaitTime then
-                    guidePos = mmd.aoeGroudWater.GuidePos1
+                if mmd.aoeGroudWater.GuidePosOffset1 ~= nil then
+                    if timer < mmd.aoeGroudWater.WaitTime then
+                        if mmd.spell45866.CurState == 0 then
+                            guidePos = mmd.aoeGroudWater.GuidePos1
+                        elseif mmd.spell45866.CurState == 1 then
+                            guidePos = mmd.aoeGroudWater.GuidePosOffset1
+                        elseif mmd.spell45866.CurState == 2 then
+                            guidePos = mmd.aoeGroudWater.GuidePosOffset2
+                        end
+                    else
+                        if mmd.spell45866.CurState == 0 then
+                            guidePos = mmd.aoeGroudWater.GuidePos2
+                        elseif mmd.spell45866.CurState == 1 then
+                            guidePos = mmd.aoeGroudWater.GuidePos2Offset1
+                        elseif mmd.spell45866.CurState == 2 then
+                            guidePos = mmd.aoeGroudWater.GuidePos2Offset2
+                        end
+                    end
                 else
-                    guidePos = mmd.aoeGroudWater.GuidePos2
+                    if timer < mmd.aoeGroudWater.WaitTime then
+                        guidePos = mmd.aoeGroudWater.GuidePos1
+                    else
+                        guidePos = mmd.aoeGroudWater.GuidePos2
+                    end
                 end
                 MuAiGuide.FrameDirect(guidePos.x, guidePos.z)
             end
@@ -3115,14 +3189,20 @@ G.OnAddEntityVFX = function(vfxID)
         else
             table.insert(mmd.B1P3SongData, vfxID)
         end
+    elseif vfxID == 2727 then
+        --剑术大师 分摊
+        mmd.spellRingData.spellType = 1
+    elseif vfxID == 2726 then
+        --剑术大师 分散
+        mmd.spellRingData.spellType = 2
     end
 end
 
 --- 每帧执行
 G.Update = function()
-    if not getCfg().Merchant 
-            or MuAiGuide.CurRaidBoss == nil 
-            or MuAiGuide.CurRaidBoss.contentid == nil 
+    if not getCfg().Merchant
+            or MuAiGuide.CurRaidBoss == nil
+            or MuAiGuide.CurRaidBoss.contentid == nil
             or MuAiGuide.Merchant == nil
     then
         return
