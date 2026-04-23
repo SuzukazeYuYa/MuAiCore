@@ -1,5 +1,5 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
-M.VERSION = 283
+M.VERSION = 284
 M.GlobalGuideY = nil
 M.Develop = {
     JobView = false,
