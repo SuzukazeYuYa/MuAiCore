@@ -149,7 +149,6 @@
         local defConfig = M.FruMitigation.LoadDefault()
         local path = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\MitigationDefault"
         local config = M.LoadConfig(path, fileName, defConfig)
-        d(config)
         for i = 1, #M.FruMitigation.AoeNames do
             local key = M.FruMitigation.AoeNames[i].key
             if isTarget then

@@ -1,5 +1,5 @@
 ﻿local M = {} ---@class MuAiGuide 轮子定义
-M.VERSION = 284
+M.VERSION = 285
 M.GlobalGuideY = nil
 M.Develop = {
     JobView = false,
@@ -43,7 +43,7 @@ M.FruMitigationUI = {
     NewFileName = ""
 }
 M.MsgUI = {
-    ---@param type number 弹出类型，1:单按钮，2:双按钮
+    ---@param type number 弹出类型，1:确认取消，2:更新，3：单按钮确认
     Show = function(type, msgTbl, onOKClick, onCancelClick)
         M.MsgUI.Type = type
         M.MsgUI.MsgTable = msgTbl
@@ -52,6 +52,31 @@ M.MsgUI = {
         M.MsgUI.open = true
     end
 }
+
+M.QRCodeUI = {
+    visible = false,
+    open = false,
+    --打开类型 1:微星，2支付宝
+    type = 1,
+}
+-- 是否开启教学模式
+M.TeachingMode = false
+-- 支持教学模式的地图
+M.TeachingMap = { 1362 }
+-- 教学模式学生
+M.InitTeachingStudent = function()
+    M.TeachingStudent = {
+        ['MT'] = false,
+        ['ST'] = false,
+        ['H1'] = false,
+        ['H2'] = false,
+        ['D1'] = false,
+        ['D2'] = false,
+        ['D3'] = false,
+        ['D4'] = false,
+    }
+end
+M.InitTeachingStudent()
 ------------------------------- 工具方法 -------------------------------
 --- 输出消息到聊天栏
 --- @param msg string
@@ -487,7 +512,7 @@ M.checkVersion = function(isAuto)
                                 "Tab|最新版本：" .. tostring(M.LatestVer)
             }
             table.insert(infoTable, "")
-            table.insert(infoTable, tostring(M.LatestVer).. "版本更新内容：")
+            table.insert(infoTable, tostring(M.LatestVer) .. "版本更新内容：")
             for i = 2, #logsData do
                 table.insert(infoTable, ("Tab|" .. logsData[i]))
             end
@@ -1501,6 +1526,21 @@ end
 --- 绘制一个地面圆（已废弃仿报错用）
 M.DrawCircleFloor = function()
 end
+--[[
+-- 画图基础颜色定义
+local r_03 = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0.3)
+local g_03 = GUI:ColorConvertFloat4ToU32(0, 1, 0, 0.3)
+local b_03 = GUI:ColorConvertFloat4ToU32(0, 0, 1, 0.3)
+local yl_03 = GUI:ColorConvertFloat4ToU32(1, 1,0, 0.3)
+local cy_03 = GUI:ColorConvertFloat4ToU32(0, 1,1, 0.3)
+local w_1 = GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)
 
+-- 画图工具定义
+M.RedDrawer = Argus2.ShapeDrawer:new(r_03, r_03, r_03, w_1, 1)
+M.GreenDrawer = Argus2.ShapeDrawer:new(g_03, g_03, g_03, w_1, 1)
+M.BlueDrawer = Argus2.ShapeDrawer:new(b_03, b_03, b_03, w_1, 1)
+M.YellowDrawer = Argus2.ShapeDrawer:new(yl_03, yl_03, yl_03, w_1, 1)
+M.CyanDrawer = Argus2.ShapeDrawer:new(cy_03, cy_03, cy_03, w_1, 1)
+]]
 M.Debug("MuAiGuide初始化成功!")
 return M

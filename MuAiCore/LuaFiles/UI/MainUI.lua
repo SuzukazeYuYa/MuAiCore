@@ -21,7 +21,7 @@ local DrawMainUI = function(M)
         return false
     end
     if M.UI.tabs == nil then
-        M.UI.tabs = GUI_CreateTabs('职能,基本,副本,辅助,开发,支持')
+        M.UI.tabs = GUI_CreateTabs('职能,基本,副本,辅助,开发,赞助')
     end
     GUI:SetNextWindowSize(355, 0, GUI.SetCond_Appearing)
     M.UI.visible, M.UI.open = GUI:Begin('MuAiGuide Setting', M.UI.open)
@@ -63,6 +63,19 @@ local DrawMainUI = function(M)
                     GUI:TextColored(1, 0, 0, 1, '[DEBUG]')
                 end
                 GUI:SetWindowFontSize(1)
+                GUI:Dummy(10, 0)
+                GUI:SameLine()
+                if table.contains(M.TeachingMap, Player.localmapid) then
+                    M.TeachingMode = GUI:Checkbox('开启教学模式', M.TeachingMode)
+                    if M.TeachingMode then
+                        GUI:SameLine(180)
+                        GUI:Button('一键清空指导列表')
+                        if GUI:IsItemClicked(0) then
+                            M.InitTeachingStudent()
+                            M.MsgUI.Show(3, { '已清空指导列表' })
+                        end
+                    end
+                end
                 GUI:TextColored(0, 1, 0, 1, '   ※拖动角色名进行职能修改')
             else
                 GUI:TextColored(1, 0, 0, 1, '当前没有加入队伍')
@@ -70,7 +83,11 @@ local DrawMainUI = function(M)
             GUI:Dummy(1, 1)
             GUI:Separator()
             GUI:Dummy(1, 1)
-            GUI:Text('  | 职能 |职业|            角色名           |')
+            if M.TeachingMode then
+                GUI:Text('  | 职能 |职业|指导|         角色名         |')
+            else
+                GUI:Text('  | 职能 |职业|            角色名           |')
+            end
             GUI:Dummy(6, 0)
             GUI:SameLine()
             GUI:PushItemWidth(303)
@@ -140,6 +157,27 @@ local DrawMainUI = function(M)
                 if ptMember.info ~= nil and ptMember.info.job ~= nil and ptMember.info.name ~= nil then
                     local path = GetLuaModsPath() .. '\\MuAiCore\\Image\\JobIcon\\' .. tostring(ptMember.info.job) .. '.png'
                     GUI:Image(path, 25, 25)
+                    if M.TeachingMode then
+                        GUI:PushStyleColor(GUI.Col_FrameBg, 0.2, 0.2, 0.2, 1.0)
+                        GUI:SameLine()
+                        GUI:Dummy(2, 0)
+                        GUI:SameLine()
+                        local tJobSelect, tJobChanged = GUI:Checkbox("##" .. ptMember.label .. 'Teach', M.TeachingStudent[ptMember.label])
+                        if tJobChanged then
+                            if ptMember.label == M.SelfPos and tJobSelect == true then
+                                MuAiGuide.MsgUI.Show(3, { '无法将自己加入到指导列表' })
+                            else
+                                M.TeachingStudent[ptMember.label] = tJobSelect
+                                if tJobSelect then
+                                    MuAiGuide.Info(  string.format('已经将[%s]加入到指导列表。', ptMember.info.name))
+                                else
+                                    MuAiGuide.Info(  string.format('已经将[%s]从指导列表中移除。', ptMember.info.name))
+                                end
+                            end
+                        end
+
+                        GUI:PopStyleColor(1)
+                    end
                     GUI:SameLine(0, 25)
                     GUI:Selectable(ptMember.info.name, IsSelected(member), GUI.SelectableFlags_DontClosePopups, 0, 22)
                 else
@@ -814,23 +852,43 @@ local DrawMainUI = function(M)
                 end
             end
         elseif tabindex == 6 then
-            local path = GetLuaModsPath() .. '\\MuAiCore\\Image\\QRCode.png'
-            GUI:TextColored(0, 1, 0, 1, '如果您觉得本插件还不错, 可以支持一下.')
-            GUI:Image(path, 340, 170)
-            GUI:TextColored(0, 1, 0, 1, '        微  信')
+            GUI:TextColored(0, 1, 0, 1, '如果您觉得狗链很棒, 可以点击下面按钮进行打赏.')
+            GUI:ImageButton(
+                    'wechatPay',
+                    GetLuaModsPath() .. '\\MuAiCore\\Image\\WeChatPay.png',
+                    155, 155
+            )
+            if GUI:IsItemClicked(0) then
+                M.QRCodeUI.type = 1
+                M.QRCodeUI.open = true
+            end
             GUI:SameLine()
-            GUI:TextColored(0, 0.5, 1, 1, '                  支付宝')
-            GUI:Separator()
-            GUI:Dummy(0, 2)
-            GUI:TextColored(1, 1, 0, 1, '感谢您的支持, 但是这并不能让您获得更多权益, ')
-            GUI:TextColored(1, 1, 0, 1, '仅代表您对本人的支持, 所以请慎重打赏! ')
-            GUI:TextColored(1, 0, 0, 1, '※郑重声明：本插件没有任何用户分级政策.')
-            GUI:TextColored(1, 0, 0, 1, '※请勿用付费说事, 全凭自愿打赏!')
+            GUI:ImageButton(
+                    'alipay',
+                    GetLuaModsPath() .. '\\MuAiCore\\Image\\AliPay.png',
+                    155, 155
+            )
+            if GUI:IsItemClicked(0) then
+                M.QRCodeUI.type = 2
+                M.QRCodeUI.open = true
+            end
+            GUI:TextColored(1, 0, 0, 1, '如果你想登上赞助者名单,请在在打赏后截图发给')
+            GUI:TextColored(1, 0, 0, 1, '给作者, 作者会添加到赞助者名单中(绝妖星开始)')
+        end
+        if tabindex ~= 6 then
+            M.QRCodeUI.open = false
         end
         GUI:Separator()
         GUI:Separator()
         GUI:Dummy(10, 2)
-        GUI:BulletText('如需BUG反馈, 请添加QQ2437365584')
+        GUI:AlignFirstTextHeightToWidgets()
+        GUI:BulletText('BUG反馈,QQ群1106367633')
+        GUI:SameLine(200)
+        GUI:Button('点击加入', 145, 20)
+        if GUI:IsItemClicked(0) then
+            io.popen('start https://qm.qq.com/q/UouaYGbTO2')
+        end
+
         GUI:SameLine()
         GUI:Dummy(10, 1)
         GUI:AlignFirstTextHeightToWidgets()
@@ -896,6 +954,8 @@ local DrawMainUI = function(M)
     local winPosx, winPosy = GUI:GetWindowPos();
     M.FruConfigUI.x = winPosx + 350
     M.FruConfigUI.y = winPosy
+    M.QRCodeUI.x = winPosx + 350
+    M.QRCodeUI.y = winPosy
     GUI:SetWindowSize(355, 0)
     GUI:End()
 end

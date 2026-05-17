@@ -1,8 +1,8 @@
-local MuAiCore = {}
+MuAiCore = {}
 local AddonName = "MuAiCore"
 local core = MuAiCore
 local autoPopMap = { 1238, 1122, 1325, 1327, 1317 }
-local mainDrawer, fruConfigDrawer, fruMitigationDrawer, messageBoxDrawer
+local mainDrawer, fruConfigDrawer, fruMitigationDrawer, messageBoxDrawer, qrCodeDrawer
 local lastMap, lastJob, updateTime
 local updateNeedReLoad = false
 local downloadPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
@@ -207,7 +207,7 @@ end
 --- 读取副本脚本
 local LoadScripts = function()
     raidScript = {}
-    local folderPath = MuAiGuideRoot .. "Scripts"
+    local folderPath = MuAiGuideRoot .. "RaidScripts"
     local list = FolderList(folderPath)
     for _, fileName in pairs(list) do
         MuAiGuide.Debug("已加载副本脚本：" .. fileName)
@@ -362,6 +362,9 @@ local onMapChange = function()
             for i = 1, 6 do
                 MuAiGuide.UI.tabs.tabs[i].isselected = i == 1
             end
+            MuAiGuide.FruConfigUI.open = false
+            MuAiGuide.FruMitigationUI.open = false
+            MuAiGuide.QRCodeUI.open = false
         end
     else
         MuAiGuide.UI.open = false
@@ -388,6 +391,9 @@ local onMapChange = function()
     then
         MoogleTelegraphs.Settings.DrawEnemyAoE = true
         MuAiGuide.Info("当前已由MuAiGuide管理莫古力敌人范围开关，检测MoogleTelegraphs的[敌人范围]被关闭，已将其恢复到开启状态。")
+    end
+    if not table.contains(MuAiGuide.TeachingMap, Player.localmapid) then
+        MuAiGuide.TeachingMode = false
     end
 end
 
@@ -449,10 +455,12 @@ ReloadMuAiScripts = function()
 end
 
 RefreshMuAiUI = function()
-    mainDrawer = FileLoad(MuAiGuideRoot .. "MainUI.lua")
-    fruConfigDrawer = FileLoad(MuAiGuideRoot .. "FruConfigUI.lua")
-    fruMitigationDrawer = FileLoad(MuAiGuideRoot .. "FruMitigationUI.lua")
-    messageBoxDrawer = FileLoad(MuAiGuideRoot .. "MessageBoxUI.lua")
+    mainDrawer = FileLoad(MuAiGuideRoot .. "UI\\MainUI.lua")
+    fruConfigDrawer = FileLoad(MuAiGuideRoot .. "UI\\FruConfigUI.lua")
+    fruMitigationDrawer = FileLoad(MuAiGuideRoot .. "UI\\FruMitigationUI.lua")
+    messageBoxDrawer = FileLoad(MuAiGuideRoot .. "UI\\MessageBoxUI.lua")
+    qrCodeDrawer = FileLoad(MuAiGuideRoot .. "UI\\QRCodeUI.lua")
+    MuAiGuide.Debug("UI重载完成")
 end
 
 core.InitMuAiGuide = function(checkUpdate)
@@ -484,30 +492,37 @@ end
 
 core.DrawMainUI = function()
     if mainDrawer == nil or MuAiGuide.Develop.UIRefresh then
-        mainDrawer = FileLoad(MuAiGuideRoot .. "MainUI.lua")
+        mainDrawer = FileLoad(MuAiGuideRoot .. "UI\\MainUI.lua")
     end
     mainDrawer(MuAiGuide)
 end
 
 core.DrawFriConfigUI = function()
     if fruConfigDrawer == nil or MuAiGuide.Develop.UIRefresh then
-        fruConfigDrawer = FileLoad(MuAiGuideRoot .. "FruConfigUI.lua")
+        fruConfigDrawer = FileLoad(MuAiGuideRoot .. "UI\\FruConfigUI.lua")
     end
     fruConfigDrawer(MuAiGuide)
 end
 
 core.DrawFruMitigationUI = function()
     if fruMitigationDrawer == nil or MuAiGuide.Develop.UIRefresh then
-        fruMitigationDrawer = FileLoad(MuAiGuideRoot .. "FruMitigationUI.lua")
+        fruMitigationDrawer = FileLoad(MuAiGuideRoot .. "UI\\FruMitigationUI.lua")
     end
     fruMitigationDrawer(MuAiGuide)
 end
 
 core.DrawMessageBoxUI = function()
     if messageBoxDrawer == nil or MuAiGuide.Develop.UIRefresh then
-        messageBoxDrawer = FileLoad(MuAiGuideRoot .. "MessageBoxUI.lua")
+        messageBoxDrawer = FileLoad(MuAiGuideRoot .. "UI\\MessageBoxUI.lua")
     end
     messageBoxDrawer(MuAiGuide)
+end
+
+core.DrawQRCodeUI = function()
+    if qrCodeDrawer == nil or MuAiGuide.Develop.UIRefresh then
+        qrCodeDrawer = FileLoad(MuAiGuideRoot .. "UI\\QRCodeUI.lua")
+    end
+    qrCodeDrawer(MuAiGuide)
 end
 
 core.Initialize = function()
@@ -549,6 +564,10 @@ core.Draw = function()
     if MuAiGuide then
         if MuAiGuide.UI.open then
             core.DrawMainUI()
+        else
+            MuAiGuide.FruConfigUI.open = false
+            MuAiGuide.FruMitigationUI.open = false
+            MuAiGuide.QRCodeUI.open = false
         end
         if MuAiGuide.FruConfigUI.open then
             core.DrawFriConfigUI()
@@ -558,6 +577,9 @@ core.Draw = function()
         end
         if MuAiGuide.MsgUI.open then
             core.DrawMessageBoxUI()
+        end
+        if MuAiGuide.QRCodeUI.open then
+            core.DrawQRCodeUI()
         end
     end
 end

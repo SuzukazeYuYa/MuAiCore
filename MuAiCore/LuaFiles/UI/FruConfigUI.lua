@@ -28,7 +28,7 @@ local DrawFruConfigUI = function(M)
                     if GUI:IsItemClicked(0) then
                         M.FastJapanConfig()
                     end
-                    GUI:Button("莫古力/MMW", 130, 20)
+                    GUI:Button("莫力/MMW", 130, 20)
                     if GUI:IsItemClicked(0) then
                         M.FastMgl()
                     end
