@@ -14,7 +14,7 @@ M.Update = function()
         curState = FFXIV_Common_BotRunning
     end
 end
-
+  
 
 
 RegisterEventHandler("Gameloop.Update", M.Update, "MuAiCore")

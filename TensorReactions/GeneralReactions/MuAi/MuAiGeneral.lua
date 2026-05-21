@@ -2644,7 +2644,7 @@ local tbl =
 					data = 
 					{
 						category = "Lua",
-						conditionLua = "return MuAiGuide.M12S.ArmySlayer ~= nil and MuAiGuide.M12S.ArmySlayer == true",
+						conditionLua = "return MuAiGuide.M12S and MuAiGuide.M12S.ArmySlayer ~= nil and MuAiGuide.M12S.ArmySlayer == true",
 						name = "致命灾变",
 						uuid = "3b5a92e6-57ae-be17-86cc-738c6cb9d5f5",
 						version = 3,
@@ -2674,12 +2674,12 @@ local tbl =
 						{
 							
 							{
-								"8785e636-0643-2c4a-877d-b941da280ccf",
+								"6d035129-cd47-17cc-ae57-023df4037b1b",
 								true,
 							},
 							
 							{
-								"6d035129-cd47-17cc-ae57-023df4037b1b",
+								"8785e636-0643-2c4a-877d-b941da280ccf",
 								true,
 							},
 							
@@ -2715,12 +2715,12 @@ local tbl =
 						{
 							
 							{
-								"8785e636-0643-2c4a-877d-b941da280ccf",
+								"6d035129-cd47-17cc-ae57-023df4037b1b",
 								true,
 							},
 							
 							{
-								"6d035129-cd47-17cc-ae57-023df4037b1b",
+								"8785e636-0643-2c4a-877d-b941da280ccf",
 								true,
 							},
 							
@@ -3424,12 +3424,12 @@ local tbl =
 						{
 							
 							{
-								"b443f63c-4f48-9657-8dce-38651fcd335a",
+								"46727616-9562-0812-8d34-1438da7f5081",
 								true,
 							},
 							
 							{
-								"46727616-9562-0812-8d34-1438da7f5081",
+								"b443f63c-4f48-9657-8dce-38651fcd335a",
 								true,
 							},
 							
@@ -3503,10 +3503,11 @@ local tbl =
 				{
 					data = 
 					{
-						category = "Lua",
-						conditionLua = "return MuAiGuide.Config.Main.M12SAutoFace1",
-						name = "Config",
-						uuid = "b443f63c-4f48-9657-8dce-38651fcd335a",
+						category = "Self",
+						conditionType = 8,
+						localmapid = 1327,
+						name = "M12S",
+						uuid = "46727616-9562-0812-8d34-1438da7f5081",
 						version = 3,
 					},
 					inheritedIndex = 1,
@@ -3515,14 +3516,13 @@ local tbl =
 				{
 					data = 
 					{
-						category = "Self",
-						conditionType = 8,
-						localmapid = 1327,
-						name = "M12S",
-						uuid = "46727616-9562-0812-8d34-1438da7f5081",
+						category = "Lua",
+						conditionLua = "return MuAiGuide.Config.Main.M12SAutoFace1",
+						name = "Config",
+						uuid = "b443f63c-4f48-9657-8dce-38651fcd335a",
 						version = 3,
 					},
-					inheritedIndex = 2,
+					inheritedIndex = 1,
 				},
 				
 				{

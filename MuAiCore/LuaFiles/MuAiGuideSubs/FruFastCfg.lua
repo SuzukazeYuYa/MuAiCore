@@ -1,6 +1,13 @@
-﻿local loadConfigs = function(M)
+local FruFastCfg = {}
+--[[
+===========================
+    绝伊甸快速默认模块
+===========================
+]]
+---@param M MuAiGuide
+FruFastCfg.init = function(M)
     --- 快速莫古力&mmw攻略
-    M.FastMgl = function()
+    M.FastFruMgl = function()
         local configTbl1 = {
             --- 标点
             PosInfo = { "C", "3", "B", "2", "A", "1", "D", "4" },
@@ -137,7 +144,7 @@
         M.Info("已切换为莫古力&MMW攻略默认配置。")
     end
     --- 快速日基
-    M.FastJapanConfig = function()
+    M.FastFruJapanConfig = function()
         local configTbl2 = {
             --- 标点
             PosInfo = { "C", "2", "B", "1", "A", "4", "D", "3" },
@@ -214,11 +221,11 @@
             DarkLitOrder = { "H1", "H2", "MT", "ST", "D1", "D2", "D3", "D4" },
             --- 光暗龙诗 翻花绳4边形时候 谁换，1左换，2右换
             DarkLitChangeType = 2,
-            CrystallizeTimeMark = false,     
+            CrystallizeTimeMark = false,
             --- 暗夜舞蹈谁引导 1 MT 2 ST
             P4DarkestDanceTaker = 1,
             --- 时间结晶优先级
-            CrystallizeTimePriority = { "H1", "MT", "ST", "D1", "D2", "D3", "D4", "H2" },       
+            CrystallizeTimePriority = { "H1", "MT", "ST", "D1", "D2", "D3", "D4", "H2" },
             --- Buff 处理方式， 1，基本，2，日基
             CrystallizeTimeBuffType = 2,
             --- 时间结晶处理方式：1:固定吃，2:标点，3:自动摇号
@@ -273,9 +280,8 @@
         M.Config.FruCfg = configTbl2
         M.Info("已切换为日基攻略默认配置。")
     end
-
     --- 快速莫灵喵
-    M.FastMLM = function()
+    M.FastFruMLM = function()
         local configTbl1 = {
             --- 标点
             PosInfo = { "C", "3", "B", "2", "A", "1", "D", "4" },
@@ -348,7 +354,7 @@
             --- 暗夜舞蹈谁引导 1 MT 2 ST
             P3DarkestDanceTaker = 1,
             ----------------------------- P4 -----------------------------
-            
+
             --- 光暗龙诗优先级
             DarkLitOrder = { "MT", "ST", "H1", "H2", "D1", "D2", "D3", "D4" },
             --- 光暗龙诗 翻花绳4边形时候 谁换，1左换，2右换
@@ -365,7 +371,7 @@
 
             --- 时间结晶击退处理方式：1 Y字， 2：角落
             CrystallizeTimeKnockBack = 2,
-            
+
             CrystallizeTimeKnockCType = 1,
             -- 固定吃, 顺序
             CrystallizeTimeByBuff = {
@@ -414,7 +420,6 @@
         M.Config.FruCfg = configTbl1
         M.Info("已切换到莫灵喵默认设置，请根据组内情况调整可选配置。")
     end
-    
-    M.Debug("默认配置文件读取完成。")
 end
-return loadConfigs
+
+return FruFastCfg

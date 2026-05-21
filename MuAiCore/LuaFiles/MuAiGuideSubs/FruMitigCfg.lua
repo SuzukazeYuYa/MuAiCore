@@ -1,4 +1,11 @@
-﻿local function MitigationDef(M)
+﻿local FruMitigCfg = {}
+--[[
+===========================
+    绝伊甸j减伤设置模块
+===========================
+]]
+---@param M MuAiGuide
+FruMitigCfg.init = function(M)
     M.FruMitigation = {}
     M.FruMitigation.AoeNames = {
         --- P1
@@ -40,7 +47,7 @@
     M.FruMitigation.JobMap = {
         --- TANK
         [19] = { "雪仇", "幕帘" },
-        [21] = { "雪仇", "摆脱" }, 
+        [21] = { "雪仇", "摆脱" },
         [32] = { "雪仇", "步道" },
         [37] = { "雪仇", "光心" },
         --- Melee
@@ -75,7 +82,6 @@
         }
         return table
     end
-
     M.FruMitigation.LoadDefault = function()
         local ConfigValue = {
             --- P1
@@ -121,7 +127,6 @@
         end
         return ConfigValue
     end
-
     M.FruMitigation.ChangeJob = function()
         if not M.IsPlayer(Player) then
             return
@@ -134,7 +139,7 @@
     end
     M.FruMitigation.LoadDefaultByName = function(fileName)
         local defConfig = M.FruMitigation.LoadDefault()
-        local path = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\MitigationDefault"
+        local path = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\MitigationDefault\\Fru"
         if not FolderExists(path) then
             M.Info("读取默认配置失败，已关闭全部开关。")
             M.Config.FruMitigation = defConfig
@@ -147,7 +152,7 @@
     --- 补充读取
     M.FruMitigation.LoadDefaultByNameEx = function(fileName, isTarget)
         local defConfig = M.FruMitigation.LoadDefault()
-        local path = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\MitigationDefault"
+        local path = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\MitigationDefault\\Fru"
         local config = M.LoadConfig(path, fileName, defConfig)
         for i = 1, #M.FruMitigation.AoeNames do
             local key = M.FruMitigation.AoeNames[i].key
@@ -159,4 +164,4 @@
         end
     end
 end
-return MitigationDef
+return FruMitigCfg

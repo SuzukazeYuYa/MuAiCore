@@ -1,12 +1,21 @@
-local DrawFruConfigUI = function(M)
+local FruConfigUI = {}
+--[[
+===========================
+    绝伊甸设置UI VIEW
+===========================
+]]
+local newMode = false
+local newFileName = ""
+FruConfigUI.draw = function()
+    local M = MuAiGuide
     if M.FruConfigUI.open then
-        if not M.UI.open then
+        if not M.MainUI.open then
             M.FruConfigUI.open = false
-            M.FruConfigUI.NewMode = false
+            newMode = false
             return
         end
-        GUI:SetNextWindowSize(300, 0, GUI.SetCond_Appearing)
-        GUI:SetNextWindowPos(M.FruConfigUI.x, M.FruConfigUI.y, GUI.SetCond_Appearing)
+        GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
+        GUI:SetNextWindowSize(300, 0, GUI.SetCond_Appearing) 
         M.FruConfigUI.visible, M.FruConfigUI.open = GUI:Begin("MuAiGuide Fru Setting", M.FruConfigUI.open)
         if M.FruConfigUI.visible then
 	        M.Config.Main.AnyOneReactionOn = GUI:Checkbox("关闭一些本插件和Anyone重复功能", M.Config.Main.AnyOneReactionOn)
@@ -26,16 +35,16 @@ local DrawFruConfigUI = function(M)
                     GUI:SameLine(0, 30)
                     GUI:Button("日基", 130, 20)
                     if GUI:IsItemClicked(0) then
-                        M.FastJapanConfig()
+                        M.FastFruJapanConfig()
                     end
                     GUI:Button("莫力/MMW", 130, 20)
                     if GUI:IsItemClicked(0) then
-                        M.FastMgl()
+                        M.FastFruMgl()
                     end
                     GUI:SameLine(0, 30)
                     GUI:Button("莫灵喵", 130, 20)
                     if GUI:IsItemClicked(0) then
-                        M.FastMLM()
+                        M.FastFruMLM()
                     end
                     GUI:TextColored(1, 1, 0, 1, "※一键配置说明※")
                     GUI:TextColored(1, 1, 0, 1, "1.国服野队为当前主流，细节自行查看和修改。")
@@ -49,11 +58,11 @@ local DrawFruConfigUI = function(M)
                 GUI:Separator()
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("2.配置文件工具") then
-                    if M.FruConfigUI.NewMode then
-                        M.AddLabel("新配置名：", false)
+                    if newMode then
+                        M.UITool.AddLabel("新配置名：", false)
                         GUI:PushItemWidth(200)
                         local havaSame = false
-                        local NewFileName, NewFileNameChanged = GUI:InputText("##NewFileName", M.FruConfigUI.NewFileName, GUI.InputTextFlags_CharsNoBlank)
+                        local NewFileName, NewFileNameChanged = GUI:InputText("##NewFileName", newFileName, GUI.InputTextFlags_CharsNoBlank)
                         if NewFileNameChanged then
                             local fileName = NewFileName
                             if M.ContainsIgnoreCase(M.Config.FruCustomList, fileName)
@@ -63,17 +72,17 @@ local DrawFruConfigUI = function(M)
                                 GUI:TextColored(1, 0, 0, 1, "已存在该名称文件或者名称不合法,无法创建!")
                                 havaSame = true
                             else
-                                M.FruConfigUI.NewFileName = NewFileName
+                                newFileName = NewFileName
                             end
                         end
                         GUI:PopItemWidth()
                         GUI:Button("确认", 100, 20)
                         if GUI:IsItemClicked(0) then
-                            if not havaSame and M.FruConfigUI.NewFileName ~= nil and #M.FruConfigUI.NewFileName > 0 then
-                                M.SaveFileConfig(M.Config.FruGuidePath, M.FruConfigUI.NewFileName, M.Config.FruCfg)
-                                M.FruConfigUI.NewMode = false
-                                if M.FruConfigUI.NewFileName ~= M.Config.FruCustomList[M.Config.FruCustomListIndex] then
-                                    table.insert(M.Config.FruCustomList, M.FruConfigUI.NewFileName)
+                            if not havaSame and newFileName ~= nil and #newFileName > 0 then
+                                M.SaveFileConfig(M.Config.FruGuidePath, newFileName, M.Config.FruCfg)
+                                newMode = false
+                                if newFileName ~= M.Config.FruCustomList[M.Config.FruCustomListIndex] then
+                                    table.insert(M.Config.FruCustomList, newFileName)
                                 end
                             else
                                 M.Info("已存在该名称文件或者名称不合法,无法创建!")
@@ -82,22 +91,22 @@ local DrawFruConfigUI = function(M)
                         GUI:SameLine()
                         GUI:Button("取消", 100, 20)
                         if GUI:IsItemClicked(0) then
-                            M.FruConfigUI.NewFileName = M.Config.FruCustomList[M.Config.FruCustomListIndex]
-                            M.FruConfigUI.NewMode = false
+                            newFileName = M.Config.FruCustomList[M.Config.FruCustomListIndex]
+                            newMode = false
                         end
                     else
                         GUI:PushItemWidth(300)
                         local configIndex, configIndexChange = GUI:Combo("##configIndex", M.Config.FruCustomListIndex, M.Config.FruCustomList, 30)
                         if configIndexChange then
                             M.Config.FruCustomListIndex = configIndex
-                            M.FruConfigUI.NewFileName = M.Config.FruCustomList[M.Config.FruCustomListIndex]
+                            newFileName = M.Config.FruCustomList[M.Config.FruCustomListIndex]
                         end
                         GUI:PopItemWidth()
                         if M.Config.FruCustomListIndex == 1 then
                             GUI:Button("新建配置", 90, 20)
                             if GUI:IsItemClicked(0) then
-                                M.FruConfigUI.NewFileName = ""
-                                M.FruConfigUI.NewMode = true
+                                newFileName = ""
+                                newMode = true
                             end
                         else
                             GUI:Button("加载此配置", 90, 20)
@@ -109,13 +118,13 @@ local DrawFruConfigUI = function(M)
                             GUI:SameLine()
                             GUI:Button("新建配置", 90, 20)
                             if GUI:IsItemClicked(0) then
-                                M.FruConfigUI.NewFileName = ""
-                                M.FruConfigUI.NewMode = true
+                                newFileName = ""
+                                newMode = true
                             end
                             GUI:SameLine()
                             GUI:Button("保存到此配置", 100, 20)
                             if GUI:IsItemClicked(0) then
-                                M.SaveFileConfig(M.Config.FruGuidePath, M.FruConfigUI.NewFileName, M.Config.FruCfg)
+                                M.SaveFileConfig(M.Config.FruGuidePath, newFileName, M.Config.FruCfg)
                             end
                         end
                     end
@@ -124,14 +133,14 @@ local DrawFruConfigUI = function(M)
                 GUI:Separator()
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("3.基础设置") then
-                    M.AddLabel("基础八方：", false, 115)
+                    M.UITool.AddLabel("基础八方：", false, 115)
                     GUI:PushItemWidth(180)
                     local gJobPos, gJobPosChanged = GUI:InputText("##JobPos", M.StringJoin(M.Config.FruCfg.JobPos, ","), GUI.InputTextFlags_CharsNoBlank)
                     if gJobPosChanged then
                         M.Config.FruCfg.JobPos = M.StringSplit(gJobPos, ",")
                     end
                     GUI:PopItemWidth()
-                    M.AddLabel("场地标点：", false)
+                    M.UITool.AddLabel("场地标点：", false)
                     GUI:PushItemWidth(115)
                     local markPos, markPosChanged = GUI:InputText("##PosInfo", M.StringJoin(M.Config.FruCfg.PosInfo, ","), GUI.InputTextFlags_CharsNoBlank)
                     if markPosChanged then
@@ -146,14 +155,14 @@ local DrawFruConfigUI = function(M)
             if GUI:CollapsingHeader("P1.绝命战士") then
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("1.八方分散&雾龙") then
-                    M.AddLabel("分散方式：", false, 118)
+                    M.UITool.AddLabel("分散方式：", false, 118)
                     GUI:PushItemWidth(80)
                     local ProteanType, ProteanTypeCg = GUI:Combo("##ProteanType", M.Config.FruCfg.ProteanType, { "TH逆,D顺", "全顺时针" }, 4)
                     if ProteanTypeCg then
                         M.Config.FruCfg.ProteanType = ProteanType
                     end
                     GUI:PopItemWidth()
-                    M.AddLabel("雾龙站位：", false)
+                    M.UITool.AddLabel("雾龙站位：", false)
                     GUI:PushItemWidth(180)
                     local utopainSkyPosInput, utopainSkyPosInputChanged = GUI:InputText("##FruUtopainSkyPosInfo", M.StringJoin(M.Config.FruCfg.FruUtopainSkyPosInfo, ","), GUI.InputTextFlags_CharsNoBlank)
                     if utopainSkyPosInputChanged then
@@ -166,19 +175,19 @@ local DrawFruConfigUI = function(M)
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("2.双分组") then
                     GUI:TextColored(1, 1, 0, 1, "※含优先级设置，如高换反着写即可")
-                    M.AddLabel("上方分组：", false, 127)
+                    M.UITool.AddLabel("上方分组：", false, 127)
                     GUI:PushItemWidth(90)
                     local inputGroupUp, inputGroupUpChanged = GUI:InputText("##CatchTwoUp", M.StringJoin(M.Config.FruCfg.CatchTwoUp, ","), GUI.InputTextFlags_CharsNoBlank)
                     if inputGroupUpChanged then
                         M.Config.FruCfg.CatchTwoUp = M.StringSplit(inputGroupUp, ",")
                     end
-                    M.AddLabel("下方分组：", false, 127)
+                    M.UITool.AddLabel("下方分组：", false, 127)
                     GUI:PushItemWidth(90)
                     local inputGroupDown, inputGroupDownChanged = GUI:InputText("##CatchTwoDown", M.StringJoin(M.Config.FruCfg.CatchTwoDown, ","), GUI.InputTextFlags_CharsNoBlank)
                     if inputGroupDownChanged then
                         M.Config.FruCfg.CatchTwoDown = M.StringSplit(inputGroupDown, ",")
                     end
-                    M.AddLabel("需要换位时：", false)
+                    M.UITool.AddLabel("需要换位时：", false)
                     GUI:PushItemWidth(50)
                     local inputGroupFall, inputGroupFallDownChanged = GUI:InputText("##CatchTwoDownFall", M.StringJoin(M.Config.FruCfg.CatchTwoDownFall, ","), GUI.InputTextFlags_CharsNoBlank)
                     if inputGroupFallDownChanged then
@@ -192,13 +201,13 @@ local DrawFruConfigUI = function(M)
                 GUI:Separator()
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("3.雷火线") then
-                    M.AddLabel("优先级：", false, 113)
+                    M.UITool.AddLabel("优先级：", false, 113)
                     GUI:PushItemWidth(185)
                     local FruLightFirePriority, FruLightFirePriorityChanged = GUI:InputText("##FruLightFirePriority", M.StringJoin(M.Config.FruCfg.FruLightFirePriority, ","), GUI.InputTextFlags_CharsNoBlank)
                     if FruLightFirePriorityChanged then
                         M.Config.FruCfg.FruLightFirePriority = M.StringSplit(FruLightFirePriority, ",")
                     end
-                    M.AddLabel("处理方式：", false)
+                    M.UITool.AddLabel("处理方式：", false)
                     GUI:PushItemWidth(50)
                     local FruLightFireDir, FruLightFireDirIdxChanged = GUI:Combo("##FruLightFireDir", M.Config.FruCfg.FruLightFireDir, { "上下", "左右" }, 4)
                     if FruLightFireDirIdxChanged then
@@ -206,7 +215,7 @@ local DrawFruConfigUI = function(M)
                     end
                     GUI:SameLine(0, 2)
                     if M.Config.FruCfg.FruLightFireDir == 1 then
-                        M.AddLabel("方向分组", true, 218)
+                        M.UITool.AddLabel("方向分组", true, 218)
                         GUI:PushItemWidth(80)
                         local FruLightFireType, FruLightFireTypeIdxChanged = GUI:Combo("##FruLightFireType", M.Config.FruCfg.FruLightFireType, { "内外互换", "闲人固定" }, 4)
                         if FruLightFireTypeIdxChanged then
@@ -218,7 +227,7 @@ local DrawFruConfigUI = function(M)
                     end
 
                     if M.Config.FruCfg.FruLightFireType == 1 then
-                        M.AddLabel("闲人站位：", false, 113)
+                        M.UITool.AddLabel("闲人站位：", false, 113)
                         GUI:PushItemWidth(70)
                         local restPos, restPosChanged = GUI:InputText("##FruLightFireRestPos", M.StringJoin(M.Config.FruCfg.FruLightFireRestPos, ","), GUI.InputTextFlags_CharsNoBlank)
                         GUI:PopItemWidth()
@@ -236,7 +245,7 @@ local DrawFruConfigUI = function(M)
                 GUI:Separator()
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("4.踩塔") then
-                    M.AddLabel("基本方案：", false, 130)
+                    M.UITool.AddLabel("基本方案：", false, 130)
                     GUI:PushItemWidth(90)
                     local TakeTowerType, TakeTowerTypeIdxChanged = GUI:Combo("##TakeTowerType", M.Config.FruCfg.TakeTowerType, { "填充数数", "固定和补位", "日野主流" }, 4)
                     if TakeTowerTypeIdxChanged then
@@ -245,7 +254,7 @@ local DrawFruConfigUI = function(M)
                     GUI:PopItemWidth()
 
                     if M.Config.FruCfg.TakeTowerType == 1 then
-                        M.AddLabel("填充优先级：", false)
+                        M.UITool.AddLabel("填充优先级：", false)
                         GUI:PushItemWidth(140)
                         local fallInput, fallInputChanged = GUI:InputText("##FallTowerOrder", M.StringJoin(M.Config.FruCfg.FallTowerOrder, ","), GUI.InputTextFlags_CharsNoBlank)
                         if fallInputChanged then
@@ -299,14 +308,14 @@ local DrawFruConfigUI = function(M)
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("1.钻石星辰") then
                     GUI:PushItemWidth(90)
-                    M.AddLabel("点名和冰花重叠时：", false)
+                    M.UITool.AddLabel("点名和冰花重叠时：", false)
                     local DDChangeType, DDChangeTypeChange = GUI:Combo("##DDChangeType", M.Config.FruCfg.DDChangeType, { "同组互换", "全体顺时针" }, 4)
                     if DDChangeTypeChange then
                         M.Config.FruCfg.DDChangeType = DDChangeType
                     end
                     GUI:SameLine()
                     GUI:Text("处理")
-                    M.AddLabel("左右分组方案：", false, 165)
+                    M.UITool.AddLabel("左右分组方案：", false, 165)
                     local fCfg = M.Config.FruCfg.PosInfo
                     local dGroup1Str = fCfg[5] .. fCfg[6] .. fCfg[7] .. fCfg[8] .. "/" .. fCfg[4] .. fCfg[3] .. fCfg[2] .. fCfg[1]
                     local dGroup2Str = fCfg[4] .. fCfg[5] .. fCfg[6] .. fCfg[7] .. "/" .. fCfg[3] .. fCfg[2] .. fCfg[1] .. fCfg[8]
@@ -314,14 +323,14 @@ local DrawFruConfigUI = function(M)
                     if DDGroupTypeIdxChange then
                         M.Config.FruCfg.DDGroupType = DDGroupType
                     end
-                    M.AddLabel("逆时针跑圈方式：", false, 165)
+                    M.UITool.AddLabel("逆时针跑圈方式：", false, 165)
                     GUI:PushItemWidth(120)
                     local DDRunType, DDRunTypeChange = GUI:Combo("##DDRunType", M.Config.FruCfg.DDRunType, { "全体成员都逆", "仅分身在45度逆" }, 4)
                     if DDRunTypeChange then
                         M.Config.FruCfg.DDRunType = DDRunType
                     end
                     GUI:PopItemWidth()
-                    M.AddLabel("滑冰倒计时提示：", false, 165)
+                    M.UITool.AddLabel("滑冰倒计时提示：", false, 165)
                     GUI:PushItemWidth(50)
                     local SkatingHit, SkatingHitChange = GUI:Combo("##SkatingHit", M.Config.FruCfg.SkatingHit, { "TTS", "噪音", "关闭" }, 4)
                     if SkatingHitChange then
@@ -335,13 +344,13 @@ local DrawFruConfigUI = function(M)
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("2.镜中奇遇") then
                     GUI:PushItemWidth(90)
-                    M.AddLabel("白镜子与两个红镜子等距时：", false)
+                    M.UITool.AddLabel("白镜子与两个红镜子等距时：", false)
                     local MirrorSameDistanceType, MirrorSameDistanceTypeChange = GUI:Combo("##MirrorSameDistanceType", M.Config.FruCfg.MirrorSameDistanceType, { "远左近右", "顺时针" }, 4)
                     if MirrorSameDistanceTypeChange then
                         M.Config.FruCfg.MirrorSameDistanceType = MirrorSameDistanceType
                     end
                     GUI:PopItemWidth()
-                    M.AddLabel("远程站位：", false)
+                    M.UITool.AddLabel("远程站位：", false)
                     local inputRange, inputRangeChanged = GUI:InputText("##MirrorPosRange", M.StringJoin(M.Config.FruCfg.MirrorPosRange, ","), GUI.InputTextFlags_CharsNoBlank)
                     if inputRangeChanged then
                         M.Config.FruCfg.MirrorPosRange = M.StringSplit(inputRange, ",")
@@ -349,14 +358,14 @@ local DrawFruConfigUI = function(M)
                     GUI:SameLine()
                     GUI:TextColored(1, 0, 0, 1, "※面向红镜子")
                     GUI:BulletText("近战站位：")
-                    M.AddLabel("    第一波：", true, 115)
+                    M.UITool.AddLabel("    第一波：", true, 115)
                     local inputMelee1, inputMelee1Changed = GUI:InputText("##MirrorPosMelee1", M.StringJoin(M.Config.FruCfg.MirrorPosMelee1, ","), GUI.InputTextFlags_CharsNoBlank)
                     if inputMelee1Changed then
                         M.Config.FruCfg.MirrorPosMelee1 = M.StringSplit(inputMelee1, ",")
                     end
                     GUI:SameLine()
                     GUI:TextColored(0, 1, 1, 1, "※背对蓝镜子")
-                    M.AddLabel("    第二波：", true, 115)
+                    M.UITool.AddLabel("    第二波：", true, 115)
                     local inputMelee2, inputMelee2Changed = GUI:InputText("##MirrorPosMelee2", M.StringJoin(M.Config.FruCfg.MirrorPosMelee2, ","), GUI.InputTextFlags_CharsNoBlank)
                     if inputMelee2Changed then
                         M.Config.FruCfg.MirrorPosMelee2 = M.StringSplit(inputMelee2, ",")
@@ -369,7 +378,7 @@ local DrawFruConfigUI = function(M)
                 GUI:Separator()
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("3.光之暴走") then
-                    M.AddLabel("基本方案：", false)
+                    M.UITool.AddLabel("基本方案：", false)
                     GUI:PushItemWidth(80)
                     local FruLightRampantTypeIdx, FruLightRampantTypeIdxChange = GUI:Combo("##FruLightRampantType", M.Config.FruCfg.FruLightRampantType, { "正六芒星", "新灰九式" }, 4)
                     if FruLightRampantTypeIdxChange then
@@ -377,13 +386,13 @@ local DrawFruConfigUI = function(M)
                     end
                     GUI:PopItemWidth()
                     if M.Config.FruCfg.FruLightRampantType == 1 then
-                        M.AddLabel("优先级：", false, 112)
+                        M.UITool.AddLabel("优先级：", false, 112)
                         GUI:PushItemWidth(180)
                         local lrPos, lrPosChanged = GUI:InputText("##FruLightRampantOrder", M.StringJoin(M.Config.FruCfg.FruLightRampantOrder, ","), GUI.InputTextFlags_CharsNoBlank)
                         if lrPosChanged then
                             M.Config.FruCfg.FruLightRampantOrder = M.StringSplit(lrPos, ",")
                         end
-                        M.AddLabel("放圈方式：", false)
+                        M.UITool.AddLabel("放圈方式：", false)
                         GUI:PushItemWidth(80)
                         local FruLightRampantDropType, FruLightRampantDropTypeChange = GUI:Combo("##FruLightRampantDropType", M.Config.FruCfg.FruLightRampantDropType, { "莫古力", "田园郡" }, 4)
                         if FruLightRampantDropTypeChange then
@@ -397,7 +406,7 @@ local DrawFruConfigUI = function(M)
             if GUI:CollapsingHeader("P3.暗之巫女") then
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("1.时间压缩·绝") then
-                    M.AddLabel("处理方案：", false)
+                    M.UITool.AddLabel("处理方案：", false)
                     GUI:PushItemWidth(80)
                     local UltimateRelativityType, UltimateRelativityTypeChange = GUI:Combo("##UltimateRelativityType", M.Config.FruCfg.UltimateRelativityType, { "灰九式", "日野摇号" }, 4)
                     if UltimateRelativityTypeChange then
@@ -415,7 +424,7 @@ local DrawFruConfigUI = function(M)
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("2.启示录") then
                     GUI:PushItemWidth(80)
-                    M.AddLabel("处理方案：", false)
+                    M.UITool.AddLabel("处理方案：", false)
                     local ApocalypseGroupType, ApocalypseGroupTypeCg = GUI:Combo("##ApocalypseGroupType", M.Config.FruCfg.ApocalypseGroupType, { "预站位", "莫莫科技", "日野主流", "双分组" }, 4)
                     if ApocalypseGroupTypeCg then
                         M.Config.FruCfg.ApocalypseGroupType = ApocalypseGroupType
@@ -432,7 +441,7 @@ local DrawFruConfigUI = function(M)
                     end
                     if M.Config.FruCfg.ApocalypseGroupType <= 2 then
                         if M.Config.FruCfg.ApocalypseGroupType == 1 then
-                            M.AddLabel("换位后：", false, 113)
+                            M.UITool.AddLabel("换位后：", false, 113)
                             GUI:PushItemWidth(100)
                             local ApocalypseChangePos, ApocalypseChangePosCg = GUI:Combo("##ApocalypseChangePos", M.Config.FruCfg.ApocalypseChangePos, { "不调整站位", "调整站位" }, 4)
                             if ApocalypseChangePosCg then
@@ -444,7 +453,7 @@ local DrawFruConfigUI = function(M)
                             end
                         end
                         GUI:PushItemWidth(80)
-                        M.AddLabel("分散方案：", false, 113)
+                        M.UITool.AddLabel("分散方案：", false, 113)
                         local ApocalypseType, ApocalypseTypeCg = GUI:Combo("##ApocalypseType", M.Config.FruCfg.ApocalypseType, { "车头基准", "人群基准", "起点基准" }, 4)
                         if ApocalypseTypeCg then
                             M.Config.FruCfg.ApocalypseType = ApocalypseType
@@ -462,7 +471,7 @@ local DrawFruConfigUI = function(M)
                             M.Config.FruCfg.ApocalypseType = 1
                         end
                         GUI:PushItemWidth(80)
-                        M.AddLabel("分散方案：", false, 113)
+                        M.UITool.AddLabel("分散方案：", false, 113)
                         local ApocalypseType, ApocalypseTypeCg = GUI:Combo("##ApocalypseType", M.Config.FruCfg.ApocalypseType, { "地火基准", "安置基准" }, 4)
                         if ApocalypseTypeCg then
                             M.Config.FruCfg.ApocalypseType = ApocalypseType
@@ -471,7 +480,7 @@ local DrawFruConfigUI = function(M)
                     end
 
                     GUI:PushItemWidth(40)
-                    M.AddLabel("暗夜舞蹈引导：", false)
+                    M.UITool.AddLabel("暗夜舞蹈引导：", false)
                     local P3DarkestDanceTaker, P3DarkestDanceTakerChange = GUI:Combo("##P3DarkestDanceTaker", M.Config.FruCfg.P3DarkestDanceTaker, { "MT", "ST" }, 4)
                     if P3DarkestDanceTakerChange then
                         M.Config.FruCfg.P3DarkestDanceTaker = P3DarkestDanceTaker
@@ -485,14 +494,14 @@ local DrawFruConfigUI = function(M)
             if GUI:CollapsingHeader("P4.希瓦·米特隆&暗之巫女") then
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("1.光暗龙诗：") then
-                    M.AddLabel("优先级：", false)
+                    M.UITool.AddLabel("优先级：", false)
                     GUI:PushItemWidth(180)
                     local DarkLitOrder, DarkLitOrderChanged = GUI:InputText("##DarkLitOrder", M.StringJoin(M.Config.FruCfg.DarkLitOrder, ","), GUI.InputTextFlags_CharsNoBlank)
                     if DarkLitOrderChanged then
                         M.Config.FruCfg.DarkLitOrder = M.StringSplit(DarkLitOrder, ",")
                     end
                     GUI:PopItemWidth()
-                    M.AddLabel("翻花绳四边形时换位人：", false, 204)
+                    M.UITool.AddLabel("翻花绳四边形时换位人：", false, 204)
                     GUI:PushItemWidth(80)
                     local DarkLitChangeType, DarkLitChangeTypeCg = GUI:Combo("##DarkLitChangeType", M.Config.FruCfg.DarkLitChangeType, { "左边两人", "右边两人" }, 4)
                     if DarkLitChangeTypeCg then
@@ -500,7 +509,7 @@ local DrawFruConfigUI = function(M)
                     end
                     GUI:PopItemWidth()
                     GUI:PushItemWidth(40)
-                    M.AddLabel("暗夜舞蹈引导：", false)
+                    M.UITool.AddLabel("暗夜舞蹈引导：", false)
                     local P4DarkestDanceTaker, P4DarkestDanceTakerChange = GUI:Combo("##P4DarkestDanceTaker", M.Config.FruCfg.P4DarkestDanceTaker, { "MT", "ST" }, 4)
                     if P4DarkestDanceTakerChange then
                         M.Config.FruCfg.P4DarkestDanceTaker = P4DarkestDanceTaker
@@ -513,14 +522,14 @@ local DrawFruConfigUI = function(M)
                 GUI:Separator()
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("2.时间结晶：") then
-                    M.AddLabel("优先级：", false)
+                    M.UITool.AddLabel("优先级：", false)
                     GUI:PushItemWidth(180)
                     local inputP42ProPriority, inputP42ProPriorityChange = GUI:InputText("##CrystallizeTimePriority", M.StringJoin(M.Config.FruCfg.CrystallizeTimePriority, ","), GUI.InputTextFlags_CharsNoBlank)
                     if inputP42ProPriorityChange then
                         M.Config.FruCfg.CrystallizeTimePriority = M.StringSplit(inputP42ProPriority, ",")
                     end
                     GUI:PopItemWidth()
-                    M.AddLabel("红冰不分摊人：", false, 162)
+                    M.UITool.AddLabel("红冰不分摊人：", false, 162)
                     GUI:PushItemWidth(100)
                     local CrystallizeTimeBuffType, CrystallizeTimeBuffTypeCg = GUI:Combo("##CrystallizeTimeBuffType", M.Config.FruCfg.CrystallizeTimeBuffType, { "往下躲大圈", "赤暴走开冲" }, 4)
                     if CrystallizeTimeBuffTypeCg then
@@ -531,7 +540,7 @@ local DrawFruConfigUI = function(M)
                     if M.Config.FruCfg.CrystallizeTimeBuffType == 2 then
                         GUI:TextColored(0, 1, 1, 1, "  ※赤暴走含自动疾跑")
                     end
-                    M.AddLabel("贡品拾取方式：", false, 162)
+                    M.UITool.AddLabel("贡品拾取方式：", false, 162)
                     local CrystallizeTimeType, CrystallizeTimeTypeCG = GUI:Combo("##CrystallizeTimeType", M.Config.FruCfg.CrystallizeTimeType, { "BUFF固定", "科技标点", "自动手摇结果" }, 4)
                     if CrystallizeTimeTypeCG then
                         M.Config.FruCfg.CrystallizeTimeType = CrystallizeTimeType
@@ -563,7 +572,7 @@ local DrawFruConfigUI = function(M)
                             local index = indexChange[i]
                             local buffId = tonumber(M.Config.FruCfg.CrystallizeTimeByBuff[index])
                             local buffIndex = M.IndexOf(buffIds, buffId)
-                            M.AddLabel("[" .. labels[index] .. "]", true)
+                            M.UITool.AddLabel("[" .. labels[index] .. "]", true)
                             local newIndex, changed = GUI:Combo("##POS" .. index, buffIndex, buffNames, 4)
                             if changed then
                                 local newBuff = buffIds[newIndex]
@@ -595,7 +604,7 @@ local DrawFruConfigUI = function(M)
                         M.FruConfigUI.MarkInputRight = true
                         GUI:Dummy(10, 0)
                         GUI:SameLine()
-                        M.AddLabel("[" .. leftStr .. "]", true)
+                        M.UITool.AddLabel("[" .. leftStr .. "]", true)
                         local inputStrD, DChanged = GUI:InputText("##CrystallizeMarkD", M.Config.FruCfg.CrystallizeMark["D"], GUI.InputTextFlags_CharsNoBlank)
                         if DChanged then
                             if tonumber(inputStrD) == nil or tonumber(inputStrD) > 4 then
@@ -605,7 +614,7 @@ local DrawFruConfigUI = function(M)
                             end
                         end
                         GUI:SameLine(0, 160)
-                        M.AddLabel("[" .. rightStr .. "]", true)
+                        M.UITool.AddLabel("[" .. rightStr .. "]", true)
                         local inputStrB, BChanged = GUI:InputText("##CrystallizeMarkB", M.Config.FruCfg.CrystallizeMark["B"], GUI.InputTextFlags_CharsNoBlank)
                         if BChanged then
                             if tonumber(inputStrB) == nil or tonumber(inputStrB) > 4 then
@@ -616,7 +625,7 @@ local DrawFruConfigUI = function(M)
                         end
                         GUI:Dummy(45, 0)
                         GUI:SameLine()
-                        M.AddLabel("[" .. leftDownStr .. "]", true)
+                        M.UITool.AddLabel("[" .. leftDownStr .. "]", true)
                         local inputStr4, _4Changed = GUI:InputText("##CrystallizeMark4", M.Config.FruCfg.CrystallizeMark["4"], GUI.InputTextFlags_CharsNoBlank)
                         if _4Changed then
                             if tonumber(inputStr4) == nil or tonumber(inputStr4) > 4 then
@@ -626,7 +635,7 @@ local DrawFruConfigUI = function(M)
                             end
                         end
                         GUI:SameLine(0, 90)
-                        M.AddLabel("[" .. rightDownStr .. "]", true)
+                        M.UITool.AddLabel("[" .. rightDownStr .. "]", true)
                         local inputStr3, _3Changed = GUI:InputText("##CrystallizeMark3", M.Config.FruCfg.CrystallizeMark["3"], GUI.InputTextFlags_CharsNoBlank)
                         if _3Changed then
                             if tonumber(inputStr3) == nil or tonumber(inputStr3) > 4 then
@@ -643,7 +652,7 @@ local DrawFruConfigUI = function(M)
                     GUI:Text("--------------------------------------")
 
                     GUI:PushItemWidth(80)
-                    M.AddLabel("击退方案：", false, 140)
+                    M.UITool.AddLabel("击退方案：", false, 140)
                     local CrystallizeTimeKnockBack, CrystallizeTimeKnockBackCg = GUI:Combo("##CrystallizeTimeKnockBack", M.Config.FruCfg.CrystallizeTimeKnockBack, { "Y字击退", "角落击退" }, 4)
                     if CrystallizeTimeKnockBackCg then
                         M.Config.FruCfg.CrystallizeTimeKnockBack = CrystallizeTimeKnockBack
@@ -653,7 +662,7 @@ local DrawFruConfigUI = function(M)
                         GUI:TextColored(0, 1, 1, 1, "   ※Y字击退自动开启防击退")
                     elseif M.Config.FruCfg.CrystallizeTimeKnockBack then
                         GUI:PushItemWidth(80)
-                        M.AddLabel("回返位置：", false, 140)
+                        M.UITool.AddLabel("回返位置：", false, 140)
                         local CrystallizeTimeKnockCType, CrystallizeTimeKnockCTypeCg = GUI:Combo("##CrystallizeTimeKnockCType", M.Config.FruCfg.CrystallizeTimeKnockCType, { "外标点", "内标点" }, 4)
                         if CrystallizeTimeKnockCTypeCg then
                             M.Config.FruCfg.CrystallizeTimeKnockCType = CrystallizeTimeKnockCType
@@ -666,7 +675,7 @@ local DrawFruConfigUI = function(M)
             if GUI:CollapsingHeader("P5.潘多拉·米特隆") then
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("1.踩塔：") then
-                    M.AddLabel("基本方案：")
+                    M.UITool.AddLabel("基本方案：")
                     GUI:PushItemWidth(80)
                     local DarkLightWingsType, DarkLightWingsTypeChange = GUI:Combo("##DarkLightWingsType", M.Config.FruCfg.DarkLightWingsType, { "MT无脑", "人群无脑" }, 4)
                     if DarkLightWingsTypeChange then
@@ -675,7 +684,7 @@ local DrawFruConfigUI = function(M)
                     GUI:PopItemWidth()
                     if M.Config.FruCfg.DarkLightWingsType == 1 then
                         GUI:TextColored(0, 1, 1, 1, "  ※MT无脑去1塔对面，人群看左右刀")
-                        M.AddLabel("踩塔方案：")
+                        M.UITool.AddLabel("踩塔方案：")
                         GUI:PushItemWidth(80)
                         local DarkLightWingsTakeTowerType, DarkLightWingsTakeTowerTypeCg = GUI:Combo("##DarkLightWingsTakeTowerType", M.Config.FruCfg.DarkLightWingsTakeTowerType, { "固定踩塔", "顺序踩塔" }, 4)
                         if DarkLightWingsTakeTowerTypeCg then
@@ -712,36 +721,36 @@ local DrawFruConfigUI = function(M)
                             M.Info("治疗踩1塔。")
                         end
                         GUI:Text("   ----------------------------------")
-                        M.AddLabel("   正下塔：", true)
+                        M.UITool.AddLabel("   正下塔：", true)
                         local inputDown, inputDownChanged = GUI:InputText("##DarkLightWings.Down", M.StringJoin(M.Config.FruCfg.DarkLightWings.Down, ","), GUI.InputTextFlags_CharsNoBlank)
                         if inputDownChanged then
                             M.Config.FruCfg.DarkLightWings.Down = M.StringSplit(inputDown, ",")
                         end
-                        M.AddLabel("   左上塔：", true)
+                        M.UITool.AddLabel("   左上塔：", true)
                         local inputLeft, inputLeftChanged = GUI:InputText("##DarkLightWings.Left", M.StringJoin(M.Config.FruCfg.DarkLightWings.Left, ","), GUI.InputTextFlags_CharsNoBlank)
                         if inputLeftChanged then
                             M.Config.FruCfg.DarkLightWings.Left = M.StringSplit(inputLeft, ",")
                         end
                         GUI:SameLine(0, 52)
-                        M.AddLabel("右上塔：", true)
+                        M.UITool.AddLabel("右上塔：", true)
                         local inputRight, inputRightChanged = GUI:InputText("##DarkLightWings.Right", M.StringJoin(M.Config.FruCfg.DarkLightWings.Right, ","), GUI.InputTextFlags_CharsNoBlank)
                         if inputRightChanged then
                             M.Config.FruCfg.DarkLightWings.Right = M.StringSplit(inputRight, ",")
                         end
 
                     else
-                        M.AddLabel("   正下塔：", true, 113)
+                        M.UITool.AddLabel("   正下塔：", true, 113)
                         local inputDown, inputDownChanged = GUI:InputText("##DarkLightWings2.Down", M.StringJoin(M.Config.FruCfg.DarkLightWings2.Down, ","), GUI.InputTextFlags_CharsNoBlank)
                         if inputDownChanged then
                             M.Config.FruCfg.DarkLightWings2.Down = M.StringSplit(inputDown, ",")
                         end
-                        M.AddLabel("   安全半场：", true)
+                        M.UITool.AddLabel("   安全半场：", true)
                         local inputLeft, inputLeftChanged = GUI:InputText("##DarkLightWings2.Left", M.StringJoin(M.Config.FruCfg.DarkLightWings2.Left, ","), GUI.InputTextFlags_CharsNoBlank)
                         if inputLeftChanged then
                             M.Config.FruCfg.DarkLightWings2.Left = M.StringSplit(inputLeft, ",")
                         end
                         GUI:SameLine(0, 35)
-                        M.AddLabel("危险半场：", true)
+                        M.UITool.AddLabel("危险半场：", true)
                         local inputRight, inputRightChanged = GUI:InputText("##DarkLightWings2.Right", M.StringJoin(M.Config.FruCfg.DarkLightWings2.Right, ","), GUI.InputTextFlags_CharsNoBlank)
                         if inputRightChanged then
                             M.Config.FruCfg.DarkLightWings2.Right = M.StringSplit(inputRight, ",")
@@ -752,7 +761,7 @@ local DrawFruConfigUI = function(M)
                 end
                 GUI:SetNextTreeNodeOpened(true, GUI.SetCond_Appearing)
                 if GUI:TreeNode("2.挡枪：") then
-                    M.AddLabel("   第1挡：", true)
+                    M.UITool.AddLabel("   第1挡：", true)
                     GUI:PushItemWidth(50)
                     local drawWinPolarizing1, drawWinPolarizing1Changed = GUI:InputText("##drawWinPolarizing1", M.StringJoin(M.Config.FruCfg.drawWinPolarizingOrder[1], ","), GUI.InputTextFlags_CharsNoBlank)
                     if drawWinPolarizing1Changed then
@@ -760,14 +769,14 @@ local DrawFruConfigUI = function(M)
                     end
                     GUI:PopItemWidth()
                     GUI:SameLine(0, 50)
-                    M.AddLabel("第2挡：", true)
+                    M.UITool.AddLabel("第2挡：", true)
                     GUI:PushItemWidth(50)
                     local drawWinPolarizing2, drawWinPolarizing2Changed = GUI:InputText("##drawWinPolarizing2", M.StringJoin(M.Config.FruCfg.drawWinPolarizingOrder[2], ","), GUI.InputTextFlags_CharsNoBlank)
                     if drawWinPolarizing2Changed then
                         M.Config.FruCfg.drawWinPolarizingOrder[2] = M.StringSplit(drawWinPolarizing2, ",")
                     end
                     GUI:PopItemWidth()
-                    M.AddLabel("   第3挡：", true)
+                    M.UITool.AddLabel("   第3挡：", true)
                     GUI:PushItemWidth(50)
                     local drawWinPolarizing3, drawWinPolarizing3Changed = GUI:InputText("##drawWinPolarizing3", M.StringJoin(M.Config.FruCfg.drawWinPolarizingOrder[3], ","), GUI.InputTextFlags_CharsNoBlank)
                     if drawWinPolarizing3Changed then
@@ -775,7 +784,7 @@ local DrawFruConfigUI = function(M)
                     end
                     GUI:SameLine(0, 50)
                     GUI:PopItemWidth()
-                    M.AddLabel("第4挡：", true)
+                    M.UITool.AddLabel("第4挡：", true)
                     GUI:PushItemWidth(50)
                     local drawWinPolarizing4, drawWinPolarizing4Changed = GUI:InputText("##drawWinPolarizing4", M.StringJoin(M.Config.FruCfg.drawWinPolarizingOrder[4], ","), GUI.InputTextFlags_CharsNoBlank)
                     if drawWinPolarizing4Changed then
@@ -825,4 +834,4 @@ local DrawFruConfigUI = function(M)
         GUI:End()
     end
 end
-return DrawFruConfigUI
+return FruConfigUI

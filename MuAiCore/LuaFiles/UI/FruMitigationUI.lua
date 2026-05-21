@@ -1,10 +1,21 @@
-﻿local titles = {
+﻿local FruMitigationUI = {}
+--[[
+===========================
+    绝伊甸减伤设置UI VIEW
+===========================
+]]
+local titles = {
     "绝命战士",
     "希瓦·米特隆",
     "暗之巫女",
     "希瓦·米特隆&暗之巫女",
     "潘多拉希瓦·米特隆",
 }
+-- 当前UI是否为新建模式
+local newMode = false
+-- 是否发送到小队频道
+local sendParty = false
+local newFileName = ""
 local function AddCheckBox(index, M)
     local key = M.FruMitigation.AoeNames[index].key
     local skillName = M.FruMitigation.JobMap[Player.job]
@@ -38,15 +49,16 @@ local function AddCheckBox(index, M)
     end
     GUI:Columns(1)
 end
-local DrawUI = function(M)
+FruMitigationUI.draw = function()
+    local M = MuAiGuide
     if M.FruMitigationUI.open then
-        if not M.UI.open or M.IsHealer(Player.job) then
+        if not M.MainUI.open or M.IsHealer(Player.job) then
             M.FruMitigationUI.open = false
-            M.FruMitigationUI.NewMode = false
+            newMode = false
             return
         end
+        GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
         GUI:SetNextWindowSize(300, 0, GUI.SetCond_Appearing)
-        GUI:SetNextWindowPos(M.FruConfigUI.x, M.FruConfigUI.y, GUI.SetCond_Appearing)
         M.FruMitigationUI.visible, M.FruMitigationUI.open = GUI:Begin("Fru Mitigation Setting", M.FruMitigationUI.open)
         if M.FruMitigationUI.visible then
             GUI:TextColored(1, 0, 0, 1, "※请勿盲目勾选，需要根据技能CD情况合理设置。")
@@ -92,19 +104,19 @@ local DrawUI = function(M)
                     GUI:BulletText("自动极限技")
                     GUI:Dummy(20, 10)
                     GUI:SameLine()
-                    
-                    M.AddLabel("自动P3极限技", true, 120)
-                    M.Config.FruMitigation.AutoLB1 = GUI:Checkbox("##AutoLB1",  M.Config.FruMitigation.AutoLB1)
+
+                    M.UITool.AddLabel("自动P3极限技", true, 130)
+                    M.Config.FruMitigation.AutoLB1 = GUI:Checkbox("##AutoLB1", M.Config.FruMitigation.AutoLB1)
                     GUI:SameLine(0, 50)
-                    M.AddLabel("自动P5极限技", true,273)
-                    M.Config.FruMitigation.AutoLB2 = GUI:Checkbox("##AutoLB2",  M.Config.FruMitigation.AutoLB2)
+                    M.UITool.AddLabel("自动P5极限技", true, 293)
+                    M.Config.FruMitigation.AutoLB2 = GUI:Checkbox("##AutoLB2", M.Config.FruMitigation.AutoLB2)
                 end
                 GUI:Separator()
                 GUI:TextColored(1, 0, 0, 1, "※请谨慎使用，慎防挂友认亲！")
                 GUI:TextColored(1, 0, 0, 1, "※默语默认打钩，此状态下发送到默语，可以复制出去做宏。")
                 GUI:TextColored(1, 0, 0, 1, "※默语取消打钩，则直接发送到小队频道！（慎用）")
                 local mark
-                if M.FruMitigationUI.SendParty then
+                if sendParty then
                     mark = "/e"
                 else
                     mark = "/p"
@@ -129,7 +141,7 @@ local DrawUI = function(M)
                             if #fieldInfo ~= 0 then
                                 table.insert(msgSkill2, pMark .. fieldInfo)
                             end
-                            pMark = "P" .. curInfo .p .. ": "
+                            pMark = "P" .. curInfo.p .. ": "
                             lastPSend = curInfo.p
                             targetInfo = ""
                             fieldInfo = ""
@@ -169,7 +181,7 @@ local DrawUI = function(M)
                     end
                 end
                 GUI:SameLine()
-                M.FruMitigationUI.SendParty = GUI:Checkbox("默语", M.FruMitigationUI.SendParty)
+                sendParty = GUI:Checkbox("默语", sendParty)
             end
             if M.IsTank(Player.job) then
                 if GUI:CollapsingHeader("坦克死刑") then
@@ -295,7 +307,7 @@ local DrawUI = function(M)
                     GUI:BulletText("第一波死刑:")
                     GUI:NextColumn()
                     GUI:PushItemWidth(100)
-                    local P5_Death1, P5_Death1RingChange = GUI:Combo("##P5_Death1", M.Config.FruMitigation.Tank.P5_Death1, table2, 4)
+                    local P5_Death1, P5_Death1RingChange = GUI:Combo("##P5_Death1", M.Config.FruMitigation.Tank.P5_Death1, table2, 2)
                     if P5_Death1RingChange then
                         M.Config.FruMitigation.Tank.P5_Death1 = P5_Death1
                     end
@@ -307,7 +319,7 @@ local DrawUI = function(M)
                     GUI:BulletText("第二波死刑:")
                     GUI:NextColumn()
                     GUI:PushItemWidth(100)
-                    local P5_Death2, P5_Death2Change = GUI:Combo("##P5_Death2", M.Config.FruMitigation.Tank.P5_Death2, table2, 4)
+                    local P5_Death2, P5_Death2Change = GUI:Combo("##P5_Death2", M.Config.FruMitigation.Tank.P5_Death2, table2, 2)
                     if P5_Death2Change then
                         M.Config.FruMitigation.Tank.P5_Death2 = P5_Death2
                     end
@@ -353,7 +365,6 @@ local DrawUI = function(M)
                 if GUI:IsItemClicked(0) then
                     M.FruMitigation.LoadDefaultByName("melee_d1_default.lua")
                     if Player.job == 20 then
-                 
                         M.FruMitigation.LoadDefaultByNameEx("melee_monkEx.lua", false)
                     elseif Player.job == 39 then
                         M.FruMitigation.LoadDefaultByNameEx("melee_reaperEx.lua", false)
@@ -400,13 +411,13 @@ local DrawUI = function(M)
             end
 
             GUI:BulletText("配置文件工具：")
-            if M.FruMitigationUI.NewMode then
+            if newMode then
                 GUI:Dummy(10, 20)
                 GUI:SameLine()
-                M.AddLabel("新配置名：", true)
+                M.UITool.AddLabel("新配置名：", true)
                 GUI:PushItemWidth(200)
                 local havaSame = false
-                local NewFileName, NewFileNameChanged = GUI:InputText("##NewFileName", M.FruMitigationUI.NewFileName, GUI.InputTextFlags_CharsNoBlank)
+                local NewFileName, NewFileNameChanged = GUI:InputText("##NewFileName", newFileName, GUI.InputTextFlags_CharsNoBlank)
                 if NewFileNameChanged then
                     if M.ContainsIgnoreCase(M.Config.FruMitigationCustomList, NewFileName)
                             or string.lower(NewFileName) == "frumitigation"
@@ -415,7 +426,7 @@ local DrawUI = function(M)
                         GUI:TextColored(1, 0, 0, 1, "已存在该名称文件或者名称不合法,无法创建!")
                         havaSame = true
                     else
-                        M.FruMitigationUI.NewFileName = NewFileName
+                        newFileName = NewFileName
                     end
                 end
                 GUI:PopItemWidth()
@@ -423,12 +434,12 @@ local DrawUI = function(M)
                 GUI:SameLine()
                 GUI:Button("确认", 100, 20)
                 if GUI:IsItemClicked(0) then
-                    if not havaSame and M.FruMitigationUI.NewFileName ~= nil and #M.FruMitigationUI.NewFileName > 0 then
+                    if not havaSame and newFileName ~= nil and #newFileName > 0 then
                         local path = M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job)
-                        M.SaveFileConfig(path, M.FruMitigationUI.NewFileName, M.Config.FruMitigation)
-                        M.FruMitigationUI.NewMode = false
-                        if M.FruMitigationUI.NewFileName ~= M.Config.FruMitigationCustomList[M.Config.FruMitigationCustomListIndex] then
-                            table.insert(M.Config.FruMitigationCustomList, M.FruMitigationUI.NewFileName)
+                        M.SaveFileConfig(path, newFileName, M.Config.FruMitigation)
+                        newMode = false
+                        if newFileName ~= M.Config.FruMitigationCustomList[M.Config.FruMitigationCustomListIndex] then
+                            table.insert(M.Config.FruMitigationCustomList, newFileName)
                         end
                     else
                         M.Info("已存在该名称文件或者名称不合法,无法创建!")
@@ -437,8 +448,8 @@ local DrawUI = function(M)
                 GUI:SameLine()
                 GUI:Button("取消", 100, 20)
                 if GUI:IsItemClicked(0) then
-                    M.FruMitigationUI.NewFileName = M.Config.FruMitigationCustomList[M.Config.FruMitigationCustomListIndex]
-                    M.FruMitigationUI.NewMode = false
+                    newFileName = M.Config.FruMitigationCustomList[M.Config.FruMitigationCustomListIndex]
+                    newMode = false
                 end
             else
                 GUI:Dummy(10, 20)
@@ -447,7 +458,7 @@ local DrawUI = function(M)
                 local configIndex, configIndexChange = GUI:Combo("##configIndex", M.Config.FruMitigationCustomListIndex, M.Config.FruMitigationCustomList, 4)
                 if configIndexChange then
                     M.Config.FruMitigationCustomListIndex = configIndex
-                    M.FruMitigationUI.NewFileName = M.Config.FruMitigationCustomList[M.Config.FruMitigationCustomListIndex]
+                    newFileName = M.Config.FruMitigationCustomList[M.Config.FruMitigationCustomListIndex]
                 end
                 GUI:PopItemWidth()
                 GUI:Dummy(10, 20)
@@ -455,8 +466,8 @@ local DrawUI = function(M)
                 if M.Config.FruMitigationCustomListIndex == 1 then
                     GUI:Button("新建配置", 90, 20)
                     if GUI:IsItemClicked(0) then
-                        M.FruMitigationUI.NewFileName = ""
-                        M.FruMitigationUI.NewMode = true
+                        newFileName = ""
+                        newMode = true
                     end
                 else
                     GUI:Button("加载此配置", 90, 20)
@@ -469,14 +480,14 @@ local DrawUI = function(M)
                     GUI:SameLine()
                     GUI:Button("新建配置", 90, 20)
                     if GUI:IsItemClicked(0) then
-                        M.FruMitigationUI.NewFileName = ""
-                        M.FruMitigationUI.NewMode = true
+                        newFileName = ""
+                        newMode = true
                     end
                     GUI:SameLine()
                     GUI:Button("保存到此配置", 100, 20)
                     if GUI:IsItemClicked(0) then
                         local path = M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job)
-                        M.SaveFileConfig(path, M.FruMitigationUI.NewFileName, M.Config.FruMitigation)
+                        M.SaveFileConfig(path, newFileName, M.Config.FruMitigation)
                     end
                 end
             end
@@ -487,4 +498,4 @@ local DrawUI = function(M)
         GUI:End()
     end
 end
-return DrawUI
+return FruMitigationUI

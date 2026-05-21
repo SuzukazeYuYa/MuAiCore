@@ -1,4 +1,11 @@
-local DrawMsgBox = function(M)
+local MsgUI = {}
+--[[
+===========================
+    消息弹窗UI VIEW
+===========================
+]]
+MsgUI.draw = function()
+    local M = MuAiGuide
     if not M.MsgUI.open then
         return
     end
@@ -50,7 +57,7 @@ local DrawMsgBox = function(M)
             GUI:SameLine()
             GUI:Button('更新', 100, 25)
             if GUI:IsItemClicked(0) then
-                M.MsgUI.open = false
+                M.CloseAllUI()
                 M.ForceUpdate()
             end
             GUI:SameLine(0, 22)
@@ -116,4 +123,4 @@ local DrawMsgBox = function(M)
     end
     GUI:End()
 end
-return DrawMsgBox
+return MsgUI
