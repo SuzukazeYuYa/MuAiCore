@@ -460,6 +460,19 @@ GameTools.init = function(M)
     ---@param entityId number 标记对象
     M.MarkParty = function(marker, entityId)
         ActionList:Get(12, marker):Cast(entityId)
-    end 
-end 
+    end
+
+    --- 判断是否有成员有指定buff
+    ---@param buffId number buffId
+    ---@return boolean 是否有成员有指定buff
+    M.IsAnyMemberHasBuff = function(buffId)
+        for _, player in pairs(M.Party) do
+            local debuff = TensorCore.getBuff(player.id, buffId)
+            if debuff ~= nil then
+                return true
+            end
+        end
+        return false
+    end
+end
 return GameTools

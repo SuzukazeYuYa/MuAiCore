@@ -6,7 +6,7 @@ local MultiGuide = {}
 ]]
 local playerData = {}
 --- 支持指导逻辑的副本，无法设置 
-local mapsIds = {} 
+local mapsIds = { 1363 }
 ---@param M MuAiGuide
 MultiGuide.init = function(M)
     M.MultiGuide = {

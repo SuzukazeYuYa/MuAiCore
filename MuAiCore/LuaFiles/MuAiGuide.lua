@@ -4,7 +4,7 @@
     MuAiGuide逻辑总脚本
 ===========================
 ]]
-M.VERSION = 286
+M.VERSION = 287
 M.GlobalGuideY = nil
 M.IsInit = false;
 --- 输出信息到控制台 
@@ -31,17 +31,27 @@ local modules = {
     'UIMgr',
 }
 
-M.Debug("加载子脚本!")
+M.Debug("----------------------------- 初始化开始 -----------------------------")
 for i = 1, #modules do
     local curPath =  MuAiGuideRoot .. 'MuAiGuideSubs' .. '\\' .. modules[i] .. '.lua'
-    M.Debug('  加载:' .. modules[i])
+    M.Debug('加载:' .. modules[i])
     local model = FileLoad(curPath)
-    model.init(M)
+    if type(model) ~= "table" then
+        M.Debug('加载失败，获取到内容如下：')
+        M.Debug('-----------------------')
+        d(model)
+        M.Debug('-----------------------')
+    else
+        model.init(M)
+    end
 end
 M.IsInit = true
 M.FruMitigation.ChangeJob()
 M.CheckVersion(true)
 M.GetSponsorsList()
+M.Debug('基础模块加载完成')
+M.Debug("加载副本脚本")
 M.LoadRaidScripts()
-M.Debug("初始化完成!")
+M.Debug("副本脚本加载完成")
+M.Debug("----------------------------- 初始化完成 -----------------------------")
 return M

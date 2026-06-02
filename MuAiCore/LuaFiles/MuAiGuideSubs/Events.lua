@@ -5,7 +5,7 @@ local Events = {}
 ===========================
 ]]
 local lastMap, lastJob
-local autoPopMap = { 1238, 1122, 1325, 1327, 1317  } -- 1362为测试地图，后续删除
+local autoPopMap = { 1238, 1122, 1325, 1327, 1317, 1363 }
 ---@type MuAiGuide
 local MG
 

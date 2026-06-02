@@ -870,10 +870,6 @@ local drawDeveloperTab = function(M)
         GUI:SameLine()
         GUI:Button('重载副本脚本', 120, 20)
         if GUI:IsItemClicked(0) then
-            if (M[M.Develop.DateTable]) ~= nil then
-                M.Develop.State = M[M.Develop.DateTable].CurrentState
-                M.Debug('已缓存[' .. M.Develop.DateTable .. ']进度：' .. M[M.Develop.DateTable].CurrentState)
-            end
             M.LoadRaidScripts()
         end
         GUI:SameLine(205, 0)

@@ -15,16 +15,22 @@ RaidMgr.init = function(M)
         local folderPath = MuAiGuideRoot .. "RaidScripts"
         local list = FolderList(folderPath)
         for _, fileName in pairs(list) do
+            M.Debug('   加载副本脚本：' .. fileName)
             local filePath = folderPath .. "\\" .. fileName
             local script = FileLoad(filePath)
-            if script ~= nil then
+            if type(script) ~= "table" then
+                M.Debug('   加载副本脚本：' .. fileName .. '加载失败，获取到内容如下：')
+                M.Debug('-----------------------')
+                d(script)
+                M.Debug('-----------------------')
+            else
                 raidScript[script.MapId] = script
                 if script.Init ~= nil then
                     -- 此处为脚本定义初始化，和进入副本之后逻辑不同
                     script.Init(M)
                 end
+                M.Debug('   加载副本脚本：' .. fileName .. '成功')
             end
-            M.Debug("已加载副本脚本：" .. fileName)
         end
         if M.CurRaidScript ~= nil and raidScript[Player.localmapid] ~= nil then
             M.CurRaidScript = raidScript[Player.localmapid]
