@@ -527,12 +527,12 @@ local drawRaidSettingTab = function(M)
         GUI:Text('   筹划中，仅有初步UI, 暂不可用')
         GUI:Dummy(15, 0)
         GUI:SameLine()
-        local dcmCfgChanged
-        M.Config.DcmCfg.state.global.enable, dcmCfgChanged = GUI:Checkbox('开启', M.Config.DcmCfg.state.global.enable)
+        local DmuCfgChanged
+        M.Config.DmuCfg.state.global.enable, DmuCfgChanged = GUI:Checkbox('开启', M.Config.DmuCfg.state.global.enable)
         if GUI:IsItemHovered() then
             GUI:SetTooltip('是否开启妖星乱舞绝境战相关功能')
         end
-        if M.Config.DcmCfg.state.global.enable then
+        if M.Config.DmuCfg.state.global.enable then
             GUI:Dummy(15, 0)
             GUI:SameLine()
             GUI:Button('指路设置', 150, 25)
@@ -540,8 +540,8 @@ local drawRaidSettingTab = function(M)
                 
             end
         end
-        if dcmCfgChanged then
-            M.SaveConfig(M.Config.DcmGuidePath, M.Config.DcmGuideFile, 'DcmCfg')
+        if DmuCfgChanged then
+            M.SaveConfig(M.Config.DmuGuidePath, M.Config.DmuGuideFile, 'DmuCfg')
         end
     end
 
@@ -874,7 +874,7 @@ local drawDeveloperTab = function(M)
                 M.Develop.State = M[M.Develop.DateTable].CurrentState
                 M.Debug('已缓存[' .. M.Develop.DateTable .. ']进度：' .. M[M.Develop.DateTable].CurrentState)
             end
-            M.LoadScripts()
+            M.LoadRaidScripts()
         end
         GUI:SameLine(205, 0)
         GUI:Button('恢复重载阶段', 120, 20)

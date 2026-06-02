@@ -15,9 +15,9 @@ local LoadUIConfig = function(M)
     M.Config.FruMitigationPath = M.Config.MainPath .. "\\FruMitigation"
     M.Config.FruMitigationFile = "FruMitigation.lua"
 
-    M.Config.DcmGuidePath = M.Config.MainPath .. "\\DcmGuide"
-    M.Config.DcmGuideFile = "GuideConfig.lua"
-    M.Config.DcmMitig = M.Config.MainPath .. "\\DcmMitig"
+    M.Config.DmuGuidePath = M.Config.MainPath .. "\\DmuGuide"
+    M.Config.DmuGuideFile = "GuideConfig.lua"
+    M.Config.DmuMitig = M.Config.MainPath .. "\\DmuMitig"
 
     M.Config.Key1 = { "Shift", "Ctrl", "Alt" }
     M.Config.Key2 = {}
@@ -39,12 +39,12 @@ local LoadUIConfig = function(M)
     M.Config.FruCustomList = M.LoadFileList(M.Config.FruGuidePath, { "GuideConfig.lua" })
     M.Config.FruCustomListIndex = 1
     --- 读取绝妖星存档
-    local defDcmCfg = M.CreateDcmDefaultCfg()
-    M.Config.DcmCfg = defDcmCfg  -- 这里只是让编辑可以默认识别，无实际作用
-    M.Config.DcmCfg = M.LoadConfig(M.Config.DcmGuidePath, M.Config.DcmGuideFile, defDcmCfg)
-    M.Config.DcmCfgPrevious = table.deepcopy(M.Config.DcmCfg)
-    M.Config.DcmCustomList = M.LoadFileList(M.Config.DcmGuidePath, { "GuideConfig.lua" })
-    M.Config.DcmCustomListIndex = 1
+    local defDmuCfg = M.CreateDmuDefaultCfg()
+    M.Config.DmuCfg = defDmuCfg  -- 这里只是让编辑可以默认识别，无实际作用
+    M.Config.DmuCfg = M.LoadConfig(M.Config.DmuGuidePath, M.Config.DmuGuideFile, defDmuCfg)
+    M.Config.DmuCfgPrevious = table.deepcopy(M.Config.DmuCfg)
+    M.Config.DmuCustomList = M.LoadFileList(M.Config.DmuGuidePath, { "GuideConfig.lua" })
+    M.Config.DmuCustomListIndex = 1
 end
 
 ---@param M MuAiGuide
@@ -289,7 +289,7 @@ Config.init = function(M)
 
     --- 创建绝卡夫卡默认配置
     --- @return table
-    M.CreateDcmDefaultCfg = function()
+    M.CreateDmuDefaultCfg = function()
         return {
             state = {
                 global = { enable = true, draw = true, guide = true },

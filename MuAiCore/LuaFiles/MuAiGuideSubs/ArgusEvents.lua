@@ -4,7 +4,14 @@ local ArgusEvents = {}
     Argus事件模块
 ===========================
 ]]
-local register = {}
+local register = {
+    OnEntityChannel = false,
+    OnMarkerAdd = false,
+    OnAOECreate = false,
+    OnEventObjectScriptFunc = false,
+    OnMapEffect = false,
+    OnAddEntityVFX = false,
+}
 local registerOK = false
 local infoTime = function()
     return string.format("%.3f", TensorReactions_CurrentCombatTimer)
@@ -14,7 +21,7 @@ end
 ArgusEvents.init = function(M)
     --- 开始读条事件
     local OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
-        if M.CurRaidScript ~= nil and M.CurRaidScript.OnEntityChannel ~= nil then
+       if M.CurRaidScript ~= nil and M.CurRaidScript.OnEntityChannel ~= nil then
             M.CurRaidScript.OnEntityChannel(entityID, spellID, targetID, channelTimeMax)
         end
 
@@ -29,7 +36,7 @@ ArgusEvents.init = function(M)
                     entityID,
                     GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
                     true,
-                    3,
+                    1,
                     4
             )
         end
@@ -56,7 +63,7 @@ ArgusEvents.init = function(M)
                     entityID,
                     GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
                     true,
-                    3,
+                    1,
                     2
             )
         end
@@ -68,6 +75,7 @@ ArgusEvents.init = function(M)
     end
 
     --- 注册AOE生成
+    ---@param aoeInfo DirectionalAOE
     local OnAOECreate = function(aoeInfo)
         if M.CurRaidScript ~= nil and M.CurRaidScript.OnAOECreate ~= nil then
             M.CurRaidScript.OnAOECreate(aoeInfo)
@@ -80,6 +88,12 @@ ArgusEvents.init = function(M)
             table.insert(M.Develop.AoeInfo[aoeInfo.aoeID], aoeInfo)
         end
         if M.Develop.PrintAoeInfo then
+            if aoeInfo.entityID then
+                local ent = TensorCore.mGetEntity(aoeInfo.entityID)
+                if ent.type == 1 then
+                    return
+                end 
+            end
             M.Info('[' .. infoTime()
                     .. ']AOE生成，名称：' .. aoeInfo.aoeName
                     .. ', ID：' .. aoeInfo.aoeID
@@ -135,46 +149,31 @@ ArgusEvents.init = function(M)
     --- 安全注册阿古斯（防止加载失败导致报错）
     local registerArgus = function()
         if Argus == nil then
-            register = nil
             return
-        else
-            register = {}
         end
         if Argus.registerOnEntityChannel ~= nil and not register["OnEntityChannel"] then
             Argus.registerOnEntityChannel(OnEntityChannel)
             register["OnEntityChannel"] = true
-        else
-            register["OnEntityChannel"] = false
         end
         if Argus.registerOnMarkerAdd ~= nil and not register["OnMarkerAdd"] then
             Argus.registerOnMarkerAdd(OnMarkerAdd)
             register["OnMarkerAdd"] = true
-        else
-            register["OnMarkerAdd"] = false
         end
         if Argus.registerOnAOECreateFunc ~= nil and not register["OnAOECreate"] then
             Argus.registerOnAOECreateFunc(OnAOECreate)
             register["OnAOECreate"] = true
-        else
-            register["OnAOECreate"] = false
         end
         if Argus.registerOnEventObjectScriptFunc ~= nil and not register["OnEventObjectScriptFunc"] then
             Argus.registerOnEventObjectScriptFunc(OnEventObjectScriptFunc)
             register["OnEventObjectScriptFunc"] = true
-        else
-            register["OnEventObjectScriptFunc"] = false
         end
         if Argus.registerOnMapEffect ~= nil and not register["OnMapEffect"] then
             Argus.registerOnMapEffect(OnMapEffect)
             register["OnMapEffect"] = true
-        else
-            register["OnMapEffect"] = false
         end
         if Argus.registerOnAddEntityVFXFunc ~= nil and not register["OnAddEntityVFX"] then
             Argus.registerOnAddEntityVFXFunc(OnAddEntityVFX)
             register["OnAddEntityVFX"] = true
-        else
-            register["OnAddEntityVFX"] = false
         end
     end
 

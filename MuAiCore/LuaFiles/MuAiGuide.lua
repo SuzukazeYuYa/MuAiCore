@@ -42,5 +42,6 @@ M.IsInit = true
 M.FruMitigation.ChangeJob()
 M.CheckVersion(true)
 M.GetSponsorsList()
+M.LoadRaidScripts()
 M.Debug("初始化完成!")
 return M
