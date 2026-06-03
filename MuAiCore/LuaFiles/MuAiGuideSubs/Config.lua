@@ -291,17 +291,13 @@ Config.init = function(M)
     --- @return table
     M.CreateDmuDefaultCfg = function()
         return {
-            state = {
-                global = { enable = true, draw = true, guide = true },
-                P1 = { enable = true, draw = true, guide = true },
-                P2 = { enable = true, draw = true, guide = true },
-                P3 = { enable = true, draw = true, guide = true },
-                P4 = { enable = true, draw = true, guide = true },
-                P5 = { enable = true, draw = true, guide = true },
-                P6 = { enable = true, draw = true, guide = true },
-            },
+            Enable = true,
             --- 基础8方位置
             JobPos = { "H2", "D2", "ST", "D4", "MT", "D3", "H1", "D1" },
+            P1 = { enable = true, draw = true, guide = true },
+            P2 = { enable = true, draw = true, guide = true },
+            P3 = { enable = true, draw = true, guide = true },
+            P4 = { enable = true, draw = true, guide = true },
         }
     end
 

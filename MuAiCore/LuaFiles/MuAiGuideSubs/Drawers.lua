@@ -13,6 +13,9 @@ local cy_03 = GUI:ColorConvertFloat4ToU32(0, 1, 1, 0.3)
 local pp_03 = GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.3)
 local w_1 = GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)
 
+
+
+
 ---@param M MuAiGuide
 Drawers.init = function(M)
     local ZeroYMap = { 1238, 1122, 1325, 1327 }
@@ -419,7 +422,14 @@ Drawers.init = function(M)
             end
         end
     end
-
+    
+    -- 通用创建 Drawer 函数
+    M.CreateDrawer = function(r, g, b, a)
+        local color = GUI:ColorConvertFloat4ToU32(r, g, b, a or 0.3)
+        return Argus2.ShapeDrawer:new(color, color, color,
+                GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), 1)
+    end
+    
     --- 绘制一个圆（已废弃仿报错用）
     M.DrawCircleUI = function()
     end

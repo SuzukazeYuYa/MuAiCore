@@ -442,6 +442,7 @@ GameTools.init = function(M)
     ---查询给定实体或者实体id对应的实体是否有执行类型的线
     ---@param  entityID number|table
     ---@return boolean 是否存在
+    ---@return TetherInfo 存在情况下，返回线对象
     M.HasLine = function(entityID, lineType)
         local tethers = Argus.getTethersOnEnt(entityID)
         if tethers == nil or table.size(tethers) == 0 then
@@ -449,7 +450,7 @@ GameTools.init = function(M)
         end
         for _, tether in pairs(tethers) do
             if tether.type == lineType then
-                return true
+                return true, tether
             end
         end
         return false

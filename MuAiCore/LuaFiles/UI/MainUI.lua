@@ -528,11 +528,11 @@ local drawRaidSettingTab = function(M)
         GUI:Dummy(15, 0)
         GUI:SameLine()
         local DmuCfgChanged
-        M.Config.DmuCfg.state.global.enable, DmuCfgChanged = GUI:Checkbox('开启', M.Config.DmuCfg.state.global.enable)
+        M.Config.DmuCfg.Enable, DmuCfgChanged = GUI:Checkbox('开启', M.Config.DmuCfg.Enable)
         if GUI:IsItemHovered() then
             GUI:SetTooltip('是否开启妖星乱舞绝境战相关功能')
         end
-        if M.Config.DmuCfg.state.global.enable then
+        if M.Config.DmuCfg.Enable then
             GUI:Dummy(15, 0)
             GUI:SameLine()
             GUI:Button('指路设置', 150, 25)
