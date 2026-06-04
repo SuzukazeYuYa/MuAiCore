@@ -57,6 +57,10 @@ RaidMgr.init = function(M)
                 M.CurRaidScript = raidScript[Player.localmapid]
             end
         end
+        -- 小工具扩展
+        if raidScript[-1] ~= nil then
+            raidScript[-1].Update()
+        end
     end
 end
 return RaidMgr

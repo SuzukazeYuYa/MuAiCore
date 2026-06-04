@@ -293,11 +293,15 @@ Config.init = function(M)
         return {
             Enable = true,
             --- 基础8方位置
-            JobPos = { "H2", "D2", "ST", "D4", "MT", "D3", "H1", "D1" },
-            P1 = { enable = true, draw = true, guide = true },
+            --JobPos = { "H2", "D2", "ST", "D4", "MT", "D3", "H1", "D1" },
+            P1 = { enable = true, draw = true, guide = true,
+                BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
+            },
             P2 = { enable = true, draw = true, guide = true },
             P3 = { enable = true, draw = true, guide = true },
             P4 = { enable = true, draw = true, guide = true },
+            P5 = { enable = true, draw = true, guide = true },
+            P6 = { enable = true, draw = true, guide = true },
         }
     end
 

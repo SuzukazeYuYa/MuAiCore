@@ -47,12 +47,18 @@ local drawJobTab = function(M)
         GUI:Dummy(10, 0)
         GUI:SameLine()
         if M.MultiGuide.onMap() then
-            M.MultiGuide.enable = GUI:Checkbox('指导模式', M.MultiGuide.enable)
+            local multiEnable, multiChanged = GUI:Checkbox('指导模式', M.MultiGuide.enable)
+            M.MultiGuide.enable = multiEnable
+            if multiChanged then
+                if not multiEnable then
+                    M.MultiGuide.initList()
+                end
+            end
             if GUI:IsItemHovered() then
                 GUI:SetTooltip("可以显示其他队友当前应该去哪")
             end
             if M.MultiGuide.enable then
-                GUI:SameLine()
+                GUI:SameLine()  
                 GUI:Button('清空指导', 100, 20)
                 if GUI:IsItemClicked(0) then
                     M.MultiGuide.initList()
@@ -524,7 +530,6 @@ local drawRaidSettingTab = function(M)
         end
         GUI:Dummy(0, 7)
         GUI:BulletText('妖星乱舞绝境战')
-        GUI:Text('   筹划中，仅有初步UI, 暂不可用')
         GUI:Dummy(15, 0)
         GUI:SameLine()
         local DmuCfgChanged
@@ -537,7 +542,7 @@ local drawRaidSettingTab = function(M)
             GUI:SameLine()
             GUI:Button('指路设置', 150, 25)
             if GUI:IsItemClicked(0) then
-                
+                M.DancingMadUI.open = not M.DancingMadUI.open
             end
         end
         if DmuCfgChanged then
@@ -1086,7 +1091,7 @@ MainUI.draw = function()
     M.MainUI.visible, M.MainUI.open = GUI:Begin('MuAiGuide Setting', M.MainUI.open)
     local winPosX, winPosY = GUI:GetWindowPos()
     M.MainUI.uiPos.x = winPosX + WIN_WIDE
-    M.MainUI.uiPos.y = winPosY 
+    M.MainUI.uiPos.y = winPosY
     if M.MainUI.visible and not GUI:IsWindowCollapsed() then
         GUI:Separator()
         GUI:Dummy(2, 2)

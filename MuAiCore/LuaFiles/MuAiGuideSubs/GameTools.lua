@@ -465,15 +465,58 @@ GameTools.init = function(M)
 
     --- 判断是否有成员有指定buff
     ---@param buffId number buffId
+    ---@param time number buffTime
     ---@return boolean 是否有成员有指定buff
-    M.IsAnyMemberHasBuff = function(buffId)
+    M.IsAnyMemberHasBuff = function(buffId, time)
         for _, player in pairs(M.Party) do
             local debuff = TensorCore.getBuff(player.id, buffId)
             if debuff ~= nil then
-                return true
+                if time == nil then
+                    return true
+                else
+                    return debuff.duration > time
+                end
             end
         end
         return false
     end
+
+    --- 当前队伍遍历执行
+    --- @param action function(job,curMember)
+    M.OnCurrentPartyDo = function(action)
+        for job, oldMember in pairs(M.Party) do
+            local curMember = TensorCore.mGetEntity(oldMember.id)
+            if curMember ~= nil then
+                local breakFlag = action(job, curMember)
+                if breakFlag then
+                    break
+                end
+            end
+        end
+    end
+    --- 获取刷新所有数据后的小队列表
+    --- @param divTable table 可空，非空时表示拆分依据
+    M.getCurParty = function(divTable)
+        if divTable == nil then
+            local member = {}
+            for job, oldMember in pairs(M.Party) do
+                member[job] = TensorCore.mGetEntity(oldMember.id)
+            end
+            return member
+        end
+        local include = {}
+        local out = {}
+        for job, oldMember in pairs(M.Party) do
+            local member = TensorCore.mGetEntity(oldMember.id)
+            if table.contains(divTable, job) then
+                include[job] = member
+            else
+                out[job] = member
+            end
+        end
+        return include, out
+    end
+
+
 end
 return GameTools

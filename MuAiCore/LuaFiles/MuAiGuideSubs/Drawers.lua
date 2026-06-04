@@ -423,7 +423,8 @@ Drawers.init = function(M)
         end
     end
     
-    -- 通用创建 Drawer 函数
+    --- 通用创建 Drawer 函数
+    ---@return ShapeDrawer
     M.CreateDrawer = function(r, g, b, a)
         local color = GUI:ColorConvertFloat4ToU32(r, g, b, a or 0.3)
         return Argus2.ShapeDrawer:new(color, color, color,

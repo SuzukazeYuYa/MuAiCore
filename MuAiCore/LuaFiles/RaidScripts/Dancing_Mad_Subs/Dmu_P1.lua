@@ -32,9 +32,12 @@ Dmu_P1.OnEntityChannel = function(entityID, spellID, _)
         end
     elseif spellID == 48370 then
         -- 众神之象
-        if DM.OverState('P1BeamEnd') then
-            DM.ChangeState('P1Line2_1')
+        if DM.OverState('P1BeamEnd') and DM.BeLowState('P1Line2Start') then
+            DM.ChangeState('P1Line2Start')
         end
+    elseif spellID == 47782 then
+        -- 连环环陷阱
+
     end
 end
 
@@ -75,7 +78,12 @@ Dmu_P1.OnAOECreate = function(aoeInfo)
 
     -- 采集刷的塔信息
     if aoeInfo.aoeID == 47786 and DM.BeLowState('P2Start') then
-        table.insert(Data().TowerAoe, aoeInfo)
+        table.insert(Data().Tower.Aoe, aoeInfo)
+        if table.size(Data().Tower.Aoe) == 4 then
+            table.sort(Data().Tower.Aoe, function(t1, t2)
+                return t1.x < t2.x
+            end)
+        end
     end
 end
 
@@ -157,7 +165,7 @@ Dmu_P1.Update = function()
         end
     end
 
-    if DM.InState('P1TrueFalse1End') then
+    if DM.OverState('P1TrueFalse1End', true) and DM.BeLowState('P1BeamEnd') then
         if Cfg().draw then
             -- 画激光
             local point = { x = 100, y = 0, z = 70 }
@@ -170,21 +178,190 @@ Dmu_P1.Update = function()
                           :addRect(point.x, point.y, point.z, 60, 6, dir, false)
                 end
             end
+            if Cfg().guide then
+                --这里可能涉及计算
+                if Data().Beam.Order == nil then
+                    Data().Beam.Order = Cfg().BeamOrder
+                end
+                local curParty = {}
+                for job, member in pairs(MG.Party) do
+                    curParty[job] = TensorCore.mGetEntity(member.id)
+                end
+
+                -- 一字横排法
+                local beamWay = {
+                    ['H2'] = { x = 80.5, z = 100 },
+                    ['D4'] = { x = 119.5, z = 100 },
+                }
+
+                for i = 2, 7 do
+                    local curJob = Data().Beam.Order[i]
+                    local leftPlayer = curParty[Data().Beam.Order[i - 1]]
+                    local rightPlayer = curParty[Data().Beam.Order[i + 1]]
+                    beamWay[curJob] = { x = (leftPlayer.pos.x + rightPlayer.pos.x) / 2, z = 100 }
+                end
+                MG.FrameMultiD(beamWay)
+            end
         end
         if TimeSince(Data().Fire1.Time) > 2500 and MG.IsAnyMemberHasBuff(2941) then
             DM.ChangeState('P1BeamEnd')
+            Data().Beam.Time = Now()
         end
     end
 
     -- 记录激光射了谁
     if DM.InState('P1BeamEnd') then
-        for _, member in pairs(MG.Party) do
-            local debuff = TensorCore.getBuff(member.id, 2941)
-            if debuff ~= nil and table.contains(Data().BeamShoot, member.id) then
-                table.insert(Data().BeamShoot, member.id)
+        -- 计算被射了的人
+        if Data().Beam.Order ~= nil and Data().Beam.Shoot == nil then
+            local shoot = {}
+            for _, job in pairs(Data().Beam.Order) do
+                local member = MG.Party[job]
+                local debuff = TensorCore.getBuff(member.id, 2941)
+                if debuff ~= nil then
+                    table.insert(shoot, job)
+                end
+            end
+            if table.size(shoot == 4) then
+                Data().Beam.Shoot = shoot
+            end
+        end
+
+        --计算没被射的人
+        if Data().Beam.Order ~= nil
+                and Data().Beam.Shoot ~= nil
+                and Data().Beam.UnShoot == nil
+        then
+            local unshoot = {}
+            for _, job in pairs(Data().Beam.Order) do
+                if not table.contains(Data().Beam.Shoot, job) then
+                    table.insert(unshoot, job)
+                end
+            end
+            Data().Beam.UnShoot = unshoot
+        end
+
+        -- 激光判定小于4秒，指路踩塔
+        if TimeSince(Data().Beam.Time) < 4000 then
+            if table.size(Data().Beam.Shoot) >= 4
+                    and table.size(Data().Tower.Aoe) >= 4
+            then
+                if Cfg().guide then
+                    -- 计算踩塔指路位置
+                    if Data().Tower.GuideData == nil then
+                        Data().Tower.GuideData = {}
+                        for _, job in pairs(Data().Beam.Order) do
+                            if table.contains(Data().Beam.Shoot, job) then
+                                local curIdx = MG.IndexOf(Data().Beam.Shoot, job)
+                                local tower = Data().Tower.Aoe[curIdx]
+                                Data().Tower.GuideData[job] = { x = tower.x, z = tower.z + 5 }
+                            else
+                                local curIdx = MG.IndexOf(Data().Beam.UnShoot, job)
+                                local tower = Data().Tower.Aoe[curIdx]
+                                Data().Tower.GuideData[job] = { x = tower.x, z = tower.z }
+                            end
+                        end
+                    else
+                        MG.FrameMultiD(Data().Tower.GuideData)
+                    end
+                end
+            end
+        else
+            -- 超过4秒进入传毒阶段
+            DM.ChangeState('P1BuffTurn1')
+        end
+    end
+
+    -- 传毒开始
+    if DM.InState('P1BuffTurn1') then
+        -- 如果有任意一人毒buff超过50秒，判定为传毒完成
+        if MG.IsAnyMemberHasBuff(5078, 50) then
+            DM.ChangeState('P1Line2Start')
+        else
+            local thGroup = { 'MT', 'ST', 'H1', 'H2' }
+            if Data().Turn1.BuffJobs == nil then
+                local buffJob = {}
+                for job, member in pairs(MG.Party) do
+                    if TensorCore.hasBuff(member.id, 5078) then
+                        table.insert(buffJob, job)
+                    end
+                end
+                if table.size(buffJob) >= 2 then
+                    Data().Turn1.BuffJobs = buffJob
+                    if table.contains(buffJob, MG.SelfPos) then
+                        Data().Turn1.SelfGroupTurner = MG.SelfPos
+                    else
+                        for _, job in pairs(buffJob) do
+                            if (table.contains(thGroup, job) and table.contains(thGroup, MG.SelfPos))
+                                    or (not table.contains(thGroup, job) and not table.contains(thGroup, MG.SelfPos))
+                            then
+                                Data().Turn1.SelfGroupTurner = job
+                                break
+                            end
+                        end
+                    end
+                end
+            else
+               
+                local player = MG.GetPlayer()
+                -- 画传毒
+                if Cfg().draw then
+                    MG.OnCurrentPartyDo(function(job, curMember)
+                        if table.contains(Data().Turn1.BuffJobs, job) then
+                            DM.cyanDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 6)
+                        end
+                        -- 画击退箭头
+                        if Data().Turn1.SelfGroupTurner == job and job ~= MG.SelfPos then
+                            local distance = TensorCore.getDistance2d(curMember.pos, player.pos)
+                            if distance < 6 then
+                                local kickDis = 15
+                                local heading = TensorCore.getHeadingToTarget(curMember.pos, player.pos)
+                                DM.greenDrawer:addArrow(player.pos.x, player.pos.y, player.pos.z, heading, kickDis - 0.4, 0.2, 0.4, 0.2, true)
+                            end
+                        end
+                    end)
+                end
+                if Cfg().guide then
+                    local guideData = {}
+                    local dpsJob, thJob
+                    -- 填入
+                    for _, job in pairs(Data().Turn1.BuffJobs) do
+                        if table.contains(thGroup, job) then
+                            thJob = job
+                            guideData[job] = { x = 91, y = 0, z = 100 }
+                        else
+                            dpsJob = job
+                            guideData[job] = { x = 109, y = 0, z = 100 }
+                        end
+                    end
+                    local dpsObj = TensorCore.mGetEntity(MG.Party[dpsJob].id)
+                    local thObj = TensorCore.mGetEntity(MG.Party[thJob].id)
+                    local disDps = TensorCore.getDistance2d(dpsObj.pos, guideData[dpsJob])
+                    local disTh = TensorCore.getDistance2d(thObj.pos, guideData[thJob])
+                    for job, member in pairs(MG.Party) do
+                        if table.contains(thGroup, job) then
+                            if job ~= thJob then
+                                if disTh < 2 then
+                                    guideData[job] = { x = thObj.pos.x + 1, y = thObj.pos.y, z = thObj.pos.z }
+                                else
+                                    guideData[job] = { x = 91.5, y = 0, z = 100 }
+                                end
+                            end
+                        else
+                            if job ~= dpsJob then
+                                if disDps < 2 then
+                                    guideData[job] = { x = dpsObj.pos.x - 1, y = dpsObj.pos.y, z = dpsObj.pos.z }
+                                else
+                                    guideData[job] = { x = 108.5, y = 0, z = 100 }
+                                end
+                            end
+                        end
+                    end
+                    MG.FrameMultiD(guideData)
+                end
             end
         end
     end
+  
     if DM.InState('P1Line2_1') then
         if Cfg().draw then
             for _, member in pairs(MG.Party) do

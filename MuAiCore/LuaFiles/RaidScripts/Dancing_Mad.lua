@@ -38,41 +38,57 @@ local dataInit = function()
                 GatherPlayers = {},
                 Time = 0 --火判定时间
             },
-            BeamShoot = {},
-            TowerAoe = {},
-            
+            Beam = {
+                Order = nil,
+                --被激光射了的人
+                Shoot = nil,
+                -- 没被射
+                UnShoot = nil,
+                TowerPos = nil,
+                Time = 0,
+            },
+            Tower = {
+                Aoe = {},
+                GuideData = nil
+            },
+            Turn1 = {
+                BuffJobs = nil,
+                SelfGroupTurner = nil,
+                SelfGroupTurnerObj = nil,
+            },
         }
     }
     MG.DancingMad.CurrentState = DM.State.P1Start
     MG.Info(DM.NameCN .. '数据初始化完毕！')
 end
 
---- 状态定义
-DM.State = {
-    P1Start = 1000,
-    P1TrueFalse1 = 1001,
-    P1LineKickBacked = 1002,
-    P1TrueFalse2 = 1003,
-    P1TrueFalse1End = 1004,
-    P1BeamEnd = 1005,
-    P1TowerBoom = 1006,
-    P1BuffTrans1 = 1007,
-    P1BuffTrans2 = 1008,
-    P1BuffTrans3 = 1009,
-    P1BuffTrans4 = 1010,
-    P1Line2_1 = 1011,
-    P1Line2_2 = 1012,
-    P1Line3_1 = 1013,
-    P1Line3_2 = 1014,
-    
-    P1End = 1099,
-    
-    
-    P2Start = 2000,
-}
+local StateNames = {
+    'P1Start',
+    'P1TrueFalse1',
+    'P1LineKickBacked',
+    'P1TrueFalse2',
+    'P1TrueFalse1End',
+    'P1BeamEnd',
+    'P1TowerBoom',
+    'P1BuffTurn1',
 
---- 初始化，将拆分的脚本合并加载
+    'P1Line2Start',
+    'P1Line2_1',
+    'P1Line2_2',
+    'P1Line3_1',
+    'P1Line3_2',
+
+    'P1End,',
+
+    'P2Start',
+}
+--- 初始化
 DM.Init = function(M)
+    DM.State = {}
+    -- 绑定阶段序号
+    for i = 1, #StateNames do
+        DM.State[StateNames[i]] = i
+    end
     DM.SubScripts = {}
     MG = M
     -- 一次性创建所有颜色
@@ -119,6 +135,10 @@ end
 ---@param stateName string
 DM.InState = function(stateName)
     local state = DM.State[stateName]
+    if state == nil then
+        MG.Debug("[错误]切换状态失败，状态不存在：" .. stateName)
+        return false
+    end
     if MG.DancingMad.CurrentState == state then
         return true
     end
