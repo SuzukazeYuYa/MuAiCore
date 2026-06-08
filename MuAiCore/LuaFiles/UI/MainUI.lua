@@ -72,9 +72,16 @@ local drawJobTab = function(M)
                 end
             end
         end
-        GUI:TextColored(0, 1, 0, 1, '   ※拖动角色名进行职能修改')
+        GUI:AlignFirstTextHeightToWidgets()
+        GUI:TextColored(0, 1, 0, 1, '   ※拖动角色名修改职能')
     else
-        GUI:TextColored(1, 0, 0, 1, '当前没有加入队伍')
+        GUI:AlignFirstTextHeightToWidgets()
+        GUI:TextColored(1, 0, 0, 1, '  当前没有加入队伍')
+    end
+    GUI:SameLine(195, 0)
+    GUI:Button('默认顺序设置', 135, 22)
+    if GUI:IsItemClicked(0) then
+        M.DefaultJobsUI.open = not M.DefaultJobsUI.open
     end
     GUI:Dummy(1, 1)
     GUI:Separator()
@@ -1113,6 +1120,9 @@ MainUI.draw = function()
             drawDeveloperTab(M)
         elseif tabindex == 6 then
             drawSupportTab(M)
+        end
+        if tabindex ~= 1 then
+            M.DefaultJobsUI.open = false
         end
         if tabindex ~= 6 then
             M.QRCodeUI.open = false

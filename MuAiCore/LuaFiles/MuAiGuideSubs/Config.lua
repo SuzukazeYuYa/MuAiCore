@@ -74,6 +74,13 @@ Config.init = function(M)
     end
     M.CreateDefMainCfg = function()
         local mainCfg = {
+            JobOrder = {
+                19, 21, 32, 37,
+                24, 33, 40, 28,
+                34, 20, 22, 30, 39, 41,
+                31, 23, 38,
+                27, 42, 25, 35
+            },
             --- 指路工具颜色
             GuideColor = { r = 0, g = 1, b = 1, a = 0.5 },
             --- 多人指路工具颜色
@@ -295,10 +302,10 @@ Config.init = function(M)
             --- 基础8方位置
             --JobPos = { "H2", "D2", "ST", "D4", "MT", "D3", "H1", "D1" },
             P1 = { enable = true, draw = true, guide = true,
-                BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
+                   BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
             },
             P2 = { enable = true, draw = true, guide = true,
-                MarkMember  = false,
+                   MarkMember = false,
             },
             P3 = { enable = true, draw = true, guide = true },
             P4 = { enable = true, draw = true, guide = true },

@@ -6,7 +6,7 @@ GameTools.init = function(M)
     local MeleeJob = { 20, 22, 30, 34, 39, 41 }
     local RangeJob = { 31, 23, 38 }
     local MagicJob = { 25, 27, 35, 42 }
-    local JobIds = {
+    M.JobIds = {
         19, 21, 32, 37,
         24, 33, 40, 28,
         34, 20, 22, 30, 39, 41,
@@ -20,6 +20,14 @@ GameTools.init = function(M)
         "武士", "武僧", "龙骑", "忍者", "钐镰", "蝰蛇",
         "机工", "诗人", "舞者",
         "召唤", "绘灵", "黑魔", "赤魔"
+    }
+    
+    local fullJobName = {
+        "骑士", "战士", "暗黑骑士", "绝枪战士",
+        "白魔法师", "占星术士", "贤者", "学者",
+        "武士", "武僧", "龙骑士", "忍者", "钐镰客", "蝰蛇剑士",
+        "机工士", "诗人", "舞者",
+        "召唤师", "绘灵法师", "黑魔法师", "赤魔法师"
     }
 
     M.JobPosName = { "MT", "ST", "H1", "H2", "D1", "D2", "D3", "D4" }
@@ -89,7 +97,7 @@ GameTools.init = function(M)
         if not entity
                 or not entity.job
                 or entity.type ~= 1
-                or not table.contains(JobIds, entity.job)
+                or not table.contains(M.JobIds, entity.job)
         then
             return false
         end
@@ -98,14 +106,20 @@ GameTools.init = function(M)
 
     --- 获取职业名称
     --- @param job number 职业ID
-    M.GetJobNameById = function(job)
-        for i = 1, #JobIds, 1 do
-            if JobIds[i] == job then
-                return JobName[i]
+    M.GetJobNameById = function(job, jobName)
+        jobName = jobName or JobName
+        for i = 1, #M.JobIds, 1 do
+            if M.JobIds[i] == job then
+                return jobName[i]
             end
         end
     end
-
+    
+    
+    M.GetJobFullNameById = function(job)
+        return M.GetJobNameById(job, fullJobName)
+    end
+    
     --- 读取小队列表
     M.GetPartyPlayers = function()
         local curPt = TensorCore.getEntityGroupList("Party")
@@ -142,9 +156,10 @@ GameTools.init = function(M)
     --- 读取小队信息（初始化模块）
     M.LoadParty = function()
         M.Party = {}
+        local jobOrder = M.Config.Main.JobOrder
         local members = M.GetPartyPlayers()
         table.sort(members, function(p1, p2)
-            return M.IndexOf(JobIds, p1.job) < M.IndexOf(JobIds, p2.job)
+            return M.IndexOf(jobOrder, p1.job) < M.IndexOf(jobOrder, p2.job)
         end)
         if table.size(members) == 4 then
             for i = 1, 4 do
