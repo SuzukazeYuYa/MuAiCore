@@ -6,7 +6,7 @@ DancingMadUI.draw = function()
         return
     end
     GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
-    GUI:SetNextWindowSize(400, 0, GUI.SetCond_Appearing)
+    GUI:SetNextWindowSize(270, 0, GUI.SetCond_Appearing)
     M.DancingMadUI.visible, M.DancingMadUI.open = GUI:Begin("Dmu Setting", M.DancingMadUI.open)
     if M.DancingMadUI.visible then
         if GUI:CollapsingHeader("全局开关") then
@@ -50,10 +50,13 @@ DancingMadUI.draw = function()
                 end
             end
         end
+        --if M.Config.DmuCfg.P2.enable and GUI:CollapsingHeader("P2") then
+        --    M.Config.DmuCfg.P2.MarkMember = GUI:Checkbox('标记队友 分摊禁止,大圈锁链,扇形攻击', M.Config.DmuCfg.P2.MarkMember)
+        --end
     end
     M.SaveConfig(M.Config.DmuGuidePath, M.Config.DmuGuideFile, "DmuCfg")
 
-    GUI:SetWindowSize(415, 0)
+    GUI:SetWindowSize(270, 0)
     GUI:End()
 end
 return DancingMadUI

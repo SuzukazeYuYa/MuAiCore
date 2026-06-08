@@ -179,12 +179,20 @@ Tools.init = function(M)
         end
         return false
     end
-    
+
     M.ShuffleListInPlace = function(tbl)
         for i = #tbl, 2, -1 do
             local j = math.random(i)
             tbl[i], tbl[j] = tbl[j], tbl[i]
         end
+    end
+
+    M.GetMidPos = function(posA, posB)
+        return {
+            x = (posA.x + posB.x) / 2,
+            y = (posA.y + posB.y) / 2,
+            z = (posA.z + posB.z) / 2,
+        }
     end
 end
 return Tools

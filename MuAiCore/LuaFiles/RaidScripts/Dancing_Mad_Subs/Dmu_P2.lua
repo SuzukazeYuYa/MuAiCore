@@ -1,0 +1,550 @@
+local Dmu_P2 = {}
+
+Dmu_P2.StateName = "P2"
+
+---@type DancingMad
+local DM
+---@type MuAiGuide
+local MG
+
+local Cfg = function()
+    return MG.Config.DmuCfg.P2
+end
+
+local Data = function()
+    if MG.DancingMad == nil then
+        return nil
+    end
+    return MG.DancingMad.P2
+end
+
+local towerPointByA1 = {
+    [1] = { label = "上", x = 100.000, y = 0.000, z = 92.000 },
+    [2] = { label = "右上", x = 105.657, y = 0.000, z = 94.343 },
+    [3] = { label = "右", x = 108.000, y = 0.000, z = 100.000 },
+    [4] = { label = "右下", x = 105.657, y = 0.000, z = 105.657 },
+    [5] = { label = "下", x = 100.000, y = 0.000, z = 108.000 },
+    [6] = { label = "左下", x = 94.343, y = 0.000, z = 105.657 },
+    [7] = { label = "左", x = 92.000, y = 0.000, z = 100.000 },
+    [8] = { label = "左上", x = 94.343, y = 0.000, z = 94.343 },
+}
+
+--- 初始化
+--- @param dm DancingMad
+--- @param m MuAiGuide
+Dmu_P2.Init = function(dm, m)
+    DM = dm
+    MG = m
+end
+
+Dmu_P2.DataInit = function()
+    MG.DancingMad.P2 = {
+        Towers = {
+            spawn = {},
+            temp = {},
+            guideDir = {
+                { finish = false, skill = 0, guideData = nil },
+                { finish = false, skill = 0, guideData = nil },
+                { finish = false, skill = 0, guideData = nil },
+                { finish = false, skill = 0, guideData = nil, backData = nil },
+            },
+            markCnt = 0,
+            Timer = 0,
+            curMarks = {},
+            wave = 0,
+            groupA = {},
+            groupB = {},
+            doing = {},
+            standBy = {},
+            GuideData = {},
+            markCache = {},
+            groupOrders = {},
+        }
+    }
+end
+
+-- 1234按照THMR顺序排列
+local standTemplate = {
+    odd = {-- 奇数
+        doing = {
+            [1] = { isLeft = true, dis = 3.6, dir = -math.pi / 6 },
+            [2] = { isLeft = true, dis = 3.6, dir = math.pi / 4 },
+            [3] = { isLeft = false, dis = 3.6, dir = -math.pi * 3 / 4 },
+            [4] = { isLeft = false, dis = 3.6, dir = math.pi / 4 },
+        },
+        standBy = {
+            [1] = { isLeft = true, dis = 4.4, dir = -math.pi / 4 },
+            [2] = { isLeft = true, dis = 4.4, dir = math.pi * 3 / 10 },
+            [3] = { isLeft = false, dis = 4.4, dir = math.pi / 4 },
+            [4] = { isLeft = false, dis = 4.4, dir = math.pi / 4 },
+        }
+    },
+    even = { --偶数
+        doing = {
+            [1] = { isLeft = true, dis = 3.6, dir = -math.pi / 5 },
+            [2] = { isLeft = true, dis = 3.6, dir = 0 },
+            -- [3] = { isLeft = false, dis = 3.6, dir = math.pi / 3 },
+            --[4] = { isLeft = false, dis = 3.6, dir = -math.pi / 3 },      
+            [3] = { isLeft = false, dis = 3.6, dir = math.pi * 17 / 36 },
+            [4] = { isLeft = false, dis = 3.6, dir = -math.pi * 17 / 36 },
+        },
+        standBy = {
+            [1] = { isLeft = true, dis = 12, dir = -math.pi * 17 / 20 },
+            [2] = { isLeft = true, dis = 4.4, dir = -math.pi * 17 / 18 },
+            [3] = { isLeft = false, dis = 11, dir = math.pi * 7 / 9 },
+            [4] = { isLeft = false, dis = 4.4, dir = math.pi * 17 / 18 },
+        }
+    },
+}
+
+Dmu_P2.OnEntityChannel = function(entityID, spellID, _)
+    if spellID == 47804 then
+        -- 终末双腕
+        if DM.BeLowState('P2T8Start') then
+            DM.ChangeState('P2T8Start')
+        end
+    elseif spellID == 47826 or spellID == 47827 then
+        -- 未来/过去
+        if Data().Towers.wave <= 3 then
+            Data().Towers.guideDir[1].skill = spellID
+        elseif Data().Towers.wave <= 5 then
+            Data().Towers.guideDir[2].skill = spellID
+        elseif Data().Towers.wave <= 7 then
+            Data().Towers.guideDir[3].skill = spellID
+        else
+            Data().Towers.guideDir[4].skill = spellID
+        end
+    elseif spellID == 47836 or spellID == 47837 then
+        -- 毁灭之脚
+        if Data().Towers.wave <= 3 then
+            Data().Towers.guideDir[1].finish = true
+        elseif Data().Towers.wave <= 5 then
+            Data().Towers.guideDir[2].finish = true
+        elseif Data().Towers.wave <= 7 then
+            Data().Towers.guideDir[3].finish = true
+        else
+            Data().Towers.guideDir[4].finish = true
+        end
+    end
+end
+
+--local logMarkName = function(job, id, type)
+--    local nameCn
+--    if id == 715 then
+--        nameCn = '分摊'
+--    elseif id == 716 then
+--        nameCn = '钢铁'
+--    elseif id == 717 then
+--        nameCn = '扇形'
+--    end
+--    if type == nil or type == 1 then
+--        MG.Info(job .. '的标记为：' .. nameCn)
+--    else
+--        MG.Info(job .. '的标记更新为：' .. nameCn)
+--    end
+--end
+
+local initGroups = function()
+    -- 采取当前流行的2222分组1238 4567
+    if Data().Towers.curMarks.MT == 715 or Data().Towers.curMarks.H1 == 715 then
+        table.insert(Data().Towers.groupA, 'MT')
+        table.insert(Data().Towers.groupA, 'H1')
+        table.insert(Data().Towers.groupB, 'ST')
+        table.insert(Data().Towers.groupB, 'H2')
+    else
+        table.insert(Data().Towers.groupA, 'ST')
+        table.insert(Data().Towers.groupA, 'H2')
+        table.insert(Data().Towers.groupB, 'MT')
+        table.insert(Data().Towers.groupB, 'H1')
+    end
+    if Data().Towers.curMarks.D1 == 715 or Data().Towers.curMarks.D3 == 715 then
+        table.insert(Data().Towers.groupA, 'D1')
+        table.insert(Data().Towers.groupA, 'D3')
+        table.insert(Data().Towers.groupB, 'D2')
+        table.insert(Data().Towers.groupB, 'D4')
+    else
+        table.insert(Data().Towers.groupA, 'D2')
+        table.insert(Data().Towers.groupA, 'D4')
+        table.insert(Data().Towers.groupB, 'D1')
+        table.insert(Data().Towers.groupB, 'D3')
+    end
+end
+
+Dmu_P2.OnMarkerAdd = function(entityID, markerID)
+    d(markerID)
+    if 715 <= markerID and markerID <= 717 then
+        Data().Towers.markCnt = Data().Towers.markCnt + 1
+        local curMarkJob
+        for job, member in pairs(MG.Party) do
+            if member.id == entityID then
+                curMarkJob = job
+                break
+            end
+        end
+        if curMarkJob ~= nil then
+            Data().Towers.curMarks[curMarkJob] = markerID
+            if Data().Towers.markCnt > 8 then
+                if table.size(Data().Towers.markCache) < 4 then
+                    Data().Towers.markCache[curMarkJob] = markerID
+                end
+            end
+        end
+        if Data().Towers.markCnt == 8 then
+            initGroups()
+            if DM.BeLowState('P2T8InitMark') then
+                DM.ChangeState('P2T8InitMark')
+            end
+        end
+    end
+end
+
+Dmu_P2.OnAOECreate = function(aoeInfo)
+end
+
+Dmu_P2.OnEventObjectScriptFunc = function(entityID)
+end
+
+Dmu_P2.OnAddEntityVFX = function(vfxID)
+
+end
+
+Dmu_P2.OnMapEffect = function(a1, a2, a3)
+    if DM.OverState('P2T8Start', true)
+            and DM.BeLowState('P2T8End')
+            and a2 == 1 and a3 == 2
+            and 1 <= a1 and a1 <= 8
+    then
+        if table.size(Data().Towers.temp) < 2 then
+            table.insert(Data().Towers.temp, towerPointByA1[a1])
+            if table.size(Data().Towers.temp) == 2 then
+                local left, right
+                local tbl = Data().Towers.temp
+                if MG.GetClock(tbl[1], tbl[2]) then
+                    left = tbl[2]
+                    right = tbl[1]
+                else
+                    left = tbl[1]
+                    right = tbl[2]
+                end
+                Data().Towers.wave = Data().Towers.wave + 1
+                if Data().Towers.wave == 8 then
+                    Data().Towers.Timer = Now()
+                end
+                Data().Towers.spawn[Data().Towers.wave] = { left = left, right = right }
+                Data().Towers.temp = {}
+            end
+        end
+        --- 1238 4567 其他解法改这里即可
+        if Data().Towers.wave <= 3 or Data().Towers.wave == 8 then
+            Data().Towers.doing = Data().Towers.groupA
+            Data().Towers.standBy = Data().Towers.groupB
+        else
+            Data().Towers.standBy = Data().Towers.groupA
+            Data().Towers.doing = Data().Towers.groupB
+        end
+    end
+end
+
+local calcGuidePos = function(wave)
+    local dirL = TensorCore.getHeadingToTarget(DM.Center, Data().Towers.spawn[wave].left)
+    local dirR = TensorCore.getHeadingToTarget(DM.Center, Data().Towers.spawn[wave].right)
+    local curDoingPos = {}
+    local curTemplate
+    if wave % 2 ~= 0 then
+        curTemplate = standTemplate.odd
+    else
+        curTemplate = standTemplate.even
+    end
+    for i = 1, #curTemplate.doing do
+        local t = curTemplate.doing[i]
+        if t.isLeft then
+            local curDir = dirL + t.dir
+            curDoingPos[i] = TensorCore.getPosInDirection(Data().Towers.spawn[wave].left, curDir, t.dis)
+        else
+            local curDir = dirR + t.dir
+            curDoingPos[i] = TensorCore.getPosInDirection(Data().Towers.spawn[wave].right, curDir, t.dis)
+        end
+    end
+
+    local curStbPos = {}
+    for i = 1, #curTemplate.standBy do
+        local t = curTemplate.standBy[i]
+        if t.isLeft then
+            local curDir = dirL + t.dir
+            curStbPos[i] = TensorCore.getPosInDirection(Data().Towers.spawn[wave].left, curDir, t.dis)
+        else
+            local curDir = dirR + t.dir
+            curStbPos[i] = TensorCore.getPosInDirection(Data().Towers.spawn[wave].right, curDir, t.dis)
+        end
+    end
+    local guideData = {}
+    for i = 1, 4 do
+        local curDoingJob = Data().Towers.groupOrders[wave][i]
+        local curStanByJob = Data().Towers.standBy[i]
+        guideData[curDoingJob] = curDoingPos[i]
+        guideData[curStanByJob] = curStbPos[i]
+    end
+    return guideData
+end
+
+local calcFirstOrderA = function()
+    local group = Data().Towers.groupA
+    local index = 1
+    local mark1 = Data().Towers.curMarks[group[1]]
+    local mark2 = Data().Towers.curMarks[group[2]]
+    local mark3 = Data().Towers.curMarks[group[3]]
+    local mark4 = Data().Towers.curMarks[group[4]]
+    if mark1 == 717 then
+        if mark3 == 716 then
+            Data().Towers.groupOrders[index] = { group[2], group[1], group[3], group[4] }
+        else
+            Data().Towers.groupOrders[index] = { group[2], group[1], group[4], group[3] }
+        end
+    elseif mark2 == 717 then
+        if mark3 == 716 then
+            Data().Towers.groupOrders[index] = { group[1], group[2], group[3], group[4] }
+        else
+            Data().Towers.groupOrders[index] = { group[1], group[2], group[4], group[3] }
+        end
+    elseif mark3 == 717 then
+        if mark1 == 716 then
+            Data().Towers.groupOrders[index] = { group[4], group[3], group[1], group[2] }
+        else
+            Data().Towers.groupOrders[index] = { group[4], group[3], group[2], group[1] }
+        end
+    elseif mark4 == 717 then
+        if mark1 == 716 then
+            Data().Towers.groupOrders[index] = { group[3], group[4], group[1], group[2] }
+        else
+            Data().Towers.groupOrders[index] = { group[3], group[4], group[2], group[1] }
+        end
+    end
+end
+local calcFirstOrderB = function()
+    local group = Data().Towers.groupB
+    local index = 4
+    local cone = {}
+    local circle = {}
+    for _, job in pairs(Data().Towers.groupB) do
+        local markId = Data().Towers.curMarks[job]
+        if markId == 716 then
+            table.insert(circle, job)
+        elseif markId == 717 then
+            table.insert(cone, job)
+        end
+    end
+    local curOrder = {}
+    if MG.IndexOf(group, cone[1]) < MG.IndexOf(group, cone[2]) then
+        curOrder = { cone[1], cone[2] }
+    else
+        curOrder = { cone[2], cone[1] }
+    end
+
+    if MG.IndexOf(group, circle[1]) < MG.IndexOf(group, circle[2]) then
+        table.insert(curOrder, circle[1])
+        table.insert(curOrder, circle[2])
+    else
+        table.insert(curOrder, circle[2])
+        table.insert(curOrder, circle[1])
+    end
+
+    Data().Towers.groupOrders[index] = curOrder
+end
+
+local calcGroupOrder = function(wave)
+    if Data().Towers.groupOrders[wave] ~= nil then
+        return
+    end
+    if wave == 1 then
+        calcFirstOrderA()
+    else
+        if table.size(Data().Towers.markCache) < 4 then
+            return
+        end
+        local lstOdr = Data().Towers.groupOrders[wave - 1]
+        if wave % 2 == 0 then
+            local curWave
+            if wave == 4 then
+                curWave = 8
+                calcFirstOrderB()
+            else
+                curWave = wave
+            end
+            -- 有4个头标进行了更新
+            local circle = {}
+            local cone = {}
+            for job, markId in pairs(Data().Towers.markCache) do
+                if markId == 716 then
+                    table.insert(circle, job)
+                elseif markId == 717 then
+                    table.insert(cone, job)
+                end
+            end
+            Data().Towers.groupOrders[curWave] = {}
+            if MG.IndexOf(lstOdr, cone[1]) < MG.IndexOf(lstOdr, cone[2]) then
+                table.insert(Data().Towers.groupOrders[curWave], cone[1])
+                table.insert(Data().Towers.groupOrders[curWave], cone[2])
+            else
+                table.insert(Data().Towers.groupOrders[curWave], cone[2])
+                table.insert(Data().Towers.groupOrders[curWave], cone[1])
+            end
+
+            if MG.IndexOf(lstOdr, circle[1]) < MG.IndexOf(lstOdr, circle[2]) then
+                table.insert(Data().Towers.groupOrders[curWave], circle[1])
+                table.insert(Data().Towers.groupOrders[curWave], circle[2])
+            else
+                table.insert(Data().Towers.groupOrders[curWave], circle[2])
+                table.insert(Data().Towers.groupOrders[curWave], circle[1])
+            end
+        else
+            local gather = {}
+            local cone, circle
+            for job, markId in pairs(Data().Towers.markCache) do
+                if markId == 716 then
+                    circle = job
+                elseif markId == 717 then
+                    cone = job
+                elseif markId == 715 then
+                    table.insert(gather, job)
+                end
+            end
+            if MG.IndexOf(lstOdr, gather[1]) < MG.IndexOf(lstOdr, gather[2]) then
+                Data().Towers.groupOrders[wave] = { gather[1], cone, circle, gather[2] }
+            else
+                Data().Towers.groupOrders[wave] = { gather[2], cone, circle, gather[1] }
+            end
+        end
+
+        if table.size(Data().Towers.groupOrders[wave]) == 4 then
+            -- 算完丢弃
+            Data().Towers.markCache = {}
+        end
+    end
+end
+
+local guideGatherPoint = function(idx, wave, finishPoints)
+    local curData = Data().Towers.guideDir[idx]
+    if curData.finish then
+        if Cfg().guide then
+            MG.FrameMultiD(finishPoints, 0.3)
+        end
+    else
+        if curData.guideData == nil then
+            curData.guideData = {}
+            local guidePos, guidePos2
+            local leftTw = Data().Towers.spawn[wave].left
+            local rightTw = Data().Towers.spawn[wave].right
+            local mid = MG.GetMidPos(leftTw, rightTw)
+            if curData.skill == 47827 then
+                guidePos = mid
+                guidePos2 = mid
+            elseif curData.skill == 47826 then
+                local dir = TensorCore.getHeadingToTarget(leftTw, rightTw)
+                guidePos = TensorCore.getPosInDirection(mid, dir + math.pi / 2, 13)
+                if idx == 4 then
+                    guidePos2 = mid
+                end
+            end
+            for job, _ in pairs(MG.Party) do
+                curData.guideData[job] = guidePos
+            end
+        else
+            if Cfg().guide then
+                MG.FrameMultiD(curData.guideData)
+            end
+        end
+    end
+end
+
+local guideFuturePastOrTakeTower = function()
+    local waves = { 3, 5, 7 }
+    local wave = Data().Towers.wave
+    if not table.contains(waves, wave) then
+        if Cfg().guide then
+            MG.FrameMultiD(Data().Towers.GuideData[wave], 0.3)
+        end
+    else
+        local idxMap = { [3] = 1, [5] = 2, [7] = 3 }
+        local idx = idxMap[wave]
+        local finishPoints = Data().Towers.GuideData[wave]
+        guideGatherPoint(idx, wave, finishPoints)
+    end
+end
+
+Dmu_P2.Update = function()
+    if DM.InState('P2T8InitMark') and Data().Towers.wave > 0 then
+        local wave = Data().Towers.wave
+        if Data().Towers.GuideData[wave] == nil then
+            if Data().Towers.groupOrders[wave] == nil then
+                calcGroupOrder(wave)
+            else
+                Data().Towers.GuideData[wave] = calcGuidePos(wave)
+            end
+        else
+            guideFuturePastOrTakeTower()
+        end
+        if Cfg().draw then
+            local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
+            local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 3)
+            local left = Data().Towers.spawn[wave].left
+            local right = Data().Towers.spawn[wave].right
+            drawer:addCircle(left.x, left.y, left.z, 4, true)
+            drawer:addCircle(right.x, right.y, right.z, 4, true)
+            for job, member in pairs(MG.Party) do
+                if table.contains(Data().Towers.doing, job) then
+                    local curMember = TensorCore.mGetEntity(member.id)
+                    if TensorCore.getDistance2d(curMember.pos, left) < 4 or TensorCore.getDistance2d(curMember.pos, right) < 4 then
+                        local curMark = Data().Towers.curMarks[job]
+                        if curMark == 715 then
+                            -- 分摊
+                            DM.greenDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 5)
+                        elseif curMark == 716 then
+                            -- 钢铁
+                            DM.redDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 5)
+                        elseif curMark == 717 then
+                            -- 扇形
+                            local nearest = nil
+                            local dis = 1000
+                            for _, mmb in pairs(MG.Party) do
+                                if mmb.id ~= curMember.id then
+                                    local memberNew = TensorCore.mGetEntity(mmb.id)
+                                    local distance = TensorCore.getDistance2d(memberNew.pos, curMember.pos)
+                                    if distance < dis then
+                                        dis = distance
+                                        nearest = memberNew
+                                    end
+                                end
+                            end
+                            if nearest ~= nil then
+                                local dir = TensorCore.getHeadingToTarget(curMember.pos, nearest.pos)
+                                MG.CreateDrawer(0, 0.5, 1, 0.3)
+                                  :addCone(curMember.pos.x, curMember.pos.y, curMember.pos.z, 40, math.pi / 2, dir)
+                            end
+                        end
+                    end
+                end
+            end
+            if wave % 2 == 0 then
+                local curParty = MG.GetPartyPlayers()
+                table.sort(curParty, function(a, b)
+                    return TensorCore.getDistance2d(a.pos, DM.Center) < TensorCore.getDistance2d(b.pos, DM.Center)
+                end)
+                for i = 1, 4 do
+                    DM.purpleDrawer:addCircle(curParty[i].pos.x, curParty[i].pos.y, curParty[i].pos.z, 5)
+                end
+            end
+        end
+    end
+    if Data().Towers.wave == 8
+            and TimeSince(Data().Towers.Timer) > 10000
+            and DM.BeLowState('P2T8End')
+    then
+        DM.ChangeState('P2T8End')
+    end
+    if DM.InState('P2T8End') then
+        --local curData = Data().Towers.guideDir[4]
+        --guideGatherPoint(4, 8, finishPoints)
+    end
+end
+
+return Dmu_P2

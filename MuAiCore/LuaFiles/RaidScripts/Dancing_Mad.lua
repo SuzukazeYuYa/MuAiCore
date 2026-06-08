@@ -14,7 +14,11 @@ local doSubEvents = function(eventName, ...)
     end
 
     for _, script in pairs(DM.SubScripts or {}) do
-        if MG.Config.DmuCfg[script.StateName].enable and script[eventName] then
+        if MG.Config.DmuCfg[script.StateName].enable
+                and script[eventName]
+                and DM.OverState(script.StateName .. 'Start', true)
+                and DM.BeLowState(script.StateName .. 'End', true)
+        then
             local ok, err = pcall(script[eventName], ...)
             if not ok then
                 MG.Debug(script.StateName .. '执行' .. eventName .. '失败！')
@@ -29,40 +33,26 @@ end
 
 ---数据初始化
 local dataInit = function()
-    --- @class DancingMadData
-    MG.DancingMad = {
-        P1 = {
-            Fire1 = {
-                BossMark = 0,
-                PlayerMark = 0,
-                GatherPlayers = {},
-                Time = 0 --火判定时间
-            },
-            Beam = {
-                Order = nil,
-                --被激光射了的人
-                Shoot = nil,
-                -- 没被射
-                UnShoot = nil,
-                TowerPos = nil,
-                Time = 0,
-            },
-            Tower = {
-                Aoe = {},
-                GuideData = nil
-            },
-            Turn1 = {
-                BuffJobs = nil,
-                SelfGroupTurner = nil,
-                SelfGroupTurnerObj = nil,
-            },
-        }
-    }
-    MG.DancingMad.CurrentState = DM.State.P1Start
+    MG.DancingMad = {}
+    for _, script in pairs(DM.SubScripts or {}) do
+        if script ~= nil then
+            local ok, err = pcall(script.DataInit)
+            if not ok then
+                MG.Debug(script.StateName .. '执行' .. DataInit .. '失败！')
+                d('----------------------------------------------------')
+                MG.Debug('错误信息:' .. tostring(err))
+                MG.Debug('调用堆栈:' .. debug.traceback())
+                d('----------------------------------------------------')
+            end
+        end
+    end
+    MG.DancingMad.CurrentState = 0
     MG.Info(DM.NameCN .. '数据初始化完毕！')
 end
 
+-- 阶段名称定义，注意每个阶段都必须有Start和End否则会出错
 local StateNames = {
+    --- P1 ---
     'P1Start',
     'P1TrueFalse1',
     'P1LineKickBacked',
@@ -71,16 +61,21 @@ local StateNames = {
     'P1BeamEnd',
     'P1TowerBoom',
     'P1BuffTurn1',
-
     'P1Line2Start',
     'P1Line2_1',
     'P1Line2_2',
     'P1Line3_1',
     'P1Line3_2',
 
-    'P1End,',
-
+    'P1End',
+    --- P2 ---
     'P2Start',
+    -- 8轮踩塔开始
+    'P2T8Start',
+    'P2T8InitMark',
+    'P2T8End',
+    'P2End',
+
 }
 --- 初始化
 DM.Init = function(M)
@@ -106,9 +101,9 @@ DM.Init = function(M)
         local script = FileLoad(filePath)
         if type(script) ~= "table" then
             M.Debug('       加载失败，获取到内容如下：')
-            M.Debug('       -----------------------')
+            M.Debug('-------------------------------')
             d(script)
-            M.Debug('       -----------------------')
+            M.Debug('-------------------------------')
         else
             script.Init(DM, M)
             table.insert(DM.SubScripts, script)
@@ -116,6 +111,7 @@ DM.Init = function(M)
     end
 end
 
+DM.Center = { x = 100, y = 0, z = 100 }
 --- 切换状态
 DM.ChangeState = function(stateName)
     local state = DM.State[stateName]
@@ -149,7 +145,7 @@ DM.OverState = function(stateName, include)
     local state = DM.State[stateName]
     if state == nil then
         -- 输出错误日志
-        MG.Debug("[错误]状态不存在：" .. stateName)
+        d("[MuAiGuide][错误]状态不存在：" .. stateName)
     end
     if include then
         return MG.DancingMad.CurrentState >= state
@@ -177,9 +173,16 @@ end
 -------------------------- Argus Events --------------------------
 DM.OnEntityChannel = function(entityID, spellID, _)
     if spellID == 50179 and TensorReactions_CurrentCombatTimer < 30 then
-        -- 初步设定开场读条，可能增加其他条件
+        -- 恶狠狠毁荡
         dataInit()
+        DM.ChangeState('P1Start')
+    elseif spellID == 49740 then
+        -- 终末双腕
+        if DM.BeLowState('P2Start') then
+            DM.ChangeState('P2Start')
+        end
     end
+
     doSubEvents('OnEntityChannel', entityID, spellID)
 end
 
@@ -199,12 +202,18 @@ DM.OnAddEntityVFX = function(vfxID)
     doSubEvents('OnAddEntityVFX', vfxID)
 end
 
+DM.OnMapEffect = function(a1, a2, a3)
+    doSubEvents('OnMapEffect', a1, a2, a3)
+end
+
 -------------------------- MuAiGuide Events --------------------------
 DM.Update = function()
     doSubEvents('Update')
 end
 
 DM.OnEnter = function()
+    MG.DancingMad = {}
+    MG.DancingMad.CurrentState = 0
     MG.Develop.Reg("DancingMad")
 end
 

@@ -17,12 +17,73 @@ local Data = function()
     return MG.DancingMad.P1
 end
 
+local drawBuffKick = function()
+    if not Cfg().draw then
+        return 
+    end
+    local buffPlayer = {}
+    local buffPlayerId = {}
+    local needDo = false
+    for _, member in pairs(MG.Party) do
+        local buff = TensorCore.getBuff(member.id, 5078)
+        if buff and buff.duration < 4 then
+            local curMember = TensorCore.mGetEntity(member.id)
+            table.insert(buffPlayer, curMember)
+            table.insert(buffPlayerId, curMember.id)
+            needDo = true
+        end
+    end
+    if needDo then
+        local player = TensorCore.mGetPlayer()
+        for _, curMember in pairs(buffPlayer) do
+            DM.cyanDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 6)
+            if not table.contains(buffPlayerId, player.id) then
+                local distance = TensorCore.getDistance2d(curMember.pos, player.pos)
+                if distance < 6 then
+                    local kickDis = 15
+                    local heading = TensorCore.getHeadingToTarget(curMember.pos, player.pos)
+                    DM.greenDrawer:addArrow(player.pos.x, player.pos.y, player.pos.z, heading, kickDis - 0.4, 0.2, 0.4, 0.2, true)
+                end
+            end
+        end
+    end
+end
+
 --- 初始化
 --- @param dm DancingMad
 --- @param m MuAiGuide
 Dmu_P1.Init = function(dm, m)
     DM = dm
     MG = m
+end
+
+Dmu_P1.DataInit = function()
+    MG.DancingMad.P1 = {
+        Fire1 = {
+            BossMark = 0,
+            PlayerMark = 0,
+            GatherPlayers = {},
+            Time = 0 --火判定时间
+        },
+        Beam = {
+            Order = nil,
+            --被激光射了的人
+            Shoot = nil,
+            -- 没被射
+            UnShoot = nil,
+            TowerPos = nil,
+            Time = 0,
+        },
+        Tower = {
+            Aoe = {},
+            GuideData = nil
+        },
+        Turn1 = {
+            BuffJobs = nil,
+            SelfGroupTurner = nil,
+            SelfGroupTurnerObj = nil,
+        }
+    }
 end
 
 Dmu_P1.OnEntityChannel = function(entityID, spellID, _)
@@ -89,11 +150,9 @@ end
 
 Dmu_P1.OnEventObjectScriptFunc = function(entityID)
 
-
 end
 
 Dmu_P1.OnAddEntityVFX = function(vfxID)
-
 
 end
 
@@ -301,25 +360,6 @@ Dmu_P1.Update = function()
                     end
                 end
             else
-               
-                local player = MG.GetPlayer()
-                -- 画传毒
-                if Cfg().draw then
-                    MG.OnCurrentPartyDo(function(job, curMember)
-                        if table.contains(Data().Turn1.BuffJobs, job) then
-                            DM.cyanDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 6)
-                        end
-                        -- 画击退箭头
-                        if Data().Turn1.SelfGroupTurner == job and job ~= MG.SelfPos then
-                            local distance = TensorCore.getDistance2d(curMember.pos, player.pos)
-                            if distance < 6 then
-                                local kickDis = 15
-                                local heading = TensorCore.getHeadingToTarget(curMember.pos, player.pos)
-                                DM.greenDrawer:addArrow(player.pos.x, player.pos.y, player.pos.z, heading, kickDis - 0.4, 0.2, 0.4, 0.2, true)
-                            end
-                        end
-                    end)
-                end
                 if Cfg().guide then
                     local guideData = {}
                     local dpsJob, thJob
@@ -361,7 +401,7 @@ Dmu_P1.Update = function()
             end
         end
     end
-  
+
     if DM.InState('P1Line2_1') then
         if Cfg().draw then
             for _, member in pairs(MG.Party) do
@@ -375,6 +415,8 @@ Dmu_P1.Update = function()
             end
         end
     end
+
+    drawBuffKick()
 end
 
 return Dmu_P1

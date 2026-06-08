@@ -115,7 +115,7 @@ ArgusEvents.init = function(M)
         if M.CurRaidScript ~= nil and M.CurRaidScript.OnMapEffect ~= nil then
             M.CurRaidScript.OnMapEffect(a1, a2, a3)
         end
-        if M.Develop.PrintAoeInfo then
+        if M.Develop.PrintMapEffect then
             M.Info('[' .. infoTime()
                     .. ']OnMapEffect: |' .. a1 .. '|' .. a2 .. '|' .. a3 .. '|。')
         end
