@@ -37,32 +37,6 @@ Dmu_P2.Init = function(dm, m)
     MG = m
 end
 
-Dmu_P2.DataInit = function()
-    MG.DancingMad.P2 = {
-        Towers = {
-            spawn = {},
-            temp = {},
-            guideDir = {
-                { finish = false, skill = 0, guideData = nil },
-                { finish = false, skill = 0, guideData = nil },
-                { finish = false, skill = 0, guideData = nil },
-                { finish = false, skill = 0, guideData = nil, backData = nil },
-            },
-            markCnt = 0,
-            Timer = 0,
-            curMarks = {},
-            wave = 0,
-            groupA = {},
-            groupB = {},
-            doing = {},
-            standBy = {},
-            GuideData = {},
-            markCache = {},
-            groupOrders = {},
-        }
-    }
-end
-
 -- 1234按照THMR顺序排列
 local standTemplate = {
     odd = {-- 奇数

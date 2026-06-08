@@ -1,0 +1,60 @@
+local CatZDmuTankUI = {}
+
+local table4 = { "自己减伤", "自己无敌", "搭档减伤", "搭档无敌" }
+local wide = 300
+local keys = {
+    -- P1,
+    'RevoltingRuinIII_1',
+    'LightingJudgment_1',
+    'RevoltingRuinIII_2',
+    'LightingJudgment_2',
+    -- P2,
+    'UltimateEmbrace_1',
+    'WingOfDestruction',
+    'UltimateEmbrace_2',
+    -- P3,
+    'ThunderIII_1',
+    'ThunderIII_2',
+    'ThunderIII_3',
+    'ThunderIII_4',
+    'ThunderIII_5',
+    'ThunderIII_6',
+    'ThunderIII_7',
+    'ThunderIII_8',
+    'ThunderIII_9',
+    'ThunderIII_10',
+}
+
+CatZDmuTankUI.draw = function()
+    local M = MuAiGuide
+    if not M.CatZDmuTankUI.open then
+        return
+    end
+    GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
+    GUI:SetNextWindowSize(wide, 0, GUI.SetCond_Appearing)
+    M.CatZDmuTankUI.visible, M.CatZDmuTankUI.open = GUI:Begin("CatZ Dmu Mitigation Setting", M.CatZDmuTankUI.open)
+    if M.CatZDmuTankUI.visible then
+        local curP = 0
+        GUI:Columns(2, 'CNName and Value', false)
+        for i = 1, #keys do
+            local curConfig = M.Config.DmuCatZCfg[keys[i]]
+            if curP ~= curConfig.p then
+                GUI:Columns(1)
+                GUI:Separator()
+                GUI:BulletText('P' .. curConfig.p)
+                GUI:Separator()
+                GUI:Columns(2)
+                curP = curConfig.p
+            end
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text('  ' .. curConfig.nameCn)
+            GUI:NextColumn()
+            curConfig.value = GUI:Combo("##" .. keys[i], curConfig.value, table4, 4)
+            GUI:NextColumn()
+        end
+    end
+    M.SaveConfig(M.Config.DmuCatZMigPath, M.Config.DmuCatZMigFile, 'DmuCatZCfg')
+    GUI:SetWindowSize(wide, 0)
+    GUI:End()
+end
+return CatZDmuTankUI

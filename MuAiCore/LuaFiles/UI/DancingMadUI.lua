@@ -1,4 +1,5 @@
 local DancingMadUI = {}
+local wide = 350
 
 DancingMadUI.draw = function()
     local M = MuAiGuide
@@ -6,7 +7,7 @@ DancingMadUI.draw = function()
         return
     end
     GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
-    GUI:SetNextWindowSize(270, 0, GUI.SetCond_Appearing)
+    GUI:SetNextWindowSize(wide, 0, GUI.SetCond_Appearing)
     M.DancingMadUI.visible, M.DancingMadUI.open = GUI:Begin("Dmu Setting", M.DancingMadUI.open)
     if M.DancingMadUI.visible then
         if GUI:CollapsingHeader("全局开关") then
@@ -37,12 +38,21 @@ DancingMadUI.draw = function()
             end
         end
         if M.Config.DmuCfg.P1.enable and GUI:CollapsingHeader("P1") then
+            GUI:Dummy(0, 0)
             GUI:Dummy(15, 0)
             GUI:SameLine(0, 0)
+            M.Config.DmuCfg.P1.effect = GUI:Checkbox('屏蔽真假AOE特效##effectBind', M.Config.DmuCfg.P1.effect)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip("勾选后屏蔽特效采用A+画紫色危险区，未勾选使用ImGui画图显示黄色危险区")
+            end
+            GUI:Dummy(0, 0)
+            GUI:Dummy(15, 0)
+            GUI:SameLine(0, 0)
+            GUI:AlignFirstTextHeightToWidgets()
             GUI:Text('1神激光站位顺序')
             GUI:Dummy(15, 0)
             GUI:SameLine(0, 0)
-            local dmOrder, dmOrderChanged = GUI:InputText('##DrawBlackList', 
+            local dmOrder, dmOrderChanged = GUI:InputText('##DrawBlackList',
                     M.StringJoin(M.Config.DmuCfg.P1.BeamOrder, ','), GUI.InputTextFlags_CharsNoBlank)
             if dmOrderChanged then
                 if dmOrderChanged then
@@ -55,8 +65,7 @@ DancingMadUI.draw = function()
         --end
     end
     M.SaveConfig(M.Config.DmuGuidePath, M.Config.DmuGuideFile, "DmuCfg")
-
-    GUI:SetWindowSize(270, 0)
+    GUI:SetWindowSize(wide, 0)
     GUI:End()
 end
 return DancingMadUI

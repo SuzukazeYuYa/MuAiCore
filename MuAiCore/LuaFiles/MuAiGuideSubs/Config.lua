@@ -19,6 +19,9 @@ local LoadUIConfig = function(M)
     M.Config.DmuGuideFile = "GuideConfig.lua"
     M.Config.DmuMitig = M.Config.MainPath .. "\\DmuMitig"
 
+    M.Config.DmuCatZMigPath = M.Config.MainPath .. "\\DmuMitig\\CatZ"
+    M.Config.DmuCatZMigFile = "Config.lua"
+
     M.Config.Key1 = { "Shift", "Ctrl", "Alt" }
     M.Config.Key2 = {}
     for i = 65, 90 do
@@ -45,6 +48,12 @@ local LoadUIConfig = function(M)
     M.Config.DmuCfgPrevious = table.deepcopy(M.Config.DmuCfg)
     M.Config.DmuCustomList = M.LoadFileList(M.Config.DmuGuidePath, { "GuideConfig.lua" })
     M.Config.DmuCustomListIndex = 1
+
+    local defDmuCatZCfg = M.CreateCatZDmuCfg()
+    M.Config.DmuCatZCfg = defDmuCatZCfg  -- 这里只是让编辑可以默认识别，无实际作用
+    M.Config.DmuCatZCfg = M.LoadConfig(M.Config.DmuCatZMigPath, M.Config.DmuCatZMigFile, defDmuCatZCfg)
+    M.Config.DmuCatZCfgPrevious = table.deepcopy(M.Config.DmuCatZCfg)
+
 end
 
 ---@param M MuAiGuide
@@ -301,8 +310,11 @@ Config.init = function(M)
             Enable = true,
             --- 基础8方位置
             --JobPos = { "H2", "D2", "ST", "D4", "MT", "D3", "H1", "D1" },
-            P1 = { enable = true, draw = true, guide = true,
-                   BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
+            P1 = {
+                enable = true, draw = true, guide = true,
+                --是否关闭P1特效
+                effect = true,
+                BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
             },
             P2 = { enable = true, draw = true, guide = true,
                    MarkMember = false,
@@ -311,6 +323,31 @@ Config.init = function(M)
             P4 = { enable = true, draw = true, guide = true },
             P5 = { enable = true, draw = true, guide = true },
             P6 = { enable = true, draw = true, guide = true },
+        }
+    end
+
+    M.CreateCatZDmuCfg = function()
+        return {
+            -- P1
+            RevoltingRuinIII_1 = { p = 1, value = 1, nameCn = '恶狠狠毁荡' },
+            LightingJudgment_1 = { p = 1, value = 1, nameCn = '超驱动' },
+            RevoltingRuinIII_2 = { p = 1, value = 1, nameCn = '恶狠狠毁荡' },
+            LightingJudgment_2 = { p = 1, value = 1, nameCn = '超驱动' },
+            -- P2
+            UltimateEmbrace_1 = { p = 2, value = 1, nameCn = '终末双腕' },
+            WingOfDestruction = { p = 2, value = 1, nameCn = '破坏之翼' },
+            UltimateEmbrace_2 = { p = 2, value = 1, nameCn = '终末双碗' },
+            -- P3
+            ThunderIII_1 = { p = 3, value = 1, nameCn = '暴雷1' },
+            ThunderIII_2 = { p = 3, value = 1, nameCn = '暴雷2' },
+            ThunderIII_3 = { p = 3, value = 1, nameCn = '暴雷3' },
+            ThunderIII_4 = { p = 3, value = 1, nameCn = '暴雷4' },
+            ThunderIII_5 = { p = 3, value = 1, nameCn = '暴雷5' },
+            ThunderIII_6 = { p = 3, value = 1, nameCn = '暴雷6' },
+            ThunderIII_7 = { p = 3, value = 1, nameCn = '暴雷7' },
+            ThunderIII_8 = { p = 3, value = 1, nameCn = '暴雷8' },
+            ThunderIII_9 = { p = 3, value = 1, nameCn = '暴雷9' },
+            ThunderIII_10 = { p = 3, value = 1, nameCn = '暴雷10' },
         }
     end
 

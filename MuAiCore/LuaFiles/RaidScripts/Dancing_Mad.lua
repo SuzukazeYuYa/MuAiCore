@@ -33,20 +33,64 @@ end
 
 ---数据初始化
 local dataInit = function()
-    MG.DancingMad = {}
-    for _, script in pairs(DM.SubScripts or {}) do
-        if script ~= nil then
-            local ok, err = pcall(script.DataInit)
-            if not ok then
-                MG.Debug(script.StateName .. '执行' .. DataInit .. '失败！')
-                d('----------------------------------------------------')
-                MG.Debug('错误信息:' .. tostring(err))
-                MG.Debug('调用堆栈:' .. debug.traceback())
-                d('----------------------------------------------------')
-            end
-        end
-    end
-    MG.DancingMad.CurrentState = 0
+    MG.DancingMad = {
+        P1 = {
+            Death ={
+                Timer = 0,
+                OnDraw = false,
+                MT = nil,
+                ST = nil,
+            },
+            Fire1 = {
+                BossMark = 0,
+                PlayerMark = 0,
+                GatherPlayers = {},
+                Time = 0 --火判定时间
+            },
+            Beam = {
+                Order = nil,
+                --被激光射了的人
+                Shoot = nil,
+                -- 没被射
+                UnShoot = nil,
+                TowerPos = nil,
+                Time = 0,
+            },
+            Tower = {
+                Aoe = {},
+                GuideData = nil
+            },
+            Turn1 = {
+                BuffJobs = nil,
+                SelfGroupTurner = nil,
+                SelfGroupTurnerObj = nil,
+            }
+        },
+        P2 = {
+            Towers = {
+                spawn = {},
+                temp = {},
+                guideDir = {
+                    { finish = false, skill = 0, guideData = nil },
+                    { finish = false, skill = 0, guideData = nil },
+                    { finish = false, skill = 0, guideData = nil },
+                    { finish = false, skill = 0, guideData = nil, backData = nil },
+                },
+                markCnt = 0,
+                Timer = 0,
+                curMarks = {},
+                wave = 0,
+                groupA = {},
+                groupB = {},
+                doing = {},
+                standBy = {},
+                GuideData = {},
+                markCache = {},
+                groupOrders = {},
+            }
+        }
+    }
+
     MG.Info(DM.NameCN .. '数据初始化完毕！')
 end
 

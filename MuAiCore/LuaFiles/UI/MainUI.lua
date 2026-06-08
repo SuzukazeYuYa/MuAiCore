@@ -547,9 +547,14 @@ local drawRaidSettingTab = function(M)
         if M.Config.DmuCfg.Enable then
             GUI:Dummy(15, 0)
             GUI:SameLine()
-            GUI:Button('指路设置', 150, 25)
+            GUI:Button('设置绘制指路', 150, 25)
             if GUI:IsItemClicked(0) then
                 M.DancingMadUI.open = not M.DancingMadUI.open
+            end
+            GUI:SameLine(0, 8)
+            GUI:Button('CatZTankUI', 150, 25)
+            if GUI:IsItemClicked(0) then
+                M.CatZDmuTankUI.open = not M.CatZDmuTankUI.open
             end
         end
         if DmuCfgChanged then

@@ -21,7 +21,7 @@ GameTools.init = function(M)
         "机工", "诗人", "舞者",
         "召唤", "绘灵", "黑魔", "赤魔"
     }
-    
+
     local fullJobName = {
         "骑士", "战士", "暗黑骑士", "绝枪战士",
         "白魔法师", "占星术士", "贤者", "学者",
@@ -114,12 +114,11 @@ GameTools.init = function(M)
             end
         end
     end
-    
-    
+
     M.GetJobFullNameById = function(job)
         return M.GetJobNameById(job, fullJobName)
     end
-    
+
     --- 读取小队列表
     M.GetPartyPlayers = function()
         local curPt = TensorCore.getEntityGroupList("Party")
@@ -532,6 +531,12 @@ GameTools.init = function(M)
         return include, out
     end
 
-
+    M.GetCurRaidBoss = function()
+        if M.CurRaidBoss ~= nil then
+            return TensorCore.mGetEntity(M.CurRaidBoss.id)
+        end
+        return nil
+    end
 end
+
 return GameTools

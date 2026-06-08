@@ -17,9 +17,10 @@ local Data = function()
     return MG.DancingMad.P1
 end
 
+--- 绘制击退
 local drawBuffKick = function()
     if not Cfg().draw then
-        return 
+        return
     end
     local buffPlayer = {}
     local buffPlayerId = {}
@@ -49,6 +50,44 @@ local drawBuffKick = function()
     end
 end
 
+--- 绘制死刑
+local drawDeath = function()
+    if Cfg().draw and Data().Death.OnDraw and Data().Death.Timer > 0 then
+        if TimeSince(Data().Death.Timer) < 9000 then
+            if TimeSince(Data().Death.Timer) < 6000 then
+                if Data().Death.MT == nil then
+                    Data().Death.MT = TensorCore.getEntityByGroup("Main Tank", "Nearest")
+                else
+                    local curMt = TensorCore.mGetEntity(Data().Death.MT.id)
+                    local dir = TensorCore.getHeadingToTarget(MG.CurRaidBoss.pos, curMt.pos)
+                    local curBoss = MG.GetCurRaidBoss()
+                    DM.redDrawer:addCone(curBoss.pos.x, curBoss.pos.y, curBoss.pos.z, 30, math.pi * 2 / 3, dir)
+                end
+            else
+                if Data().Death.ST == nil then
+                    local curMt = TensorCore.getEntityByGroup("Main Tank", "Nearest")
+                    for job, member in pairs(MG.Party) do
+                        if (job == 'MT' or job == 'ST') and member.id ~= curMt then
+                            Data().Death.ST = member
+                            break
+                        end
+                    end
+                else
+                    local cur = TensorCore.mGetEntity(Data().Death.MT.id)
+                    local dir = TensorCore.getHeadingToTarget(MG.CurRaidBoss.pos, cur.pos)
+                    local curBoss = MG.GetCurRaidBoss()
+                    DM.redDrawer:addCone(curBoss.pos.x, curBoss.pos.y, curBoss.pos.z, 30, math.pi * 2 / 3, dir)
+                end
+            end
+        else
+            Data().Death.OnDraw = false
+            Data().Death.MT = nil
+            Data().Death.ST = nil
+            Data().Death.Timer = 0
+        end
+    end
+end
+
 --- 初始化
 --- @param dm DancingMad
 --- @param m MuAiGuide
@@ -57,40 +96,56 @@ Dmu_P1.Init = function(dm, m)
     MG = m
 end
 
-Dmu_P1.DataInit = function()
-    MG.DancingMad.P1 = {
-        Fire1 = {
-            BossMark = 0,
-            PlayerMark = 0,
-            GatherPlayers = {},
-            Time = 0 --火判定时间
-        },
-        Beam = {
-            Order = nil,
-            --被激光射了的人
-            Shoot = nil,
-            -- 没被射
-            UnShoot = nil,
-            TowerPos = nil,
-            Time = 0,
-        },
-        Tower = {
-            Aoe = {},
-            GuideData = nil
-        },
-        Turn1 = {
-            BuffJobs = nil,
-            SelfGroupTurner = nil,
-            SelfGroupTurnerObj = nil,
-        }
-    }
+local closeList = {
+    [47764] = { old0 = nil, old1 = nil },
+    [47768] = { old0 = nil, old1 = nil },
+    [47771] = { old0 = nil, old1 = nil },
+    [47774] = { old0 = nil, old1 = nil },
+    [47775] = { old0 = nil, old1 = nil },
+    [47776] = { old0 = nil, old1 = nil },
+    [47777] = { old0 = nil, old1 = nil },
+}
+
+local effectSwitch
+
+local applyEffectBinder = function()
+    if effectSwitch ~= Cfg().effect then
+        if Cfg().effect then
+            if closeList[47764].old0 == nil then
+                for skillId, _ in pairs(closeList) do
+                    closeList[skillId].old0 = Argus.getActionAOEType(skillId, 0)
+                    closeList[skillId].old1 = Argus.getActionAOEType(skillId, 1)
+                    Argus.setActionAOEType(skillId, 0, 0)
+                    Argus.setActionAOEType(skillId, 1, 0)
+                end
+            end
+            d('applyEffectBinder1')
+        else
+            for skillId, _ in pairs(closeList) do
+                if closeList[skillId].old0 ~= nil then
+                    Argus.setActionAOEType(skillId, 0, closeList[skillId].old0)
+                end
+                if closeList[skillId].old1 ~= nil then
+                    Argus.setActionAOEType(skillId, 1, closeList[skillId].old1)
+                end
+            end
+            d('applyEffectBinder2')
+        end
+        effectSwitch = Cfg().effect
+    end
 end
 
 Dmu_P1.OnEntityChannel = function(entityID, spellID, _)
-    if spellID == 47764 then
+    if spellID == 50179 then
+        -- 恶狠狠毁荡
+        Data().Death.Timer = Now()
+        Data().Death.OnDraw = true
+        MG.CurRaidBoss = TensorCore.mGetEntity(entityID)
+    elseif spellID == 47764 then
         if DM.BeLowState('P1TrueFalse1', true) then
             DM.ChangeState('P1TrueFalse1')
         end
+
     elseif spellID == 48370 then
         -- 众神之象
         if DM.OverState('P1BeamEnd') and DM.BeLowState('P1Line2Start') then
@@ -125,15 +180,28 @@ Dmu_P1.OnAOECreate = function(aoeInfo)
     -- 画制冰和雷
     if Cfg().draw then
         local drawTime = 5500
-        -- 冰危险区
-        if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
-            DM.yellowDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, math.pi / 2, aoeInfo.heading, 0, true)
-        end
+        if not Cfg().effect then
+            -- 冰危险区
+            if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
+                DM.yellowDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, math.pi / 2, aoeInfo.heading, 0, true)
+            end
 
-        -- 画雷危险区
-        if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-            local startPos = TensorCore.getPosInDirection({ x = aoeInfo.x, y = aoeInfo.y, z = aoeInfo.z }, aoeInfo.heading + math.pi, 5)
-            DM.yellowDrawer:addTimedRect(drawTime, startPos.x, startPos.y, startPos.z, 50, 10, aoeInfo.heading, 0, true)
+            -- 画雷危险区
+            if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
+                local startPos = TensorCore.getPosInDirection({ x = aoeInfo.x, y = aoeInfo.y, z = aoeInfo.z }, aoeInfo.heading + math.pi, 5)
+                DM.yellowDrawer:addTimedRect(drawTime, startPos.x, startPos.y, startPos.z, 50, 10, aoeInfo.heading, 0, true)
+            end
+        else
+            -- 冰危险区
+            if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
+                DM.purpleDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, math.pi / 2, aoeInfo.heading)
+            end
+
+            -- 画雷危险区
+            if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
+                local startPos = TensorCore.getPosInDirection({ x = aoeInfo.x, y = aoeInfo.y, z = aoeInfo.z }, aoeInfo.heading + math.pi, 5)
+                DM.purpleDrawer:addTimedRect(drawTime, startPos.x, startPos.y, startPos.z, 50, 10, aoeInfo.heading)
+            end
         end
     end
 
@@ -157,11 +225,8 @@ Dmu_P1.OnAddEntityVFX = function(vfxID)
 end
 
 Dmu_P1.Update = function()
-    local data = MG.DancingMad
-    if data == nil then
-        return
-    end
-
+    applyEffectBinder()
+    drawDeath()
     if DM.InState('P1TrueFalse1') then
         -- 真假火画图
         if Cfg().draw
@@ -262,7 +327,7 @@ Dmu_P1.Update = function()
                 MG.FrameMultiD(beamWay)
             end
         end
-        if TimeSince(Data().Fire1.Time) > 2500 and MG.IsAnyMemberHasBuff(2941) then
+        if TimeSince(Data().Fire1.Time) > 1500 and MG.IsAnyMemberHasBuff(2941) then
             DM.ChangeState('P1BeamEnd')
             Data().Beam.Time = Now()
         end
@@ -280,6 +345,7 @@ Dmu_P1.Update = function()
                     table.insert(shoot, job)
                 end
             end
+            d(Data().Beam.Shoot)
             if table.size(shoot == 4) then
                 Data().Beam.Shoot = shoot
             end
