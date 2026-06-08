@@ -18,7 +18,7 @@ local w_1 = GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)
 
 ---@param M MuAiGuide
 Drawers.init = function(M)
-    local ZeroYMap = { 1238, 1122, 1325, 1327 }
+    local ZeroYMap = { 1238, 1122, 1325, 1327, 1363 }
     M.NotDelayGuides = {}
     M.NotDelayGuidesMulti = {}
     -- 画图工具定义

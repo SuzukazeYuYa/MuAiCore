@@ -168,6 +168,8 @@ local initGroups = function()
         table.insert(Data().Towers.groupB, 'D1')
         table.insert(Data().Towers.groupB, 'D3')
     end
+    MuAiGuide.Info('初始踩塔组：' .. MG.StringJoin(Data().Towers.groupA, ','))
+    MuAiGuide.Info('初始闲人组：' .. MG.StringJoin(Data().Towers.groupB, ','))
 end
 
 Dmu_P2.OnMarkerAdd = function(entityID, markerID)
@@ -227,6 +229,7 @@ Dmu_P2.OnMapEffect = function(a1, a2, a3)
                     right = tbl[2]
                 end
                 Data().Towers.wave = Data().Towers.wave + 1
+                MG.Info('第' .. Data().Towers.wave .. '轮：')
                 if Data().Towers.wave == 8 then
                     Data().Towers.Timer = Now()
                 end
@@ -339,13 +342,14 @@ local calcFirstOrderB = function()
     else
         curOrder = { cone[2], cone[1] }
     end
-
+    
+    -- 近上远下，那么应该是反的
     if MG.IndexOf(group, circle[1]) < MG.IndexOf(group, circle[2]) then
-        table.insert(curOrder, circle[1])
         table.insert(curOrder, circle[2])
+        table.insert(curOrder, circle[1])
     else
-        table.insert(curOrder, circle[2])
         table.insert(curOrder, circle[1])
+        table.insert(curOrder, circle[2])
     end
 
     Data().Towers.groupOrders[index] = curOrder
@@ -477,6 +481,9 @@ Dmu_P2.Update = function()
         if Data().Towers.GuideData[wave] == nil then
             if Data().Towers.groupOrders[wave] == nil then
                 calcGroupOrder(wave)
+                if Data().Towers.groupOrders[wave] ~= nil then
+                    MuAiGuide.Info(' 当前踩塔组顺序：' .. MG.StringJoin(Data().Towers.groupOrders[wave], ','))
+                end
             else
                 Data().Towers.GuideData[wave] = calcGuidePos(wave)
             end
