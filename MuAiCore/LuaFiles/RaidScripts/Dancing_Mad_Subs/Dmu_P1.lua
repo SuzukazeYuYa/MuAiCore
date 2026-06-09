@@ -88,6 +88,111 @@ local drawDeath = function()
     end
 end
 
+-- ===== 回转寿司(唰啦啦传送 47802) 方向debuff指路: 时长短的先去①, 长的后去② =====
+-- 方向debuff: 4876/5079=上 4877/5080=下 4878/5081=右 4879/5082=左
+local SushiBuffDir = {
+    [4876] = 'up', [4877] = 'down', [4878] = 'right', [4879] = 'left',
+    [5079] = 'up', [5080] = 'down', [5081] = 'right', [5082] = 'left',
+}
+-- 每种方向组合的两步落点(16点格, 与回转寿司一致): { 箭1, 箭2 } 每箭 {dir,x,z}
+local SushiPairs = {
+    ['same:left']           = { { dir = 'left',  x = 100, z = 88 },  { dir = 'left',  x = 106, z = 88 } },
+    ['different:left:up']   = { { dir = 'left',  x = 112, z = 88 },  { dir = 'up',    x = 112, z = 94 } },
+    ['same:up']             = { { dir = 'up',    x = 112, z = 100 }, { dir = 'up',    x = 112, z = 106 } },
+    ['different:up:right']  = { { dir = 'up',    x = 112, z = 112 }, { dir = 'right', x = 106, z = 112 } },
+    ['same:right']          = { { dir = 'right', x = 100, z = 112 }, { dir = 'right', x = 94,  z = 112 } },
+    ['different:right:down']= { { dir = 'right', x = 88,  z = 112 }, { dir = 'down',  x = 88,  z = 106 } },
+    ['same:down']           = { { dir = 'down',  x = 88,  z = 100 }, { dir = 'down',  x = 88,  z = 94 } },
+    ['different:down:left'] = { { dir = 'down',  x = 88,  z = 88 },  { dir = 'left',  x = 94,  z = 88 } },
+}
+local function sushiDiffKey(d1, d2)
+    local has = { [d1] = true, [d2] = true }
+    if has.up and has.left then
+        return 'different:left:up'
+    elseif has.up and has.right then
+        return 'different:up:right'
+    elseif has.right and has.down then
+        return 'different:right:down'
+    elseif has.down and has.left then
+        return 'different:down:left'
+    end
+end
+local function sushiArrowByDir(pair, dir)
+    if pair[1].dir == dir then return pair[1] end
+    if pair[2].dir == dir then return pair[2] end
+end
+-- 画靶心(粉内+绿外)+步骤数字, 同 huizhuan
+local function sushiMark(p, text, drawTime)
+    TensorCore.getStaticFlatDrawer(3539271935):addTimedCircle(drawTime, p.x, 0, p.z, 0.25, 0, true, true)
+    TensorCore.getStaticFlatDrawer(1359019776):addTimedCircle(drawTime, p.x, 0, p.z, 0.75, 0, true, true)
+    AnyoneCore.addTimedWorldText(drawTime, text, { x = p.x, y = 0, z = p.z }, AnyoneCore.COLOR_WHITE, true, 2)
+end
+
+--- 回转寿司指路 + 触发神像连线
+--- 玩家2方向debuff: 短①长②(画一次); buff全清空=传送阵放完 → 开神像连线站位指路窗口
+local drawSushi = function()
+    local player = TensorCore.mGetPlayer()
+    local matched = {}
+    for _, buff in pairs(player.buffs or {}) do
+        local dir = SushiBuffDir[buff.id]
+        if dir ~= nil then
+            table.insert(matched, { dir = dir, duration = buff.duration })
+        end
+    end
+    local n = table.size(matched)
+    if n >= 1 then
+        -- 回转寿司进行中: 记下时刻(供识别其后的众神之象=神像连线那次)
+        Data().Link = Data().Link or {}
+        Data().Link.sushiSeenTime = Now()
+        if Cfg().draw and n == 2 and (Data().Sushi == nil or not Data().Sushi.drawn) then
+            local d1, d2 = matched[1], matched[2]
+            local shortPos, longPos
+            if d1.dir == d2.dir then
+                local pair = SushiPairs['same:' .. d1.dir]
+                if pair ~= nil then
+                    shortPos, longPos = pair[1], pair[2]
+                end
+            else
+                local pair = SushiPairs[sushiDiffKey(d1.dir, d2.dir)]
+                if pair ~= nil then
+                    local sb, lb = d1, d2
+                    if d1.duration > d2.duration then
+                        sb, lb = d2, d1
+                    end
+                    shortPos = sushiArrowByDir(pair, sb.dir)
+                    longPos = sushiArrowByDir(pair, lb.dir)
+                end
+            end
+            if shortPos ~= nil and longPos ~= nil then
+                sushiMark(shortPos, '1', 7000)
+                sushiMark(longPos, '2', 10000)
+                Data().Sushi = { drawn = true }
+            end
+        end
+    else
+        Data().Sushi = nil
+    end
+end
+
+-- ===== 神像连线(圣母/睡魔的神气) 固定站位指路 =====
+-- 外环 D3上/D4右/H2下/H1左(距中心16); 内环 MT上/ST右/D2下/D1左(距中心9.8); 中心100,100
+local LinkGuide = {
+    D3 = { x = 100, z = 84 },  MT = { x = 100, z = 90.2 },
+    D4 = { x = 116, z = 100 }, ST = { x = 109.8, z = 100 },
+    H2 = { x = 100, z = 116 }, D2 = { x = 100, z = 109.8 },
+    H1 = { x = 84, z = 100 },  D1 = { x = 90.2, z = 100 },
+}
+
+--- 神像连线固定站位指路: 神像连线那次众神之象后, 延迟到连环环陷阱(击退)判定之后才画, 持续到神气判定前
+local drawLink = function()
+    if Cfg().guide and Data().Link ~= nil and Data().Link.gsTime ~= nil then
+        local dt = TimeSince(Data().Link.gsTime)
+        if dt >= 7500 and dt < 16500 then
+            MG.FrameMultiD(LinkGuide)
+        end
+    end
+end
+
 --- 初始化
 --- @param dm DancingMad
 --- @param m MuAiGuide
@@ -135,6 +240,39 @@ local applyEffectBinder = function()
     end
 end
 
+-- ===== 真假火雷(冰火雷最后一次: 火+雷同时出现) 职能固定式指路 =====
+-- 标点(中心100,100,偏移12): A上 B右 C下 D左; 1左上 2右上 3右下 4左下
+local FtWay = {
+    ['1'] = { x = 88, z = 88 }, ['2'] = { x = 112, z = 88 },
+    ['3'] = { x = 112, z = 112 }, ['4'] = { x = 88, z = 112 },
+    ['A'] = { x = 100, z = 88 }, ['B'] = { x = 112, z = 100 },
+    ['C'] = { x = 100, z = 112 }, ['D'] = { x = 88, z = 100 },
+}
+-- 分散: 职能→标点 (MT=1 D1=2 D2=3 ST=4 / H1=A D4=B D3=C H2=D)
+local FtSpread = { MT = '1', D1 = '2', D2 = '3', ST = '4', H1 = 'A', D4 = 'B', D3 = 'C', H2 = 'D' }
+local FtTh = { MT = true, ST = true, H1 = true, H2 = true }
+
+-- 把落点沿法线推出真雷(47775/47777)危险带(半宽5)
+local ftAvoidThunder = function(pos, thunders)
+    local q = { x = pos.x, y = 0, z = pos.z }
+    for _ = 1, 2 do
+        for _, a in pairs(thunders) do
+            local p2 = TensorCore.getPosInDirection({ x = a.x, y = 0, z = a.z }, a.heading, 1)
+            local nx = -(p2.z - a.z)
+            local nz = (p2.x - a.x)
+            local dd = (q.x - a.x) * nx + (q.z - a.z) * nz
+            if math.abs(dd) < 5.5 then
+                local sign = 1
+                if dd < 0 then sign = -1 end
+                local push = (5.5 - math.abs(dd)) * sign + sign * 0.3
+                q.x = q.x + nx * push
+                q.z = q.z + nz * push
+            end
+        end
+    end
+    return q
+end
+
 Dmu_P1.OnEntityChannel = function(entityID, spellID, _)
     if spellID == 50179 then
         -- 恶狠狠毁荡
@@ -151,6 +289,11 @@ Dmu_P1.OnEntityChannel = function(entityID, spellID, _)
         if DM.OverState('P1BeamEnd') and DM.BeLowState('P1Line2Start') then
             DM.ChangeState('P1Line2Start')
         end
+        -- 回转寿司后的众神之象 = 神像连线那次; 记时, 之后延迟到连环环陷阱(击退)判定后才画站位
+        if Data().Link ~= nil and Data().Link.sushiSeenTime ~= nil
+                and TimeSince(Data().Link.sushiSeenTime) < 10000 then
+            Data().Link.gsTime = Now()
+        end
     elseif spellID == 47782 then
         -- 连环环陷阱
 
@@ -158,6 +301,16 @@ Dmu_P1.OnEntityChannel = function(entityID, spellID, _)
 end
 
 Dmu_P1.OnMarkerAdd = function(entityID, markerID)
+    -- 真假火雷识别: 采 火头标(127/128)/真假标(673/674), 各记时间戳(头标常比玄乎乎魔法读条早)
+    if markerID == 127 or markerID == 128 or markerID == 673 or markerID == 674 then
+        Data().Ft = Data().Ft or { pm = 0, pmTime = 0, bm = 0, thunders = {}, thTime = 0 }
+        if markerID == 127 or markerID == 128 then
+            Data().Ft.pm = markerID
+            Data().Ft.pmTime = Now()
+        else
+            Data().Ft.bm = markerID
+        end
+    end
     if DM.BeLowState('P1TrueFalse1', true) then
         if DM.BeLowState('P1TrueFalse1') then
             DM.ChangeState('P1TrueFalse1')
@@ -205,6 +358,16 @@ Dmu_P1.OnAOECreate = function(aoeInfo)
         end
     end
 
+    -- 真假火雷识别: 采真雷线(47775/47777)初始位置(与上方危险区同一判定), 隔轮(>9s)重置
+    if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
+        Data().Ft = Data().Ft or { pm = 0, pmTime = 0, bm = 0, thunders = {}, thTime = 0 }
+        if TimeSince(Data().Ft.thTime) > 9000 then
+            Data().Ft.thunders = {}
+        end
+        table.insert(Data().Ft.thunders, { x = aoeInfo.x, z = aoeInfo.z, heading = aoeInfo.heading })
+        Data().Ft.thTime = Now()
+    end
+
     -- 采集刷的塔信息
     if aoeInfo.aoeID == 47786 and DM.BeLowState('P2Start') then
         table.insert(Data().Tower.Aoe, aoeInfo)
@@ -227,6 +390,33 @@ end
 Dmu_P1.Update = function()
     applyEffectBinder()
     drawDeath()
+
+    -- 真假火雷 职能固定式指路: 近期 火头标(127/128)+雷线 同时存在(=冰火雷最后一次火+雷)
+    if Cfg().guide and Data().Ft ~= nil
+            and Data().Ft.pm ~= 0 and TimeSince(Data().Ft.pmTime) < 9000
+            and table.size(Data().Ft.thunders) > 0 and TimeSince(Data().Ft.thTime) < 9000 then
+        -- 127分散/128分摊; 火假(673)翻转(假分散即分摊、假分摊即分散)
+        local spread = (Data().Ft.pm == 127)
+        if Data().Ft.bm == 673 then
+            spread = not spread
+        end
+        local guideData = {}
+        for job, member in pairs(MG.Party) do
+            local slot
+            if spread then
+                slot = FtSpread[job]
+            elseif FtTh[job] then
+                slot = '1'
+            else
+                slot = '3'
+            end
+            if slot ~= nil and FtWay[slot] ~= nil then
+                guideData[job] = ftAvoidThunder(FtWay[slot], Data().Ft.thunders)
+            end
+        end
+        MG.FrameMultiD(guideData)
+    end
+
     if DM.InState('P1TrueFalse1') then
         -- 真假火画图
         if Cfg().draw
@@ -483,6 +673,8 @@ Dmu_P1.Update = function()
     end
 
     drawBuffKick()
+    drawSushi()
+    drawLink()
 end
 
 return Dmu_P1
