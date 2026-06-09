@@ -240,6 +240,9 @@ local drawJobTab = function(M)
             end
             GUI:SameLine(0, 25)
             local text = ptMember.info.name
+            if ptMember.label == M.SelfPos and M.IsVideo() then
+                text = M.GetJobFullNameById(M.Party[M.SelfPos].job)
+            end
             local itemW = GUI:GetContentRegionAvailWidth()
             local textW = GUI:CalcTextSize(text)
             local offsetX = (itemW - textW) * 0.5
@@ -273,7 +276,7 @@ local drawJobTab = function(M)
                         M.MainUI.selected = ptMember.label
                     end
                 elseif M.MainUI.mousePosition ~= ptMember.label then
-                    d('[M]站位交换：' .. M.MainUI.mousePosition .. '<==>' .. ptMember.label)
+                    M.Info('站位交换：' .. M.MainUI.mousePosition .. '<==>' .. ptMember.label)
                     local temp = M.Party[M.MainUI.mousePosition]
                     M.Party[M.MainUI.mousePosition] = M.Party[ptMember.label]
                     M.Party[ptMember.label] = temp
@@ -289,9 +292,7 @@ local drawJobTab = function(M)
                             M.MainUI.selected = ptMember.label
                         end
                     end
-                    if M.MultiGuide.enable then
-                        M.MultiGuide.RefreshDic()
-                    end
+                    M.MultiGuide.RefreshDic()
                 end
             end
         end

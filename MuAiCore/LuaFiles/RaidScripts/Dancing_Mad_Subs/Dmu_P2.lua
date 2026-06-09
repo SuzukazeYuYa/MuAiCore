@@ -203,6 +203,7 @@ local initGroups = function()
     end
 
     if MG.Config.Main.LogToEchoMsg then
+        loged = {}
         showOrderLog(Data().Towers.groupA, '初始踩塔组：')
         showOrderLog(Data().Towers.groupB, '初始闲人组：')
     end
