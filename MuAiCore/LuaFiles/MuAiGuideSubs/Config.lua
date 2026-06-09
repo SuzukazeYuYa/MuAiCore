@@ -314,6 +314,7 @@ Config.init = function(M)
                 enable = true, draw = true, guide = true,
                 --是否关闭P1特效
                 effect = true,
+                autoLookAt = true, 
                 BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
             },
             P2 = { enable = true, draw = true, guide = true,
@@ -321,8 +322,7 @@ Config.init = function(M)
             },
             P3 = { enable = true, draw = true, guide = true },
             P4 = { enable = true, draw = true, guide = true },
-            P5 = { enable = true, draw = true, guide = true },
-            P6 = { enable = true, draw = true, guide = true },
+            P5 = { enable = true, draw = true, guide = true }
         }
     end
 
@@ -343,11 +343,15 @@ Config.init = function(M)
             ThunderIII_3 = { p = 3, value = 1, nameCn = '暴雷3' },
             ThunderIII_4 = { p = 3, value = 1, nameCn = '暴雷4' },
             ThunderIII_5 = { p = 3, value = 1, nameCn = '暴雷5' },
-            ThunderIII_6 = { p = 3, value = 1, nameCn = '暴雷6' },
-            ThunderIII_7 = { p = 3, value = 1, nameCn = '暴雷7' },
-            ThunderIII_8 = { p = 3, value = 1, nameCn = '暴雷8' },
-            ThunderIII_9 = { p = 3, value = 1, nameCn = '暴雷9' },
-            ThunderIII_10 = { p = 3, value = 1, nameCn = '暴雷10' },
+            --ThunderIII_6 = { p = 3, value = 1, nameCn = '暴雷6' },
+            --ThunderIII_7 = { p = 3, value = 1, nameCn = '暴雷7' },
+            --ThunderIII_8 = { p = 3, value = 1, nameCn = '暴雷8' },
+            --ThunderIII_9 = { p = 3, value = 1, nameCn = '暴雷9' },
+            --ThunderIII_10 = { p = 3, value = 1, nameCn = '暴雷10' },
+            -- p4 没死刑开减伤吃平a
+            -- p5
+            ChaoticFlare_1 = { p = 5, value = 1, nameCn = '混沌核爆1' },
+            ChaoticFlare_2 = { p = 5, value = 1, nameCn = '混沌核爆2' },
         }
     end
 

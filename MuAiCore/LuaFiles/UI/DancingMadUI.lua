@@ -11,12 +11,22 @@ DancingMadUI.draw = function()
     M.DancingMadUI.visible, M.DancingMadUI.open = GUI:Begin("Dmu Setting", M.DancingMadUI.open)
     if M.DancingMadUI.visible then
         if GUI:CollapsingHeader("全局开关") then
-            GUI:TextColored(1, 0, 0, 1, '[开启]表示是否开启当前这一P，[画图]和[指路]控制当前P')
-            GUI:TextColored(1, 0, 0, 1, '是否指路绘图')
-            for i = 1, 6 do
+            GUI:Columns(3, 'switch', false)
+            GUI:Dummy(15, 10)
+            GUI:SameLine()
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text('总开关')
+            GUI:NextColumn()
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text('是否画图')
+            GUI:NextColumn()
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text('是否指路')
+            GUI:NextColumn()
+            GUI:Separator()
+            for i = 1, 5 do
                 local key = 'P' .. i
                 local curConfig = M.Config.DmuCfg[key]
-                GUI:Columns(3, key .. 'switch', false)
                 GUI:Dummy(15, 10)
                 GUI:SameLine(0, 0)
                 GUI:AlignFirstTextHeightToWidgets()
@@ -24,18 +34,23 @@ DancingMadUI.draw = function()
                 GUI:SameLine()
                 curConfig.enable = GUI:Checkbox('##' .. key .. 'enable', curConfig.enable)
                 GUI:NextColumn()
-                GUI:AlignFirstTextHeightToWidgets()
-                GUI:Text('画图')
+                --GUI:AlignFirstTextHeightToWidgets()
+                --GUI:Text('画图')
+                GUI:Dummy(10,0)
                 GUI:SameLine()
                 curConfig.draw = GUI:Checkbox('##' .. key .. 'draw', curConfig.draw)
                 GUI:NextColumn()
-                GUI:AlignFirstTextHeightToWidgets()
-                GUI:Text('指路')
+                --GUI:AlignFirstTextHeightToWidgets()
+                --GUI:Text('指路')
+                --GUI:SameLine()
+                GUI:Dummy(10,0)
                 GUI:SameLine()
                 curConfig.guide = GUI:Checkbox('##' .. key .. 'guide', curConfig.guide)
-                GUI:Columns(1)
+                GUI:NextColumn()
                 GUI:Separator()
+                
             end
+            GUI:Columns(1)
         end
         if M.Config.DmuCfg.P1.enable and GUI:CollapsingHeader("P1") then
             GUI:Dummy(0, 0)
@@ -59,6 +74,9 @@ DancingMadUI.draw = function()
                     M.Config.DmuCfg.P1.BeamOrder = M.StringSplit(dmOrder, ",")
                 end
             end
+            GUI:Dummy(15, 0)
+            GUI:SameLine(0, 0)
+            M.Config.DmuCfg.P1.autoLookAt = GUI:Checkbox('自动背对##autoLookAt', M.Config.DmuCfg.P1.autoLookAt)
         end
         --if M.Config.DmuCfg.P2.enable and GUI:CollapsingHeader("P2") then
         --    M.Config.DmuCfg.P2.MarkMember = GUI:Checkbox('标记队友 分摊禁止,大圈锁链,扇形攻击', M.Config.DmuCfg.P2.MarkMember)

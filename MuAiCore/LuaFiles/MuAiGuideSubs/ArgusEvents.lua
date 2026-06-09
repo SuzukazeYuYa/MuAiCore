@@ -4,24 +4,26 @@ local ArgusEvents = {}
     Argus事件模块
 ===========================
 ]]
+
 local register = {
     OnEntityChannel = false,
+    OnEntityCast = false,
     OnMarkerAdd = false,
     OnAOECreate = false,
     OnEventObjectScriptFunc = false,
     OnMapEffect = false,
     OnAddEntityVFX = false,
 }
+
 local registerOK = false
 local infoTime = function()
-    return string.format("%.3f", TensorReactions_CurrentCombatTimer)
+    return string.format('%.3f', TensorReactions_CurrentCombatTimer)
 end
-
 ---@param M MuAiGuide
 ArgusEvents.init = function(M)
     --- 开始读条事件
     local OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
-       if M.CurRaidScript ~= nil and M.CurRaidScript.OnEntityChannel ~= nil then
+        if M.CurRaidScript ~= nil and M.CurRaidScript.OnEntityChannel ~= nil then
             M.CurRaidScript.OnEntityChannel(entityID, spellID, targetID, channelTimeMax)
         end
 
@@ -42,7 +44,14 @@ ArgusEvents.init = function(M)
         end
         if M.Develop.PrintChannelInfo then
             M.Info('[' .. infoTime()
-                    .. ']开始读条，实体名称：' .. ent.name .. ', 技能ID：' .. spellID .. "，判定时间：" .. channelTimeMax)
+                    .. ']开始读条，实体名称：' .. ent.name .. ', 技能ID：' .. spellID .. '，判定时间：' .. channelTimeMax)
+        end
+    end
+
+    --- 读条结束事件
+    local OnEntityCast = function(entityID, spellID, castPos)
+        if M.CurRaidScript ~= nil and M.CurRaidScript.OnEntityCast ~= nil then
+            M.CurRaidScript.OnEntityCast(entityID, spellID, castPos)
         end
     end
 
@@ -69,7 +78,7 @@ ArgusEvents.init = function(M)
         end
         if M.Develop.PrintMarkId then
             M.Info('[' .. infoTime()
-                    .. ']添加标记，实体名称：' .. ent.name .. ', 标记ID：' .. markerID .. "。")
+                    .. ']添加标记，实体名称：' .. ent.name .. ', 标记ID：' .. markerID .. '。')
         end
 
     end
@@ -92,13 +101,13 @@ ArgusEvents.init = function(M)
                 local ent = TensorCore.mGetEntity(aoeInfo.entityID)
                 if ent.type == 1 then
                     return
-                end 
+                end
             end
             M.Info('[' .. infoTime()
                     .. ']AOE生成，名称：' .. aoeInfo.aoeName
                     .. ', ID：' .. aoeInfo.aoeID
-                    .. "，类型：" .. aoeInfo.aoeCastType
-                    .. "，朝向：" .. aoeInfo.heading
+                    .. '，类型：' .. aoeInfo.aoeCastType
+                    .. '，朝向：' .. aoeInfo.heading
             )
         end
 
@@ -151,29 +160,35 @@ ArgusEvents.init = function(M)
         if Argus == nil then
             return
         end
-        if Argus.registerOnEntityChannel ~= nil and not register["OnEntityChannel"] then
+        if Argus.registerOnEntityChannel ~= nil and not register['OnEntityChannel'] then
             Argus.registerOnEntityChannel(OnEntityChannel)
-            register["OnEntityChannel"] = true
+            register['OnEntityChannel'] = true
         end
-        if Argus.registerOnMarkerAdd ~= nil and not register["OnMarkerAdd"] then
+
+        if Argus.registerOnEntityCast ~= nil and not register['OnEntityCast'] then
+            Argus.registerOnEntityCast(OnEntityCast)
+            register['OnEntityCast'] = true
+        end
+
+        if Argus.registerOnMarkerAdd ~= nil and not register['OnMarkerAdd'] then
             Argus.registerOnMarkerAdd(OnMarkerAdd)
-            register["OnMarkerAdd"] = true
+            register['OnMarkerAdd'] = true
         end
-        if Argus.registerOnAOECreateFunc ~= nil and not register["OnAOECreate"] then
+        if Argus.registerOnAOECreateFunc ~= nil and not register['OnAOECreate'] then
             Argus.registerOnAOECreateFunc(OnAOECreate)
-            register["OnAOECreate"] = true
+            register['OnAOECreate'] = true
         end
-        if Argus.registerOnEventObjectScriptFunc ~= nil and not register["OnEventObjectScriptFunc"] then
+        if Argus.registerOnEventObjectScriptFunc ~= nil and not register['OnEventObjectScriptFunc'] then
             Argus.registerOnEventObjectScriptFunc(OnEventObjectScriptFunc)
-            register["OnEventObjectScriptFunc"] = true
+            register['OnEventObjectScriptFunc'] = true
         end
-        if Argus.registerOnMapEffect ~= nil and not register["OnMapEffect"] then
+        if Argus.registerOnMapEffect ~= nil and not register['OnMapEffect'] then
             Argus.registerOnMapEffect(OnMapEffect)
-            register["OnMapEffect"] = true
+            register['OnMapEffect'] = true
         end
-        if Argus.registerOnAddEntityVFXFunc ~= nil and not register["OnAddEntityVFX"] then
+        if Argus.registerOnAddEntityVFXFunc ~= nil and not register['OnAddEntityVFX'] then
             Argus.registerOnAddEntityVFXFunc(OnAddEntityVFX)
-            register["OnAddEntityVFX"] = true
+            register['OnAddEntityVFX'] = true
         end
     end
 
@@ -196,7 +211,7 @@ ArgusEvents.init = function(M)
             registerArgus()
         else
             registerOK = true
-            M.Debug("ArgusEvents:所有Argus事件函数注册完成")
+            M.Debug('ArgusEvents:所有Argus事件函数注册完成')
         end
     end
 end

@@ -1,6 +1,6 @@
 local CatZDmuTankUI = {}
 
-local table4 = { "自己减伤", "自己无敌", "搭档减伤", "搭档无敌" }
+local dropDrownList = { "自己减伤", "自己无敌", "搭档减伤", "搭档无敌", "换T", "分摊" }
 local wide = 300
 local keys = {
     -- P1,
@@ -18,11 +18,15 @@ local keys = {
     'ThunderIII_3',
     'ThunderIII_4',
     'ThunderIII_5',
-    'ThunderIII_6',
-    'ThunderIII_7',
-    'ThunderIII_8',
-    'ThunderIII_9',
-    'ThunderIII_10',
+    --'ThunderIII_6',
+    --'ThunderIII_7',
+    --'ThunderIII_8',
+    --'ThunderIII_9',
+    --'ThunderIII_10',
+    -- P4
+    -- P5
+    'ChaoticFlare_1',
+    'ChaoticFlare_2',
 }
 
 CatZDmuTankUI.draw = function()
@@ -49,7 +53,7 @@ CatZDmuTankUI.draw = function()
             GUI:AlignFirstTextHeightToWidgets()
             GUI:Text('  ' .. curConfig.nameCn)
             GUI:NextColumn()
-            curConfig.value = GUI:Combo("##" .. keys[i], curConfig.value, table4, 4)
+            curConfig.value = GUI:Combo("##" .. keys[i], curConfig.value, dropDrownList, #dropDrownList)
             GUI:NextColumn()
         end
     end

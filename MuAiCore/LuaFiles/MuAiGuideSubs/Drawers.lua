@@ -425,10 +425,11 @@ Drawers.init = function(M)
     
     --- 通用创建 Drawer 函数
     ---@return ShapeDrawer
-    M.CreateDrawer = function(r, g, b, a)
+    M.CreateDrawer = function(r, g, b, a, lineSize)
         local color = GUI:ColorConvertFloat4ToU32(r, g, b, a or 0.3)
+        lineSize = lineSize or 1
         return Argus2.ShapeDrawer:new(color, color, color,
-                GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), 1)
+                GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), lineSize)
     end
     
     --- 绘制一个圆（已废弃仿报错用）

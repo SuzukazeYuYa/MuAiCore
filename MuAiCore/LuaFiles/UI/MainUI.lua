@@ -58,7 +58,7 @@ local drawJobTab = function(M)
                 GUI:SetTooltip("可以显示其他队友当前应该去哪")
             end
             if M.MultiGuide.enable then
-                GUI:SameLine()  
+                GUI:SameLine()
                 GUI:Button('清空指导', 100, 20)
                 if GUI:IsItemClicked(0) then
                     M.MultiGuide.initList()
@@ -536,11 +536,11 @@ local drawRaidSettingTab = function(M)
             end
         end
         GUI:Dummy(0, 7)
-        GUI:BulletText('妖星乱舞绝境战')
-        GUI:Dummy(15, 0)
-        GUI:SameLine()
+        --GUI:AlignFirstTextHeightToWidgets()
+        --GUI:BulletText('妖星乱舞绝境战 ')
+        --GUI:SameLine()
         local DmuCfgChanged
-        M.Config.DmuCfg.Enable, DmuCfgChanged = GUI:Checkbox('开启', M.Config.DmuCfg.Enable)
+        M.Config.DmuCfg.Enable, DmuCfgChanged = GUI:Checkbox('妖星乱舞绝境战##DmuEnable', M.Config.DmuCfg.Enable)
         if GUI:IsItemHovered() then
             GUI:SetTooltip('是否开启妖星乱舞绝境战相关功能')
         end
@@ -550,11 +550,13 @@ local drawRaidSettingTab = function(M)
             GUI:Button('设置绘制指路', 150, 25)
             if GUI:IsItemClicked(0) then
                 M.DancingMadUI.open = not M.DancingMadUI.open
+                M.CatZDmuTankUI.open = false
             end
             GUI:SameLine(0, 8)
             GUI:Button('CatZTankUI', 150, 25)
             if GUI:IsItemClicked(0) then
                 M.CatZDmuTankUI.open = not M.CatZDmuTankUI.open
+                M.DancingMadUI.open = false
             end
         end
         if DmuCfgChanged then
@@ -867,7 +869,7 @@ local drawDeveloperTab = function(M)
     end
     GUI:Separator()
     GUI:Dummy(0, 0)
-    GUI:BulletText('UI调试')
+    GUI:BulletText('调试')
     GUI:Dummy(6, 0)
     GUI:SameLine()
     GUI:Button('刷新UI', 120, 20)
@@ -876,42 +878,22 @@ local drawDeveloperTab = function(M)
     end
     GUI:SameLine(205, 0)
     M.Develop.UIRefresh = GUI:Checkbox('持续刷新', M.Develop.UIRefresh)
-    GUI:Separator()
-    GUI:Dummy(0, 0)
-    GUI:BulletText('脚本调试')
+    GUI:Dummy(6, 0)
     GUI:Dummy(6, 0)
     GUI:SameLine()
-    M.Develop.ScRefresh = GUI:Checkbox('开启脚本调试', M.Develop.ScRefresh)
-    if M.Develop.ScRefresh then
-        GUI:Dummy(6, 0)
-        GUI:SameLine()
-        GUI:Button('重载副本脚本', 120, 20)
-        if GUI:IsItemClicked(0) then
-            M.LoadRaidScripts()
-        end
-        GUI:SameLine(205, 0)
-        GUI:Button('恢复重载阶段', 120, 20)
-        if GUI:IsItemClicked(0) then
-            if (M[M.Develop.DateTable]) ~= nil then
-                M[M.Develop.DateTable].CurrentState = M.Develop.State
-                M.Debug('恢复[' .. M.Develop.DateTable .. ']进度：' .. M.Develop.State)
-            end
-        end
+    GUI:Button('重载副本脚本', 120, 20)
+    if GUI:IsItemClicked(0) then
+        M.LoadRaidScripts()
     end
-    GUI:Separator()
-    GUI:Dummy(0, 0)
-    GUI:BulletText('其他')
-    GUI:Dummy(6, 0)
-    GUI:SameLine()
-    M.Develop.ShowTetherInfo = GUI:Checkbox('显示所有实体连线信息', M.Develop.ShowTetherInfo)
-    GUI:Dummy(6, 0)
-    GUI:SameLine()
+    GUI:SameLine(205, 0)
     GUI:Button('重载MuAiGuide', 120, 20)
     if GUI:IsItemClicked(0) then
         M.CloseAllUI()
         MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
     end
-    GUI:SameLine(205, 0)
+    GUI:Dummy(6, 0)
+    GUI:Dummy(6, 0)
+    GUI:SameLine()
     GUI:Button('显示日志弹窗', 120, 20)
     if GUI:IsItemClicked(0) then
         if M.LogInfo ~= nil and table.size(M.LogInfo) > 0 then
@@ -920,7 +902,12 @@ local drawDeveloperTab = function(M)
     end
     GUI:Separator()
     GUI:Dummy(0, 0)
-    if GUI:CollapsingHeader('Event工具') then
+    if GUI:CollapsingHeader('工具') then
+        GUI:Dummy(6, 0)
+        GUI:SameLine()
+        M.Develop.ShowTetherInfo = GUI:Checkbox('显示所有实体连线信息', M.Develop.ShowTetherInfo)
+        GUI:Dummy(6, 5)
+        GUI:BulletText('Events')
         GUI:Dummy(6, 0)
         GUI:SameLine()
         GUI:AlignFirstTextHeightToWidgets()
@@ -1136,6 +1123,8 @@ MainUI.draw = function()
         if tabindex ~= 3 then
             M.FruConfigUI.open = false
             M.FruMitigationUI.open = false
+            M.DancingMadUI.open = false
+            M.CatZDmuTankUI.open = false
         end
         drawCommon(M)
         --GUI:Button('测试')

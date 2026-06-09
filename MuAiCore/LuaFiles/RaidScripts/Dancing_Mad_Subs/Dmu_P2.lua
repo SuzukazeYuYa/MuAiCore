@@ -18,6 +18,30 @@ local Data = function()
     return MG.DancingMad.P2
 end
 
+---打印当前踩塔情况到默语
+---@param tbl table
+local loged = {}
+local showOrderLog = function(tbl, infoHead)
+    local log = ''
+    for i = 1, #tbl do
+        local curJob = tbl[i]
+        local mark = Data().Towers.curMarks[curJob]
+        local markName
+        if mark == 715 then
+            markName = '摊'
+        elseif mark == 716 then
+            markName = '钢'
+        elseif mark == 717 then
+            markName = '扇'
+        end
+        log = log .. curJob .. '-' .. markName
+        if i ~= #tbl then
+            log = log .. ','
+        end
+    end
+    MG.Info(infoHead .. log)
+end
+
 local towerPointByA1 = {
     [1] = { label = "上", x = 100.000, y = 0.000, z = 92.000 },
     [2] = { label = "右上", x = 105.657, y = 0.000, z = 94.343 },
@@ -37,7 +61,7 @@ Dmu_P2.Init = function(dm, m)
     MG = m
 end
 
--- 1234按照THMR顺序排列
+-- 1234按照从左到右顺序排列
 local standTemplate = {
     odd = {-- 奇数
         doing = {
@@ -59,8 +83,8 @@ local standTemplate = {
             [2] = { isLeft = true, dis = 3.6, dir = 0 },
             -- [3] = { isLeft = false, dis = 3.6, dir = math.pi / 3 },
             --[4] = { isLeft = false, dis = 3.6, dir = -math.pi / 3 },      
-            [3] = { isLeft = false, dis = 3.6, dir = math.pi * 17 / 36 },
-            [4] = { isLeft = false, dis = 3.6, dir = -math.pi * 17 / 36 },
+            [3] = { isLeft = false, dis = 3.6, dir = -math.pi * 17 / 36 },
+            [4] = { isLeft = false, dis = 3.6, dir = math.pi * 17 / 36 },
         },
         standBy = {
             [1] = { isLeft = true, dis = 12, dir = -math.pi * 17 / 20 },
@@ -92,13 +116,48 @@ Dmu_P2.OnEntityChannel = function(entityID, spellID, _)
         -- 毁灭之脚
         if Data().Towers.wave <= 3 then
             Data().Towers.guideDir[1].finish = true
+            Data().Towers.kickPreSkill = Data().Towers.guideDir[1].skill
         elseif Data().Towers.wave <= 5 then
             Data().Towers.guideDir[2].finish = true
+            Data().Towers.kickPreSkill = Data().Towers.guideDir[2].skill
         elseif Data().Towers.wave <= 7 then
             Data().Towers.guideDir[3].finish = true
+            Data().Towers.kickPreSkill = Data().Towers.guideDir[3].skill
         else
             Data().Towers.guideDir[4].finish = true
+            Data().Towers.kickPreSkill = Data().Towers.guideDir[4].skill
         end
+        table.insert(Data().Towers.kickBoss, entityID)
+        Data().Towers.kickTimer = Now()
+        Data().Towers.kickDrawing = true
+    end
+end
+
+local drawAllThingEnding = function()
+    if not Cfg().draw
+            or Data().Towers.kickTimer == 0
+            or not Data().Towers.kickDrawing
+            or table.size(Data().Towers.kickBoss) == 0
+    then
+        return
+    end
+    if TimeSince(Data().Towers.kickTimer) < 5500 then
+        for _, id in pairs(Data().Towers.kickBoss) do
+            local preSkill = Data().Towers.kickPreSkill
+            local curCaster = TensorCore.mGetEntity(id)
+            local dir
+            if preSkill == 47827 then
+                dir = curCaster.pos.h + math.pi
+            elseif preSkill == 47826 then
+                dir = curCaster.pos.h
+            end
+            MG.CreateDrawer(1, 0.5, 0, nil, 2)
+              :addCone(curCaster.pos.x, curCaster.pos.y, curCaster.pos.z, 21, math.pi, dir)
+        end
+    else
+        Data().Towers.kickTimer = 0
+        Data().Towers.kickBoss = {}
+        Data().Towers.kickDrawing = false
     end
 end
 
@@ -142,12 +201,14 @@ local initGroups = function()
         table.insert(Data().Towers.groupB, 'D1')
         table.insert(Data().Towers.groupB, 'D3')
     end
-    MuAiGuide.Info('初始踩塔组：' .. MG.StringJoin(Data().Towers.groupA, ','))
-    MuAiGuide.Info('初始闲人组：' .. MG.StringJoin(Data().Towers.groupB, ','))
+
+    if MG.Config.Main.LogToEchoMsg then
+        showOrderLog(Data().Towers.groupA, '初始踩塔组：')
+        showOrderLog(Data().Towers.groupB, '初始闲人组：')
+    end
 end
 
 Dmu_P2.OnMarkerAdd = function(entityID, markerID)
-    d(markerID)
     if 715 <= markerID and markerID <= 717 then
         Data().Towers.markCnt = Data().Towers.markCnt + 1
         local curMarkJob
@@ -297,6 +358,7 @@ local calcFirstOrderA = function()
         end
     end
 end
+
 local calcFirstOrderB = function()
     local group = Data().Towers.groupB
     local index = 4
@@ -316,7 +378,7 @@ local calcFirstOrderB = function()
     else
         curOrder = { cone[2], cone[1] }
     end
-    
+
     -- 近上远下，那么应该是反的
     if MG.IndexOf(group, circle[1]) < MG.IndexOf(group, circle[2]) then
         table.insert(curOrder, circle[2])
@@ -442,7 +504,7 @@ local guideFuturePastOrTakeTower = function()
             MG.FrameMultiD(Data().Towers.GuideData[wave], 0.3)
         end
     else
-        local idxMap = { [3] = 1, [5] = 2, [7] = 3 }
+        local idxMap = { [3] = 1, [5] = 2, [7] = 3, [8] = 4 }
         local idx = idxMap[wave]
         local finishPoints = Data().Towers.GuideData[wave]
         guideGatherPoint(idx, wave, finishPoints)
@@ -455,14 +517,15 @@ Dmu_P2.Update = function()
         if Data().Towers.GuideData[wave] == nil then
             if Data().Towers.groupOrders[wave] == nil then
                 calcGroupOrder(wave)
-                if Data().Towers.groupOrders[wave] ~= nil then
-                    MuAiGuide.Info(' 当前踩塔组顺序：' .. MG.StringJoin(Data().Towers.groupOrders[wave], ','))
-                end
             else
                 Data().Towers.GuideData[wave] = calcGuidePos(wave)
             end
         else
             guideFuturePastOrTakeTower()
+        end
+        if MG.Config.Main.LogToEchoMsg and Data().Towers.groupOrders[wave] ~= nil and not loged[wave] then
+            showOrderLog(Data().Towers.groupOrders[wave], '当前踩塔组顺序：')
+            loged[wave] = true
         end
         if Cfg().draw then
             local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
@@ -515,6 +578,7 @@ Dmu_P2.Update = function()
                 end
             end
         end
+        drawAllThingEnding()
     end
     if Data().Towers.wave == 8
             and TimeSince(Data().Towers.Timer) > 10000

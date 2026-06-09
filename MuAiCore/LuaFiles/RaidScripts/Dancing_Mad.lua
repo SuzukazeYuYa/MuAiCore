@@ -35,11 +35,15 @@ end
 local dataInit = function()
     MG.DancingMad = {
         P1 = {
-            Death ={
+            Death = {
                 Timer = 0,
                 OnDraw = false,
                 MT = nil,
                 ST = nil,
+            },
+            Death2 = {
+                Timer = 0,
+                OnDraw = false,
             },
             Fire1 = {
                 BossMark = 0,
@@ -64,6 +68,18 @@ local dataInit = function()
                 BuffJobs = nil,
                 SelfGroupTurner = nil,
                 SelfGroupTurnerObj = nil,
+            },
+            Line2 = {
+                dangerDir = 0,
+                Gather1Players = nil,
+                Gather2Players = nil,
+                Guide1 = nil,
+                Guide2 = nil,
+            },
+            AutoLookAt = {
+                enable = false,
+                boss = nil,
+                Timer = 0,
             }
         },
         P2 = {
@@ -87,6 +103,10 @@ local dataInit = function()
                 GuideData = {},
                 markCache = {},
                 groupOrders = {},
+                kickBoss = {},
+                kickPreSkill = 0,
+                kickTimer = 0,
+                kickDrawing = false
             }
         }
     }
@@ -105,6 +125,7 @@ local StateNames = {
     'P1BeamEnd',
     'P1TowerBoom',
     'P1BuffTurn1',
+    'DeathBfLine2',
     'P1Line2Start',
     'P1Line2_1',
     'P1Line2_2',
@@ -131,12 +152,12 @@ DM.Init = function(M)
     DM.SubScripts = {}
     MG = M
     -- 一次性创建所有颜色
-    DM.redDrawer = MG.CreateDrawer(1, 0, 0)
-    DM.yellowDrawer = MG.CreateDrawer(1, 1, 0)
-    DM.blueDrawer = MG.CreateDrawer(0, 0, 1)
-    DM.greenDrawer = MG.CreateDrawer(0, 1, 0)
-    DM.purpleDrawer = MG.CreateDrawer(1, 0, 1)
-    DM.cyanDrawer = MG.CreateDrawer(0, 1, 1)
+    DM.redDrawer = MG.CreateDrawer(1, 0, 0, nil, 2)
+    DM.yellowDrawer = MG.CreateDrawer(1, 1, 0, nil, 2)
+    DM.blueDrawer = MG.CreateDrawer(0, 0, 1, nil, 2)
+    DM.greenDrawer = MG.CreateDrawer(0, 1, 0, nil, 2)
+    DM.purpleDrawer = MG.CreateDrawer(1, 0, 1, nil, 2)
+    DM.cyanDrawer = MG.CreateDrawer(0, 1, 1, nil, 2)
     local folderPath = MuAiGuideRoot .. "RaidScripts\\Dancing_Mad_Subs"
     local list = FolderList(folderPath)
     for _, fileName in pairs(list) do
@@ -230,6 +251,10 @@ DM.OnEntityChannel = function(entityID, spellID, _)
     doSubEvents('OnEntityChannel', entityID, spellID)
 end
 
+DM.OnEntityCast = function(entityID, spellID, castPos)
+    doSubEvents('OnEntityCast', entityID, spellID, castPos)
+end
+
 DM.OnMarkerAdd = function(entityID, markerID)
     doSubEvents('OnMarkerAdd', entityID, markerID)
 end
@@ -238,8 +263,8 @@ DM.OnAOECreate = function(aoeInfo)
     doSubEvents('OnAOECreate', aoeInfo)
 end
 
-DM.OnEventObjectScriptFunc = function(entityID)
-    doSubEvents('OnEventObjectScriptFunc', entityID)
+DM.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
+    doSubEvents('OnEventObjectScriptFunc', entityID, a1, a2, a3)
 end
 
 DM.OnAddEntityVFX = function(vfxID)
