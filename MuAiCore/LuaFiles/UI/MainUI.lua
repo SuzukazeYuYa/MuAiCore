@@ -240,9 +240,9 @@ local drawJobTab = function(M)
             end
             GUI:SameLine(0, 25)
             local text = ptMember.info.name
-            if ptMember.label == M.SelfPos and M.IsVideo() then
-                text = M.GetJobFullNameById(M.Party[M.SelfPos].job)
-            end
+            --if ptMember.label == M.SelfPos and M.IsVideo() then
+            --    text = M.GetJobFullNameById(M.Party[M.SelfPos].job)
+            --end
             local itemW = GUI:GetContentRegionAvailWidth()
             local textW = GUI:CalcTextSize(text)
             local offsetX = (itemW - textW) * 0.5
