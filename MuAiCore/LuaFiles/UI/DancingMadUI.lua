@@ -53,20 +53,27 @@ DancingMadUI.draw = function()
             GUI:Columns(1)
         end
         if M.Config.DmuCfg.P1.enable and GUI:CollapsingHeader("P1") then
+            GUI:BulletText('真假冰和雷')
             GUI:Dummy(0, 0)
-            GUI:Dummy(15, 0)
+            GUI:Dummy(20, 0)
             GUI:SameLine(0, 0)
             M.Config.DmuCfg.P1.effect = GUI:Checkbox('屏蔽真假AOE特效##effectBind', M.Config.DmuCfg.P1.effect)
             if GUI:IsItemHovered() then
                 GUI:SetTooltip("勾选后屏蔽特效采用A+画紫色危险区，未勾选使用ImGui画图显示黄色危险区")
             end
             GUI:Dummy(0, 0)
+            GUI:Dummy(0, 0)
+            GUI:SameLine(0, 0)
+            GUI:BulletText('一神')
+            GUI:Dummy(15, 0)
+            GUI:SameLine(0, 0)
+            GUI:Text(' 打法：职能固定  ')
             GUI:Dummy(15, 0)
             GUI:SameLine(0, 0)
             GUI:AlignFirstTextHeightToWidgets()
-            GUI:Text('1神激光站位顺序')
-            GUI:Dummy(15, 0)
+            GUI:Text(' 激光站位顺序  ')
             GUI:SameLine(0, 0)
+            GUI:PushItemWidth(175)
             local dmOrder, dmOrderChanged = GUI:InputText('##DrawBlackList',
                     M.StringJoin(M.Config.DmuCfg.P1.BeamOrder, ','), GUI.InputTextFlags_CharsNoBlank)
             if dmOrderChanged then
@@ -74,9 +81,37 @@ DancingMadUI.draw = function()
                     M.Config.DmuCfg.P1.BeamOrder = M.StringSplit(dmOrder, ",")
                 end
             end
+            GUI:PopItemWidth()
+            GUI:Dummy(0, 0)
+            GUI:SameLine(0, 0)
+            GUI:BulletText('二神')
             GUI:Dummy(15, 0)
             GUI:SameLine(0, 0)
-            M.Config.DmuCfg.P1.autoLookAt = GUI:Checkbox('自动背对##autoLookAt', M.Config.DmuCfg.P1.autoLookAt)
+            GUI:Text(' 打法：M S分组AC固定分摊, 近左远右放分散  ')
+            GUI:Dummy(0, 0)
+            GUI:Dummy(0, 0)
+            GUI:SameLine(0, 0)
+            GUI:BulletText('唰啦啦传送')
+            GUI:Dummy(0, 0)
+            GUI:Dummy(15, 0)
+            GUI:SameLine(0, 0)
+            GUI:Text(' 打法：回转寿司, 相同buff优先正点放  ')
+            GUI:Dummy(0, 0)
+            GUI:SameLine(0, 0)
+            GUI:BulletText('最后雷火')
+            GUI:Dummy(15, 0)
+            GUI:SameLine(0, 0)
+            GUI:Text(' 打法：固定式')
+            GUI:Dummy(20, 0)
+            GUI:SameLine(0, 0)
+            M.Config.DmuCfg.P1.autoLookAt = GUI:Checkbox('自动面对和背对石像##autoLookAt', M.Config.DmuCfg.P1.autoLookAt)
+        end
+        if M.Config.DmuCfg.P1.enable and GUI:CollapsingHeader("P2") then
+            GUI:Dummy(0, 0)
+            GUI:SameLine(0, 0)
+            GUI:BulletText('8次踩塔')
+            GUI:Text(' 打法：混合优化, 闲人职能固定')
+            GUI:Text(' 扇左钢右在开发中，暂不支持！  ')
         end
         --if M.Config.DmuCfg.P2.enable and GUI:CollapsingHeader("P2") then
         --    M.Config.DmuCfg.P2.MarkMember = GUI:Checkbox('标记队友 分摊禁止,大圈锁链,扇形攻击', M.Config.DmuCfg.P2.MarkMember)
@@ -86,4 +121,5 @@ DancingMadUI.draw = function()
     GUI:SetWindowSize(wide, 0)
     GUI:End()
 end
+
 return DancingMadUI

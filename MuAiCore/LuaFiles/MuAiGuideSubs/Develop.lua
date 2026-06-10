@@ -29,6 +29,7 @@ DevelopModel.init = function(M)
         VFXFilterNoPlayer = false,
         VFXFilterMax = 65535,
         VFXFilterMin = 0,
+        TempList = {}
     }
     --- @ 注册开发模数据表格名称
     M.Develop.Reg = function(key)

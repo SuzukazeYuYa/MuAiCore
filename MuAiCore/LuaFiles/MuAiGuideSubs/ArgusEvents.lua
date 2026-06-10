@@ -13,6 +13,7 @@ local register = {
     OnEventObjectScriptFunc = false,
     OnMapEffect = false,
     OnAddEntityVFX = false,
+    OnTetherChange = false,
 }
 
 local registerOK = false
@@ -155,6 +156,12 @@ ArgusEvents.init = function(M)
         end
     end
 
+    local OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID, newTetherID, newTetherFlags, newTargetID)
+        if M.CurRaidScript ~= nil and M.CurRaidScript.OnTetherChange ~= nil then
+            M.CurRaidScript.OnTetherChange(sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID, newTetherID, newTetherFlags, newTargetID)
+        end
+    end
+
     --- 安全注册阿古斯（防止加载失败导致报错）
     local registerArgus = function()
         if Argus == nil then
@@ -189,6 +196,11 @@ ArgusEvents.init = function(M)
         if Argus.registerOnAddEntityVFXFunc ~= nil and not register['OnAddEntityVFX'] then
             Argus.registerOnAddEntityVFXFunc(OnAddEntityVFX)
             register['OnAddEntityVFX'] = true
+        end 
+        
+        if Argus.registerOnTetherChange ~= nil and not register['OnTetherChange'] then
+            Argus.registerOnTetherChange(OnTetherChange)
+            register['OnTetherChange'] = true
         end
     end
 

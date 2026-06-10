@@ -488,7 +488,7 @@ GameTools.init = function(M)
                 if time == nil then
                     return true
                 else
-                    return debuff.duration > time
+                    return debuff.duration >= time
                 end
             end
         end
@@ -536,6 +536,20 @@ GameTools.init = function(M)
             return TensorCore.mGetEntity(M.CurRaidBoss.id)
         end
         return nil
+    end
+
+    M.IsVideo = function()
+        local jobNameCnt = 0
+        if M.inArr == nil then
+            for job, member in pairs(M.Party) do
+                local jobName = M.GetJobFullNameById(member.job)
+                if member.name == jobName then
+                    jobNameCnt = jobNameCnt + 1
+                end
+            end
+            M.inArr = jobNameCnt >= 7
+        end
+        return M.inArr
     end
 end
 

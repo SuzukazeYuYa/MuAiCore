@@ -37,7 +37,7 @@ local dataInit = function()
         P1 = {
             Death = {
                 Timer = 0,
-                OnDraw = false,
+                InState = false,
                 MT = nil,
                 ST = nil,
             },
@@ -68,19 +68,101 @@ local dataInit = function()
                 BuffJobs = nil,
                 SelfGroupTurner = nil,
                 SelfGroupTurnerObj = nil,
+                NextState = 'DeathBfLine2',
+                thGroupGuidePos = { x = 91, y = 0, z = 100 },
+                dpsGroupGuidePos = { x = 109, y = 0, z = 100 },
+                offSetTh = { x = 1, y = 0, z = 0 },
+                offSetDps = { x = -1, y = 0, z = 0 }
             },
+            -- 放黑泥1
             Line2 = {
-                dangerDir = 0,
-                Gather1Players = nil,
-                Gather2Players = nil,
+                dangerDir = nil,
+                GatherPlayers = nil,
+                DisPlayers = nil,
+                Guide0 = nil,
                 Guide1 = nil,
                 Guide2 = nil,
+                Timer = 0,
             },
+            -- 放黑泥2
+            Line3 = {
+                GatherPlayers = nil,
+                DisPlayers = nil,
+                Guide1 = nil,
+                Guide2 = nil,
+                Timer = 0,
+                Shits = nil,
+                UpShit = nil,
+                DownShit = nil,
+            },
+            Turn2 = {
+                BuffJobs = nil,
+                SelfGroupTurner = nil,
+                SelfGroupTurnerObj = nil,
+                NextState = 'Turn2End',
+                thGroupGuidePos = nil,
+                dpsGroupGuidePos = nil,
+                offSetTh = { x = 0, y = 0, z = 1 },
+                offSetDps = { x = 0, y = 0, z = -1 }
+            },
+            TeleTrouncing = {
+                BuffInfo = nil,
+                Guide1 = nil,
+                Guide2 = nil,
+                Timer = 0,
+                Reference = nil
+            },
+            Turn3 = {
+                BuffJobs = nil,
+                SelfGroupTurner = nil,
+                SelfGroupTurnerObj = nil,
+                NextState = 'SleepOrConfused',
+                thGroupGuidePos = { x = 94, y = 0, z = 94 },
+                dpsGroupGuidePos = { x = 106, y = 0, z = 106 },
+                offSetTh = { x = 1, y = 0, z = 1 },
+                offSetDps = { x = -1, y = 0, z = -1 }
+            },
+            -- 放完箭头之击退之后的指路
+            LastLink = {
+                GuideData = {
+                    MT = { x = 100, z = 92 },
+                    ST = { x = 108, z = 100 },
+                    H1 = { x = 84, z = 100 },
+                    H2 = { x = 100, z = 116 },
+                    D1 = { x = 92, z = 100 },
+                    D2 = { x = 100, z = 108 },
+                    D3 = { x = 100, z = 84 },
+                    D4 = { x = 116, z = 100 },
+                },
+                SleepGroup = nil,
+                Timer = 0,
+            },
+
             AutoLookAt = {
                 enable = false,
                 boss = nil,
                 Timer = 0,
-            }
+            },
+            FireThunder = {
+                BossMark = 0,
+                PlayerMark = 0,
+                GatherPlayers = {},
+                Thunders = {},
+                Time = 0, --火判定时间
+                BaseGuideData = {
+                    H1 = { x = 100, y = 0, z = 85.86 },
+                    D1 = { x = 107.07, y = 0, z = 92.93 },
+                    D4 = { x = 114.14, y = 0, z = 100 },
+                    MT = { x = 92.93, y = 0, z = 92.93 },
+                    D2 = { x = 107.07, y = 0, z = 107.07 },
+                    H2 = { x = 85.86, y = 0, z = 100 },
+                    ST = { x = 92.93, y = 0, z = 107.07 },
+                    D3 = { x = 100, y = 0, z = 114.14 }
+                },
+                GuideData = nil,
+                MoveTable = nil,
+                DrawCalled = false,
+            },
         },
         P2 = {
             Towers = {
@@ -115,7 +197,7 @@ local dataInit = function()
 end
 
 -- 阶段名称定义，注意每个阶段都必须有Start和End否则会出错
-local StateNames = {
+DM.StateNames = {
     --- P1 ---
     'P1Start',
     'P1TrueFalse1',
@@ -127,10 +209,20 @@ local StateNames = {
     'P1BuffTurn1',
     'DeathBfLine2',
     'P1Line2Start',
+    --1线消失
     'P1Line2_1',
+    --2线消失
     'P1Line2_2',
+    'DeathBfLine3',
     'P1Line3_1',
     'P1Line3_2',
+    'Turn2End',
+    'TeleTrouncing',
+    'TeleTrouncingGetBuff',
+    'ArrowPut',
+    'SleepOrConfused',
+    'Teleport',
+    'FireThunder',
 
     'P1End',
     --- P2 ---
@@ -146,8 +238,8 @@ local StateNames = {
 DM.Init = function(M)
     DM.State = {}
     -- 绑定阶段序号
-    for i = 1, #StateNames do
-        DM.State[StateNames[i]] = i
+    for i = 1, #DM.StateNames do
+        DM.State[DM.StateNames[i]] = i
     end
     DM.SubScripts = {}
     MG = M
@@ -273,6 +365,10 @@ end
 
 DM.OnMapEffect = function(a1, a2, a3)
     doSubEvents('OnMapEffect', a1, a2, a3)
+end
+
+DM.OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID, newTetherID, newTetherFlags, newTargetID)
+    doSubEvents('OnTetherChange', sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID, newTetherID, newTetherFlags, newTargetID)
 end
 
 -------------------------- MuAiGuide Events --------------------------

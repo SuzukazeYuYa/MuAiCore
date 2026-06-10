@@ -18,7 +18,6 @@ local checkAndPopMainUI = function()
             for i = 1, 6 do
                 MG.MainUI.tabs.tabs[i].isselected = i == 1
             end
-
         end
         MG.OpenUI("MainUI")
     end
@@ -186,6 +185,7 @@ local onMapChange = function()
         MG.RaidMapCheck()
         MG.MultiGuide.onMapChange()
         MoogleExCheck()
+        MG.inArr = nil
         --MuAiGuide.Info("地图发生改变，当前地图为：" .. Player.localmapid)
     end
 end
