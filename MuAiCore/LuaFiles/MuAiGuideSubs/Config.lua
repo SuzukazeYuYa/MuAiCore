@@ -314,11 +314,13 @@ Config.init = function(M)
                 enable = true, draw = true, guide = true,
                 --是否关闭P1特效
                 effect = true,
-                autoLookAt = true, 
+                autoLookAt = true,
                 BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
             },
-            P2 = { enable = true, draw = true, guide = true,
-                   MarkMember = false,
+            P2 = {
+                enable = true, draw = true, guide = true,
+                -- 1职能固定，2扇左钢右
+                fixType = 1
             },
             P3 = { enable = true, draw = true, guide = true },
             P4 = { enable = true, draw = true, guide = true },

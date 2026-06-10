@@ -21,6 +21,8 @@ end
 ---打印当前踩塔情况到默语
 ---@param tbl table
 local loged = {}
+
+---输出踩塔日志
 local showOrderLog = function(tbl, infoHead)
     local log = ''
     for i = 1, #tbl do
@@ -42,6 +44,7 @@ local showOrderLog = function(tbl, infoHead)
     MG.Info(infoHead .. log)
 end
 
+---所有塔位置定义
 local towerPointByA1 = {
     [1] = { label = "上", x = 100.000, y = 0.000, z = 92.000 },
     [2] = { label = "右上", x = 105.657, y = 0.000, z = 94.343 },
@@ -53,15 +56,7 @@ local towerPointByA1 = {
     [8] = { label = "左上", x = 94.343, y = 0.000, z = 94.343 },
 }
 
---- 初始化
---- @param dm DancingMad
---- @param m MuAiGuide
-Dmu_P2.Init = function(dm, m)
-    DM = dm
-    MG = m
-end
-
--- 1234按照从左到右顺序排列
+-- 踩塔站位模版
 local standTemplate = {
     odd = {-- 奇数
         doing = {
@@ -81,8 +76,6 @@ local standTemplate = {
         doing = {
             [1] = { isLeft = true, dis = 3.6, dir = -math.pi / 5 },
             [2] = { isLeft = true, dis = 3.6, dir = 0 },
-            -- [3] = { isLeft = false, dis = 3.6, dir = math.pi / 3 },
-            --[4] = { isLeft = false, dis = 3.6, dir = -math.pi / 3 },      
             [3] = { isLeft = false, dis = 3.6, dir = -math.pi * 17 / 36 },
             [4] = { isLeft = false, dis = 3.6, dir = math.pi * 17 / 36 },
         },
@@ -95,44 +88,7 @@ local standTemplate = {
     },
 }
 
-Dmu_P2.OnEntityChannel = function(entityID, spellID, _)
-    if spellID == 47804 then
-        -- 终末双腕
-        if DM.BeLowState('P2T8Start') then
-            DM.ChangeState('P2T8Start')
-        end
-    elseif spellID == 47826 or spellID == 47827 then
-        -- 未来/过去
-        if Data().Towers.wave <= 3 then
-            Data().Towers.guideDir[1].skill = spellID
-        elseif Data().Towers.wave <= 5 then
-            Data().Towers.guideDir[2].skill = spellID
-        elseif Data().Towers.wave <= 7 then
-            Data().Towers.guideDir[3].skill = spellID
-        else
-            Data().Towers.guideDir[4].skill = spellID
-        end
-    elseif spellID == 47836 or spellID == 47837 then
-        -- 毁灭之脚
-        if Data().Towers.wave <= 3 then
-            Data().Towers.guideDir[1].finish = true
-            Data().Towers.kickPreSkill = Data().Towers.guideDir[1].skill
-        elseif Data().Towers.wave <= 5 then
-            Data().Towers.guideDir[2].finish = true
-            Data().Towers.kickPreSkill = Data().Towers.guideDir[2].skill
-        elseif Data().Towers.wave <= 7 then
-            Data().Towers.guideDir[3].finish = true
-            Data().Towers.kickPreSkill = Data().Towers.guideDir[3].skill
-        else
-            Data().Towers.guideDir[4].finish = true
-            Data().Towers.kickPreSkill = Data().Towers.guideDir[4].skill
-        end
-        table.insert(Data().Towers.kickBoss, entityID)
-        Data().Towers.kickTimer = Now()
-        Data().Towers.kickDrawing = true
-    end
-end
-
+-- 绘制毁灭之脚
 local drawAllThingEnding = function()
     if not Cfg().draw
             or Data().Towers.kickTimer == 0
@@ -161,22 +117,7 @@ local drawAllThingEnding = function()
     end
 end
 
---local logMarkName = function(job, id, type)
---    local nameCn
---    if id == 715 then
---        nameCn = '分摊'
---    elseif id == 716 then
---        nameCn = '钢铁'
---    elseif id == 717 then
---        nameCn = '扇形'
---    end
---    if type == nil or type == 1 then
---        MG.Info(job .. '的标记为：' .. nameCn)
---    else
---        MG.Info(job .. '的标记更新为：' .. nameCn)
---    end
---end
-
+-- 初始化AB分组
 local initGroups = function()
     -- 采取当前流行的2222分组1238 4567
     if Data().Towers.curMarks.MT == 715 or Data().Towers.curMarks.H1 == 715 then
@@ -202,6 +143,17 @@ local initGroups = function()
         table.insert(Data().Towers.groupB, 'D3')
     end
 
+    -- 如果是扇左钢右，对B组进行调整
+    if MG.Config.DmuCfg.P2.fixType == 2 then
+        local group = Data().Towers.groupB
+        local mark1 = Data().Towers.curMarks[group[1]]
+        if mark1 == 717 then
+            Data().Towers.groupB = { group[1], group[2], group[4], group[3] }
+        else
+            Data().Towers.groupB = { group[3], group[4], group[1], group[2] }
+        end
+    end
+
     if MG.Config.Main.LogToEchoMsg then
         loged = {}
         showOrderLog(Data().Towers.groupA, '初始踩塔组：')
@@ -209,78 +161,30 @@ local initGroups = function()
     end
 end
 
-Dmu_P2.OnMarkerAdd = function(entityID, markerID)
-    if 715 <= markerID and markerID <= 717 then
-        Data().Towers.markCnt = Data().Towers.markCnt + 1
-        local curMarkJob
-        for job, member in pairs(MG.Party) do
-            if member.id == entityID then
-                curMarkJob = job
-                break
-            end
+---计算扇左钢右第一次当闲人时候的情况
+local calcFix = function()
+    local last = Data().Towers.groupOrders[3]
+    local mark1 = Data().Towers.curMarks[last[1]]
+    local mark2 = Data().Towers.curMarks[last[2]]
+    local mark3 = Data().Towers.curMarks[last[3]]
+    local mark4 = Data().Towers.curMarks[last[4]]
+    local result = {}
+    if mark1 == 717 then
+        if mark2 == 717 then
+            result = { last[1], last[2], last[3], last[4] }
+        elseif mark3 == 717 then
+            result = { last[1], last[3], last[2], last[4] }
+        elseif mark4 == 717 then
+            result = { last[1], last[4], last[2], last[3] }
         end
-        if curMarkJob ~= nil then
-            Data().Towers.curMarks[curMarkJob] = markerID
-            if Data().Towers.markCnt > 8 then
-                if table.size(Data().Towers.markCache) < 4 then
-                    Data().Towers.markCache[curMarkJob] = markerID
-                end
-            end
+    elseif mark2 == 717 then
+        if mark3 == 717 then
+            result = { last[2], last[3], last[1], last[4] }
+        elseif mark4 == 717 then
+            result = { last[2], last[4], last[1], last[3] }
         end
-        if Data().Towers.markCnt == 8 then
-            initGroups()
-            if DM.BeLowState('P2T8InitMark') then
-                DM.ChangeState('P2T8InitMark')
-            end
-        end
-    end
-end
-
-Dmu_P2.OnAOECreate = function(aoeInfo)
-end
-
-Dmu_P2.OnEventObjectScriptFunc = function(entityID)
-end
-
-Dmu_P2.OnAddEntityVFX = function(vfxID)
-
-end
-
-Dmu_P2.OnMapEffect = function(a1, a2, a3)
-    if DM.OverState('P2T8Start', true)
-            and DM.BeLowState('P2T8End')
-            and a2 == 1 and a3 == 2
-            and 1 <= a1 and a1 <= 8
-    then
-        if table.size(Data().Towers.temp) < 2 then
-            table.insert(Data().Towers.temp, towerPointByA1[a1])
-            if table.size(Data().Towers.temp) == 2 then
-                local left, right
-                local tbl = Data().Towers.temp
-                if MG.GetClock(tbl[1], tbl[2]) then
-                    left = tbl[2]
-                    right = tbl[1]
-                else
-                    left = tbl[1]
-                    right = tbl[2]
-                end
-                Data().Towers.wave = Data().Towers.wave + 1
-                MG.Info('第' .. Data().Towers.wave .. '轮：')
-                if Data().Towers.wave == 8 then
-                    Data().Towers.Timer = Now()
-                end
-                Data().Towers.spawn[Data().Towers.wave] = { left = left, right = right }
-                Data().Towers.temp = {}
-            end
-        end
-        --- 1238 4567 其他解法改这里即可
-        if Data().Towers.wave <= 3 or Data().Towers.wave == 8 then
-            Data().Towers.doing = Data().Towers.groupA
-            Data().Towers.standBy = Data().Towers.groupB
-        else
-            Data().Towers.standBy = Data().Towers.groupA
-            Data().Towers.doing = Data().Towers.groupB
-        end
+    elseif mark3 == 717 then
+        result = { last[3], last[4], last[1], last[2] }
     end
 end
 
@@ -317,9 +221,13 @@ local calcGuidePos = function(wave)
         end
     end
     local guideData = {}
+    local standBy = Data().Towers.standBy
+    if MG.Config.DmuCfg.P2.fixType == 2 and wave == 4 then
+        standBy = calcFix()
+    end
     for i = 1, 4 do
         local curDoingJob = Data().Towers.groupOrders[wave][i]
-        local curStanByJob = Data().Towers.standBy[i]
+        local curStanByJob = standBy[i]
         guideData[curDoingJob] = curDoingPos[i]
         guideData[curStanByJob] = curStbPos[i]
     end
@@ -497,6 +405,7 @@ local guideGatherPoint = function(idx, wave, finishPoints)
     end
 end
 
+---引导过去未来
 local guideFuturePastOrTakeTower = function()
     local waves = { 3, 5, 7 }
     local wave = Data().Towers.wave
@@ -509,6 +418,128 @@ local guideFuturePastOrTakeTower = function()
         local idx = idxMap[wave]
         local finishPoints = Data().Towers.GuideData[wave]
         guideGatherPoint(idx, wave, finishPoints)
+    end
+end
+
+--------------------------------------------- event function ---------------------------------------------
+--- 初始化
+--- @param dm DancingMad
+--- @param m MuAiGuide
+Dmu_P2.Init = function(dm, m)
+    DM = dm
+    MG = m
+end
+
+Dmu_P2.OnEntityChannel = function(entityID, spellID, _)
+    if spellID == 47804 then
+        -- 终末双腕
+        if DM.BeLowState('P2T8Start') then
+            DM.ChangeState('P2T8Start')
+        end
+    elseif spellID == 47826 or spellID == 47827 then
+        -- 未来/过去
+        if Data().Towers.wave <= 3 then
+            Data().Towers.guideDir[1].skill = spellID
+        elseif Data().Towers.wave <= 5 then
+            Data().Towers.guideDir[2].skill = spellID
+        elseif Data().Towers.wave <= 7 then
+            Data().Towers.guideDir[3].skill = spellID
+        else
+            Data().Towers.guideDir[4].skill = spellID
+        end
+    elseif spellID == 47836 or spellID == 47837 then
+        -- 毁灭之脚
+        if Data().Towers.wave <= 3 then
+            Data().Towers.guideDir[1].finish = true
+            Data().Towers.kickPreSkill = Data().Towers.guideDir[1].skill
+        elseif Data().Towers.wave <= 5 then
+            Data().Towers.guideDir[2].finish = true
+            Data().Towers.kickPreSkill = Data().Towers.guideDir[2].skill
+        elseif Data().Towers.wave <= 7 then
+            Data().Towers.guideDir[3].finish = true
+            Data().Towers.kickPreSkill = Data().Towers.guideDir[3].skill
+        else
+            Data().Towers.guideDir[4].finish = true
+            Data().Towers.kickPreSkill = Data().Towers.guideDir[4].skill
+        end
+        table.insert(Data().Towers.kickBoss, entityID)
+        Data().Towers.kickTimer = Now()
+        Data().Towers.kickDrawing = true
+    end
+end
+
+Dmu_P2.OnMarkerAdd = function(entityID, markerID)
+    if 715 <= markerID and markerID <= 717 then
+        Data().Towers.markCnt = Data().Towers.markCnt + 1
+        local curMarkJob
+        for job, member in pairs(MG.Party) do
+            if member.id == entityID then
+                curMarkJob = job
+                break
+            end
+        end
+        if curMarkJob ~= nil then
+            Data().Towers.curMarks[curMarkJob] = markerID
+            if Data().Towers.markCnt > 8 then
+                if table.size(Data().Towers.markCache) < 4 then
+                    Data().Towers.markCache[curMarkJob] = markerID
+                end
+            end
+        end
+        if Data().Towers.markCnt == 8 then
+            initGroups()
+            if DM.BeLowState('P2T8InitMark') then
+                DM.ChangeState('P2T8InitMark')
+            end
+        end
+    end
+end
+
+Dmu_P2.OnAOECreate = function(aoeInfo)
+end
+
+Dmu_P2.OnEventObjectScriptFunc = function(entityID)
+end
+
+Dmu_P2.OnAddEntityVFX = function(vfxID)
+
+end
+
+Dmu_P2.OnMapEffect = function(a1, a2, a3)
+    if DM.OverState('P2T8Start', true)
+            and DM.BeLowState('P2T8End')
+            and a2 == 1 and a3 == 2
+            and 1 <= a1 and a1 <= 8
+    then
+        if table.size(Data().Towers.temp) < 2 then
+            table.insert(Data().Towers.temp, towerPointByA1[a1])
+            if table.size(Data().Towers.temp) == 2 then
+                local left, right
+                local tbl = Data().Towers.temp
+                if MG.GetClock(tbl[1], tbl[2]) then
+                    left = tbl[2]
+                    right = tbl[1]
+                else
+                    left = tbl[1]
+                    right = tbl[2]
+                end
+                Data().Towers.wave = Data().Towers.wave + 1
+                MG.Info('第' .. Data().Towers.wave .. '轮：')
+                if Data().Towers.wave == 8 then
+                    Data().Towers.Timer = Now()
+                end
+                Data().Towers.spawn[Data().Towers.wave] = { left = left, right = right }
+                Data().Towers.temp = {}
+            end
+        end
+        --- 1238 4567 其他解法改这里即可
+        if Data().Towers.wave <= 3 or Data().Towers.wave == 8 then
+            Data().Towers.doing = Data().Towers.groupA
+            Data().Towers.standBy = Data().Towers.groupB
+        else
+            Data().Towers.standBy = Data().Towers.groupA
+            Data().Towers.doing = Data().Towers.groupB
+        end
     end
 end
 
@@ -579,8 +610,8 @@ Dmu_P2.Update = function()
                 end
             end
         end
-        drawAllThingEnding()
     end
+    drawAllThingEnding()
     if Data().Towers.wave == 8
             and TimeSince(Data().Towers.Timer) > 10000
             and DM.BeLowState('P2T8End')
