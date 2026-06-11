@@ -277,31 +277,42 @@ end
 local calcFirstOrderB = function()
     local group = Data().Towers.groupB
     local index = 4
-    local cone = {}
-    local circle = {}
-    for _, job in pairs(Data().Towers.groupB) do
-        local markId = Data().Towers.curMarks[job]
-        if markId == 716 then
-            table.insert(circle, job)
-        elseif markId == 717 then
-            table.insert(cone, job)
-        end
-    end
     local curOrder = {}
-    if MG.IndexOf(group, cone[1]) < MG.IndexOf(group, cone[2]) then
-        curOrder = { cone[1], cone[2] }
+
+    local firstJob = group[1]
+    local firstMark = Data().Towers.curMarks[firstJob] --这里一定是T
+    if firstMark == 716 then
+        --TH组钢铁，MRTH
+        curOrder = { group[3], group[4], group[1], group[2] }
     else
-        curOrder = { cone[2], cone[1] }
+        --DPS组钢铁，THRM
+        curOrder = { group[1], group[2], group[4], group[3] }
     end
 
-    -- 近上远下，那么应该是反的
-    if MG.IndexOf(group, circle[1]) < MG.IndexOf(group, circle[2]) then
-        table.insert(curOrder, circle[2])
-        table.insert(curOrder, circle[1])
-    else
-        table.insert(curOrder, circle[1])
-        table.insert(curOrder, circle[2])
-    end
+    --local cone = {}
+    --local circle = {}
+    --for _, job in pairs(Data().Towers.groupB) do
+    --    local markId = Data().Towers.curMarks[job]
+    --    if markId == 716 then
+    --        table.insert(circle, job)
+    --    elseif markId == 717 then
+    --        table.insert(cone, job)
+    --    end
+    --end
+    --if MG.IndexOf(group, cone[1]) < MG.IndexOf(group, cone[2]) then
+    --    curOrder = { cone[1], cone[2] }
+    --else
+    --    curOrder = { cone[2], cone[1] }
+    --end
+    --
+    ---- 近上远下，那么应该是反的
+    --if MG.IndexOf(group, circle[1]) < MG.IndexOf(group, circle[2]) then
+    --    table.insert(curOrder, circle[2])
+    --    table.insert(curOrder, circle[1])
+    --else
+    --    table.insert(curOrder, circle[1])
+    --    table.insert(curOrder, circle[2])
+    --end
 
     Data().Towers.groupOrders[index] = curOrder
 end

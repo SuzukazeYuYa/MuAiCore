@@ -248,6 +248,10 @@ DM.StateNames = {
     'P2T8LastKick',
     'P2TrineStart',
     'P2End',
+    --- P2 ---
+    'P3Start',
+    
+    'P3End',
 }
 -- 
 --- 初始化
