@@ -194,5 +194,9 @@ Tools.init = function(M)
             z = (posA.z + posB.z) / 2,
         }
     end
+
+    M.VectorXZAdd = function(v1, v2)
+        return { x = v1.x + v2.x, y = 0, z = v1.z + v2.z }
+    end
 end
 return Tools

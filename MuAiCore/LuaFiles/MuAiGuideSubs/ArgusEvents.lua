@@ -119,6 +119,9 @@ ArgusEvents.init = function(M)
         if M.CurRaidScript ~= nil and M.CurRaidScript.OnEventObjectScriptFunc ~= nil then
             M.CurRaidScript.OnEventObjectScriptFunc(entityID, a1, a2, a3)
         end
+        if M.Develop.EventObjectScript then
+            M.Info('[' .. infoTime() .. ']OnEventObjectScriptFunc: |' .. entityID .. '| ' .. a1 .. '|' .. a2 .. '|' .. a3 .. '|。')
+        end
     end
 
     local OnMapEffect = function(a1, a2, a3)
@@ -196,8 +199,8 @@ ArgusEvents.init = function(M)
         if Argus.registerOnAddEntityVFXFunc ~= nil and not register['OnAddEntityVFX'] then
             Argus.registerOnAddEntityVFXFunc(OnAddEntityVFX)
             register['OnAddEntityVFX'] = true
-        end 
-        
+        end
+
         if Argus.registerOnTetherChange ~= nil and not register['OnTetherChange'] then
             Argus.registerOnTetherChange(OnTetherChange)
             register['OnTetherChange'] = true

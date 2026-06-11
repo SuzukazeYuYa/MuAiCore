@@ -320,7 +320,11 @@ Config.init = function(M)
             P2 = {
                 enable = true, draw = true, guide = true,
                 -- 1职能固定，2扇左钢右
-                fixType = 1
+                fixType = 1,
+                -- 踩塔结束之后去哪 1 -> A, 2 -> 两塔中间
+                endTower = 1,
+                -- 1.只画一次，2.绘制预览
+                trineDrawType = 1,
             },
             P3 = { enable = true, draw = true, guide = true },
             P4 = { enable = true, draw = true, guide = true },

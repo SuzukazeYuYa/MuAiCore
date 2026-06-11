@@ -68,7 +68,7 @@ local dataInit = function()
                 BuffJobs = nil,
                 SelfGroupTurner = nil,
                 SelfGroupTurnerObj = nil,
-                NextState = 'DeathBfLine2',
+                NextState = 'P1DeathBfLine2',
                 thGroupGuidePos = { x = 91, y = 0, z = 100 },
                 dpsGroupGuidePos = { x = 109, y = 0, z = 100 },
                 offSetTh = { x = 1, y = 0, z = 0 },
@@ -99,11 +99,18 @@ local dataInit = function()
                 BuffJobs = nil,
                 SelfGroupTurner = nil,
                 SelfGroupTurnerObj = nil,
-                NextState = 'Turn2End',
+                NextState = 'P1Turn2End',
                 thGroupGuidePos = nil,
                 dpsGroupGuidePos = nil,
                 offSetTh = { x = 0, y = 0, z = 1 },
                 offSetDps = { x = 0, y = 0, z = -1 }
+            },
+            Shit = {
+                StateTimer = 0,
+                Guide1 = nil,
+                Guide2 = nil,
+                Boomed = {},
+                first = true
             },
             TeleTrouncing = {
                 BuffInfo = nil,
@@ -188,7 +195,17 @@ local dataInit = function()
                 kickBoss = {},
                 kickPreSkill = 0,
                 kickTimer = 0,
-                kickDrawing = false
+                kickDrawing = false,
+            },
+            Trine = {
+                wave = 1,
+                TimerStart = 0,
+                Timer = 0,
+                DrawPos = {},
+            },
+            FarNearDeath = {
+                Timer = 0,
+                OnDraw = false,
             }
         }
     }
@@ -207,33 +224,32 @@ DM.StateNames = {
     'P1BeamEnd',
     'P1TowerBoom',
     'P1BuffTurn1',
-    'DeathBfLine2',
+    'P1DeathBfLine2',
     'P1Line2Start',
-    --1线消失
-    'P1Line2_1',
-    --2线消失
-    'P1Line2_2',
-    'DeathBfLine3',
+    'P1Line2_1', --1线消失
+    'P1Line2_2', --2线消失
+    'P1DeathBfLine3',
     'P1Line3_1',
     'P1Line3_2',
-    'Turn2End',
-    'TeleTrouncing',
-    'TeleTrouncingGetBuff',
-    'ArrowPut',
-    'SleepOrConfused',
-    'Teleport',
-    'FireThunder',
-
+    'P1Turn2End',
+    'P1ShitBoom',
+    'P1TeleTrouncing',
+    'P1TeleTrouncingGetBuff',
+    'P1ArrowPut',
+    'P1SleepOrConfused',
+    'P1Teleport',
+    'P1FireThunder',
     'P1End',
     --- P2 ---
-    'P2Start',
-    -- 8轮踩塔开始
+    'P2Start', -- 8轮踩塔开始
     'P2T8Start',
     'P2T8InitMark',
     'P2T8End',
+    'P2T8LastKick',
+    'P2TrineStart',
     'P2End',
-
 }
+-- 
 --- 初始化
 DM.Init = function(M)
     DM.State = {}

@@ -88,6 +88,12 @@ local standTemplate = {
     },
 }
 
+---异三角爆炸位置与三角偏移量 data by String
+local trineOffsets = {
+    left = { { x = -5.773, z = 0 }, { x = 2.887, z = -5 }, { x = 2.887, z = 5 } },
+    right = { { x = 5.773, z = 0 }, { x = -2.887, z = -5 }, { x = -2.887, z = 5 } },
+}
+
 -- 绘制毁灭之脚
 local drawAllThingEnding = function()
     if not Cfg().draw
@@ -386,13 +392,9 @@ local guideGatherPoint = function(idx, wave, finishPoints)
             local mid = MG.GetMidPos(leftTw, rightTw)
             if curData.skill == 47827 then
                 guidePos = mid
-                guidePos2 = mid
             elseif curData.skill == 47826 then
                 local dir = TensorCore.getHeadingToTarget(leftTw, rightTw)
                 guidePos = TensorCore.getPosInDirection(mid, dir + math.pi / 2, 13)
-                if idx == 4 then
-                    guidePos2 = mid
-                end
             end
             for job, _ in pairs(MG.Party) do
                 curData.guideData[job] = guidePos
@@ -419,6 +421,33 @@ local guideFuturePastOrTakeTower = function()
         local finishPoints = Data().Towers.GuideData[wave]
         guideGatherPoint(idx, wave, finishPoints)
     end
+end
+
+--- 异三角
+local calcTrinePos = function(object, a1, a2, a3)
+    local appear = (a1 == 16 and a2 == 32) or (a2 == 16 and a3 == 32)
+    if not appear then
+        return
+    end
+    if Data().Trine.Timer ~= 0 and TimeSince(Data().Trine.Timer) > 500 then
+        Data().Trine.wave = Data().Trine.wave + 1
+    end
+    if Data().Trine.DrawPos[Data().Trine.wave] == nil then
+        Data().Trine.DrawPos[Data().Trine.wave] = {}
+    end
+    if Data().Trine.TimerStart == 0 then
+        Data().Trine.TimerStart = Now()
+    end
+    local offset
+    if object.contentid == 2015155 or object.pos.x < 95 and object.pos.z < 95 then
+        offset = trineOffsets.left
+    else
+        offset = trineOffsets.right
+    end
+    for i = 1, #offset do
+        table.insert(Data().Trine.DrawPos[Data().Trine.wave], MG.VectorXZAdd(object.pos, offset[i]))
+    end
+    Data().Trine.Timer = Now()
 end
 
 --------------------------------------------- event function ---------------------------------------------
@@ -465,6 +494,26 @@ Dmu_P2.OnEntityChannel = function(entityID, spellID, _)
         table.insert(Data().Towers.kickBoss, entityID)
         Data().Towers.kickTimer = Now()
         Data().Towers.kickDrawing = true
+    elseif spellID == 47839 or spellID == 47840 then
+        -- 异三角
+        if DM.BeLowState('P2TrineStart') then
+            DM.ChangeState('P2TrineStart')
+        end
+    elseif spellID == 47821 or spellID == 47822 then
+        -- 破坏之翼（左右刀）
+        if Cfg().draw then
+            local heading
+            if spellID == 47821 then
+                --打左边
+                heading = -math.pi / 2
+            else
+                heading = math.pi / 2
+            end
+            DM.purpleDrawer:addTimedRect(4000, 100, 0, 100, 20, 40, heading)
+        end
+    elseif spellID == 50311 then
+        Data().FarNearDeath.Timer = Now()
+        Data().FarNearDeath.OnDraw = true
     end
 end
 
@@ -498,7 +547,11 @@ end
 Dmu_P2.OnAOECreate = function(aoeInfo)
 end
 
-Dmu_P2.OnEventObjectScriptFunc = function(entityID)
+Dmu_P2.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
+    local object = TensorCore.mGetEntity(entityID)
+    if object.contentid == 2015154 or object.contentid == 2015155 then
+        calcTrinePos(object, a1, a2, a3)
+    end
 end
 
 Dmu_P2.OnAddEntityVFX = function(vfxID)
@@ -561,7 +614,7 @@ Dmu_P2.Update = function()
         end
         if Cfg().draw then
             local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
-            local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 3)
+            local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 2)
             local left = Data().Towers.spawn[wave].left
             local right = Data().Towers.spawn[wave].right
             drawer:addCircle(left.x, left.y, left.z, 4, true)
@@ -618,10 +671,107 @@ Dmu_P2.Update = function()
     then
         DM.ChangeState('P2T8End')
     end
+
     if DM.InState('P2T8End') then
-        --local curData = Data().Towers.guideDir[4]
-        --guideGatherPoint(4, 8, finishPoints)
+        local curData = Data().Towers.guideDir[4]
+        if Cfg().guide and curData.skill ~= nil then
+            if curData.guideData == nil or curData.backData == nil then
+                curData.guideData = {}
+                curData.backData = {}
+                local needCross
+                if curData.skill == 47827 then
+                    needCross = false
+                elseif curData.skill == 47826 then
+                    needCross = true
+                end
+                if Cfg().endTower == 1 then
+                    for job, _ in pairs(MG.Party) do
+                        curData.guideData[job] = { x = 100, y = 0, z = 90 }
+                        if needCross then
+                            curData.backData[job] = { x = 100, y = 0, z = 110 }
+                        else
+                            curData.backData[job] = { x = 100, y = 0, z = 90 }
+                        end
+                    end
+                else
+                    local tower = Data().Towers.spawn[8]
+                    if tower ~= nil then
+                        local mid = MG.GetMidPos(tower.left, tower.right)
+                        local dir = TensorCore.getHeadingToTarget(mid, DM.Center)
+                        local crossPos = TensorCore.getPosInDirection(DM.Center, dir, 10)
+                        for job, _ in pairs(MG.Party) do
+                            curData.guideData[job] = mid
+                            if needCross then
+                                curData.backData[job] = crossPos
+                            else
+                                curData.backData[job] = mid
+                            end
+                        end
+                    end
+                end
+            else
+                if curData.finish then
+                    MG.FrameMultiD(curData.backData)
+                else
+                    MG.FrameMultiD(curData.guideData)
+                end
+            end
+        end
+        if Data().Towers.kickTimer > 0 and TimeSince(Data().Towers.kickTimer) > 5000 then
+            DM.ChangeState('P2T8LastKick')
+        end
+    end
+
+    if DM.InState('P2TrineStart')
+            and table.size(Data().Trine.DrawPos) > 0
+            and Data().Trine.TimerStart > 0
+    then
+        if Cfg().draw then
+            local index, preIndex
+            local timeSince = TimeSince(Data().Trine.TimerStart)
+            if timeSince < 11000 then
+                index = 1
+                if timeSince > 7000 then
+                    preIndex = 2
+                end
+            elseif timeSince < 13000 then
+                index = 2
+                preIndex = 3
+            elseif timeSince < 15000 then
+                index = 3
+            else
+                DM.ChangeState('P2End')
+            end
+            if index ~= nil and Data().Trine.DrawPos[index] ~= nil then
+                for _, drawPos in pairs(Data().Trine.DrawPos[index]) do
+                    DM.redDrawer:addCircle(drawPos.x, drawPos.y, drawPos.z, 6)
+                end
+            end
+            if Cfg().trineDrawType == 2 and preIndex ~= nil and Data().Trine.DrawPos[preIndex] ~= nil then
+                for _, drawPos in pairs(Data().Trine.DrawPos[preIndex]) do
+                    DM.yellowDrawer:addCircle(drawPos.x, drawPos.y, drawPos.z, 6)
+                end
+            end
+        end
+    end
+
+    if Data().FarNearDeath.OnDraw
+            and Cfg().draw
+            and Data().FarNearDeath.Timer > 0
+    then
+        if TimeSince(Data().FarNearDeath.Timer) < 5000 then
+            local curParty = MG.GetPartyPlayers()
+            table.sort(curParty, function(a, b)
+                local disA = TensorCore.getDistance2d(DM.Center, a.pos)
+                local disB = TensorCore.getDistance2d(DM.Center, b.pos)
+                return disA < disB
+            end)
+            DM.purpleDrawer:addCircle(curParty[1].pos.x, curParty[1].pos.y, curParty[1].pos.z, 6)
+            DM.purpleDrawer:addCircle(curParty[8].pos.x, curParty[8].pos.y, curParty[8].pos.z, 6)
+        else
+            Data().FarNearDeath.OnDraw = false
+            Data().FarNearDeath.Timer = 0
+        end
     end
 end
-
 return Dmu_P2

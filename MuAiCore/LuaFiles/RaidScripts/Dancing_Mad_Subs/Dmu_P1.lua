@@ -130,7 +130,7 @@ local CheckConeDeath = function()
             Data().Death.ST = nil
             Data().Death.Timer = 0
             if DM.InState('P1Line2_2') then
-                DM.ChangeState('DeathBfLine3')
+                DM.ChangeState('P1DeathBfLine3')
             end
         end
     end
@@ -180,6 +180,7 @@ local autoLookAtCache = function(entityID, a1, a2, a3)
 end
 
 --- 画半场刀 data by string
+
 local halfGroupAOE = function(entityID, a1, a2, a3)
     if not Cfg().draw or not ((a1 == 64 and a2 == 128) or (a2 == 64 and a3 == 128)) then
         return
@@ -195,7 +196,19 @@ local halfGroupAOE = function(entityID, a1, a2, a3)
     else
         return
     end
-    MG.CreateDrawer(1, 0.2, 0, nil, 0.2):addTimedCenteredRect(5150, x, 0, 100, 20, 42, heading)
+    DM.purpleDrawer:addTimedCenteredRect(5150, x, 0, 100, 20, 42, heading)
+end
+
+--- 紫圈爆炸
+local shitBoom = function(entityID, a1, a2, a3)
+    if not (a1 == 4 and a2 == 8 and a3 == 0) then
+        return
+    end
+    local boomObj = TensorCore.mGetEntity(entityID)
+    if boomObj == nil or boomObj.contentid ~= 2015266 then
+        return
+    end
+    table.insert(Data().Shit.Boomed, boomObj)
 end
 
 --- 自动背对 执行/取消
@@ -261,7 +274,6 @@ local turnBuff = function(dataTable, stateChangeFunc)
     if stateChangeFunc() then
         DM.ChangeState(dataTable.NextState)
     else
-        local thGroup = { 'MT', 'ST', 'H1', 'H2' }
         if dataTable.BuffJobs == nil then
             local buffJob = {}
             for job, member in pairs(MG.Party) do
@@ -447,7 +459,7 @@ Dmu_P1.OnEntityChannel = function(entityID, spellID, _)
         end
     elseif spellID == 48370 then
         -- 众神之像
-        if DM.InState('DeathBfLine2') then
+        if DM.InState('P1DeathBfLine2') then
             -- 死刑后，开始处理线
             DM.ChangeState('P1Line2Start')
         end
@@ -460,9 +472,7 @@ Dmu_P1.OnEntityChannel = function(entityID, spellID, _)
         -- 制裁之光，接3连死刑
 
     elseif spellID == 47782 then
-        -- 连环环x陷阱
-    elseif spellID == 48370 then
-
+        -- 连环环陷阱
     end
 end
 
@@ -471,9 +481,9 @@ Dmu_P1.OnEntityCast = function(entityID, spellID, castPos)
         local mt = TensorCore.getEntityByGroup("Main Tank", "Nearest")
         MG.CreateDrawer(1, 0.5, 0, nil, 2):addTimedCircleOnEnt(9000, mt.id, 5)
     elseif spellID == 47801 or spellID == 47802 then
-        --唰啦啦传送
-        if DM.BeLowState('TeleTrouncing') then
-            DM.ChangeState('TeleTrouncing')
+        -- 唰啦啦传送
+        if DM.BeLowState('P1TeleTrouncing') then
+            DM.ChangeState('P1TeleTrouncing')
         end
     end
 end
@@ -485,7 +495,7 @@ Dmu_P1.OnMarkerAdd = function(entityID, markerID)
             DM.ChangeState('P1TrueFalse1')
         end
         DataTable = Data().Fire1
-    elseif DM.OverState('SleepOrConfused') then
+    elseif DM.OverState('P1SleepOrConfused') then
         DataTable = Data().FireThunder
     end
     if DataTable ~= nil then
@@ -529,7 +539,7 @@ Dmu_P1.OnAOECreate = function(aoeInfo)
     end
 
     if (aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777)
-            and DM.InState('FireThunder')
+            and DM.InState('P1FireThunder')
     then
         if Data().FireThunder.MoveTable == nil then
             local moveTable = getThunderMoveTable(aoeInfo)
@@ -562,6 +572,7 @@ end
 Dmu_P1.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
     autoLookAtCache(entityID, a1, a2, a3)
     halfGroupAOE(entityID, a1, a2, a3)
+    shitBoom(entityID, a1, a2, a3)
 end
 
 Dmu_P1.OnAddEntityVFX = function(vfxID)
@@ -569,16 +580,6 @@ Dmu_P1.OnAddEntityVFX = function(vfxID)
 end
 
 Dmu_P1.OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID, newTetherID, newTetherFlags, newTargetID)
-    --d('p1 OnTetherChange')
-    --MuAiGuide.Info('OnTetherChange|'
-    --        .. sourceEntityID ..'|'
-    --        .. oldTetherID ..'|'
-    --        .. oldTetherFlags ..'|'
-    --        .. oldTargetID ..'|'
-    --        .. newTetherID ..'|'
-    --        .. newTetherFlags ..'|'
-    --        .. newTargetID ..'|'
-    --)
     if oldTetherID ~= 0 and newTetherID == 0 then
         local fromObj = TensorCore.mGetEntity(sourceEntityID)
         if fromObj.contentid == 7132 then
@@ -596,7 +597,7 @@ Dmu_P1.OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, ol
                 if oldTarget ~= nil and oldTarget.charType == 4 then
                     DM.ChangeState('P1Line2_2')
                 end
-            elseif DM.InState('DeathBfLine3') then
+            elseif DM.InState('P1DeathBfLine3') then
                 local oldTarget = TensorCore.mGetEntity(oldTargetID)
                 if oldTarget ~= nil and oldTarget.charType == 4 then
                     DM.ChangeState('P1Line3_1')
@@ -842,7 +843,7 @@ Dmu_P1.Update = function()
         end
     end
     -- 第二次扇形死刑后
-    if DM.InState('DeathBfLine3') then
+    if DM.InState('P1DeathBfLine3') then
         if Data().Line3.Guide1 == nil
                 or Data().Line3.GatherPlayers == nil
                 or table.size(Data().Line3.GatherPlayers) < 4 then
@@ -913,19 +914,18 @@ Dmu_P1.Update = function()
         end
     end
 
-    if (DM.InState('P1Line3_1') or DM.InState('P1Line3_2'))
-            and Data().Line3.Shits ~= nil and table.size(Data().Line3.Shits) >= 8
+    if Cfg().draw
+            and (DM.InState('P1Line3_1') or DM.InState('P1Line3_2'))
+            and Data().Line3.Shits ~= nil and table.size(Data().Line3.Shits) >= 0
     then
-        -- 画泥圈边缘
-        if Cfg().draw then
-            local color = GUI:ColorConvertFloat4ToU32(1, 1, 1, 0)
-            local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(0.5, 0, 1, 1), 3)
-            for _, ent in pairs(Data().Line3.Shits) do
-                drawer:addCircle(ent.pos.x, ent.pos.y, ent.pos.z, 5, true)
-            end
+        for _, ent in pairs(Data().Line3.Shits) do
+            local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
+            local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 2)
+            drawer:addCircle(ent.pos.x, ent.pos.y, ent.pos.z, 5, true)
         end
     end
     -- 第二次传毒
+
     if DM.InState('P1Line3_2') then
         if Data().Turn2.thGroupGuidePos == nil or
                 Data().Turn2.dpsGroupGuidePos == nil
@@ -947,18 +947,51 @@ Dmu_P1.Update = function()
         end
     end
 
+    if DM.InState('P1Turn2End') then
+        if table.size(Data().Shit.Boomed) >= 8 then
+            DM.ChangeState('P1ShitBoom')
+        end
+        if Data().Shit.StateTimer == 0 then
+            Data().Shit.StateTimer = Now()
+        end
+        if TimeSince(Data().Shit.StateTimer) > 1200 then
+            local player = MG.GetPlayer()
+            if Data().Shit.Guide1 == nil
+                    or Data().Shit.Guide2 == nil
+            then
+                if player.pos.z > 100 then
+                    Data().Shit.Guide1 = Data().Line3.DownShit.pos
+                    Data().Shit.Guide2 = MG.VectorXZAdd(Data().Line3.DownShit.pos, { x = 0, y = 0, z = 5.5 })
+                else
+                    Data().Shit.Guide1 = Data().Line3.UpShit.pos
+                    Data().Shit.Guide2 = MG.VectorXZAdd(Data().Line3.UpShit.pos, { x = 0, y = 0, z = -5.5 })
+                end
+            else
+                if Data().Shit.first then
+                    for _, shit in pairs(Data().Shit.Boomed) do
+                        if TensorCore.getDistance2d(shit.pos, player.pos) < 6 then
+                            Data().Shit.first = false
+                        end
+                    end
+                    MG.FrameDirect(Data().Shit.Guide1.x, Data().Shit.Guide1.z)
+                else
+                    MG.FrameDirect(Data().Shit.Guide2.x, Data().Shit.Guide2.z)
+                end
+            end
+        end
+    end
     --箭头
-    if DM.InState('TeleTrouncing') then
+    if DM.InState('P1TeleTrouncing') then
         for buffId, buffType in pairs(ArrowBuffs) do
             if TensorCore.hasBuff(TensorCore.mGetPlayer().id, buffId) then
-                DM.ChangeState('TeleTrouncingGetBuff')
+                DM.ChangeState('P1TeleTrouncingGetBuff')
                 Data().TeleTrouncing.Timer = Now()
                 break
             end
         end
     end
 
-    if DM.InState('TeleTrouncingGetBuff')
+    if DM.InState('P1TeleTrouncingGetBuff')
             and Data().TeleTrouncing.Timer ~= 0
             and TimeSince(Data().TeleTrouncing.Timer) > 500
     then
@@ -1022,13 +1055,13 @@ Dmu_P1.Update = function()
                 end
             else
                 if Data().TeleTrouncing.Timer ~= 0 and TimeSince(Data().TeleTrouncing.Timer) > 10000 then
-                    DM.ChangeState('ArrowPut')
+                    DM.ChangeState('P1ArrowPut')
                 end
             end
         end
     end
     -- 放完箭头去击退位置
-    if DM.InState('ArrowPut') then
+    if DM.InState('P1ArrowPut') then
         turnBuff(Data().Turn3, function()
             for _, member in pairs(MG.Party) do
                 if TensorCore.hasBuff(member.id, 5078) then
@@ -1039,9 +1072,9 @@ Dmu_P1.Update = function()
         end)
     end
     -- 睡眠点名
-    if DM.InState('SleepOrConfused') then
+    if DM.InState('P1SleepOrConfused') then
         if MG.IsAnyMemberHasBuff(4894) then
-            DM.ChangeState('Teleport')
+            DM.ChangeState('P1Teleport')
             Data().LastLink.Timer = Now()
         end
         if Cfg().guide then
@@ -1074,7 +1107,7 @@ Dmu_P1.Update = function()
         end
     end
     -- 开始传送
-    if DM.InState('Teleport')
+    if DM.InState('P1Teleport')
             and Data().LastLink.Timer ~= 0
             and TimeSince(Data().LastLink.Timer) > 4000 then
         local anyoneNoBuff = true
@@ -1087,10 +1120,10 @@ Dmu_P1.Update = function()
             end
         end
         if anyoneNoBuff then
-            DM.ChangeState('FireThunder')
+            DM.ChangeState('P1FireThunder')
         end
     end
-    if DM.InState('FireThunder') then
+    if DM.InState('P1FireThunder') then
         if MG.IsAnyMemberHasBuff(2941) then
             DM.ChangeState('P1End')
         end
