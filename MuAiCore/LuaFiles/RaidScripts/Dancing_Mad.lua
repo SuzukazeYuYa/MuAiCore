@@ -49,7 +49,11 @@ local dataInit = function()
                 BossMark = 0,
                 PlayerMark = 0,
                 GatherPlayers = {},
-                Time = 0 --火判定时间
+                Time = 0 ,--火判定时间
+                GuideData = nil,
+                GuideDataLink = nil,
+                linkGuideFinish = false,
+                iceDir = nil
             },
             Beam = {
                 Order = nil,
@@ -123,7 +127,7 @@ local dataInit = function()
                 BuffJobs = nil,
                 SelfGroupTurner = nil,
                 SelfGroupTurnerObj = nil,
-                NextState = 'SleepOrConfused',
+                NextState = 'P1SleepOrConfused',
                 thGroupGuidePos = { x = 94, y = 0, z = 94 },
                 dpsGroupGuidePos = { x = 106, y = 0, z = 106 },
                 offSetTh = { x = 1, y = 0, z = 1 },

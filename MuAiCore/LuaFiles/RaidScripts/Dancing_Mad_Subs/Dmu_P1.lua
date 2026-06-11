@@ -54,6 +54,29 @@ local TeleTrouncingPos = {
     ['down_right'] = { right = { x = 88, z = 112 }, down = { x = 88, z = 106 } },
 }
 
+local dis24 = {
+    MT = { x = 94, y = 0, z = 100.5 },
+    ST = { x = 99.5, y = 0, z = 106 },
+    H1 = { x = 84, y = 0, z = 100.5 },
+    H2 = { x = 99.5, y = 0, z = 116 },
+    D1 = { x = 106, y = 0, z = 99.5 },
+    D2 = { x = 100.5, y = 0, z = 94 },
+    D3 = { x = 116, y = 0, z = 99.5 },
+    D4 = { x = 100.5, y = 0, z = 84 },
+}
+
+local dis13 = {
+    MT = { x = 99.5, y = 0, z = 94 },
+    ST = { x = 94, y = 0, z = 99.5 },
+    H1 = { x = 99.5, y = 0, z = 84 },
+    H2 = { x = 84, y = 0, z = 99.5 },
+
+    D1 = { x = 100.5, y = 0, z = 106 },
+    D2 = { x = 106, y = 0, z = 100.5 },
+    D3 = { x = 100.5, y = 0, z = 116 },
+    D4 = { x = 116, y = 0, z = 100.5 },
+}
+
 --- 绘制击退
 local drawBuffKick = function()
     if not Cfg().draw then
@@ -538,6 +561,12 @@ Dmu_P1.OnAOECreate = function(aoeInfo)
         end
     end
 
+    if DM.BeLowState('P1TrueFalse2', true) and (aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768) then
+        if Data().Fire1.iceDir == nil then
+            Data().Fire1.iceDir = MG.SetHeading2Pi(aoeInfo.heading)
+        end
+    end
+
     if (aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777)
             and DM.InState('P1FireThunder')
     then
@@ -581,6 +610,9 @@ end
 
 Dmu_P1.OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID, newTetherID, newTetherFlags, newTargetID)
     if oldTetherID ~= 0 and newTetherID == 0 then
+        if DM.BeLowState('P1TrueFalse1End', true) then
+            Data().Fire1.linkGuideFinish = true
+        end
         local fromObj = TensorCore.mGetEntity(sourceEntityID)
         if fromObj.contentid == 7132 then
             -- 线消失
@@ -652,6 +684,105 @@ Dmu_P1.Update = function()
             DM.ChangeState('P1TrueFalse1End')
             Data().Fire1.Time = Now()
         end
+        if Cfg().guide and Data().Fire1.iceDir ~= nil then
+            local dataTable = Data().Fire1
+            if dataTable.GuideData == nil then
+                dataTable.GuideData = {}
+                if dataTable.PlayerMark == 127 or table.size(dataTable.GatherPlayers) >= 2 then
+                    if dataTable.BossMark == 673 then
+                        --火是假的
+                        if dataTable.PlayerMark == 127 then
+                            --点名分散，实际是分摊
+                            if (0 < dataTable.iceDir and dataTable.iceDir < math.pi / 2)
+                                    or (math.pi < dataTable.iceDir and dataTable.iceDir < math.pi * 3 / 2)
+                            then
+                                -- 如果危险区在13象限
+                                for job, _ in pairs(MG.Party) do
+                                    if table.contains(thGroup, job) then
+                                        dataTable.GuideData[job] = { x = 96, y = 0, z = 104 }
+                                    else
+                                        dataTable.GuideData[job] = { x = 104, y = 0, z = 96 }
+                                    end
+                                end
+                            else
+                                for job, _ in pairs(MG.Party) do
+                                    if table.contains(thGroup, job) then
+                                        dataTable.GuideData[job] = { x = 96, y = 0, z = 96 }
+                                    else
+                                        dataTable.GuideData[job] = { x = 104, y = 0, z = 104 }
+                                    end
+                                end
+                            end
+                        else
+                            if (0 < dataTable.iceDir and dataTable.iceDir < math.pi / 2)
+                                    or (math.pi < dataTable.iceDir and dataTable.iceDir < math.pi * 3 / 2)
+                            then
+                                -- 如果危险区在13象限
+                                dataTable.GuideData = dis24
+                            else
+                                dataTable.GuideData = dis13
+                            end
+                        end
+                    else
+                        --真的
+                        if dataTable.PlayerMark == 127 then
+                            --点名分散
+                            if (0 < dataTable.iceDir and dataTable.iceDir < math.pi / 2)
+                                    or (math.pi < dataTable.iceDir and dataTable.iceDir < math.pi * 3 / 2)
+                            then
+                                -- 如果危险区在13象限
+                                dataTable.GuideData = dis24
+                            else
+                                dataTable.GuideData = dis13
+                            end
+                        else
+                            --点名分摊
+                            if (0 < dataTable.iceDir and dataTable.iceDir < math.pi / 2)
+                                    or (math.pi < dataTable.iceDir and dataTable.iceDir < math.pi * 3 / 2)
+                            then
+                                -- 如果危险区在13象限
+                                for job, _ in pairs(MG.Party) do
+                                    if table.contains(thGroup, job) then
+                                        dataTable.GuideData[job] = { x = 96, y = 0, z = 104 }
+                                    else
+                                        dataTable.GuideData[job] = { x = 104, y = 0, z = 96 }
+                                    end
+                                end
+                            else
+                                for job, _ in pairs(MG.Party) do
+                                    if table.contains(thGroup, job) then
+                                        dataTable.GuideData[job] = { x = 96, y = 0, z = 96 }
+                                    else
+                                        dataTable.GuideData[job] = { x = 104, y = 0, z = 104 }
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            else
+                if Data().Fire1.linkGuideFinish then
+                    MG.FrameMultiD(dataTable.GuideData)
+                else
+                    if Data().Fire1.GuideDataLink == nil then
+                        Data().Fire1.GuideDataLink = {}
+                        for job, ent in pairs(MG.Party) do
+                            if MG.HasLine(ent.id, 45) then
+                                if table.contains(thGroup, job) then
+                                    Data().Fire1.GuideDataLink[job] = { x = 98, y = 0, z = 88 }
+                                else
+                                    Data().Fire1.GuideDataLink[job] = { x = 102, y = 0, z = 88 }
+                                end
+                            else
+                                Data().Fire1.GuideDataLink[job] = dataTable.GuideData[job]
+                            end
+                        end
+                    else
+                        MG.FrameMultiD(dataTable.GuideDataLink)
+                    end
+                end
+            end
+        end
     end
     -- 真假火结束，准备激光
     if DM.OverState('P1TrueFalse1End', true) and DM.BeLowState('P1BeamEnd') then
@@ -665,30 +796,31 @@ Dmu_P1.Update = function()
                     DM.cyanDrawer:addRect(point.x, point.y, point.z, 60, 6, dir, false)
                 end
             end
-            if Cfg().guide then
-                --这里可能涉及计算
-                if Data().Beam.Order == nil then
-                    Data().Beam.Order = Cfg().BeamOrder
-                end
-                local curParty = {}
-                for job, member in pairs(MG.Party) do
-                    curParty[job] = TensorCore.mGetEntity(member.id)
-                end
-
-                -- 一字横排法
-                local beamWay = {
-                    [Data().Beam.Order[1]] = { x = 80.5, z = 100 },
-                    [Data().Beam.Order[8]] = { x = 119.5, z = 100 },
-                }
-                for i = 2, 7 do
-                    local curJob = Data().Beam.Order[i]
-                    local leftPlayer = curParty[Data().Beam.Order[i - 1]]
-                    local rightPlayer = curParty[Data().Beam.Order[i + 1]]
-                    beamWay[curJob] = { x = (leftPlayer.pos.x + rightPlayer.pos.x) / 2, z = 100 }
-                end
-                MG.FrameMultiD(beamWay)
-            end
         end
+        if Cfg().guide then
+            --这里可能涉及计算
+            if Data().Beam.Order == nil then
+                Data().Beam.Order = Cfg().BeamOrder
+            end
+            local curParty = {}
+            for job, member in pairs(MG.Party) do
+                curParty[job] = TensorCore.mGetEntity(member.id)
+            end
+
+            -- 一字横排法
+            local beamWay = {
+                [Data().Beam.Order[1]] = { x = 80.5, z = 100 },
+                [Data().Beam.Order[8]] = { x = 119.5, z = 100 },
+            }
+            for i = 2, 7 do
+                local curJob = Data().Beam.Order[i]
+                local leftPlayer = curParty[Data().Beam.Order[i - 1]]
+                local rightPlayer = curParty[Data().Beam.Order[i + 1]]
+                beamWay[curJob] = { x = (leftPlayer.pos.x + rightPlayer.pos.x) / 2, z = 100 }
+            end
+            MG.FrameMultiD(beamWay)
+        end
+
         if TimeSince(Data().Fire1.Time) > 1500 and MG.IsAnyMemberHasBuff(2941) then
             DM.ChangeState('P1BeamEnd')
             Data().Beam.Time = Now()
@@ -961,10 +1093,10 @@ Dmu_P1.Update = function()
             then
                 if player.pos.z > 100 then
                     Data().Shit.Guide1 = Data().Line3.DownShit.pos
-                    Data().Shit.Guide2 = MG.VectorXZAdd(Data().Line3.DownShit.pos, { x = 0, y = 0, z = 5.5 })
+                    Data().Shit.Guide2 = MG.VectorXZAdd(Data().Line3.DownShit.pos, { x = 0, y = 0, z = 6 })
                 else
                     Data().Shit.Guide1 = Data().Line3.UpShit.pos
-                    Data().Shit.Guide2 = MG.VectorXZAdd(Data().Line3.UpShit.pos, { x = 0, y = 0, z = -5.5 })
+                    Data().Shit.Guide2 = MG.VectorXZAdd(Data().Line3.UpShit.pos, { x = 0, y = 0, z = -6 })
                 end
             else
                 if Data().Shit.first then
