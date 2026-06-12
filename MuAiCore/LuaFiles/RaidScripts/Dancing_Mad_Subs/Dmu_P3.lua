@@ -7,6 +7,17 @@ local DM
 ---@type MuAiGuide
 local MG
 
+local markIndex = {
+    [336] = 1,
+    [337] = 2,
+    [338] = 3,
+    [339] = 4,
+    [437] = 5,
+    [438] = 6,
+    [439] = 7,
+    [440] = 8,
+}
+
 local Cfg = function()
     return MG.Config.DmuCfg.P3
 end
@@ -259,10 +270,27 @@ Dmu_P3.OnEntityCast = function(entityID, spellID, castPos)
         if DM.BeLowState('P3ElementsStart') then
             DM.ChangeState('P3ElementsStart')
         end
+    elseif spellID == 47843 then
+        local obj = TensorCore.mGetEntity(entityID)
+        table.insert(Data().UltimaBlaster.Lines, obj)
     end
 end
 
 Dmu_P3.OnAOECreate = function(aoeInfo)
+end
+
+Dmu_P3.OnMarkerAdd = function(entityID, markerID)
+    if markIndex[markerID] ~= nil then
+        for job, member in pairs(MG.Party) do
+            if member.id == entityID then
+                Data().UltimaBlaster.Markers[job] = markerID
+                break
+            end
+        end
+        if Data().UltimaBlaster .StartTimer == 0 then
+            Data().UltimaBlaster .StartTimer = Now()
+        end
+    end
 end
 
 Dmu_P3.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
@@ -470,6 +498,54 @@ Dmu_P3.Update = function()
                 if TimeSince(Data().UmbraSmash.Timer) < 4700 then
                     local pos = Data().UmbraSmash.drawPos
                     DM.redDrawer:addCircle(pos.x, pos.y, pos.z, 17)
+                end
+            end
+        end
+    end
+
+    if DM.InState('P3UltimaBlaster') then
+        if Data().UltimaBlaster.StartTimer ~= 0 and TimeSince(Data().UltimaBlaster.StartTimer) > 14000 then
+            DM.ChangeState('P3BlackHoleStart')
+        end
+        if Data().UltimaBlaster.GuideData == nil or table.size(Data().UltimaBlaster.GuideData) < 8 then
+            if table.size(Data().UltimaBlaster.Lines) >= 2 and table.size(Data().UltimaBlaster.Markers) >= 8 then
+                Data().UltimaBlaster.GuideData = {}
+                Data().UltimaBlaster.DrawData = {}
+                local line = Data().UltimaBlaster.Lines
+                local dir = TensorCore.getHeadingToTarget(DM.Center, line[1].pos)
+                if MG.GetClock(line[1].pos, line[2].pos) then
+                    for i = 1, 8 do
+                        local curDir = dir + (i - 1) * math.pi / 4
+                        local curPos = TensorCore.getPosInDirection(DM.Center, curDir, 20)
+                        local aimPos = TensorCore.getPosInDirection(DM.Center, curDir + math.pi + math.pi / 8, 19)
+                        Data().UltimaBlaster.DrawData[i] = { from = curPos, target = aimPos }
+                    end
+                else
+                    for i = 1, 8 do
+                        local curDir = dir - (i - 1) * math.pi / 4
+                        local curPos = TensorCore.getPosInDirection(DM.Center, curDir, 20)
+                        local aimPos = TensorCore.getPosInDirection(DM.Center, curDir + math.pi - math.pi / 8, 19)
+                        Data().UltimaBlaster.DrawData[i] = { from = curPos, target = aimPos }
+                    end
+                end
+                for job, member in pairs(MG.Party) do
+                    local curMark = Data().UltimaBlaster.Markers[job]
+                    local curIndex = markIndex[curMark]
+                    Data().UltimaBlaster.GuideData[job] = Data().UltimaBlaster.DrawData[curIndex].target
+                end
+            end
+        else
+            if Cfg().guide then
+                MG.FrameMultiD(Data().UltimaBlaster.GuideData)
+            end
+            if Cfg().draw then
+                for job, member in pairs(MG.Party) do
+                    local curMark = Data().UltimaBlaster.Markers[job]
+                    local curIndex = markIndex[curMark]
+                    local curDrawData = Data().UltimaBlaster.DrawData[curIndex]
+                    local curMember = TensorCore.mGetEntity(member.id)
+                    local dir = TensorCore.getHeadingToTarget(curDrawData.from, curMember.pos)
+                    MG.CreateDrawer(0, 0.3, 0.5):addRect(curDrawData.from.x, curDrawData.from.y, curDrawData.from.z, 40, 10, dir)
                 end
             end
         end

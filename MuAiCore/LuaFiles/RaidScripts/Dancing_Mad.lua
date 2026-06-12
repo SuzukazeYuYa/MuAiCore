@@ -262,9 +262,12 @@ local dataInit = function()
                 onDoing = false
             },
             UltimaBlaster = {
-                Lines = nil,
-                Markers = nil,
+                Lines = {},
+                Markers = {},
+                fromPos = {},
                 GuideData = nil,
+                DrawData = nil,
+                StartTimer = 0,
             },
             ThunderIII = {
                 Start = false,
@@ -317,6 +320,7 @@ DM.StateNames = {
     'P3ElementsBuff1',
     'P3ElementsBuff2',
     'P3UltimaBlaster',
+    'P3BlackHoleStart',
     'P3End',
 }
 -- 
