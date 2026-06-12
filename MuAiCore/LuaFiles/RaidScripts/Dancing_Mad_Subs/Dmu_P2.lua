@@ -107,6 +107,9 @@ local drawAllThingEnding = function()
         for _, id in pairs(Data().Towers.kickBoss) do
             local preSkill = Data().Towers.kickPreSkill
             local curCaster = TensorCore.mGetEntity(id)
+            if curCaster == nil then
+                return
+            end
             local dir
             if preSkill == 47827 then
                 dir = curCaster.pos.h + math.pi
@@ -192,6 +195,7 @@ local calcFix = function()
     elseif mark3 == 717 then
         result = { last[3], last[4], last[1], last[2] }
     end
+    return result
 end
 
 local calcGuidePos = function(wave)

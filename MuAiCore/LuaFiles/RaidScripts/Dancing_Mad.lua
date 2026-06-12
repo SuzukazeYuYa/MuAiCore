@@ -49,7 +49,7 @@ local dataInit = function()
                 BossMark = 0,
                 PlayerMark = 0,
                 GatherPlayers = {},
-                Time = 0 ,--火判定时间
+                Time = 0, --火判定时间
                 GuideData = nil,
                 GuideDataLink = nil,
                 linkGuideFinish = false,
@@ -211,6 +211,65 @@ local dataInit = function()
                 Timer = 0,
                 OnDraw = false,
             }
+        },
+        P3 = {
+            Elements = {
+                Fire = nil,
+                Water = nil,
+                Wind = nil,
+                Guide1 = nil,
+                Guide2 = nil,
+                exGuidePos = nil,
+                chaosGuidePos = nil,
+                bigCircleTimer = 0,
+                exCasting = false,
+                exPull = nil,
+                chaosPull = nil,
+                gather = nil,
+                FireBuff = nil, --点名火buff的职能
+                LongBuff = 0,
+                ShortBuff = 0,
+                BuffEndTimer = {
+                    [1600] = 0,
+                    [1601] = 0,
+                },
+                BuffStart = {
+                    [1600] = false,
+                    [1601] = false,
+                },
+                Buff1End = false,
+                Buff2End = false,
+            },
+            Implosion = {
+                skillId = 0,
+                OnDraw = false,
+                Timer = 0,
+            },
+            WacuumWave = {
+                Timer = 0,
+                Start = false;
+            },
+            UmbraSmash = {
+                Timer = 0,
+                Start = false,
+                LeadEnd = false,
+                drawPos = nil,
+                LeadPlayer = nil
+            },
+            LockFace = {
+                buffType = 0,
+                enable = false,
+                onDoing = false
+            },
+            UltimaBlaster = {
+                Lines = nil,
+                Markers = nil,
+                GuideData = nil,
+            },
+            ThunderIII = {
+                Start = false,
+                Timer = 0,
+            }
         }
     }
 
@@ -252,9 +311,12 @@ DM.StateNames = {
     'P2T8LastKick',
     'P2TrineStart',
     'P2End',
-    --- P2 ---
+    --- P3 ---
     'P3Start',
-    
+    'P3ElementsStart',
+    'P3ElementsBuff1',
+    'P3ElementsBuff2',
+    'P3UltimaBlaster',
     'P3End',
 }
 -- 
@@ -268,11 +330,17 @@ DM.Init = function(M)
     DM.SubScripts = {}
     MG = M
     -- 一次性创建所有颜色
+    ---@type ShapeDrawer
     DM.redDrawer = MG.CreateDrawer(1, 0, 0, nil, 2)
+    ---@type ShapeDrawer
     DM.yellowDrawer = MG.CreateDrawer(1, 1, 0, nil, 2)
+    ---@type ShapeDrawer
     DM.blueDrawer = MG.CreateDrawer(0, 0, 1, nil, 2)
+    ---@type ShapeDrawer
     DM.greenDrawer = MG.CreateDrawer(0, 1, 0, nil, 2)
+    ---@type ShapeDrawer
     DM.purpleDrawer = MG.CreateDrawer(1, 0, 1, nil, 2)
+    ---@type ShapeDrawer
     DM.cyanDrawer = MG.CreateDrawer(0, 1, 1, nil, 2)
     local folderPath = MuAiGuideRoot .. "RaidScripts\\Dancing_Mad_Subs"
     local list = FolderList(folderPath)
@@ -362,6 +430,11 @@ DM.OnEntityChannel = function(entityID, spellID, _)
         if DM.BeLowState('P2Start') then
             DM.ChangeState('P2Start')
         end
+    elseif spellID == 49890 or spellID == 49891 then
+        --决战
+        if DM.BeLowState('P3Start') then
+            DM.ChangeState('P3Start')
+        end
     end
 
     doSubEvents('OnEntityChannel', entityID, spellID)
@@ -401,9 +474,13 @@ DM.Update = function()
 end
 
 DM.OnEnter = function()
-    MG.DancingMad = {}
-    MG.DancingMad.CurrentState = 0
+    MG.DancingMad = nil
+    -- MG.DancingMad.CurrentState = 0
     MG.Develop.Reg("DancingMad")
+end
+
+DM.OnWipe = function()
+    MG.DancingMad = nil
 end
 
 return DM

@@ -961,7 +961,7 @@ local drawDeveloperTab = function(M)
         GUI:Text('6.OnAddEntityVFX')
         GUI:Dummy(6, 0)
         GUI:SameLine()
-        M.Develop.PrintVFXInfo = GUI:Checkbox('将VFX信息输出到聊天栏', M.Develop.PrintVFXInfo)
+        M.Develop.PrintVFXInfo = GUI:Checkbox('将entityVFX信息输出到聊天栏', M.Develop.PrintVFXInfo)
         if M.Develop.PrintVFXInfo then
             GUI:Dummy(6, 0)
             GUI:SameLine()

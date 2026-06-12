@@ -62,5 +62,10 @@ RaidMgr.init = function(M)
             raidScript[-1].Update()
         end
     end
+    M.OnWipe = function()
+        if raidScript and raidScript[Player.localmapid] then
+            raidScript[Player.localmapid].OnWipe()
+        end
+    end
 end
 return RaidMgr

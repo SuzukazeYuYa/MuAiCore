@@ -8,7 +8,7 @@ local lastMap, lastJob
 local autoPopMap = { 1238, 1122, 1325, 1327, 1317, 1363 }
 ---@type MuAiGuide
 local MG
-
+local lastBattleTime = 0
 ---@param M MuAiGuide
 local checkAndPopMainUI = function()
     MG.CloseAllUI()
@@ -190,6 +190,20 @@ local onMapChange = function()
     end
 end
 
+local onWipeCheck = function()
+    if TensorReactions_CurrentCombatTimer ~= nil and TensorReactions_CurrentCombatTimer ~= 0 then
+        if lastBattleTime ~= TensorReactions_CurrentCombatTimer then
+            lastBattleTime = TensorReactions_CurrentCombatTimer
+        end
+    else
+        if lastBattleTime ~= nil and lastBattleTime ~= 0 then
+            lastBattleTime = 0
+            MG.Debug('团灭')
+            MG.OnWipe()
+        end
+    end
+end
+
 ---@param M MuAiGuide
 local onPlayerChangeJob = function()
     MG.FruMitigation.ChangeJob()
@@ -227,6 +241,7 @@ Events.init = function(M)
         MG.OnRaidUpdate()
         attackRangeHackHelper()
         attackRangeReMake()
+        onWipeCheck()
         MG.DrawTargetPos()
         MG.DrawAllLink()
         MG.CheckNeedReload()

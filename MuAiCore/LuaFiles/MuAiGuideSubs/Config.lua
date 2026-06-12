@@ -326,7 +326,15 @@ Config.init = function(M)
                 -- 1.只画一次，2.绘制预览
                 trineDrawType = 1,
             },
-            P3 = { enable = true, draw = true, guide = true },
+            P3 = {
+                enable = true, draw = true, guide = true,
+                -- 开场拉ex的T是谁 1 ST  2 MT
+                ExDeathTank = 1,
+                -- 是否自动面向
+                LockFace = true,
+                -- 1 d3; 2 d4
+                superJump = 1,
+            },
             P4 = { enable = true, draw = true, guide = true },
             P5 = { enable = true, draw = true, guide = true }
         }
