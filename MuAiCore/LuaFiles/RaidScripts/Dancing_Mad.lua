@@ -31,6 +31,10 @@ local doSubEvents = function(eventName, ...)
     end
 end
 
+local printCurrentState = function()
+    MG.Debug('当前副本阶段：' .. DM.StateNames[MG.DancingMad.CurrentState])
+end
+
 ---数据初始化
 local dataInit = function()
     MG.DancingMad = {
@@ -272,8 +276,55 @@ local dataInit = function()
             ThunderIII = {
                 Start = false,
                 Timer = 0,
+            },
+            Mark = {
+                Finish = false,
+                -- 自身标记类型=buffid
+                SelfType = 0,
+                BuffTypeMap = nil,
+                MarkCnt = {
+                    [3004] = 0,
+                    [3005] = 0,
+                    [3006] = 0,
+                },
+            },
+            BlackHolds = {
+                temp = {},
+                wave = 0,
+                tempCnt = 0,
+                Object = {},
+                JumpTimer = 0,
+                MarkedPlayers = {},
+                allMarkFind = false,
+                CastedEnt = {},
+                tetherInfo = {},
+                sourceObject = {},
+                guideData = {}
+            },
+            SlapHappy = {
+                OnDraw = false,
+                CasterId = 0,
+                Timer = 0,
+                SkillId = 0,
+            },
+            LookUponMe = {
+                OnDraw = false,
+                Timer = 0,
+                CasterId = 0,
+            },
+            DamningEdict = {
+                OnDraw = false,
+                Timer = 0,
+            },
+            TakeTower = {
+                aoeCache = {},
+                castCache = {},
+                isDps = nil,
+                Guide1 = nil,
+                Guide2 = nil,
+                Timer = 0,
             }
-        }
+        },
     }
 
     MG.Info(DM.NameCN .. '数据初始化完毕！')
@@ -281,6 +332,7 @@ end
 
 -- 阶段名称定义，注意每个阶段都必须有Start和End否则会出错
 DM.StateNames = {
+    'NotStart',
     --- P1 ---
     'P1Start',
     'P1TrueFalse1',
@@ -320,19 +372,30 @@ DM.StateNames = {
     'P3ElementsBuff1',
     'P3ElementsBuff2',
     'P3UltimaBlaster',
+    'P3BlackHolePre',
     'P3BlackHoleStart',
+    'P3BlackHoleAppear1',
+    'P3BlackHole1_1',
+    'P3BlackHole1_2',
+    'P3BlackHoleAppear2',
+    'P3BlackHole2_1',
+    'P3BlackHole2_2',
+    'P3BlackHole2_3',
+    'P3BlackHoleAppear3',
+    'P3BlackHole3_1',
+    'P3BlackHole3_2',
+    'P3BlackHole3_3',
+    'P3BlackHoleAppear4',
+    'P3BlackHole4_1',
+    'P3BlackHole4_2',
+    'P3AoePut1',
+    'P3AoePut2',
+    'P3Tower1',
+    'P3Tower2',
     'P3End',
 }
--- 
---- 初始化
-DM.Init = function(M)
-    DM.State = {}
-    -- 绑定阶段序号
-    for i = 1, #DM.StateNames do
-        DM.State[DM.StateNames[i]] = i
-    end
-    DM.SubScripts = {}
-    MG = M
+
+local defineColors = function()
     -- 一次性创建所有颜色
     ---@type ShapeDrawer
     DM.redDrawer = MG.CreateDrawer(1, 0, 0, nil, 2)
@@ -346,6 +409,21 @@ DM.Init = function(M)
     DM.purpleDrawer = MG.CreateDrawer(1, 0, 1, nil, 2)
     ---@type ShapeDrawer
     DM.cyanDrawer = MG.CreateDrawer(0, 1, 1, nil, 2)
+    ---@type ShapeDrawer
+    DM.litBlue = MG.CreateDrawer(0, 0.3, 0.5, 0.3, 2)
+
+end
+
+--- 初始化
+DM.Init = function(M)
+    DM.State = {}
+    -- 绑定阶段序号
+    for i = 1, #DM.StateNames do
+        DM.State[DM.StateNames[i]] = i
+    end
+    DM.SubScripts = {}
+    MG = M
+    defineColors()
     local folderPath = MuAiGuideRoot .. "RaidScripts\\Dancing_Mad_Subs"
     local list = FolderList(folderPath)
     for _, fileName in pairs(list) do
@@ -377,7 +455,22 @@ DM.ChangeState = function(stateName)
         return
     end
     MG.DancingMad.CurrentState = state
-    MG.Debug("DancingMad阶段切换：" .. stateName)
+    local log = DM.NameCN .. "阶段切换：" .. stateName
+    if MG.IsVideo() then
+        MG.Info(log)
+    else
+        MG.Debug(log)
+    end
+end
+
+DM.GoNextSate = function()
+    MG.DancingMad.CurrentState = MG.DancingMad.CurrentState + 1
+    local log =  DM.NameCN .. "阶段切换：" .. DM.StateNames[MG.DancingMad.CurrentState]
+    if MG.IsVideo() then
+        MG.Info(log)
+    else
+        MG.Debug(log)  
+    end
 end
 
 --- 是否在状态中
@@ -472,19 +565,30 @@ DM.OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, oldTar
     doSubEvents('OnTetherChange', sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID, newTetherID, newTetherFlags, newTargetID)
 end
 
+DM.OnEntityAdd = function(entityID, entityName)
+    doSubEvents('OnEntityAdd', entityID, entityName)
+end
+
 -------------------------- MuAiGuide Events --------------------------
 DM.Update = function()
     doSubEvents('Update')
 end
 
 DM.OnEnter = function()
-    MG.DancingMad = nil
+    MG.DancingMad = {
+        CurrentState = 1
+    }
     -- MG.DancingMad.CurrentState = 0
     MG.Develop.Reg("DancingMad")
+    MG.Develop.LogState = function()
+        printCurrentState()
+    end
 end
 
 DM.OnWipe = function()
-    MG.DancingMad = nil
+    MG.DancingMad = {
+        CurrentState = 1
+    }
 end
 
 return DM

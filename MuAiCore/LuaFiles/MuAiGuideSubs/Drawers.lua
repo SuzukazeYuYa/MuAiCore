@@ -13,9 +13,6 @@ local cy_03 = GUI:ColorConvertFloat4ToU32(0, 1, 1, 0.3)
 local pp_03 = GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.3)
 local w_1 = GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)
 
-
-
-
 ---@param M MuAiGuide
 Drawers.init = function(M)
     local ZeroYMap = { 1238, 1122, 1325, 1327, 1363 }
@@ -265,11 +262,11 @@ Drawers.init = function(M)
     --- @param x number 指路位置x
     --- @param z number 指路位置z
     --- @param size number 圆圈大小
-    M.FrameDirect = function(x, z, size)
+    M.FrameDirect = function(x, z, size, color)
         local curPlayer = M.GetPlayer() or Player
         local playerPos = TensorCore.mGetEntity(curPlayer.id).pos
-        local color = M.Config.Main.GuideColor
-        commonFrameDirect(x, z, playerPos, color, size)
+        local curColor = color or M.Config.Main.GuideColor
+        commonFrameDirect(x, z, playerPos, curColor, size)
     end
 
     --- 帧指路OnFrame用
@@ -286,24 +283,47 @@ Drawers.init = function(M)
         end
     end
 
+    --- 计算点 P 到线段 AB 的最近投影点
+    ---@param A table 线段起点坐标 {x, z} 人
+    ---@param B table 线段终点坐标 {x, z} 物体
+    ---@param P table 待测点坐标 {x, z}  接线人坐标
+    ---@return boolean isOnSegment 投影垂足是否落在线段 AB 上
+    ---@return table point 线段上距离 P 最近的点坐标
+    ---@return boolean 如果在延长线上，近端是否为A
     local getLinePos = function(A, B, P)
+        -- 向量 AB、向量 AP
         local ABx, ABz = B.x - A.x, B.z - A.z
         local APx, APz = P.x - A.x, P.z - A.z
+
+        -- 线段 AB 长度平方，避免开方提升计算效率
         local abLenSq = ABx * ABx + ABz * ABz
+        -- 起止点重合，直接返回 A 点
         if abLenSq == 0 then
             return false, { x = A.x, z = A.z }
         end
+
+        -- 投影系数 t：0 对应 A 点，1 对应 B 点
         local t = (APx * ABx + APz * ABz) / abLenSq
+        -- 判断垂足是否在线段区间内
         local isOnSegment = t >= 0 and t <= 1
+
         local point = {}
+        local isA
         if t < 0 then
+            -- 投影在 A 侧延长线，取端点 A
             point = { x = A.x, z = A.z }
+            isA = true
         elseif t > 1 then
+            -- 投影在 B 侧延长线，取端点 B
             point = { x = B.x, z = B.z }
+            isA = false
         else
+            -- 投影在线段内部，计算垂足坐标
             point = { x = A.x + ABx * t, z = A.z + ABz * t }
+            isA = nil
         end
-        return isOnSegment, point
+
+        return isOnSegment, point, isA
     end
 
     --- 帧指路接线
@@ -328,6 +348,50 @@ Drawers.init = function(M)
             local heading = TensorCore.getHeadingToTarget(pos2, pos1)
             local guidePos = TensorCore.getPosInDirection(pos2, heading, 1)
             M.FrameDirect(guidePos.x, guidePos.z)
+        end
+    end
+    ---多重指路拉线
+    M.MultiTakeLine = function(guideData, size)
+        for job, multiData in pairs(M.MultiGuide.players) do
+            local data = guideData[job]
+            if data ~= nil then
+                local color = data.color or { r = 1, g = 0, b = 0 }
+                local drawer = Argus2.ShapeDrawer:new(
+                        (GUI:ColorConvertFloat4ToU32(0, 0, 0, 0)),
+                        (GUI:ColorConvertFloat4ToU32(0, 0, 0, 0)),
+                        (GUI:ColorConvertFloat4ToU32(0, 0, 0, 0)),
+                        (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 1)), 3)
+                drawer:addLine(data.posPlayer.x, data.posPlayer.y, data.posPlayer.z, data.posObj.x, data.posObj.y, data.posObj.z, 4, 0)
+                local playerPos = TensorCore.mGetEntity(multiData.obj.id).pos
+                local isInLine, nearestPos, isClosePlayer = getLinePos(data.posPlayer, data.posObj, playerPos)
+                local guidePos
+                if isInLine then
+                    guidePos = nearestPos
+                else
+                    local heading
+                    local length = TensorCore.getDistance2d(data.posPlayer, data.posObj)
+                    if isClosePlayer then
+                        --计算出的位置是否更贴近玩家 
+                        local dis = data.disPlayer or 2
+                        if length < dis then
+                            guidePos = M.GetMidPos(data.posPlayer, data.posObj)
+                        else
+                            heading = TensorCore.getHeadingToTarget(data.posPlayer, data.posObj)
+                            guidePos = TensorCore.getPosInDirection(data.posPlayer, heading, data.disPlayer)
+                        end
+                    else
+                        local dis = data.disObj or 2
+                        if length < dis then
+                            guidePos = M.GetMidPos(data.posPlayer, data.posObj)
+                        else
+                            heading = TensorCore.getHeadingToTarget(data.posObj, data.posPlayer)
+                            guidePos = TensorCore.getPosInDirection(data.posObj, heading, dis)
+                        end
+                    end
+                end
+                local guideColor = multiData.color
+                commonFrameDirect(guidePos.x, guidePos.z, playerPos, guideColor, size)
+            end
         end
     end
 
@@ -422,7 +486,7 @@ Drawers.init = function(M)
             end
         end
     end
-    
+
     --- 通用创建 Drawer 函数
     ---@return ShapeDrawer
     M.CreateDrawer = function(r, g, b, a, lineSize)
@@ -431,7 +495,7 @@ Drawers.init = function(M)
         return Argus2.ShapeDrawer:new(color, color, color,
                 GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), lineSize)
     end
-    
+
     --- 绘制一个圆（已废弃仿报错用）
     M.DrawCircleUI = function()
     end

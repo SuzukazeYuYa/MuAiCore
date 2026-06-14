@@ -8,9 +8,9 @@ DancingMadUI.draw = function()
     end
     GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
     GUI:SetNextWindowSize(wide, 0, GUI.SetCond_Appearing)
-    M.DancingMadUI.visible, M.DancingMadUI.open = GUI:Begin("Dmu Setting", M.DancingMadUI.open)
+    M.DancingMadUI.visible, M.DancingMadUI.open = GUI:Begin('Dmu Setting', M.DancingMadUI.open)
     if M.DancingMadUI.visible then
-        if GUI:CollapsingHeader("全局开关") then
+        if GUI:CollapsingHeader('全局开关') then
             GUI:Columns(3, 'switch', false)
             GUI:Dummy(15, 10)
             GUI:SameLine()
@@ -46,13 +46,13 @@ DancingMadUI.draw = function()
             end
             GUI:Columns(1)
         end
-        if M.Config.DmuCfg.P1.enable and GUI:CollapsingHeader("P1") then
+        if M.Config.DmuCfg.P1.enable and GUI:CollapsingHeader('P1') then
             GUI:BulletText('真假冰和雷')
             GUI:Dummy(20, 0)
             GUI:SameLine(0, 0)
             M.Config.DmuCfg.P1.effect = GUI:Checkbox('屏蔽真假AOE特效##effectBind', M.Config.DmuCfg.P1.effect)
             if GUI:IsItemHovered() then
-                GUI:SetTooltip("勾选后屏蔽特效采用A+画紫色危险区, 未勾选使用ImGui画图显示黄色危险区")
+                GUI:SetTooltip('勾选后屏蔽特效采用A+画紫色危险区, 未勾选使用ImGui画图显示黄色危险区')
             end
             GUI:Dummy(0, 0)
             GUI:SameLine(0, 0)
@@ -66,12 +66,10 @@ DancingMadUI.draw = function()
             GUI:Text(' 激光站位顺序  ')
             GUI:SameLine(0, 0)
             GUI:PushItemWidth(175)
-            local dmOrder, dmOrderChanged = GUI:InputText('##DrawBlackList',
+            local dmOrder, dmOrderChanged = GUI:InputText('##BeamOrder',
                     M.StringJoin(M.Config.DmuCfg.P1.BeamOrder, ','), GUI.InputTextFlags_CharsNoBlank)
             if dmOrderChanged then
-                if dmOrderChanged then
-                    M.Config.DmuCfg.P1.BeamOrder = M.StringSplit(dmOrder, ",")
-                end
+                M.Config.DmuCfg.P1.BeamOrder = M.StringSplit(dmOrder, ',')
             end
             GUI:PopItemWidth()
             GUI:Dummy(0, 0)
@@ -98,7 +96,7 @@ DancingMadUI.draw = function()
             GUI:SameLine(0, 0)
             M.Config.DmuCfg.P1.autoLookAt = GUI:Checkbox('自动调整面向##autoLookAt', M.Config.DmuCfg.P1.autoLookAt)
         end
-        if M.Config.DmuCfg.P2.enable and GUI:CollapsingHeader("P2") then
+        if M.Config.DmuCfg.P2.enable and GUI:CollapsingHeader('P2') then
             GUI:Dummy(0, 0)
             GUI:SameLine(0, 0)
             GUI:BulletText('8次踩塔')
@@ -110,8 +108,8 @@ DancingMadUI.draw = function()
             GUI:AlignFirstTextHeightToWidgets()
             GUI:Text(' 固定方式: ')
             GUI:SameLine(0, 0)
-            GUI:PushItemWidth(100)
-            M.Config.DmuCfg.P2.fixType = GUI:Combo("##T8fixType", M.Config.DmuCfg.P2.fixType, { "职能固定", "扇左钢右" }, 2)
+            GUI:PushItemWidth(120)
+            M.Config.DmuCfg.P2.fixType = GUI:Combo('##T8fixType', M.Config.DmuCfg.P2.fixType, { '职能固定', '扇左钢右', '职能固定Uptime' }, 3)
             GUI:PopItemWidth()
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
@@ -119,7 +117,7 @@ DancingMadUI.draw = function()
             GUI:Text(' 最后一脚: ')
             GUI:SameLine(0, 0)
             GUI:PushItemWidth(100)
-            M.Config.DmuCfg.P2.endTower = GUI:Combo("##endTower", M.Config.DmuCfg.P2.endTower, { "去A点方向", "去两塔之间" }, 2)
+            M.Config.DmuCfg.P2.endTower = GUI:Combo('##endTower', M.Config.DmuCfg.P2.endTower, { '去A点方向', '去两塔之间' }, 2)
             GUI:PopItemWidth()
             GUI:Dummy(0, 0)
             GUI:SameLine(0, 0)
@@ -130,38 +128,106 @@ DancingMadUI.draw = function()
             GUI:Text(' 画图方案: ')
             GUI:SameLine(0, 0)
             GUI:PushItemWidth(130)
-            M.Config.DmuCfg.P2.trineDrawType = GUI:Combo("##trineDrawType", M.Config.DmuCfg.P2.trineDrawType, { "只画当前一次", "当前和下次预览" }, 2)
+            M.Config.DmuCfg.P2.trineDrawType = GUI:Combo('##trineDrawType', M.Config.DmuCfg.P2.trineDrawType, { '只画当前一次', '当前和下次预览' }, 2)
             GUI:PopItemWidth()
-            if M.Config.DmuCfg.P3.enable and GUI:CollapsingHeader("P3") then
-                GUI:Dummy(0, 0)
-                GUI:SameLine()
-                GUI:BulletText('一运')
-                GUI:Dummy(0, 0)
-                GUI:SameLine(20, 0)
-                GUI:Text(' 攻略: 逃课, 夜音式')
-                GUI:Dummy(0, 0)
-                GUI:SameLine(20, 0)
-                GUI:AlignFirstTextHeightToWidgets()
-                GUI:Text(' 谁拉艾克斯迪斯: ')
-                GUI:SameLine()
-                GUI:PushItemWidth(40)
-                M.Config.DmuCfg.P3.ExDeathTank = GUI:Combo("##ExDeathTank", M.Config.DmuCfg.P3.ExDeathTank, { "ST", "MT" }, 2)
-                GUI:PopItemWidth()
-                GUI:Dummy(0, 0)
-                GUI:SameLine(20, 0)
-                GUI:AlignFirstTextHeightToWidgets()
-                GUI:Text(' 谁引导超级跳:   ')
-                GUI:SameLine()
-                GUI:PushItemWidth(40)
-                M.Config.DmuCfg.P3.superJump = GUI:Combo("##superJump", M.Config.DmuCfg.P3.superJump, { "D3", "D4" }, 2)
-                GUI:PopItemWidth()
+        end
+        if M.Config.DmuCfg.P3.enable and GUI:CollapsingHeader('P3') then
+            GUI:Dummy(0, 0)
+            GUI:SameLine()
+            GUI:BulletText('一运')
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:Text(' 攻略: 逃课, 夜音式')
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(' 谁拉艾克斯迪斯: ')
+            GUI:SameLine()
+            GUI:PushItemWidth(40)
+            M.Config.DmuCfg.P3.ExDeathTank = GUI:Combo('##ExDeathTank', M.Config.DmuCfg.P3.ExDeathTank, { 'ST', 'MT' }, 2)
+            GUI:PopItemWidth()
+
+            GUI:Dummy(12, 0)
+            GUI:SameLine(0, 0)
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(' 火BUFF左右优先级 ')
+            GUI:SameLine(0, 0)
+            GUI:PushItemWidth(175)
+            local p3fireBuffOrder, p3fireBuffOrderChanged = GUI:InputText('##fireBuffOrder',
+                    M.StringJoin(M.Config.DmuCfg.P3.fireBuffOrder, ','), GUI.InputTextFlags_CharsNoBlank)
+            GUI:PopItemWidth()
+            if p3fireBuffOrderChanged then
+                M.Config.DmuCfg.P3.fireBuffOrder = M.StringSplit(p3fireBuffOrder, ',')
+            end
+            
+            
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(' 谁引导超级跳:   ')
+            GUI:SameLine()
+            GUI:PushItemWidth(40)
+            M.Config.DmuCfg.P3.superJump = GUI:Combo('##superJump', M.Config.DmuCfg.P3.superJump, { 'D3', 'D4' }, 2)
+            GUI:PopItemWidth()
+            GUI:Dummy(10, 0)
+            GUI:SameLine()
+            M.Config.DmuCfg.P3.LockFace = GUI:Checkbox('自动调整面向##p3LockFace', M.Config.DmuCfg.P3.LockFace)
+            if M.Config.DmuCfg.P3.LockFace then
+                GUI:SameLine(0, 13)
+                M.Config.DmuCfg.P3.HardLockFace = GUI:Checkbox('使用更严格的硬锁定##HardLockFace', M.Config.DmuCfg.P3.HardLockFace)
+                if GUI:IsItemHovered() then
+                    GUI:SetTooltip('开启后会完全禁止可能会改变面向的事，\n约等于停手，请谨慎使用')
+                end
+            end  
+            GUI:Dummy(0, 0)
+            GUI:SameLine()
+            GUI:BulletText('二运')
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:Text(' 攻略: 盗火, 按标记顺序')
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:Text(' 以巨大凯夫卡为12点顺时针找线')
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(' 标记类型:  ')
+            GUI:SameLine()
+            GUI:PushItemWidth(90)
+            M.Config.DmuCfg.P3.markType = GUI:Combo('##P3markType', M.Config.DmuCfg.P3.markType, { '不标记', '标记自身', '标记全队' }, 3)
+            GUI:PopItemWidth()
+            if M.Config.DmuCfg.P3.markType == 2 then
                 GUI:Dummy(10, 0)
                 GUI:SameLine()
-                M.Config.DmuCfg.P3.LockFace = GUI:Checkbox('自动调整面向BOSS##p3LockFace', M.Config.DmuCfg.P3.LockFace)
+                M.Config.DmuCfg.P3.delayMark = GUI:Checkbox('延迟标记##p3delayMark', M.Config.DmuCfg.P3.delayMark)
+                if GUI:IsItemHovered() then
+                    GUI:SetTooltip('勾选后会自动检查队友标记情况, 有标记才会标记自己; 否则Buff出来就标.')
+                end
+            elseif M.Config.DmuCfg.P3.markType == 3 then
+                GUI:Dummy(12, 0)
+                GUI:SameLine(0, 0)
+                GUI:AlignFirstTextHeightToWidgets()
+                GUI:Text(' 标记优先级  ')
+                GUI:SameLine(0, 0)
+                GUI:PushItemWidth(175)
+                local p3mkOrder, p3mkOrderChanged = GUI:InputText('##P3markOrder',
+                        M.StringJoin(M.Config.DmuCfg.P3.markOrder, ','), GUI.InputTextFlags_CharsNoBlank)
+                GUI:PopItemWidth()
+                if p3mkOrderChanged then
+                    M.Config.DmuCfg.P3.markOrder = M.StringSplit(p3mkOrder, ',')
+                end
             end
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(' 踩塔12点:  ')
+            GUI:SameLine()
+            GUI:PushItemWidth(100)
+            M.Config.DmuCfg.P3.towerHeading = GUI:Combo('##towerHeading', M.Config.DmuCfg.P3.towerHeading, { '脚跟方向', '脚尖方向' }, 2)
+            GUI:PopItemWidth()
         end
     end
-    M.SaveConfig(M.Config.DmuGuidePath, M.Config.DmuGuideFile, "DmuCfg")
+    M.SaveConfig(M.Config.DmuGuidePath, M.Config.DmuGuideFile, 'DmuCfg')
     GUI:SetWindowSize(wide, 0)
     GUI:End()
 end

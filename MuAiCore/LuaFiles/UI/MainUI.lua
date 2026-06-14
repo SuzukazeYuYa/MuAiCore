@@ -59,10 +59,22 @@ local drawJobTab = function(M)
             end
             if M.MultiGuide.enable then
                 GUI:SameLine()
-                GUI:Button('清空指导', 100, 20)
-                if GUI:IsItemClicked(0) then
-                    M.MultiGuide.initList()
-                    M.ShowMsgUI(3, { '已清空指导列表' })
+                if M.MultiGuide.Count() > 1 then
+                    GUI:Button('清空指导', 100, 20)
+                    if GUI:IsItemClicked(0) then
+                        M.MultiGuide.initList()
+                        M.ShowMsgUI(3, { '已清空指导列表' })
+                    end
+                else
+                    GUI:Button('全选指导', 100, 20)
+                    if GUI:IsItemClicked(0) then
+                        M.MultiGuide.initList()
+                        for job, _ in pairs(M.Party) do
+                            if job ~= M.SelfPos then
+                                M.MultiGuide.addPlayer(job)
+                            end
+                        end
+                    end
                 end
                 GUI:SameLine()
                 GUI:Button('还原颜色', 100, 20)

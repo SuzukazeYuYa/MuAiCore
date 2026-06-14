@@ -1,6 +1,7 @@
 local CatZDmuTankUI = {}
 
-local dropDrownList = { "自己减伤", "自己无敌", "搭档减伤", "搭档无敌", "换T", "分摊" }
+local dropDrownList = { "自己减伤", "自己无敌", "搭档减伤", "搭档无敌", "分摊" }
+local dropDrownListP3 = { "自己减伤", "自己无敌", "搭档减伤", "搭档无敌", "分摊", "换T先吃", "换T后吃" }
 local wide = 300
 local keys = {
     -- P1,
@@ -53,7 +54,13 @@ CatZDmuTankUI.draw = function()
             GUI:AlignFirstTextHeightToWidgets()
             GUI:Text('  ' .. curConfig.nameCn)
             GUI:NextColumn()
-            curConfig.value = GUI:Combo("##" .. keys[i], curConfig.value, dropDrownList, #dropDrownList)
+            local itemList
+            if curP == 3 then
+                itemList = dropDrownListP3
+            else
+                itemList = dropDrownList
+            end
+            curConfig.value = GUI:Combo("##" .. keys[i], curConfig.value, itemList, #itemList)
             GUI:NextColumn()
         end
     end

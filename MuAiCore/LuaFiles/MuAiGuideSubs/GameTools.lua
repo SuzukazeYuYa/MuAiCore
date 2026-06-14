@@ -50,7 +50,7 @@ GameTools.init = function(M)
                 markType = "攻击" .. (mark - 9)
             end
         elseif mark < 9 then
-            markType = "锁链" .. (mark - 5)
+            markType = "止步" .. (mark - 5)
         elseif mark < 11 then
             markType = "禁止" .. (mark - 8)
         elseif mark == 11 then

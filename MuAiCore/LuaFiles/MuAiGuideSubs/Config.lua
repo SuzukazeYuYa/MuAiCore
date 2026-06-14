@@ -7,27 +7,27 @@ local Config = {}
 ---@param M MuAiGuide
 local LoadUIConfig = function(M)
     M.Config = {}
-    M.Config.MainPath = GetLuaModsPath() .. "MuAiCore\\Configs"
-    M.Config.MainFile = "MainConfig.lua"
+    M.Config.MainPath = GetLuaModsPath() .. 'MuAiCore\\Configs'
+    M.Config.MainFile = 'MainConfig.lua'
 
-    M.Config.FruGuidePath = M.Config.MainPath .. "\\FruGuide"
-    M.Config.FruGuideFile = "GuideConfig.lua"
-    M.Config.FruMitigationPath = M.Config.MainPath .. "\\FruMitigation"
-    M.Config.FruMitigationFile = "FruMitigation.lua"
+    M.Config.FruGuidePath = M.Config.MainPath .. '\\FruGuide'
+    M.Config.FruGuideFile = 'GuideConfig.lua'
+    M.Config.FruMitigationPath = M.Config.MainPath .. '\\FruMitigation'
+    M.Config.FruMitigationFile = 'FruMitigation.lua'
 
-    M.Config.DmuGuidePath = M.Config.MainPath .. "\\DmuGuide"
-    M.Config.DmuGuideFile = "GuideConfig.lua"
-    M.Config.DmuMitig = M.Config.MainPath .. "\\DmuMitig"
+    M.Config.DmuGuidePath = M.Config.MainPath .. '\\DmuGuide'
+    M.Config.DmuGuideFile = 'GuideConfig.lua'
+    M.Config.DmuMitig = M.Config.MainPath .. '\\DmuMitig'
 
-    M.Config.DmuCatZMigPath = M.Config.MainPath .. "\\DmuMitig\\CatZ"
-    M.Config.DmuCatZMigFile = "Config.lua"
+    M.Config.DmuCatZMigPath = M.Config.MainPath .. '\\DmuMitig\\CatZ'
+    M.Config.DmuCatZMigFile = 'Config.lua'
 
-    M.Config.Key1 = { "Shift", "Ctrl", "Alt" }
+    M.Config.Key1 = { 'Shift', 'Ctrl', 'Alt' }
     M.Config.Key2 = {}
     for i = 65, 90 do
         table.insert(M.Config.Key2, string.char(i))
     end
-    table.insert(M.Config.Key2, "~")
+    table.insert(M.Config.Key2, '~')
 
     -- 读取主存档
     local defMainCfg = M.CreateDefMainCfg()
@@ -39,14 +39,14 @@ local LoadUIConfig = function(M)
     M.Config.FruCfg = defFruCfg  -- 这里只是让编辑可以默认识别，无实际作用
     M.Config.FruCfg = M.LoadConfig(M.Config.FruGuidePath, M.Config.FruGuideFile, defFruCfg)
     M.Config.FruCfgPrevious = table.deepcopy(M.Config.FruCfg)
-    M.Config.FruCustomList = M.LoadFileList(M.Config.FruGuidePath, { "GuideConfig.lua" })
+    M.Config.FruCustomList = M.LoadFileList(M.Config.FruGuidePath, { 'GuideConfig.lua' })
     M.Config.FruCustomListIndex = 1
     --- 读取绝妖星存档
     local defDmuCfg = M.CreateDmuDefaultCfg()
     M.Config.DmuCfg = defDmuCfg  -- 这里只是让编辑可以默认识别，无实际作用
     M.Config.DmuCfg = M.LoadConfig(M.Config.DmuGuidePath, M.Config.DmuGuideFile, defDmuCfg)
     M.Config.DmuCfgPrevious = table.deepcopy(M.Config.DmuCfg)
-    M.Config.DmuCustomList = M.LoadFileList(M.Config.DmuGuidePath, { "GuideConfig.lua" })
+    M.Config.DmuCustomList = M.LoadFileList(M.Config.DmuGuidePath, { 'GuideConfig.lua' })
     M.Config.DmuCustomListIndex = 1
 
     local defDmuCatZCfg = M.CreateCatZDmuCfg()
@@ -79,7 +79,7 @@ Config.init = function(M)
         M.Config.Main.MerchantGuide = oldConfig.MerchantGuide
         M.Config.Main.MerchantLockFace = oldConfig.MerchantLockFace
         M.Config.Main.MerchantAimTool = oldConfig.MerchantAimTool
-        M.Info("已恢复默认设置.")
+        M.Info('已恢复默认设置.')
     end
     M.CreateDefMainCfg = function()
         local mainCfg = {
@@ -170,21 +170,21 @@ Config.init = function(M)
     M.CreateFruDefaultCfg = function()
         return {
             --- 标点
-            PosInfo = { "C", "3", "B", "2", "A", "1", "D", "4" },
+            PosInfo = { 'C', '3', 'B', '2', 'A', '1', 'D', '4' },
             --- 基础8方位置
-            JobPos = { "H2", "D2", "ST", "D4", "MT", "D3", "H1", "D1" },
+            JobPos = { 'H2', 'D2', 'ST', 'D4', 'MT', 'D3', 'H1', 'D1' },
             ----------------------------- P1 -----------------------------
             ProteanType = 1,
             --- 雾龙8方站位 C逆
-            FruUtopainSkyPosInfo = { "H2", "D2", "D4", "ST", "MT", "D3", "H1", "D1" },
+            FruUtopainSkyPosInfo = { 'H2', 'D2', 'D4', 'ST', 'MT', 'D3', 'H1', 'D1' },
             --- 抓人分组上
-            CatchTwoUp = { "MT", "ST", "H1", "H2" },
+            CatchTwoUp = { 'MT', 'ST', 'H1', 'H2' },
             --- 抓人分组下
-            CatchTwoDown = { "D1", "D2", "D3", "D4" },
+            CatchTwoDown = { 'D1', 'D2', 'D3', 'D4' },
             --- 抓人补位
-            CatchTwoDownFall = { "MT", "D1" },
+            CatchTwoDownFall = { 'MT', 'D1' },
             --- 雷火线优先级
-            FruLightFirePriority = { "H1", "H2", "MT", "ST", "D1", "D2", "D3", "D4" },
+            FruLightFirePriority = { 'H1', 'H2', 'MT', 'ST', 'D1', 'D2', 'D3', 'D4' },
             --- 雷火线标记
             FruLightFireMark = false,
             --- 雷火线处理方向：1：上下，2：左右
@@ -192,18 +192,18 @@ Config.init = function(M)
             --- 雷火线处理方式：1：上下互换，2：闲人固定
             FruLightFireType = 1,
             --- 闲人顺序，从上到下从左到右
-            FruLightFireRestPos = { "2", "1", "3", "4" },
+            FruLightFireRestPos = { '2', '1', '3', '4' },
             --- 踩塔方式 1 小学塔，2固定+补位，3,日基塔固定3人补位3人
             TakeTowerType = 2,
             --- 填充塔优先级
-            FallTowerOrder = { "H1", "H2", "D1", "D2", "D3", "D4" },
+            FallTowerOrder = { 'H1', 'H2', 'D1', 'D2', 'D3', 'D4' },
             --- 固定塔
-            FixTowerUp = { "H1", "D1" },
-            FixTowerMid = { "H2", "D2" },
-            FixTowerDown = { "D4", "D3" },
+            FixTowerUp = { 'H1', 'D1' },
+            FixTowerMid = { 'H2', 'D2' },
+            FixTowerDown = { 'D4', 'D3' },
             --- 日基踩塔
-            JapanTowerFix = { "H1", "H2", "D4" },
-            JapanTowerFall = { "D1", "D2", "D3" },
+            JapanTowerFix = { 'H1', 'H2', 'D4' },
+            JapanTowerFall = { 'D1', 'D2', 'D3' },
 
             ----------------------------- P2 -----------------------------
             --- DD 换位方式 1： 同组互换，2：全员顺时针
@@ -215,15 +215,15 @@ Config.init = function(M)
             --- 滑冰提示TTS
             SkatingHit = 2,
             --- 镜子
-            MirrorPosMelee1 = { "D1", "MT", "ST", "D2" },
-            MirrorPosMelee2 = { "MT", "D1", "D2", "ST" },
-            MirrorPosRange = { "H1", "D3", "D4", "H2" },
+            MirrorPosMelee1 = { 'D1', 'MT', 'ST', 'D2' },
+            MirrorPosMelee2 = { 'MT', 'D1', 'D2', 'ST' },
+            MirrorPosRange = { 'H1', 'D3', 'D4', 'H2' },
             --- 蓝镜子居中情况下 1. 远左近右， 2.近左远右
             MirrorSameDistanceType = 1,
             --- 光爆处理方式 1、田园郡 2、灰9
             FruLightRampantType = 1,
             --- 田园郡式光爆优先级
-            FruLightRampantOrder = { "MT", "ST", "H1", "H2", "D1", "D2", "D3", "D4" },
+            FruLightRampantOrder = { 'MT', 'ST', 'H1', 'H2', 'D1', 'D2', 'D3', 'D4' },
             --- 放圈方案 1 莫古力 2 日基
             FruLightRampantDropType = 1,
 
@@ -240,7 +240,7 @@ Config.init = function(M)
             P3DarkestDanceTaker = 1,
             ----------------------------- P4 -----------------------------
             --- 光暗龙诗优先级
-            DarkLitOrder = { "MT", "ST", "H1", "H2", "D1", "D2", "D3", "D4" },
+            DarkLitOrder = { 'MT', 'ST', 'H1', 'H2', 'D1', 'D2', 'D3', 'D4' },
             --- 光暗龙诗 翻花绳4边形时候 谁换，1左换，2右换
             DarkLitChangeType = 1,
             --- 标记队友
@@ -248,7 +248,7 @@ Config.init = function(M)
             --- 暗夜舞蹈谁引导 1 MT 2 ST
             P4DarkestDanceTaker = 1,
             --- 时间结晶优先级
-            CrystallizeTimePriority = { "H1", "H2", "MT", "ST", "D1", "D2", "D3", "D4" },
+            CrystallizeTimePriority = { 'H1', 'H2', 'MT', 'ST', 'D1', 'D2', 'D3', 'D4' },
             --- Buff 处理方式， 1，基本，2，日基
             CrystallizeTimeBuffType = 1,
             --- 时间结晶处理方式：1:固定吃，2:标点，3:自动摇号
@@ -266,10 +266,10 @@ Config.init = function(M)
             },
 
             CrystallizeMark = {
-                ["D"] = 4,
-                ["B"] = 1,
-                ["3"] = 2,
-                ["4"] = 3
+                ['D'] = 4,
+                ['B'] = 1,
+                ['3'] = 2,
+                ['4'] = 3
             },
 
             ----------------------------- P5 -----------------------------
@@ -279,21 +279,21 @@ Config.init = function(M)
             DarkLightWingsTakeTowerType = 1,
             --- 固定塔站位
             DarkLightWings = {
-                Down = { "D1", "D2" },
-                Left = { "H1", "H2" },
-                Right = { "D3", "D4" },
+                Down = { 'D1', 'D2' },
+                Left = { 'H1', 'H2' },
+                Right = { 'D3', 'D4' },
             },
             --- 顺序塔站位
             DarkLightWings2 = {
-                Down = { "H1", "H2" },
-                Left = { "D3", "D4" },
-                Right = { "D1", "D2" },
+                Down = { 'H1', 'H2' },
+                Left = { 'D3', 'D4' },
+                Right = { 'D1', 'D2' },
             },
             drawWinPolarizingOrder = {
-                { "MT", "ST" },
-                { "D1", "D2" },
-                { "D3", "D4" },
-                { "H1", "H2" },
+                { 'MT', 'ST' },
+                { 'D1', 'D2' },
+                { 'D3', 'D4' },
+                { 'H1', 'H2' },
             },
             --- 绘图开关
             drawAknMorn = true,
@@ -309,7 +309,7 @@ Config.init = function(M)
         return {
             Enable = true,
             --- 基础8方位置
-            --JobPos = { "H2", "D2", "ST", "D4", "MT", "D3", "H1", "D1" },
+            --JobPos = { 'H2', 'D2', 'ST', 'D4', 'MT', 'D3', 'H1', 'D1' },
             P1 = {
                 enable = true, draw = true, guide = true,
                 --是否关闭P1特效
@@ -319,7 +319,7 @@ Config.init = function(M)
             },
             P2 = {
                 enable = true, draw = true, guide = true,
-                -- 1职能固定，2扇左钢右
+                -- 1职能固定，2扇左钢右 3职固Uptime
                 fixType = 1,
                 -- 踩塔结束之后去哪 1 -> A, 2 -> 两塔中间
                 endTower = 1,
@@ -328,12 +328,20 @@ Config.init = function(M)
             },
             P3 = {
                 enable = true, draw = true, guide = true,
+                fireBuffOrder = { 'MT', 'ST', 'H1', 'H2', 'D1', 'D2', 'D3', 'D4', },
                 -- 开场拉ex的T是谁 1 ST  2 MT
                 ExDeathTank = 1,
                 -- 是否自动面向
                 LockFace = true,
+                HardLockFace = false,
                 -- 1 d3; 2 d4
                 superJump = 1,
+                -- 标记类型，1 关闭； 2  标记自己；  3 标记全队;
+                markType = 1,
+                markOrder = { 'D1', 'D2', 'D3', 'D4', 'MT', 'ST', 'H2', 'H1' },
+                delayMark = true,
+                -- 踩塔12点
+                towerHeading = 1,
             },
             P4 = { enable = true, draw = true, guide = true },
             P5 = { enable = true, draw = true, guide = true }
@@ -372,8 +380,8 @@ Config.init = function(M)
     --- 同步配置字段
     M.SyncNestedFields = function(saveData, defaultData)
         for key, value in pairs(defaultData) do
-            if type(value) == "table" then
-                if type(saveData[key]) == "table" then
+            if type(value) == 'table' then
+                if type(saveData[key]) == 'table' then
                     M.SyncNestedFields(saveData[key], value)
                 else
                     saveData[key] = value
@@ -387,7 +395,7 @@ Config.init = function(M)
     end
     --- 读取存档名称
     M.LoadFileList = function(path, except)
-        local files = { "None" }
+        local files = { 'None' }
         if (not FolderExists(path)) then
             FolderCreate(path)
         end
@@ -408,7 +416,7 @@ Config.init = function(M)
     end
     --- 读取序列化的表格文件
     M.LoadFileConfig = function(path, fileName, defConfig)
-        local saveFile = path .. "\\" .. fileName .. ".lua"
+        local saveFile = path .. '\\' .. fileName .. '.lua'
 
         if (not FolderExists(path)) then
             FolderCreate(path)
@@ -416,20 +424,20 @@ Config.init = function(M)
         local config = FileLoad(saveFile)
         if config ~= nil then
             M.SyncNestedFields(config, defConfig)
-            M.Info("加载配置[" .. fileName .. "]成功！")
+            M.Info('加载配置[' .. fileName .. ']成功！')
             return config
         end
-        M.Info("加载配置[" .. fileName .. "]失败！")
+        M.Info('加载配置[' .. fileName .. ']失败！')
         return defConfig
     end
     --- 将表格序列化到文件
     M.SaveFileConfig = function(path, fileName, table)
-        local saveFile = path .. "\\" .. fileName .. ".lua"
+        local saveFile = path .. '\\' .. fileName .. '.lua'
         if (not FolderExists(path)) then
             FolderCreate(path)
         end
         FileSave(saveFile, table)
-        M.Info("已将当前设置保存到配置[" .. fileName .. "]。")
+        M.Info('已将当前设置保存到配置[' .. fileName .. ']。')
     end
     --- 读取设置信息
     --- @param path string 路径(最后不带\\)
@@ -440,7 +448,7 @@ Config.init = function(M)
         if (not FolderExists(path)) then
             FolderCreate(path)
         end
-        local saveFile = path .. "\\" .. fileName
+        local saveFile = path .. '\\' .. fileName
         local config = FileLoad(saveFile)
         if config ~= nil then
             M.SyncNestedFields(config, defaultCfg)
@@ -455,18 +463,18 @@ Config.init = function(M)
     --- @param configName string 配置ID
     M.SaveConfig = function(path, fileName, configName)
         local curConfig = M.Config[configName]
-        local preConfig = M.Config[configName .. "Previous"]
+        local preConfig = M.Config[configName .. 'Previous']
         if curConfig == nil or preConfig == nil then
             return
         end
         if not table.deepcompare(curConfig, preConfig) then
-            local saveFile = path .. "\\" .. fileName
+            local saveFile = path .. '\\' .. fileName
             if (not FolderExists(path)) then
                 FolderCreate(path)
             end
             FileSave(saveFile, curConfig)
-            M.Config[configName .. "Previous"] = table.deepcopy(curConfig)
-            --d("[MuAiCore]存档" .. fileName .. "已更新")
+            M.Config[configName .. 'Previous'] = table.deepcopy(curConfig)
+            --d('[MuAiCore]存档' .. fileName .. '已更新')
         end
     end
     LoadUIConfig(M)

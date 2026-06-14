@@ -86,7 +86,24 @@ local standTemplate = {
             [4] = { isLeft = false, dis = 4.4, dir = math.pi * 17 / 18 },
         }
     },
+    odd_uptime = {
+        -- 奇数,uptime站位，数据由群友提供
+        doing = {  --分摊半径5  钢铁半径5  塔半径4 正逆时针旋转，负顺时针旋转
+            [1] = { isLeft = true, dis = 1, dir = math.pi },  --左分摊 站目标圈上
+            [2] = { isLeft = true, dis = 3.8, dir = 0 },  --左扇形
+            [3] = { isLeft = false, dis = 3.8, dir = 0 },  --右钢铁
+            [4] = { isLeft = false, dis = 3.8, dir = math.pi },  --右分摊
+        },
+        standBy = {
+            [1] = { isLeft = true, dis = 4.4, dir = math.pi },  --左闲人分摊
+            [2] = { isLeft = true, dis = 4.4, dir = 0 },  --左闲人引导扇形
+            [3] = { isLeft = false, dis = 4.4, dir = math.pi },  --右闲人分摊
+            [4] = { isLeft = false, dis = 4.4, dir = math.pi },  --右闲人分摊
+        }
+    },
 }
+
+
 
 ---异三角爆炸位置与三角偏移量 data by String
 local trineOffsets = {
@@ -204,7 +221,11 @@ local calcGuidePos = function(wave)
     local curDoingPos = {}
     local curTemplate
     if wave % 2 ~= 0 then
-        curTemplate = standTemplate.odd
+        if MG.Config.DmuCfg.P2.fixType == 3 then
+            curTemplate = standTemplate.odd_uptime
+        else
+            curTemplate = standTemplate.odd
+        end
     else
         curTemplate = standTemplate.even
     end

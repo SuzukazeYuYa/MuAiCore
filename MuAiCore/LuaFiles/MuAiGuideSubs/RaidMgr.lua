@@ -14,6 +14,7 @@ RaidMgr.init = function(M)
         raidScript = {}
         local folderPath = MuAiGuideRoot .. "RaidScripts"
         local list = FolderList(folderPath)
+        local cnter = 0
         for _, fileName in pairs(list) do
             M.Debug('   加载副本脚本：' .. fileName)
             local filePath = folderPath .. "\\" .. fileName
@@ -30,10 +31,16 @@ RaidMgr.init = function(M)
                     script.Init(M)
                 end
                 M.Debug('   加载副本脚本：' .. fileName .. '成功')
+                cnter = cnter  + 1
             end
         end
         if M.CurRaidScript ~= nil and raidScript[Player.localmapid] ~= nil then
             M.CurRaidScript = raidScript[Player.localmapid]
+        end
+        if cnter == table.size(list) then
+            M.Info('重载副本脚本成功。')
+        else
+            M.Info('重载副本脚本失败，部分脚本未能正确加载。')
         end
     end
     

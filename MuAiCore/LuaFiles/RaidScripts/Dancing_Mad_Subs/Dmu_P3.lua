@@ -18,6 +18,17 @@ local markIndex = {
     [440] = 8,
 }
 
+-- 死认记号模式
+local catchMarkMap
+
+-- 在哪些阶段修妖修正
+local needFixState = {
+    'P3BlackHole2_1',
+    'P3BlackHole2_2',
+    'P3BlackHole3_1',
+    'P3BlackHole3_2',
+}
+
 local Cfg = function()
     return MG.Config.DmuCfg.P3
 end
@@ -156,8 +167,12 @@ local lockFaceCheck = function()
         local curBoss = TensorCore.mGetEntity(bossExDeath.id)
         local curBuff = TensorCore.getBuff(player.id, Data().LockFace.buffType)
         if curBuff ~= nil then
+            local during = 5.5
+            if Cfg().HardLockFace then
+                during = 4.1
+            end
             -- 真空波读条完成时候，buff剩余4秒（>4 <4.5）所以5秒开始进行背对
-            if curBuff.duration < 5.5 and Data().LockFace.enable == false then
+            if curBuff.duration < during and Data().LockFace.enable == false then
                 MG.Debug('P3 一运自动面向开始')
                 local heading
                 if Data().LockFace.buffType == 1602 then
@@ -166,7 +181,12 @@ local lockFaceCheck = function()
                     heading = TensorCore.getHeadingToTarget(player.pos, curBoss.pos)
                 end
                 TensorCore.API.TensorACR.setLockFaceHeading(heading)
-                TensorCore.API.TensorACR.toggleLockFace(true)
+                if Cfg().HardLockFace then
+                    TensorCore.API.TensorACR.setHardLockFace(true)
+                else
+                    TensorCore.API.TensorACR.toggleLockFace(true)
+                end
+
                 Data().LockFace.enable = true
             end
         else
@@ -175,7 +195,11 @@ local lockFaceCheck = function()
                 MG.Debug('P3 一运自动面向结束')
                 Data().LockFace.onDoing = false
                 Data().LockFace.enable = false
-                TensorCore.API.TensorACR.toggleLockFace(false)
+                if Cfg().HardLockFace then
+                    TensorCore.API.TensorACR.setHardLockFace(false)
+                else
+                    TensorCore.API.TensorACR.toggleLockFace(false)
+                end
             end
         end
     end
@@ -218,6 +242,327 @@ local drawThunderIII = function()
     end
 end
 
+local getBuffType = function(player)
+    local buff3004 = TensorCore.getBuff(player.id, 3004)
+    if buff3004 ~= nil then
+        return 3004
+    end
+    local buff3005 = TensorCore.getBuff(player.id, 3005)
+    if buff3005 ~= nil then
+        return 3005
+    end
+    local buff3006 = TensorCore.getBuff(player.id, 3006)
+    if buff3006 ~= nil then
+        return 3006
+    end
+    return 0
+end
+
+-- 根据buff，使用手摇宏标记自己
+local markSelfMacro = function()
+    local player = TensorCore.mGetPlayer()
+    local buffType = getBuffType(player)
+    if buffType == 3004 then
+        SendTextCommand('/mk attack <me>')
+        Data().Mark.SelfType = 3004
+    elseif buffType == 3005 then
+        SendTextCommand('/mk bind <me>')
+        Data().Mark.SelfType = 3005
+    elseif buffType == 3006 then
+        SendTextCommand('/mk stop <me>')
+        Data().Mark.SelfType = 3006
+    end
+end
+
+--- 响亮亮耳光画图
+local drawSlapHappy = function()
+    if not Cfg().draw or not Data().SlapHappy.OnDraw then
+        return
+    end
+    local r3 = 14
+    local r = 10
+    local distance = { r * 1.414, r, r * 1.414, }
+    local curCaster = TensorCore.mGetEntity(Data().SlapHappy.CasterId)
+    local curHeading = curCaster.pos.h
+    local headingTable
+    if Data().SlapHappy.SkillId == 47846 then
+        headingTable = {
+            curHeading - math.pi * 3 / 4,
+            curHeading - math.pi * 1 / 2,
+            curHeading - math.pi * 1 / 4,
+        }
+        local dir = TensorCore.getHeadingToTarget(DM.Center, TensorCore.mGetPlayer().pos)
+        DM.litBlue:addCone(100, 0, 100, 30, math.pi / 3, dir)
+    elseif Data().SlapHappy.SkillId == 47847 then
+        headingTable = {
+            curHeading + math.pi * 3 / 4,
+            curHeading + math.pi * 1 / 2,
+            curHeading + math.pi * 1 / 4,
+        }
+        local curMt = TensorCore.mGetEntity(MG.Party.MT.id)
+        local curH1 = TensorCore.mGetEntity(MG.Party.H1.id)
+        local curD1 = TensorCore.mGetEntity(MG.Party.D1.id)
+        local dirMt = TensorCore.getHeadingToTarget(DM.Center, curMt.pos)
+        local dirH1 = TensorCore.getHeadingToTarget(DM.Center, curH1.pos)
+        local dirD1 = TensorCore.getHeadingToTarget(DM.Center, curD1.pos)
+        DM.blueDrawer:addCone(100, 0, 100, 30, math.pi / 3, dirMt)
+        DM.greenDrawer:addCone(100, 0, 100, 30, math.pi / 3, dirH1)
+        DM.redDrawer:addCone(100, 0, 100, 30, math.pi / 3, dirD1)
+    end
+    for i = 1, 3 do
+        local h = headingTable[i]
+        local dis = distance[i]
+        local pos = TensorCore.getPosInDirection(DM.Center, h, dis)
+        if i == 1 then
+            pos = TensorCore.getPosInDirection(pos, curCaster.pos.h + math.pi, 6)
+        elseif i == 3 then
+            pos = TensorCore.getPosInDirection(pos, curCaster.pos.h, 4)
+        end
+        MG.CreateDrawer(0.7, 0.1, 0):addCircle(pos.x, pos.y, pos.z, r3)
+    end
+    MG.CreateDrawer(0.7, 0.1, 0):addCircle(100, 0, 100, 6)
+    if TimeSince(Data().SlapHappy.Timer) > 9000 then
+        Data().SlapHappy.OnDraw = false
+        Data().SlapHappy.SkillId = 0
+    end
+end
+
+---本色出演得的我画图
+local drawLookUponMe = function()
+    if not Cfg().draw or not Data().LookUponMe.OnDraw then
+        return
+    end
+    local curCaster = TensorCore.mGetEntity(Data().LookUponMe.CasterId)
+    local curHeading = curCaster.pos.h
+    MG.CreateDrawer(1, 0.1, 0):addCenteredRect(100, 0, 100, 40, 16, curHeading)
+    if TimeSince(Data().LookUponMe.Timer) > 5700 then
+        Data().LookUponMe.OnDraw = false
+        Data().LookUponMe.CasterId = 0
+        Data().LookUponMe.Timer = 0
+    end
+end
+
+-- 画卡奥斯诅咒赦令
+local drawDamningEdict = function()
+    if not Cfg().draw or not Data().DamningEdict.OnDraw then
+        return
+    end
+    local curCaster = TensorCore.mGetEntity(bossChaos.id)
+    local curHeading = curCaster.pos.h
+    MG.CreateDrawer(1, 0.5, 0):addRect(curCaster.pos.x, 0, curCaster.pos.z, 40, 40, curHeading)
+    if TimeSince(Data().DamningEdict.Timer) > 5000 then
+        Data().DamningEdict.OnDraw = false
+        Data().DamningEdict.CasterId = 0
+        Data().DamningEdict.Timer = 0
+    end
+end
+
+local getFarestFromChaos = function()
+    local curChaos = TensorCore.mGetEntity(bossChaos.id)
+    local distance = 0
+    local farest = nil
+    for _, member in pairs(MG.Party) do
+        local curMember = TensorCore.mGetEntity(member.id)
+        local dis = TensorCore.getDistance2d(curChaos.pos, curMember.pos)
+        if farest == nil or dis > distance then
+            distance = dis
+            farest = curMember
+        end
+    end
+    return farest
+end
+
+local getEntTethers = function(contentId, tetherType)
+    local allTethers = Argus.getCurrentTethers()
+    if allTethers == nil or table.size(allTethers) == 0 then
+        return nil
+    end
+    local result = {}
+    for sourceId, tethers in pairs(allTethers) do
+        for _, tether in pairs(tethers) do
+            if tetherType == tether.type then
+                local object = TensorCore.mGetEntity(sourceId)
+                if object.contentid == contentId then
+                    table.insert(result, {
+                        sourceid = sourceId,
+                        targetid = tether.targetid,
+                        type = tether.type,
+                        flags = tether.flags
+                    })
+                end
+            end
+        end
+    end
+    return result
+end
+
+-- 绘制黑洞（防撞）
+local drawBlackHole = function()
+    local curWave = Data().BlackHolds.wave
+    if not Cfg().draw or curWave == 0 then
+        return
+    end
+    local endCnt
+    if curWave == 1 or curWave == 4 then
+        endCnt = 1
+    else
+        endCnt = 2
+    end
+    local startState = 'P3BlackHoleAppear' .. tostring(curWave)
+    local endState = 'P3BlackHole' .. tostring(curWave) .. '_' .. tostring(endCnt)
+    if DM.OverState(startState, true) and DM.BeLowState(endState, true) then
+        for _, obj in pairs(Data().BlackHolds.Object[curWave]) do
+            MG.CreateDrawer(1, 0, 0, 0.4, 1):addCircle(obj.pos.x, obj.pos.y, obj.pos.z, 2, true)
+        end
+        local tethers = getEntTethers(8343, 84)
+        if tethers == nil or table.size(tethers) == 0 then
+            return
+        end
+        for _, tether in pairs(tethers) do
+            local object = TensorCore.mGetEntity(tether.sourceid)
+            local target = TensorCore.mGetEntity(tether.targetid)
+            local dir = TensorCore.getHeadingToTarget(object.pos, target.pos)
+            DM.litBlue:addRect(object.pos.x, object.pos.y, object.pos.z, 40, 6, dir)
+        end
+    end
+end
+
+--- 持续查找玩家标记，直到全部找到为止
+local loadMarkPlayer = function()
+    if Data().BlackHolds.allMarkFind
+            or DM.BeLowState('P3BlackHoleStart')
+            or DM.OverState('P3BlackHole4_2')
+    then
+        return
+    end
+    MG.OnCurrentPartyDo(function(job, member)
+        if member.marker ~= nil and member.marker > 0 then
+            Data().BlackHolds.MarkedPlayers[member.marker] = job
+        end
+    end)
+    if table.size(Data().BlackHolds.MarkedPlayers) >= 8 then
+        Data().BlackHolds.allMarkFind = true
+    end
+end
+
+local guideTakeLine = function(curStateGuide, curCnt)
+    local data = Data().BlackHolds
+    -- 当前阶段ID
+    local curState = MG.DancingMad.CurrentState
+    if data.sourceObject[curState] == nil or table.size(data.sourceObject[curState]) < curCnt then
+        --获取场上所有连线
+        local tethers = getEntTethers(8343, 84)
+        if tethers ~= nil and table.size(tethers) >= curCnt then
+            --当前场内线数量保证充足
+            --初始化表格
+            data.sourceObject[curState] = {}
+            -- 获取当前BOSS面向
+            local bigKfk = TensorCore.mGetEntity(Data().SlapHappy.CasterId)
+            -- 实际计算的12点是BOSS面向的反方向
+            local dir = bigKfk.pos.h + math.pi
+            -- 从12点开始正点找线
+            for i = 1, 8 do
+                --当前查找的面向
+                local curDir = MG.SetHeading2Pi(dir - (i - 1) * math.pi / 4)
+                -- 分析场内线情况并且将其按照12点排序，且将线出发点的黑洞缓存下来
+                for _, tether in pairs(tethers) do
+                    local fromObj = TensorCore.mGetEntity(tether.sourceid)
+                    local teDir = TensorCore.getHeadingToTarget(DM.Center, fromObj.pos)
+                    if MG.IsSameDirection(MG.SetHeading2Pi(teDir), curDir, 0.1) then
+                        --如果当前面向近似于黑洞方向，则添加到表格，这样循环过后会生成一个自然有序列
+                        table.insert(data.sourceObject[curState], fromObj)
+                    end
+                end
+            end
+        end
+    else
+        if data.guideData[curState] == nil then
+            data.guideData[curState] = {}
+        end
+        local guideData = {}
+        local takeLineData = {}
+        --要的数据都已经获取到了
+        for i = 1, #curStateGuide do
+            local curMark = curStateGuide[i]
+            local curJob = Data().BlackHolds.MarkedPlayers[curMark]
+            local curSourceObj = data.sourceObject[curState][i]
+            if curJob ~= nil then
+                --如果当前标记的人没有找到，跳过
+                local curPlayer = MG.Party[curJob]
+                local tethers = Argus.getTethersOnEnt(curSourceObj.id)
+                local curTarget
+                if tethers ~= nil then
+                    for _, tether in pairs(tethers) do
+                        if tether.type == 84 then
+                            curTarget = TensorCore.mGetEntity(tether.partnerid)
+                            break
+                        end
+                    end
+                end
+                if curTarget ~= nil then
+                    if curTarget.id == curPlayer.id then
+                        local fromDir = TensorCore.getHeadingToTarget(DM.Center, curSourceObj.pos)
+                        if DM.InState('P3BlackHole4_1') then
+                            local dir = MG.SetHeading2Pi(fromDir)
+                            local bigKfk = TensorCore.mGetEntity(Data().SlapHappy.CasterId)
+                            local front = MG.SetHeading2Pi(bigKfk.pos.h)
+                            local back = MG.SetHeading2Pi(bigKfk.pos.h + math.pi)
+                            local guidePos
+                            if MG.IsSame(dir, front) or MG.IsSame(dir, back) then
+                                guidePos = TensorCore.getPosInDirection(DM.Center, fromDir - math.pi / 4, 19)
+                            else
+                                guidePos = TensorCore.getPosInDirection(curSourceObj.pos, front, 4)
+                            end
+                            guideData[curJob] = guidePos
+                        else
+                            --已经接到了线，那么指路去引导位置
+                            if data.guideData[curState][i] == nil then
+                                local curHeading = fromDir - math.pi * 3 / 4
+                                local finalGuidePos = TensorCore.getPosInDirection(curSourceObj.pos, curHeading, 10)
+                                data.guideData[curState][i] = finalGuidePos
+                            end
+                            guideData[curJob] = data.guideData[curState][i]
+                        end
+                    else
+                        local needFix = false
+                        --修正
+                        for _, stateName in pairs(needFixState) do
+                            if DM.InState(stateName) then
+                                needFix = true
+                                break
+                            end
+                        end
+                        local focusPlayer
+                        if needFix then
+                            local targetMark = catchMarkMap[curMark]
+                            if targetMark == nil then
+                                focusPlayer = curTarget
+                            else
+                                if targetMark == curTarget.marker then
+                                    focusPlayer = curTarget
+                                else
+                                    local targetJob = Data().BlackHolds.MarkedPlayers[targetMark]
+                                    focusPlayer = TensorCore.mGetEntity(MG.Party[targetJob].id)
+                                end
+                            end
+                        else
+                            focusPlayer = curTarget
+                        end
+                        takeLineData[curJob] = { posObj = curSourceObj.pos, posPlayer = focusPlayer.pos, disObj = 4.5, disPlayer = 3, }
+                    end
+                end
+            end
+        end
+        --开始执行绘制：
+        if table.size(guideData) > 0 then
+            MG.FrameMultiD(guideData)
+        end
+        if table.size(takeLineData) then
+            MG.MultiTakeLine(takeLineData)
+        end
+    end
+end
+
 --------------------------------------------- event function ---------------------------------------------
 --- 初始化
 --- @param dm DancingMad
@@ -225,6 +570,12 @@ end
 Dmu_P3.Init = function(dm, m)
     DM = dm
     MG = m
+    catchMarkMap = {
+        [MG.HeadMark.Bind1] = MG.HeadMark.Attack1,
+        [MG.HeadMark.Bind2] = MG.HeadMark.Attack2,
+        [MG.HeadMark.Stop1] = MG.HeadMark.Bind1,
+        [MG.HeadMark.Stop2] = MG.HeadMark.Bind2,
+    }
 end
 
 Dmu_P3.OnEntityChannel = function(entityID, spellID, _)
@@ -235,6 +586,11 @@ Dmu_P3.OnEntityChannel = function(entityID, spellID, _)
             bossExDeath = boss
         elseif boss.contentid == 7691 then
             bossChaos = boss
+        end
+        if DM.OverState('P3UltimaBlaster', true) then
+            for i = 1, 8 do
+                SendTextCommand("/mk clear <" .. i .. ">")
+            end
         end
     elseif spellID == 47869 or spellID == 47870 then
         --经度聚爆 纬度聚爆
@@ -261,6 +617,27 @@ Dmu_P3.OnEntityChannel = function(entityID, spellID, _)
         -- 本影暴碎
         Data().UmbraSmash.Start = true
         Data().UmbraSmash.Timer = Now()
+    elseif spellID == 50545 or spellID == 50546 then
+        --地震，2运开始
+        if DM.BeLowState('P3BlackHoleStart') then
+            DM.ChangeState('P3BlackHoleStart')
+        end
+    elseif spellID == 47847 or spellID == 47846 then
+        -- 响亮亮耳光----打右--------------打左
+        Data().SlapHappy.OnDraw = true
+        Data().SlapHappy.Timer = Now()
+        Data().SlapHappy.CasterId = entityID
+        Data().SlapHappy.SkillId = spellID
+    elseif spellID == 47854 then
+        -- 本色出演的我
+        Data().LookUponMe.OnDraw = true
+        Data().LookUponMe.Timer = Now()
+        Data().LookUponMe.CasterId = entityID
+    elseif spellID == 47873 then
+        Data().DamningEdict.OnDraw = true
+        Data().DamningEdict.Timer = Now()
+    elseif spellID == 47877 then
+        Data().TakeTower.Timer = Now()
     end
 end
 
@@ -273,10 +650,33 @@ Dmu_P3.OnEntityCast = function(entityID, spellID, castPos)
     elseif spellID == 47843 then
         local obj = TensorCore.mGetEntity(entityID)
         table.insert(Data().UltimaBlaster.Lines, obj)
+    elseif spellID == 47868 then
+        local timer = Data().BlackHolds.JumpTimer
+        if timer == 0 or TimeSince(timer) > 2000 then
+            -- 只要触发激光射击，且距离前次被射击超过2秒
+            -- 进入到下一个阶段
+            Data().BlackHolds.JumpTimer = Now()
+            DM.GoNextSate()
+        end
     end
 end
 
 Dmu_P3.OnAOECreate = function(aoeInfo)
+    if aoeInfo.aoeID == 47885 then
+        table.insert(Data().TakeTower.aoeCache, aoeInfo)
+        if table.size(Data().TakeTower.aoeCache) == 8 then
+            DM.ChangeState('P3AoePut1')
+        elseif table.size(Data().TakeTower.aoeCache) == 16 then
+            DM.ChangeState('P3AoePut2')
+        end
+    elseif aoeInfo.aoeID == 47856 then
+        table.insert(Data().TakeTower.castCache, aoeInfo)
+        if table.size(Data().TakeTower.castCache) == 2 then
+            DM.ChangeState('P3Tower1')
+        elseif table.size(Data().TakeTower.castCache) == 4 then
+            DM.ChangeState('P3Tower2')
+        end
+    end
 end
 
 Dmu_P3.OnMarkerAdd = function(entityID, markerID)
@@ -291,6 +691,32 @@ Dmu_P3.OnMarkerAdd = function(entityID, markerID)
             Data().UltimaBlaster .StartTimer = Now()
         end
     end
+    if markerID == 161 and DM.OverState('P3BlackHole4_2', true) then
+        for job, member in pairs(MG.Party) do
+            if entityID == member.id and Data().TakeTower.isDps == nil then
+                local curDir = TensorCore.mGetEntity(Data().SlapHappy.CasterId).pos.h
+                local left = TensorCore.getPosInDirection(DM.Center, curDir - math.pi / 2, 10)
+                local right = TensorCore.getPosInDirection(DM.Center, curDir + math.pi / 2, 10)
+                if Cfg().towerHeading == 2 then
+                    left, right = right, left
+                end
+                local thFirst = { MT = DM.Center, ST = DM.Center, H1 = DM.Center, H2 = DM.Center,
+                                  D1 = left, D3 = left, D2 = right, D4 = right, }
+                local dpsFirst = { MT = left, ST = right, H1 = left, H2 = right,
+                                   D1 = DM.Center, D3 = DM.Center, D2 = DM.Center, D4 = DM.Center, }
+                if MG.IndexOf(MG.JobPosName, job) <= 4 then
+                    Data().TakeTower.isDps = false
+                    Data().TakeTower.Guide1 = thFirst
+                    Data().TakeTower.Guide2 = dpsFirst
+                else
+                    Data().TakeTower.isDps = true
+                    Data().TakeTower.Guide1 = dpsFirst
+                    Data().TakeTower.Guide2 = thFirst
+                end
+                break
+            end
+        end
+    end
 end
 
 Dmu_P3.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
@@ -302,11 +728,37 @@ end
 Dmu_P3.OnMapEffect = function(a1, a2, a3)
 end
 
+Dmu_P3.OnEntityAdd = function(entityID, entityName)
+    local obj = TensorCore.mGetEntity(entityID)
+    if obj == nil or obj.contentid == nil or obj.contentid ~= 8343 then
+        return
+    end
+    local data = Data().BlackHolds
+    table.insert(data.temp, obj)
+    if table.size(data.temp) == 11 then
+        data.wave = data.wave + 1
+        if data.Object[data.wave] == nil then
+            data.Object[data.wave] = data.temp
+        end
+        MG.Info('第' .. data.wave .. '轮黑洞')
+        local goState = 'P3BlackHoleAppear' .. tostring(data.wave)
+        if DM.BeLowState(goState) then
+            DM.ChangeState(goState)
+        end
+        data.temp = {}
+    end
+end
+
 Dmu_P3.Update = function()
     getBoss()
     drawImplosion()
     lockFaceCheck()
     drawThunderIII()
+    drawSlapHappy()
+    drawLookUponMe()
+    drawDamningEdict()
+    drawBlackHole()
+    loadMarkPlayer()
     if Data().Elements.bigCircleTimer > 0 then
         if TimeSince(Data().Elements.bigCircleTimer) < 8500 then
             local boss = TensorCore.mGetEntity(bossExDeath.id)
@@ -380,7 +832,7 @@ Dmu_P3.Update = function()
                     end
                 end
                 table.sort(Data().Elements.FireBuff, function(a, b)
-                    return MG.IndexOf(MG.JobPosName, a) < MG.IndexOf(MG.JobPosName, a)
+                    return MG.IndexOf(Cfg().fireBuffOrder, a) < MG.IndexOf(Cfg().fireBuffOrder, a)
                 end)
                 Data().Elements.Guide2[Data().Elements.FireBuff[1]] = dis2
                 Data().Elements.Guide2[Data().Elements.FireBuff[2]] = dis1
@@ -472,32 +924,22 @@ Dmu_P3.Update = function()
         end
         --绘制超级跳范围
         if Cfg().draw then
-            if not Data().UmbraSmash.Start then
-                local curChaos = TensorCore.mGetEntity(bossChaos.id)
-                local distance = 0
-                local farest = nil
-                for job, member in pairs(MG.Party) do
-                    local curMember = TensorCore.mGetEntity(member.id)
-                    local dis = TensorCore.getDistance2d(curChaos.pos, curMember.pos)
-                    if farest == nil or dis > distance then
-                        distance = dis
-                        farest = curMember
-                    end
-                end
+            if not Data().UmbraSmash.Start or TimeSince(Data().UmbraSmash.Timer) < 30 then
+                local farest = getFarestFromChaos()
                 if farest ~= nil then
                     if Data().UmbraSmash.LeadPlayer == nil then
                         Data().UmbraSmash.LeadPlayer = farest
                     end
-                    DM.redDrawer:addCircle(farest.pos.x, farest.pos.y, farest.pos.z, 17)
+                    DM.redDrawer:addCircle(farest.pos.x, farest.pos.y, farest.pos.z, 18)
                 end
-            elseif Data().UmbraSmash.Timer ~= 0 then
-                if Data().UmbraSmash.drawPos == nil then
-                    local curLeadPlayer = TensorCore.mGetEntity(Data().UmbraSmash.LeadPlayer.id)
-                    Data().UmbraSmash.drawPos = curLeadPlayer.pos
-                end
+            else
                 if TimeSince(Data().UmbraSmash.Timer) < 4700 then
+                    if Data().UmbraSmash.drawPos == nil then
+                        local farest = getFarestFromChaos()
+                        Data().UmbraSmash.drawPos = farest.pos
+                    end
                     local pos = Data().UmbraSmash.drawPos
-                    DM.redDrawer:addCircle(pos.x, pos.y, pos.z, 17)
+                    DM.redDrawer:addCircle(pos.x, pos.y, pos.z, 18)
                 end
             end
         end
@@ -505,7 +947,7 @@ Dmu_P3.Update = function()
 
     if DM.InState('P3UltimaBlaster') then
         if Data().UltimaBlaster.StartTimer ~= 0 and TimeSince(Data().UltimaBlaster.StartTimer) > 14000 then
-            DM.ChangeState('P3BlackHoleStart')
+            DM.ChangeState('P3BlackHolePre')
         end
         if Data().UltimaBlaster.GuideData == nil or table.size(Data().UltimaBlaster.GuideData) < 8 then
             if table.size(Data().UltimaBlaster.Lines) >= 2 and table.size(Data().UltimaBlaster.Markers) >= 8 then
@@ -545,8 +987,133 @@ Dmu_P3.Update = function()
                     local curDrawData = Data().UltimaBlaster.DrawData[curIndex]
                     local curMember = TensorCore.mGetEntity(member.id)
                     local dir = TensorCore.getHeadingToTarget(curDrawData.from, curMember.pos)
-                    MG.CreateDrawer(0, 0.3, 0.5):addRect(curDrawData.from.x, curDrawData.from.y, curDrawData.from.z, 40, 10, dir)
+                    DM.litBlue:addRect(curDrawData.from.x, curDrawData.from.y, curDrawData.from.z, 40, 10, dir)
                 end
+            end
+        end
+    end
+
+    if DM.InState('P3BlackHoleStart') then
+        if Cfg().markType ~= 1 and not Data().Mark.Finish then
+            if Cfg().markType == 2 then
+                -- 开始检查Buff
+                if Cfg().delayMark then
+                    local anyHasMark = false
+                    MG.OnCurrentPartyDo(function(job, member)
+                        if member.marker ~= nil and member.marker > 0 then
+                            anyHasMark = true
+                            return true
+                        end
+                    end)
+                    if anyHasMark then
+                        markSelfMacro()
+                    end
+                else
+                    markSelfMacro()
+                end
+                if Data().Mark.SelfType ~= 0 then
+                    Data().Mark.Finish = true
+                end
+            elseif Cfg().markType == 3 then
+                local buffMap = {}
+                -- 开始检查全队buff
+                for job, member in pairs(MG.Party) do
+                    local buffType = getBuffType(member)
+                    if buffType ~= 0 then
+                        buffMap[job] = buffType
+                    end
+                end
+                -- 全队都有buff
+                if table.size(buffMap) >= 8 then
+                    Data().Mark.BuffTypeMap = buffMap
+                    for i = 1, #Cfg().markOrder do
+                        local job = Cfg().markOrder[i]
+                        local curMember = MG.Party[job]
+                        local buffType = buffMap[job]
+                        local curMarkId
+                        if buffType == 3004 then
+                            curMarkId = MG.HeadMark.Attack1 + Data().Mark.MarkCnt[buffType]
+                        elseif buffType == 3005 then
+                            curMarkId = MG.HeadMark.Bind1 + Data().Mark.MarkCnt[buffType]
+                        elseif buffType == 3006 then
+                            curMarkId = MG.HeadMark.Stop1 + Data().Mark.MarkCnt[buffType]
+                        end
+                        MG.MarkParty(curMarkId, curMember.id)
+                        Data().Mark.MarkCnt[buffType] = Data().Mark.MarkCnt[buffType] + 1
+                        if MG.IsVideo() then
+                            --如果回放，直接输出出来方便debug
+                            MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMarkId) .. '”标记。')
+                        end
+                    end
+                    Data().Mark.Finish = true
+                end
+            end
+        end
+    end
+
+    if Cfg().guide then
+        --第一轮黑洞
+        if DM.InState('P3BlackHoleAppear1') then
+            guideTakeLine({ MG.HeadMark.Attack1 }, 1)
+        end
+        if DM.InState('P3BlackHole1_1') then
+            guideTakeLine({ MG.HeadMark.Attack1, MG.HeadMark.Attack2 }, 2)
+        end
+
+        --第二轮黑洞
+        if DM.InState('P3BlackHoleAppear2') then
+            guideTakeLine({ MG.HeadMark.Attack1, MG.HeadMark.Attack2, MG.HeadMark.Attack3 }, 3)
+        end
+        if DM.InState('P3BlackHole2_1') then
+            guideTakeLine({ MG.HeadMark.Bind1, MG.HeadMark.Attack2, MG.HeadMark.Attack3 }, 3)
+        end
+        if DM.InState('P3BlackHole2_2') then
+            guideTakeLine({ MG.HeadMark.Bind1, MG.HeadMark.Bind2, MG.HeadMark.Attack3 }, 3)
+        end
+
+        --第三轮黑洞
+        if DM.InState('P3BlackHoleAppear3') then
+            guideTakeLine({ MG.HeadMark.Bind1, MG.HeadMark.Bind2, MG.HeadMark.Bind3 }, 3)
+        end
+        if DM.InState('P3BlackHole3_1') then
+            guideTakeLine({ MG.HeadMark.Stop1, MG.HeadMark.Bind2, MG.HeadMark.Bind3 }, 3)
+        end
+        if DM.InState('P3BlackHole3_2') then
+            guideTakeLine({ MG.HeadMark.Stop1, MG.HeadMark.Stop2, MG.HeadMark.Bind3 }, 3)
+        end
+
+        --第四轮黑洞
+        if DM.InState('P3BlackHoleAppear4') then
+            guideTakeLine({ MG.HeadMark.Stop1, MG.HeadMark.Stop2 }, 2)
+        end
+        if DM.InState('P3BlackHole4_1') then
+            guideTakeLine({ MG.HeadMark.Stop2 }, 1)
+        end
+        if DM.InState('P3AoePut2') and Data().TakeTower.Guide1 ~= nil then
+            MG.FrameMultiD(Data().TakeTower.Guide1)
+        end
+        if DM.InState('P3Tower1') and Data().TakeTower.Guide2 ~= nil then
+            MG.FrameMultiD(Data().TakeTower.Guide2)
+        end
+        if DM.InState('P3Tower2') then
+            local isFinish = false
+            if Data().TakeTower.Timer ~= 0 and TimeSince(Data().TakeTower.Timer) > 800 then
+                for job, member in pairs(MG.Party) do
+                    if Data().TakeTower.isDps == true then
+                        local curMember = TensorCore.mGetEntity(member.id)
+                        if MG.IndexOf(MG.JobPosName, job) <= 4 then
+                            isFinish = true
+                            DM.redDrawer:addTimedCircle(4000, curMember.pos.x, curMember.pos.y, curMember.pos.z, 6)
+                        end
+                    else
+                        local curMember = TensorCore.mGetEntity(member.id)
+                        if MG.IndexOf(MG.JobPosName, job) > 4 then
+                            isFinish = true
+                            DM.redDrawer:addTimedCircle(4000, curMember.pos.x, curMember.pos.y, curMember.pos.z, 6)
+                        end
+                    end
+                end
+                DM.ChangeState('P3End')
             end
         end
     end

@@ -86,5 +86,8 @@ MultiGuide.init = function(M)
             ['D4'] = { r = 1.0, g = 0.3, b = 0.7, a = 0.5 }
         }
     end
+    M.MultiGuide.Count = function()
+        return table.size(playerData)
+    end
 end
 return MultiGuide

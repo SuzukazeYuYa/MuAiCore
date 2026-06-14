@@ -14,6 +14,7 @@ local register = {
     OnMapEffect = false,
     OnAddEntityVFX = false,
     OnTetherChange = false,
+    OnEntityAdd = false,
 }
 
 local registerOK = false
@@ -27,25 +28,26 @@ ArgusEvents.init = function(M)
         if M.CurRaidScript ~= nil and M.CurRaidScript.OnEntityChannel ~= nil then
             M.CurRaidScript.OnEntityChannel(entityID, spellID, targetID, channelTimeMax)
         end
-
-        local ent = TensorCore.mGetEntity(entityID)
-        if ent == nil or ent.type == 1 then
-            return
-        end
-        if M.Develop.ShowSkillId then
-            AnyoneCore.addTimedWorldTextOnEnt(
-                    M.Develop.ShowTime * 1000,
-                    'Spell:' .. tostring(spellID),
-                    entityID,
-                    GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
-                    true,
-                    1,
-                    4
-            )
-        end
-        if M.Develop.PrintChannelInfo then
-            M.Info('[' .. infoTime()
-                    .. ']开始读条，实体名称：' .. ent.name .. ', 技能ID：' .. spellID .. '，判定时间：' .. channelTimeMax)
+        if M.Develop.ShowSkillId or M.Develop.PrintChannelInfo then
+            if M.Develop.ShowSkillId then
+                local ent = TensorCore.mGetEntity(entityID)
+                if ent == nil or ent.type == 1 then
+                    return
+                end
+                AnyoneCore.addTimedWorldTextOnEnt(
+                        M.Develop.ShowTime * 1000,
+                        'Spell:' .. tostring(spellID),
+                        entityID,
+                        GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
+                        true,
+                        1,
+                        4
+                )
+            end
+            if M.Develop.PrintChannelInfo then
+                M.Info('[' .. infoTime()
+                        .. ']开始读条，实体名称：' .. ent.name .. ', 技能ID：' .. spellID .. '，判定时间：' .. channelTimeMax)
+            end
         end
     end
 
@@ -165,6 +167,12 @@ ArgusEvents.init = function(M)
         end
     end
 
+    local OnEntityAdd = function(entityID, entityName)
+        if M.CurRaidScript ~= nil and M.CurRaidScript.OnEntityAdd ~= nil then
+            M.CurRaidScript.OnEntityAdd(entityID, entityName)
+        end
+    end
+
     --- 安全注册阿古斯（防止加载失败导致报错）
     local registerArgus = function()
         if Argus == nil then
@@ -204,6 +212,11 @@ ArgusEvents.init = function(M)
         if Argus.registerOnTetherChange ~= nil and not register['OnTetherChange'] then
             Argus.registerOnTetherChange(OnTetherChange)
             register['OnTetherChange'] = true
+        end
+
+        if Argus.registerOnEntityAddFunc ~= nil and not register['OnEntityAdd'] then
+            Argus.registerOnEntityAddFunc(OnEntityAdd)
+            register['OnEntityAdd'] = true
         end
     end
 
