@@ -451,7 +451,7 @@ DM.ChangeState = function(stateName)
         MG.Debug("[错误]切换状态失败，状态不存在：" .. stateName)
         MG.Debug("调用堆栈：" .. debug.traceback()) -- 打印完整调用栈
         -- 直接抛出 Lua 异常，强制中断，避免继续执行
-        error("DM.ChangeState 禁止传入 nil 状态！")
+        error("ChangeState 禁止传入 nil 状态！")
         return
     end
     MG.DancingMad.CurrentState = state

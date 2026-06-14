@@ -353,48 +353,57 @@ Drawers.init = function(M)
     ---多重指路拉线
     M.MultiTakeLine = function(guideData, size)
         for job, multiData in pairs(M.MultiGuide.players) do
-            local data = guideData[job]
-            if data ~= nil then
-                local color = data.color or { r = 1, g = 0, b = 0 }
-                local drawer = Argus2.ShapeDrawer:new(
-                        (GUI:ColorConvertFloat4ToU32(0, 0, 0, 0)),
-                        (GUI:ColorConvertFloat4ToU32(0, 0, 0, 0)),
-                        (GUI:ColorConvertFloat4ToU32(0, 0, 0, 0)),
-                        (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 1)), 3)
-                drawer:addLine(data.posPlayer.x, data.posPlayer.y, data.posPlayer.z, data.posObj.x, data.posObj.y, data.posObj.z, 4, 0)
-                local playerPos = TensorCore.mGetEntity(multiData.obj.id).pos
-                local isInLine, nearestPos, isClosePlayer = getLinePos(data.posPlayer, data.posObj, playerPos)
-                local guidePos
-                if isInLine then
-                    guidePos = nearestPos
-                else
-                    local heading
-                    local length = TensorCore.getDistance2d(data.posPlayer, data.posObj)
-                    if isClosePlayer then
-                        --计算出的位置是否更贴近玩家 
-                        local dis = data.disPlayer or 2
-                        if length < dis then
-                            guidePos = M.GetMidPos(data.posPlayer, data.posObj)
+            local curJobData = guideData[job]
+            if curJobData ~= nil and table.size(curJobData) > 0 then
+                for i = 1, #curJobData do
+                    local data = curJobData[i]
+                    local color = data.color or { r = 1, g = 0, b = 0 }
+                    local drawer = Argus2.ShapeDrawer:new(
+                            (GUI:ColorConvertFloat4ToU32(0, 0, 0, 0)),
+                            (GUI:ColorConvertFloat4ToU32(0, 0, 0, 0)),
+                            (GUI:ColorConvertFloat4ToU32(0, 0, 0, 0)),
+                            (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 1)), 3)
+                    drawer:addLine(data.posPlayer.x, data.posPlayer.y, data.posPlayer.z, data.posObj.x, data.posObj.y, data.posObj.z, 4, 0)
+                    local playerPos = TensorCore.mGetEntity(multiData.obj.id).pos
+                    local isInLine, nearestPos, isClosePlayer = getLinePos(data.posPlayer, data.posObj, playerPos)
+                    local guidePos
+                    local disPlayer = data.disPlayer or 2
+                    local disObj = data.disObj or 2
+                    if isInLine then
+                        -- nearestPos 进行修正
+                        if TensorCore.getDistance2d(nearestPos, data.posObj) < disObj then
+                            --可能处在危险区
+                            local dir = TensorCore.getHeadingToTarget(data.posObj, data.posPlayer)
+                            guidePos = TensorCore.getPosInDirection(data.posObj, dir, disObj)
                         else
-                            heading = TensorCore.getHeadingToTarget(data.posPlayer, data.posObj)
-                            guidePos = TensorCore.getPosInDirection(data.posPlayer, heading, data.disPlayer)
+                            guidePos = nearestPos
                         end
                     else
-                        local dis = data.disObj or 2
-                        if length < dis then
-                            guidePos = M.GetMidPos(data.posPlayer, data.posObj)
+                        local heading
+                        local length = TensorCore.getDistance2d(data.posPlayer, data.posObj)
+                        if isClosePlayer then
+                            --计算出的位置是否更贴近玩家
+                            if length < disPlayer then
+                                guidePos = M.GetMidPos(data.posPlayer, data.posObj)
+                            else
+                                heading = TensorCore.getHeadingToTarget(data.posPlayer, data.posObj)
+                                guidePos = TensorCore.getPosInDirection(data.posPlayer, heading, disPlayer)
+                            end
                         else
-                            heading = TensorCore.getHeadingToTarget(data.posObj, data.posPlayer)
-                            guidePos = TensorCore.getPosInDirection(data.posObj, heading, dis)
+                            if length < disObj then
+                                guidePos = M.GetMidPos(data.posPlayer, data.posObj)
+                            else
+                                heading = TensorCore.getHeadingToTarget(data.posObj, data.posPlayer)
+                                guidePos = TensorCore.getPosInDirection(data.posObj, heading, disObj)
+                            end
                         end
                     end
+                    local guideColor = multiData.color
+                    commonFrameDirect(guidePos.x, guidePos.z, playerPos, guideColor, size)
                 end
-                local guideColor = multiData.color
-                commonFrameDirect(guidePos.x, guidePos.z, playerPos, guideColor, size)
             end
         end
     end
-
     M.DrawTargetPos = function()
         local target = TensorCore.mGetTarget()
         if not M.Config.Main.ShowTargetPos

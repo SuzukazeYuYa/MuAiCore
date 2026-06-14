@@ -169,7 +169,7 @@ local lockFaceCheck = function()
         if curBuff ~= nil then
             local during = 5.5
             if Cfg().HardLockFace then
-                during = 4.1
+                during = 4.5
             end
             -- 真空波读条完成时候，buff剩余4秒（>4 <4.5）所以5秒开始进行背对
             if curBuff.duration < during and Data().LockFace.enable == false then
@@ -183,10 +183,8 @@ local lockFaceCheck = function()
                 TensorCore.API.TensorACR.setLockFaceHeading(heading)
                 if Cfg().HardLockFace then
                     TensorCore.API.TensorACR.setHardLockFace(true)
-                else
-                    TensorCore.API.TensorACR.toggleLockFace(true)
                 end
-
+                TensorCore.API.TensorACR.toggleLockFace(true)
                 Data().LockFace.enable = true
             end
         else
@@ -197,9 +195,8 @@ local lockFaceCheck = function()
                 Data().LockFace.enable = false
                 if Cfg().HardLockFace then
                     TensorCore.API.TensorACR.setHardLockFace(false)
-                else
-                    TensorCore.API.TensorACR.toggleLockFace(false)
                 end
+                TensorCore.API.TensorACR.toggleLockFace(false)
             end
         end
     end
@@ -445,7 +442,7 @@ local loadMarkPlayer = function()
     end
 end
 
-local guideTakeLine = function(curStateGuide, curCnt)
+local guideTakeLine = function(curStateGuide, curCnt, isDouble)
     local data = Data().BlackHolds
     -- 当前阶段ID
     local curState = MG.DancingMad.CurrentState
@@ -480,6 +477,8 @@ local guideTakeLine = function(curStateGuide, curCnt)
             data.guideData[curState] = {}
         end
         local guideData = {}
+        local doubleLinePos = {}
+        local doubleJob = nil
         local takeLineData = {}
         --要的数据都已经获取到了
         for i = 1, #curStateGuide do
@@ -488,7 +487,7 @@ local guideTakeLine = function(curStateGuide, curCnt)
             local curSourceObj = data.sourceObject[curState][i]
             if curJob ~= nil then
                 --如果当前标记的人没有找到，跳过
-                local curPlayer = MG.Party[curJob]
+                local curPlayer = TensorCore.mGetEntity(MG.Party[curJob].id)
                 local tethers = Argus.getTethersOnEnt(curSourceObj.id)
                 local curTarget
                 if tethers ~= nil then
@@ -513,7 +512,12 @@ local guideTakeLine = function(curStateGuide, curCnt)
                             else
                                 guidePos = TensorCore.getPosInDirection(curSourceObj.pos, front, 4)
                             end
-                            guideData[curJob] = guidePos
+                            if isDouble then
+                                table.insert(doubleLinePos, curSourceObj.pos)
+                                doubleJob = curJob
+                            else
+                                guideData[curJob] = guidePos
+                            end
                         else
                             --已经接到了线，那么指路去引导位置
                             if data.guideData[curState][i] == nil then
@@ -548,16 +552,46 @@ local guideTakeLine = function(curStateGuide, curCnt)
                         else
                             focusPlayer = curTarget
                         end
-                        takeLineData[curJob] = { posObj = curSourceObj.pos, posPlayer = focusPlayer.pos, disObj = 4.5, disPlayer = 3, }
+                        -- takeLineData[curJob] = { posObj = curSourceObj.pos, posPlayer = focusPlayer.pos, disObj = 4.5, disPlayer = 3, }
+                        if takeLineData[curJob] == nil then
+                            takeLineData[curJob] = {}
+                        end
+                        table.insert(takeLineData[curJob], { posObj = curSourceObj.pos, posPlayer = focusPlayer.pos, disObj = 3, disPlayer = 2 })
                     end
                 end
             end
         end
         --开始执行绘制：
         if table.size(guideData) > 0 then
-            MG.FrameMultiD(guideData)
+            if isDouble then
+                local doubleData = {}
+                if doubleJob ~= nil and table.size(doubleLinePos) > 1 then
+                    local mid = MG.GetMidPos(doubleLinePos[1], doubleLinePos[2])
+                    if TensorCore.getDistance2d(DM.Center, mid) < 2 then
+                        --倒霉孩子 打场中了
+                        local bigKfk = TensorCore.mGetEntity(Data().SlapHappy.CasterId)
+                        local dir1 = bigKfk.h + math.pi / 2
+                        local dir2 = bigKfk.h - math.pi / 2
+                        local pos1 = TensorCore.getPosInDirection(DM.Center, dir1, 10)
+                        local pos2 = TensorCore.getPosInDirection(DM.Center, dir2, 10)
+                        local curPlayer = TensorCore.mGetEntity(MG.Party[doubleJob].id)
+                        local dis1 = TensorCore.getDistance2d(curPlayer.pos, pos1)
+                        local dis2 = TensorCore.getDistance2d(curPlayer.pos, pos2)
+                        if dis1 < dis2 then
+                            doubleData[doubleJob] = pos1
+                        else
+                            doubleData[doubleJob] = pos2
+                        end
+                    else
+                        doubleData[doubleJob] = mid
+                    end
+                end
+                MG.FrameMultiD(doubleData)
+            else
+                MG.FrameMultiD(guideData)
+            end
         end
-        if table.size(takeLineData) then
+        if table.size(takeLineData) > 0 then
             MG.MultiTakeLine(takeLineData)
         end
     end
@@ -719,14 +753,14 @@ Dmu_P3.OnMarkerAdd = function(entityID, markerID)
     end
 end
 
-Dmu_P3.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
-end
-
-Dmu_P3.OnAddEntityVFX = function(vfxID)
-end
-
-Dmu_P3.OnMapEffect = function(a1, a2, a3)
-end
+--Dmu_P3.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
+--end
+--
+--Dmu_P3.OnAddEntityVFX = function(vfxID)
+--end
+--
+--Dmu_P3.OnMapEffect = function(a1, a2, a3)
+--end
 
 Dmu_P3.OnEntityAdd = function(entityID, entityName)
     local obj = TensorCore.mGetEntity(entityID)
@@ -1053,11 +1087,20 @@ Dmu_P3.Update = function()
 
     if Cfg().guide then
         --第一轮黑洞
-        if DM.InState('P3BlackHoleAppear1') then
-            guideTakeLine({ MG.HeadMark.Attack1 }, 1)
-        end
-        if DM.InState('P3BlackHole1_1') then
-            guideTakeLine({ MG.HeadMark.Attack1, MG.HeadMark.Attack2 }, 2)
+        if Cfg().takeLineAttack12 then
+            if DM.InState('P3BlackHoleAppear1') then
+                guideTakeLine({ MG.HeadMark.Attack2 }, 1)
+            end
+            if DM.InState('P3BlackHole1_1') then
+                guideTakeLine({ MG.HeadMark.Attack1, MG.HeadMark.Attack1 }, 2, true)
+            end
+        else
+            if DM.InState('P3BlackHoleAppear1') then
+                guideTakeLine({ MG.HeadMark.Attack1 }, 1)
+            end
+            if DM.InState('P3BlackHole1_1') then
+                guideTakeLine({ MG.HeadMark.Attack1, MG.HeadMark.Attack2 }, 2)
+            end
         end
 
         --第二轮黑洞
@@ -1082,13 +1125,24 @@ Dmu_P3.Update = function()
             guideTakeLine({ MG.HeadMark.Stop1, MG.HeadMark.Stop2, MG.HeadMark.Bind3 }, 3)
         end
 
-        --第四轮黑洞
-        if DM.InState('P3BlackHoleAppear4') then
-            guideTakeLine({ MG.HeadMark.Stop1, MG.HeadMark.Stop2 }, 2)
+        if Cfg().takeLineStop22 then
+            --第四轮黑洞
+            if DM.InState('P3BlackHoleAppear4') then
+                guideTakeLine({ MG.HeadMark.Stop2, MG.HeadMark.Stop2 }, 2, true)
+            end
+            if DM.InState('P3BlackHole4_1') then
+                guideTakeLine({ MG.HeadMark.Stop1 }, 1)
+            end
+        else
+            --第四轮黑洞
+            if DM.InState('P3BlackHoleAppear4') then
+                guideTakeLine({ MG.HeadMark.Stop1, MG.HeadMark.Stop2 }, 2)
+            end
+            if DM.InState('P3BlackHole4_1') then
+                guideTakeLine({ MG.HeadMark.Stop2 }, 1)
+            end
         end
-        if DM.InState('P3BlackHole4_1') then
-            guideTakeLine({ MG.HeadMark.Stop2 }, 1)
-        end
+
         if DM.InState('P3AoePut2') and Data().TakeTower.Guide1 ~= nil then
             MG.FrameMultiD(Data().TakeTower.Guide1)
         end

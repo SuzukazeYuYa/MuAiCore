@@ -338,6 +338,8 @@ Config.init = function(M)
                 superJump = 1,
                 -- 标记类型，1 关闭； 2  标记自己；  3 标记全队;
                 markType = 1,
+                takeLineAttack12 = false,
+                takeLineStop22 = false,
                 markOrder = { 'D1', 'D2', 'D3', 'D4', 'MT', 'ST', 'H2', 'H1' },
                 delayMark = true,
                 -- 踩塔12点

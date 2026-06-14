@@ -176,7 +176,7 @@ DancingMadUI.draw = function()
                 GUI:SameLine(0, 13)
                 M.Config.DmuCfg.P3.HardLockFace = GUI:Checkbox('使用更严格的硬锁定##HardLockFace', M.Config.DmuCfg.P3.HardLockFace)
                 if GUI:IsItemHovered() then
-                    GUI:SetTooltip('开启后会完全禁止可能会改变面向的事，\n约等于停手，请谨慎使用')
+                    GUI:SetTooltip('开启后会完全禁止可能会改变面向的事, \n约等于停手, 请谨慎使用')
                 end
             end  
             GUI:Dummy(0, 0)
@@ -188,6 +188,17 @@ DancingMadUI.draw = function()
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:Text(' 以巨大凯夫卡为12点顺时针找线')
+            GUI:Dummy(20, 0)
+            GUI:SameLine(0, 0)
+            M.Config.DmuCfg.P3.takeLineAttack12 = GUI:Checkbox('攻击1接两根##takeLineAttack12', M.Config.DmuCfg.P3.takeLineAttack12)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('在第1波中, 先由攻击2接第一根, 然后由攻击1同时接后面两根')
+            end
+            GUI:SameLine(0, 18)
+            M.Config.DmuCfg.P3.takeLineStop22 = GUI:Checkbox('禁止2接两根##autoLookAt', M.Config.DmuCfg.P3.takeLineStop22)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('在第4波中, 先由禁止2接两根, 然后由禁止1接最后一根')
+            end
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:AlignFirstTextHeightToWidgets()
