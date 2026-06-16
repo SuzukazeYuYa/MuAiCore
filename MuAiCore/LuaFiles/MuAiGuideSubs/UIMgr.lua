@@ -66,11 +66,13 @@ UIMgr.init = function(M)
 
     --- 显示消息弹窗
     ---@param type number 弹窗类型: 1.更新,2.确认取消, 3.单确认
-    M.ShowMsgUI = function(type, msgTbl, onOKClick, onCancelClick)
+    M.ShowMsgUI = function(type, msgTbl, onOKClick, onCancelClick, okText, cancelText)
         M.MsgUI.Type = type
         M.MsgUI.MsgTable = msgTbl
         M.MsgUI.OnOkClick = onOKClick
         M.MsgUI.OnCancelClick = onCancelClick
+        M.MsgUI.OkText = okText
+        M.MsgUI.CancelText = cancelText
         M.MsgUI.open = true
     end
 

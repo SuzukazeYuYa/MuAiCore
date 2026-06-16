@@ -18,9 +18,7 @@ local register = {
 }
 
 local registerOK = false
-local infoTime = function()
-    return string.format('%.3f', TensorReactions_CurrentCombatTimer)
-end
+
 ---@param M MuAiGuide
 ArgusEvents.init = function(M)
     --- 开始读条事件
@@ -29,11 +27,11 @@ ArgusEvents.init = function(M)
             M.CurRaidScript.OnEntityChannel(entityID, spellID, targetID, channelTimeMax)
         end
         if M.Develop.ShowSkillId or M.Develop.PrintChannelInfo then
+            local entity = TensorCore.mGetEntity(entityID)
+            if entity == nil or entity.type == 1 then
+                return
+            end
             if M.Develop.ShowSkillId then
-                local ent = TensorCore.mGetEntity(entityID)
-                if ent == nil or ent.type == 1 then
-                    return
-                end
                 AnyoneCore.addTimedWorldTextOnEnt(
                         M.Develop.ShowTime * 1000,
                         'Spell:' .. tostring(spellID),
@@ -45,8 +43,8 @@ ArgusEvents.init = function(M)
                 )
             end
             if M.Develop.PrintChannelInfo then
-                M.Info('[' .. infoTime()
-                        .. ']开始读条，实体名称：' .. ent.name .. ', 技能ID：' .. spellID .. '，判定时间：' .. channelTimeMax)
+                M.Info('[' .. M.InfoTime()
+                        .. ']开始读条，实体名称：' .. entity.name .. ', 技能ID：' .. spellID .. '，判定时间：' .. channelTimeMax)
             end
         end
     end
@@ -80,7 +78,7 @@ ArgusEvents.init = function(M)
             )
         end
         if M.Develop.PrintMarkId then
-            M.Info('[' .. infoTime()
+            M.Info('[' .. M.InfoTime()
                     .. ']添加标记，实体名称：' .. ent.name .. ', 标记ID：' .. markerID .. '。')
         end
 
@@ -106,7 +104,7 @@ ArgusEvents.init = function(M)
                     return
                 end
             end
-            M.Info('[' .. infoTime()
+            M.Info('[' .. M.InfoTime()
                     .. ']AOE生成，名称：' .. aoeInfo.aoeName
                     .. ', ID：' .. aoeInfo.aoeID
                     .. '，类型：' .. aoeInfo.aoeCastType
@@ -122,7 +120,7 @@ ArgusEvents.init = function(M)
             M.CurRaidScript.OnEventObjectScriptFunc(entityID, a1, a2, a3)
         end
         if M.Develop.EventObjectScript then
-            M.Info('[' .. infoTime() .. ']OnEventObjectScriptFunc: |' .. entityID .. '| ' .. a1 .. '|' .. a2 .. '|' .. a3 .. '|。')
+            M.Info('[' .. M.InfoTime() .. ']OnEventObjectScriptFunc: |' .. entityID .. '| ' .. a1 .. '|' .. a2 .. '|' .. a3 .. '|。')
         end
     end
 
@@ -131,7 +129,7 @@ ArgusEvents.init = function(M)
             M.CurRaidScript.OnMapEffect(a1, a2, a3)
         end
         if M.Develop.PrintMapEffect then
-            M.Info('[' .. infoTime()
+            M.Info('[' .. M.InfoTime()
                     .. ']OnMapEffect: |' .. a1 .. '|' .. a2 .. '|' .. a3 .. '|。')
         end
     end
@@ -150,7 +148,7 @@ ArgusEvents.init = function(M)
                     return
                 end
             end
-            M.Info('[' .. infoTime()
+            M.Info('[' .. M.InfoTime()
                     .. ']' .. ent.name .. 'AddVFX，vfxID：' .. vfxID .. '，vfxName：' .. vfxName
                     .. '，Other：|' .. primaryEntityID
                     .. '|' .. secondaryEntityID
@@ -219,7 +217,7 @@ ArgusEvents.init = function(M)
             register['OnEntityAdd'] = true
         end
     end
-
+    
     M.CheckArgusRegister = function()
         if registerOK then
             return

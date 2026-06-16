@@ -32,10 +32,12 @@ MsgUI.draw = function()
         GUI:Dummy(0, lineSpace)
         GUI:Separator()
         GUI:Dummy(0, 1)
+        local okText =  M.MsgUI.OkText or '确认'
+        local cancelText =  M.MsgUI.CancelText or '取消'
         if M.MsgUI.Type == 1 then
             GUI:Dummy(30, 0)
             GUI:SameLine()
-            GUI:Button('确认', 100, 25)
+            GUI:Button(okText, 100, 25)
             if GUI:IsItemClicked(0) then
                 M.MsgUI.open = false
                 if M.MsgUI.OnOkClick ~= nil then
@@ -45,7 +47,7 @@ MsgUI.draw = function()
             GUI:SameLine(0, 22)
             GUI:Dummy(35, 25)
             GUI:SameLine()
-            GUI:Button('取消', 100, 25)
+            GUI:Button(cancelText, 100, 25)
             if GUI:IsItemClicked(0) then
                 M.MsgUI.open = false
                 if M.MsgUI.OnCancelClick ~= nil then
@@ -63,7 +65,7 @@ MsgUI.draw = function()
             GUI:SameLine(0, 22)
             GUI:Dummy(35, 25)
             GUI:SameLine()
-            GUI:Button('取消', 100, 25)
+            GUI:Button(cancelText, 100, 25)
             if GUI:IsItemClicked(0) then
                 M.MsgUI.open = false
                 if M.MsgUI.OnCancelClick ~= nil then
@@ -73,7 +75,7 @@ MsgUI.draw = function()
         else
             GUI:Dummy(0, 25)
             GUI:SameLine(117)
-            GUI:Button('确认', 100, 25)
+            GUI:Button(okText, 100, 25)
             if GUI:IsItemClicked(0) then
                 M.MsgUI.open = false
                 if M.MsgUI.OnOkClick ~= nil then

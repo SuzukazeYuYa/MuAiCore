@@ -4,7 +4,7 @@
     MuAiGuide逻辑总脚本
 ===========================
 ]]
-M.VERSION = 305
+M.VERSION = 306
 M.GlobalGuideY = nil
 M.IsInit = false;
 --- 输出信息到控制台 

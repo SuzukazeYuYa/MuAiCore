@@ -149,6 +149,7 @@ local dataInit = function()
                     D3 = { x = 100, z = 84 },
                     D4 = { x = 116, z = 100 },
                 },
+                exchanged = false,
                 SleepGroup = nil,
                 Timer = 0,
             },
@@ -323,12 +324,152 @@ local dataInit = function()
                 Guide1 = nil,
                 Guide2 = nil,
                 Timer = 0,
+                TimerTower1 = 0,
+                TimerTower2 = 0,
             }
         },
+        P4 = {
+            Chaos = {
+                CurrentIsReal = false,
+                Timer = 0,
+                -- 水 火 buffId
+                CastType = 0,
+                Timer = 0,
+            },
+            ExDeath = {
+                CurrentIsReal = false,
+                Timer = 0,
+                FirstJudge = false,
+                DeathBeamObj = nil,
+                AliveBeamObj = nil,
+                DothBeamObj = nil,
+                deathDir = nil,
+                deathDrawPos = nil,
+                aliveDir = nil,
+                aliveDrawPos = nil,
+                GuideData = nil,
+                JudgeTimer = 0
+            },
+            ThunderWater = {
+                Guide1 = nil,
+                Guide2 = nil,
+                Guide2Offset = nil,
+                IceType = nil
+            },
+            WaterFire1 = {
+                Guide1 = {},
+                Guide2 = {}, 
+                AoeTimer = 0,
+                Type = false,
+            },
+            WaterFire2 = {
+                Guide1 = {},
+                Guide2 = {},
+                AoeTimer = 0,
+                Type = false,
+                IceType = nil,
+                ThunderType = nil
+            },
+            Eye1 = {
+                GuidePos = nil,
+                thunder = nil,
+                type = false,
+                Owner = nil,
+                LostTimer = 0,
+                Locked = false,
+            },     
+            Eye2 = {
+                GuidePos = nil,
+                thunder = nil,
+                type = false,
+                Owner = nil,
+                LostTimer = 0,
+                Locked = false,
+            },
+            MoveOrStopHit = nil,
+            StateVfx = {},
+            Buff = {},
+            CheckFinish = {}
+            
+        }
     }
+
+    ---判定P4指定BUFF是否为真BUFF
+    ---@return boolean | nil 真假|为空表示Buff不存在 
+    MG.DancingMad.IsRealBuff = function(buffId, job)
+        if MG.DancingMad == nil then
+            return nil
+        end
+        job = job or MG.SelfPos
+        local buffList = MG.DancingMad.P4.Buff[MG.SelfPos]
+        if buffList == nil or buffList[buffId] then
+            return nil
+        end
+        return buffList[buffId]
+    end
 
     MG.Info(DM.NameCN .. '数据初始化完毕！')
 end
+--- 屏蔽特效开关缓存
+local effectSwitch
+
+--- 关闭的特效的技能ID
+local closeList = {
+    [47764] = { old0 = nil, old1 = nil },
+    [47768] = { old0 = nil, old1 = nil },
+    [47771] = { old0 = nil, old1 = nil },
+    [47774] = { old0 = nil, old1 = nil },
+    [47775] = { old0 = nil, old1 = nil },
+    [47776] = { old0 = nil, old1 = nil },
+    [47777] = { old0 = nil, old1 = nil },
+}
+
+local defineColors = function()
+    -- 一次性创建所有颜色
+    ---@type ShapeDrawer
+    DM.redDrawer = MG.CreateDrawer(1, 0, 0, nil, 2)
+    ---@type ShapeDrawer
+    DM.yellowDrawer = MG.CreateDrawer(1, 1, 0, nil, 2)
+    ---@type ShapeDrawer
+    DM.blueDrawer = MG.CreateDrawer(0, 0, 1, nil, 2)
+    ---@type ShapeDrawer
+    DM.greenDrawer = MG.CreateDrawer(0, 1, 0, nil, 2)
+    ---@type ShapeDrawer
+    DM.purpleDrawer = MG.CreateDrawer(1, 0, 1, nil, 2)
+    ---@type ShapeDrawer
+    DM.cyanDrawer = MG.CreateDrawer(0, 1, 1, nil, 2)
+    ---@type ShapeDrawer
+    DM.litBlue = MG.CreateDrawer(0, 0.3, 0.5, 0.3, 2)
+end
+
+--- 屏蔽特效
+local applyEffectBinder = function()
+    if effectSwitch ~= MG.Config.DmuCfg.BindEffect then
+        if MG.Config.DmuCfg.BindEffect then
+            if closeList[47764].old0 == nil then
+                for skillId, _ in pairs(closeList) do
+                    closeList[skillId].old0 = Argus.getActionAOEType(skillId, 0)
+                    closeList[skillId].old1 = Argus.getActionAOEType(skillId, 1)
+                    Argus.setActionAOEType(skillId, 0, 0)
+                    Argus.setActionAOEType(skillId, 1, 0)
+                end
+            end
+            MG.Debug('屏蔽特效已执行！')
+        else
+            for skillId, _ in pairs(closeList) do
+                if closeList[skillId].old0 ~= nil then
+                    Argus.setActionAOEType(skillId, 0, closeList[skillId].old0)
+                end
+                if closeList[skillId].old1 ~= nil then
+                    Argus.setActionAOEType(skillId, 1, closeList[skillId].old1)
+                end
+            end
+            MG.Debug('屏蔽特效已取消！')
+        end
+        effectSwitch = MG.Config.DmuCfg.BindEffect
+    end
+end
+--------------------------------------------- public ---------------------------------------------
 
 -- 阶段名称定义，注意每个阶段都必须有Start和End否则会出错
 DM.StateNames = {
@@ -393,27 +534,38 @@ DM.StateNames = {
     'P3Tower1',
     'P3Tower2',
     'P3End',
+    --- P4 ---
+    'P4Start',
+    'P4ExDeathBuff1',
+    'P4ChaosBuff1',
+    'P4ExDeathBuff2',
+    'P4ChaosBuff2',
+    'P4ExDeathBuff3',
+    'P4ExDeath3Judge',
+    'P4ThunderWater1',
+    'P4Eye1',
+    'P4WaterFire1',
+    'P4WaterFire1Put',
+    'P4ThunderWater2',
+    'P4Eye2',
+    'P4WaterFire2',
+    'P4WaterFire2Put',
+    'P4End',
 }
 
-local defineColors = function()
-    -- 一次性创建所有颜色
-    ---@type ShapeDrawer
-    DM.redDrawer = MG.CreateDrawer(1, 0, 0, nil, 2)
-    ---@type ShapeDrawer
-    DM.yellowDrawer = MG.CreateDrawer(1, 1, 0, nil, 2)
-    ---@type ShapeDrawer
-    DM.blueDrawer = MG.CreateDrawer(0, 0, 1, nil, 2)
-    ---@type ShapeDrawer
-    DM.greenDrawer = MG.CreateDrawer(0, 1, 0, nil, 2)
-    ---@type ShapeDrawer
-    DM.purpleDrawer = MG.CreateDrawer(1, 0, 1, nil, 2)
-    ---@type ShapeDrawer
-    DM.cyanDrawer = MG.CreateDrawer(0, 1, 1, nil, 2)
-    ---@type ShapeDrawer
-    DM.litBlue = MG.CreateDrawer(0, 0.3, 0.5, 0.3, 2)
+---@class ThunderType 雷类型
+DM.ThunderType = {
+    Left13 = 1,
+    Left24 = 2,
+    Right13 = 3,
+    Right24 = 4
+}
 
-end
-
+---@class IceType 冰类型
+DM.IceType = {
+    danger13 = 1,
+    danger24 = 2,
+}
 --- 初始化
 DM.Init = function(M)
     DM.State = {}
@@ -442,7 +594,9 @@ DM.Init = function(M)
     end
 end
 
+--- 中心点
 DM.Center = { x = 100, y = 0, z = 100 }
+
 --- 切换状态
 DM.ChangeState = function(stateName)
     local state = DM.State[stateName]
@@ -456,21 +610,14 @@ DM.ChangeState = function(stateName)
     end
     MG.DancingMad.CurrentState = state
     local log = DM.NameCN .. "阶段切换：" .. stateName
-    if MG.IsVideo() then
-        MG.Info(log)
-    else
-        MG.Debug(log)
-    end
+    MG.ArrInfo(log)
 end
 
+--- 切到下一个状态
 DM.GoNextSate = function()
     MG.DancingMad.CurrentState = MG.DancingMad.CurrentState + 1
-    local log =  DM.NameCN .. "阶段切换：" .. DM.StateNames[MG.DancingMad.CurrentState]
-    if MG.IsVideo() then
-        MG.Info(log)
-    else
-        MG.Debug(log)  
-    end
+    local log = DM.NameCN .. "阶段切换：" .. DM.StateNames[MG.DancingMad.CurrentState]
+    MG.ArrInfo(log)
 end
 
 --- 是否在状态中
@@ -487,6 +634,7 @@ DM.InState = function(stateName)
     return false
 end
 
+--- 当前阶段是否已经在某个阶段之后
 DM.OverState = function(stateName, include)
     local state = DM.State[stateName]
     if state == nil then
@@ -516,8 +664,93 @@ DM.BeLowState = function(stateName, include)
     end
 end
 
+--- 计算劈啪啪暴雷类型
+---@param thundersAoe GroundAOE
+---@return ThunderType
+DM.CalcThunderType = function(thundersAoe)
+    local h2pi = MG.SetHeading2Pi(thundersAoe.heading)
+    if MG.IsSameDirection(h2pi, math.pi * 7 / 4) then
+        if thundersAoe.x > 100 and thundersAoe.x < 107 then
+            return DM.ThunderType.Right13
+        elseif thundersAoe.x > 107 and thundersAoe.x < 114 then
+            return DM.ThunderType.Right24
+        end
+    elseif MG.IsSameDirection(h2pi, math.pi / 4) then
+        if thundersAoe.x > 93 and thundersAoe.x < 100 then
+            return DM.ThunderType.Left13
+        elseif thundersAoe.x > 86 and thundersAoe.x < 93 then
+            return DM.ThunderType.Left24
+        end
+    end
+end
+
+---计算冰AOE类型
+---@return IceType
+DM.CalcIceType = function(iceAoe)
+    local h2pi = MG.SetHeading2Pi(iceAoe.heading)
+    if MG.IsSameDirection(h2pi, math.pi / 4)
+            or MG.IsSameDirection(h2pi, math.pi * 5 / 4) then
+        return DM.IceType.danger24
+    elseif MG.IsSameDirection(h2pi, math.pi * 3 / 4)
+            or MG.IsSameDirection(h2pi, math.pi * 7 / 4) then
+        return DM.IceType.danger13
+    end
+end
+
+---计算安全点
+---@param thunderType 雷类型
+---@param iceType 冰类型
+DM.CalcMixPoint = function(thunder, ice)
+    local near, far, center
+    if thunder == DM.ThunderType.Left13 and ice == DM.IceType.danger13 then
+        -- Left13 + danger13
+        near = { x = 104, y = 0, z = 102.5 }
+        far = { x = 97.5, y = 0, z = 96 }
+        center = { x = 101, y = 0, z = 100.4 }
+    elseif thunder == DM.ThunderType.Left13 and ice == DM.IceType.danger24 then
+        -- Left13 + danger24
+        near = { x = 104, y = 0, z = 96 }
+        far = { x = 90, y = 0, z = 110 }
+        center = { x = 101, y = 0, z = 99 }
+    elseif thunder == DM.ThunderType.Left24 and ice == DM.IceType.danger13 then
+        -- Left24 + danger13
+        near = { x = 102.5, y = 0, z = 104 }
+        far = { x = 96, y = 0, z = 97.5 }
+        center = { x = 101, y = 0, z = 100.4 }
+    elseif thunder == DM.ThunderType.Left24 and ice == DM.IceType.danger24 then
+        -- Left24 + danger24
+        near = { x = 96, y = 0, z = 104 }
+        far = { x = 110, y = 0, z = 90 }
+        center = { x = 99, y = 0, z = 101 }
+    elseif thunder == DM.ThunderType.Right13 and ice == DM.IceType.danger13 then
+        -- Right13 + danger13
+        near = { x = 96, y = 0, z = 96 }
+        far = { x = 110, y = 0, z = 110 }
+        center = { x = 99, y = 0, z = 99 }
+    elseif thunder == DM.ThunderType.Right13 and ice == DM.IceType.danger24 then
+        -- Right13 + danger24
+        near = { x = 96, y = 0, z = 102.5 }
+        far = { x = 102.5, y = 0, z = 96 }
+        center = { x = 99, y = 0, z = 100.4 }
+    elseif thunder == DM.ThunderType.Right24 and ice == DM.IceType.danger13 then
+        -- Right24 + danger13
+        near = { x = 104, y = 0, z = 104 }
+        far = { x = 90, y = 0, z = 90 }
+        center = { x = 101, y = 0, z = 101 }
+    elseif thunder == DM.ThunderType.Right24 and ice == DM.IceType.danger24 then
+        -- Right24 + danger24
+        near = { x = 97.5, y = 0, z = 104 }
+        far = { x = 104, y = 0, z = 97.5 }
+        center = { x = 101, y = 0, z = 101 }
+    end
+    return near, far, center
+end
+
 -------------------------- Argus Events --------------------------
 DM.OnEntityChannel = function(entityID, spellID, _)
+    if not MG.Config.DmuCfg.Enable or MG.DancingMad == nil then
+        return
+    end
     if spellID == 50179 and TensorReactions_CurrentCombatTimer < 30 then
         -- 恶狠狠毁荡
         dataInit()
@@ -531,6 +764,10 @@ DM.OnEntityChannel = function(entityID, spellID, _)
         --决战
         if DM.BeLowState('P3Start') then
             DM.ChangeState('P3Start')
+        end
+    elseif spellID == 49884 then
+        if DM.BeLowState('P4Start') then
+            DM.ChangeState('P4Start')
         end
     end
 
@@ -553,8 +790,8 @@ DM.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
     doSubEvents('OnEventObjectScriptFunc', entityID, a1, a2, a3)
 end
 
-DM.OnAddEntityVFX = function(vfxID)
-    doSubEvents('OnAddEntityVFX', vfxID)
+DM.OnAddEntityVFX = function(vfxID, vfxName, primaryEntityID, secondaryEntityID, time, a5, a6)
+    doSubEvents('OnAddEntityVFX', vfxID, vfxName, primaryEntityID, secondaryEntityID, time, a5, a6)
 end
 
 DM.OnMapEffect = function(a1, a2, a3)
@@ -571,6 +808,7 @@ end
 
 -------------------------- MuAiGuide Events --------------------------
 DM.Update = function()
+    applyEffectBinder()
     doSubEvents('Update')
 end
 

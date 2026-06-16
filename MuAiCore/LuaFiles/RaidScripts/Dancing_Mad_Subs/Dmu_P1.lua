@@ -19,19 +19,6 @@ local Data = function()
 end
 local mtGroup = { 'MT', 'H1', 'D1', 'D3' }
 local thGroup = { 'MT', 'ST', 'H1', 'H2' }
---- 屏蔽特效开关缓存
-local effectSwitch
---- 关闭的特效的技能ID
-local closeList = {
-    [47764] = { old0 = nil, old1 = nil },
-    [47768] = { old0 = nil, old1 = nil },
-    [47771] = { old0 = nil, old1 = nil },
-    [47774] = { old0 = nil, old1 = nil },
-    [47775] = { old0 = nil, old1 = nil },
-    [47776] = { old0 = nil, old1 = nil },
-    [47777] = { old0 = nil, old1 = nil },
-}
-
 local ArrowBuffs = {
     [4876] = 'up',
     [4877] = 'down',
@@ -159,34 +146,6 @@ local CheckConeDeath = function()
     end
 end
 
---- 屏蔽特效
-local applyEffectBinder = function()
-    if effectSwitch ~= Cfg().effect then
-        if Cfg().effect then
-            if closeList[47764].old0 == nil then
-                for skillId, _ in pairs(closeList) do
-                    closeList[skillId].old0 = Argus.getActionAOEType(skillId, 0)
-                    closeList[skillId].old1 = Argus.getActionAOEType(skillId, 1)
-                    Argus.setActionAOEType(skillId, 0, 0)
-                    Argus.setActionAOEType(skillId, 1, 0)
-                end
-            end
-            d('applyEffectBinder1')
-        else
-            for skillId, _ in pairs(closeList) do
-                if closeList[skillId].old0 ~= nil then
-                    Argus.setActionAOEType(skillId, 0, closeList[skillId].old0)
-                end
-                if closeList[skillId].old1 ~= nil then
-                    Argus.setActionAOEType(skillId, 1, closeList[skillId].old1)
-                end
-            end
-            d('applyEffectBinder2')
-        end
-        effectSwitch = Cfg().effect
-    end
-end
-
 --- 缓存自动背对 data by string
 local autoLookAtCache = function(entityID, a1, a2, a3)
     if not Cfg().autoLookAt then
@@ -251,11 +210,17 @@ local autoLookAtUpdate = function()
             end
             Data().AutoLookAt.enable = true
             TensorCore.API.TensorACR.setLockFaceHeading(heading)
+            if Cfg().hardLock then
+                TensorCore.API.TensorACR.setHardLockFace(true)
+            end
             TensorCore.API.TensorACR.toggleLockFace(true)
         end
     else
         Data().AutoLookAt.Timer = 0
         Data().AutoLookAt.enable = false
+        if Cfg().hardLock then
+            TensorCore.API.TensorACR.setHardLockFace(false)
+        end
         TensorCore.API.TensorACR.toggleLockFace(false)
     end
 end
@@ -382,48 +347,43 @@ end
 -- 计算出移动表
 local getThunderMoveTable = function(curThunders)
     local moveTable = {}
-    local heading = curThunders.heading
-    local h2pi = MG.SetHeading2Pi(heading)
-    if MG.IsSameDirection(h2pi, math.pi * 7 / 4) then
-        if curThunders.x > 100 and curThunders.x < 107 then
-            moveTable.H1 = math.pi / 4
-            moveTable.MT = math.pi / 4
-            moveTable.H2 = math.pi / 4
-            moveTable.D4 = math.pi / 4
-            moveTable.D2 = math.pi / 4
-            moveTable.D3 = math.pi / 4
-            moveTable.D1 = math.pi * 5 / 4
-            moveTable.ST = math.pi * 5 / 4
-        elseif curThunders.x > 107 and curThunders.x < 114 then
-            moveTable.H1 = math.pi * 5 / 4
-            moveTable.MT = math.pi * 5 / 4
-            moveTable.H2 = math.pi * 5 / 4
-            moveTable.D4 = math.pi * 5 / 4
-            moveTable.D2 = math.pi * 5 / 4
-            moveTable.D3 = math.pi * 5 / 4
-            moveTable.D1 = math.pi / 4
-            moveTable.ST = math.pi / 4
-        end
-    elseif MG.IsSameDirection(h2pi, math.pi / 4) then
-        if curThunders.x > 93 and curThunders.x < 100 then
-            moveTable.H1 = math.pi * 7 / 4
-            moveTable.D1 = math.pi * 7 / 4
-            moveTable.D4 = math.pi * 7 / 4
-            moveTable.H2 = math.pi * 7 / 4
-            moveTable.ST = math.pi * 7 / 4
-            moveTable.D3 = math.pi * 7 / 4
-            moveTable.MT = math.pi * 3 / 4
-            moveTable.D2 = math.pi * 3 / 4
-        elseif curThunders.x > 86 and curThunders.x < 93 then
-            moveTable.H1 = math.pi * 3 / 4
-            moveTable.D1 = math.pi * 3 / 4
-            moveTable.D4 = math.pi * 3 / 4
-            moveTable.H2 = math.pi * 3 / 4
-            moveTable.ST = math.pi * 3 / 4
-            moveTable.D3 = math.pi * 3 / 4
-            moveTable.MT = math.pi * 7 / 4
-            moveTable.D2 = math.pi * 7 / 4
-        end
+    local thunderType = DM.CalcThunderType(curThunders)
+    if thunderType == DM.ThunderType.Right13 then
+        moveTable.H1 = math.pi / 4
+        moveTable.MT = math.pi / 4
+        moveTable.H2 = math.pi / 4
+        moveTable.D4 = math.pi / 4
+        moveTable.D2 = math.pi / 4
+        moveTable.D3 = math.pi / 4
+        moveTable.D1 = math.pi * 5 / 4
+        moveTable.ST = math.pi * 5 / 4
+    elseif thunderType == DM.ThunderType.Right24 then
+        moveTable.H1 = math.pi * 5 / 4
+        moveTable.MT = math.pi * 5 / 4
+        moveTable.H2 = math.pi * 5 / 4
+        moveTable.D4 = math.pi * 5 / 4
+        moveTable.D2 = math.pi * 5 / 4
+        moveTable.D3 = math.pi * 5 / 4
+        moveTable.D1 = math.pi / 4
+        moveTable.ST = math.pi / 4
+    elseif thunderType == DM.ThunderType.Left13 then
+        moveTable.H1 = math.pi * 7 / 4
+        moveTable.D1 = math.pi * 7 / 4
+        moveTable.D4 = math.pi * 7 / 4
+        moveTable.H2 = math.pi * 7 / 4
+        moveTable.ST = math.pi * 7 / 4
+        moveTable.D3 = math.pi * 7 / 4
+        moveTable.MT = math.pi * 3 / 4
+        moveTable.D2 = math.pi * 3 / 4
+    elseif thunderType == DM.ThunderType.Right24 then
+        moveTable.H1 = math.pi * 3 / 4
+        moveTable.D1 = math.pi * 3 / 4
+        moveTable.D4 = math.pi * 3 / 4
+        moveTable.H2 = math.pi * 3 / 4
+        moveTable.ST = math.pi * 3 / 4
+        moveTable.D3 = math.pi * 3 / 4
+        moveTable.MT = math.pi * 7 / 4
+        moveTable.D2 = math.pi * 7 / 4
     end
     return moveTable
 end
@@ -538,7 +498,7 @@ Dmu_P1.OnAOECreate = function(aoeInfo)
     -- 画制冰和雷
     if Cfg().draw then
         local drawTime = 5500
-        if not Cfg().effect then
+        if not MG.Config.DmuCfg.BindEffect then
             -- 冰危险区
             if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
                 DM.yellowDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, math.pi / 2, aoeInfo.heading, 0, true)
@@ -556,7 +516,7 @@ Dmu_P1.OnAOECreate = function(aoeInfo)
 
             -- 画雷危险区
             if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-                DM.purpleDrawer:addTimedRect(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
+                MG.CreateDrawer(0.5, 0, 1, 2):addTimedRect(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
             end
         end
     end
@@ -584,7 +544,6 @@ Dmu_P1.OnAOECreate = function(aoeInfo)
     then
         -- 采集冰方向
         Data().Line2.dangerDir = aoeInfo.heading
-        d('获取到扩大大冰封方向, 当前state =' .. DM.StateNames[MG.DancingMad.CurrentState])
     end
 
     -- 激光-采集刷的塔信息
@@ -648,7 +607,6 @@ Dmu_P1.OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, ol
 end
 
 Dmu_P1.Update = function()
-    applyEffectBinder()
     CheckConeDeath()
     autoLookAtUpdate()
     drawBuffKick()
@@ -1209,32 +1167,51 @@ Dmu_P1.Update = function()
             DM.ChangeState('P1Teleport')
             Data().LastLink.Timer = Now()
         end
-        if Cfg().guide then
-            MG.FrameMultiD(Data().LastLink.GuideData)
-        end
-        if Cfg().draw then
-            if Data().LastLink.SleepGroup == nil or table.size(Data().LastLink.SleepGroup) == 0 then
-                Data().LastLink.SleepGroup = {}
-                for job, member in pairs(MG.Party) do
-                    local tethers = Argus.getTethersOnEnt(member)
-                    if tethers ~= nil and table.size(tethers) > 0 then
-                        for _, tether in pairs(tethers) do
-                            if tether.type == 45 then
-                                local linkFrom = TensorCore.mGetEntity(tether.partnerid)
-                                if linkFrom.pos.x > 100 then
-                                    table.insert(Data().LastLink.SleepGroup, member.id)
-                                    break
-                                end
+        if Data().LastLink.SleepGroup == nil or table.size(Data().LastLink.SleepGroup) < 4 then
+            Data().LastLink.SleepGroup = {}
+            for job, member in pairs(MG.Party) do
+                local tethers = Argus.getTethersOnEnt(member)
+                if tethers ~= nil and table.size(tethers) > 0 then
+                    for _, tether in pairs(tethers) do
+                        if tether.type == 45 then
+                            local linkFrom = TensorCore.mGetEntity(tether.partnerid)
+                            if linkFrom.pos.x > 100 then
+                                table.insert(Data().LastLink.SleepGroup, job)
+                                break
                             end
                         end
                     end
                 end
-            else
-                for _, id in pairs(Data().LastLink.SleepGroup) do
-                    local player = TensorCore.mGetEntity(id)
+            end
+        else
+            if Cfg().draw then
+                for _, job in pairs(Data().LastLink.SleepGroup) do
+                    local player = TensorCore.mGetEntity(MG.Party[job].id)
                     MG.CreateDrawer(0.2, 0, 0.6, 0.3, 2)
                       :addCircle(player.pos.x, player.pos.y, player.pos.z, 5)
                 end
+            end
+        end
+        if Cfg().guide then
+            if Cfg().transUnOpt then
+                if table.size(Data().LastLink.SleepGroup) >= 4 then
+                    if not Data().LastLink.exchanged then
+                        Data().LastLink.GuideData2 = {}
+                        for _, job in pairs(Data().LastLink.SleepGroup) do
+                            -- 如果睡眠点了远程组，和同组互换位置
+                            if table.contains({ 'H1', 'H2', 'D3', 'D4' }, job) then
+                                local partner = MG.CalcPartner(job)
+                                Data().LastLink.GuideData[job], Data().LastLink.GuideData[partner] 
+                                    = Data().LastLink.GuideData[partner], Data().LastLink.GuideData[job]
+                            end
+                        end
+                        Data().LastLink.exchanged = true
+                    else
+                        MG.FrameMultiD(Data().LastLink.GuideData2)
+                    end
+                end
+            else
+                MG.FrameMultiD(Data().LastLink.GuideData)
             end
         end
     end

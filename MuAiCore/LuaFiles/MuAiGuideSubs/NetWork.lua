@@ -18,7 +18,7 @@ NetWork.init = function(M)
         { id = '一箱老雪', icon = 'Snowbeer' },
         { id = '楪祈', icon = 'Inori' },
     }
-    
+
     M.ThxList = {
         { id = 'kaze', icon = 'kaze' },
         { id = 'megaminx', icon = 'megaminx' },
@@ -76,7 +76,11 @@ NetWork.init = function(M)
         if not isAuto then
             if M.LatestVer ~= nil then
                 if M.LatestVer == M.VERSION then
-                    M.ShowMsgUI(3, { "版本检查完毕：没有发现新的版本！" })
+                    M.ShowMsgUI(1, 
+                            { "版本检查完毕：没有发现新的版本！" },
+                            nil,
+                            function() M.ForceUpdate() end,
+                            '确认', '强制更新')
                 else
                     M.ShowMsgUI(2, M.LogInfo)
                 end
@@ -109,7 +113,6 @@ NetWork.init = function(M)
                     f:close()
                 end
                 local msg = '[MuAiGuide]赞助人的[' .. spName.id .. ']头像图标' .. spName.icon .. '.png下载成功！'
-                d(msg)
             end
         end
     end

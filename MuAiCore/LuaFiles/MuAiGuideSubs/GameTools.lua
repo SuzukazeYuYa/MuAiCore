@@ -15,22 +15,22 @@ GameTools.init = function(M)
     }
 
     local JobName = {
-        "骑士", "战士", "黑骑", "绝枪",
-        "白魔", "占星", "贤者", "学者",
-        "武士", "武僧", "龙骑", "忍者", "钐镰", "蝰蛇",
-        "机工", "诗人", "舞者",
-        "召唤", "绘灵", "黑魔", "赤魔"
+        '骑士', '战士', '黑骑', '绝枪',
+        '白魔', '占星', '贤者', '学者',
+        '武士', '武僧', '龙骑', '忍者', '钐镰', '蝰蛇',
+        '机工', '诗人', '舞者',
+        '召唤', '绘灵', '黑魔', '赤魔'
     }
 
     local fullJobName = {
-        "骑士", "战士", "暗黑骑士", "绝枪战士",
-        "白魔法师", "占星术士", "贤者", "学者",
-        "武士", "武僧", "龙骑士", "忍者", "钐镰客", "蝰蛇剑士",
-        "机工士", "诗人", "舞者",
-        "召唤师", "绘灵法师", "黑魔法师", "赤魔法师"
+        '骑士', '战士', '暗黑骑士', '绝枪战士',
+        '白魔法师', '占星术士', '贤者', '学者',
+        '武士', '武僧', '龙骑士', '忍者', '钐镰客', '蝰蛇剑士',
+        '机工士', '吟游诗人', '舞者',
+        '召唤师', '绘灵法师', '黑魔法师', '赤魔法师'
     }
 
-    M.JobPosName = { "MT", "ST", "H1", "H2", "D1", "D2", "D3", "D4" }
+    M.JobPosName = { 'MT', 'ST', 'H1', 'H2', 'D1', 'D2', 'D3', 'D4' }
 
     ---@class MuAiGuide.HeadMark 标记枚举
     M.HeadMark = {
@@ -45,22 +45,22 @@ GameTools.init = function(M)
         local markType
         if mark < 5 or mark >= 15 and mark <= 17 then
             if mark <= 5 then
-                markType = "攻击" .. mark
+                markType = '攻击' .. mark
             else
-                markType = "攻击" .. (mark - 9)
+                markType = '攻击' .. (mark - 9)
             end
         elseif mark < 9 then
-            markType = "止步" .. (mark - 5)
+            markType = '止步' .. (mark - 5)
         elseif mark < 11 then
-            markType = "禁止" .. (mark - 8)
+            markType = '禁止' .. (mark - 8)
         elseif mark == 11 then
-            markType = "方块"
+            markType = '方块'
         elseif mark == 12 then
-            markType = "圆圈"
+            markType = '圆圈'
         elseif mark == 13 then
-            markType = "十字"
+            markType = '十字'
         elseif mark == 14 then
-            markType = "三角"
+            markType = '三角'
         end
         return markType
     end
@@ -121,14 +121,14 @@ GameTools.init = function(M)
 
     --- 读取小队列表
     M.GetPartyPlayers = function()
-        local curPt = TensorCore.getEntityGroupList("Party")
+        local curPt = TensorCore.getEntityGroupList('Party')
         local members = {}
         local checker = {}
         -- 回放模式或者其他情况
         if #curPt == 1 then
             table.insert(members, curPt[1])
             table.insert(checker, curPt[1].id)
-            curPt = TensorCore.entityList("Party")
+            curPt = TensorCore.entityList('Party')
         elseif #curPt == 3 or #curPt == 7 then
             local hasSelf = false
             for _, ent in pairs(curPt) do
@@ -144,7 +144,7 @@ GameTools.init = function(M)
         for _, ent in pairs(curPt) do
             if M.IsPlayer(ent)
                     and not table.contains(checker, ent.id)
-                    and ent.name ~= nil and ent.name ~= ""
+                    and ent.name ~= nil and ent.name ~= ''
             then
                 table.insert(members, ent)
             end
@@ -192,7 +192,7 @@ GameTools.init = function(M)
             return
         end
         if members == nil or (table.size(members) < 8 and table.size(members) ~= 4) then
-            M.Info("当前没有组队。")
+            M.Info('当前没有组队。')
             return
         end
 
@@ -408,47 +408,53 @@ GameTools.init = function(M)
                 end
             end
         else
-            local partner
-            if M.SelfPos == "MT" then
-                partner = "D3"
-            elseif M.SelfPos == "ST" then
-                partner = "D4"
-            elseif M.SelfPos == "H1" then
-                partner = "D1"
-            elseif M.SelfPos == "H2" then
-                partner = "D2"
-            elseif M.SelfPos == "D1" then
-                partner = "H1"
-            elseif M.SelfPos == "D2" then
-                partner = "H2"
-            elseif M.SelfPos == "D3" then
-                partner = "MT"
-            elseif M.SelfPos == "D4" then
-                partner = "ST"
-            end
-            return partner
+
+            return  M.CalcPartner()
         end
+    end
+
+    M.CalcPartner = function(job)
+        job = job or M.SelfPos
+        local partner
+        if job == 'MT' then
+            partner = 'D3'
+        elseif job == 'ST' then
+            partner = 'D4'
+        elseif job == 'H1' then
+            partner = 'D1'
+        elseif job == 'H2' then
+            partner = 'D2'
+        elseif job == 'D1' then
+            partner = 'H1'
+        elseif job == 'D2' then
+            partner = 'H2'
+        elseif job == 'D3' then
+            partner = 'MT'
+        elseif job == 'D4' then
+            partner = 'ST'
+        end
+        return partner
     end
 
     --- 计算同为远程/近战搭档
     M.GetRMPartner = function()
         local partner
-        if M.SelfPos == "MT" then
-            partner = "D1"
-        elseif M.SelfPos == "ST" then
-            partner = "D2"
-        elseif M.SelfPos == "H1" then
-            partner = "D3"
-        elseif M.SelfPos == "H2" then
-            partner = "D4"
-        elseif M.SelfPos == "D1" then
-            partner = "MT"
-        elseif M.SelfPos == "D2" then
-            partner = "ST"
-        elseif M.SelfPos == "D3" then
-            partner = "H1"
-        elseif M.SelfPos == "D4" then
-            partner = "H2"
+        if M.SelfPos == 'MT' then
+            partner = 'D1'
+        elseif M.SelfPos == 'ST' then
+            partner = 'D2'
+        elseif M.SelfPos == 'H1' then
+            partner = 'D3'
+        elseif M.SelfPos == 'H2' then
+            partner = 'D4'
+        elseif M.SelfPos == 'D1' then
+            partner = 'MT'
+        elseif M.SelfPos == 'D2' then
+            partner = 'ST'
+        elseif M.SelfPos == 'D3' then
+            partner = 'H1'
+        elseif M.SelfPos == 'D4' then
+            partner = 'H2'
         end
         return partner
     end

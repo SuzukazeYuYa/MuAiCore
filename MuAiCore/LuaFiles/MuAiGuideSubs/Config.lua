@@ -308,13 +308,12 @@ Config.init = function(M)
     M.CreateDmuDefaultCfg = function()
         return {
             Enable = true,
-            --- 基础8方位置
-            --JobPos = { 'H2', 'D2', 'ST', 'D4', 'MT', 'D3', 'H1', 'D1' },
+            BindEffect = true,
             P1 = {
                 enable = true, draw = true, guide = true,
-                --是否关闭P1特效
-                effect = true,
                 autoLookAt = true,
+                transUnOpt = false,
+                hardLock = false,
                 BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
             },
             P2 = {
@@ -344,8 +343,17 @@ Config.init = function(M)
                 delayMark = true,
                 -- 踩塔12点
                 towerHeading = 1,
+                -- 踩塔分组是面基是场基
+                towerGround = 1,
             },
-            P4 = { enable = true, draw = true, guide = true },
+            P4 = {
+                enable = true, draw = true, guide = true,
+                -- 分散的人 1 D左TH右，2 TH左边D右边
+                disType = 1,
+                -- 石化眼方案 1.盗火站位，2.盗火常规，3.MMW
+                eyeType = 1,
+                autoLook = true, harkLock = false,
+            },
             P5 = { enable = true, draw = true, guide = true }
         }
     end

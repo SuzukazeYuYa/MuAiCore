@@ -288,7 +288,7 @@ local drawJobTab = function(M)
                         M.MainUI.selected = ptMember.label
                     end
                 elseif M.MainUI.mousePosition ~= ptMember.label then
-                    M.Info('站位交换：' .. M.MainUI.mousePosition .. '<==>' .. ptMember.label)
+                    M.Debug('站位交换：' .. M.MainUI.mousePosition .. '<==>' .. ptMember.label)
                     local temp = M.Party[M.MainUI.mousePosition]
                     M.Party[M.MainUI.mousePosition] = M.Party[ptMember.label]
                     M.Party[ptMember.label] = temp

@@ -220,7 +220,7 @@ local drawThunderIII = function()
     if not Cfg().draw or not Data().ThunderIII.Start then
         return
     end
-    if TimeSince(Data().ThunderIII.Timer) < 4700 then
+    if TimeSince(Data().ThunderIII.Timer) < 8500 then
         local curTarget, distance
         local curEx = TensorCore.mGetEntity(bossExDeath.id)
         MG.OnCurrentPartyDo(function(job, member)
@@ -302,9 +302,9 @@ local drawSlapHappy = function()
         local dirMt = TensorCore.getHeadingToTarget(DM.Center, curMt.pos)
         local dirH1 = TensorCore.getHeadingToTarget(DM.Center, curH1.pos)
         local dirD1 = TensorCore.getHeadingToTarget(DM.Center, curD1.pos)
-        DM.blueDrawer:addCone(100, 0, 100, 30, math.pi / 3, dirMt)
-        DM.greenDrawer:addCone(100, 0, 100, 30, math.pi / 3, dirH1)
-        DM.redDrawer:addCone(100, 0, 100, 30, math.pi / 3, dirD1)
+        MG.CreateDrawer(0, 0.15, 0.3, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirMt)
+        MG.CreateDrawer(0, 0.3, 0, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirH1)
+        MG.CreateDrawer(0.3, 0, 0, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirD1)
     end
     for i = 1, 3 do
         local h = headingTable[i]
@@ -315,7 +315,7 @@ local drawSlapHappy = function()
         elseif i == 3 then
             pos = TensorCore.getPosInDirection(pos, curCaster.pos.h, 4)
         end
-        MG.CreateDrawer(0.7, 0.1, 0):addCircle(pos.x, pos.y, pos.z, r3)
+        MG.CreateDrawer(0.9, 0.3, 0):addCircle(pos.x, pos.y, pos.z, r3)
     end
     MG.CreateDrawer(0.7, 0.1, 0):addCircle(100, 0, 100, 6)
     if TimeSince(Data().SlapHappy.Timer) > 9000 then
@@ -512,20 +512,19 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                             else
                                 guidePos = TensorCore.getPosInDirection(curSourceObj.pos, front, 4)
                             end
+                        else
                             if isDouble then
                                 table.insert(doubleLinePos, curSourceObj.pos)
                                 doubleJob = curJob
                             else
-                                guideData[curJob] = guidePos
+                                --已经接到了线，那么指路去引导位置
+                                if data.guideData[curState][i] == nil then
+                                    local curHeading = fromDir - math.pi * 3 / 4
+                                    local finalGuidePos = TensorCore.getPosInDirection(curSourceObj.pos, curHeading, 10)
+                                    data.guideData[curState][i] = finalGuidePos
+                                end
+                                guideData[curJob] = data.guideData[curState][i]
                             end
-                        else
-                            --已经接到了线，那么指路去引导位置
-                            if data.guideData[curState][i] == nil then
-                                local curHeading = fromDir - math.pi * 3 / 4
-                                local finalGuidePos = TensorCore.getPosInDirection(curSourceObj.pos, curHeading, 10)
-                                data.guideData[curState][i] = finalGuidePos
-                            end
-                            guideData[curJob] = data.guideData[curState][i]
                         end
                     else
                         local needFix = false
@@ -577,6 +576,7 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                         local curPlayer = TensorCore.mGetEntity(MG.Party[doubleJob].id)
                         local dis1 = TensorCore.getDistance2d(curPlayer.pos, pos1)
                         local dis2 = TensorCore.getDistance2d(curPlayer.pos, pos2)
+                        --根据当前位置，判断去左还是右边
                         if dis1 < dis2 then
                             doubleData[doubleJob] = pos1
                         else
@@ -671,7 +671,19 @@ Dmu_P3.OnEntityChannel = function(entityID, spellID, _)
         Data().DamningEdict.OnDraw = true
         Data().DamningEdict.Timer = Now()
     elseif spellID == 47877 then
-        Data().TakeTower.Timer = Now()
+        if DM.OverState('P3Tower1', true) then
+            Data().TakeTower.Timer = Now()
+        end
+    elseif spellID == 47889 then
+        if DM.OverState('P3Tower2', true) then
+            AnyoneCore.addTimedWorldTextOnEnt(
+                    6000,
+                    'Move',
+                    TensorCore.mGetPlayer().id,
+                    GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
+                    true, 1.5, 2.5
+            )
+        end
     end
 end
 
@@ -706,9 +718,9 @@ Dmu_P3.OnAOECreate = function(aoeInfo)
     elseif aoeInfo.aoeID == 47856 then
         table.insert(Data().TakeTower.castCache, aoeInfo)
         if table.size(Data().TakeTower.castCache) == 2 then
-            DM.ChangeState('P3Tower1')
+            Data().TakeTower.TimerTower1 = Now()
         elseif table.size(Data().TakeTower.castCache) == 4 then
-            DM.ChangeState('P3Tower2')
+            Data().TakeTower.TimerTower2 = Now()
         end
     end
 end
@@ -734,10 +746,18 @@ Dmu_P3.OnMarkerAdd = function(entityID, markerID)
                 if Cfg().towerHeading == 2 then
                     left, right = right, left
                 end
-                local thFirst = { MT = DM.Center, ST = DM.Center, H1 = DM.Center, H2 = DM.Center,
-                                  D1 = left, D3 = left, D2 = right, D4 = right, }
-                local dpsFirst = { MT = left, ST = right, H1 = left, H2 = right,
-                                   D1 = DM.Center, D3 = DM.Center, D2 = DM.Center, D4 = DM.Center, }
+                -- 先后踩踏的站位
+                local dpsFirst, thFirst
+                thFirst = { MT = DM.Center, ST = DM.Center, H1 = DM.Center, H2 = DM.Center,
+                            D1 = left, D3 = left, D2 = right, D4 = right, }
+                if Cfg().towerGround == 1 then
+                    dpsFirst = { MT = right, ST = left, H1 = right, H2 = left,
+                                 D1 = DM.Center, D3 = DM.Center, D2 = DM.Center, D4 = DM.Center, }
+                else
+                    dpsFirst = { MT = left, ST = right, H1 = left, H2 = right,
+                                 D1 = DM.Center, D3 = DM.Center, D2 = DM.Center, D4 = DM.Center, }
+                end
+
                 if MG.IndexOf(MG.JobPosName, job) <= 4 then
                     Data().TakeTower.isDps = false
                     Data().TakeTower.Guide1 = thFirst
@@ -785,7 +805,6 @@ end
 
 Dmu_P3.Update = function()
     getBoss()
-    drawImplosion()
     lockFaceCheck()
     drawThunderIII()
     drawSlapHappy()
@@ -793,6 +812,7 @@ Dmu_P3.Update = function()
     drawDamningEdict()
     drawBlackHole()
     loadMarkPlayer()
+    drawImplosion()
     if Data().Elements.bigCircleTimer > 0 then
         if TimeSince(Data().Elements.bigCircleTimer) < 8500 then
             local boss = TensorCore.mGetEntity(bossExDeath.id)
@@ -1144,10 +1164,20 @@ Dmu_P3.Update = function()
         end
 
         if DM.InState('P3AoePut2') and Data().TakeTower.Guide1 ~= nil then
-            MG.FrameMultiD(Data().TakeTower.Guide1)
+            if Data().TakeTower.TimerTower1 ~= 0
+                    and TimeSince(Data().TakeTower.TimerTower1) > 1500 then
+                DM.ChangeState('P3Tower1')
+            else
+                MG.FrameMultiD(Data().TakeTower.Guide1)
+            end
         end
         if DM.InState('P3Tower1') and Data().TakeTower.Guide2 ~= nil then
-            MG.FrameMultiD(Data().TakeTower.Guide2)
+            if Data().TakeTower.TimerTower2 ~= 0
+                    and TimeSince(Data().TakeTower.TimerTower2) > 1500 then
+                DM.ChangeState('P3Tower2')
+            else
+                MG.FrameMultiD(Data().TakeTower.Guide2)
+            end
         end
         if DM.InState('P3Tower2') then
             local isFinish = false
