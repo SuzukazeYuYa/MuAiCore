@@ -396,7 +396,7 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
 
             -- 画雷危险区
             if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-                MG.CreateDrawer(0.5, 0, 1, 2):addTimedRect(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
+                MG.CreateDrawer(0.5, 0, 1, nil, 2):addTimedRect(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
             end
         end
     end
@@ -466,9 +466,9 @@ Dmu_P4.OnAddEntityVFX = function(vfxID, vfxName, primaryEntityID, secondaryEntit
     end
 end
 
-Dmu_P4.OnMapEffect = function(a1, a2, a3)
-
-end
+--Dmu_P4.OnMapEffect = function(a1, a2, a3)
+--
+--end
 
 Dmu_P4.Update = function()
     -- 添加buff阶段 --

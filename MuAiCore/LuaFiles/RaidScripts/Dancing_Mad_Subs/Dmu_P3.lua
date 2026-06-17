@@ -424,6 +424,26 @@ local drawBlackHole = function()
     end
 end
 
+local isMarkAllRight = function(markTable)
+    -- 检查是否合法
+    local cnts = {}
+    --重复性和存在性检查 
+    for markId, job in pairs(markTable) do
+        if cnts[job] == nil then
+            cnts[job] = 1
+        else
+            cnts[job] = cnts[job] + 1
+        end
+        if cnts[job] > 1 then
+            return false
+        end
+        if markId == 4 or markId == 5 or markId > 10 then
+            return false
+        end
+    end
+    return true
+end
+
 --- 持续查找玩家标记，直到全部找到为止
 local loadMarkPlayer = function()
     if Data().BlackHolds.allMarkFind
@@ -432,13 +452,61 @@ local loadMarkPlayer = function()
     then
         return
     end
-    MG.OnCurrentPartyDo(function(job, member)
-        if member.marker ~= nil and member.marker > 0 then
-            Data().BlackHolds.MarkedPlayers[member.marker] = job
+    if Data().BlackHolds.MarkCheckTimer == nil or
+            Data().BlackHolds.MarkCheckTimer == 0
+            or TimeSince(Data().BlackHolds.MarkCheckTimer) > 2000 then
+        if table.size(Data().BlackHolds.MarkedPlayers) < 8 then
+            MG.OnCurrentPartyDo(function(job, member)
+                if member.marker ~= nil and member.marker > 0 then
+                    Data().BlackHolds.MarkedPlayers[member.marker] = job
+                end
+            end)
+        else
+            if table.size(Data().BlackHolds.MarkedPlayers) >= 8 then
+                local checkTable
+                if Data().BlackHolds.MarkCheckCnt == 0 then
+                    local isAllOk = isMarkAllRight(Data().BlackHolds.MarkedPlayers)
+                    if isAllOk then
+                        Data().BlackHolds.MarkCheckTimer = Now()
+                        Data().BlackHolds.MarkCheckCnt = Data().BlackHolds.MarkCheckCnt + 1
+                        MG.ArrInfo('第' .. Data().BlackHolds.MarkCheckCnt .. '次头标检测完成')
+                    else
+                        Data().BlackHolds.MarkedPlayers = {}
+                    end
+                elseif Data().BlackHolds.MarkCheckTimer ~= nil and Data().BlackHolds.MarkCheckTimer ~= 0
+                        and TimeSince(Data().BlackHolds.MarkCheckTimer) > 2000 then
+                    checkTable = {}
+                    MG.OnCurrentPartyDo(function(job, member)
+                        if member.marker ~= nil and member.marker > 0 then
+                            checkTable[member.marker] = job
+                        end
+                    end)
+                    local newTableIsOK = isMarkAllRight(checkTable)
+                    if newTableIsOK then
+                        -- 如果新的表也是合法的，那么对比2个表
+                        local isChanged = false
+                        for id, job in pairs(checkTable) do
+                            if Data().BlackHolds.MarkedPlayers[id] ~= job then
+                                isChanged = true
+                                break
+                            end
+                        end
+                        Data().BlackHolds.MarkCheckCnt = Data().BlackHolds.MarkCheckCnt + 1
+                        if isChanged then
+                            Data().BlackHolds.MarkedPlayers = checkTable
+                            MG.ArrInfo('第' .. Data().BlackHolds.MarkCheckCnt .. '次头标检测完成，发现变更，已更新头标表格！')
+                        else
+                            MG.ArrInfo('第' .. Data().BlackHolds.MarkCheckCnt .. '次头标检测完成，未发现变更，维持表格不变！')
+                        end
+                        Data().BlackHolds.MarkCheckTimer = Now()
+                    end
+                end
+                if Data().BlackHolds.MarkCheckCnt >= 3 then
+                    MG.ArrInfo('3次检测完成, 终止检测！')
+                    Data().BlackHolds.allMarkFind = true
+                end
+            end
         end
-    end)
-    if table.size(Data().BlackHolds.MarkedPlayers) >= 8 then
-        Data().BlackHolds.allMarkFind = true
     end
 end
 
@@ -561,35 +629,34 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
             end
         end
         --开始执行绘制：
-        if table.size(guideData) > 0 then
-            if isDouble then
+        if isDouble then
+            if table.size(doubleLinePos) > 1 and doubleJob ~= nil then
                 local doubleData = {}
-                if doubleJob ~= nil and table.size(doubleLinePos) > 1 then
-                    local mid = MG.GetMidPos(doubleLinePos[1], doubleLinePos[2])
-                    if TensorCore.getDistance2d(DM.Center, mid) < 2 then
-                        --倒霉孩子 打场中了
-                        local bigKfk = TensorCore.mGetEntity(Data().SlapHappy.CasterId)
-                        local dir1 = bigKfk.h + math.pi / 2
-                        local dir2 = bigKfk.h - math.pi / 2
-                        local pos1 = TensorCore.getPosInDirection(DM.Center, dir1, 10)
-                        local pos2 = TensorCore.getPosInDirection(DM.Center, dir2, 10)
-                        local curPlayer = TensorCore.mGetEntity(MG.Party[doubleJob].id)
-                        local dis1 = TensorCore.getDistance2d(curPlayer.pos, pos1)
-                        local dis2 = TensorCore.getDistance2d(curPlayer.pos, pos2)
-                        --根据当前位置，判断去左还是右边
-                        if dis1 < dis2 then
-                            doubleData[doubleJob] = pos1
-                        else
-                            doubleData[doubleJob] = pos2
-                        end
+                local mid = MG.GetMidPos(doubleLinePos[1], doubleLinePos[2])
+                if TensorCore.getDistance2d(DM.Center, mid) < 2 then
+                    --倒霉孩子 打场中了
+                    local bigKfk = TensorCore.mGetEntity(Data().SlapHappy.CasterId)
+                    local dir1 = bigKfk.h + math.pi / 2
+                    local dir2 = bigKfk.h - math.pi / 2
+                    local pos1 = TensorCore.getPosInDirection(DM.Center, dir1, 12)
+                    local pos2 = TensorCore.getPosInDirection(DM.Center, dir2, 12)
+                    local curPlayer = TensorCore.mGetEntity(MG.Party[doubleJob].id)
+                    local dis1 = TensorCore.getDistance2d(curPlayer.pos, pos1)
+                    local dis2 = TensorCore.getDistance2d(curPlayer.pos, pos2)
+                    --根据当前位置，判断去左还是右边
+                    if dis1 < dis2 then
+                        doubleData[doubleJob] = pos1
                     else
-                        doubleData[doubleJob] = mid
+                        doubleData[doubleJob] = pos2
                     end
+                else
+                    doubleData[doubleJob] = mid
                 end
+
                 MG.FrameMultiD(doubleData)
-            else
-                MG.FrameMultiD(guideData)
             end
+        elseif table.size(guideData) > 0 then
+            MG.FrameMultiD(guideData)
         end
         if table.size(takeLineData) > 0 then
             MG.MultiTakeLine(takeLineData)

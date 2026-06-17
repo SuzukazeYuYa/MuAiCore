@@ -41,6 +41,17 @@ local TeleTrouncingPos = {
     ['down_right'] = { right = { x = 88, z = 112 }, down = { x = 88, z = 106 } },
 }
 
+local TeleTrouncingPos2 = {
+    ['up_up'] = { { x = 112, z = 99 }, { x = 112, z = 106 } },
+    ['left_left'] = { { x = 99, z = 88 }, { x = 106, z = 88 } },
+    ['down_down'] = { { x = 88, z = 99 }, { x = 88, z = 94 } },
+    ['right_right'] = { { x = 99, z = 112 }, { x = 94, z = 112 } },
+    ['right_up'] = { up = { x = 112, z = 112 }, right = { x = 106, z = 112 } },
+    ['up_left'] = { left = { x = 112, z = 88 }, up = { x = 112, z = 94 } },
+    ['left_down'] = { down = { x = 88, z = 88 }, left = { x = 94, z = 88 } },
+    ['down_right'] = { right = { x = 88, z = 112 }, down = { x = 88, z = 106 } },
+}
+
 local dis24 = {
     MT = { x = 94, y = 0, z = 100.5 },
     ST = { x = 99.5, y = 0, z = 106 },
@@ -375,7 +386,7 @@ local getThunderMoveTable = function(curThunders)
         moveTable.D3 = math.pi * 7 / 4
         moveTable.MT = math.pi * 3 / 4
         moveTable.D2 = math.pi * 3 / 4
-    elseif thunderType == DM.ThunderType.Right24 then
+    elseif thunderType == DM.ThunderType.Left24 then
         moveTable.H1 = math.pi * 3 / 4
         moveTable.D1 = math.pi * 3 / 4
         moveTable.D4 = math.pi * 3 / 4
@@ -516,7 +527,7 @@ Dmu_P1.OnAOECreate = function(aoeInfo)
 
             -- 画雷危险区
             if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-                MG.CreateDrawer(0.5, 0, 1, 2):addTimedRect(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
+                MG.CreateDrawer(0.5, 0, 1, nil, 2):addTimedRect(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
             end
         end
     end
@@ -1110,10 +1121,18 @@ Dmu_P1.Update = function()
                 if buffInfo[job].short ~= nil and buffInfo[job].long ~= nil then
                     key1 = buffInfo[job].shortKey .. '_' .. buffInfo[job].longKey
                     key2 = buffInfo[job].longKey .. '_' .. buffInfo[job].shortKey
-                    if TeleTrouncingPos[key1] ~= nil then
-                        buffInfo[job].posInfo = TeleTrouncingPos[key1]
-                    elseif TeleTrouncingPos[key2] ~= nil then
-                        buffInfo[job].posInfo = TeleTrouncingPos[key2]
+                    if Cfg().transUnOpt then
+                        if TeleTrouncingPos2[key1] ~= nil then
+                            buffInfo[job].posInfo = TeleTrouncingPos2[key1]
+                        elseif TeleTrouncingPos2[key2] ~= nil then
+                            buffInfo[job].posInfo = TeleTrouncingPos2[key2]
+                        end
+                    else
+                        if TeleTrouncingPos[key1] ~= nil then
+                            buffInfo[job].posInfo = TeleTrouncingPos[key1]
+                        elseif TeleTrouncingPos[key2] ~= nil then
+                            buffInfo[job].posInfo = TeleTrouncingPos[key2]
+                        end
                     end
                     if buffInfo[job].longKey == buffInfo[job].shortKey then
                         Data().TeleTrouncing.Guide1[job] = buffInfo[job].posInfo[1]
@@ -1201,13 +1220,12 @@ Dmu_P1.Update = function()
                             -- 如果睡眠点了远程组，和同组互换位置
                             if table.contains({ 'H1', 'H2', 'D3', 'D4' }, job) then
                                 local partner = MG.CalcPartner(job)
-                                Data().LastLink.GuideData[job], Data().LastLink.GuideData[partner] 
-                                    = Data().LastLink.GuideData[partner], Data().LastLink.GuideData[job]
+                                Data().LastLink.GuideData[job], Data().LastLink.GuideData[partner] = Data().LastLink.GuideData[partner], Data().LastLink.GuideData[job]
                             end
                         end
                         Data().LastLink.exchanged = true
                     else
-                        MG.FrameMultiD(Data().LastLink.GuideData2)
+                        MG.FrameMultiD(Data().LastLink.GuideData)
                     end
                 end
             else
