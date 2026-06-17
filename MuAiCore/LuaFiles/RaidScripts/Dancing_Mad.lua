@@ -350,7 +350,8 @@ local dataInit = function()
                 aliveDir = nil,
                 aliveDrawPos = nil,
                 GuideData = nil,
-                JudgeTimer = 0
+                JudgeTimer = 0,
+                DrawTimer = 0
             },
             ThunderWater = {
                 Guide1 = nil,
@@ -393,7 +394,10 @@ local dataInit = function()
             Buff = {},
             CheckFinish = {}
             
-        }
+        },
+        P5 = {
+            
+        },
     }
 
     ---判定P4指定BUFF是否为真BUFF
@@ -590,8 +594,10 @@ DM.Init = function(M)
             d(script)
             M.Debug('-------------------------------')
         else
-            script.Init(DM, M)
-            table.insert(DM.SubScripts, script)
+            if script.Init ~= nil then
+                script.Init(DM, M)
+                table.insert(DM.SubScripts, script)
+            end
         end
     end
 end

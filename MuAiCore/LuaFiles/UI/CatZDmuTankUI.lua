@@ -39,7 +39,9 @@ CatZDmuTankUI.draw = function()
     GUI:SetNextWindowSize(wide, 0, GUI.SetCond_Appearing)
     M.CatZDmuTankUI.visible, M.CatZDmuTankUI.open = GUI:Begin("CatZ Dmu Mitigation Setting", M.CatZDmuTankUI.open)
     if M.CatZDmuTankUI.visible then
-        local curP = 0
+        GUI:TextColored(1,1,0,1, '本插件仅为CatZ的时间轴提供减伤控制UI,')
+        GUI:TextColored(1,1,0,1, '如果需要对应的时间轴请联系CatZ.')
+        local curP = 01
         GUI:Columns(2, 'CNName and Value', false)
         for i = 1, #keys do
             local curConfig = M.Config.DmuCatZCfg[keys[i]]
