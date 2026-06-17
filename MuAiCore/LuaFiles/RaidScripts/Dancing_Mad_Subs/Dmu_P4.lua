@@ -30,9 +30,15 @@ local buffExDeath = {
     5545, --水属性压缩，8米分摊
     5546, --加速度炸弹，停止行动
     454, --亚拉戈领域 持续时间不能吃到高伤害
+
     5464, --超越死亡，要吃到秒杀级伤害
+    1382, --超越死亡，要吃到秒杀级伤害
+
     4888, -- 死者之伤，蓝buff
+    5542, -- 死者之伤，蓝buff
+
     4887, -- 生者之伤，紫buff
+    5541, -- 生者之伤，紫buff
 }
 
 local buffChaos = {
@@ -111,16 +117,19 @@ local onAddNewBuff = function(buffTable, timer, currentVfx)
 end
 
 local lockFaceCheck = function(eyeTable)
+   
     local buffOwner = eyeTable.Owner
     if buffOwner == nil or not Cfg().autoLook then
         return
     end
+
     local buff1 = TensorCore.getBuff(buffOwner[1], 5543)
+  
     if buff1 ~= nil then
         if buff1.duration < 1 and not eyeTable.Locked then
             local player = MG.GetPlayer()
             local lookHeading
-            if table.contains(buffOwner, player) then
+            if table.contains(buffOwner, player.id) then
                 --如果自己是眼
                 local other
                 if player.id == buffOwner[1] then
@@ -130,7 +139,7 @@ local lockFaceCheck = function(eyeTable)
                 end
                 local otherObj = TensorCore.mGetEntity(other)
                 local heading = TensorCore.getHeadingToTarget(otherObj.pos, player.pos)
-                if Data().Eye1.type then
+                if eyeTable.type then
                     lookHeading = heading
                 else
                     lookHeading = heading + math.pi
@@ -138,7 +147,7 @@ local lockFaceCheck = function(eyeTable)
             else
                 local eye1 = TensorCore.mGetEntity(buffOwner[1])
                 local eye2 = TensorCore.mGetEntity(buffOwner[2])
-                if Data().Eye1.type then
+                if eyeTable.type then
                     --真眼
                     local backPos = MG.GetMidPos(eye1.pos, eye2.pos)
                     lookHeading = TensorCore.getHeadingToTarget(backPos, player.pos)
@@ -163,19 +172,19 @@ local lockFaceCheck = function(eyeTable)
             eyeTable.Locked = true
             MG.ArrInfo('锁定面向，开始，当前面向：' .. tostring(lookHeading))
         end
-    else
-        if eyeTable.LostTimer == nil then
-            eyeTable.LostTimer = Now()
-        end
-        if eyeTable.Locked and TimeSince(eyeTable.LostTimer) > 1000 then
-            if Cfg().harkLock then
-                TensorCore.API.TensorACR.setHardLockFace(false)
+        else
+            if eyeTable.LostTimer == nil then
+                eyeTable.LostTimer = Now()
             end
-            TensorCore.API.TensorACR.toggleLockFace(false)
-            eyeTable.Locked = false
-            MG.ArrInfo('锁定面向结束。')
+            if eyeTable.Locked and TimeSince(eyeTable.LostTimer) > 1000 then
+                if Cfg().harkLock then
+                    TensorCore.API.TensorACR.setHardLockFace(false)
+                end
+                TensorCore.API.TensorACR.toggleLockFace(false)
+                eyeTable.Locked = false
+                MG.ArrInfo('锁定面向结束。')
+            end
         end
-    end
 end
 
 local ThunderWater = function(wave)
@@ -316,10 +325,7 @@ Dmu_P4.Init = function(dm, m)
 end
 
 Dmu_P4.OnEntityChannel = function(entityID, spellID, _)
-    if spellID == 50082 then
-        Data().ExDeath.FirstJudge = true
-        Data().ExDeath.JudgeTimer = Now
-    elseif spellID == 50069 then
+    if spellID == 50069 then
         --死者暗黑光
         Data().ExDeath.DeathBeamObj = TensorCore.mGetEntity(entityID)
         Data().ExDeath.DrawTimer = Now()
@@ -367,6 +373,12 @@ Dmu_P4.OnEntityCast = function(entityID, spellID, castPos)
         if DM.InState('P4WaterFire2Put') then
             DM.ChangeState('P4End')
         end
+    elseif spellID == 50067
+            or spellID == 50068
+            or spellID == 50081
+            or spellID == 50082
+    then
+        DM.ChangeState('P4ThunderWater1')
     end
 end
 
@@ -410,16 +422,31 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
     end
     if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
         if DM.OverState('P4ThunderWater1', true) and DM.BeLowState('P4WaterFire1', true) then
-            Data().Eye1.thunder = DM.CalcThunderType(aoeInfo)
+            if Data().Eye1.thunder == nil then
+                local thunderType = DM.CalcThunderType(aoeInfo)
+                if thunderType ~= nil then
+                    Data().Eye1.thunder = thunderType
+                end
+            end
         end
         if DM.OverState('P4Eye2', true) and DM.BeLowState('P4WaterFire2Put', true) then
-            Data().WaterFire2.ThunderType = DM.CalcThunderType(aoeInfo)
+            if Data().WaterFire2.ThunderType == nil then
+                local thunderType = DM.CalcThunderType(aoeInfo)
+                if thunderType ~= nil then
+                    Data().WaterFire2.ThunderType = thunderType
+                end
+            end
             Data().WaterFire2.AoeTimer = Now()
         end
     end
-    if aoeInfo.aoeID == 47906 or aoeInfo.aoeID == 47909 then
+
+    if aoeInfo.aoeID == 47906
+            or aoeInfo.aoeID == 47909
+            or aoeInfo.aoeID == 47908
+            or aoeInfo.aoeID == 47905
+    then
         if DM.OverState('P4WaterFire1', true)
-                or DM.OverState('P4WaterFire1Put', true)
+                and DM.BeLowState('P4WaterFire1Put', true)
         then
             if Cfg().draw then
                 if Data().WaterFire1.Type then
@@ -430,7 +457,7 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
             end
             Data().WaterFire1.AoeTimer = Now()
         elseif DM.OverState('P4WaterFire2', true)
-                or DM.OverState('P4WaterFire2Put', true)
+                and DM.BeLowState('P4WaterFire2Put', true)
         then
             if Cfg().draw then
                 if Data().WaterFire2.Type then
@@ -489,12 +516,7 @@ Dmu_P4.Update = function()
     end
     -- 添加执行buff阶段 --
     if DM.InState('P4ExDeath3Judge') then
-        if Data().ExDeath.DrawTimer > 0
-                and TimeSince(Data().ExDeath.DrawTimer) > 5000 then
-            DM.ChangeState('P4ThunderWater1')
-        end
-        if Data().ExDeath.FirstJudge
-                and Data().ExDeath.DeathBeamObj ~= nil
+        if Data().ExDeath.DeathBeamObj ~= nil
                 and Data().ExDeath.AliveBeamObj ~= nil
                 and Data().ExDeath.DothBeamObj ~= nil
         then
@@ -527,8 +549,10 @@ Dmu_P4.Update = function()
                         for job, member in pairs(MG.Party) do
                             local buffMap = Data().Buff[job]
                             local goSame
-                            if TensorCore.hasBuff(member.id, 5464) then
-                                if buffMap[5464] then
+                            if TensorCore.hasBuff(member.id, 5464)
+                                    or TensorCore.hasBuff(member.id, 1382) then
+                                if (buffMap[5464] == nil and buffMap[1382] == true)
+                                        or (buffMap[5464] == true and buffMap[1382] == nil) then
                                     goSame = true
                                 else
                                     goSame = false
@@ -540,36 +564,41 @@ Dmu_P4.Update = function()
                                     goSame = true
                                 end
                             end
-
                             local buff
-                            if TensorCore.hasBuff(member.id, 4887) then
-                                if buffMap[4887] then
+                            if TensorCore.hasBuff(member.id, 4887) or TensorCore.hasBuff(member.id, 5541) then
+                                if (buffMap[4887] == nil and buffMap[5541] == true)
+                                        or (buffMap[5541] == nil and buffMap[4887] == true)
+                                then
                                     buff = 4887
                                 else
                                     buff = 4888
                                 end
-                            elseif TensorCore.hasBuff(member.id, 4888) then
-                                if buffMap[4888] then
+                            elseif TensorCore.hasBuff(member.id, 4888) or TensorCore.hasBuff(member.id, 5542) then
+                                if (buffMap[4888] == nil and buffMap[5542] == true)
+                                        or (buffMap[5542] == nil and buffMap[4888] == true)
+                                then
                                     buff = 4888
                                 else
                                     buff = 4887
                                 end
                             end
                             local dir
-                            if goSame then
+                            if goSame == true then
                                 if buff == 4887 then
                                     dir = Data().ExDeath.aliveDir
                                 else
                                     dir = Data().ExDeath.deathDir
                                 end
-                            else
+                            elseif goSame == false then
                                 if buff == 4888 then
                                     dir = Data().ExDeath.aliveDir
                                 else
                                     dir = Data().ExDeath.deathDir
                                 end
                             end
-                            Data().ExDeath.GuideData[job] = TensorCore.getPosInDirection(DM.Center, dir, 5)
+                            if dir ~= nil then
+                                Data().ExDeath.GuideData[job] = TensorCore.getPosInDirection(DM.Center, dir, 5)
+                            end
                         end
                     else
                         MG.FrameMultiD(Data().ExDeath.GuideData)
@@ -792,9 +821,9 @@ Dmu_P4.Update = function()
                                 Data().Eye2.GuidePos[job] = { x = 95, y = 0, z = 100 }
                             else
                                 if MG.IndexOf(MG.JobPosName, job) <= 4 then
-                                    Data().Eye2.GuidePos[job] = { x = 100, y = 0, z = 90 }
+                                    Data().Eye2.GuidePos[job] = { x = 100, y = 0, z = 91 }
                                 else
-                                    Data().Eye2.GuidePos[job] = { x = 100, y = 0, z = 110 }
+                                    Data().Eye2.GuidePos[job] = { x = 100, y = 0, z = 109 }
                                 end
                             end
                         else

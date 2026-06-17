@@ -31,6 +31,10 @@ UIMgr.init = function(M)
             local filePath = path .. "\\" .. fileName
             local uiTable = FileLoad(filePath)
             local uiName = string.gsub(fileName, "%.lua", "")
+            if type(uiTable) ~= 'table' then
+                M.Debug('    加载' .. uiName .. '失败:')
+                d(uiTable)
+            end
             if not isReload then
                 M[uiName] = {
                     open = false,

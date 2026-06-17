@@ -557,6 +557,8 @@ DM.StateNames = {
     'P4WaterFire2',
     'P4WaterFire2Put',
     'P4End',
+    'P5Start',
+    'P5End',
 }
 
 ---@class ThunderType 雷类型
@@ -677,6 +679,7 @@ end
 ---@return ThunderType
 DM.CalcThunderType = function(thundersAoe)
     local h2pi = MG.SetHeading2Pi(thundersAoe.heading)
+    MG.ArrInfo('CalcThunderType: ' .. thundersAoe.aoeID)
     if MG.IsSameDirection(h2pi, math.pi * 7 / 4) then
         if thundersAoe.x > 100 and thundersAoe.x < 107 then
             return DM.ThunderType.Right13

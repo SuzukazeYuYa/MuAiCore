@@ -1021,8 +1021,8 @@ Dmu_P3.Update = function()
                             9.6, 0.2, 0.4, 0.2, true
                     )
                 end
-            elseif timeSince < 12700 then
-                local drawer = MG.CreateDrawer(0.1, 0.5, 0)
+            elseif Cfg().draw and timeSince < 12700 then
+                local drawer = MG.CreateDrawer(0.1, 0.5, 0, 0.1)
                 MG.OnCurrentPartyDo(function(job, member)
                     drawer:addCircle(member.pos.x, member.pos.y, member.pos.z, 6)
                 end)
