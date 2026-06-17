@@ -408,7 +408,7 @@ local dataInit = function()
         end
         job = job or MG.SelfPos
         local buffList = MG.DancingMad.P4.Buff[MG.SelfPos]
-        if buffList == nil or buffList[buffId] then
+        if buffList == nil or buffList[buffId] == nil then
             return nil
         end
         return buffList[buffId]

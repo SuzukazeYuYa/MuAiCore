@@ -117,14 +117,11 @@ local onAddNewBuff = function(buffTable, timer, currentVfx)
 end
 
 local lockFaceCheck = function(eyeTable)
-   
     local buffOwner = eyeTable.Owner
     if buffOwner == nil or not Cfg().autoLook then
         return
     end
-
     local buff1 = TensorCore.getBuff(buffOwner[1], 5543)
-  
     if buff1 ~= nil then
         if buff1.duration < 1 and not eyeTable.Locked then
             local player = MG.GetPlayer()
@@ -172,23 +169,23 @@ local lockFaceCheck = function(eyeTable)
             eyeTable.Locked = true
             MG.ArrInfo('锁定面向，开始，当前面向：' .. tostring(lookHeading))
         end
-        else
-            if eyeTable.LostTimer == nil then
-                eyeTable.LostTimer = Now()
-            end
-            if eyeTable.Locked and TimeSince(eyeTable.LostTimer) > 1000 then
-                if Cfg().harkLock then
-                    TensorCore.API.TensorACR.setHardLockFace(false)
-                end
-                TensorCore.API.TensorACR.toggleLockFace(false)
-                eyeTable.Locked = false
-                MG.ArrInfo('锁定面向结束。')
-            end
+    else
+        if eyeTable.LostTimer == nil then
+            eyeTable.LostTimer = Now()
         end
+        if eyeTable.Locked and TimeSince(eyeTable.LostTimer) > 1000 then
+            if Cfg().harkLock then
+                TensorCore.API.TensorACR.setHardLockFace(false)
+            end
+            TensorCore.API.TensorACR.toggleLockFace(false)
+            eyeTable.Locked = false
+            MG.ArrInfo('锁定面向结束。')
+        end
+    end
 end
 
 local ThunderWater = function(wave)
-    local canHit
+    local canHit = true
     if wave == 1 then
         canHit = Data().MoveOrStopHit == nil
     else
@@ -197,14 +194,17 @@ local ThunderWater = function(wave)
     if Cfg().draw and canHit then
         local player = MG.GetPlayer()
         local buff = TensorCore.getBuff(player.id, 5546)
-        if buff.duration < 15 then
-            Data().MoveOrStopHit = true
-        else
-            Data().MoveOrStopHit = false
+        if buff ~= nil then
+            if buff.duration < 15 then
+                Data().MoveOrStopHit = true
+            else
+                Data().MoveOrStopHit = false
+            end
         end
         if Data().MoveOrStopHit then
             local text
-            if MG.DancingMad.IsRealBuff(5546) then
+            local buffMap = Data().Buff[MG.SelfPos]
+            if buffMap[5546] then
                 text = 'Stop'
             else
                 text = 'Move'
@@ -441,9 +441,9 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
     end
 
     if aoeInfo.aoeID == 47906
-            or aoeInfo.aoeID == 47909
+            or aoeInfo.aoeID == 47907
             or aoeInfo.aoeID == 47908
-            or aoeInfo.aoeID == 47905
+            or aoeInfo.aoeID == 47909
     then
         if DM.OverState('P4WaterFire1', true)
                 and DM.BeLowState('P4WaterFire1Put', true)
@@ -461,9 +461,9 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
         then
             if Cfg().draw then
                 if Data().WaterFire2.Type then
-                    DM.cyanDrawer:addTimedDonut(5000, aoeInfo.x, 0, aoeInfo.z, 6, 40)
+                    MG.CreateDrawer(0, 0.5, 1, 0.3, 2):addTimedDonut(5000, aoeInfo.x, 0, aoeInfo.z, 6, 40)
                 else
-                    DM.cyanDrawer:addTimedCircle(5000, aoeInfo.x, 0, aoeInfo.z, 6)
+                    MG.CreateDrawer(0, 0.5, 1, 0.3, 2):addTimedCircle(5000, aoeInfo.x, 0, aoeInfo.z, 6)
                 end
             end
         end
@@ -539,9 +539,9 @@ Dmu_P4.Update = function()
                     local posDeath = Data().ExDeath.deathDrawPos
                     local posAlive = Data().ExDeath.aliveDrawPos
                     local posBoth = Data().ExDeath.DothBeamObj.pos
-                    MG.CreateDrawer(0, 0, 1, nil, 1):addRect(posDeath.x, 0, posDeath.z, 40, 20, 0)
-                    MG.CreateDrawer(1, 0, 1, nil, 1):addRect(posAlive.x, 0, posAlive.z, 40, 20, 0)
-                    MG.CreateDrawer(1, 0, 0, nil, 1):addRect(posBoth.x, 0, posBoth.z, 40, 3, 0)
+                    MG.CreateDrawer(0, 0, 1, nil, 1):addRect(posDeath.x, 0, posDeath.z, 40, 20, Data().ExDeath.DeathBeamObj.pos.h)
+                    MG.CreateDrawer(1, 0, 1, nil, 1):addRect(posAlive.x, 0, posAlive.z, 40, 20, Data().ExDeath.AliveBeamObj.pos.h)
+                    MG.CreateDrawer(1, 0, 0, nil, 1):addRect(posBoth.x, 0, posBoth.z, 40, 3, Data().ExDeath.DothBeamObj.pos.h)
                 end
                 if Cfg().guide then
                     if Data().ExDeath.GuideData == nil then
