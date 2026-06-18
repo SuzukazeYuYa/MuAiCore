@@ -38,6 +38,7 @@ end
 ---数据初始化
 local dataInit = function()
     MG.DancingMad = {
+        Casting = {},
         P1 = {
             Death = {
                 Timer = 0,
@@ -357,11 +358,12 @@ local dataInit = function()
                 Guide1 = nil,
                 Guide2 = nil,
                 Guide2Offset = nil,
-                IceType = nil
+                IceType = nil,
+                ToEye2Timer = 0,
             },
             WaterFire1 = {
                 Guide1 = {},
-                Guide2 = {}, 
+                Guide2 = {},
                 AoeTimer = 0,
                 Type = false,
             },
@@ -380,7 +382,7 @@ local dataInit = function()
                 Owner = nil,
                 LostTimer = 0,
                 Locked = false,
-            },     
+            },
             Eye2 = {
                 GuidePos = nil,
                 thunder = nil,
@@ -393,10 +395,34 @@ local dataInit = function()
             StateVfx = {},
             Buff = {},
             CheckFinish = {}
-            
+
         },
         P5 = {
-            
+            Blood = {
+                Cross12 = nil,
+                Cross23 = nil,
+                Cross34 = nil,
+                Cross14 = nil,
+                Aoe = {},
+                AoeOut = {},
+                GuideData = {}
+            },
+            MaddeningOrchestra = {
+                FirstHitTimer = 0,
+                FirstHits = {},
+                Guide1 = nil,
+                Guide2 = nil,
+                Guide3 = nil,
+                GuideOut = nil,
+                RedBuff = nil,
+                BlueBuff = nil,
+            },
+            Celestriad = {
+              AllTowers = nil,  
+              TowerFire = nil,
+              TowerIce = nil,
+              TowerThunder = nil,
+            },
         },
     }
 
@@ -413,7 +439,6 @@ local dataInit = function()
         end
         return buffList[buffId]
     end
-
     MG.Info(DM.NameCN .. '数据初始化完毕！')
 end
 --- 屏蔽特效开关缓存
@@ -558,6 +583,16 @@ DM.StateNames = {
     'P4WaterFire2Put',
     'P4End',
     'P5Start',
+    'P5BloodStart',
+    'P5Blood1End',
+    'P5Blood2End',
+    'P5Blood3End',
+    'P5MaddeningOrchestra',
+    'P5MaddeningOrchestra1End',
+    'P5MaddeningOrchestra2End',
+    'P5UltimaRepeater2',
+    'P5CelestriadPre',
+    'P5Celestriad',
     'P5End',
 }
 
@@ -757,6 +792,60 @@ DM.CalcMixPoint = function(thunder, ice)
     return near, far, center
 end
 
+DM.commonDrawIds = { 47774, 47775, 47777, 47768 }
+
+---@param aoeInfo DirectionalAOE
+DM.commonStartDraw = function(aoeInfo)
+    if MG == nil or MG.DancingMad == nil or MG.DancingMad.Casting == nil then
+        return
+    end
+    if table.contains(DM.commonDrawIds, (aoeInfo.aoeID))
+            and ((DM.OverState('P1Start', true) and DM.BeLowState('P1End') and MG.Config.DmuCfg.P1.draw)
+            or (DM.OverState('P4Start', true) and DM.BeLowState('P4End') and MG.Config.DmuCfg.P4.draw))
+    then
+        MG.DancingMad.Casting[aoeInfo.entityID] = aoeInfo
+    end
+end
+
+DM.CommonDraw = function()
+    if MG == nil or MG.DancingMad == nil or MG.DancingMad.Casting == nil then
+        return
+    end
+    for id, aoeInfo in pairs(MG.DancingMad.Casting) do
+        if aoeInfo.aoeCastType == 13 then
+            if MG.Config.DmuCfg.BindEffect then
+                DM.purpleDrawer:addCone(aoeInfo.x, aoeInfo.y, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading)
+            else
+                DM.yellowDrawer:addCone(aoeInfo.x, aoeInfo.y, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading, true)
+            end
+        elseif aoeInfo.aoeCastType == 12 then
+            if MG.Config.DmuCfg.BindEffect then
+                MG.CreateDrawer(0.5, 0, 1, 0.3, 2):addRect(aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
+            else
+                DM.yellowDrawer:addRect(aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading, true)
+            end
+        end
+    end
+end
+
+DM.CommonEndDraw = function(entityID)
+    if MG == nil or MG.DancingMad == nil or MG.DancingMad.Casting == nil or table.size(MG.DancingMad.Casting) == 0 then
+        return
+    end
+    if (DM.OverState('P1Start', true) and DM.BeLowState('P1End') and MG.Config.DmuCfg.P1.draw)
+            or (DM.OverState('P4Start', true) and DM.BeLowState('P4End') and MG.Config.DmuCfg.P4.draw)
+    then
+        ---@type DirectionalAOE
+        local aoe = MG.DancingMad.Casting[entityID]
+        if aoe ~= nil and TimeSince(aoe.startTime) > aoe.duration * 1000 - 100 then
+            MG.DancingMad.Casting[entityID] = nil
+        end
+    else
+        if table.size(MG.DancingMad.Casting) > 0 then
+            MG.DancingMad.Casting = {}
+        end
+    end
+end
 -------------------------- Argus Events --------------------------
 DM.OnEntityChannel = function(entityID, spellID, _)
     if not MG.Config.DmuCfg.Enable or MG.DancingMad == nil then
@@ -780,13 +869,17 @@ DM.OnEntityChannel = function(entityID, spellID, _)
         if DM.BeLowState('P4Start') then
             DM.ChangeState('P4Start')
         end
+    elseif spellID == 47936 then
+        if DM.BeLowState('P5Start') then
+            DM.ChangeState('P5Start')
+        end
     end
-
     doSubEvents('OnEntityChannel', entityID, spellID)
 end
 
 DM.OnEntityCast = function(entityID, spellID, castPos)
     doSubEvents('OnEntityCast', entityID, spellID, castPos)
+    DM.CommonEndDraw(entityID)
 end
 
 DM.OnMarkerAdd = function(entityID, markerID)
@@ -795,6 +888,7 @@ end
 
 DM.OnAOECreate = function(aoeInfo)
     doSubEvents('OnAOECreate', aoeInfo)
+    DM.commonStartDraw(aoeInfo)
 end
 
 DM.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
@@ -821,6 +915,7 @@ end
 DM.Update = function()
     applyEffectBinder()
     doSubEvents('Update')
+    DM.CommonDraw()
 end
 
 DM.OnEnter = function()

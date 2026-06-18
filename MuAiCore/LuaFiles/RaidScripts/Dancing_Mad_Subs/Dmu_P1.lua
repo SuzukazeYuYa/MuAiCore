@@ -507,30 +507,30 @@ end
 ---@param aoeInfo DirectionalAOE
 Dmu_P1.OnAOECreate = function(aoeInfo)
     -- 画制冰和雷
-    if Cfg().draw then
-        local drawTime = 5500
-        if not MG.Config.DmuCfg.BindEffect then
-            -- 冰危险区
-            if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
-                DM.yellowDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, math.pi / 2, aoeInfo.heading, 0, true)
-            end
-            -- 画雷危险区
-            if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-                local startPos = TensorCore.getPosInDirection({ x = aoeInfo.x, y = aoeInfo.y, z = aoeInfo.z }, aoeInfo.heading + math.pi, 5)
-                DM.yellowDrawer:addTimedRect(drawTime, startPos.x, startPos.y, startPos.z, 50, 10, aoeInfo.heading, 0, true)
-            end
-        else
-            -- 冰危险区
-            if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
-                DM.purpleDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading)
-            end
-
-            -- 画雷危险区
-            if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-                MG.CreateDrawer(0.5, 0, 1, nil, 2):addTimedRect(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
-            end
-        end
-    end
+    --if Cfg().draw then
+    --    local drawTime = 5500
+    --    if not MG.Config.DmuCfg.BindEffect then
+    --        -- 冰危险区
+    --        if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
+    --            DM.yellowDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, math.pi / 2, aoeInfo.heading, 0, true)
+    --        end
+    --        -- 画雷危险区
+    --        if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
+    --            local startPos = TensorCore.getPosInDirection({ x = aoeInfo.x, y = aoeInfo.y, z = aoeInfo.z }, aoeInfo.heading + math.pi, 5)
+    --            DM.yellowDrawer:addTimedRect(drawTime, startPos.x, startPos.y, startPos.z, 50, 10, aoeInfo.heading, 0, true)
+    --        end
+    --    else
+    --        -- 冰危险区
+    --        if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
+    --            DM.purpleDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading)
+    --        end
+    --
+    --        -- 画雷危险区
+    --        if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
+    --            MG.CreateDrawer(0.5, 0, 1, nil, 2):addTimedRect(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
+    --        end
+    --    end
+    --end
 
     if DM.BeLowState('P1TrueFalse2', true) and (aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768) then
         if Data().Fire1.iceDir == nil then

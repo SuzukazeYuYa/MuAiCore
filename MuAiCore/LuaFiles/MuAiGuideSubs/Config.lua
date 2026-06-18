@@ -354,7 +354,10 @@ Config.init = function(M)
                 eyeType = 1,
                 autoLook = true, harkLock = false,
             },
-            P5 = { enable = true, draw = true, guide = true }
+            P5 = { enable = true, draw = true, guide = true,
+                   isLeaning = false,
+                   jobOrder = { 'H2', 'D2', 'D4', 'ST', 'MT', 'D3', 'H1', 'D1' }
+            }
         }
     end
 

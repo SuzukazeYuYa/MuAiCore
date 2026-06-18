@@ -50,25 +50,25 @@ local eye1PosFix = {
     [1] = { -- L13
         th = { x = 96.11, y = 0, z = 95.41 },
         dps = { x = 104.59, y = 0, z = 103.89 },
-        g = { x = 100.35, y = 0, z = 99.65 },
+        g = { x = 101, y = 0, z = 99 },
         real = { x = 106.00, y = 0, z = 94.00 },
     },
     [2] = { -- L24
         th = { x = 95.41, y = 0, z = 96.11 },
         dps = { x = 103.89, y = 0, z = 104.59 },
-        g = { x = 99.65, y = 0, z = 100.35 },
+        g = { x = 99, y = 0, z = 101 },
         real = { x = 94.00, y = 0, z = 106.00 },
     },
-    [3] = { --R13
+    [3] = { -- R13
         th = { x = 103.89, y = 0, z = 95.41 },
         dps = { x = 95.41, y = 0, z = 95.41 },
-        g = { x = 99.65, y = 0, z = 99.65 },
+        g = { x = 99, y = 0, z = 99 },
         real = { x = 94.00, y = 0, z = 94.00 },
     },
-    [4] = {--R24
+    [4] = { -- R24
         th = { x = 104.59, y = 0, z = 96.11 },
         dps = { x = 96.11, y = 0, z = 104.59 },
-        g = { x = 100.35, y = 0, z = 100.35 },
+        g = { x = 101, y = 0, z = 101 },
         real = { x = 106.00, y = 0, z = 106.00 },
     },
 }
@@ -388,30 +388,30 @@ end
 
 Dmu_P4.OnAOECreate = function(aoeInfo)
     -- 画制冰和雷
-    if Cfg().draw then
-        local drawTime = 5500
-        if not MG.Config.DmuCfg.BindEffect then
-            -- 冰危险区
-            if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
-                DM.yellowDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, math.pi / 2, aoeInfo.heading, 0, true)
-            end
-            -- 画雷危险区
-            if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-                local startPos = TensorCore.getPosInDirection({ x = aoeInfo.x, y = aoeInfo.y, z = aoeInfo.z }, aoeInfo.heading + math.pi, 5)
-                DM.yellowDrawer:addTimedRect(drawTime, startPos.x, startPos.y, startPos.z, 50, 10, aoeInfo.heading, 0, true)
-            end
-        else
-            -- 冰危险区
-            if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
-                DM.purpleDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading)
-            end
-
-            -- 画雷危险区
-            if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-                MG.CreateDrawer(0.5, 0, 1, nil, 2):addTimedRect(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
-            end
-        end
-    end
+    --if Cfg().draw then
+    --    local drawTime = 5500
+    --    if not MG.Config.DmuCfg.BindEffect then
+    --        -- 冰危险区
+    --        if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
+    --            DM.yellowDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, math.pi / 2, aoeInfo.heading, 0, true)
+    --        end
+    --        -- 画雷危险区
+    --        if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
+    --            local startPos = TensorCore.getPosInDirection({ x = aoeInfo.x, y = aoeInfo.y, z = aoeInfo.z }, aoeInfo.heading + math.pi, 5)
+    --            DM.yellowDrawer:addTimedRect(drawTime, startPos.x, startPos.y, startPos.z, 50, 10, aoeInfo.heading, 0, true)
+    --        end
+    --    else
+    --        -- 冰危险区
+    --        if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
+    --            DM.purpleDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading)
+    --        end
+    --
+    --        -- 画雷危险区
+    --        if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
+    --            MG.CreateDrawer(0.5, 0, 1, nil, 2):addTimedRect(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
+    --        end
+    --    end
+    --end
     if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
         if DM.OverState('P4WaterFire1Put', true) and DM.BeLowState('P4Eye2') then
             Data().ThunderWater.IceType = DM.CalcIceType(aoeInfo)
@@ -674,7 +674,7 @@ Dmu_P4.Update = function()
                         elseif Cfg().eyeType == 3 then
                             --MMW
                             local template
-                            if tType == DM.ThunderType.Left24 or DM.ThunderType.Right24 then
+                            if tType == DM.ThunderType.Left24 or tType == DM.ThunderType.Right24 then
                                 template = eye1PosMMW[1]
                             else
                                 template = eye1PosMMW[2]
@@ -747,7 +747,11 @@ Dmu_P4.Update = function()
             end
         end
         if not hasBuff then
-            DM.ChangeState('P4Eye2')
+            if Data().ThunderWater.ToEye2Timer == 0 then
+                Data().ThunderWater.ToEye2Timer = Now()
+            elseif TimeSince(Data().ThunderWater.ToEye2Timer) > 1200 then
+                DM.ChangeState('P4Eye2')
+            end
         end
         ThunderWater(2)
         if Data().ThunderWater.Guide2Offset == nil then
@@ -838,7 +842,7 @@ Dmu_P4.Update = function()
                             Data().Eye2.GuidePos[job] = { x = 100, y = 0, z = 100 }
                         end
                     elseif Cfg().eyeType == 3 then
-                        if table.contains(Data().Eye1.Owner, member.id) then
+                        if table.contains(Data().Eye2.Owner, member.id) then
                             if Data().Eye2.type then
                                 Data().Eye2.GuidePos[job] = eye1PosMMW[1].real
                             else
