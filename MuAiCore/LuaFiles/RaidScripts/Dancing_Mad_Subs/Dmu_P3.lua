@@ -346,7 +346,7 @@ local drawDamningEdict = function()
     end
     local curCaster = TensorCore.mGetEntity(bossChaos.id)
     local curHeading = curCaster.pos.h
-    MG.CreateDrawer(1, 0.5, 0):addRect(curCaster.pos.x, 0, curCaster.pos.z, 40, 40, curHeading)
+    MG.CreateDrawer(1, 0.5, 0):addRect(curCaster.pos.x, 0, curCaster.pos.z, 50, 50, curHeading)
     if TimeSince(Data().DamningEdict.Timer) > 5000 then
         Data().DamningEdict.OnDraw = false
         Data().DamningEdict.CasterId = 0

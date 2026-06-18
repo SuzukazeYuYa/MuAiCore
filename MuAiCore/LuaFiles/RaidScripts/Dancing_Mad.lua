@@ -418,10 +418,26 @@ local dataInit = function()
                 BlueBuff = nil,
             },
             Celestriad = {
-              AllTowers = nil,  
-              TowerFire = nil,
-              TowerIce = nil,
-              TowerThunder = nil,
+                AllTowers = nil,
+                TowerFire = nil,
+                TowerIce = nil,
+                TowerThunder = nil,
+                BuffPlayerStart = nil,
+                groupBuffPos = {},
+                groupNoBuff = nil,
+                wave = 0,
+                CastingTowers = {},
+                Guiding = {},
+                GuideData = {},
+                GuideDataOut = {},
+                GuideDataIn = {},
+                castingCache = {},
+                CatastrophicChoiceId = 0,
+            },
+            GroundFire  = {
+                OnCreate = {},
+                AoePos = {},
+                OnCast = {}
             },
         },
     }
@@ -459,6 +475,8 @@ local defineColors = function()
     -- 一次性创建所有颜色
     ---@type ShapeDrawer
     DM.redDrawer = MG.CreateDrawer(1, 0, 0, nil, 2)
+    ---@type ShapeDrawer
+    DM.orangeDrawer = MG.CreateDrawer(1, 0.5, 0, nil, 2)
     ---@type ShapeDrawer
     DM.yellowDrawer = MG.CreateDrawer(1, 1, 0, nil, 2)
     ---@type ShapeDrawer
@@ -593,6 +611,15 @@ DM.StateNames = {
     'P5UltimaRepeater2',
     'P5CelestriadPre',
     'P5Celestriad',
+    'P5CelestriadGetData',
+    'P5CelestriadEnd',
+    'P5UltimaRepeater3',
+    'P5GroundFire',
+    'P5MaddeningOrchestra2',
+    'P5MaddeningOrchestra2_1End',
+    'P5MaddeningOrchestra2_2End',
+    'P5UltimaRepeater4',
+    'P5BeforeEnd',
     'P5End',
 }
 
@@ -619,13 +646,13 @@ DM.Init = function(M)
     DM.SubScripts = {}
     MG = M
     defineColors()
-    local folderPath = MuAiGuideRoot .. "RaidScripts\\Dancing_Mad_Subs"
+    local folderPath = MuAiGuideRoot .. 'RaidScripts\\Dancing_Mad_Subs'
     local list = FolderList(folderPath)
     for _, fileName in pairs(list) do
-        M.Debug("       加载副本[" .. DM.ScriptName .. "]的子脚本：" .. fileName)
-        local filePath = folderPath .. "\\" .. fileName
+        M.Debug('       加载副本[' .. DM.ScriptName .. ']的子脚本：' .. fileName)
+        local filePath = folderPath .. '\\' .. fileName
         local script = FileLoad(filePath)
-        if type(script) ~= "table" then
+        if type(script) ~= 'table' then
             M.Debug('       加载失败，获取到内容如下：')
             M.Debug('-------------------------------')
             d(script)
@@ -647,21 +674,21 @@ DM.ChangeState = function(stateName)
     local state = DM.State[stateName]
     if state == nil then
         -- 输出错误日志
-        MG.Debug("[错误]切换状态失败，状态不存在：" .. stateName)
-        MG.Debug("调用堆栈：" .. debug.traceback()) -- 打印完整调用栈
+        MG.Debug('[错误]切换状态失败，状态不存在：' .. stateName)
+        MG.Debug('调用堆栈：' .. debug.traceback()) -- 打印完整调用栈
         -- 直接抛出 Lua 异常，强制中断，避免继续执行
-        error("ChangeState 禁止传入 nil 状态！")
+        error('ChangeState 禁止传入 nil 状态！')
         return
     end
     MG.DancingMad.CurrentState = state
-    local log = DM.NameCN .. "阶段切换：" .. stateName
+    local log = DM.NameCN .. '阶段切换：' .. stateName
     MG.ArrInfo(log)
 end
 
 --- 切到下一个状态
 DM.GoNextSate = function()
     MG.DancingMad.CurrentState = MG.DancingMad.CurrentState + 1
-    local log = DM.NameCN .. "阶段切换：" .. DM.StateNames[MG.DancingMad.CurrentState]
+    local log = DM.NameCN .. '阶段切换：' .. DM.StateNames[MG.DancingMad.CurrentState]
     MG.ArrInfo(log)
 end
 
@@ -670,7 +697,7 @@ end
 DM.InState = function(stateName)
     local state = DM.State[stateName]
     if state == nil then
-        MG.Debug("[错误]切换状态失败，状态不存在：" .. stateName)
+        MG.Debug('[错误]判断当前状态失败：' .. stateName .. '不存在')
         return false
     end
     if MG.DancingMad.CurrentState == state then
@@ -684,7 +711,7 @@ DM.OverState = function(stateName, include)
     local state = DM.State[stateName]
     if state == nil then
         -- 输出错误日志
-        d("[MuAiGuide][错误]状态不存在：" .. stateName)
+        d('[MuAiGuide][错误]状态不存在：' .. stateName)
     end
     if include then
         return MG.DancingMad.CurrentState >= state
@@ -700,7 +727,7 @@ DM.BeLowState = function(stateName, include)
     local state = DM.State[stateName]
     if state == nil then
         -- 输出错误日志
-        MG.Debug("[错误]状态不存在：" .. stateName)
+        MG.Debug('[错误]状态不存在：' .. stateName)
     end
     if include then
         return MG.DancingMad.CurrentState <= state
@@ -923,7 +950,7 @@ DM.OnEnter = function()
         CurrentState = 1
     }
     -- MG.DancingMad.CurrentState = 0
-    MG.Develop.Reg("DancingMad")
+    MG.Develop.Reg('DancingMad')
     MG.Develop.LogState = function()
         printCurrentState()
     end
