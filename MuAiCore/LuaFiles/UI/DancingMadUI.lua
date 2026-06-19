@@ -1,21 +1,104 @@
 local DancingMadUI = {}
 local wide = 350
+local newCfgMode = false
+local newFileName = ""
 
 DancingMadUI.draw = function()
     local M = MuAiGuide
     if not M.DancingMadUI.open then
+        newCfgMode = false
         return
     end
     GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
     GUI:SetNextWindowSize(wide, 0, GUI.SetCond_Appearing)
     M.DancingMadUI.visible, M.DancingMadUI.open = GUI:Begin('Dmu Setting', M.DancingMadUI.open)
     if M.DancingMadUI.visible then
-        if GUI:CollapsingHeader('全局开关') then
+        if GUI:CollapsingHeader('全局设置') then
+            GUI:BulletText('配置文件工具')
+            if newCfgMode then
+                GUI:Dummy(20, 0)
+                GUI:SameLine(0, 0)
+                M.UITool.AddLabel("新配置名：", false)
+                GUI:PushItemWidth(200)
+                local havaSame = false
+                local NewFileName, NewFileNameChanged = GUI:InputText("##NewFileName", newFileName, GUI.InputTextFlags_CharsNoBlank)
+                if NewFileNameChanged then
+                    local fileName = NewFileName
+                    if M.ContainsIgnoreCase(M.Config.DmuCustomList, fileName)
+                            or string.lower(fileName) == "guideconfig"
+                            or NewFileName == "" or #NewFileName == 0
+                    then
+                        GUI:TextColored(1, 0, 0, 1, "已存在该名称文件或者名称不合法,无法创建!")
+                        havaSame = true
+                    else
+                        newFileName = NewFileName
+                    end
+                end
+                GUI:PopItemWidth()
+                GUI:Dummy(20, 0)
+                GUI:SameLine(0, 0)
+                GUI:Button("确认", 100, 20)
+                if GUI:IsItemClicked(0) then
+                    if not havaSame and newFileName ~= nil and #newFileName > 0 then
+                        M.SaveFileConfig(M.Config.DmuGuidePath, newFileName, M.Config.DmuCfg)
+                        newCfgMode = false
+                        if newFileName ~= M.Config.DmuCustomList[M.Config.DmuCustomListIndex] then
+                            table.insert(M.Config.DmuCustomList, newFileName)
+                        end
+                    else
+                        M.ShowMsgUI(3,{"已存在该名称文件或者名称不合法,无法创建!"})
+                    end
+                end
+                GUI:SameLine()
+                GUI:Button("取消", 100, 20)
+                if GUI:IsItemClicked(0) then
+                    newFileName = M.Config.DmuCustomList[M.Config.DmuCustomListIndex]
+                    newCfgMode = false
+                end
+            else
+                GUI:Dummy(20, 0)
+                GUI:SameLine(0, 0)
+                GUI:PushItemWidth(300)
+                local configIndex, configIndexChange = GUI:Combo("##configIndex", M.Config.DmuCustomListIndex, M.Config.DmuCustomList, 30)
+                if configIndexChange then
+                    M.Config.DmuCustomListIndex = configIndex
+                    newFileName = M.Config.DmuCustomList[M.Config.DmuCustomListIndex]
+                end
+                GUI:PopItemWidth()
+                if M.Config.DmuCustomListIndex == 1 then
+                    GUI:Dummy(20, 0)
+                    GUI:SameLine(0, 0)
+                    GUI:Button("新建配置", 90, 20)
+                    if GUI:IsItemClicked(0) then
+                        newFileName = ""
+                        newCfgMode = true
+                    end
+                else
+                    GUI:Dummy(20, 0)
+                    GUI:SameLine(0, 0)
+                    GUI:Button("加载此配置", 90, 20)
+                    if GUI:IsItemClicked(0) then
+                        local fileName = M.Config.DmuCustomList[M.Config.DmuCustomListIndex]
+                        local defCfg = M.CreateDmuDefaultCfg()
+                        M.Config.DmuCfg = M.LoadFileConfig(M.Config.DmuGuidePath, fileName, defCfg)
+                    end
+                    GUI:SameLine()
+                    GUI:Button("新建配置", 90, 20)
+                    if GUI:IsItemClicked(0) then
+                        newFileName = ""
+                        newCfgMode = true
+                    end
+                    GUI:SameLine()
+                    GUI:Button("保存到此配置", 100, 20)
+                    if GUI:IsItemClicked(0) then
+                        M.SaveFileConfig(M.Config.DmuGuidePath, newFileName, M.Config.DmuCfg)
+                    end
+                end
+            end
+            GUI:Separator()
             GUI:Columns(3, 'switch', false)
-            GUI:Dummy(15, 10)
-            GUI:SameLine()
             GUI:AlignFirstTextHeightToWidgets()
-            GUI:Text('总开关')
+            GUI:BulletText('总开关')
             GUI:NextColumn()
             GUI:AlignFirstTextHeightToWidgets()
             GUI:Text('是否画图')

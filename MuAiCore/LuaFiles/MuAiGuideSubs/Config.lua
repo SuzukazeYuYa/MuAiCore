@@ -437,10 +437,10 @@ Config.init = function(M)
         local config = FileLoad(saveFile)
         if config ~= nil then
             M.SyncNestedFields(config, defConfig)
-            M.Info('加载配置[' .. fileName .. ']成功！')
+            M.ShowMsgUI(3, { ('加载配置[' .. fileName .. ']成功！') })
             return config
         end
-        M.Info('加载配置[' .. fileName .. ']失败！')
+        M.ShowMsgUI(3, { ('加载配置[' .. fileName .. ']失败！') })
         return defConfig
     end
     --- 将表格序列化到文件
