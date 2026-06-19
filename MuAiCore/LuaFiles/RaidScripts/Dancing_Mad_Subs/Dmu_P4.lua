@@ -218,6 +218,38 @@ local ThunderWater = function(wave)
             )
         end
     end
+    if Cfg().draw then
+        for _, member in pairs(MG.Party) do
+            local bf5544 = TensorCore.getBuff(member.id, 5544)
+            local bf5545 = TensorCore.getBuff(member.id, 5545)
+            local buffType
+            if bf5544 ~= nil and bf5544.duration < 10 then
+                if Data().Buff[5544] then
+                    buffType = 5544
+                else
+                    buffType = 5545
+                end
+            elseif bf5545 ~= nil and bf5545.duration < 10 then
+                buffType = 5545
+                if Data().Buff[5545] then
+                    buffType = 5545
+                else
+                    buffType = 5544
+                end
+            end
+            local drawer
+            if buffType == 5544 then
+                --雷
+                drawer = MG.CreateDrawer(1, 0.5, 0)
+            elseif buffType == 5545 then
+                drawer = DM.cyanDrawer --水
+            end
+            if drawer ~= nil then
+                local curMember = TensorCore.mGetEntity(member.id)
+                drawer:addCircle(curMember.pos.x, 0, curMember.pos.z, 8)
+            end
+        end
+    end
     if Cfg().guide then
         local needGetData
         if wave == 1 then
@@ -282,38 +314,7 @@ local ThunderWater = function(wave)
             end
         end
     end
-    if Cfg().draw then
-        for _, member in pairs(MG.Party) do
-            local bf5544 = TensorCore.getBuff(member.id, 5544)
-            local bf5545 = TensorCore.getBuff(member.id, 5545)
-            local buffType
-            if bf5544 ~= nil and bf5544.duration < 10 then
-                if Data().Buff[5544] then
-                    buffType = 5544
-                else
-                    buffType = 5545
-                end
-            elseif bf5545 ~= nil and bf5545.duration < 10 then
-                buffType = 5545
-                if Data().Buff[5545] then
-                    buffType = 5545
-                else
-                    buffType = 5544
-                end
-            end
-            local drawer
-            if buffType == 5544 then
-                --雷
-                drawer = MG.CreateDrawer(1, 0.5, 0)
-            elseif buffType == 5545 then
-                drawer = DM.cyanDrawer --水
-            end
-            if drawer ~= nil then
-                local curMember = TensorCore.mGetEntity(member.id)
-                drawer:addCircle(curMember.pos.x, 0, curMember.pos.z, 8)
-            end
-        end
-    end
+    
 end
 --------------------------------------------- event function ---------------------------------------------
 --- 初始化
@@ -383,7 +384,6 @@ Dmu_P4.OnEntityCast = function(entityID, spellID, castPos)
 end
 
 Dmu_P4.OnMarkerAdd = function(entityID, markerID)
-
 end
 
 Dmu_P4.OnAOECreate = function(aoeInfo)
@@ -450,7 +450,7 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
         then
             if Cfg().draw then
                 if Data().WaterFire1.Type then
-                    DM.redDrawer:addTimedCircle(5000, aoeInfo.x, 0, aoeInfo.z, 6)
+                    MG.CreateDrawer(1, 0, 1, 0.1, 2):addTimedCircle(5000, aoeInfo.x, 0, aoeInfo.z, 6)
                 else
                     DM.redDrawer:addTimedDonut(5000, aoeInfo.x, 0, aoeInfo.z, 6, 40)
                 end
@@ -463,7 +463,7 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
                 if Data().WaterFire2.Type then
                     MG.CreateDrawer(0, 0.5, 1, 0.3, 2):addTimedDonut(5000, aoeInfo.x, 0, aoeInfo.z, 6, 40)
                 else
-                    MG.CreateDrawer(0, 0.5, 1, 0.3, 2):addTimedCircle(5000, aoeInfo.x, 0, aoeInfo.z, 6)
+                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addTimedCircle(5000, aoeInfo.x, 0, aoeInfo.z, 6)
                 end
             end
         end

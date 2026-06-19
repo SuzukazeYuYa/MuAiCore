@@ -302,9 +302,15 @@ local drawSlapHappy = function()
         local dirMt = TensorCore.getHeadingToTarget(DM.Center, curMt.pos)
         local dirH1 = TensorCore.getHeadingToTarget(DM.Center, curH1.pos)
         local dirD1 = TensorCore.getHeadingToTarget(DM.Center, curD1.pos)
-        MG.CreateDrawer(0, 0.15, 0.3, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirMt)
-        MG.CreateDrawer(0, 0.3, 0, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirH1)
-        MG.CreateDrawer(0.3, 0, 0, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirD1)
+        if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
+            MG.CreateDrawer(0, 0, 0.2, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirMt)
+            MG.CreateDrawer(0, 0.2, 0, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirH1)
+            MG.CreateDrawer(0.2, 0, 0, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirD1)
+        else
+            MG.CreateDrawer(0, 0, 1, 0.1, 1):addCone(100, 0, 100, 20, math.pi / 3, dirMt)
+            MG.CreateDrawer(0, 1, 0, 0.1, 1):addCone(100, 0, 100, 20, math.pi / 3, dirH1)
+            MG.CreateDrawer(1, 0, 0, 0.1, 1):addCone(100, 0, 100, 20, math.pi / 3, dirD1)
+        end
     end
     for i = 1, 3 do
         local h = headingTable[i]
@@ -315,7 +321,7 @@ local drawSlapHappy = function()
         elseif i == 3 then
             pos = TensorCore.getPosInDirection(pos, curCaster.pos.h, 4)
         end
-        MG.CreateDrawer(0.9, 0.3, 0):addCircle(pos.x, pos.y, pos.z, r3)
+        MG.CreateDrawer(0.9, 0.3, 0, 0.4):addCircle(pos.x, pos.y, pos.z, r3)
     end
     MG.CreateDrawer(0.7, 0.1, 0):addCircle(100, 0, 100, 6)
     if TimeSince(Data().SlapHappy.Timer) > 9000 then
@@ -873,12 +879,12 @@ end
 Dmu_P3.Update = function()
     getBoss()
     lockFaceCheck()
+    loadMarkPlayer()
     drawThunderIII()
     drawSlapHappy()
     drawLookUponMe()
     drawDamningEdict()
     drawBlackHole()
-    loadMarkPlayer()
     drawImplosion()
     if Data().Elements.bigCircleTimer > 0 then
         if TimeSince(Data().Elements.bigCircleTimer) < 8500 then
@@ -959,7 +965,7 @@ Dmu_P3.Update = function()
                 Data().Elements.Guide2[Data().Elements.FireBuff[2]] = dis1
                 -- 这里将最终指路进行拷贝，修改MT ST的初始位置
                 Data().Elements.Guide1 = table.deepcopy(Data().Elements.Guide2)
-                if Cfg().ExDeathTank == 2 then
+                if TensorCore.hasBuff(MG.Party.MT.id, 4194) then
                     Data().Elements.Guide1.ST = Data().Elements.chaosPull
                     Data().Elements.Guide1.MT = Data().Elements.exPull
                 else
@@ -967,11 +973,13 @@ Dmu_P3.Update = function()
                     Data().Elements.Guide1.MT = Data().Elements.chaosPull
                 end
             else
-                -- 这里以exDeath读条为分界
-                if Data().Elements.exCasting then
-                    MG.FrameMultiD(Data().Elements.Guide2)
-                else
-                    MG.FrameMultiD(Data().Elements.Guide1)
+                if Cfg().guide then
+                    -- 这里以exDeath读条为分界
+                    if Data().Elements.exCasting then
+                        MG.FrameMultiD(Data().Elements.Guide2)
+                    else
+                        MG.FrameMultiD(Data().Elements.Guide1)
+                    end
                 end
             end
         end
@@ -1098,9 +1106,6 @@ Dmu_P3.Update = function()
                 end
             end
         else
-            if Cfg().guide then
-                MG.FrameMultiD(Data().UltimaBlaster.GuideData)
-            end
             if Cfg().draw then
                 for job, member in pairs(MG.Party) do
                     local curMark = Data().UltimaBlaster.Markers[job]
@@ -1110,6 +1115,9 @@ Dmu_P3.Update = function()
                     local dir = TensorCore.getHeadingToTarget(curDrawData.from, curMember.pos)
                     DM.litBlue:addRect(curDrawData.from.x, curDrawData.from.y, curDrawData.from.z, 40, 10, dir)
                 end
+            end
+            if Cfg().guide then
+                MG.FrameMultiD(Data().UltimaBlaster.GuideData)
             end
         end
     end
@@ -1171,7 +1179,6 @@ Dmu_P3.Update = function()
             end
         end
     end
-
     if Cfg().guide then
         --第一轮黑洞
         if Cfg().takeLineAttack12 then

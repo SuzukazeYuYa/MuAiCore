@@ -43,6 +43,7 @@ CatZDmuTankUI.draw = function()
         GUI:TextColored(1,1,0,1, '如果需要对应的时间轴请联系CatZ.')
         local curP = 01
         GUI:Columns(2, 'CNName and Value', false)
+        local p3Pull = false
         for i = 1, #keys do
             local curConfig = M.Config.DmuCatZCfg[keys[i]]
             if curP ~= curConfig.p then
@@ -53,15 +54,24 @@ CatZDmuTankUI.draw = function()
                 GUI:Columns(2)
                 curP = curConfig.p
             end
-            GUI:AlignFirstTextHeightToWidgets()
-            GUI:Text('  ' .. curConfig.nameCn)
-            GUI:NextColumn()
             local itemList
             if curP == 3 then
                 itemList = dropDrownListP3
+                if not p3Pull then
+                    p3Pull = true
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:Text('  谁拉艾克斯迪斯')
+                    GUI:NextColumn()
+                    M.Config.DmuCfg.P3.ExDeathTank = GUI:Combo('##ExDeathTank', M.Config.DmuCfg.P3.ExDeathTank, { 'ST', 'MT' }, 2)
+                    GUI:NextColumn()
+                end
             else
                 itemList = dropDrownList
             end
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text('  ' .. curConfig.nameCn)
+            GUI:NextColumn()
+            
             curConfig.value = GUI:Combo("##" .. keys[i], curConfig.value, itemList, #itemList)
             GUI:NextColumn()
         end

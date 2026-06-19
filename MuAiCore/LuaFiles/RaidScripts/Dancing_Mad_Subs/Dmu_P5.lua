@@ -429,41 +429,41 @@ Dmu_P5.Update = function()
     end
 
     if DM.InState('P5BloodStart') then
-        if Data().Blood.Cross34 ~= nil and Cfg().guide then
-            setDataAndGuide(1, Data().Blood.Cross34)
-        end
         if Cfg().draw and table.size(Data().Blood.Aoe) >= 2 and table.size(Data().Blood.AoeOut) >= 2 then
             drawCurBlood(1, 2)
+        end
+        if Data().Blood.Cross34 ~= nil and Cfg().guide then
+            setDataAndGuide(1, Data().Blood.Cross34)
         end
     end
 
     if DM.InState('P5Blood1End') then
-        if Data().Blood.Cross14 ~= nil and Cfg().guide then
-            setDataAndGuide(2, Data().Blood.Cross14)
-        end
         if Cfg().draw and table.size(Data().Blood.Aoe) >= 3
                 and table.size(Data().Blood.AoeOut) >= 3 then
             drawCurBlood(2, 3)
         end
+        if Data().Blood.Cross14 ~= nil and Cfg().guide then
+            setDataAndGuide(2, Data().Blood.Cross14)
+        end
     end
 
     if DM.InState('P5Blood2End') then
-        if Data().Blood.Cross12 ~= nil and Cfg().guide then
-            setDataAndGuide(3, Data().Blood.Cross12)
-        end
         if Cfg().draw and table.size(Data().Blood.Aoe) >= 4
                 and table.size(Data().Blood.AoeOut) >= 4 then
             drawCurBlood(3, 4)
         end
-    end
-
-    if DM.InState('P5Blood3End') then
         if Data().Blood.Cross12 ~= nil and Cfg().guide then
             setDataAndGuide(3, Data().Blood.Cross12)
         end
+    end
+
+    if DM.InState('P5Blood3End') then
         if Cfg().draw and table.size(Data().Blood.Aoe) >= 4
                 and table.size(Data().Blood.AoeOut) >= 4 then
             drawCurBlood(4)
+        end
+        if Data().Blood.Cross12 ~= nil and Cfg().guide then
+            setDataAndGuide(3, Data().Blood.Cross12)
         end
     end
     if DM.InState('P5MaddeningOrchestra')
@@ -477,6 +477,17 @@ Dmu_P5.Update = function()
             end
 
             Data().MaddeningOrchestra.FirstHitTimer = Now()
+        end
+        if Cfg().draw then
+            MG.OnCurrentPartyDo(function(job, member)
+                local drawer
+                if MG.IsTank(member.job) then
+                    drawer = MG.CreateDrawer(1, 0.5, 0, 0.2, 2)
+                else
+                    drawer = MG.CreateDrawer(0, 0.5, 1, 0.2, 2)
+                end
+                drawer:addCircle(member.pos.x, 0, member.pos.z, 5)
+            end)
         end
         if Data().MaddeningOrchestra.Guide1 == nil or table.size(Data().MaddeningOrchestra.Guide1) < 8 then
             Data().MaddeningOrchestra.Guide1 = {}
@@ -503,22 +514,26 @@ Dmu_P5.Update = function()
                 MG.FrameMultiD(Data().MaddeningOrchestra.Guide1)
             end
         end
-        if Cfg().draw then
-            MG.OnCurrentPartyDo(function(job, member)
-                local drawer
-                if MG.IsTank(member.job) then
-                    drawer = MG.CreateDrawer(1, 0.5, 0, 0.3, 2)
-                else
-                    drawer = MG.CreateDrawer(0, 0.5, 1, 0.3, 2)
-                end
-                drawer:addCircle(member.pos.x, 0, member.pos.z, 5)
-            end)
-        end
     end
 
     if DM.InState('P5MaddeningOrchestra1End')
             or DM.InState('P5MaddeningOrchestra2_1End')
     then
+        if Cfg().draw then
+            local curParty = MG.GetPartyPlayers()
+            table.sort(curParty, function(a, b)
+                return TensorCore.getDistance2d(DM.Center, a.pos)
+                        < TensorCore.getDistance2d(DM.Center, b.pos)
+            end)
+            for i = 1, #curParty do
+                local member = curParty[i]
+                if i < 4 then
+                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addCircle(member.pos.x, 0, member.pos.z, 5)
+                end
+            end
+            local mt = TensorCore.mGetEntity(MG.Party.MT.id)
+            MG.CreateDrawer(1, 0.5, 0, 0.2, 2):addCircle(mt.pos.x, 0, mt.pos.z, 5)
+        end
         -- 获取DebuffHD
         if Data().MaddeningOrchestra.Guide2 == nil or table.size(Data().MaddeningOrchestra.Guide2) < 8 then
             if TimeSince(Data().MaddeningOrchestra.FirstHitTimer) > 500 then
@@ -543,21 +558,6 @@ Dmu_P5.Update = function()
             if Cfg().guide then
                 MG.FrameMultiD(Data().MaddeningOrchestra.Guide2)
             end
-        end
-        if Cfg().draw then
-            local curParty = MG.GetPartyPlayers()
-            table.sort(curParty, function(a, b)
-                return TensorCore.getDistance2d(DM.Center, a.pos)
-                        < TensorCore.getDistance2d(DM.Center, b.pos)
-            end)
-            for i = 1, #curParty do
-                local member = curParty[i]
-                if i < 4 then
-                    MG.CreateDrawer(0, 0.5, 1, 0.3, 2):addCircle(member.pos.x, 0, member.pos.z, 5)
-                end
-            end
-            local mt = TensorCore.mGetEntity(MG.Party.MT.id)
-            MG.CreateDrawer(1, 0.5, 0, 0.3, 2):addCircle(mt.pos.x, 0, mt.pos.z, 5)
         end
         if TimeSince(Data().MaddeningOrchestra.FirstHitTimer) > 4200 then
             for job, member in pairs(MG.Party) do
@@ -593,20 +593,19 @@ Dmu_P5.Update = function()
                     Data().MaddeningOrchestra.Guide3[job] = { x = 100, y = 0, z = 111 }
                 end
             end
-        else
-            if Cfg().guide then
-                MG.FrameMultiD(Data().MaddeningOrchestra.Guide3)
-            end
         end
         if Cfg().draw then
             if Data().MaddeningOrchestra.RedBuff ~= nil then
                 local curPlayer = TensorCore.mGetEntity(Data().MaddeningOrchestra.RedBuff.id)
-                MG.CreateDrawer(1, 0.5, 0, 3, 2):addCircle(curPlayer.pos.x, 0, curPlayer.pos.z, 26)
+                MG.CreateDrawer(1, 0.5, 0, 0.2, 2):addCircle(curPlayer.pos.x, 0, curPlayer.pos.z, 26)
             end
             if Data().MaddeningOrchestra.BlueBuff ~= nil then
                 local curPlayer = TensorCore.mGetEntity(Data().MaddeningOrchestra.BlueBuff.id)
-                MG.CreateDrawer(0, 0.5, 1, 0.3, 2):addCircle(curPlayer.pos.x, 0, curPlayer.pos.z, 6)
+                MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addCircle(curPlayer.pos.x, 0, curPlayer.pos.z, 6)
             end
+        end
+        if Cfg().guide and Data().MaddeningOrchestra.Guide3 ~= nil then
+            MG.FrameMultiD(Data().MaddeningOrchestra.Guide3)
         end
         if not TensorCore.hasBuff(Data().MaddeningOrchestra.RedBuff.id, redBuffId)
                 and not TensorCore.hasBuff(Data().MaddeningOrchestra.BlueBuff.id, blueBuffId)
@@ -660,7 +659,6 @@ Dmu_P5.Update = function()
         end
     end
     if DM.InState('P5CelestriadGetData') then
-        loadGuidePosAndNextStart()
         if Cfg().draw and Data().Celestriad.CatastrophicChoiceId ~= 0 then
             if Data().Celestriad.BossOnDraw == nil then
                 Data().Celestriad.BossOnDraw = TensorCore.mGetEntity(boss.id)
@@ -669,9 +667,10 @@ Dmu_P5.Update = function()
             if Data().Celestriad.CatastrophicChoiceId == 49742 then
                 MG.CreateDrawer(1, 0, 0, 0.3, 2):addCircle(curBoss.pos.x, 0, curBoss.pos.z, 10)
             elseif Data().Celestriad.CatastrophicChoiceId == 49743 then
-                MG.CreateDrawer(1, 0, 0, 0.3, 2):addDonut(curBoss.pos.x, 0, curBoss.pos.z, 10, 40)
+                MG.CreateDrawer(1, 0, 0, 0.4, 2):addDonut(curBoss.pos.x, 0, curBoss.pos.z, 10, 25)
             end
         end
+        loadGuidePosAndNextStart()
     end
     if DM.InState('P5BeforeEnd') then
         local curBoss = TensorCore.mGetEntity(boss.id)

@@ -89,21 +89,19 @@ local standTemplate = {
     odd_uptime = {
         -- 奇数,uptime站位，数据由群友提供
         doing = {  --分摊半径5  钢铁半径5  塔半径4 正逆时针旋转，负顺时针旋转
-            [1] = { isLeft = true, dis = 1, dir = math.pi },  --左分摊 站目标圈上
-            [2] = { isLeft = true, dis = 3.8, dir = 0 },  --左扇形
-            [3] = { isLeft = false, dis = 3.8, dir = 0 },  --右钢铁
-            [4] = { isLeft = false, dis = 3.8, dir = math.pi },  --右分摊
+            [1] = { isLeft = true, dis = 1, dir = math.pi }, --左分摊 站目标圈上
+            [2] = { isLeft = true, dis = 3.8, dir = 0 }, --左扇形
+            [3] = { isLeft = false, dis = 3.8, dir = 0 }, --右钢铁
+            [4] = { isLeft = false, dis = 3.8, dir = math.pi }, --右分摊
         },
         standBy = {
-            [1] = { isLeft = true, dis = 4.4, dir = math.pi },  --左闲人分摊
-            [2] = { isLeft = true, dis = 4.4, dir = 0 },  --左闲人引导扇形
-            [3] = { isLeft = false, dis = 4.4, dir = math.pi },  --右闲人分摊
-            [4] = { isLeft = false, dis = 4.4, dir = math.pi },  --右闲人分摊
+            [1] = { isLeft = true, dis = 4.4, dir = math.pi }, --左闲人分摊
+            [2] = { isLeft = true, dis = 4.4, dir = 0 }, --左闲人引导扇形
+            [3] = { isLeft = false, dis = 4.4, dir = math.pi }, --右闲人分摊
+            [4] = { isLeft = false, dis = 4.4, dir = math.pi }, --右闲人分摊
         }
     },
 }
-
-
 
 ---异三角爆炸位置与三角偏移量 data by String
 local trineOffsets = {
@@ -137,6 +135,17 @@ local drawAllThingEnding = function()
               :addCone(curCaster.pos.x, curCaster.pos.y, curCaster.pos.z, 21, math.pi, dir)
         end
     else
+        Data().Towers.kickTimer = 0
+        Data().Towers.kickBoss = {}
+        Data().Towers.kickDrawing = false
+    end
+end
+
+local resetKickTimer = function()
+    -- 如果用户没有开启画图，则超时100毫秒后自动重置数据
+    if Data().Towers.kickTimer ~= 0 
+        and  TimeSince(Data().Towers.kickTimer) > 5600 
+    then
         Data().Towers.kickTimer = 0
         Data().Towers.kickBoss = {}
         Data().Towers.kickDrawing = false
@@ -633,16 +642,34 @@ Dmu_P2.OnMapEffect = function(a1, a2, a3)
 end
 
 Dmu_P2.Update = function()
+    drawAllThingEnding()
+    resetKickTimer()
+    if Data().FarNearDeath.OnDraw
+            and Cfg().draw
+            and Data().FarNearDeath.Timer > 0
+    then
+        if TimeSince(Data().FarNearDeath.Timer) < 5000 then
+            local curParty = MG.GetPartyPlayers()
+            table.sort(curParty, function(a, b)
+                local disA = TensorCore.getDistance2d(DM.Center, a.pos)
+                local disB = TensorCore.getDistance2d(DM.Center, b.pos)
+                return disA < disB
+            end)
+            DM.purpleDrawer:addCircle(curParty[1].pos.x, curParty[1].pos.y, curParty[1].pos.z, 6)
+            DM.purpleDrawer:addCircle(curParty[8].pos.x, curParty[8].pos.y, curParty[8].pos.z, 6)
+        else
+            Data().FarNearDeath.OnDraw = false
+            Data().FarNearDeath.Timer = 0
+        end
+    end
     if DM.InState('P2T8InitMark') and Data().Towers.wave > 0 then
         local wave = Data().Towers.wave
-        if Data().Towers.GuideData[wave] == nil then
+        if Data().Towers.GuideData[wave] == nil or table.size(Data().Towers.GuideData[wave]) < 8 then
             if Data().Towers.groupOrders[wave] == nil then
                 calcGroupOrder(wave)
             else
                 Data().Towers.GuideData[wave] = calcGuidePos(wave)
             end
-        else
-            guideFuturePastOrTakeTower()
         end
         if MG.Config.Main.LogToEchoMsg and Data().Towers.groupOrders[wave] ~= nil and not loged[wave] then
             showOrderLog(Data().Towers.groupOrders[wave], '当前踩塔组顺序：')
@@ -699,18 +726,20 @@ Dmu_P2.Update = function()
                 end
             end
         end
+        if Data().Towers.GuideData[wave] ~= nil and table.size(Data().Towers.GuideData[wave]) >= 8 then
+            guideFuturePastOrTakeTower()
+        end
     end
-    drawAllThingEnding()
+
     if Data().Towers.wave == 8
             and TimeSince(Data().Towers.Timer) > 10000
             and DM.BeLowState('P2T8End')
     then
         DM.ChangeState('P2T8End')
     end
-
     if DM.InState('P2T8End') then
         local curData = Data().Towers.guideDir[4]
-        if Cfg().guide and curData.skill ~= nil then
+        if Cfg().guide and curData.skill ~= 0 then
             if curData.guideData == nil or curData.backData == nil then
                 curData.guideData = {}
                 curData.backData = {}
@@ -788,25 +817,6 @@ Dmu_P2.Update = function()
                     DM.yellowDrawer:addCircle(drawPos.x, drawPos.y, drawPos.z, 6)
                 end
             end
-        end
-    end
-
-    if Data().FarNearDeath.OnDraw
-            and Cfg().draw
-            and Data().FarNearDeath.Timer > 0
-    then
-        if TimeSince(Data().FarNearDeath.Timer) < 5000 then
-            local curParty = MG.GetPartyPlayers()
-            table.sort(curParty, function(a, b)
-                local disA = TensorCore.getDistance2d(DM.Center, a.pos)
-                local disB = TensorCore.getDistance2d(DM.Center, b.pos)
-                return disA < disB
-            end)
-            DM.purpleDrawer:addCircle(curParty[1].pos.x, curParty[1].pos.y, curParty[1].pos.z, 6)
-            DM.purpleDrawer:addCircle(curParty[8].pos.x, curParty[8].pos.y, curParty[8].pos.z, 6)
-        else
-            Data().FarNearDeath.OnDraw = false
-            Data().FarNearDeath.Timer = 0
         end
     end
 end

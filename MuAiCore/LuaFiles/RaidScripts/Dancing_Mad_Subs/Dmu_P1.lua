@@ -618,9 +618,19 @@ Dmu_P1.OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, ol
 end
 
 Dmu_P1.Update = function()
+    autoLookAtUpdate()  
     CheckConeDeath()
-    autoLookAtUpdate()
-    drawBuffKick()
+    drawBuffKick()   
+    if Cfg().draw
+            and (DM.InState('P1Line3_1') or DM.InState('P1Line3_2'))
+            and Data().Line3.Shits ~= nil and table.size(Data().Line3.Shits) >= 0
+    then
+        for _, ent in pairs(Data().Line3.Shits) do
+            local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
+            local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 2)
+            drawer:addCircle(ent.pos.x, ent.pos.y, ent.pos.z, 5, true)
+        end
+    end
     -- 一神击退范围画图
     if DM.BeLowState('P1TrueFalse2', true) then
         if Cfg().draw then
@@ -637,7 +647,6 @@ Dmu_P1.Update = function()
             end
         end
     end
-
     -- 真假火开始
     if DM.InState('P1TrueFalse1') then
         -- 真假火画图
@@ -646,7 +655,6 @@ Dmu_P1.Update = function()
             DM.ChangeState('P1TrueFalse2')
         end
     end
-
     -- 真假火判定 转阶段
     if DM.InState('P1TrueFalse2') then
         if MG.IsAnyMemberHasBuff(2941) then
@@ -862,6 +870,31 @@ Dmu_P1.Update = function()
     end
     -- 第一次放圈前
     if DM.InState('P1Line2Start') then
+        -- 可能线还没出现，所以要找一帧确认4个人都有的情况
+        if Data().Line2.GatherPlayers == nil or table.size(Data().Line2.GatherPlayers) < 4 then
+            Data().Line2.GatherPlayers = {}
+            for _, member in pairs(MG.Party) do
+                local tethers = Argus.getTethersOnEnt(member)
+                if tethers ~= nil and table.size(tethers) > 0 then
+                    for _, tether in pairs(tethers) do
+                        if tether.type == 45 then
+                            local linkFrom = TensorCore.mGetEntity(tether.partnerid)
+                            if linkFrom.pos.x < 110 then
+                                table.insert(Data().Line2.GatherPlayers, member.id)
+                                break
+                            end
+                        end
+                    end
+                end
+            end
+        else
+            if Cfg().draw then
+                for _, id in pairs(Data().Line2.GatherPlayers) do
+                    local player = TensorCore.mGetEntity(id)
+                    MG.CreateDrawer(0.2, 0, 0.6, 0.3, 2):addCircle(player.pos.x, player.pos.y, player.pos.z, 5)
+                end
+            end
+        end
         if Cfg().guide then
             if Data().Line2.Guide1 == nil then
                 if Data().Line2.dangerDir ~= nil then
@@ -900,33 +933,6 @@ Dmu_P1.Update = function()
                 end
             else
                 MG.FrameMultiD(Data().Line2.Guide1)
-            end
-        end
-
-        -- 可能线还没出现，所以要找一帧确认4个人都有的情况
-        -- 更合理应该判断线变化事件，但是懒得弄了
-        if Data().Line2.GatherPlayers == nil or table.size(Data().Line2.GatherPlayers) < 4 then
-            Data().Line2.GatherPlayers = {}
-            for _, member in pairs(MG.Party) do
-                local tethers = Argus.getTethersOnEnt(member)
-                if tethers ~= nil and table.size(tethers) > 0 then
-                    for _, tether in pairs(tethers) do
-                        if tether.type == 45 then
-                            local linkFrom = TensorCore.mGetEntity(tether.partnerid)
-                            if linkFrom.pos.x < 110 then
-                                table.insert(Data().Line2.GatherPlayers, member.id)
-                                break
-                            end
-                        end
-                    end
-                end
-            end
-        else
-            if Cfg().draw then
-                for _, id in pairs(Data().Line2.GatherPlayers) do
-                    local player = TensorCore.mGetEntity(id)
-                    MG.CreateDrawer(0.2, 0, 0.6, 0.3, 2):addCircle(player.pos.x, player.pos.y, player.pos.z, 5)
-                end
             end
         end
     end
@@ -986,13 +992,13 @@ Dmu_P1.Update = function()
                 end
             end
         else
+            MG.FrameMultiD(Data().Line3.Guide1)
             if Cfg().draw then
                 for _, id in pairs(Data().Line3.GatherPlayers) do
                     local player = TensorCore.mGetEntity(id)
                     MG.CreateDrawer(0.2, 0, 0.6, 0.3, 2):addCircle(player.pos.x, player.pos.y, player.pos.z, 5)
                 end
             end
-            MG.FrameMultiD(Data().Line3.Guide1)
         end
     end
     -- 第二次放圈后分散
@@ -1014,19 +1020,8 @@ Dmu_P1.Update = function()
             end
         end
     end
-
-    if Cfg().draw
-            and (DM.InState('P1Line3_1') or DM.InState('P1Line3_2'))
-            and Data().Line3.Shits ~= nil and table.size(Data().Line3.Shits) >= 0
-    then
-        for _, ent in pairs(Data().Line3.Shits) do
-            local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
-            local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 2)
-            drawer:addCircle(ent.pos.x, ent.pos.y, ent.pos.z, 5, true)
-        end
-    end
+    
     -- 第二次传毒
-
     if DM.InState('P1Line3_2') then
         if Data().Turn2.thGroupGuidePos == nil or
                 Data().Turn2.dpsGroupGuidePos == nil
