@@ -17,10 +17,10 @@ local Data = function()
 end
 
 local floodPos = {
-    { x = 100, y = 0, z = 99 }, --A
-    { x = 101, y = 0, z = 100 }, --B
-    { x = 100, y = 0, z = 101 }, --C
-    { x = 99, y = 0, z = 100 }, --D
+    { x = 100, y = 0, z = 98 }, --A
+    { x = 102, y = 0, z = 100 }, --B
+    { x = 100, y = 0, z = 102 }, --C
+    { x = 98, y = 0, z = 100 }, --D
 }
 local blueBuffId = 5351 -- 顺手加一个神圣
 local redBuffId = 5350 -- 顺手加一个核爆
@@ -263,7 +263,46 @@ local drawingGroudFire = function()
         end
     end
 end
-
+local drawBloodArrow = function(wave)
+    if not Cfg().draw
+            or DM.OverState('P5Blood3End')
+            or DM.BeLowState('P5BloodStart') then
+        return
+    end
+    local data = Data().Blood.drawData
+    if data.first == nil
+            and Data().Blood.Cross34 ~= nil
+            and Data().Blood.Cross14 ~= nil
+    then
+        local dir = TensorCore.getHeadingToTarget(Data().Blood.Cross34, Data().Blood.Cross14)
+        local length = TensorCore.getDistance2d(Data().Blood.Cross34, Data().Blood.Cross14)
+        local startPoint = TensorCore.getPosInDirection(Data().Blood.Cross34, dir, 0.55)
+        data.first = {
+            h = dir,
+            l = length,
+            p = startPoint
+        }
+    end
+    if data.second == nil
+            and Data().Blood.Cross14 ~= nil
+            and Data().Blood.Cross12 ~= nil
+    then
+        local dir = TensorCore.getHeadingToTarget(Data().Blood.Cross14, Data().Blood.Cross12)
+        local length = TensorCore.getDistance2d(Data().Blood.Cross14, Data().Blood.Cross12)
+        local startPoint = TensorCore.getPosInDirection(Data().Blood.Cross14, dir, 0.55)
+        data.second = {
+            h = dir,
+            l = length,
+            p = startPoint
+        }
+    end
+    if wave < 3 then
+        MG.CreateDrawer(0,1,0,1,1):addArrow(data.first.p.x, 0, data.first.p.z, data.first.h, data.first.l - 1.3, 0.1, 0.3, 0.2, true)
+        MG.CreateDrawer(0,1,0,1,1):addArrow(data.second.p.x, 0, data.second.p.z, data.second.h, data.second.l - 1.3, 0.1, 0.3, 0.2, true)
+    else
+        MG.CreateDrawer(0,1,0,1,1):addArrow(data.second.p.x, 0, data.second.p.z, data.second.h, data.second.l - 1.3, 0.1, 0.3, 0.2, true)
+    end
+end
 --------------------------------------------- event function ---------------------------------------------
 --- 初始化
 --- @param dm DancingMad
@@ -429,6 +468,7 @@ Dmu_P5.Update = function()
     end
 
     if DM.InState('P5BloodStart') then
+        drawBloodArrow(1)
         if Cfg().draw and table.size(Data().Blood.Aoe) >= 2 and table.size(Data().Blood.AoeOut) >= 2 then
             drawCurBlood(1, 2)
         end
@@ -438,6 +478,7 @@ Dmu_P5.Update = function()
     end
 
     if DM.InState('P5Blood1End') then
+        drawBloodArrow(2)
         if Cfg().draw and table.size(Data().Blood.Aoe) >= 3
                 and table.size(Data().Blood.AoeOut) >= 3 then
             drawCurBlood(2, 3)
@@ -448,6 +489,7 @@ Dmu_P5.Update = function()
     end
 
     if DM.InState('P5Blood2End') then
+        drawBloodArrow(3)
         if Cfg().draw and table.size(Data().Blood.Aoe) >= 4
                 and table.size(Data().Blood.AoeOut) >= 4 then
             drawCurBlood(3, 4)
@@ -458,6 +500,7 @@ Dmu_P5.Update = function()
     end
 
     if DM.InState('P5Blood3End') then
+        drawBloodArrow(4)
         if Cfg().draw and table.size(Data().Blood.Aoe) >= 4
                 and table.size(Data().Blood.AoeOut) >= 4 then
             drawCurBlood(4)

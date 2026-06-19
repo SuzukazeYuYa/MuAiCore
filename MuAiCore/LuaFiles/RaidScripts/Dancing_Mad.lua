@@ -405,7 +405,11 @@ local dataInit = function()
                 Cross14 = nil,
                 Aoe = {},
                 AoeOut = {},
-                GuideData = {}
+                GuideData = {},
+                drawData = {
+                    first = nil,
+                    second = nil,
+                },
             },
             MaddeningOrchestra = {
                 FirstHitTimer = 0,

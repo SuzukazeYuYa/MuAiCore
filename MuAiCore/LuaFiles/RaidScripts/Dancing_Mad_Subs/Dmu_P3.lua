@@ -592,11 +592,11 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                                 doubleJob = curJob
                             else
                                 --已经接到了线，那么指路去引导位置
-                                if data.guideData[curState][i] == nil then
+                                --if data.guideData[curState][i] == nil then
                                     local curHeading = fromDir - math.pi * 3 / 4
-                                    local finalGuidePos = TensorCore.getPosInDirection(curSourceObj.pos, curHeading, 10)
+                                    local finalGuidePos = TensorCore.getPosInDirection(curSourceObj.pos, curHeading, 15.5)
                                     data.guideData[curState][i] = finalGuidePos
-                                end
+                               -- end
                                 guideData[curJob] = data.guideData[curState][i]
                             end
                         end
@@ -669,7 +669,25 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
         end
     end
 end
-
+local drawTowerHeading = function()
+    if not Cfg().draw
+            or DM.BeLowState('P3BlackHole4_2')
+            or DM.OverState('P3Tower2', true)
+    then
+        return
+    end
+    local kfk = TensorCore.mGetEntity(Data().SlapHappy.CasterId)
+    if kfk ~= nil then
+        local heading
+        if Cfg().towerHeading == 1 then
+            heading = kfk.pos.h
+        else
+            heading = kfk.pos.h + math.pi
+        end
+        local startPos = TensorCore.getPosInDirection(kfk.pos, heading + math.pi, 20)
+        MG.CreateDrawer(1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, heading, 39.5, 0.05, 0.5, 0.5, true)
+    end
+end
 --------------------------------------------- event function ---------------------------------------------
 --- 初始化
 --- @param dm DancingMad
@@ -886,6 +904,7 @@ Dmu_P3.Update = function()
     drawDamningEdict()
     drawBlackHole()
     drawImplosion()
+    drawTowerHeading()
     if Data().Elements.bigCircleTimer > 0 then
         if TimeSince(Data().Elements.bigCircleTimer) < 8500 then
             local boss = TensorCore.mGetEntity(bossExDeath.id)
