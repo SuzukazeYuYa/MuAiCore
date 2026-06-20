@@ -452,7 +452,7 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
                 if Data().WaterFire1.Type then
                     MG.CreateDrawer(1, 0, 1, 0.1, 2):addTimedCircle(5000, aoeInfo.x, 0, aoeInfo.z, 6)
                 else
-                    DM.redDrawer:addTimedDonut(5000, aoeInfo.x, 0, aoeInfo.z, 6, 40)
+                    MG.CreateDrawer(1, 0, 1, 0.1, 2):addTimedDonut(5000, aoeInfo.x, 0, aoeInfo.z, 6, 40)
                 end
             end
             Data().WaterFire1.AoeTimer = Now()
@@ -461,7 +461,7 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
         then
             if Cfg().draw then
                 if Data().WaterFire2.Type then
-                    MG.CreateDrawer(0, 0.5, 1, 0.3, 2):addTimedDonut(5000, aoeInfo.x, 0, aoeInfo.z, 6, 40)
+                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addTimedDonut(5000, aoeInfo.x, 0, aoeInfo.z, 6, 40)
                 else
                     MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addTimedCircle(5000, aoeInfo.x, 0, aoeInfo.z, 6)
                 end

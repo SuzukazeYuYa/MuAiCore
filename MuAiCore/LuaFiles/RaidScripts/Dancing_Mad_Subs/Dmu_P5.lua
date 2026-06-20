@@ -718,11 +718,11 @@ Dmu_P5.Update = function()
     if DM.InState('P5BeforeEnd') then
         local curBoss = TensorCore.mGetEntity(boss.id)
         if curBoss ~= nil and (not curBoss.alive or curBoss.hp.current <= 0) then
-            MG.Info('----------------------------')
+            MG.Info('------------------------------------------')
             MG.Info('恭喜通关' .. DM.NameCN .. '!')
             MG.Info('感谢使用本插件，了解更多信息请加入QQ群1106367633。')
             MG.Info('Powered by MuAi 2026-06')
-            MG.Info('----------------------------')
+            MG.Info('------------------------------------------')
             DM.ChangeState('P5End')
         end
     end

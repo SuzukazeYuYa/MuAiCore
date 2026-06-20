@@ -143,8 +143,8 @@ end
 
 local resetKickTimer = function()
     -- 如果用户没有开启画图，则超时100毫秒后自动重置数据
-    if Data().Towers.kickTimer ~= 0 
-        and  TimeSince(Data().Towers.kickTimer) > 5600 
+    if Data().Towers.kickTimer ~= 0
+            and TimeSince(Data().Towers.kickTimer) > 5600
     then
         Data().Towers.kickTimer = 0
         Data().Towers.kickBoss = {}
@@ -183,7 +183,7 @@ local initGroups = function()
         local group = Data().Towers.groupB
         local mark1 = Data().Towers.curMarks[group[1]]
         if mark1 == 717 then
-            Data().Towers.groupB = { group[1], group[2], group[4], group[3] }
+            Data().Towers.groupB = { group[1], group[2], group[3], group[4] }
         else
             Data().Towers.groupB = { group[3], group[4], group[1], group[2] }
         end
@@ -316,38 +316,17 @@ local calcFirstOrderB = function()
     local firstJob = group[1]
     local firstMark = Data().Towers.curMarks[firstJob] --这里一定是T
     if firstMark == 716 then
-        --TH组钢铁，MRTH
-        curOrder = { group[3], group[4], group[1], group[2] }
+        if MG.Config.DmuCfg.P2.fixType == 2 then
+            --扇左钢右, TH组钢铁 在右边，且面向BOSS H左T右近左远右
+            curOrder = { group[3], group[4], group[2], group[1] }
+        else
+            --TH组钢铁，RMTH
+            curOrder = { group[4], group[3], group[1], group[2] }
+        end
     else
-        --DPS组钢铁，THRM
+        --DPS组钢铁，THRM, 闲固和扇左钢右一致
         curOrder = { group[1], group[2], group[4], group[3] }
     end
-
-    --local cone = {}
-    --local circle = {}
-    --for _, job in pairs(Data().Towers.groupB) do
-    --    local markId = Data().Towers.curMarks[job]
-    --    if markId == 716 then
-    --        table.insert(circle, job)
-    --    elseif markId == 717 then
-    --        table.insert(cone, job)
-    --    end
-    --end
-    --if MG.IndexOf(group, cone[1]) < MG.IndexOf(group, cone[2]) then
-    --    curOrder = { cone[1], cone[2] }
-    --else
-    --    curOrder = { cone[2], cone[1] }
-    --end
-    --
-    ---- 近上远下，那么应该是反的
-    --if MG.IndexOf(group, circle[1]) < MG.IndexOf(group, circle[2]) then
-    --    table.insert(curOrder, circle[2])
-    --    table.insert(curOrder, circle[1])
-    --else
-    --    table.insert(curOrder, circle[1])
-    --    table.insert(curOrder, circle[2])
-    --end
-
     Data().Towers.groupOrders[index] = curOrder
 end
 
@@ -431,15 +410,15 @@ local guideGatherPoint = function(idx, wave, finishPoints)
     else
         if curData.guideData == nil then
             curData.guideData = {}
-            local guidePos, guidePos2
+            local guidePos
             local leftTw = Data().Towers.spawn[wave].left
             local rightTw = Data().Towers.spawn[wave].right
             local mid = MG.GetMidPos(leftTw, rightTw)
+            local dir = TensorCore.getHeadingToTarget(leftTw, rightTw)
             if curData.skill == 47827 then
-                guidePos = mid
+                guidePos = TensorCore.getPosInDirection(mid, dir - math.pi / 2, 3)
             elseif curData.skill == 47826 then
-                local dir = TensorCore.getHeadingToTarget(leftTw, rightTw)
-                guidePos = TensorCore.getPosInDirection(mid, dir + math.pi / 2, 13)
+                guidePos = TensorCore.getPosInDirection(mid, dir + math.pi / 2, 15)
             end
             for job, _ in pairs(MG.Party) do
                 curData.guideData[job] = guidePos
@@ -493,6 +472,20 @@ local calcTrinePos = function(object, a1, a2, a3)
         table.insert(Data().Trine.DrawPos[Data().Trine.wave], MG.VectorXZAdd(object.pos, offset[i]))
     end
     Data().Trine.Timer = Now()
+end
+
+local drawTowerHeading = function()
+    if not Cfg().draw
+            or Data().Towers.wave == 0
+            or DM.OverState('P2T8End', true)
+    then
+        return
+    end
+    local wave = Data().Towers.wave
+    local mid = MG.GetMidPos(Data().Towers.spawn[wave].left, Data().Towers.spawn[wave].right)
+    local dir = TensorCore.getHeadingToTarget(DM.Center, mid)
+    local startPos = TensorCore.getPosInDirection(DM.Center, dir, 20)
+    MG.CreateDrawer(1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, dir + math.pi, 39.5, 0.05, 0.5, 0.5, true)
 end
 
 --------------------------------------------- event function ---------------------------------------------
@@ -644,6 +637,7 @@ end
 Dmu_P2.Update = function()
     drawAllThingEnding()
     resetKickTimer()
+    drawTowerHeading()
     if Data().FarNearDeath.OnDraw
             and Cfg().draw
             and Data().FarNearDeath.Timer > 0
