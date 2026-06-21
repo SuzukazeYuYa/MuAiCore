@@ -225,6 +225,7 @@ local autoLookAtUpdate = function()
                 TensorCore.API.TensorACR.setHardLockFace(true)
             end
             TensorCore.API.TensorACR.toggleLockFace(true)
+            MG.Info('P1锁定面向开始，面向：' .. string.format("%.2f", heading))
         end
     else
         Data().AutoLookAt.Timer = 0
@@ -233,6 +234,7 @@ local autoLookAtUpdate = function()
             TensorCore.API.TensorACR.setHardLockFace(false)
         end
         TensorCore.API.TensorACR.toggleLockFace(false)
+        MG.Info('P1锁定面向结束。')
     end
 end
 

@@ -19,6 +19,7 @@ DevelopModel.init = function(M)
         PrintMarkId = false,
         ShowSkillId = false,
         PrintChannelInfo = false,
+        PrintCastInfo = false,
         CacheAoeInfo = false,
         PrintAoeInfo = false,
         AoeInfo = {},

@@ -431,19 +431,55 @@ local guideGatherPoint = function(idx, wave, finishPoints)
     end
 end
 
+-- 近U情况， 点名为扇形时候，对自身站位进行动态处理
+local type3FixPos = function(wave)
+    if not Cfg().fixType == 3
+            or not wave % 2 ~= 0
+            or not table.contains(Data().Towers.doing, MG.SelfPos)
+            or Data().Towers.curMarks[MG.SelfPos] ~= 717
+    then
+        return Data().Towers.GuideData[wave]
+    end
+    local leftTower = Data().Towers.spawn[wave].left
+    local curGather, curJob, curGuidePos
+    for _, job in pairs(Data().Towers.doing) do
+        local player = TensorCore.mGetEntity(MG.Party[job].id)
+        if TensorCore.getDistance2d(player.pos, leftTower) < 4 and Data().Towers.curMark[job] == 715 then
+            curGather = player
+            curJob = job
+            break
+        end
+    end
+    if curGather ~= nil then
+        local leftHeading = TensorCore.getHeadingToTarget(DM.Center, leftTower)
+        -- 计算出从这个人触发，去4.5米距离，如果在塔外，那么不做修正
+        local pos = TensorCore.getPosInDirection(curGather.pos, leftHeading, 4.5)
+        if TensorCore.getDistance2d(pos, leftTower) < 3.8 then
+            curGuidePos = pos
+        end
+    end
+    if curGuidePos ~= nil then
+        local guideData = table.deepcopy(Data().Towers.GuideData[wave])
+        guideData[MG.SelfPos] = curGuidePos
+        return guideData
+    else
+        return Data().Towers.GuideData[wave]
+    end
+end
+
 ---引导过去未来
 local guideFuturePastOrTakeTower = function()
     local waves = { 3, 5, 7 }
     local wave = Data().Towers.wave
+    local guideData = type3FixPos()
     if not table.contains(waves, wave) then
         if Cfg().guide then
-            MG.FrameMultiD(Data().Towers.GuideData[wave], 0.3)
+            MG.FrameMultiD(guideData, 0.3)
         end
     else
         local idxMap = { [3] = 1, [5] = 2, [7] = 3, [8] = 4 }
         local idx = idxMap[wave]
-        local finishPoints = Data().Towers.GuideData[wave]
-        guideGatherPoint(idx, wave, finishPoints)
+        guideGatherPoint(idx, wave, guideData)
     end
 end
 

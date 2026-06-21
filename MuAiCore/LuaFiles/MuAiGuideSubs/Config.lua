@@ -301,6 +301,7 @@ Config.init = function(M)
             drawWinLight = true,
             drawWinPolarizing = true,
         }
+       
     end
 
     --- 创建绝卡夫卡默认配置

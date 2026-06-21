@@ -296,11 +296,13 @@ local drawBloodArrow = function(wave)
             p = startPoint
         }
     end
-    if wave < 3 then
-        MG.CreateDrawer(0,1,0,1,1):addArrow(data.first.p.x, 0, data.first.p.z, data.first.h, data.first.l - 1.3, 0.1, 0.3, 0.2, true)
-        MG.CreateDrawer(0,1,0,1,1):addArrow(data.second.p.x, 0, data.second.p.z, data.second.h, data.second.l - 1.3, 0.1, 0.3, 0.2, true)
-    else
-        MG.CreateDrawer(0,1,0,1,1):addArrow(data.second.p.x, 0, data.second.p.z, data.second.h, data.second.l - 1.3, 0.1, 0.3, 0.2, true)
+    if data.first ~= nil and data.second then
+        if wave < 3 then
+            MG.CreateDrawer(0, 1, 0, 1, 1):addArrow(data.first.p.x, 0, data.first.p.z, data.first.h, data.first.l - 1.3, 0.1, 0.3, 0.2, true)
+            MG.CreateDrawer(0, 1, 0, 1, 1):addArrow(data.second.p.x, 0, data.second.p.z, data.second.h, data.second.l - 1.3, 0.1, 0.3, 0.2, true)
+        else
+            MG.CreateDrawer(0, 1, 0, 1, 1):addArrow(data.second.p.x, 0, data.second.p.z, data.second.h, data.second.l - 1.3, 0.1, 0.3, 0.2, true)
+        end
     end
 end
 --------------------------------------------- event function ---------------------------------------------
@@ -352,9 +354,9 @@ Dmu_P5.OnEntityChannel = function(entityID, spellID, _)
         if DM.BeLowState('P5GroundFire') then
             DM.ChangeState('P5GroundFire')
         end
-    elseif spellID == 47934 or spellID == 4793 then
+    elseif spellID == 47934 or spellID == 47935 then
         for _, member in pairs(MG.Party) do
-            DM.orangeDrawer:addTimedCircleOnEnt(5000, member.id, 6)
+            MG.CreateDrawer(1, 0, 1, 0.1):addTimedCircleOnEnt(5000, member.id, 5)
         end
     elseif spellID == 47925 then
         DM.ChangeState('P5BeforeEnd')

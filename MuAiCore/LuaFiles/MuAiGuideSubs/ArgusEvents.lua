@@ -28,7 +28,7 @@ ArgusEvents.init = function(M)
         end
         if M.Develop.ShowSkillId or M.Develop.PrintChannelInfo then
             local entity = TensorCore.mGetEntity(entityID)
-            if entity == nil or entity.type == 1 then
+            if entity == nil or entity.charType == 4 or entity.charType == 2 then
                 return
             end
             if M.Develop.ShowSkillId then
@@ -53,6 +53,14 @@ ArgusEvents.init = function(M)
     local OnEntityCast = function(entityID, spellID, castPos)
         if M.CurRaidScript ~= nil and M.CurRaidScript.OnEntityCast ~= nil then
             M.CurRaidScript.OnEntityCast(entityID, spellID, castPos)
+        end
+        if M.Develop.PrintCastInfo then
+            local entity = TensorCore.mGetEntity(entityID)
+            if entity == nil or entity.charType == 4 or entity.charType == 2 then
+                return
+            end
+            M.Info('[' .. M.InfoTime()
+                    .. ']OnEntityCast，实体名称：' .. entity.name .. ',SpellID：' .. spellID)
         end
     end
 

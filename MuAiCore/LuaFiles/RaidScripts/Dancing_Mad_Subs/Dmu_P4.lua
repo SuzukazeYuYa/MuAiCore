@@ -144,21 +144,10 @@ local lockFaceCheck = function(eyeTable)
             else
                 local eye1 = TensorCore.mGetEntity(buffOwner[1])
                 local eye2 = TensorCore.mGetEntity(buffOwner[2])
-                if eyeTable.type then
-                    --真眼
-                    local backPos = MG.GetMidPos(eye1.pos, eye2.pos)
-                    lookHeading = TensorCore.getHeadingToTarget(backPos, player.pos)
-                else
-                    local focus
-                    --假的，找到更新的那个 人看
-                    local dis1 = TensorCore.getDistance2d(eye1.pos, player.pos)
-                    local dis2 = TensorCore.getDistance2d(eye2.pos, player.pos)
-                    if dis1 < dis2 then
-                        focus = eye1
-                    else
-                        focus = eye2
-                    end
-                    lookHeading = TensorCore.getHeadingToTarget(player.pos, focus.pos)
+                local backPos = MG.GetMidPos(eye1.pos, eye2.pos)
+                lookHeading = TensorCore.getHeadingToTarget(backPos, player.pos)
+                if not eyeTable.type then
+                    lookHeading = lookHeading + math.pi
                 end
             end
             TensorCore.API.TensorACR.setLockFaceHeading(lookHeading)
@@ -167,7 +156,7 @@ local lockFaceCheck = function(eyeTable)
             end
             TensorCore.API.TensorACR.toggleLockFace(true)
             eyeTable.Locked = true
-            MG.ArrInfo('锁定面向，开始，当前面向：' .. tostring(lookHeading))
+            MG.Info('P4锁定面向开始，面向：' .. string.format("%.2f", lookHeading))
         end
     else
         if eyeTable.LostTimer == nil then
@@ -179,7 +168,7 @@ local lockFaceCheck = function(eyeTable)
             end
             TensorCore.API.TensorACR.toggleLockFace(false)
             eyeTable.Locked = false
-            MG.ArrInfo('锁定面向结束。')
+            MG.Info('P4锁定面向结束。')
         end
     end
 end
@@ -314,7 +303,7 @@ local ThunderWater = function(wave)
             end
         end
     end
-    
+
 end
 --------------------------------------------- event function ---------------------------------------------
 --- 初始化

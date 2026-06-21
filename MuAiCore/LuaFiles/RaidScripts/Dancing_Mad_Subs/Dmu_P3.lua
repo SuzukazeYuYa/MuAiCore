@@ -173,7 +173,6 @@ local lockFaceCheck = function()
             end
             -- 真空波读条完成时候，buff剩余4秒（>4 <4.5）所以5秒开始进行背对
             if curBuff.duration < during and Data().LockFace.enable == false then
-                MG.Debug('P3 一运自动面向开始')
                 local heading
                 if Data().LockFace.buffType == 1602 then
                     heading = TensorCore.getHeadingToTarget(curBoss.pos, player.pos)
@@ -181,6 +180,7 @@ local lockFaceCheck = function()
                     heading = TensorCore.getHeadingToTarget(player.pos, curBoss.pos)
                 end
                 TensorCore.API.TensorACR.setLockFaceHeading(heading)
+                MG.Info('P3锁定面向开始，面向：' .. string.format("%.2f", heading))
                 if Cfg().HardLockFace then
                     TensorCore.API.TensorACR.setHardLockFace(true)
                 end
@@ -190,7 +190,7 @@ local lockFaceCheck = function()
         else
             if Data().LockFace.enable then
                 -- buff消失背对结束
-                MG.Debug('P3 一运自动面向结束')
+                MG.Info('P3锁定面向结束。')
                 Data().LockFace.onDoing = false
                 Data().LockFace.enable = false
                 if Cfg().HardLockFace then
@@ -593,10 +593,10 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                             else
                                 --已经接到了线，那么指路去引导位置
                                 --if data.guideData[curState][i] == nil then
-                                    local curHeading = fromDir - math.pi * 3 / 4
-                                    local finalGuidePos = TensorCore.getPosInDirection(curSourceObj.pos, curHeading, 15.5)
-                                    data.guideData[curState][i] = finalGuidePos
-                               -- end
+                                local curHeading = fromDir - math.pi * 3 / 4
+                                local finalGuidePos = TensorCore.getPosInDirection(curSourceObj.pos, curHeading, 15.5)
+                                data.guideData[curState][i] = finalGuidePos
+                                -- end
                                 guideData[curJob] = data.guideData[curState][i]
                             end
                         end
@@ -686,6 +686,7 @@ local drawTowerHeading = function()
         end
         local startPos = TensorCore.getPosInDirection(kfk.pos, heading + math.pi, 20)
         MG.CreateDrawer(1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, heading, 39.5, 0.05, 0.5, 0.5, true)
+        MG.CreateDrawer(1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, heading, 20, 0.05, 0.5, 0.5, true)
     end
 end
 --------------------------------------------- event function ---------------------------------------------
@@ -761,10 +762,10 @@ Dmu_P3.OnEntityChannel = function(entityID, spellID, _)
     elseif spellID == 47873 then
         Data().DamningEdict.OnDraw = true
         Data().DamningEdict.Timer = Now()
-    elseif spellID == 47877 then
-        if DM.OverState('P3Tower1', true) then
-            Data().TakeTower.Timer = Now()
-        end
+    --elseif spellID == 47877 then
+        --if DM.OverState('P3Tower1', true) then
+        --    Data().TakeTower.Timer = Now()
+        --end
     elseif spellID == 47889 then
         if DM.OverState('P3Tower2', true) then
             AnyoneCore.addTimedWorldTextOnEnt(
@@ -795,6 +796,27 @@ Dmu_P3.OnEntityCast = function(entityID, spellID, castPos)
             Data().BlackHolds.JumpTimer = Now()
             DM.GoNextSate()
         end
+    elseif spellID == 47875 then
+        -- 分摊判定
+        if Data().TakeTower.boomPos == nil then
+            Data().TakeTower.boomPos = {
+                TensorCore.mGetEntity(Data().TakeTower.firstEntity).pos
+            }
+        else
+            table.insert(Data().TakeTower.boomPos,
+                    TensorCore.mGetEntity(Data().TakeTower.secondEntity).pos)
+        end
+    elseif spellID == 47856 then
+        --跺脚判定
+        Data().TakeTower.stampCnt = Data().TakeTower.stampCnt + 1
+        if Data().TakeTower.stampCnt == 2 then
+            DM.ChangeState('P3Tower1')
+        elseif Data().TakeTower.stampCnt == 4 then
+            DM.ChangeState('P3Tower2')
+        end
+    elseif spellID == 47878 then
+        -- 分摊位置炸圈
+        DM.ChangeState('P3End')
     end
 end
 
@@ -807,12 +829,12 @@ Dmu_P3.OnAOECreate = function(aoeInfo)
             DM.ChangeState('P3AoePut2')
         end
     elseif aoeInfo.aoeID == 47856 then
-        table.insert(Data().TakeTower.castCache, aoeInfo)
-        if table.size(Data().TakeTower.castCache) == 2 then
-            Data().TakeTower.TimerTower1 = Now()
-        elseif table.size(Data().TakeTower.castCache) == 4 then
-            Data().TakeTower.TimerTower2 = Now()
-        end
+        --table.insert(Data().TakeTower.castCache, aoeInfo)
+        --if table.size(Data().TakeTower.castCache) == 2 then
+        --    Data().TakeTower.TimerTower1 = Now()
+        --elseif table.size(Data().TakeTower.castCache) == 4 then
+        --    Data().TakeTower.TimerTower2 = Now()
+        --end
     end
 end
 
@@ -829,6 +851,11 @@ Dmu_P3.OnMarkerAdd = function(entityID, markerID)
         end
     end
     if markerID == 161 and DM.OverState('P3BlackHole4_2', true) then
+        if Data().TakeTower.firstEntity == nil then
+            Data().TakeTower.firstEntity = entityID
+        else
+            Data().TakeTower.secondEntity = entityID
+        end
         for job, member in pairs(MG.Party) do
             if entityID == member.id and Data().TakeTower.isDps == nil then
                 local curDir = TensorCore.mGetEntity(Data().SlapHappy.CasterId).pos.h
@@ -1255,42 +1282,19 @@ Dmu_P3.Update = function()
                 guideTakeLine({ MG.HeadMark.Stop2 }, 1)
             end
         end
-
+        -- 第二轮放圈后，开始踩塔逻辑
         if DM.InState('P3AoePut2') and Data().TakeTower.Guide1 ~= nil then
-            if Data().TakeTower.TimerTower1 ~= 0
-                    and TimeSince(Data().TakeTower.TimerTower1) > 1500 then
-                DM.ChangeState('P3Tower1')
-            else
-                MG.FrameMultiD(Data().TakeTower.Guide1)
-            end
+            MG.FrameMultiD(Data().TakeTower.Guide1)
         end
         if DM.InState('P3Tower1') and Data().TakeTower.Guide2 ~= nil then
-            if Data().TakeTower.TimerTower2 ~= 0
-                    and TimeSince(Data().TakeTower.TimerTower2) > 1500 then
-                DM.ChangeState('P3Tower2')
-            else
-                MG.FrameMultiD(Data().TakeTower.Guide2)
-            end
+            MG.FrameMultiD(Data().TakeTower.Guide2)
         end
         if DM.InState('P3Tower2') then
-            local isFinish = false
-            if Data().TakeTower.Timer ~= 0 and TimeSince(Data().TakeTower.Timer) > 800 then
-                for job, member in pairs(MG.Party) do
-                    if Data().TakeTower.isDps == true then
-                        local curMember = TensorCore.mGetEntity(member.id)
-                        if MG.IndexOf(MG.JobPosName, job) <= 4 then
-                            isFinish = true
-                            DM.redDrawer:addTimedCircle(4000, curMember.pos.x, curMember.pos.y, curMember.pos.z, 6)
-                        end
-                    else
-                        local curMember = TensorCore.mGetEntity(member.id)
-                        if MG.IndexOf(MG.JobPosName, job) > 4 then
-                            isFinish = true
-                            DM.redDrawer:addTimedCircle(4000, curMember.pos.x, curMember.pos.y, curMember.pos.z, 6)
-                        end
-                    end
+            if Cfg().draw and Data().TakeTower.boomPos ~= nil and table.size(Data().TakeTower.boomPos) >= 2 then
+                d(Data().TakeTower.boomPos)
+                for _, pos in pairs(Data().TakeTower.boomPos) do
+                    DM.redDrawer:addCircle(pos.x, pos.y, pos.z, 6)
                 end
-                DM.ChangeState('P3End')
             end
         end
     end
