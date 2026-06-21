@@ -95,6 +95,28 @@ local sortTableByClock = function(tbl)
     end
 end
 
+local drawCelestriadChoice = function(spellID, entityID, drawTime)
+    if not Cfg().draw then
+        return
+    end
+    local curBoss
+    if entityID ~= nil then
+        curBoss = TensorCore.mGetEntity(entityID)
+    end
+    if curBoss == nil and boss ~= nil then
+        curBoss = TensorCore.mGetEntity(boss.id)
+    end
+    if curBoss == nil or curBoss.pos == nil then
+        return
+    end
+    drawTime = drawTime or 5000
+    if spellID == 49742 then
+        MG.CreateDrawer(1, 0, 0, 0.3, 2):addTimedCircle(drawTime, curBoss.pos.x, 0, curBoss.pos.z, 10)
+    elseif spellID == 49743 then
+        MG.CreateDrawer(1, 0, 0, 0.4, 2):addTimedDonut(drawTime, curBoss.pos.x, 0, curBoss.pos.z, 10, 25)
+    end
+end
+
 -- 踩塔指路
 local loadGuidePosAndNextStart = function()
     if not Cfg().guide then
@@ -189,78 +211,31 @@ local loadGuidePosAndNextStart = function()
 end
 
 ---@param aoeInfo DirectionalAOE
-local startGroundFire = function(aoeInfo)
+local drawGroundFire = function(aoeInfo)
     if not Cfg().draw then
         return
     end
-    table.insert(Data().GroundFire.OnCreate, aoeInfo)
+    Data().GroundFire.seen = Data().GroundFire.seen or {}
+    local key = tostring(aoeInfo.entityID or 0)
+            .. ':' .. tostring(math.floor((aoeInfo.x or 0) * 10 + 0.5))
+            .. ':' .. tostring(math.floor((aoeInfo.z or 0) * 10 + 0.5))
+            .. ':' .. tostring(math.floor((aoeInfo.heading or 0) * 1000 + 0.5))
+    if Data().GroundFire.seen[key] then
+        return
+    end
+    Data().GroundFire.seen[key] = true
+
     local pos = { x = aoeInfo.x, y = 0, z = aoeInfo.z }
-    if Data().GroundFire.AoePos[aoeInfo.entityID] == nil then
-        Data().GroundFire.AoePos[aoeInfo.entityID] = { pos }
-    end
-    local length = 7
-    for i = 2, 7 do
-        local curLength = (i - 1) * length
-        table.insert(Data().GroundFire.AoePos[aoeInfo.entityID], TensorCore.getPosInDirection(pos, aoeInfo.heading, curLength))
-    end
-
-end
-
-local castGroundFire = function(entityId, spellID)
-    if not Cfg().draw then
-        return
-    end
-    Data().GroundFire.OnCreate[entityId] = nil
-    Data().GroundFire.OnCast[entityId] = Now()
-end
-
-local drawingGroudFire = function()
-    if not Cfg().draw then
-        return
-    end
-    --for id, aoeInfo in pairs(Data().GroundFire.OnCreate) do
-    --    local curTable = Data().GroundFire.AoePos[aoeInfo.entityID]
-    --    if curTable ~= nil and TimeSince(aoeInfo.startTime) < aoeInfo.duration * 1000 then
-    --        DM.redDrawer:addCircle(curTable[1].x, 0, curTable[1].z, 6)
-    --        DM.orangeDrawer:addCircle(curTable[2].x, 0, curTable[2].z, 6)
-    --        DM.yellowDrawer:addCircle(curTable[3].x, 0, curTable[3].z, 6)
-    --    else
-    --        Data().GroundFire.OnCreate[id] = nil
-    --    end
-    --end
-    for id, timer in pairs(Data().GroundFire.OnCast) do
-        local curTable = Data().GroundFire.AoePos[id]
-        if curTable ~= nil then
-            local s = TimeSince(timer)
-            local idx1, idx2, idx3
-            if s < 520 then
-                idx1, idx2, idx3 = 1, 2, 3
-            elseif s < 1040 then
-                idx1, idx2, idx3 = 2, 3, 4
-            elseif s < 1560 then
-                idx1, idx2, idx3 = 3, 4, 5
-            elseif s < 2080 then
-                idx1, idx2, idx3 = 4, 5, 6
-            elseif s < 2600 then
-                idx1, idx2 = 5, 6, 7
-            elseif s < 3120 then
-                idx1 = 6, 7
-            elseif s < 3640 then
-                idx1 = 7
-            end
-            if s < 3640 then
-                DM.redDrawer:addCircle(curTable[idx1].x, 0, curTable[idx1].z, 6)
-                if idx2 ~= nil then
-                    DM.orangeDrawer:addCircle(curTable[idx2].x, 0, curTable[idx2].z, 6)
-                end
-                if idx3 ~= nil then
-                    DM.yellowDrawer:addCircle(curTable[idx3].x, 0, curTable[idx3].z, 6)
-                end
-            else
-                Data().GroundFire.AoePos[id] = nil
-                Data().GroundFire.OnCast[id] = nil
-            end
-        end
+    local radius = aoeInfo.aoeLength or 6
+    local step = 7.07106781187
+    local firstDelay = math.floor((aoeInfo.duration or 3.7) * 1000 + 250)
+    local interval = 520
+    for i = 0, 6 do
+        local p = TensorCore.getPosInDirection(pos, aoeInfo.heading, step * i)
+        local resolveDelay = firstDelay + interval * i
+        local drawDelay = math.max(0, resolveDelay - 3000)
+        local drawTime = math.max(250, resolveDelay - drawDelay + interval)
+        DM.redDrawer:addTimedCircle(drawTime, p.x, 0, p.z, radius, drawDelay, true, false)
     end
 end
 local drawBloodArrow = function(wave)
@@ -350,6 +325,7 @@ Dmu_P5.OnEntityChannel = function(entityID, spellID, _)
         end
     elseif spellID == 49742 or spellID == 49743 then
         Data().Celestriad.CatastrophicChoiceId = spellID
+        drawCelestriadChoice(spellID, entityID)
     elseif spellID == 47931 then
         if DM.BeLowState('P5GroundFire') then
             DM.ChangeState('P5GroundFire')
@@ -375,8 +351,6 @@ Dmu_P5.OnEntityCast = function(entityID, spellID, castPos)
         end
     elseif spellID == 49742 or spellID == 49743 then
         Data().Celestriad.CatastrophicChoiceId = 0
-    elseif spellID == 47932 then
-        castGroundFire(entityID, spellID)
     end
 end
 
@@ -391,7 +365,7 @@ Dmu_P5.OnAOECreate = function(aoeInfo)
             table.insert(Data().Blood.AoeOut, aoeInfo)
         end
     elseif aoeInfo.aoeID == 47932 then
-        startGroundFire(aoeInfo)
+        drawGroundFire(aoeInfo)
     end
 end
 
@@ -423,7 +397,6 @@ end
 
 Dmu_P5.Update = function()
     getBoss()
-    drawingGroudFire()
     if DM.InState('P5Start') --P5UltimaRepeater1
             or DM.InState('P5UltimaRepeater2')
             or DM.InState('P5UltimaRepeater3')
@@ -704,17 +677,6 @@ Dmu_P5.Update = function()
         end
     end
     if DM.InState('P5CelestriadGetData') then
-        if Cfg().draw and Data().Celestriad.CatastrophicChoiceId ~= 0 then
-            if Data().Celestriad.BossOnDraw == nil then
-                Data().Celestriad.BossOnDraw = TensorCore.mGetEntity(boss.id)
-            end
-            local curBoss = Data().Celestriad.BossOnDraw
-            if Data().Celestriad.CatastrophicChoiceId == 49742 then
-                MG.CreateDrawer(1, 0, 0, 0.3, 2):addCircle(curBoss.pos.x, 0, curBoss.pos.z, 10)
-            elseif Data().Celestriad.CatastrophicChoiceId == 49743 then
-                MG.CreateDrawer(1, 0, 0, 0.4, 2):addDonut(curBoss.pos.x, 0, curBoss.pos.z, 10, 25)
-            end
-        end
         loadGuidePosAndNextStart()
     end
     if DM.InState('P5BeforeEnd') then
