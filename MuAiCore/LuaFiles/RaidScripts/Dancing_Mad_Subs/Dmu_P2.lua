@@ -433,8 +433,7 @@ end
 
 -- 近U情况， 点名为扇形时候，对自身站位进行动态处理
 local type3FixPos = function(wave)
-    if not Cfg().fixType == 3
-            or not wave % 2 ~= 0
+    if (wave % 2) == 0
             or not table.contains(Data().Towers.doing, MG.SelfPos)
             or Data().Towers.curMarks[MG.SelfPos] ~= 717
     then
@@ -471,7 +470,12 @@ end
 local guideFuturePastOrTakeTower = function()
     local waves = { 3, 5, 7 }
     local wave = Data().Towers.wave
-    local guideData = type3FixPos()
+    local guideData
+    if Cfg().fixType == 3 then
+        guideData = type3FixPos(wave)
+    else
+        guideData = Data().Towers.GuideData[wave]
+    end
     if not table.contains(waves, wave) then
         if Cfg().guide then
             MG.FrameMultiD(guideData, 0.3)
@@ -685,8 +689,8 @@ Dmu_P2.Update = function()
                 local disB = TensorCore.getDistance2d(DM.Center, b.pos)
                 return disA < disB
             end)
-            DM.purpleDrawer:addCircle(curParty[1].pos.x, curParty[1].pos.y, curParty[1].pos.z, 6)
-            DM.purpleDrawer:addCircle(curParty[8].pos.x, curParty[8].pos.y, curParty[8].pos.z, 6)
+            DM.purpleDrawer:addCircle(curParty[1].pos.x, 0, curParty[1].pos.z, 6)
+            DM.purpleDrawer:addCircle(curParty[8].pos.x, 0, curParty[8].pos.z, 6)
         else
             Data().FarNearDeath.OnDraw = false
             Data().FarNearDeath.Timer = 0
@@ -710,8 +714,8 @@ Dmu_P2.Update = function()
             local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 2)
             local left = Data().Towers.spawn[wave].left
             local right = Data().Towers.spawn[wave].right
-            drawer:addCircle(left.x, left.y, left.z, 4, true)
-            drawer:addCircle(right.x, right.y, right.z, 4, true)
+            drawer:addCircle(left.x, 0, left.z, 4, true)
+            drawer:addCircle(right.x, 0, right.z, 4, true)
             for job, member in pairs(MG.Party) do
                 if table.contains(Data().Towers.doing, job) then
                     local curMember = TensorCore.mGetEntity(member.id)
@@ -719,10 +723,10 @@ Dmu_P2.Update = function()
                         local curMark = Data().Towers.curMarks[job]
                         if curMark == 715 then
                             -- 分摊
-                            DM.greenDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 5)
+                            DM.greenDrawer:addCircle(curMember.pos.x, 0, curMember.pos.z, 5)
                         elseif curMark == 716 then
                             -- 钢铁
-                            DM.redDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 5)
+                            DM.redDrawer:addCircle(curMember.pos.x, 0, curMember.pos.z, 5)
                         elseif curMark == 717 then
                             -- 扇形
                             local nearest = nil
@@ -740,7 +744,7 @@ Dmu_P2.Update = function()
                             if nearest ~= nil then
                                 local dir = TensorCore.getHeadingToTarget(curMember.pos, nearest.pos)
                                 MG.CreateDrawer(0, 0.5, 1, 0.3)
-                                  :addCone(curMember.pos.x, curMember.pos.y, curMember.pos.z, 40, math.pi / 2, dir)
+                                  :addCone(curMember.pos.x, 0, curMember.pos.z, 40, math.pi / 2, dir)
                             end
                         end
                     end
@@ -752,7 +756,7 @@ Dmu_P2.Update = function()
                     return TensorCore.getDistance2d(a.pos, DM.Center) < TensorCore.getDistance2d(b.pos, DM.Center)
                 end)
                 for i = 1, 4 do
-                    DM.purpleDrawer:addCircle(curParty[i].pos.x, curParty[i].pos.y, curParty[i].pos.z, 5)
+                    DM.purpleDrawer:addCircle(curParty[i].pos.x, 0, curParty[i].pos.z, 5)
                 end
             end
         end
@@ -839,12 +843,12 @@ Dmu_P2.Update = function()
             end
             if index ~= nil and Data().Trine.DrawPos[index] ~= nil then
                 for _, drawPos in pairs(Data().Trine.DrawPos[index]) do
-                    DM.redDrawer:addCircle(drawPos.x, drawPos.y, drawPos.z, 6)
+                    DM.redDrawer:addCircle(drawPos.x, 0, drawPos.z, 6)
                 end
             end
             if Cfg().trineDrawType == 2 and preIndex ~= nil and Data().Trine.DrawPos[preIndex] ~= nil then
                 for _, drawPos in pairs(Data().Trine.DrawPos[preIndex]) do
-                    DM.yellowDrawer:addCircle(drawPos.x, drawPos.y, drawPos.z, 6)
+                    DM.yellowDrawer:addCircle(drawPos.x,0, drawPos.z, 6)
                 end
             end
         end
