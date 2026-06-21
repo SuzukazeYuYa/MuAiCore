@@ -315,6 +315,8 @@ Config.init = function(M)
                 autoLookAt = true,
                 transUnOpt = false,
                 hardLock = false,
+                -- 波动炮指路方案：1 TN左DPS右，2 击退上闲人下
+                line2GuideType = 1,
                 BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
             },
             P2 = {

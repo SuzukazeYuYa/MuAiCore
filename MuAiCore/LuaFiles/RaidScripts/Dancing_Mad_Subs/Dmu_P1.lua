@@ -434,6 +434,111 @@ local drawFire = function(dataTable)
     end
 end
 
+local fire1IsSpread = function()
+    local fireData = Data().Fire1
+    if fireData.BossMark == 0 then
+        return nil
+    end
+    if fireData.PlayerMark == 127 then
+        return fireData.BossMark ~= 673
+    elseif table.size(fireData.GatherPlayers) >= 2 then
+        return fireData.BossMark == 673
+    end
+    return nil
+end
+
+local line2SpreadPoint = function(center, job, isSpread)
+    if not isSpread then
+        return { x = center.x, y = 0, z = center.z }
+    end
+    local bossPos = DM.Center
+    if MG.CurRaidBoss ~= nil and MG.CurRaidBoss.pos ~= nil then
+        bossPos = MG.CurRaidBoss.pos
+    end
+    local heading = TensorCore.getHeadingToTarget(center, bossPos)
+    local jobOffset = {
+        MT = { side = 1, back = 0 },
+        D1 = { side = 1, back = 0 },
+        ST = { side = -1, back = 0 },
+        D2 = { side = -1, back = 0 },
+        H1 = { side = 1, back = 1 },
+        D3 = { side = 1, back = 1 },
+        H2 = { side = -1, back = 1 },
+        D4 = { side = -1, back = 1 },
+    }
+    local offset = jobOffset[job] or { side = 0, back = 0 }
+    local sideDis = 2.5
+    local backDis = 5
+    return {
+        x = center.x + math.cos(heading) * offset.side * sideDis - math.sin(heading) * offset.back * backDis,
+        y = 0,
+        z = center.z - math.sin(heading) * offset.side * sideDis - math.cos(heading) * offset.back * backDis,
+    }
+end
+
+local getLine2DefaultGuide = function()
+    local lineData = Data().Line2
+    if lineData.dangerDir == nil then
+        return nil
+    end
+    local guideData = {}
+    local dir = MG.SetHeading2Pi(lineData.dangerDir)
+    if (math.pi / 2 < dir and dir < math.pi) or (math.pi * 3 / 2 < dir and dir < 2 * math.pi) then
+        for job, _ in pairs(MG.Party) do
+            if table.contains(mtGroup, job) then
+                guideData[job] = { x = 99.5, y = 0, z = 81 }
+            else
+                guideData[job] = { x = 100.5, y = 0, z = 119 }
+            end
+        end
+    else
+        for job, _ in pairs(MG.Party) do
+            if table.contains(mtGroup, job) then
+                guideData[job] = { x = 100.5, y = 0, z = 81 }
+            else
+                guideData[job] = { x = 99.5, y = 0, z = 119 }
+            end
+        end
+    end
+    return guideData
+end
+
+local getLine2KnockUpGuide = function()
+    local lineData = Data().Line2
+    if lineData.dangerDir == nil
+            or lineData.GatherPlayers == nil
+            or table.size(lineData.GatherPlayers) < 4 then
+        return nil
+    end
+    local isSpread = fire1IsSpread()
+    if isSpread == nil then
+        return nil
+    end
+    local dir = MG.SetHeading2Pi(lineData.dangerDir)
+    local upPos, downPos
+    if (math.pi / 2 < dir and dir < math.pi) or (math.pi * 3 / 2 < dir and dir < 2 * math.pi) then
+        upPos = { x = 96, y = 0, z = 88 }
+        downPos = { x = 104, y = 0, z = 112 }
+    else
+        upPos = { x = 104, y = 0, z = 88 }
+        downPos = { x = 96, y = 0, z = 112 }
+    end
+
+    local guideData = {}
+    for job, member in pairs(MG.Party) do
+        local center = table.contains(lineData.GatherPlayers, member.id) and upPos or downPos
+        guideData[job] = line2SpreadPoint(center, job, isSpread)
+    end
+    return guideData
+end
+
+local getLine2Guide = function()
+    if Cfg().line2GuideType == 2 then
+        return getLine2KnockUpGuide()
+    end
+    return getLine2DefaultGuide()
+end
+
 --------------------------------------------- event function ---------------------------------------------
 --- 初始化
 --- @param dm DancingMad
@@ -899,27 +1004,8 @@ Dmu_P1.Update = function()
         end
         if Cfg().guide then
             if Data().Line2.Guide1 == nil then
-                if Data().Line2.dangerDir ~= nil then
-                    Data().Line2.Guide1 = {}
-                    local dir = MG.SetHeading2Pi(Data().Line2.dangerDir)
-                    if (math.pi / 2 < dir and dir < math.pi) or (math.pi * 3 / 2 < dir and dir < 2 * math.pi) then
-                        for job, _ in pairs(MG.Party) do
-                            if table.contains(mtGroup, job) then
-                                Data().Line2.Guide1[job] = { x = 99.5, y = 0, z = 81 }
-                            else
-                                Data().Line2.Guide1[job] = { x = 100.5, y = 0, z = 119 }
-                            end
-                        end
-                    else
-                        for job, _ in pairs(MG.Party) do
-                            if table.contains(mtGroup, job) then
-                                Data().Line2.Guide1[job] = { x = 100.5, y = 0, z = 81 }
-                            else
-                                Data().Line2.Guide1[job] = { x = 99.5, y = 0, z = 119 }
-                            end
-                        end
-                    end
-                else
+                Data().Line2.Guide1 = getLine2Guide()
+                if Data().Line2.Guide1 == nil and Data().Line2.dangerDir == nil then
                     if Data().Line2.Guide0 == nil then
                         Data().Line2.Guide0 = {}
                         for job, _ in pairs(MG.Party) do
