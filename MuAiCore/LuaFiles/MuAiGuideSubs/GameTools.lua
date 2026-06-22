@@ -502,12 +502,12 @@ GameTools.init = function(M)
     end
 
     --- 当前队伍遍历执行
-    --- @param action function(job,curMember)
-    M.OnCurrentPartyDo = function(action)
+    --- @param func function(job,curMember) return breakFlg
+    M.OnCurrentPartyDo = function(func)
         for job, oldMember in pairs(M.Party) do
             local curMember = TensorCore.mGetEntity(oldMember.id)
             if curMember ~= nil then
-                local breakFlag = action(job, curMember)
+                local breakFlag = func(job, curMember)
                 if breakFlag then
                     break
                 end

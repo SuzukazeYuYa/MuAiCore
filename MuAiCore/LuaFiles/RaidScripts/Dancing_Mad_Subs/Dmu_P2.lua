@@ -196,9 +196,9 @@ local initGroups = function()
     end
 end
 
----计算扇左钢右第一次当闲人时候的情况
-local calcFix = function()
-    local last = Data().Towers.groupOrders[3]
+---计算扇左钢右闲人情况
+local calcConeLeft = function(tbl)
+    local last = tbl
     local mark1 = Data().Towers.curMarks[last[1]]
     local mark2 = Data().Towers.curMarks[last[2]]
     local mark3 = Data().Towers.curMarks[last[3]]
@@ -248,7 +248,6 @@ local calcGuidePos = function(wave)
             curDoingPos[i] = TensorCore.getPosInDirection(Data().Towers.spawn[wave].right, curDir, t.dis)
         end
     end
-
     local curStbPos = {}
     for i = 1, #curTemplate.standBy do
         local t = curTemplate.standBy[i]
@@ -261,10 +260,10 @@ local calcGuidePos = function(wave)
         end
     end
     local guideData = {}
-    local standBy = Data().Towers.standBy
-    if MG.Config.DmuCfg.P2.fixType == 2 and wave == 4 then
-        standBy = calcFix()
+    if Cfg().fixType == 2 and wave >= 4 and wave < 8 then
+        Data().Towers.standBy = calcConeLeft(Data().Towers.standBy)
     end
+    local standBy = Data().Towers.standBy
     for i = 1, 4 do
         local curDoingJob = Data().Towers.groupOrders[wave][i]
         local curStanByJob = standBy[i]
@@ -317,11 +316,11 @@ local calcFirstOrderB = function()
     local firstMark = Data().Towers.curMarks[firstJob] --这里一定是T
     if firstMark == 716 then
         if MG.Config.DmuCfg.P2.fixType == 2 then
-            --扇左钢右, TH组钢铁 在右边，且面向BOSS H左T右近左远右
+            --扇左钢右, TH组钢铁 在右边，且面向BOSS H左T右 近左远右
             curOrder = { group[3], group[4], group[2], group[1] }
         else
-            --TH组钢铁，RMTH
-            curOrder = { group[4], group[3], group[1], group[2] }
+            --TH组钢铁，MRTH
+            curOrder = { group[3], group[4], group[1], group[2] }
         end
     else
         --DPS组钢铁，THRM, 闲固和扇左钢右一致
@@ -331,7 +330,7 @@ local calcFirstOrderB = function()
 end
 
 local calcGroupOrder = function(wave)
-    if Data().Towers.groupOrders[wave] ~= nil then
+    if Data().Towers.groupOrders[wave] ~= nil and table.size(Data().Towers.groupOrders) >= 4 then
         return
     end
     if wave == 1 then
@@ -340,40 +339,47 @@ local calcGroupOrder = function(wave)
         if table.size(Data().Towers.markCache) < 4 then
             return
         end
-        local lstOdr = Data().Towers.groupOrders[wave - 1]
+        --local lstOdr = Data().Towers.groupOrders[wave - 1]
+        local lstOdr = Data().Towers.groupOrdersLast[wave - 1]
         if wave % 2 == 0 then
-            local curWave
-            if wave == 4 then
-                curWave = 8
-                calcFirstOrderB()
+            if Cfg().fixType == 2 and wave == 8 then
+                Data().Towers.groupOrders[wave] = calcConeLeft(Data().Towers.groupA)
             else
-                curWave = wave
-            end
-            -- 有4个头标进行了更新
-            local circle = {}
-            local cone = {}
-            for job, markId in pairs(Data().Towers.markCache) do
-                if markId == 716 then
-                    table.insert(circle, job)
-                elseif markId == 717 then
-                    table.insert(cone, job)
+                local curWave
+                if wave == 4 then
+                    -- 如果是第四波，那么直接使用第三波数据计算第八波
+                    curWave = 8
+                    -- 根据初始点名计算第四波B组踩塔位置
+                    calcFirstOrderB()
+                else
+                    curWave = wave
                 end
-            end
-            Data().Towers.groupOrders[curWave] = {}
-            if MG.IndexOf(lstOdr, cone[1]) < MG.IndexOf(lstOdr, cone[2]) then
-                table.insert(Data().Towers.groupOrders[curWave], cone[1])
-                table.insert(Data().Towers.groupOrders[curWave], cone[2])
-            else
-                table.insert(Data().Towers.groupOrders[curWave], cone[2])
-                table.insert(Data().Towers.groupOrders[curWave], cone[1])
-            end
+                -- 有4个头标进行了更新
+                local circle = {}
+                local cone = {}
+                for job, markId in pairs(Data().Towers.markCache) do
+                    if markId == 716 then
+                        table.insert(circle, job)
+                    elseif markId == 717 then
+                        table.insert(cone, job)
+                    end
+                end
+                Data().Towers.groupOrders[curWave] = {}
+                if MG.IndexOf(lstOdr, cone[1]) < MG.IndexOf(lstOdr, cone[2]) then
+                    table.insert(Data().Towers.groupOrders[curWave], cone[1])
+                    table.insert(Data().Towers.groupOrders[curWave], cone[2])
+                else
+                    table.insert(Data().Towers.groupOrders[curWave], cone[2])
+                    table.insert(Data().Towers.groupOrders[curWave], cone[1])
+                end
 
-            if MG.IndexOf(lstOdr, circle[1]) < MG.IndexOf(lstOdr, circle[2]) then
-                table.insert(Data().Towers.groupOrders[curWave], circle[1])
-                table.insert(Data().Towers.groupOrders[curWave], circle[2])
-            else
-                table.insert(Data().Towers.groupOrders[curWave], circle[2])
-                table.insert(Data().Towers.groupOrders[curWave], circle[1])
+                if MG.IndexOf(lstOdr, circle[1]) < MG.IndexOf(lstOdr, circle[2]) then
+                    table.insert(Data().Towers.groupOrders[curWave], circle[1])
+                    table.insert(Data().Towers.groupOrders[curWave], circle[2])
+                else
+                    table.insert(Data().Towers.groupOrders[curWave], circle[2])
+                    table.insert(Data().Towers.groupOrders[curWave], circle[1])
+                end
             end
         else
             local gather = {}
@@ -393,7 +399,6 @@ local calcGroupOrder = function(wave)
                 Data().Towers.groupOrders[wave] = { gather[2], cone, circle, gather[1] }
             end
         end
-
         if table.size(Data().Towers.groupOrders[wave]) == 4 then
             -- 算完丢弃
             Data().Towers.markCache = {}
@@ -654,6 +659,27 @@ Dmu_P2.OnMapEffect = function(a1, a2, a3)
                     left = tbl[1]
                     right = tbl[2]
                 end
+                --记录踩塔玩家相对位置
+                if Data().Towers.wave >= 1 then
+                    local doingPlayers = {}
+                    MG.OnCurrentPartyDo(function(job, member)
+                        if table.contains(Data().Towers.doing, job) then
+                            table.insert(doingPlayers, { pos = member.pos, job = job })
+                            if table.size(doingPlayers) == 4 then
+                                return true
+                            end
+                        end
+                    end)
+                    table.sort(doingPlayers, function(a, b)
+                        return not MG.GetClock(a.pos, b.pos, DM.Center)
+                    end)
+                    if Data().Towers.groupOrdersLast[Data().Towers.wave] == nil then
+                        Data().Towers.groupOrdersLast[Data().Towers.wave] = {}
+                    end
+                    for i = 1, #doingPlayers do
+                        table.insert(Data().Towers.groupOrdersLast[Data().Towers.wave], doingPlayers[i].job)
+                    end
+                end
                 Data().Towers.wave = Data().Towers.wave + 1
                 MG.Info('第' .. Data().Towers.wave .. '轮：')
                 if Data().Towers.wave == 8 then
@@ -705,8 +731,9 @@ Dmu_P2.Update = function()
                 Data().Towers.GuideData[wave] = calcGuidePos(wave)
             end
         end
-        if MG.Config.Main.LogToEchoMsg and Data().Towers.groupOrders[wave] ~= nil and not loged[wave] then
-            showOrderLog(Data().Towers.groupOrders[wave], '当前踩塔组顺序：')
+        if MG.Config.Main.LogToEchoMsg and Data().Towers.GuideData[wave] ~= nil and not loged[wave] then
+            showOrderLog(Data().Towers.groupOrders[wave], ' 踩塔顺序：')
+            showOrderLog(Data().Towers.standBy, ' 闲人顺序：')
             loged[wave] = true
         end
         if Cfg().draw then
@@ -848,7 +875,7 @@ Dmu_P2.Update = function()
             end
             if Cfg().trineDrawType == 2 and preIndex ~= nil and Data().Trine.DrawPos[preIndex] ~= nil then
                 for _, drawPos in pairs(Data().Trine.DrawPos[preIndex]) do
-                    DM.yellowDrawer:addCircle(drawPos.x,0, drawPos.z, 6)
+                    DM.yellowDrawer:addCircle(drawPos.x, 0, drawPos.z, 6)
                 end
             end
         end

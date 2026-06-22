@@ -14,7 +14,17 @@ DancingMadUI.draw = function()
     M.DancingMadUI.visible, M.DancingMadUI.open = GUI:Begin('Dmu Setting', M.DancingMadUI.open)
     if M.DancingMadUI.visible then
         if GUI:CollapsingHeader('全局设置') then
+            GUI:AlignFirstTextHeightToWidgets()
             GUI:BulletText('配置文件工具')
+            GUI:SameLine(0, 60)
+            GUI:Button('打开存档位置', 150, 22)
+            if GUI:IsItemClicked(0) then
+                local cmd = string.format('explorer "%s"', M.Config.DmuGuidePath)
+                local handle = io.popen(cmd)
+                if handle then
+                    handle:close()
+                end
+            end
             if newCfgMode then
                 GUI:Dummy(20, 0)
                 GUI:SameLine(0, 0)
@@ -46,7 +56,7 @@ DancingMadUI.draw = function()
                             table.insert(M.Config.DmuCustomList, newFileName)
                         end
                     else
-                        M.ShowMsgUI(3,{"已存在该名称文件或者名称不合法,无法创建!"})
+                        M.ShowMsgUI(3, { "已存在该名称文件或者名称不合法,无法创建!" })
                     end
                 end
                 GUI:SameLine()
@@ -229,21 +239,10 @@ DancingMadUI.draw = function()
             GUI:PopItemWidth()
         end
         if M.Config.DmuCfg.P3.enable and GUI:CollapsingHeader('P3 艾克斯迪斯&卡奥斯') then
-            GUI:Dummy(0, 0)
-            GUI:SameLine()
             GUI:BulletText('一运')
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:TextColored(1, 0, 0, 1, ' 攻略: 逃课, 夜音式')
-            --GUI:Dummy(0, 0)
-            --GUI:SameLine(20, 0)
-            --GUI:AlignFirstTextHeightToWidgets()
-            --GUI:Text(' 谁拉艾克斯迪斯: ')
-            --GUI:SameLine()
-            --GUI:PushItemWidth(40)
-            --M.Config.DmuCfg.P3.ExDeathTank = GUI:Combo('##ExDeathTank', M.Config.DmuCfg.P3.ExDeathTank, { 'ST', 'MT' }, 2)
-            --GUI:PopItemWidth()
-
             GUI:Dummy(12, 0)
             GUI:SameLine(0, 0)
             GUI:AlignFirstTextHeightToWidgets()
@@ -256,7 +255,6 @@ DancingMadUI.draw = function()
             if p3fireBuffOrderChanged then
                 M.Config.DmuCfg.P3.fireBuffOrder = M.StringSplit(p3fireBuffOrder, ',')
             end
-
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:AlignFirstTextHeightToWidgets()
@@ -265,6 +263,16 @@ DancingMadUI.draw = function()
             GUI:PushItemWidth(40)
             M.Config.DmuCfg.P3.superJump = GUI:Combo('##superJump', M.Config.DmuCfg.P3.superJump, { 'D3', 'D4' }, 2)
             GUI:PopItemWidth()
+
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(' 击退站位方案:   ')
+            GUI:SameLine()
+            GUI:PushItemWidth(100)
+            M.Config.DmuCfg.P3.kickType = GUI:Combo('##P3kickType', M.Config.DmuCfg.P3.kickType, { 'THHT', 'HTH', '8人一起' }, 3)
+            GUI:PopItemWidth()
+
             GUI:Dummy(10, 0)
             GUI:SameLine()
             M.Config.DmuCfg.P3.LockFace = GUI:Checkbox('自动调整面向##p3LockFace', M.Config.DmuCfg.P3.LockFace)
@@ -275,8 +283,12 @@ DancingMadUI.draw = function()
                     GUI:SetTooltip('开启后会完全禁止可能会改变面向的事, \n约等于停手, 请谨慎使用')
                 end
             end
-            GUI:Dummy(0, 0)
+            GUI:Dummy(10, 0)
             GUI:SameLine()
+            M.Config.DmuCfg.P3.autoTargetEx = GUI:Checkbox('击退前自动切换到EX防止出现锁面向问题##autoTargetEx', M.Config.DmuCfg.P3.autoTargetEx)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('BUFF剩余5秒锁定, BUFF消失停止, 检查\n到目标不对会一直tab小艾，谨慎使用!')
+            end
             GUI:BulletText('二运')
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
@@ -303,6 +315,9 @@ DancingMadUI.draw = function()
             GUI:PushItemWidth(100)
             M.Config.DmuCfg.P3.markType = GUI:Combo('##P3markType', M.Config.DmuCfg.P3.markType, { '不标记', '标记自身', '标记全队' }, 3)
             GUI:PopItemWidth()
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('标记全队：如果有人噶了导致没有BUFF会不标记')
+            end
             if M.Config.DmuCfg.P3.markType == 2 then
                 GUI:Dummy(10, 0)
                 GUI:SameLine()
@@ -322,6 +337,35 @@ DancingMadUI.draw = function()
                 GUI:PopItemWidth()
                 if p3mkOrderChanged then
                     M.Config.DmuCfg.P3.markOrder = M.StringSplit(p3mkOrder, ',')
+                end
+            end
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:BulletText('放圈踩塔')
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:TextColored(1, 0, 0, 1, ' 攻略: 盗火orCCHH, 其他请选择关闭')
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(' 方案设置:  ')
+            GUI:SameLine()
+            GUI:PushItemWidth(100)
+            local takeTowerTypeChanged
+            M.Config.DmuCfg.P3.takeTowerType, takeTowerTypeChanged = GUI:Combo('##takeTowerType', M.Config.DmuCfg.P3.takeTowerType, { '关闭放圈', 'NOCCHH', '盗火', }, 3)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('修改这里选项为CCHH或者盗火下面两个选项\n会自动修改, 如果你打的是标准的CCHH或者\n盗火, 请勿手动修改下方的两个设置')
+            end
+            if takeTowerTypeChanged then
+                d('takeTowerTypeChanged')
+                d(M.Config.DmuCfg.P3.takeTowerType)
+                if M.Config.DmuCfg.P3.takeTowerType == 2 then
+                    M.Config.DmuCfg.P3.towerGround = 2
+                    M.Config.DmuCfg.P3.towerHeading = 1
+                else
+                    if M.Config.DmuCfg.P3.takeTowerType == 3 then
+                        M.Config.DmuCfg.P3.towerGround = 1
+                        M.Config.DmuCfg.P3.towerHeading = 2
+                    end
                 end
             end
             GUI:Dummy(0, 0)
@@ -400,6 +444,24 @@ DancingMadUI.draw = function()
                 GUI:SetTooltip('顺序：C（下）开始逆时针一周')
             end
             GUI:PopItemWidth()
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(' 地火预警次数:  ')
+            GUI:SameLine()
+            local groundCntChanged, groundCntValue
+            GUI:PushItemWidth(80)
+            groundCntValue, groundCntChanged = GUI:InputInt('##P5groundCnt', M.Config.DmuCfg.P5.groundCnt, 1, 1)
+            GUI:PopItemWidth()
+            if groundCntChanged then
+                if groundCntValue < 2 then
+                    M.Config.DmuCfg.P5.groundCnt = 2
+                elseif groundCntValue > 7 then
+                    M.Config.DmuCfg.P5.groundCnt = 7
+                else
+                    M.Config.DmuCfg.P5.groundCnt = groundCntValue
+                end
+            end
         end
     end
     M.SaveConfig(M.Config.DmuGuidePath, M.Config.DmuGuideFile, 'DmuCfg')

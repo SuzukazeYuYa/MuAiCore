@@ -68,7 +68,6 @@ local dis13 = {
     ST = { x = 94, y = 0, z = 99.5 },
     H1 = { x = 99.5, y = 0, z = 84 },
     H2 = { x = 84, y = 0, z = 99.5 },
-
     D1 = { x = 100.5, y = 0, z = 106 },
     D2 = { x = 106, y = 0, z = 100.5 },
     D3 = { x = 100.5, y = 0, z = 116 },
@@ -173,9 +172,8 @@ local autoLookAtCache = function(entityID, a1, a2, a3)
 end
 
 --- 画半场刀 data by string
-
 local halfGroupAOE = function(entityID, a1, a2, a3)
-    if not Cfg().draw or not ((a1 == 64 and a2 == 128) or (a2 == 64 and a3 == 128)) then
+    if not ((a1 == 64 and a2 == 128) or (a2 == 64 and a3 == 128)) then
         return
     end
     local obj = TensorCore.mGetEntity(entityID)
@@ -189,7 +187,9 @@ local halfGroupAOE = function(entityID, a1, a2, a3)
     else
         return
     end
-    DM.purpleDrawer:addTimedCenteredRect(5150, x, 0, 100, 20, 42, heading)
+    if Cfg().draw then
+        DM.purpleDrawer:addTimedCenteredRect(5150, x, 0, 100, 20, 42, heading)
+    end
 end
 
 --- 紫圈爆炸
@@ -620,9 +620,9 @@ Dmu_P1.OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, ol
 end
 
 Dmu_P1.Update = function()
-    autoLookAtUpdate()  
+    autoLookAtUpdate()
     CheckConeDeath()
-    drawBuffKick()   
+    drawBuffKick()
     if Cfg().draw
             and (DM.InState('P1Line3_1') or DM.InState('P1Line3_2'))
             and Data().Line3.Shits ~= nil and table.size(Data().Line3.Shits) >= 0
@@ -1022,7 +1022,7 @@ Dmu_P1.Update = function()
             end
         end
     end
-    
+
     -- 第二次传毒
     if DM.InState('P1Line3_2') then
         if Data().Turn2.thGroupGuidePos == nil or

@@ -336,13 +336,20 @@ Config.init = function(M)
                 HardLockFace = false,
                 -- 1 d3; 2 d4
                 superJump = 1,
+                -- 1: THHT 2: HTH, 3 8人一起 
+                kickType  = 1,
+                -- 击退前自动选中小艾
+                autoTargetEx = false,
                 -- 标记类型，1 关闭； 2  标记自己；  3 标记全队;
                 markType = 1,
                 takeLineAttack12 = false,
                 takeLineStop22 = false,
                 markOrder = { 'D1', 'D2', 'D3', 'D4', 'MT', 'ST', 'H2', 'H1' },
                 delayMark = true,
-                -- 踩塔12点
+                -- 踩塔基础类型
+                -- 1:其他 2:CCHH, 3:盗火，
+                takeTowerType = 1,
+                -- 踩塔12点, 1 脚跟，2脚尖
                 towerHeading = 1,
                 -- 踩塔分组是面基是场基
                 towerGround = 1,
@@ -357,7 +364,8 @@ Config.init = function(M)
             },
             P5 = { enable = true, draw = true, guide = true,
                    isLeaning = false,
-                   jobOrder = { 'H2', 'D2', 'D4', 'ST', 'MT', 'D3', 'H1', 'D1' }
+                   jobOrder = { 'H2', 'D2', 'D4', 'ST', 'MT', 'D3', 'H1', 'D1' },
+                   groundCnt = 3,
             }
         }
     end
