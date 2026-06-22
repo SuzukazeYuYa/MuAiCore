@@ -671,7 +671,7 @@ Dmu_P2.OnMapEffect = function(a1, a2, a3)
                         end
                     end)
                     table.sort(doingPlayers, function(a, b)
-                        return not MG.GetClock(a.pos, b.pos, DM.Center)
+                        return MG.GetClock(a.pos, b.pos, DM.Center) == false
                     end)
                     if Data().Towers.groupOrdersLast[Data().Towers.wave] == nil then
                         Data().Towers.groupOrdersLast[Data().Towers.wave] = {}
