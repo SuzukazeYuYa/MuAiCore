@@ -35,6 +35,11 @@ local printCurrentState = function()
     MG.Debug('当前副本阶段：' .. DM.StateNames[MG.DancingMad.CurrentState])
 end
 
+local developForceChange = function(stateName) 
+    DM.ChangeState(stateName)
+end
+
+
 ---数据初始化
 local dataInit = function()
     MG.DancingMad = {
@@ -202,6 +207,7 @@ local dataInit = function()
                 GuideData = {},
                 GuideDataCache = {},
                 markCache = {},
+                groupOrdersLast = {},
                 groupOrders = {},
                 kickBoss = {},
                 kickPreSkill = 0,
@@ -220,6 +226,9 @@ local dataInit = function()
             }
         },
         P3 = {
+            Chaos = nil,
+            ExDeath = nil,
+            Kefka = nil,
             Elements = {
                 Fire = nil,
                 Water = nil,
@@ -254,7 +263,9 @@ local dataInit = function()
             },
             WacuumWave = {
                 Timer = 0,
-                Start = false;
+                Start = false,
+                BeforeKick = nil,
+                AfterKick = nil,
             },
             UmbraSmash = {
                 Timer = 0,
@@ -285,6 +296,9 @@ local dataInit = function()
                 -- 自身标记类型=buffid
                 SelfType = 0,
                 BuffTypeMap = nil,
+                JobDelay = nil,
+                JobDelayTimer = 0,
+                AnyHasMark = false,
                 MarkCnt = {
                     [3004] = 0,
                     [3005] = 0,
@@ -330,6 +344,8 @@ local dataInit = function()
                 secondEntity = nil,
                 boomPos = nil,
                 isDps = nil,
+                Put1Pos = nil,
+                Put2Pos = nil, 
                 Guide1 = nil,
                 Guide2 = nil,
                 Timer = 0,
@@ -404,6 +420,7 @@ local dataInit = function()
 
         },
         P5 = {
+            Kefka = nil,
             Blood = {
                 Cross12 = nil,
                 Cross23 = nil,
@@ -445,6 +462,8 @@ local dataInit = function()
                 CatastrophicChoiceId = 0,
             },
             GroundFire  = {
+                Info = {},
+                OverTime = {},
                 OnCreate = {},
                 AoePos = {},
                 OnCast = {}
@@ -964,6 +983,9 @@ DM.OnEnter = function()
     MG.Develop.Reg('DancingMad')
     MG.Develop.LogState = function()
         printCurrentState()
+    end
+    MG.Develop.ForceChange = function(stateName)
+        developForceChange(stateName)
     end
 end
 

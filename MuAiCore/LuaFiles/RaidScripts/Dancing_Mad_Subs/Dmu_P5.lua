@@ -40,16 +40,15 @@ local ultimaRepeater = {
     D4 = { x = 105.66, y = 0, z = 105.66 },
 }
 
-local boss
-
 local getBoss = function()
-    if boss == nil then
-        for _, ent in pairs(TensorCore.entityList("contentid=7131")) do
-            local model = Argus.getEntityModel(ent.id)
-            if model == 19511 and Argus.isEntityVisible(ent) then
-                boss = ent
-                break
-            end
+    if Data().Kefka ~= nil then
+        return
+    end
+    for _, ent in pairs(TensorCore.entityList("contentid=7131")) do
+        local model = Argus.getEntityModel(ent.id)
+        if model == 19511 and Argus.isEntityVisible(ent) then
+            Data().Kefka = ent
+            break
         end
     end
 end
@@ -193,7 +192,7 @@ local startGroundFire = function(aoeInfo)
     if not Cfg().draw then
         return
     end
-    table.insert(Data().GroundFire.OnCreate, aoeInfo)
+    Data().GroundFire.OnCreate[aoeInfo.entityID] = aoeInfo
     local pos = { x = aoeInfo.x, y = 0, z = aoeInfo.z }
     if Data().GroundFire.AoePos[aoeInfo.entityID] == nil then
         Data().GroundFire.AoePos[aoeInfo.entityID] = { pos }
@@ -210,10 +209,31 @@ local castGroundFire = function(entityId, spellID)
     if not Cfg().draw then
         return
     end
+    local aoeInfo = Data().GroundFire.OnCreate[entityId]
+    local aoeData = Data().GroundFire.AoePos[entityId]
+    table.insert(Data().GroundFire.Info, {
+        aoe = aoeInfo,
+        pos = aoeData,
+        castTimer = Now()
+    })
     Data().GroundFire.OnCreate[entityId] = nil
-    Data().GroundFire.OnCast[entityId] = Now()
+    Data().GroundFire.AoePos[entityId] = nil
 end
 
+local getIndexTable = function(startIdx, n)
+    local targetEnd = startIdx + n - 1
+    local endValue
+    if targetEnd > 7 then
+        endValue = 7
+    else
+        endValue = targetEnd
+    end
+    local result = {}
+    for i = startIdx, endValue do
+        table.insert(result, i)
+    end
+    return result
+end
 local drawingGroudFire = function()
     if not Cfg().draw then
         return
@@ -228,39 +248,61 @@ local drawingGroudFire = function()
     --        Data().GroundFire.OnCreate[id] = nil
     --    end
     --end
-    for id, timer in pairs(Data().GroundFire.OnCast) do
-        local curTable = Data().GroundFire.AoePos[id]
+    for i = 1, #Data().GroundFire.Info do
+        local info = Data().GroundFire.Info[i]
+        local curTable = info.pos
         if curTable ~= nil then
-            local s = TimeSince(timer)
-            local idx1, idx2, idx3
+            local s = TimeSince(info.castTimer)
+            local indexTable = {}
             if s < 520 then
-                idx1, idx2, idx3 = 1, 2, 3
+                indexTable = getIndexTable(1, Cfg().groundCnt)
             elseif s < 1040 then
-                idx1, idx2, idx3 = 2, 3, 4
+                indexTable = getIndexTable(2, Cfg().groundCnt)
             elseif s < 1560 then
-                idx1, idx2, idx3 = 3, 4, 5
+                indexTable = getIndexTable(3, Cfg().groundCnt)
             elseif s < 2080 then
-                idx1, idx2, idx3 = 4, 5, 6
+                indexTable = getIndexTable(4, Cfg().groundCnt)
             elseif s < 2600 then
-                idx1, idx2 = 5, 6, 7
+                indexTable = getIndexTable(5, Cfg().groundCnt)
             elseif s < 3120 then
-                idx1 = 6, 7
+                indexTable = getIndexTable(6, Cfg().groundCnt)
             elseif s < 3640 then
-                idx1 = 7
+                indexTable = getIndexTable(7, Cfg().groundCnt)
             end
             if s < 3640 then
-                DM.redDrawer:addCircle(curTable[idx1].x, 0, curTable[idx1].z, 6)
-                if idx2 ~= nil then
-                    DM.orangeDrawer:addCircle(curTable[idx2].x, 0, curTable[idx2].z, 6)
-                end
-                if idx3 ~= nil then
-                    DM.yellowDrawer:addCircle(curTable[idx3].x, 0, curTable[idx3].z, 6)
+                for j = 1, #indexTable do
+                    local idx = indexTable[j]
+                    if curTable[idx] ~= nil then
+                        local drawer
+                        if j == 1 then
+                            drawer = DM.redDrawer
+                        elseif j == 2 then
+                            drawer = DM.orangeDrawer
+                        elseif j == 3 then
+                            drawer = DM.yellowDrawer
+                        elseif j == 4 then
+                            drawer = DM.orangeDrawer
+                        elseif j == 5 then
+                            drawer = DM.cyanDrawer
+                        else
+                            drawer = DM.greenDrawer
+                        end
+                        drawer:addCircle(curTable[idx].x, 0, curTable[idx].z, 6)
+                    end
                 end
             else
-                Data().GroundFire.AoePos[id] = nil
-                Data().GroundFire.OnCast[id] = nil
+                table.insert(Data().GroundFire.OverTime, i)
             end
         end
+    end
+    if table.size(Data().GroundFire.OverTime) > 0 then
+        table.sort(Data().GroundFire.OverTime, function(a, b)
+            return a > b
+        end)
+        for _, idx in ipairs(Data().GroundFire.OverTime) do
+            table.remove(Data().GroundFire.Info, idx)
+        end
+        Data().GroundFire.OverTime = {}
     end
 end
 local drawBloodArrow = function(wave)
@@ -706,19 +748,20 @@ Dmu_P5.Update = function()
     if DM.InState('P5CelestriadGetData') then
         if Cfg().draw and Data().Celestriad.CatastrophicChoiceId ~= 0 then
             if Data().Celestriad.BossOnDraw == nil then
-                Data().Celestriad.BossOnDraw = TensorCore.mGetEntity(boss.id)
-            end
-            local curBoss = Data().Celestriad.BossOnDraw
-            if Data().Celestriad.CatastrophicChoiceId == 49742 then
-                MG.CreateDrawer(1, 0, 0, 0.3, 2):addCircle(curBoss.pos.x, 0, curBoss.pos.z, 10)
-            elseif Data().Celestriad.CatastrophicChoiceId == 49743 then
-                MG.CreateDrawer(1, 0, 0, 0.4, 2):addDonut(curBoss.pos.x, 0, curBoss.pos.z, 10, 25)
+                Data().Celestriad.BossOnDraw = TensorCore.mGetEntity(Data().Kefka.id)
+            else
+                local curBoss = Data().Celestriad.BossOnDraw
+                if Data().Celestriad.CatastrophicChoiceId == 49742 then
+                    MG.CreateDrawer(1, 0, 0, 0.3, 2):addCircle(curBoss.pos.x, 0, curBoss.pos.z, 10)
+                elseif Data().Celestriad.CatastrophicChoiceId == 49743 then
+                    MG.CreateDrawer(1, 0, 0, 0.4, 2):addDonut(curBoss.pos.x, 0, curBoss.pos.z, 10, 25)
+                end
             end
         end
         loadGuidePosAndNextStart()
     end
     if DM.InState('P5BeforeEnd') then
-        local curBoss = TensorCore.mGetEntity(boss.id)
+        local curBoss = TensorCore.mGetEntity(Data().Kefka.id)
         if curBoss ~= nil and (not curBoss.alive or curBoss.hp.current <= 0) then
             MG.Info('------------------------------------------')
             MG.Info('恭喜通关' .. DM.NameCN .. '!')
