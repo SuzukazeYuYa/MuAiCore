@@ -537,6 +537,7 @@ local drawRaidSettingTab = function(M)
             M.ConfigFruInit = false
             M.FruConfigUI.open = not M.FruConfigUI.open
             M.FruMitigationUI.open = false
+            M.DancingMadUI.open = false
         end
         GUI:SameLine()
         GUI:Button('减伤设置', 150, 25)
@@ -547,6 +548,8 @@ local drawRaidSettingTab = function(M)
                 M.FruMitigationUI.open = not M.FruMitigationUI.open
                 M.FruConfigUI.open = false
             end
+            M.DancingMadUI.open = false
+            M.CatZDmuTankUI.open = false
         end
         GUI:Dummy(0, 7)
         --GUI:AlignFirstTextHeightToWidgets()
@@ -564,12 +567,16 @@ local drawRaidSettingTab = function(M)
             if GUI:IsItemClicked(0) then
                 M.DancingMadUI.open = not M.DancingMadUI.open
                 M.CatZDmuTankUI.open = false
+                M.FruConfigUI.open = false
+                M.FruMitigationUI.open = false
             end
             GUI:SameLine(0, 8)
             GUI:Button('CatZTankUI', 150, 25)
             if GUI:IsItemClicked(0) then
                 M.CatZDmuTankUI.open = not M.CatZDmuTankUI.open
                 M.DancingMadUI.open = false
+                M.FruConfigUI.open = false
+                M.FruMitigationUI.open = false
             end
         end
         if DmuCfgChanged then
@@ -1045,24 +1052,25 @@ local drawCommon = function(M)
     GUI:AlignFirstTextHeightToWidgets()
     GUI:BulletText('BUG反馈,QQ群1106367633')
     GUI:SameLine(200)
-    GUI:Button('点击加入', 145, 20)
+    GUI:Button('点此加入', 145, 20)
     if GUI:IsItemClicked(0) then
         io.popen('start https://qm.qq.com/q/BGzv02jsiI')
+        M.Info('加群答案为：MuAiCore(注意大小写)<se.1>')
     end
 
     GUI:SameLine()
     GUI:Dummy(10, 1)
     GUI:AlignFirstTextHeightToWidgets()
     GUI:BulletText('GitHub主页（说明书）')
-    GUI:SameLine()
-    GUI:Button('点击查看主页说明书', 160, 20)
+    GUI:SameLine(200)
+    GUI:Button('点击打开', 145, 20)
     if GUI:IsItemClicked(0) then
         io.popen('start https://github.com/SuzukazeYuYa/MuAiCore')
     end
     GUI:AlignFirstTextHeightToWidgets()
     GUI:BulletText('更新日志：')
-    GUI:SameLine(185)
-    GUI:Button('点击查看更新日志', 160, 20)
+    GUI:SameLine(200)
+    GUI:Button('点击查看', 145, 20)
     if GUI:IsItemClicked(0) then
         io.popen('start https://github.com/SuzukazeYuYa/MuAiCore/commits/main/')
     end
@@ -1112,7 +1120,7 @@ MainUI.draw = function()
         M.MainUI.tabs = GUI_CreateTabs('职能,基本,副本,辅助,开发,赞助')
     end
     GUI:SetNextWindowSize(WIN_WIDE, 0, GUI.SetCond_Appearing)
-    M.MainUI.visible, M.MainUI.open = GUI:Begin('MuAiGuide Setting', M.MainUI.open)
+    M.MainUI.visible, M.MainUI.open = GUI:Begin('MuAiCore Setting', M.MainUI.open)
     local winPosX, winPosY = GUI:GetWindowPos()
     M.MainUI.uiPos.x = winPosX + WIN_WIDE
     M.MainUI.uiPos.y = winPosY

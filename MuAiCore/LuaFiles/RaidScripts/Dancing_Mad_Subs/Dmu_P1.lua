@@ -319,34 +319,18 @@ local turnBuff = function(dataTable, stateChangeFunc)
                 for job, _ in pairs(MG.Party) do
                     if table.contains(thGroup, job) then
                         if job ~= thJob then
-                            if disTh < 3 then
-                                guideData[job] = {
-                                    x = thObj.pos.x + dataTable.offSetTh.x,
-                                    y = thObj.pos.y + dataTable.offSetTh.y,
-                                    z = thObj.pos.z + dataTable.offSetTh.z,
-                                }
+                            if disTh < 2 then
+                                guideData[job] = MG.VectorXZAdd(thObj.pos, dataTable.offSetTh)
                             else
-                                guideData[job] = {
-                                    x = guideData[thJob].x + dataTable.offSetTh.x,
-                                    y = guideData[thJob].y + dataTable.offSetTh.y,
-                                    z = guideData[thJob].z + dataTable.offSetTh.z,
-                                }
+                                guideData[job] = MG.VectorXZAdd(guideData[thJob], dataTable.offSetTh)
                             end
                         end
                     else
                         if job ~= dpsJob then
                             if disDps < 2 then
-                                guideData[job] = {
-                                    x = dpsObj.pos.x + dataTable.offSetDps.x,
-                                    y = dpsObj.pos.y + dataTable.offSetDps.y,
-                                    z = dpsObj.pos.z + dataTable.offSetDps.z,
-                                }
+                                guideData[job] = MG.VectorXZAdd(dpsObj.pos, dataTable.offSetDps)
                             else
-                                guideData[job] = {
-                                    x = guideData[dpsJob].x + dataTable.offSetDps.x,
-                                    y = guideData[dpsJob].y + dataTable.offSetDps.y,
-                                    z = guideData[dpsJob].z + dataTable.offSetDps.z,
-                                }
+                                guideData[job] = MG.VectorXZAdd(guideData[dpsJob], dataTable.offSetDps)
                             end
                         end
                     end
@@ -434,111 +418,6 @@ local drawFire = function(dataTable)
     end
 end
 
-local fire1IsSpread = function()
-    local fireData = Data().Fire1
-    if fireData.BossMark == 0 then
-        return nil
-    end
-    if fireData.PlayerMark == 127 then
-        return fireData.BossMark ~= 673
-    elseif table.size(fireData.GatherPlayers) >= 2 then
-        return fireData.BossMark == 673
-    end
-    return nil
-end
-
-local line2SpreadPoint = function(center, job, isSpread)
-    if not isSpread then
-        return { x = center.x, y = 0, z = center.z }
-    end
-    local bossPos = DM.Center
-    if MG.CurRaidBoss ~= nil and MG.CurRaidBoss.pos ~= nil then
-        bossPos = MG.CurRaidBoss.pos
-    end
-    local heading = TensorCore.getHeadingToTarget(center, bossPos)
-    local jobOffset = {
-        MT = { side = 1, back = 0 },
-        D1 = { side = 1, back = 0 },
-        ST = { side = -1, back = 0 },
-        D2 = { side = -1, back = 0 },
-        H1 = { side = 1, back = 1 },
-        D3 = { side = 1, back = 1 },
-        H2 = { side = -1, back = 1 },
-        D4 = { side = -1, back = 1 },
-    }
-    local offset = jobOffset[job] or { side = 0, back = 0 }
-    local sideDis = 2.5
-    local backDis = 5
-    return {
-        x = center.x + math.cos(heading) * offset.side * sideDis - math.sin(heading) * offset.back * backDis,
-        y = 0,
-        z = center.z - math.sin(heading) * offset.side * sideDis - math.cos(heading) * offset.back * backDis,
-    }
-end
-
-local getLine2DefaultGuide = function()
-    local lineData = Data().Line2
-    if lineData.dangerDir == nil then
-        return nil
-    end
-    local guideData = {}
-    local dir = MG.SetHeading2Pi(lineData.dangerDir)
-    if (math.pi / 2 < dir and dir < math.pi) or (math.pi * 3 / 2 < dir and dir < 2 * math.pi) then
-        for job, _ in pairs(MG.Party) do
-            if table.contains(mtGroup, job) then
-                guideData[job] = { x = 99.5, y = 0, z = 81 }
-            else
-                guideData[job] = { x = 100.5, y = 0, z = 119 }
-            end
-        end
-    else
-        for job, _ in pairs(MG.Party) do
-            if table.contains(mtGroup, job) then
-                guideData[job] = { x = 100.5, y = 0, z = 81 }
-            else
-                guideData[job] = { x = 99.5, y = 0, z = 119 }
-            end
-        end
-    end
-    return guideData
-end
-
-local getLine2KnockUpGuide = function()
-    local lineData = Data().Line2
-    if lineData.dangerDir == nil
-            or lineData.GatherPlayers == nil
-            or table.size(lineData.GatherPlayers) < 4 then
-        return nil
-    end
-    local isSpread = fire1IsSpread()
-    if isSpread == nil then
-        return nil
-    end
-    local dir = MG.SetHeading2Pi(lineData.dangerDir)
-    local upPos, downPos
-    if (math.pi / 2 < dir and dir < math.pi) or (math.pi * 3 / 2 < dir and dir < 2 * math.pi) then
-        upPos = { x = 96, y = 0, z = 88 }
-        downPos = { x = 104, y = 0, z = 112 }
-    else
-        upPos = { x = 104, y = 0, z = 88 }
-        downPos = { x = 96, y = 0, z = 112 }
-    end
-
-    local guideData = {}
-    for job, member in pairs(MG.Party) do
-        local center = table.contains(lineData.GatherPlayers, member.id) and upPos or downPos
-        guideData[job] = line2SpreadPoint(center, job, isSpread)
-    end
-    return guideData
-end
-
-local getLine2Guide = function()
-    if Cfg().line2GuideType == 2 then
-        return getLine2KnockUpGuide()
-    end
-    return getLine2DefaultGuide()
-end
-
 --------------------------------------------- event function ---------------------------------------------
 --- 初始化
 --- @param dm DancingMad
@@ -613,32 +492,6 @@ end
 
 ---@param aoeInfo DirectionalAOE
 Dmu_P1.OnAOECreate = function(aoeInfo)
-    -- 画制冰和雷
-    --if Cfg().draw then
-    --    local drawTime = 5500
-    --    if not MG.Config.DmuCfg.BindEffect then
-    --        -- 冰危险区
-    --        if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
-    --            DM.yellowDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, math.pi / 2, aoeInfo.heading, 0, true)
-    --        end
-    --        -- 画雷危险区
-    --        if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-    --            local startPos = TensorCore.getPosInDirection({ x = aoeInfo.x, y = aoeInfo.y, z = aoeInfo.z }, aoeInfo.heading + math.pi, 5)
-    --            DM.yellowDrawer:addTimedRect(drawTime, startPos.x, startPos.y, startPos.z, 50, 10, aoeInfo.heading, 0, true)
-    --        end
-    --    else
-    --        -- 冰危险区
-    --        if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
-    --            DM.purpleDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading)
-    --        end
-    --
-    --        -- 画雷危险区
-    --        if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-    --            MG.CreateDrawer(0.5, 0, 1, nil, 2):addTimedRect(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
-    --        end
-    --    end
-    --end
-
     if DM.BeLowState('P1TrueFalse2', true) and (aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768) then
         if Data().Fire1.iceDir == nil then
             Data().Fire1.iceDir = MG.SetHeading2Pi(aoeInfo.heading)
@@ -729,7 +582,7 @@ Dmu_P1.Update = function()
     CheckConeDeath()
     drawBuffKick()
     if Cfg().draw
-            and (DM.InState('P1Line3_1') or DM.InState('P1Line3_2'))
+            and (DM.OverState('P1Line3_1', true) and DM.BeLowState('P1ShitBoom'))
             and Data().Line3.Shits ~= nil and table.size(Data().Line3.Shits) >= 0
     then
         for _, ent in pairs(Data().Line3.Shits) do
@@ -1004,8 +857,27 @@ Dmu_P1.Update = function()
         end
         if Cfg().guide then
             if Data().Line2.Guide1 == nil then
-                Data().Line2.Guide1 = getLine2Guide()
-                if Data().Line2.Guide1 == nil and Data().Line2.dangerDir == nil then
+                if Data().Line2.dangerDir ~= nil then
+                    Data().Line2.Guide1 = {}
+                    local dir = MG.SetHeading2Pi(Data().Line2.dangerDir)
+                    if (math.pi / 2 < dir and dir < math.pi) or (math.pi * 3 / 2 < dir and dir < 2 * math.pi) then
+                        for job, _ in pairs(MG.Party) do
+                            if table.contains(mtGroup, job) then
+                                Data().Line2.Guide1[job] = { x = 99.5, y = 0, z = 81 }
+                            else
+                                Data().Line2.Guide1[job] = { x = 100.5, y = 0, z = 119 }
+                            end
+                        end
+                    else
+                        for job, _ in pairs(MG.Party) do
+                            if table.contains(mtGroup, job) then
+                                Data().Line2.Guide1[job] = { x = 100.5, y = 0, z = 81 }
+                            else
+                                Data().Line2.Guide1[job] = { x = 99.5, y = 0, z = 119 }
+                            end
+                        end
+                    end
+                else
                     if Data().Line2.Guide0 == nil then
                         Data().Line2.Guide0 = {}
                         for job, _ in pairs(MG.Party) do
@@ -1115,12 +987,12 @@ Dmu_P1.Update = function()
                 Data().Turn2.dpsGroupGuidePos == nil
         then
             Data().Turn2.thGroupGuidePos = {
-                x = Data().Line3.UpShit.pos.x,
+                x = 100,
                 y = Data().Line3.UpShit.pos.y,
                 z = Data().Line3.UpShit.pos.z + 5.5
             }
             Data().Turn2.dpsGroupGuidePos = {
-                x = Data().Line3.DownShit.pos.x,
+                x = 100,
                 y = Data().Line3.DownShit.pos.y,
                 z = Data().Line3.DownShit.pos.z - 5.5
             }

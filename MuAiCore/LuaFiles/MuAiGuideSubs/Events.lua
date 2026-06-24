@@ -54,7 +54,7 @@ local MoogleExCheck = function()
                 and MoogleTelegraphs.Settings.DrawEnemyAoE == false
         then
             MoogleTelegraphs.Settings.DrawEnemyAoE = true
-            MG.Info("当前已由MuAiGuide管理莫古力敌人范围开关，检测MoogleTelegraphs的[敌人范围]被关闭，已将其恢复到开启状态。")
+            MG.Info("当前已由MuAiCore管理莫古力敌人范围开关，检测MoogleTelegraphs的[敌人范围]被关闭，已将其恢复到开启状态。")
         end
     end
 end

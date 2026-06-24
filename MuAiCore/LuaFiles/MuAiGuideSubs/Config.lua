@@ -301,7 +301,7 @@ Config.init = function(M)
             drawWinLight = true,
             drawWinPolarizing = true,
         }
-       
+
     end
 
     --- 创建绝卡夫卡默认配置
@@ -315,14 +315,14 @@ Config.init = function(M)
                 autoLookAt = true,
                 transUnOpt = false,
                 hardLock = false,
-                -- 波动炮指路方案：1 TN左DPS右，2 击退上闲人下
-                line2GuideType = 1,
                 BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
             },
             P2 = {
                 enable = true, draw = true, guide = true,
                 -- 1职能固定，2扇左钢右 3职固Uptime
                 fixType = 1,
+                -- 踩塔开启指挥模式
+                towerGuide = false,
                 -- 踩塔结束之后去哪 1 -> A, 2 -> 两塔中间
                 endTower = 1,
                 -- 1.只画一次，2.绘制预览
@@ -339,7 +339,7 @@ Config.init = function(M)
                 -- 1 d3; 2 d4
                 superJump = 1,
                 -- 1: THHT 2: HTH, 3 8人一起 
-                kickType  = 1,
+                kickType = 1,
                 -- 击退前自动选中小艾
                 autoTargetEx = false,
                 -- 标记类型，1 关闭； 2  标记自己；  3 标记全队;
@@ -347,7 +347,7 @@ Config.init = function(M)
                 takeLineAttack12 = false,
                 takeLineStop22 = false,
                 markOrder = { 'D1', 'D2', 'D3', 'D4', 'MT', 'ST', 'H2', 'H1' },
-                delayMark = true,
+                numberGuidedelayMark = true,
                 -- 踩塔基础类型
                 -- 1:其他 2:CCHH, 3:盗火，
                 takeTowerType = 1,

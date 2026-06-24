@@ -35,15 +35,17 @@ local printCurrentState = function()
     MG.Debug('当前副本阶段：' .. DM.StateNames[MG.DancingMad.CurrentState])
 end
 
-local developForceChange = function(stateName) 
-    DM.ChangeState(stateName)
-end
-
-
 ---数据初始化
 local dataInit = function()
     MG.DancingMad = {
+        -- 公共变量
+        Init = true,
         Casting = {},
+        CastingCache = {},
+        IceThunderTimer = 0,
+        IceType = nil,
+        ThunderType = nil,
+        -- 阶段变量
         P1 = {
             Death = {
                 Timer = 0,
@@ -213,6 +215,8 @@ local dataInit = function()
                 kickPreSkill = 0,
                 kickTimer = 0,
                 kickDrawing = false,
+                fixFlg = false,
+                marked = {}
             },
             Trine = {
                 wave = 1,
@@ -286,6 +290,7 @@ local dataInit = function()
                 GuideData = nil,
                 DrawData = nil,
                 StartTimer = 0,
+                guideMarked = false
             },
             ThunderIII = {
                 Start = false,
@@ -345,7 +350,7 @@ local dataInit = function()
                 boomPos = nil,
                 isDps = nil,
                 Put1Pos = nil,
-                Put2Pos = nil, 
+                Put2Pos = nil,
                 Guide1 = nil,
                 Guide2 = nil,
                 Timer = 0,
@@ -461,7 +466,7 @@ local dataInit = function()
                 castingCache = {},
                 CatastrophicChoiceId = 0,
             },
-            GroundFire  = {
+            GroundFire = {
                 Info = {},
                 OverTime = {},
                 OnCreate = {},
@@ -470,7 +475,6 @@ local dataInit = function()
             },
         },
     }
-
     ---判定P4指定BUFF是否为真BUFF
     ---@return boolean | nil 真假|为空表示Buff不存在 
     MG.DancingMad.IsRealBuff = function(buffId, job)
@@ -486,6 +490,14 @@ local dataInit = function()
     end
     MG.Info(DM.NameCN .. '数据初始化完毕！')
 end
+
+local developForceChange = function(stateName)
+    if MG.DancingMad == nil or not MG.DancingMad.Init then
+        dataInit()
+    end
+    DM.ChangeState(stateName)
+end
+
 --- 屏蔽特效开关缓存
 local effectSwitch
 
@@ -804,105 +816,180 @@ end
 ---@param thunderType 雷类型
 ---@param iceType 冰类型
 DM.CalcMixPoint = function(thunder, ice)
-    local near, far, center
+    local near, far, center, same
     if thunder == DM.ThunderType.Left13 and ice == DM.IceType.danger13 then
         -- Left13 + danger13
-        near = { x = 104, y = 0, z = 102.5 }
-        far = { x = 97.5, y = 0, z = 96 }
+        near = { x = 104, y = 0, z = 101.6568 }
+        far = { x = 98.3432, y = 0, z = 96 }
         center = { x = 101, y = 0, z = 100.4 }
+        same = true
     elseif thunder == DM.ThunderType.Left13 and ice == DM.IceType.danger24 then
         -- Left13 + danger24
         near = { x = 104, y = 0, z = 96 }
         far = { x = 90, y = 0, z = 110 }
         center = { x = 101, y = 0, z = 99 }
+        same = false
     elseif thunder == DM.ThunderType.Left24 and ice == DM.IceType.danger13 then
         -- Left24 + danger13
-        near = { x = 102.5, y = 0, z = 104 }
-        far = { x = 96, y = 0, z = 97.5 }
+        near = { x = 101.6568, y = 0, z = 104 }
+        far = { x = 96, y = 0, z = 98.3432 }
         center = { x = 101, y = 0, z = 100.4 }
+        same = true
     elseif thunder == DM.ThunderType.Left24 and ice == DM.IceType.danger24 then
         -- Left24 + danger24
         near = { x = 96, y = 0, z = 104 }
         far = { x = 110, y = 0, z = 90 }
         center = { x = 99, y = 0, z = 101 }
+        same = false
     elseif thunder == DM.ThunderType.Right13 and ice == DM.IceType.danger13 then
         -- Right13 + danger13
         near = { x = 96, y = 0, z = 96 }
         far = { x = 110, y = 0, z = 110 }
         center = { x = 99, y = 0, z = 99 }
+        same = false
     elseif thunder == DM.ThunderType.Right13 and ice == DM.IceType.danger24 then
         -- Right13 + danger24
-        near = { x = 96, y = 0, z = 102.5 }
-        far = { x = 102.5, y = 0, z = 96 }
+        near = { x = 96, y = 0, z = 101.6568 }
+        far = { x = 101.6568, y = 0, z = 96 }
         center = { x = 99, y = 0, z = 100.4 }
+        same = true
     elseif thunder == DM.ThunderType.Right24 and ice == DM.IceType.danger13 then
         -- Right24 + danger13
         near = { x = 104, y = 0, z = 104 }
         far = { x = 90, y = 0, z = 90 }
         center = { x = 101, y = 0, z = 101 }
+        same = false
     elseif thunder == DM.ThunderType.Right24 and ice == DM.IceType.danger24 then
         -- Right24 + danger24
-        near = { x = 97.5, y = 0, z = 104 }
-        far = { x = 104, y = 0, z = 97.5 }
-        center = { x = 101, y = 0, z = 101 }
+        near = { x = 98.3432, y = 0, z = 104 }
+        far = { x = 104, y = 0, z = 98.3432 }
+        center = { x = 99.6, y = 0, z = 101 }
+        same = true
     end
-    return near, far, center
+    return near, far, center, same
 end
 
+-- 公共画图aoeId
 DM.commonDrawIds = { 47774, 47775, 47777, 47768 }
+
+-- 公共指路排除的阶段
+DM.notGuideState = { 'P1BuffTurn1', 'P4WaterFire2Put' }
 
 ---@param aoeInfo DirectionalAOE
 DM.commonStartDraw = function(aoeInfo)
     if MG == nil or MG.DancingMad == nil or MG.DancingMad.Casting == nil then
         return
     end
-    if table.contains(DM.commonDrawIds, (aoeInfo.aoeID))
-            and ((DM.OverState('P1Start', true) and DM.BeLowState('P1End') and MG.Config.DmuCfg.P1.draw)
-            or (DM.OverState('P4Start', true) and DM.BeLowState('P4End') and MG.Config.DmuCfg.P4.draw))
-    then
+    if table.contains(DM.commonDrawIds, (aoeInfo.aoeID)) then
         MG.DancingMad.Casting[aoeInfo.entityID] = aoeInfo
     end
 end
 
-DM.CommonDraw = function()
-    if MG == nil or MG.DancingMad == nil or MG.DancingMad.Casting == nil then
+DM.commonStartGuide = function(aoeInfo)
+    if MG == nil or MG.DancingMad == nil then
         return
     end
-    for id, aoeInfo in pairs(MG.DancingMad.Casting) do
-        if aoeInfo.aoeCastType == 13 then
-            if MG.Config.DmuCfg.BindEffect then
-                DM.purpleDrawer:addCone(aoeInfo.x, 0, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading)
-            else
-                DM.yellowDrawer:addCone(aoeInfo.x, 0, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading, true)
+    if table.contains(DM.commonDrawIds, (aoeInfo.aoeID)) and
+            (MG.DancingMad.IceThunderTimer == 0 or TimeSince(MG.DancingMad.IceThunderTimer) < 1000)
+    then
+        MG.Debug('缓存冰雷AOE')
+        MG.DancingMad.CastingCache[aoeInfo.entityID] = aoeInfo
+        -- 1秒内的冰雷，抓取他们的类型
+        if MG.DancingMad.IceThunderTimer == 0 then
+            MG.DancingMad.IceThunderTimer = Now()
+        end
+        if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
+            -- 冰
+            if MG.DancingMad.IceType == nil then
+                MG.DancingMad.IceType = DM.CalcIceType(aoeInfo)
             end
-        elseif aoeInfo.aoeCastType == 12 then
-            if MG.Config.DmuCfg.BindEffect then
-                MG.CreateDrawer(0.5, 0, 1, 0.3, 2):addRect(aoeInfo.x, 0, aoeInfo.z, 40, 10, aoeInfo.heading)
-            else
-                DM.yellowDrawer:addRect(aoeInfo.x, 0, aoeInfo.z, 40, 10, aoeInfo.heading, true)
+        elseif aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
+            -- 雷
+            if MG.DancingMad.ThunderType == nil then
+                MG.DancingMad.ThunderType = DM.CalcThunderType(aoeInfo)
             end
         end
     end
 end
 
-DM.CommonEndDraw = function(entityID)
+DM.CommonDraw = function()
     if MG == nil or MG.DancingMad == nil or MG.DancingMad.Casting == nil or table.size(MG.DancingMad.Casting) == 0 then
         return
     end
     if (DM.OverState('P1Start', true) and DM.BeLowState('P1End') and MG.Config.DmuCfg.P1.draw)
-            or (DM.OverState('P4Start', true) and DM.BeLowState('P4End') and MG.Config.DmuCfg.P4.draw)
-    then
-        ---@type DirectionalAOE
-        local aoe = MG.DancingMad.Casting[entityID]
-        if aoe ~= nil and TimeSince(aoe.startTime) > aoe.duration * 1000 - 100 then
-            MG.DancingMad.Casting[entityID] = nil
-        end
-    else
-        if table.size(MG.DancingMad.Casting) > 0 then
-            MG.DancingMad.Casting = {}
+            or (DM.OverState('P4Start', true) and DM.BeLowState('P4End') and MG.Config.DmuCfg.P4.draw) then
+        for id, aoeInfo in pairs(MG.DancingMad.Casting) do
+            if aoeInfo.aoeCastType == 13 then
+                if MG.Config.DmuCfg.BindEffect then
+                    DM.purpleDrawer:addCone(aoeInfo.x, 0, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading)
+                else
+                    DM.yellowDrawer:addCone(aoeInfo.x, 0, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading, true)
+                end
+            elseif aoeInfo.aoeCastType == 12 then
+                if MG.Config.DmuCfg.BindEffect then
+                    DM.purpleDrawer:addRect(aoeInfo.x, 0, aoeInfo.z, 40, 10, aoeInfo.heading)
+                else
+                    DM.yellowDrawer:addRect(aoeInfo.x, 0, aoeInfo.z, 40, 10, aoeInfo.heading, true)
+                end
+            end
         end
     end
 end
+
+DM.CommonGuide = function()
+    if MG == nil or MG.DancingMad == nil
+            or MG.DancingMad.CastingCache == nil or table.size(MG.DancingMad.CastingCache) == 0
+            or table.contains(DM.notGuideState, DM.StateNames[MG.DancingMad.CurrentState])
+    then
+        return
+    end
+
+    if ((DM.OverState('P1Start', true) and DM.BeLowState('P1End') and MG.Config.DmuCfg.P1.guide)
+            or (DM.OverState('P4Start', true) and DM.BeLowState('P4End') and MG.Config.DmuCfg.P4.guide))
+            and MG.DancingMad.IceType ~= nil and MG.DancingMad.ThunderType ~= nil then
+        local far, near = DM.CalcMixPoint(MG.DancingMad.ThunderType, MG.DancingMad.IceType)
+        local player = MG.GetPlayer()
+        local disF = TensorCore.getDistance2d(far, player.pos)
+        local disN = TensorCore.getDistance2d(near, player.pos)
+        local guidePos
+        if disN > disF then
+            guidePos = far
+        else
+            guidePos = near
+        end
+        MG.FrameDirect(guidePos.x, guidePos.z)
+    end
+end
+
+DM.CommonEndDraw = function(entityID)
+    if MG == nil or MG.DancingMad == nil
+            or MG.DancingMad.Casting == nil or table.size(MG.DancingMad.Casting) == 0 then
+        return
+    end
+    ---@type DirectionalAOE
+    local aoe = MG.DancingMad.Casting[entityID]
+    if aoe ~= nil and TimeSince(aoe.startTime) > aoe.duration * 1000 - 200 then
+        MG.DancingMad.Casting[entityID] = nil
+    end
+end
+
+DM.CommonEndGuide = function(entityID)
+    if MG == nil or MG.DancingMad == nil
+            or MG.DancingMad.CastingCache == nil or table.size(MG.DancingMad.CastingCache) == 0 then
+        return
+    end
+    local aoe = MG.DancingMad.CastingCache[entityID]
+    if aoe ~= nil and TimeSince(aoe.startTime) > aoe.duration * 1000 - 200 then
+        MG.DancingMad.CastingCache[entityID] = nil
+    end
+    if table.size(MG.DancingMad.CastingCache) == 0 then
+        MG.DancingMad.IceType = nil
+        MG.DancingMad.ThunderType = nil
+        MG.DancingMad.IceThunderTimer = 0
+        MG.Debug('清空冰雷AOE缓存')
+    end
+end
+
 -------------------------- Argus Events --------------------------
 DM.OnEntityChannel = function(entityID, spellID, _)
     if not MG.Config.DmuCfg.Enable or MG.DancingMad == nil then
@@ -937,6 +1024,7 @@ end
 DM.OnEntityCast = function(entityID, spellID, castPos)
     doSubEvents('OnEntityCast', entityID, spellID, castPos)
     DM.CommonEndDraw(entityID)
+    DM.CommonEndGuide(entityID)
 end
 
 DM.OnMarkerAdd = function(entityID, markerID)
@@ -946,6 +1034,7 @@ end
 DM.OnAOECreate = function(aoeInfo)
     doSubEvents('OnAOECreate', aoeInfo)
     DM.commonStartDraw(aoeInfo)
+    DM.commonStartGuide(aoeInfo)
 end
 
 DM.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
@@ -973,6 +1062,7 @@ DM.Update = function()
     applyEffectBinder()
     doSubEvents('Update')
     DM.CommonDraw()
+    DM.CommonGuide()
 end
 
 DM.OnEnter = function()
