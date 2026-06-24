@@ -143,7 +143,7 @@ DancingMadUI.draw = function()
             GUI:SameLine(0, 0)
             M.Config.DmuCfg.BindEffect = GUI:Checkbox('屏蔽真假AOE特效##effectBind', M.Config.DmuCfg.BindEffect)
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('勾选后屏蔽特效采用A+画紫色危险区\n未勾选使用ImGui画图显示黄色危险区\n如果你没有A+, 那仅仅是颜色的区别')
+                GUI:SetTooltip('勾选后屏蔽特效, 并且采用A+画紫色危险区\n未勾选使用ImGui画图显示黄色危险区')
             end
         end
         if M.Config.DmuCfg.P1.enable and GUI:CollapsingHeader('P1 凯夫卡·众神之像') then
@@ -181,7 +181,7 @@ DancingMadUI.draw = function()
             GUI:TextColored(1, 0, 0, 1, ' 攻略: 回转寿司, 相同buff优先正点放  ')
             GUI:Dummy(20, 0)
             GUI:SameLine(0, 0)
-            M.Config.DmuCfg.P1.transUnOpt = GUI:Checkbox('开启近战负优化##P1transUnOpt', M.Config.DmuCfg.P1.transUnOpt)
+            M.Config.DmuCfg.P1.transUnOpt = GUI:Checkbox('开启近战负优化[寿司优化]##P1transUnOpt', M.Config.DmuCfg.P1.transUnOpt)
             if GUI:IsItemHovered() then
                 GUI:SetTooltip('启动后混乱在外, 睡眠在内 \n纯粹是特么的负优化！')
             end
@@ -210,6 +210,12 @@ DancingMadUI.draw = function()
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:TextColored(1, 0, 0, 1, ' 攻略: 混合优化, 闲人固定')
+            GUI:Dummy(10, 0)
+            GUI:SameLine()
+            M.Config.DmuCfg.P2.towerGuide = GUI:Checkbox('开启踩塔指挥模式##P2towerGuide', M.Config.DmuCfg.P2.towerGuide)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('踩塔组从左到右分别标记攻击1234, \n闲人左边锁链12, 右边禁止12')
+            end
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:AlignFirstTextHeightToWidgets()

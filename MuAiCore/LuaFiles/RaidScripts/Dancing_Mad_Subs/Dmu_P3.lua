@@ -785,7 +785,7 @@ Dmu_P3.OnEntityChannel = function(entityID, spellID, _)
         --    Data().TakeTower.Timer = Now()
         --end
     elseif spellID == 47889 then
-        if DM.OverState('P3Tower2', true) then
+        if DM.OverState('P3Tower2', true) and AnyoneCore ~= nil then
             AnyoneCore.addTimedWorldTextOnEnt(
                     6000,
                     'Move',
@@ -1153,7 +1153,7 @@ Dmu_P3.Update = function()
                             9.6, 0.2, 0.4, 0.2, true
                     )
                 end
-                if table.size(Data().WacuumWave.BeforeKick) > 0 then
+                if Cfg().guide and table.size(Data().WacuumWave.BeforeKick) > 0 then
                     MG.FrameMultiD(Data().WacuumWave.BeforeKick)
                 end
             elseif timeSince < 12700 then
@@ -1175,7 +1175,7 @@ Dmu_P3.Update = function()
             DM.ChangeState('P3BlackHolePre')
         end
         if Data().UltimaBlaster.GuideData == nil or table.size(Data().UltimaBlaster.GuideData) < 8 then
-            if table.size(Data().UltimaBlaster.Lines) >= 2 and table.size(Data().UltimaBlaster.Markers) >= 8 then
+            if table.size(Data().UltimaBlaster.Lines) >= 2 and table.size(Data().UltimaBlaster.Markers) > 0 then
                 Data().UltimaBlaster.GuideData = {}
                 Data().UltimaBlaster.DrawData = {}
                 local line = Data().UltimaBlaster.Lines
@@ -1195,10 +1195,12 @@ Dmu_P3.Update = function()
                         Data().UltimaBlaster.DrawData[i] = { from = curPos, target = aimPos }
                     end
                 end
-                for job, member in pairs(MG.Party) do
+                for job, _ in pairs(MG.Party) do
                     local curMark = Data().UltimaBlaster.Markers[job]
-                    local curIndex = markIndex[curMark]
-                    Data().UltimaBlaster.GuideData[job] = Data().UltimaBlaster.DrawData[curIndex].target
+                    if curMark ~= nil then
+                        local curIndex = markIndex[curMark]
+                        Data().UltimaBlaster.GuideData[job] = Data().UltimaBlaster.DrawData[curIndex].target
+                    end
                 end
             end
         end
@@ -1214,7 +1216,9 @@ Dmu_P3.Update = function()
                 end
             end
         end
-        if Cfg().guide and Data().UltimaBlaster.GuideData ~= nil then
+        if Cfg().guide
+                and Data().UltimaBlaster.GuideData ~= nil
+                and table.size(Data().UltimaBlaster.GuideData) > 0 then
             MG.FrameMultiD(Data().UltimaBlaster.GuideData)
         end
     end

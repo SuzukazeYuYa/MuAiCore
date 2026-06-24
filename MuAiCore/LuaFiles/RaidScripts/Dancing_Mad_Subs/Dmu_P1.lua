@@ -319,34 +319,18 @@ local turnBuff = function(dataTable, stateChangeFunc)
                 for job, _ in pairs(MG.Party) do
                     if table.contains(thGroup, job) then
                         if job ~= thJob then
-                            if disTh < 3 then
-                                guideData[job] = {
-                                    x = thObj.pos.x + dataTable.offSetTh.x,
-                                    y = thObj.pos.y + dataTable.offSetTh.y,
-                                    z = thObj.pos.z + dataTable.offSetTh.z,
-                                }
+                            if disTh < 2 then
+                                guideData[job] = MG.VectorXZAdd(thObj.pos, dataTable.offSetTh)
                             else
-                                guideData[job] = {
-                                    x = guideData[thJob].x + dataTable.offSetTh.x,
-                                    y = guideData[thJob].y + dataTable.offSetTh.y,
-                                    z = guideData[thJob].z + dataTable.offSetTh.z,
-                                }
+                                guideData[job] = MG.VectorXZAdd(guideData[thJob], dataTable.offSetTh)
                             end
                         end
                     else
                         if job ~= dpsJob then
                             if disDps < 2 then
-                                guideData[job] = {
-                                    x = dpsObj.pos.x + dataTable.offSetDps.x,
-                                    y = dpsObj.pos.y + dataTable.offSetDps.y,
-                                    z = dpsObj.pos.z + dataTable.offSetDps.z,
-                                }
+                                guideData[job] = MG.VectorXZAdd(dpsObj.pos, dataTable.offSetDps)
                             else
-                                guideData[job] = {
-                                    x = guideData[dpsJob].x + dataTable.offSetDps.x,
-                                    y = guideData[dpsJob].y + dataTable.offSetDps.y,
-                                    z = guideData[dpsJob].z + dataTable.offSetDps.z,
-                                }
+                                guideData[job] = MG.VectorXZAdd(guideData[dpsJob], dataTable.offSetDps)
                             end
                         end
                     end
@@ -508,32 +492,6 @@ end
 
 ---@param aoeInfo DirectionalAOE
 Dmu_P1.OnAOECreate = function(aoeInfo)
-    -- 画制冰和雷
-    --if Cfg().draw then
-    --    local drawTime = 5500
-    --    if not MG.Config.DmuCfg.BindEffect then
-    --        -- 冰危险区
-    --        if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
-    --            DM.yellowDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, math.pi / 2, aoeInfo.heading, 0, true)
-    --        end
-    --        -- 画雷危险区
-    --        if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-    --            local startPos = TensorCore.getPosInDirection({ x = aoeInfo.x, y = aoeInfo.y, z = aoeInfo.z }, aoeInfo.heading + math.pi, 5)
-    --            DM.yellowDrawer:addTimedRect(drawTime, startPos.x, startPos.y, startPos.z, 50, 10, aoeInfo.heading, 0, true)
-    --        end
-    --    else
-    --        -- 冰危险区
-    --        if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
-    --            DM.purpleDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading)
-    --        end
-    --
-    --        -- 画雷危险区
-    --        if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-    --            MG.CreateDrawer(0.5, 0, 1, nil, 2):addTimedRect(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
-    --        end
-    --    end
-    --end
-
     if DM.BeLowState('P1TrueFalse2', true) and (aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768) then
         if Data().Fire1.iceDir == nil then
             Data().Fire1.iceDir = MG.SetHeading2Pi(aoeInfo.heading)
@@ -624,7 +582,7 @@ Dmu_P1.Update = function()
     CheckConeDeath()
     drawBuffKick()
     if Cfg().draw
-            and (DM.InState('P1Line3_1') or DM.InState('P1Line3_2'))
+            and (DM.OverState('P1Line3_1', true) and DM.BeLowState('P1ShitBoom'))
             and Data().Line3.Shits ~= nil and table.size(Data().Line3.Shits) >= 0
     then
         for _, ent in pairs(Data().Line3.Shits) do
@@ -1029,12 +987,12 @@ Dmu_P1.Update = function()
                 Data().Turn2.dpsGroupGuidePos == nil
         then
             Data().Turn2.thGroupGuidePos = {
-                x = Data().Line3.UpShit.pos.x,
+                x = 100,
                 y = Data().Line3.UpShit.pos.y,
                 z = Data().Line3.UpShit.pos.z + 5.5
             }
             Data().Turn2.dpsGroupGuidePos = {
-                x = Data().Line3.DownShit.pos.x,
+                x = 100,
                 y = Data().Line3.DownShit.pos.y,
                 z = Data().Line3.DownShit.pos.z - 5.5
             }

@@ -40,7 +40,8 @@ CatZDmuTankUI.draw = function()
     M.CatZDmuTankUI.visible, M.CatZDmuTankUI.open = GUI:Begin("CatZ Dmu Mitigation Setting", M.CatZDmuTankUI.open)
     if M.CatZDmuTankUI.visible then
         GUI:TextColored(1,1,0,1, '本插件仅为CatZ的时间轴提供减伤控制UI,')
-        GUI:TextColored(1,1,0,1, '如果需要对应的时间轴请联系CatZ.')
+        GUI:TextColored(1,1,0,1, '如果需要对应的时间轴自行寻找CatZ的开源')
+        GUI:TextColored(1,1,0,1, '链接, 本插件不提供该时间轴文件.')
         local curP = 01
         GUI:Columns(2, 'CNName and Value', false)
         local p3Pull = false

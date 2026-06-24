@@ -90,9 +90,9 @@ local standTemplate = {
         -- 奇数,uptime站位，数据由群友提供
         doing = {  --分摊半径5  钢铁半径5  塔半径4 正逆时针旋转，负顺时针旋转
             [1] = { isLeft = true, dis = 1, dir = math.pi }, --左分摊 站目标圈上
-            [2] = { isLeft = true, dis = 3.8, dir = 0 }, --左扇形
-            [3] = { isLeft = false, dis = 3.8, dir = 0 }, --右钢铁
-            [4] = { isLeft = false, dis = 3.8, dir = math.pi }, --右分摊
+            [2] = { isLeft = true, dis = 3, dir = 0 }, --左扇形
+            [3] = { isLeft = false, dis = 3.6, dir = 0 }, --右钢铁
+            [4] = { isLeft = false, dis = 3.6, dir = math.pi }, --右分摊
         },
         standBy = {
             [1] = { isLeft = true, dis = 4.4, dir = math.pi }, --左闲人分摊
@@ -109,9 +109,62 @@ local trineOffsets = {
     right = { { x = 5.773, z = 0 }, { x = -2.887, z = -5 }, { x = -2.887, z = 5 } },
 }
 
+--- 根据过全局中心点DM.Center的射线与圆求距离中心点更远的交点
+--- @param h number 射线朝向弧度（三角函数标准弧度）
+--- @param centerPt table 圆形圆心坐标表 {x=number, z=number}
+--- @param r number 圆形半径
+--- @return table|nil 较远交点 {x=number, z=number}；无交点返回nil
+function GetFarIntersection(h, centerPt, r)
+    -- 全局基准中心点
+    local ox = DM.Center.x
+    local oz = DM.Center.z
+    local ch = math.cos(h)
+    local sh = math.sin(h)
+
+    -- 读取圆中心坐标
+    local x1 = centerPt.x
+    local z1 = centerPt.z
+
+    local dx0 = ox - x1
+    local dz0 = oz - z1
+
+    -- 一元二次方程 t² + Bt + C = 0
+    local B = 2 * (dx0 * ch + dz0 * sh)
+    local C = dx0 ^ 2 + dz0 ^ 2 - r ^ 2
+    local delta = B * B - 4 * C
+
+    -- 判别式小于0：直线与圆无交点
+    if delta < 0 then
+        return nil
+    end
+
+    local sqrtD = math.sqrt(delta)
+    -- 两个t参数，t绝对值越大离中心越远
+    local t1 = (-B - sqrtD) / 2
+    local t2 = (-B + sqrtD) / 2
+
+    -- 比较绝对值，选择距离更远的t
+    local tFar
+    if math.abs(t1) > math.abs(t2) then
+        tFar = t1
+    else
+        tFar = t2
+    end
+
+    -- 计算交点坐标
+    local intersectX = ox + tFar * ch
+    local intersectZ = oz + tFar * sh
+
+    return {
+        x = intersectX,
+        z = intersectZ
+    }
+end
+
 -- 绘制毁灭之脚
 local drawAllThingEnding = function()
     if not Cfg().draw
+            or DM.OverState('P2TrineStart', true)
             or Data().Towers.kickTimer == 0
             or not Data().Towers.kickDrawing
             or table.size(Data().Towers.kickBoss) == 0
@@ -142,6 +195,9 @@ local drawAllThingEnding = function()
 end
 
 local resetKickTimer = function()
+    if DM.OverState('P2TrineStart', true) then
+        return
+    end
     -- 如果用户没有开启画图，则超时100毫秒后自动重置数据
     if Data().Towers.kickTimer ~= 0
             and TimeSince(Data().Towers.kickTimer) > 5600
@@ -224,7 +280,7 @@ local calcConeLeft = function(tbl)
     return result
 end
 
-local calcGuidePos = function(wave)
+local calcGuidePos = function(wave, isFix)
     local dirL = TensorCore.getHeadingToTarget(DM.Center, Data().Towers.spawn[wave].left)
     local dirR = TensorCore.getHeadingToTarget(DM.Center, Data().Towers.spawn[wave].right)
     local curDoingPos = {}
@@ -260,17 +316,57 @@ local calcGuidePos = function(wave)
         end
     end
     local guideData = {}
-    if Cfg().fixType == 2 and wave >= 4 and wave < 8 then
+    if Cfg().fixType == 2 and wave >= 4 and wave < 8 and not isFix then
         Data().Towers.standBy = calcConeLeft(Data().Towers.standBy)
     end
-    local standBy = Data().Towers.standBy
     for i = 1, 4 do
         local curDoingJob = Data().Towers.groupOrders[wave][i]
-        local curStanByJob = standBy[i]
-        guideData[curDoingJob] = curDoingPos[i]
-        guideData[curStanByJob] = curStbPos[i]
+        if curDoingPos[i] ~= nil then
+            guideData[curDoingJob] = curDoingPos[i]
+        end
+        local curStanByJob = Data().Towers.standBy[i]
+        if curStbPos[i] ~= nil then
+            guideData[curStanByJob] = curStbPos[i]
+        end
     end
     return guideData
+end
+
+local checkStandBy = function()
+    local wave = Data().Towers.wave
+    local order = Data().Towers.groupOrders[wave]
+    local standBy = Data().Towers.standBy
+    for i = 1, #standBy do
+        if table.contains(order, standBy[i]) then
+            Data().Towers.fixFlg = true
+            return i
+        end
+    end
+    return nil
+end
+
+local fixStandBy = function()
+    local allElement = {}
+    local wave = Data().Towers.wave
+    local order = Data().Towers.groupOrders[wave]
+    local standBy = Data().Towers.standBy
+    for _, job in pairs(order) do
+        table.insert(allElement, job)
+    end
+    for _, job in pairs(standBy) do
+        table.insert(allElement, job)
+    end
+    local missJob
+    for _, job in pairs(MG.JobPosName) do
+        if not table.contains(allElement, job) then
+            -- 找到错了的人
+            missJob = job
+            break
+        end
+    end
+    local index = checkStandBy()
+    Data().Towers.standBy[index] = missJob
+    Data().Towers.fixFlg = false
 end
 
 local calcFirstOrderA = function()
@@ -320,7 +416,7 @@ local calcFirstOrderB = function()
             curOrder = { group[3], group[4], group[2], group[1] }
         else
             --TH组钢铁，MRTH
-            curOrder = { group[3], group[4], group[1], group[2] }
+            curOrder = { group[4], group[3], group[1], group[2] }
         end
     else
         --DPS组钢铁，THRM, 闲固和扇左钢右一致
@@ -448,7 +544,7 @@ local type3FixPos = function(wave)
     local curGather, curJob, curGuidePos
     for _, job in pairs(Data().Towers.doing) do
         local player = TensorCore.mGetEntity(MG.Party[job].id)
-        if TensorCore.getDistance2d(player.pos, leftTower) < 4 and Data().Towers.curMark[job] == 715 then
+        if TensorCore.getDistance2d(player.pos, leftTower) < 4 and Data().Towers.curMarks[job] == 715 then
             curGather = player
             curJob = job
             break
@@ -456,10 +552,10 @@ local type3FixPos = function(wave)
     end
     if curGather ~= nil then
         local leftHeading = TensorCore.getHeadingToTarget(DM.Center, leftTower)
-        -- 计算出从这个人触发，去4.5米距离，如果在塔外，那么不做修正
-        local pos = TensorCore.getPosInDirection(curGather.pos, leftHeading, 4.5)
-        if TensorCore.getDistance2d(pos, leftTower) < 3.8 then
-            curGuidePos = pos
+        local guidePos = GetFarIntersection(leftHeading, curGather.pos, 4.6)
+        -- 如果当前计算位置超过塔范围，那么使用原始位置
+        if TensorCore.getDistance2d(guidePos, leftTower) < 3.8 then
+            curGuidePos = guidePos
         end
     end
     if curGuidePos ~= nil then
@@ -498,6 +594,7 @@ local calcTrinePos = function(object, a1, a2, a3)
     if not appear then
         return
     end
+    d(object.contentid .. ', ' .. a1 .. ', ' .. a2 .. ', ' .. a3)
     if Data().Trine.Timer ~= 0 and TimeSince(Data().Trine.Timer) > 500 then
         Data().Trine.wave = Data().Trine.wave + 1
     end
@@ -521,8 +618,8 @@ end
 
 local drawTowerHeading = function()
     if not Cfg().draw
-            or Data().Towers.wave == 0
             or DM.OverState('P2T8End', true)
+            or Data().Towers.wave == 0
     then
         return
     end
@@ -729,12 +826,61 @@ Dmu_P2.Update = function()
                 calcGroupOrder(wave)
             else
                 Data().Towers.GuideData[wave] = calcGuidePos(wave)
+                local checkIdx = checkStandBy()
+                if checkIdx ~= nil then
+                    MG.Info('有人站位错误，或者小队列表不正确！踩塔组和闲人组均存在[' .. Data().Towers.standBy[checkIdx] .. ']尝试修复序列。')
+                    fixStandBy()
+                    --如果发现序列不正确，重新调整后需要再计算一次位置
+                    Data().Towers.GuideData[wave] = calcGuidePos(wave, true)
+                end
             end
         end
-        if MG.Config.Main.LogToEchoMsg and Data().Towers.GuideData[wave] ~= nil and not loged[wave] then
+        if MG.Config.Main.LogToEchoMsg
+                and Data().Towers.standBy ~= nil
+                and Data().Towers.GuideData[wave] ~= nil
+                and not loged[wave] then
             showOrderLog(Data().Towers.groupOrders[wave], ' 踩塔顺序：')
             showOrderLog(Data().Towers.standBy, ' 闲人顺序：')
             loged[wave] = true
+        end
+        if Cfg().towerGuide and not Data().Towers.marked[wave] then
+            Data().Towers.marked[wave] = true
+            local order = Data().Towers.groupOrders[wave]
+            local standBy = Data().Towers.standBy
+            if MG.Config.DmuCfg.P2.fixType == 3 and (wave % 2) ~= 0 then
+                local fixOrder = { 2, 1, 4, 3 }
+                for i = 1, #fixOrder do
+                    local index = fixOrder[i]
+                    local curMark = MG.HeadMark.Attack1 + (i - 1)
+                    local curMember = MG.Party[order[index]]
+                    MG.MarkParty(curMark, curMember.id)
+                    if MG.IsVideo() then
+                        MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。')
+                    end
+                end
+            else
+                for i = 1, #order do
+                    local curMark = MG.HeadMark.Attack1 + (i - 1)
+                    local curMember = MG.Party[order[i]]
+                    MG.MarkParty(curMark, curMember.id)
+                    if MG.IsVideo() then
+                        MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。')
+                    end
+                end
+            end
+            for i = 1, #standBy do
+                local curMark
+                if i < 3 then
+                    curMark = MG.HeadMark.Bind1 + (i - 1)
+                else
+                    curMark = MG.HeadMark.Stop1 + (i - 3)
+                end
+                local curMember = MG.Party[standBy[i]]
+                MG.MarkParty(curMark, curMember.id)
+                if MG.IsVideo() then
+                    MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。')
+                end
+            end
         end
         if Cfg().draw then
             local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
@@ -787,7 +933,7 @@ Dmu_P2.Update = function()
                 end
             end
         end
-        if Data().Towers.GuideData[wave] ~= nil and table.size(Data().Towers.GuideData[wave]) >= 8 then
+        if Data().Towers.GuideData[wave] ~= nil and table.size(Data().Towers.GuideData[wave]) > 0 then
             guideFuturePastOrTakeTower()
         end
     end
@@ -797,6 +943,11 @@ Dmu_P2.Update = function()
             and DM.BeLowState('P2T8End')
     then
         DM.ChangeState('P2T8End')
+        if Cfg().towerGuide then
+            for i = 1, 8 do
+                SendTextCommand("/mk clear <" .. i .. ">")
+            end
+        end
     end
     if DM.InState('P2T8End') then
         local curData = Data().Towers.guideDir[4]
