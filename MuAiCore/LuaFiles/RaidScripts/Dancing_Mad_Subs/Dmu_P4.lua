@@ -843,9 +843,9 @@ Dmu_P4.Update = function()
                         local disN = TensorCore.getDistance2d(member.pos, near)
                         local disF = TensorCore.getDistance2d(member.pos, far)
                         if disN < disF then
-                            basePos = disN
+                            basePos = near
                         else
-                            basePos = disF
+                            basePos = far
                         end
                     else
                         basePos = near
