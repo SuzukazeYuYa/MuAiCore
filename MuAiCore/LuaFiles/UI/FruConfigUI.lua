@@ -16,7 +16,7 @@ FruConfigUI.draw = function()
         end
         GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
         GUI:SetNextWindowSize(300, 0, GUI.SetCond_Appearing) 
-        M.FruConfigUI.visible, M.FruConfigUI.open = GUI:Begin("MuAiGuide Fru Setting", M.FruConfigUI.open)
+        M.FruConfigUI.visible, M.FruConfigUI.open = GUI:Begin("Fru Setting", M.FruConfigUI.open)
         if M.FruConfigUI.visible then
 	        M.Config.Main.AnyOneReactionOn = GUI:Checkbox("关闭一些本插件和Anyone重复功能", M.Config.Main.AnyOneReactionOn)
             GUI:TextColored(0, 1, 0, 1, "※包含：P2滑冰瞄准器，P3自动背对，引导灯画图")

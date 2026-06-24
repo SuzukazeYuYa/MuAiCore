@@ -435,6 +435,7 @@ Dmu_P5.OnAOECreate = function(aoeInfo)
     elseif aoeInfo.aoeID == 47932 then
         startGroundFire(aoeInfo)
     end
+
 end
 
 Dmu_P5.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
@@ -471,7 +472,9 @@ Dmu_P5.Update = function()
             or DM.InState('P5UltimaRepeater3')
             or DM.InState('P5UltimaRepeater4')
     then
-        MG.FrameMultiD(ultimaRepeater)
+        if Cfg().guide then
+            MG.FrameMultiD(ultimaRepeater)
+        end
     end
     -- 洪水阶段，根据当前获得AOE数据来计算4个交叉点
     -- 移动顺序一定是 34=>14=>12
@@ -625,13 +628,8 @@ Dmu_P5.Update = function()
         if Data().MaddeningOrchestra.Guide2 == nil or table.size(Data().MaddeningOrchestra.Guide2) < 8 then
             if TimeSince(Data().MaddeningOrchestra.FirstHitTimer) > 500 then
                 Data().MaddeningOrchestra.Guide2 = {}
-                if Cfg().isLeaning then
-                    Data().MaddeningOrchestra.Guide2.ST = { x = 100, y = 0, z = 91 }
-                    Data().MaddeningOrchestra.Guide2.MT = { x = 100, y = 0, z = 91 }
-                else
-                    Data().MaddeningOrchestra.Guide2.ST = Data().MaddeningOrchestra.Guide1.MT
-                    Data().MaddeningOrchestra.Guide2.MT = Data().MaddeningOrchestra.Guide1.MT
-                end
+                Data().MaddeningOrchestra.Guide2.ST = { x = 100, y = 0, z = 90 }
+                Data().MaddeningOrchestra.Guide2.MT = { x = 100, y = 0, z = 90 }
                 for job, member in pairs(MG.Party) do
                     if TensorCore.hasBuff(member.id, 2941) and job ~= 'MT' and job ~= 'ST' then
                         table.insert(Data().MaddeningOrchestra.FirstHits, job)
@@ -763,11 +761,11 @@ Dmu_P5.Update = function()
     if DM.InState('P5BeforeEnd') then
         local curBoss = TensorCore.mGetEntity(Data().Kefka.id)
         if curBoss ~= nil and (not curBoss.alive or curBoss.hp.current <= 0) then
-            MG.Info('------------------------------------------')
+            MG.Info('---------------------------------------------------')
             MG.Info('恭喜通关' .. DM.NameCN .. '!')
             MG.Info('感谢使用本插件，了解更多信息请加入QQ群1106367633。')
             MG.Info('Powered by MuAi 2026-06')
-            MG.Info('------------------------------------------')
+            MG.Info('---------------------------------------------------')
             DM.ChangeState('P5End')
         end
     end

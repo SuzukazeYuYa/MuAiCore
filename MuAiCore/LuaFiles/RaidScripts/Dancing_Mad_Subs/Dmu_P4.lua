@@ -198,13 +198,15 @@ local ThunderWater = function(wave)
             else
                 text = 'Move'
             end
-            AnyoneCore.addTimedWorldTextOnEnt(
-                    buff.duration * 1000 + 1000,
-                    text,
-                    player.id,
-                    GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
-                    true, 1.5, 2.5
-            )
+            if AnyoneCore ~= nil then
+                AnyoneCore.addTimedWorldTextOnEnt(
+                        buff.duration * 1000 + 1000,
+                        text,
+                        player.id,
+                        GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
+                        true, 1.5, 2.5
+                )
+            end
         end
     end
     if Cfg().draw then
@@ -372,35 +374,7 @@ Dmu_P4.OnEntityCast = function(entityID, spellID, castPos)
     end
 end
 
-Dmu_P4.OnMarkerAdd = function(entityID, markerID)
-end
-
 Dmu_P4.OnAOECreate = function(aoeInfo)
-    -- 画制冰和雷
-    --if Cfg().draw then
-    --    local drawTime = 5500
-    --    if not MG.Config.DmuCfg.BindEffect then
-    --        -- 冰危险区
-    --        if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
-    --            DM.yellowDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, math.pi / 2, aoeInfo.heading, 0, true)
-    --        end
-    --        -- 画雷危险区
-    --        if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-    --            local startPos = TensorCore.getPosInDirection({ x = aoeInfo.x, y = aoeInfo.y, z = aoeInfo.z }, aoeInfo.heading + math.pi, 5)
-    --            DM.yellowDrawer:addTimedRect(drawTime, startPos.x, startPos.y, startPos.z, 50, 10, aoeInfo.heading, 0, true)
-    --        end
-    --    else
-    --        -- 冰危险区
-    --        if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
-    --            DM.purpleDrawer:addTimedCone(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading)
-    --        end
-    --
-    --        -- 画雷危险区
-    --        if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
-    --            MG.CreateDrawer(0.5, 0, 1, nil, 2):addTimedRect(drawTime, aoeInfo.x, aoeInfo.y, aoeInfo.z, 40, 10, aoeInfo.heading)
-    --        end
-    --    end
-    --end
     if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
         if DM.OverState('P4WaterFire1Put', true) and DM.BeLowState('P4Eye2') then
             Data().ThunderWater.IceType = DM.CalcIceType(aoeInfo)
@@ -466,9 +440,6 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
     end
 end
 
-Dmu_P4.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
-end
-
 Dmu_P4.OnAddEntityVFX = function(vfxID, vfxName, primaryEntityID, secondaryEntityID, time, a5, a6)
     if not table.contains(onUsingVfx, vfxID) then
         return
@@ -481,10 +452,6 @@ Dmu_P4.OnAddEntityVFX = function(vfxID, vfxName, primaryEntityID, secondaryEntit
         DM.ChangeState('P4ExDeath3Judge')
     end
 end
-
---Dmu_P4.OnMapEffect = function(a1, a2, a3)
---
---end
 
 Dmu_P4.Update = function()
     -- 添加buff阶段 --
@@ -868,9 +835,22 @@ Dmu_P4.Update = function()
                 and Data().WaterFire2.IceType ~= nil then
             if Data().WaterFire2.Guide2 == nil or table.size(Data().WaterFire2.Guide2) < 8 then
                 Data().WaterFire2.Guide2 = {}
-                local near, far, center = DM.CalcMixPoint(Data().WaterFire2.ThunderType, Data().WaterFire2.IceType)
+                local near, far, center, same = DM.CalcMixPoint(Data().WaterFire2.ThunderType, Data().WaterFire2.IceType)
                 MG.OnCurrentPartyDo(function(job, member)
-                    local dir = TensorCore.getHeadingToTarget(DM.Center, near)
+                    local basePos
+                    if same then
+                        -- 如果是2个点情况
+                        local disN = TensorCore.getDistance2d(member.pos, near)
+                        local disF = TensorCore.getDistance2d(member.pos, far)
+                        if disN < disF then
+                            basePos = disN
+                        else
+                            basePos = disF
+                        end
+                    else
+                        basePos = near
+                    end
+                    local dir = TensorCore.getHeadingToTarget(DM.Center, basePos)
                     if Data().WaterFire2.Type then
                         Data().WaterFire2.Guide2[job] = TensorCore.getPosInDirection(DM.Center, dir, 2)
                     else
