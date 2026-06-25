@@ -344,7 +344,17 @@ local drawBaseSettingTab = function(M)
     GUI:Dummy(6, 0)
     GUI:SameLine()
     GUI:AlignFirstTextHeightToWidgets()
-    GUI:Text('打开UI快捷键：  ')
+    GUI:Text('更新下载源：  ')
+    GUI:NextColumn()
+    local urlChange
+    M.Config.Main.DownLoadSource, urlChange = GUI:Combo('##DownLoadSource', M.Config.Main.DownLoadSource, { 'GitHub', '腾讯云' }, 2)
+    
+    
+    GUI:NextColumn()
+    GUI:Dummy(6, 0)
+    GUI:SameLine()
+    GUI:AlignFirstTextHeightToWidgets()
+    GUI:Text('UI开启快捷键：  ')
     GUI:NextColumn()
     GUI:PushItemWidth(60)
     local curKeyIndex = M.Config.Main.KeyBindFirst - 15

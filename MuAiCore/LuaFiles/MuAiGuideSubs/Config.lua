@@ -137,6 +137,8 @@ Config.init = function(M)
                 [1327] = { [14378] = 13.8, [14379] = { range = 5, buff = 3808, onBuffRange = 9 } },
                 -- [341] = { [541] = 1.5 },
             },
+            -- 更新源，1 github 2腾讯云
+            DownLoadSource = 1,
             --------- M11S -----------
             M11SExDraw = false,
             M11SOrbitalOmenAllMelee = false,
