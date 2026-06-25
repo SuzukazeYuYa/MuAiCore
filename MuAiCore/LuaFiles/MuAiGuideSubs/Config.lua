@@ -347,7 +347,8 @@ Config.init = function(M)
                 takeLineAttack12 = false,
                 takeLineStop22 = false,
                 markOrder = { 'D1', 'D2', 'D3', 'D4', 'MT', 'ST', 'H2', 'H1' },
-                numberGuidedelayMark = true,
+                
+                delayMark = true,
                 -- 踩塔基础类型
                 -- 1:其他 2:CCHH, 3:盗火，
                 takeTowerType = 1,

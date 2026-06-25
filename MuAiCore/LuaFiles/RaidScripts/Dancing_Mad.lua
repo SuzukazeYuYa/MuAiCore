@@ -990,6 +990,13 @@ DM.CommonEndGuide = function(entityID)
     end
 end
 
+DM.ClearMarks = function()
+    for i = 1, 8 do
+        SendTextCommand("/mk clear <" .. i .. ">")
+    end
+    MG.Debug('执行清除标记。')
+end
+
 -------------------------- Argus Events --------------------------
 DM.OnEntityChannel = function(entityID, spellID, _)
     if not MG.Config.DmuCfg.Enable or MG.DancingMad == nil then

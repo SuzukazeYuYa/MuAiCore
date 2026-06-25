@@ -630,6 +630,60 @@ local drawTowerHeading = function()
     MG.CreateDrawer(1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, dir + math.pi, 39.5, 0.05, 0.5, 0.5, true)
 end
 
+local checkAndMarkMember = function(wave)
+    if not Data().Towers.marked[wave] then
+        local markCnt = 0
+        if wave > 1 then
+            MG.OnCurrentPartyDo(function(member, job)
+                if member.marker ~= nil and member.marker > 0 then
+                    markCnt = markCnt + 1
+                end
+            end)
+        end
+        if markCnt > 0 then
+            DM.ClearMarks()
+            return
+        end
+        Data().Towers.marked[wave] = true
+        local order = Data().Towers.groupOrders[wave]
+        local standBy = Data().Towers.standBy
+        if MG.Config.DmuCfg.P2.fixType == 3 and (wave % 2) ~= 0 then
+            local fixOrder = { 2, 1, 4, 3 }
+            for i = 1, #fixOrder do
+                local index = fixOrder[i]
+                local curMark = MG.HeadMark.Attack1 + (i - 1)
+                local curMember = MG.Party[order[index]]
+                MG.MarkParty(curMark, curMember.id)
+                if MG.IsVideo() then
+                    MG.ArrInfo('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。')
+                end
+            end
+        else
+            for i = 1, #order do
+                local curMark = MG.HeadMark.Attack1 + (i - 1)
+                local curMember = MG.Party[order[i]]
+                MG.MarkParty(curMark, curMember.id)
+                if MG.IsVideo() then
+                    MG.ArrInfo('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。')
+                end
+            end
+        end
+        for i = 1, #standBy do
+            local curMark
+            if i < 3 then
+                curMark = MG.HeadMark.Bind1 + (i - 1)
+            else
+                curMark = MG.HeadMark.Stop1 + (i - 3)
+            end
+            local curMember = MG.Party[standBy[i]]
+            MG.MarkParty(curMark, curMember.id)
+            if MG.IsVideo() then
+                MG.ArrInfo('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。')
+            end
+        end
+    end
+end
+
 --------------------------------------------- event function ---------------------------------------------
 --- 初始化
 --- @param dm DancingMad
@@ -843,44 +897,8 @@ Dmu_P2.Update = function()
             showOrderLog(Data().Towers.standBy, ' 闲人顺序：')
             loged[wave] = true
         end
-        if Cfg().towerGuide and not Data().Towers.marked[wave] then
-            Data().Towers.marked[wave] = true
-            local order = Data().Towers.groupOrders[wave]
-            local standBy = Data().Towers.standBy
-            if MG.Config.DmuCfg.P2.fixType == 3 and (wave % 2) ~= 0 then
-                local fixOrder = { 2, 1, 4, 3 }
-                for i = 1, #fixOrder do
-                    local index = fixOrder[i]
-                    local curMark = MG.HeadMark.Attack1 + (i - 1)
-                    local curMember = MG.Party[order[index]]
-                    MG.MarkParty(curMark, curMember.id)
-                    if MG.IsVideo() then
-                        MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。')
-                    end
-                end
-            else
-                for i = 1, #order do
-                    local curMark = MG.HeadMark.Attack1 + (i - 1)
-                    local curMember = MG.Party[order[i]]
-                    MG.MarkParty(curMark, curMember.id)
-                    if MG.IsVideo() then
-                        MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。')
-                    end
-                end
-            end
-            for i = 1, #standBy do
-                local curMark
-                if i < 3 then
-                    curMark = MG.HeadMark.Bind1 + (i - 1)
-                else
-                    curMark = MG.HeadMark.Stop1 + (i - 3)
-                end
-                local curMember = MG.Party[standBy[i]]
-                MG.MarkParty(curMark, curMember.id)
-                if MG.IsVideo() then
-                    MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。')
-                end
-            end
+        if Cfg().towerGuide then
+            checkAndMarkMember(wave)
         end
         if Cfg().draw then
             local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
