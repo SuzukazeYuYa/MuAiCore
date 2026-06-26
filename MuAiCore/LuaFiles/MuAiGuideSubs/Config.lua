@@ -312,6 +312,7 @@ Config.init = function(M)
         return {
             Enable = true,
             BindEffect = true,
+            DebugLog = false,
             P1 = {
                 enable = true, draw = true, guide = true,
                 autoLookAt = true,

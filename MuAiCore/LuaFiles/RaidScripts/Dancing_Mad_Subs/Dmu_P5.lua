@@ -467,7 +467,7 @@ Dmu_P5.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
             }
             if table.size(Data().Celestriad.castingCache) == 4 then
                 Data().Celestriad.wave = Data().Celestriad.wave + 1
-                MG.ArrInfo('第' .. Data().Celestriad.wave .. '波踩塔。')
+                DM.ArrInfo('第' .. Data().Celestriad.wave .. '波踩塔。')
                 Data().Celestriad.CastingTowers[Data().Celestriad.wave] = Data().Celestriad.castingCache
                 Data().Celestriad.castingCache = {}
             end
@@ -841,11 +841,11 @@ Dmu_P5.Update = function()
     if DM.InState('P5BeforeEnd') then
         local curBoss = TensorCore.mGetEntity(Data().Kefka.id)
         if curBoss ~= nil and (not curBoss.alive or curBoss.hp.current <= 0) then
-            MG.Info('---------------------------------------------------')
-            MG.Info('恭喜通关' .. DM.NameCN .. '!')
-            MG.Info('感谢使用本插件，了解更多信息请加入QQ群1106367633。')
-            MG.Info('Powered by MuAi 2026-06')
-            MG.Info('---------------------------------------------------')
+            DM.Info('---------------------------------------------------')
+            DM.Info('恭喜通关' .. DM.NameCN .. '!')
+            DM.Info('感谢使用本插件，了解更多信息请加入QQ群1106367633。')
+            DM.Info('Powered by MuAi 2026-06')
+            DM.Info('---------------------------------------------------')
             DM.ChangeState('P5End')
         end
     end

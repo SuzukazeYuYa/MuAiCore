@@ -16,6 +16,13 @@ local Data = function()
     return MG.DancingMad.P4
 end
 
+local debugGuideData = function(eventName, key, msg, guideData, data)
+    data = data or {}
+    data.count = DM.DebugCount(guideData)
+    data.guide = guideData
+    DM.DebugOnce(eventName, key, msg, data)
+end
+
 local onUsingVfx = {
     2913, --卡奥斯-假    
     2914, --卡奥斯-真    
@@ -94,6 +101,13 @@ local onAddNewBuff = function(buffTable, timer, currentVfx)
             and timer > 0
             and TimeSince(timer) > 2000 --读条后超过0.5秒再计算
     then
+        if currentVfx == nil then
+            DM.DebugProblem('P4Buff', '未获取真假VFX，Buff真假无法写入', {
+                state = DM.StateNames[MG.DancingMad.CurrentState],
+            })
+        end
+        local buffCount = 0
+        local buffSummary = {}
         MG.OnCurrentPartyDo(function(job, member)
             if Data().Buff[job] == nil then
                 Data().Buff[job] = {}
@@ -109,10 +123,31 @@ local onAddNewBuff = function(buffTable, timer, currentVfx)
                     elseif currentVfx == 2914 or currentVfx == 2916 then
                         Data().Buff[job][buff.id] = true
                     end
+                    if Data().Buff[job][buff.id] ~= nil then
+                        buffCount = buffCount + 1
+                        if buffSummary[job] == nil then
+                            buffSummary[job] = ''
+                        else
+                            buffSummary[job] = buffSummary[job] .. ','
+                        end
+                        buffSummary[job] = buffSummary[job] .. tostring(buff.id) .. '=' .. tostring(Data().Buff[job][buff.id])
+                    end
                 end
             end
         end)
         Data().CheckFinish[MG.DancingMad.CurrentState] = true
+        if buffCount == 0 then
+            DM.DebugProblem('P4Buff', '本轮没有缓存到任何新Buff', {
+                state = DM.StateNames[MG.DancingMad.CurrentState],
+                vfx = currentVfx,
+            })
+        end
+        DM.DebugOnce('P4Buff', 'state_' .. tostring(MG.DancingMad.CurrentState), 'Buff真假缓存完成', {
+            state = DM.StateNames[MG.DancingMad.CurrentState],
+            vfx = currentVfx,
+            count = buffCount,
+            buff = buffSummary,
+        })
     end
 end
 
@@ -156,7 +191,7 @@ local lockFaceCheck = function(eyeTable)
             end
             TensorCore.API.TensorACR.toggleLockFace(true)
             eyeTable.Locked = true
-            MG.Info('P4锁定面向开始，面向：' .. string.format("%.2f", lookHeading))
+            DM.Info('P4锁定面向开始，面向：' .. string.format("%.2f", lookHeading))
         end
     else
         if eyeTable.LostTimer == nil then
@@ -168,7 +203,7 @@ local lockFaceCheck = function(eyeTable)
             end
             TensorCore.API.TensorACR.toggleLockFace(false)
             eyeTable.Locked = false
-            MG.Info('P4锁定面向结束。')
+            DM.Info('P4锁定面向结束。')
         end
     end
 end
@@ -180,6 +215,11 @@ local ThunderWater = function(wave)
     else
         canHit = Data().MoveOrStopHit == false
     end
+    DM.DebugOnce('P4ThunderWater', 'start_wave_' .. wave, '雷水处理开始', {
+        wave = wave,
+        canHit = canHit,
+        moveOrStopHit = Data().MoveOrStopHit,
+    })
     if Cfg().draw and canHit then
         local player = MG.GetPlayer()
         local buff = TensorCore.getBuff(player.id, 5546)
@@ -210,19 +250,20 @@ local ThunderWater = function(wave)
         end
     end
     if Cfg().draw then
-        for _, member in pairs(MG.Party) do
+        for job, member in pairs(MG.Party) do
+            local buffMap = Data().Buff[job] or {}
             local bf5544 = TensorCore.getBuff(member.id, 5544)
             local bf5545 = TensorCore.getBuff(member.id, 5545)
             local buffType
             if bf5544 ~= nil and bf5544.duration < 10 then
-                if Data().Buff[5544] then
+                if buffMap[5544] then
                     buffType = 5544
                 else
                     buffType = 5545
                 end
             elseif bf5545 ~= nil and bf5545.duration < 10 then
                 buffType = 5545
-                if Data().Buff[5545] then
+                if buffMap[5545] then
                     buffType = 5545
                 else
                     buffType = 5544
@@ -303,6 +344,10 @@ local ThunderWater = function(wave)
             else
                 Data().ThunderWater.Guide2 = guideData
             end
+            debugGuideData('P4ThunderWater', 'guide_wave_' .. wave, '雷水指路数据生成', guideData, {
+                wave = wave,
+                moveOrStopHit = Data().MoveOrStopHit,
+            })
         end
     end
 
@@ -316,19 +361,52 @@ Dmu_P4.Init = function(dm, m)
     MG = m
 end
 
-Dmu_P4.OnEntityChannel = function(entityID, spellID, _)
+Dmu_P4.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
+    if spellID == 50067
+            or spellID == 50068
+            or spellID == 50069
+            or spellID == 50070
+            or spellID == 50081
+            or spellID == 50082
+    then
+        DM.DebugLog('P4ThunderWater', '雷水相关读条开始', {
+            spellID = spellID,
+            state = DM.StateNames[MG.DancingMad.CurrentState],
+            entityID = entityID,
+            target = DM.DebugEntityID(targetID),
+            channelTimeMax = channelTimeMax,
+        })
+    end
     if spellID == 50069 then
         --死者暗黑光
         Data().ExDeath.DeathBeamObj = TensorCore.mGetEntity(entityID)
         Data().ExDeath.DrawTimer = Now()
+        DM.DebugLog('P4ExDeath', '死者暗黑光读条缓存', {
+            spellID = spellID,
+            state = DM.StateNames[MG.DancingMad.CurrentState],
+            entityID = entityID,
+            channelTimeMax = channelTimeMax,
+        })
     elseif spellID == 50068 then
         --生者暗黑光
         Data().ExDeath.AliveBeamObj = TensorCore.mGetEntity(entityID)
         Data().ExDeath.DrawTimer = Now()
+        DM.DebugLog('P4ExDeath', '生者暗黑光读条缓存', {
+            spellID = spellID,
+            state = DM.StateNames[MG.DancingMad.CurrentState],
+            entityID = entityID,
+            channelTimeMax = channelTimeMax,
+        })
     elseif spellID == 50070 then
         --生死之境界
         Data().ExDeath.DothBeamObj = TensorCore.mGetEntity(entityID)
         Data().ExDeath.DrawTimer = Now()
+        DM.DebugLog('P4ExDeath', '生死之境读条缓存', {
+            spellID = spellID,
+            state = DM.StateNames[MG.DancingMad.CurrentState],
+            entityID = entityID,
+            channelTimeMax = channelTimeMax,
+        })
     elseif spellID == 49738 then
         --if DM.InState('P4WaterFire2Put') then
         --    DM.ChangeState('P4End')
@@ -370,6 +448,10 @@ Dmu_P4.OnEntityCast = function(entityID, spellID, castPos)
             or spellID == 50081
             or spellID == 50082
     then
+        DM.DebugLog('P4ThunderWater', '收到雷水起始结算读条', {
+            spellID = spellID,
+            state = DM.StateNames[MG.DancingMad.CurrentState],
+        })
         DM.ChangeState('P4ThunderWater1')
     end
 end
@@ -378,9 +460,17 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
     if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
         if DM.OverState('P4WaterFire1Put', true) and DM.BeLowState('P4Eye2') then
             Data().ThunderWater.IceType = DM.CalcIceType(aoeInfo)
+            DM.DebugOnce('P4ThunderWater', 'ice_wave_2', '第二次雷水冰类型缓存', {
+                aoeID = aoeInfo.aoeID,
+                iceType = Data().ThunderWater.IceType,
+            })
         end
         if DM.OverState('P4Eye2', true) and DM.BeLowState('P4WaterFire2Put', true) then
             Data().WaterFire2.IceType = DM.CalcIceType(aoeInfo)
+            DM.DebugOnce('P4WaterFire', 'ice_wave_2', '第二次火水冰类型缓存', {
+                aoeID = aoeInfo.aoeID,
+                iceType = Data().WaterFire2.IceType,
+            })
         end
     end
     if aoeInfo.aoeID == 47775 or aoeInfo.aoeID == 47777 then
@@ -389,6 +479,10 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
                 local thunderType = DM.CalcThunderType(aoeInfo)
                 if thunderType ~= nil then
                     Data().Eye1.thunder = thunderType
+                    DM.DebugOnce('P4Eye', 'eye1_thunder', '第一次石化眼雷类型缓存', {
+                        aoeID = aoeInfo.aoeID,
+                        thunderType = thunderType,
+                    })
                 end
             end
         end
@@ -397,6 +491,10 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
                 local thunderType = DM.CalcThunderType(aoeInfo)
                 if thunderType ~= nil then
                     Data().WaterFire2.ThunderType = thunderType
+                    DM.DebugOnce('P4WaterFire', 'thunder_wave_2', '第二次火水雷类型缓存', {
+                        aoeID = aoeInfo.aoeID,
+                        thunderType = thunderType,
+                    })
                 end
             end
             Data().WaterFire2.AoeTimer = Now()
@@ -411,6 +509,12 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
         if DM.OverState('P4WaterFire1', true)
                 and DM.BeLowState('P4WaterFire1Put', true)
         then
+            DM.DebugOnce('P4WaterFire', 'aoe_wave_1', '第一次火水AOE生成', {
+                aoeID = aoeInfo.aoeID,
+                x = aoeInfo.x,
+                z = aoeInfo.z,
+                type = Data().WaterFire1.Type,
+            })
             if Cfg().draw then
                 if Data().WaterFire1.Type then
                     MG.CreateDrawer(1, 0, 1, 0.1, 2):addTimedCircle(5000, aoeInfo.x, 0, aoeInfo.z, 6)
@@ -422,6 +526,12 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
         elseif DM.OverState('P4WaterFire2', true)
                 and DM.BeLowState('P4WaterFire2Put', true)
         then
+            DM.DebugOnce('P4WaterFire', 'aoe_wave_2', '第二次火水AOE生成', {
+                aoeID = aoeInfo.aoeID,
+                x = aoeInfo.x,
+                z = aoeInfo.z,
+                type = Data().WaterFire2.Type,
+            })
             if Cfg().draw then
                 if Data().WaterFire2.Type then
                     MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addTimedDonut(5000, aoeInfo.x, 0, aoeInfo.z, 6, 40)
@@ -444,8 +554,13 @@ Dmu_P4.OnAddEntityVFX = function(vfxID, vfxName, primaryEntityID, secondaryEntit
     if not table.contains(onUsingVfx, vfxID) then
         return
     end
-    MG.ArrInfo('真假读条，当前VFX：' .. vfxID)
+    DM.ArrInfo('真假读条，当前VFX：' .. vfxID)
     table.insert(Data().StateVfx, vfxID)
+    DM.DebugLog('P4Buff', '真假VFX缓存', {
+        vfxID = vfxID,
+        state = DM.StateNames[MG.DancingMad.CurrentState],
+        count = #Data().StateVfx,
+    })
     if DM.InState('P4ExDeathBuff3')
             and (vfxID == 2915 or vfxID == 2916)
     then
@@ -556,7 +671,11 @@ Dmu_P4.Update = function()
                                 Data().ExDeath.GuideData[job] = TensorCore.getPosInDirection(DM.Center, dir, 5)
                             end
                         end
+                        debugGuideData('P4ExDeath', 'guide_buff_3', '执行Buff指路数据生成', Data().ExDeath.GuideData)
                     else
+                        DM.DebugOnce('P4ExDeath', 'draw_buff_3', '执行Buff调用FrameMultiD', {
+                            count = DM.DebugCount(Data().ExDeath.GuideData),
+                        })
                         MG.FrameMultiD(Data().ExDeath.GuideData)
                     end
                 end
@@ -574,6 +693,9 @@ Dmu_P4.Update = function()
         end
         ThunderWater(1)
         if Data().ThunderWater.Guide1 ~= nil and Cfg().guide then
+            DM.DebugOnce('P4ThunderWater', 'draw_wave_1', '第一次雷水调用FrameMultiD', {
+                count = DM.DebugCount(Data().ThunderWater.Guide1),
+            })
             MG.FrameMultiD(Data().ThunderWater.Guide1)
         end
     end
@@ -590,6 +712,12 @@ Dmu_P4.Update = function()
                     end
                 end
 
+            end
+            if table.size(Data().Eye1.Owner) >= 2 then
+                DM.DebugOnce('P4Eye', 'owner_1', '第一次石化眼目标缓存', {
+                    owner = DM.DebugEntityList(Data().Eye1.Owner),
+                    real = Data().Eye1.type,
+                })
             end
         else
             local buff1 = TensorCore.getBuff(Data().Eye1.Owner[1], 5543)
@@ -648,8 +776,19 @@ Dmu_P4.Update = function()
                                 end
                             end
                         end
+                        debugGuideData('P4Eye', 'guide_1', '第一次石化眼指路数据生成', Data().Eye1.GuidePos, {
+                            thunderType = tType,
+                            real = Data().Eye1.type,
+                        })
+                    else
+                        DM.DebugOnce('P4Eye', 'missing_eye1_thunder', '[问题]第一次石化眼缺少雷类型，无法生成指路', {
+                            owner = DM.DebugEntityList(Data().Eye1.Owner),
+                        })
                     end
                 else
+                    DM.DebugOnce('P4Eye', 'draw_1', '第一次石化眼调用FrameMultiD', {
+                        count = DM.DebugCount(Data().Eye1.GuidePos),
+                    })
                     MG.FrameMultiD(Data().Eye1.GuidePos)
                 end
             end
@@ -678,11 +817,22 @@ Dmu_P4.Update = function()
                     Data().WaterFire1.Guide2[job] = { x = 100, y = 0, z = 100 }
                 end
             end
+            debugGuideData('P4WaterFire', 'guide_1', '第一次火水指路数据生成', Data().WaterFire1.Guide1, {
+                type = Data().WaterFire1.Type,
+                guide2Count = DM.DebugCount(Data().WaterFire1.Guide2),
+            })
         else
+            DM.DebugOnce('P4WaterFire', 'draw_1', '第一次火水调用FrameMultiD', {
+                count = DM.DebugCount(Data().WaterFire1.Guide1),
+            })
             MG.FrameMultiD(Data().WaterFire1.Guide1)
         end
     end
     if DM.InState('P4WaterFire1Put') then
+        DM.DebugOnce('P4WaterFire', 'draw_1_put', '第一次火水放置后调用FrameMultiD', {
+            count = DM.DebugCount(Data().WaterFire1.Guide2),
+            type = Data().WaterFire1.Type,
+        })
         MG.FrameMultiD(Data().WaterFire1.Guide2)
         if Data().WaterFire1.Type then
             DM.ChangeState('P4ThunderWater2')
@@ -738,12 +888,21 @@ Dmu_P4.Update = function()
                         end
                     end
                 end
+                debugGuideData('P4ThunderWater', 'guide_wave_2_offset', '第二次雷水冰偏移指路数据生成', Data().ThunderWater.Guide2Offset, {
+                    iceType = Data().ThunderWater.IceType,
+                })
             end
         end
         if Cfg().guide then
             if Data().ThunderWater.Guide2Offset ~= nil then
+                DM.DebugOnce('P4ThunderWater', 'draw_wave_2_offset', '第二次雷水调用偏移FrameMultiD', {
+                    count = DM.DebugCount(Data().ThunderWater.Guide2Offset),
+                })
                 MG.FrameMultiD(Data().ThunderWater.Guide2Offset)
             else
+                DM.DebugOnce('P4ThunderWater', 'draw_wave_2', '第二次雷水调用FrameMultiD', {
+                    count = DM.DebugCount(Data().ThunderWater.Guide2),
+                })
                 MG.FrameMultiD(Data().ThunderWater.Guide2)
             end
         end
@@ -770,6 +929,12 @@ Dmu_P4.Update = function()
                         Data().Eye2.type = true
                     end
                 end
+            end
+            if table.size(Data().Eye2.Owner) >= 2 then
+                DM.DebugOnce('P4Eye', 'owner_2', '第二次石化眼目标缓存', {
+                    owner = DM.DebugEntityList(Data().Eye2.Owner),
+                    real = Data().Eye2.type,
+                })
             end
         else
             if Data().Eye2.GuidePos == nil then
@@ -809,7 +974,13 @@ Dmu_P4.Update = function()
                         end
                     end
                 end
+                debugGuideData('P4Eye', 'guide_2', '第二次石化眼指路数据生成', Data().Eye2.GuidePos, {
+                    real = Data().Eye2.type,
+                })
             else
+                DM.DebugOnce('P4Eye', 'draw_2', '第二次石化眼调用FrameMultiD', {
+                    count = DM.DebugCount(Data().Eye2.GuidePos),
+                })
                 MG.FrameMultiD(Data().Eye2.GuidePos)
             end
         end
@@ -825,7 +996,13 @@ Dmu_P4.Update = function()
             for job, _ in pairs(MG.Party) do
                 Data().WaterFire2.Guide1[job] = { x = 100, y = 0, z = 100 }
             end
+            debugGuideData('P4WaterFire', 'guide_2_before_put', '第二次火水集合指路数据生成', Data().WaterFire2.Guide1, {
+                type = Data().WaterFire2.Type,
+            })
         else
+            DM.DebugOnce('P4WaterFire', 'draw_2_before_put', '第二次火水集合调用FrameMultiD', {
+                count = DM.DebugCount(Data().WaterFire2.Guide1),
+            })
             MG.FrameMultiD(Data().WaterFire2.Guide1)
         end
     end
@@ -857,9 +1034,25 @@ Dmu_P4.Update = function()
                         Data().WaterFire2.Guide2[job] = TensorCore.getPosInDirection(DM.Center, dir, 8)
                     end
                 end)
+                debugGuideData('P4WaterFire', 'guide_2_put', '第二次火水放置后指路数据生成', Data().WaterFire2.Guide2, {
+                    thunderType = Data().WaterFire2.ThunderType,
+                    iceType = Data().WaterFire2.IceType,
+                    same = same,
+                    type = Data().WaterFire2.Type,
+                    near = near,
+                    far = far,
+                })
             else
+                DM.DebugOnce('P4WaterFire', 'draw_2_put', '第二次火水放置后调用FrameMultiD', {
+                    count = DM.DebugCount(Data().WaterFire2.Guide2),
+                })
                 MG.FrameMultiD(Data().WaterFire2.Guide2)
             end
+        else
+            DM.DebugOnce('P4WaterFire', 'missing_2_put', '[问题]第二次火水缺少冰雷类型，无法生成最终指路', {
+                thunderType = Data().WaterFire2.ThunderType,
+                iceType = Data().WaterFire2.IceType,
+            })
         end
     end
 end
