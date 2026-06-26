@@ -729,8 +729,8 @@ Dmu_P3.OnEntityChannel = function(entityID, spellID, _)
             Data().Chaos = boss
         end
         if DM.OverState('P3UltimaBlaster', true) then
-            for i = 1, 8 do
-                SendTextCommand("/mk clear <" .. i .. ">")
+            if Cfg().markType == 3 then
+                DM.ClearMarks()
             end
         end
     elseif spellID == 47869 or spellID == 47870 then

@@ -137,6 +137,8 @@ Config.init = function(M)
                 [1327] = { [14378] = 13.8, [14379] = { range = 5, buff = 3808, onBuffRange = 9 } },
                 -- [341] = { [541] = 1.5 },
             },
+            -- 更新源，1 github 2腾讯云
+            DownLoadSource = 1,
             --------- M11S -----------
             M11SExDraw = false,
             M11SOrbitalOmenAllMelee = false,
@@ -347,7 +349,7 @@ Config.init = function(M)
                 takeLineAttack12 = false,
                 takeLineStop22 = false,
                 markOrder = { 'D1', 'D2', 'D3', 'D4', 'MT', 'ST', 'H2', 'H1' },
-                numberGuidedelayMark = true,
+                delayMark = true,
                 -- 踩塔基础类型
                 -- 1:其他 2:CCHH, 3:盗火，
                 takeTowerType = 1,

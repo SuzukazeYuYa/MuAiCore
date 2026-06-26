@@ -234,6 +234,7 @@ local getIndexTable = function(startIdx, n)
     end
     return result
 end
+
 local drawingGroudFire = function()
     if not Cfg().draw then
         return
@@ -305,6 +306,7 @@ local drawingGroudFire = function()
         Data().GroundFire.OverTime = {}
     end
 end
+
 local drawBloodArrow = function(wave)
     if not Cfg().draw
             or DM.OverState('P5Blood3End')
@@ -347,6 +349,7 @@ local drawBloodArrow = function(wave)
         end
     end
 end
+
 --------------------------------------------- event function ---------------------------------------------
 --- 初始化
 --- @param dm DancingMad
@@ -358,6 +361,10 @@ end
 
 Dmu_P5.OnEntityChannel = function(entityID, spellID, _)
     if spellID == 47936 then
+        if Data().Kefka == nil then
+            local boss = TensorCore.mGetEntity(entityID)
+            Data().Kefka = boss
+        end
         if DM.InState('P5CelestriadEnd') then
             DM.ChangeState('P5UltimaRepeater3')
         end
@@ -744,7 +751,7 @@ Dmu_P5.Update = function()
         end
     end
     if DM.InState('P5CelestriadGetData') then
-        if Cfg().draw and Data().Celestriad.CatastrophicChoiceId ~= 0 then
+        if Cfg().draw and Data().Celestriad.CatastrophicChoiceId ~= 0 and Data().Kefka ~= nil then
             if Data().Celestriad.BossOnDraw == nil then
                 Data().Celestriad.BossOnDraw = TensorCore.mGetEntity(Data().Kefka.id)
             else
