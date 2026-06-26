@@ -369,7 +369,13 @@ Config.init = function(M)
             P5 = { enable = true, draw = true, guide = true,
                    isLeaning = false,
                    jobOrder = { 'H2', 'D2', 'D4', 'ST', 'MT', 'D3', 'H1', 'D1' },
+                   -- 画地火的数量
                    groundCnt = 3,
+                   -- 软狂暴跑路类型
+                   -- 1、全顺，2关闭
+                   forsakenType = 1,
+                   -- 起点 1左下，2右下，3右上，4左上
+                   forsakenTypeStart = 1,
             }
         }
     end

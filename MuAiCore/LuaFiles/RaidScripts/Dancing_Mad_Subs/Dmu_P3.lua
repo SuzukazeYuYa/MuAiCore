@@ -1138,8 +1138,14 @@ Dmu_P3.Update = function()
                             -- 这个做特特殊处理
                             if Cfg().kickType == 3 then
                                 Data().WacuumWave.AfterKick[job] = TensorCore.getPosInDirection(exDeath.pos, curDir, 15)
-                            elseif Cfg().kickType == 2 and (job == 'ST' or job == 'D2') then
-                                Data().WacuumWave.AfterKick[job] = TensorCore.getPosInDirection(exDeath.pos, curDir, 18)
+                            elseif Cfg().kickType == 2  then
+                                if job == 'ST' or job == 'D2' then
+                                    Data().WacuumWave.AfterKick[job] = TensorCore.getPosInDirection(exDeath.pos, curDir, 15)
+                                elseif job == 'MT' or job == 'D1' then
+                                    Data().WacuumWave.AfterKick[job] = TensorCore.getPosInDirection(exDeath.pos, curDir, 5)
+                                else
+                                    Data().WacuumWave.AfterKick[job] = TensorCore.getPosInDirection(exDeath.pos, curDir, 12)
+                                end
                             else
                                 Data().WacuumWave.AfterKick[job] = TensorCore.getPosInDirection(exDeath.pos, curDir, 12)
                             end

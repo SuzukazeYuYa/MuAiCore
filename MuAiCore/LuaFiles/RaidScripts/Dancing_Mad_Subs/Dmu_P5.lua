@@ -22,6 +22,15 @@ local floodPos = {
     { x = 100, y = 0, z = 102 }, --C
     { x = 98, y = 0, z = 100 }, --D
 }
+
+local invincibleIds = {
+    82,
+    1836,
+    409,
+    811,
+    3255,
+}
+
 local blueBuffId = 5351 -- 顺手加一个神圣
 local redBuffId = 5350 -- 顺手加一个核爆
 local fireBuffId = 2902
@@ -282,8 +291,6 @@ local drawingGroudFire = function()
                         elseif j == 3 then
                             drawer = DM.yellowDrawer
                         elseif j == 4 then
-                            drawer = DM.orangeDrawer
-                        elseif j == 5 then
                             drawer = DM.cyanDrawer
                         else
                             drawer = DM.greenDrawer
@@ -408,6 +415,9 @@ Dmu_P5.OnEntityChannel = function(entityID, spellID, _)
             MG.CreateDrawer(1, 0, 1, 0.1):addTimedCircleOnEnt(5000, member.id, 5)
         end
     elseif spellID == 47925 then
+        DM.ChangeState('P5Forsaken')
+    elseif spellID == 47930 then
+        --遗弃末点（狂暴）
         DM.ChangeState('P5BeforeEnd')
     end
 end
@@ -441,8 +451,10 @@ Dmu_P5.OnAOECreate = function(aoeInfo)
         end
     elseif aoeInfo.aoeID == 47932 then
         startGroundFire(aoeInfo)
+    elseif aoeInfo.aoeID == 47928 then
+        --软狂暴脚下出现黄圈
+        Data().Forsaken.wave = Data().Forsaken.wave + 1
     end
-
 end
 
 Dmu_P5.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
@@ -480,7 +492,49 @@ Dmu_P5.Update = function()
             or DM.InState('P5UltimaRepeater4')
     then
         if Cfg().guide then
-            MG.FrameMultiD(ultimaRepeater)
+            local idx = MG.DancingMad.CurrentState
+            if Data().UltimaRepeater[idx] == nil or Data().UltimaRepeater[idx].StIn == nil then
+                Data().UltimaRepeater[idx] = {}
+                Data().UltimaRepeater[idx].StIn = ultimaRepeater
+                Data().UltimaRepeater[idx].curMt = TensorCore.getEntityByGroup("Main Tank", "Nearest")
+                if Data().UltimaRepeater[idx].curMt ~= nil then
+                    local st, stJob
+                    if Data().UltimaRepeater[idx].curMt.id == MG.Party.MT.id then
+                        st = MG.Party.ST
+                        stJob = 'ST'
+                    else
+                        st = MG.Party.MT
+                        stJob = 'MT'
+                    end
+                    if st ~= nil then
+                        local curGuideData = table.deepcopy(ultimaRepeater)
+                        curGuideData[stJob] = { x = 106, y = 0, z = 94 }
+                        Data().UltimaRepeater[idx].StOut = curGuideData
+                    end
+                end
+            else
+                if Data().UltimaRepeater[idx].curMt ~= nil
+                        and Data().UltimaRepeater[idx].StIn ~= nil
+                        and Data().UltimaRepeater[idx].StOut ~= nil
+                then
+                    local mt = Data().UltimaRepeater[idx].curMt
+                    local invincible = false
+                    for _, id in pairs(invincibleIds) do
+                        local buff = TensorCore.getBuff(mt.id, id)
+                        if buff ~= nil and buff.duration > 1.5 then
+                            invincible = true
+                            break
+                        end
+                    end
+                    if invincible then
+                        MG.FrameMultiD(Data().UltimaRepeater[idx].StOut)
+                    else
+                        MG.FrameMultiD(Data().UltimaRepeater[idx].StIn)
+                    end
+                else
+                    MG.FrameMultiD(ultimaRepeater)
+                end
+            end
         end
     end
     -- 洪水阶段，根据当前获得AOE数据来计算4个交叉点
@@ -572,7 +626,6 @@ Dmu_P5.Update = function()
             else
                 DM.ChangeState('P5MaddeningOrchestra2_1End')
             end
-
             Data().MaddeningOrchestra.FirstHitTimer = Now()
         end
         if Cfg().draw then
@@ -597,7 +650,11 @@ Dmu_P5.Update = function()
                 else
                     dir = (i - 1) * math.pi / 4
                 end
-                Data().MaddeningOrchestra.Guide1[pos[i]] = TensorCore.getPosInDirection(DM.Center, dir, 7.5)
+                if pos[i] == 'MT' or pos[i] == 'ST' then
+                    Data().MaddeningOrchestra.Guide1[pos[i]] = TensorCore.getPosInDirection(DM.Center, dir, 10)
+                else
+                    Data().MaddeningOrchestra.Guide1[pos[i]] = TensorCore.getPosInDirection(DM.Center, dir, 7.5)
+                end
                 local dis = 11
                 if pos[i] == 'MT' then
                     dis = 9
@@ -635,8 +692,6 @@ Dmu_P5.Update = function()
         if Data().MaddeningOrchestra.Guide2 == nil or table.size(Data().MaddeningOrchestra.Guide2) < 8 then
             if TimeSince(Data().MaddeningOrchestra.FirstHitTimer) > 500 then
                 Data().MaddeningOrchestra.Guide2 = {}
-                Data().MaddeningOrchestra.Guide2.ST = { x = 100, y = 0, z = 90 }
-                Data().MaddeningOrchestra.Guide2.MT = { x = 100, y = 0, z = 90 }
                 for job, member in pairs(MG.Party) do
                     if TensorCore.hasBuff(member.id, 2941) and job ~= 'MT' and job ~= 'ST' then
                         table.insert(Data().MaddeningOrchestra.FirstHits, job)
@@ -645,6 +700,8 @@ Dmu_P5.Update = function()
                         Data().MaddeningOrchestra.Guide2[job] = Data().MaddeningOrchestra.Guide1[job]
                     end
                 end
+                Data().MaddeningOrchestra.Guide2.ST = { x = 100, y = 0, z = 90 }
+                Data().MaddeningOrchestra.Guide2.MT = { x = 100, y = 0, z = 90 }
             end
         else
             if Cfg().guide then
@@ -764,6 +821,22 @@ Dmu_P5.Update = function()
             end
         end
         loadGuidePosAndNextStart()
+    end
+
+    if DM.InState('P5Forsaken') then
+        if Cfg().guide and Cfg().forsakenType == 1 then
+            if Data().Forsaken.Guide[Data().Forsaken.wave] == nil then
+                Data().Forsaken.Guide[Data().Forsaken.wave] = {}
+                local startDir = -math.pi / 4 + (Cfg().forsakenTypeStart - 1) * math.pi / 2
+                local curDir = MG.SetHeading2Pi(startDir - math.pi / 2 * (Data().Forsaken.wave - 1))
+                local guidePos = TensorCore.getPosInDirection(DM.Center, curDir, 9.5)
+                for job, _ in pairs(MG.Party) do
+                    Data().Forsaken.Guide[Data().Forsaken.wave][job] = guidePos
+                end
+            elseif table.size(Data().Forsaken.Guide[Data().Forsaken.wave]) > 0 then
+                MG.FrameMultiD(Data().Forsaken.Guide[Data().Forsaken.wave])
+            end
+        end
     end
     if DM.InState('P5BeforeEnd') then
         local curBoss = TensorCore.mGetEntity(Data().Kefka.id)
