@@ -426,6 +426,7 @@ local dataInit = function()
         },
         P5 = {
             Kefka = nil,
+            UltimaRepeater = {},
             Blood = {
                 Cross12 = nil,
                 Cross23 = nil,
@@ -473,6 +474,10 @@ local dataInit = function()
                 AoePos = {},
                 OnCast = {}
             },
+            Forsaken = {
+                wave = 1, 
+                Guide = {}
+            }
         },
     }
     ---判定P4指定BUFF是否为真BUFF
@@ -661,6 +666,7 @@ DM.StateNames = {
     'P5MaddeningOrchestra2_1End',
     'P5MaddeningOrchestra2_2End',
     'P5UltimaRepeater4',
+    'P5Forsaken',
     'P5BeforeEnd',
     'P5End',
 }

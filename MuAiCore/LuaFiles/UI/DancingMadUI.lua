@@ -433,7 +433,7 @@ DancingMadUI.draw = function()
             GUI:SameLine()
             M.Config.DmuCfg.P5.isLeaning = GUI:Checkbox('斜米站位##p5isLeaning', M.Config.DmuCfg.P5.isLeaning)
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('不勾选就是正米')
+                GUI:SetTooltip('不勾选就是常规八方')
             end
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
@@ -451,12 +451,16 @@ DancingMadUI.draw = function()
             end
             GUI:PopItemWidth()
             GUI:Dummy(0, 0)
+            GUI:SameLine()
+            GUI:BulletText('混沌末世（地火）')
+            GUI:Dummy(0, 0)
+            GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:AlignFirstTextHeightToWidgets()
-            GUI:Text(' 地火预警次数:  ')
+            GUI:Text(' 预警次数:  ')
             GUI:SameLine()
             local groundCntChanged, groundCntValue
-            GUI:PushItemWidth(80)
+            GUI:PushItemWidth(100)
             groundCntValue, groundCntChanged = GUI:InputInt('##P5groundCnt', M.Config.DmuCfg.P5.groundCnt, 1, 1)
             GUI:PopItemWidth()
             if groundCntChanged then
@@ -468,6 +472,29 @@ DancingMadUI.draw = function()
                     M.Config.DmuCfg.P5.groundCnt = groundCntValue
                 end
             end
+            GUI:Dummy(0, 0)
+            GUI:Dummy(0, 0)
+            GUI:SameLine()
+            GUI:BulletText('遗弃末世（软狂暴）')
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(' 跑位方案:  ')
+            GUI:SameLine()
+            GUI:PushItemWidth(100)
+            M.Config.DmuCfg.P5.forsakenType = GUI:Combo('##P4ForsakenType', M.Config.DmuCfg.P5.forsakenType,
+                    { '斜点全顺', '其他（关闭）' }, 2)
+            GUI:PopItemWidth()
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(' 跑位起点:  ')
+            GUI:SameLine()
+            GUI:PushItemWidth(100)
+            if M.Config.DmuCfg.P5.forsakenType then
+                M.Config.DmuCfg.P5.forsakenTypeStart = GUI:Combo('##P5forsakenTypeStart', M.Config.DmuCfg.P5.forsakenTypeStart, { '左下:4', '右下:3', '右上:2', '左上:1' }, 4)
+            end
+            GUI:PopItemWidth()
         end
     end
     M.SaveConfig(M.Config.DmuGuidePath, M.Config.DmuGuideFile, 'DmuCfg')
