@@ -41,7 +41,7 @@ local showOrderLog = function(tbl, infoHead)
             log = log .. ','
         end
     end
-    DM.Info(infoHead .. log)
+    MG.Info(infoHead .. log)
 end
 
 ---所有塔位置定义
@@ -655,7 +655,7 @@ local checkAndMarkMember = function(wave)
                 local curMember = MG.Party[order[index]]
                 MG.MarkParty(curMark, curMember.id)
                 if MG.IsVideo() then
-                    DM.ArrInfo('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。')
+                    MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。', false, true)
                 end
             end
         else
@@ -664,7 +664,7 @@ local checkAndMarkMember = function(wave)
                 local curMember = MG.Party[order[i]]
                 MG.MarkParty(curMark, curMember.id)
                 if MG.IsVideo() then
-                    DM.ArrInfo('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。')
+                    MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。', false, true)
                 end
             end
         end
@@ -678,7 +678,7 @@ local checkAndMarkMember = function(wave)
             local curMember = MG.Party[standBy[i]]
             MG.MarkParty(curMark, curMember.id)
             if MG.IsVideo() then
-                DM.ArrInfo('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。')
+                MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。', false, true)
             end
         end
     end
@@ -832,7 +832,7 @@ Dmu_P2.OnMapEffect = function(a1, a2, a3)
                     end
                 end
                 Data().Towers.wave = Data().Towers.wave + 1
-                DM.Info('第' .. Data().Towers.wave .. '轮：')
+                MG.Info('第' .. Data().Towers.wave .. '轮：')
                 if Data().Towers.wave == 8 then
                     Data().Towers.Timer = Now()
                 end
@@ -882,7 +882,7 @@ Dmu_P2.Update = function()
                 Data().Towers.GuideData[wave] = calcGuidePos(wave)
                 local checkIdx = checkStandBy()
                 if checkIdx ~= nil then
-                    DM.Info('有人站位错误，或者小队列表不正确！踩塔组和闲人组均存在[' .. Data().Towers.standBy[checkIdx] .. ']尝试修复序列。')
+                    MG.Info('有人站位错误，或者小队列表不正确！踩塔组和闲人组均存在[' .. Data().Towers.standBy[checkIdx] .. ']尝试修复序列。')
                     fixStandBy()
                     --如果发现序列不正确，重新调整后需要再计算一次位置
                     Data().Towers.GuideData[wave] = calcGuidePos(wave, true)

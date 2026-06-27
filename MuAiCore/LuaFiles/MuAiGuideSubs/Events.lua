@@ -34,10 +34,10 @@ local disableDrawCheck = function()
     if isDrawBlackListOn() then
         if lastMap ~= Player.localmapid then
             if table.contains(MG.Config.Main.DrawBlackList, Player.localmapid) then
-                MG.Info("进入绘制黑名单区域，MoogleTelegraphs的[敌人范围]已关闭。")
+                MG.InfoNoLog("进入绘制黑名单区域，MoogleTelegraphs的[敌人范围]已关闭。")
                 MoogleTelegraphs.Settings.DrawEnemyAoE = false
             elseif table.contains(MG.Config.Main.DrawBlackList, lastMap) then
-                MG.Info("离开绘制黑名单区域，MoogleTelegraphs的[敌人范围]已开启。")
+                MG.InfoNoLog("离开绘制黑名单区域，MoogleTelegraphs的[敌人范围]已开启。")
                 MoogleTelegraphs.Settings.DrawEnemyAoE = true
             end
         end
@@ -198,7 +198,7 @@ local onWipeCheck = function()
                     or lastBattleTime == 0
                     or TensorReactions_CurrentCombatTimer < lastBattleTime
             then
-                MG.StartDebugLogSession()
+                MG.LogSystemInit()
             end
             lastBattleTime = TensorReactions_CurrentCombatTimer
         end

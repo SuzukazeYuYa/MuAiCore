@@ -192,7 +192,7 @@ GameTools.init = function(M)
             return
         end
         if members == nil or (table.size(members) < 8 and table.size(members) ~= 4) then
-            M.Info('当前没有组队。')
+            M.InfoNoLog('当前没有组队。')
             return
         end
 

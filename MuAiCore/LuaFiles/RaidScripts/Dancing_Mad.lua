@@ -7,7 +7,7 @@ DM.SubScripts = nil
 ---@type MuAiGuide
 local MG
 
--- 执行子脚本
+--- 执行子脚本
 local doSubEvents = function(eventName, ...)
     if not MG.Config.DmuCfg.Enable or MG.DancingMad == nil then
         return
@@ -21,17 +21,15 @@ local doSubEvents = function(eventName, ...)
         then
             local ok, err = pcall(script[eventName], ...)
             if not ok then
-                MG.Debug(script.StateName .. '执行' .. eventName .. '失败！')
                 d('----------------------------------------------------')
+                local traceback = debug ~= nil and debug.traceback ~= nil and debug.traceback() or 'debug.traceback unavailable'
+                MG.LogError('Error',
+                        script.StateName .. '执行' .. eventName .. '失败',
+                        { err = tostring(err), traceback = traceback },
+                        true)
                 MG.Debug('错误信息:' .. tostring(err))
-                local traceback = debug ~= nil and debug.traceback ~= nil and debug.traceback()
-                        or 'debug.traceback unavailable'
                 MG.Debug('调用堆栈:' .. traceback)
                 d('----------------------------------------------------')
-                DM.DebugProblem('Error', script.StateName .. '执行' .. eventName .. '失败', {
-                    err = tostring(err),
-                    traceback = traceback,
-                }, true)
             end
         end
     end
@@ -481,7 +479,7 @@ local dataInit = function()
                 OnCast = {}
             },
             Forsaken = {
-                wave = 1, 
+                wave = 1,
                 Guide = {}
             }
         },
@@ -499,7 +497,7 @@ local dataInit = function()
         end
         return buffList[buffId]
     end
-    DM.Info(DM.NameCN .. '数据初始化完毕！')
+    MG.Info(DM.NameCN .. '数据初始化完毕！')
 end
 
 local developForceChange = function(stateName)
@@ -699,14 +697,6 @@ DM.Init = function(M)
     end
     DM.SubScripts = {}
     MG = M
-    DM.DebugLog = M.DebugLog
-    DM.DebugProblem = M.DebugProblem
-    DM.DebugOnce = M.DebugOnce
-    DM.DebugCount = M.DebugCount
-    DM.DebugEntityID = M.DebugEntityID
-    DM.DebugEntityList = M.DebugEntityList
-    DM.Info = M.Info
-    DM.ArrInfo = M.ArrInfo
     defineColors()
     local folderPath = MuAiGuideRoot .. 'RaidScripts\\Dancing_Mad_Subs'
     local list = FolderList(folderPath)
@@ -731,16 +721,13 @@ end
 --- 中心点
 DM.Center = { x = 100, y = 0, z = 100 }
 
---- 切换状态
 DM.ChangeState = function(stateName)
     local state = DM.State[stateName]
     if state == nil then
         -- 输出错误日志
-        MG.Debug('[错误]切换状态失败，状态不存在：' .. stateName)
         local traceback = debug ~= nil and debug.traceback ~= nil and debug.traceback()
                 or 'debug.traceback unavailable'
-        MG.Debug('调用堆栈：' .. traceback) -- 打印完整调用栈
-        DM.DebugProblem('Error', '切换状态失败，状态不存在：' .. tostring(stateName), {
+        MG.LogError('Error', '切换状态失败，状态不存在：' .. tostring(stateName), {
             traceback = traceback,
         }, true)
         -- 直接抛出 Lua 异常，强制中断，避免继续执行
@@ -750,20 +737,14 @@ DM.ChangeState = function(stateName)
     local oldState = MG.DancingMad.CurrentState
     local oldStateName = DM.StateNames[oldState] or tostring(oldState)
     MG.DancingMad.CurrentState = state
-    local log = DM.NameCN .. '阶段切换：' .. stateName
-    DM.ArrInfo(log)
-    DM.DebugLog('State', oldStateName .. ' -> ' .. stateName)
+    MG.Info(DM.NameCN .. '阶段切换：' .. oldStateName .. ' -> ' .. stateName, false, true)
 end
 
 --- 切到下一个状态
 DM.GoNextSate = function()
-    local oldState = MG.DancingMad.CurrentState
-    local oldStateName = DM.StateNames[oldState] or tostring(oldState)
     MG.DancingMad.CurrentState = MG.DancingMad.CurrentState + 1
-    local newStateName = DM.StateNames[MG.DancingMad.CurrentState]
-    local log = DM.NameCN .. '阶段切换：' .. newStateName
-    DM.ArrInfo(log)
-    DM.DebugLog('State', oldStateName .. ' -> ' .. tostring(newStateName))
+    local log = DM.NameCN .. '阶段切换：' .. DM.StateNames[MG.DancingMad.CurrentState]
+    MG.Info(log, false, true)
 end
 
 --- 是否在状态中
@@ -785,7 +766,7 @@ DM.OverState = function(stateName, include)
     local state = DM.State[stateName]
     if state == nil then
         -- 输出错误日志
-        d('[MuAiGuide][错误]状态不存在：' .. stateName)
+        MG.Debug('[错误]状态不存在：' .. stateName)
     end
     if include then
         return MG.DancingMad.CurrentState >= state
@@ -815,7 +796,6 @@ end
 ---@return ThunderType
 DM.CalcThunderType = function(thundersAoe)
     local h2pi = MG.SetHeading2Pi(thundersAoe.heading)
-    DM.ArrInfo('CalcThunderType: ' .. thundersAoe.aoeID)
     if MG.IsSameDirection(h2pi, math.pi * 7 / 4) then
         if thundersAoe.x > 100 and thundersAoe.x < 107 then
             return DM.ThunderType.Right13
@@ -1105,11 +1085,7 @@ DM.Update = function()
 end
 
 DM.OnEnter = function()
-    MG.DancingMad = {
-        CurrentState = 1,
-    }
-    DM.DebugLog('State', '进入副本：' .. DM.NameCN)
-    -- MG.DancingMad.CurrentState = 0
+    MG.DancingMad = { CurrentState = 1 }
     MG.Develop.Reg('DancingMad')
     MG.Develop.LogState = function()
         printCurrentState()
@@ -1117,13 +1093,12 @@ DM.OnEnter = function()
     MG.Develop.ForceChange = function(stateName)
         developForceChange(stateName)
     end
+    MG.Log('State', '副本开始：' .. DM.NameCN)
 end
 
 DM.OnWipe = function()
-    DM.DebugLog('State', '灭团重置')
-    MG.DancingMad = {
-        CurrentState = 1,
-    }
+    MG.DancingMad = { CurrentState = 1 }
+    MG.Log('State', '灭团重置：' .. DM.NameCN)
 end
 
 return DM

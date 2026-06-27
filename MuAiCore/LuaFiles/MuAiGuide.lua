@@ -10,17 +10,17 @@ M.IsInit = false;
 --- 输出信息到控制台 
 --- @param msg string
 M.Debug = function(msg)
-    local info = "[MuAiGuide]" .. msg
+    local info = "[MuAiCore]" .. msg
     d(info)
 end
 
 -- 代码加载顺序
 local modules = {
     'Tools',
+    'LogSystem',
     'NetWork',
     'ArgusEvents',
     'Config',
-    'DebugLog',
     'Develop',
     'Drawers',
     'Events',

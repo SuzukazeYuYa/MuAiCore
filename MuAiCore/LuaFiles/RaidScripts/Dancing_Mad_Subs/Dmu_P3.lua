@@ -178,7 +178,7 @@ local lockFaceCheck = function()
                     heading = TensorCore.getHeadingToTarget(player.pos, curBoss.pos)
                 end
                 TensorCore.API.TensorACR.setLockFaceHeading(heading)
-                DM.Info('P3锁定面向开始，面向：' .. string.format("%.2f", heading))
+                MG.Info('P3锁定面向开始，面向：' .. string.format("%.2f", heading))
                 if Cfg().HardLockFace then
                     TensorCore.API.TensorACR.setHardLockFace(true)
                 end
@@ -188,7 +188,7 @@ local lockFaceCheck = function()
         else
             if Data().LockFace.enable then
                 -- buff消失背对结束
-                DM.Info('P3锁定面向结束。')
+                MG.Info('P3锁定面向结束。')
                 Data().LockFace.onDoing = false
                 Data().LockFace.enable = false
                 if Cfg().HardLockFace then
@@ -473,7 +473,7 @@ local loadMarkPlayer = function()
                     if isAllOk then
                         Data().BlackHolds.MarkCheckTimer = Now()
                         Data().BlackHolds.MarkCheckCnt = Data().BlackHolds.MarkCheckCnt + 1
-                        DM.ArrInfo('第' .. Data().BlackHolds.MarkCheckCnt .. '次头标检测完成')
+                        MG.Info('第' .. Data().BlackHolds.MarkCheckCnt .. '次头标检测完成', false, true)
                     else
                         Data().BlackHolds.MarkedPlayers = {}
                     end
@@ -498,22 +498,21 @@ local loadMarkPlayer = function()
                         Data().BlackHolds.MarkCheckCnt = Data().BlackHolds.MarkCheckCnt + 1
                         if isChanged then
                             Data().BlackHolds.MarkedPlayers = checkTable
-                            DM.ArrInfo('第' .. Data().BlackHolds.MarkCheckCnt .. '次头标检测完成，发现变更，已更新头标表格！')
+                            MG.Info('第' .. Data().BlackHolds.MarkCheckCnt .. '次头标检测完成，发现变更，已更新头标表格！', false, true)
                         else
-                            DM.ArrInfo('第' .. Data().BlackHolds.MarkCheckCnt .. '次头标检测完成，未发现变更，维持表格不变！')
+                            MG.Info('第' .. Data().BlackHolds.MarkCheckCnt .. '次头标检测完成，未发现变更，维持表格不变！', false, true)
                         end
                         Data().BlackHolds.MarkCheckTimer = Now()
                     end
                 end
                 if Data().BlackHolds.MarkCheckCnt >= 3 then
-                    DM.ArrInfo('3次检测完成, 终止检测！')
+                    MG.Info('3次检测完成, 终止检测！', false, true)
                     Data().BlackHolds.allMarkFind = true
                 end
             end
         end
     end
 end
-
 local guideTakeLine = function(curStateGuide, curCnt, isDouble)
     local data = Data().BlackHolds
     -- 当前阶段ID
@@ -921,7 +920,7 @@ Dmu_P3.OnEntityAdd = function(entityID, entityName)
         if data.Object[data.wave] == nil then
             data.Object[data.wave] = data.temp
         end
-        DM.Info('第' .. data.wave .. '轮黑洞')
+        MG.Info('第' .. data.wave .. '轮黑洞')
         local goState = 'P3BlackHoleAppear' .. tostring(data.wave)
         if DM.BeLowState(goState) then
             DM.ChangeState(goState)
@@ -1281,7 +1280,7 @@ Dmu_P3.Update = function()
                         Data().Mark.MarkCnt[buffType] = Data().Mark.MarkCnt[buffType] + 1
                         if MG.IsVideo() then
                             --如果回放，直接输出出来方便debug
-                            DM.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMarkId) .. '”标记。')
+                            MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMarkId) .. '”标记。')
                         end
                     end
                     Data().Mark.Finish = true

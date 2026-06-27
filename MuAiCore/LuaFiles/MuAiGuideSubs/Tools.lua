@@ -6,37 +6,20 @@ local Tools = {}
 ]]
 ---@param M MuAiGuide
 Tools.init = function(M)
-    local sendInfo = function(msg, ttsOn)
-        if not M.Config.Main.LogToEchoMsg then
-            return
-        end
-        TensorCore.sendParsedChatMessage("/e {color:0,255,0}{resetcolor}" .. msg)
-        if ttsOn and M.Config.Main.TTS == true then
-            TensorCore.addAlertText(0, msg, 1, 2, true)
-        end
-    end
-
     --- 输出消息到聊天栏
     --- @param msg string
-    M.Info = function(msg, ttsOn)
-        if M.DebugLog ~= nil then
-            M.DebugLog('Info', msg)
-        end
-        sendInfo(msg, ttsOn)
-    end
+    --M.InfoNoLog = function(msg, ttsOn)
+    --    if not M.Config.Main.LogToEchoMsg then
+    --        return
+    --    end
+    --    local info = "/e  " .. msg
+    --    TensorCore.sendParsedChatMessage("/e {color:0,255,0}{resetcolor}" .. msg)
+    --    --SendTextCommand(info)
+    --    if ttsOn and M.Config.Main.TTS == true then
+    --        TensorCore.addAlertText(0, msg, 1, 2, true)
+    --    end
+    --end
 
-    ---在ARR下输出到聊天，在正常游戏下输出到console
-    M.ArrInfo = function(log)
-        if M.DebugLog ~= nil then
-            M.DebugLog('Info', log)
-        end
-        local timedLog = '[' .. M.InfoTime() .. ']' .. log
-        if M.IsVideo() then
-            sendInfo(timedLog)
-        else
-            M.Debug(timedLog)
-        end
-    end
     --- 计算索引位置
     --- @param orderTable table 基于哪个优先级序列的表
     --- @param value any 元素成员
@@ -214,9 +197,6 @@ Tools.init = function(M)
 
     M.VectorXZAdd = function(v1, v2)
         return { x = v1.x + v2.x, y = 0, z = v1.z + v2.z }
-    end
-    M.InfoTime = function()
-        return string.format('%.3f', TensorReactions_CurrentCombatTimer)
     end
 end
 return Tools

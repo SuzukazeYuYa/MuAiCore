@@ -10,10 +10,10 @@ local raidScript
 ---@param M MuAiGuide
 RaidMgr.init = function(M)
     --- 读取副本脚本
-    M.LoadRaidScripts = function()
-        if raidScript ~= nil then
-            M.DebugLog('Lifecycle', '重新加载副本脚本')
-            M.FlushDebugLog(true)
+    M.LoadRaidScripts = function(isReload)
+        if isReload and M.CurRaidScript ~= nil then
+            M.Log('Lifecycle', '重新加载副本脚本')
+            M.LogSystemInit()
         end
         raidScript = {}
         local folderPath = MuAiGuideRoot .. "RaidScripts"
@@ -41,27 +41,27 @@ RaidMgr.init = function(M)
         if M.CurRaidScript ~= nil and raidScript[Player.localmapid] ~= nil then
             M.CurRaidScript = raidScript[Player.localmapid]
         end
-        if cnter == table.size(list) then
-            M.Info('重载副本脚本成功。')
-        else
-            M.Info('重载副本脚本失败，部分脚本未能正确加载。')
+        if isReload then
+            if cnter == table.size(list) then
+                M.InfoNoLog('重载副本脚本成功。')
+            else
+                M.InfoNoLog('重载副本脚本失败，部分脚本未能正确加载。')
+            end
         end
     end
-    
     M.RaidMapCheck = function()
         if M.CurRaidScript == nil and raidScript[Player.localmapid] ~= nil then
             -- 进入副本
             M.CurRaidScript = raidScript[Player.localmapid]
-            M.SetDebugLogContext(M.CurRaidScript.NameCN or M.CurRaidScript.ScriptName)
+            M.LogSystemEnter()
             M.CurRaidScript.OnEnter()
             M.Debug("进入副本：" .. M.CurRaidScript.NameCN)
         elseif M.CurRaidScript ~= nil then
-            M.DebugLog('Lifecycle', '离开副本：' .. M.CurRaidScript.NameCN)
-            M.FlushDebugLog(true)
+            M.Log('Lifecycle', '离开副本：' .. M.CurRaidScript.NameCN)
             M.Debug("离开副本：" .. M.CurRaidScript.NameCN)
+            M.LogSystemLeave()
             M.CurRaidScript = nil
             M.CurRaidBoss = nil
-            M.SetDebugLogContext(nil)
         end
     end
 
@@ -77,10 +77,11 @@ RaidMgr.init = function(M)
             raidScript[-1].Update()
         end
     end
+
     M.OnWipe = function()
         if raidScript and raidScript[Player.localmapid] then
             raidScript[Player.localmapid].OnWipe()
-            M.FlushDebugLog(true)
+            M.LogSystemWipe()
         end
     end
 end

@@ -30,8 +30,6 @@ local LoadUIConfig = function(M)
     table.insert(M.Config.Key2, '~')
 
     -- 读取主存档
-    local savedMainCfg = FileLoad(M.Config.MainPath .. '\\' .. M.Config.MainFile)
-    local hasSavedDebugLog = type(savedMainCfg) == 'table' and savedMainCfg.DebugLog ~= nil
     local defMainCfg = M.CreateDefMainCfg()
     M.Config.Main = defMainCfg -- 这里只是让编辑器可以默认识别，无实际作用
     M.Config.Main = M.LoadConfig(M.Config.MainPath, M.Config.MainFile, defMainCfg)
@@ -47,9 +45,6 @@ local LoadUIConfig = function(M)
     local defDmuCfg = M.CreateDmuDefaultCfg()
     M.Config.DmuCfg = defDmuCfg  -- 这里只是让编辑可以默认识别，无实际作用
     M.Config.DmuCfg = M.LoadConfig(M.Config.DmuGuidePath, M.Config.DmuGuideFile, defDmuCfg)
-    if not hasSavedDebugLog and M.Config.DmuCfg.DebugLog == true then
-        M.Config.Main.DebugLog = true
-    end
     M.Config.DmuCfgPrevious = table.deepcopy(M.Config.DmuCfg)
     M.Config.DmuCustomList = M.LoadFileList(M.Config.DmuGuidePath, { 'GuideConfig.lua' })
     M.Config.DmuCustomListIndex = 1
@@ -84,7 +79,7 @@ Config.init = function(M)
         M.Config.Main.MerchantGuide = oldConfig.MerchantGuide
         M.Config.Main.MerchantLockFace = oldConfig.MerchantLockFace
         M.Config.Main.MerchantAimTool = oldConfig.MerchantAimTool
-        M.Info('已恢复默认设置.')
+        M.InfoNoLog('已恢复默认设置.')
     end
     M.CreateDefMainCfg = function()
         local mainCfg = {
@@ -119,8 +114,6 @@ Config.init = function(M)
             AnyOneReactionOn = true,
             --- 是否输出提示信息到消息栏
             LogToEchoMsg = true,
-            --- 是否输出副本调试日志
-            DebugLog = false,
             --- 开启TTS
             TTS = false,
             --- 是否自动更新
@@ -146,6 +139,8 @@ Config.init = function(M)
             },
             -- 更新源，1 github 2腾讯云
             DownLoadSource = 1,
+            -- 开启日志系统
+            LogEnable = true,
             --------- M11S -----------
             M11SExDraw = false,
             M11SOrbitalOmenAllMelee = false,
@@ -376,12 +371,12 @@ Config.init = function(M)
             P5 = { enable = true, draw = true, guide = true,
                    isLeaning = false,
                    jobOrder = { 'H2', 'D2', 'D4', 'ST', 'MT', 'D3', 'H1', 'D1' },
-                   -- 画地火的数量
+                -- 画地火的数量
                    groundCnt = 3,
-                   -- 软狂暴跑路类型
-                   -- 1、全顺，2关闭
+                -- 软狂暴跑路类型
+                -- 1、全顺，2关闭
                    forsakenType = 1,
-                   -- 起点 1左下，2右下，3右上，4左上
+                -- 起点 1左下，2右下，3右上，4左上
                    forsakenTypeStart = 1,
             }
         }
@@ -404,13 +399,7 @@ Config.init = function(M)
             ThunderIII_3 = { p = 3, value = 1, nameCn = '暴雷3' },
             ThunderIII_4 = { p = 3, value = 1, nameCn = '暴雷4' },
             ThunderIII_5 = { p = 3, value = 1, nameCn = '暴雷5' },
-            --ThunderIII_6 = { p = 3, value = 1, nameCn = '暴雷6' },
-            --ThunderIII_7 = { p = 3, value = 1, nameCn = '暴雷7' },
-            --ThunderIII_8 = { p = 3, value = 1, nameCn = '暴雷8' },
-            --ThunderIII_9 = { p = 3, value = 1, nameCn = '暴雷9' },
-            --ThunderIII_10 = { p = 3, value = 1, nameCn = '暴雷10' },
-            -- p4 没死刑开减伤吃平a
-            -- p5
+            -- P5
             ChaoticFlare_1 = { p = 5, value = 1, nameCn = '混沌核爆1' },
             ChaoticFlare_2 = { p = 5, value = 1, nameCn = '混沌核爆2' },
         }
@@ -476,7 +465,7 @@ Config.init = function(M)
             FolderCreate(path)
         end
         FileSave(saveFile, table)
-        M.Info('已将当前设置保存到配置[' .. fileName .. ']。')
+        M.InfoNoLog('已将当前设置保存到配置[' .. fileName .. ']。')
     end
     --- 读取设置信息
     --- @param path string 路径(最后不带\\)

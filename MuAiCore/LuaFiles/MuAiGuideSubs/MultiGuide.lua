@@ -52,7 +52,7 @@ MultiGuide.init = function(M)
         local colorCfg = M.Config.Main.MultiColor[playerJob]
         local player = M.Party[playerJob]
         playerData[player.id] = { obj = M.Party[playerJob], color = colorCfg }
-        M.Info(string.format('已经将[%s]加入到指导列表。', player.name))
+        M.InfoNoLog(string.format('已经将[%s]加入到指导列表。', player.name))
         M.MultiGuide.RefreshDic()
     end
 
@@ -61,7 +61,7 @@ MultiGuide.init = function(M)
     M.MultiGuide.removePlayer = function(playerJob)
         local player = M.Party[playerJob]
         playerData[player.id] = nil
-        M.Info(string.format('已经将[%s]从指导列表中移除。', player.name))
+        M.InfoNoLog(string.format('已经将[%s]从指导列表中移除。', player.name))
         M.MultiGuide.RefreshDic()
     end
 
