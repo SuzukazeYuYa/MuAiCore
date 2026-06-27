@@ -3,6 +3,10 @@ local AddonName = "MuAiCore"
 local core = MuAiCore
 
 core.InitMuAiGuide = function()
+    if MuAiGuide ~= nil and MuAiGuide.FlushDebugLog ~= nil then
+        MuAiGuide.DebugLog('Lifecycle', '重新初始化插件')
+        MuAiGuide.FlushDebugLog(true)
+    end
     MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
     MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
     local downloadPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"

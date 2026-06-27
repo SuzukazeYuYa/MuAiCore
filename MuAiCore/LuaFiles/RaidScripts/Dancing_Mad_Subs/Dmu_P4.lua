@@ -362,6 +362,13 @@ Dmu_P4.Init = function(dm, m)
 end
 
 Dmu_P4.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
+    if spellID == 49884 then
+        DM.DebugOnce('P4Config', 'start', 'P4配置快照', {
+            enable = MG.Config.DmuCfg.Enable,
+            debugLog = MG.Config.Main.DebugLog,
+            p4 = Cfg(),
+        })
+    end
     if spellID == 50067
             or spellID == 50068
             or spellID == 50069
@@ -781,7 +788,8 @@ Dmu_P4.Update = function()
                             real = Data().Eye1.type,
                         })
                     else
-                        DM.DebugOnce('P4Eye', 'missing_eye1_thunder', '[问题]第一次石化眼缺少雷类型，无法生成指路', {
+                        DM.DebugOnce('P4Eye', 'waiting_eye1_thunder', '第一次石化眼等待雷类型赋值', {
+                            hasThunderType = tType ~= nil,
                             owner = DM.DebugEntityList(Data().Eye1.Owner),
                         })
                     end
@@ -1049,9 +1057,9 @@ Dmu_P4.Update = function()
                 MG.FrameMultiD(Data().WaterFire2.Guide2)
             end
         else
-            DM.DebugOnce('P4WaterFire', 'missing_2_put', '[问题]第二次火水缺少冰雷类型，无法生成最终指路', {
-                thunderType = Data().WaterFire2.ThunderType,
-                iceType = Data().WaterFire2.IceType,
+            DM.DebugOnce('P4WaterFire', 'waiting_2_put', '第二次火水等待冰雷类型赋值', {
+                hasThunderType = Data().WaterFire2.ThunderType ~= nil,
+                hasIceType = Data().WaterFire2.IceType ~= nil,
             })
         end
     end

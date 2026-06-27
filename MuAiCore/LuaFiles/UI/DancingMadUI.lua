@@ -145,12 +145,6 @@ DancingMadUI.draw = function()
             if GUI:IsItemHovered() then
                 GUI:SetTooltip('勾选后屏蔽特效, 并且采用A+画紫色危险区\n未勾选使用ImGui画图显示黄色危险区')
             end
-            GUI:Dummy(20, 0)
-            GUI:SameLine(0, 0)
-            M.Config.DmuCfg.DebugLog = GUI:Checkbox('输出调试日志##dmuDebugLog', M.Config.DmuCfg.DebugLog)
-            if GUI:IsItemHovered() then
-                GUI:SetTooltip('日志会写入 MuAiCore\\\\debuglogs，并脱敏队员名称')
-            end
         end
         if M.Config.DmuCfg.P1.enable and GUI:CollapsingHeader('P1 凯夫卡·众神之像') then
             GUI:Dummy(0, 0)

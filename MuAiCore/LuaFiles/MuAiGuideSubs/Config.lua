@@ -30,6 +30,8 @@ local LoadUIConfig = function(M)
     table.insert(M.Config.Key2, '~')
 
     -- 读取主存档
+    local savedMainCfg = FileLoad(M.Config.MainPath .. '\\' .. M.Config.MainFile)
+    local hasSavedDebugLog = type(savedMainCfg) == 'table' and savedMainCfg.DebugLog ~= nil
     local defMainCfg = M.CreateDefMainCfg()
     M.Config.Main = defMainCfg -- 这里只是让编辑器可以默认识别，无实际作用
     M.Config.Main = M.LoadConfig(M.Config.MainPath, M.Config.MainFile, defMainCfg)
@@ -45,6 +47,9 @@ local LoadUIConfig = function(M)
     local defDmuCfg = M.CreateDmuDefaultCfg()
     M.Config.DmuCfg = defDmuCfg  -- 这里只是让编辑可以默认识别，无实际作用
     M.Config.DmuCfg = M.LoadConfig(M.Config.DmuGuidePath, M.Config.DmuGuideFile, defDmuCfg)
+    if not hasSavedDebugLog and M.Config.DmuCfg.DebugLog == true then
+        M.Config.Main.DebugLog = true
+    end
     M.Config.DmuCfgPrevious = table.deepcopy(M.Config.DmuCfg)
     M.Config.DmuCustomList = M.LoadFileList(M.Config.DmuGuidePath, { 'GuideConfig.lua' })
     M.Config.DmuCustomListIndex = 1
@@ -114,6 +119,8 @@ Config.init = function(M)
             AnyOneReactionOn = true,
             --- 是否输出提示信息到消息栏
             LogToEchoMsg = true,
+            --- 是否输出副本调试日志
+            DebugLog = false,
             --- 开启TTS
             TTS = false,
             --- 是否自动更新
@@ -312,7 +319,6 @@ Config.init = function(M)
         return {
             Enable = true,
             BindEffect = true,
-            DebugLog = false,
             P1 = {
                 enable = true, draw = true, guide = true,
                 autoLookAt = true,

@@ -179,6 +179,7 @@ end
 ---@param M MuAiGuide
 local onMapChange = function()
     if Player.localmapid ~= nil then
+        lastBattleTime = 0
         MG.Party = nil
         MG.SelfPos = nil
         checkAndPopMainUI()
@@ -193,6 +194,12 @@ end
 local onWipeCheck = function()
     if TensorReactions_CurrentCombatTimer ~= nil and TensorReactions_CurrentCombatTimer ~= 0 then
         if lastBattleTime ~= TensorReactions_CurrentCombatTimer then
+            if lastBattleTime == nil
+                    or lastBattleTime == 0
+                    or TensorReactions_CurrentCombatTimer < lastBattleTime
+            then
+                MG.StartDebugLogSession()
+            end
             lastBattleTime = TensorReactions_CurrentCombatTimer
         end
     else

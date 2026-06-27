@@ -6,27 +6,35 @@ local Tools = {}
 ]]
 ---@param M MuAiGuide
 Tools.init = function(M)
-    --- 输出消息到聊天栏
-    --- @param msg string
-    M.Info = function(msg, ttsOn)
+    local sendInfo = function(msg, ttsOn)
         if not M.Config.Main.LogToEchoMsg then
             return
         end
-        local info = "/e  " .. msg
         TensorCore.sendParsedChatMessage("/e {color:0,255,0}{resetcolor}" .. msg)
-        --SendTextCommand(info)
         if ttsOn and M.Config.Main.TTS == true then
             TensorCore.addAlertText(0, msg, 1, 2, true)
         end
     end
 
+    --- 输出消息到聊天栏
+    --- @param msg string
+    M.Info = function(msg, ttsOn)
+        if M.DebugLog ~= nil then
+            M.DebugLog('Info', msg)
+        end
+        sendInfo(msg, ttsOn)
+    end
+
     ---在ARR下输出到聊天，在正常游戏下输出到console
     M.ArrInfo = function(log)
-        log = '[' .. M.InfoTime() .. ']' .. log
+        if M.DebugLog ~= nil then
+            M.DebugLog('Info', log)
+        end
+        local timedLog = '[' .. M.InfoTime() .. ']' .. log
         if M.IsVideo() then
-            M.Info(log)
+            sendInfo(timedLog)
         else
-            M.Debug(log)
+            M.Debug(timedLog)
         end
     end
     --- 计算索引位置

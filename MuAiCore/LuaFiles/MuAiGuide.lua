@@ -20,6 +20,7 @@ local modules = {
     'NetWork',
     'ArgusEvents',
     'Config',
+    'DebugLog',
     'Develop',
     'Drawers',
     'Events',

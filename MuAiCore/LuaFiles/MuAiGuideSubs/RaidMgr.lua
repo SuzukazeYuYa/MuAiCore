@@ -11,6 +11,10 @@ local raidScript
 RaidMgr.init = function(M)
     --- 读取副本脚本
     M.LoadRaidScripts = function()
+        if raidScript ~= nil then
+            M.DebugLog('Lifecycle', '重新加载副本脚本')
+            M.FlushDebugLog(true)
+        end
         raidScript = {}
         local folderPath = MuAiGuideRoot .. "RaidScripts"
         local list = FolderList(folderPath)
@@ -48,12 +52,16 @@ RaidMgr.init = function(M)
         if M.CurRaidScript == nil and raidScript[Player.localmapid] ~= nil then
             -- 进入副本
             M.CurRaidScript = raidScript[Player.localmapid]
+            M.SetDebugLogContext(M.CurRaidScript.NameCN or M.CurRaidScript.ScriptName)
             M.CurRaidScript.OnEnter()
             M.Debug("进入副本：" .. M.CurRaidScript.NameCN)
         elseif M.CurRaidScript ~= nil then
+            M.DebugLog('Lifecycle', '离开副本：' .. M.CurRaidScript.NameCN)
+            M.FlushDebugLog(true)
             M.Debug("离开副本：" .. M.CurRaidScript.NameCN)
             M.CurRaidScript = nil
             M.CurRaidBoss = nil
+            M.SetDebugLogContext(nil)
         end
     end
 
@@ -72,6 +80,7 @@ RaidMgr.init = function(M)
     M.OnWipe = function()
         if raidScript and raidScript[Player.localmapid] then
             raidScript[Player.localmapid].OnWipe()
+            M.FlushDebugLog(true)
         end
     end
 end
