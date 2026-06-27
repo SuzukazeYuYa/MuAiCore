@@ -497,6 +497,7 @@ local dataInit = function()
         end
         return buffList[buffId]
     end
+    MG.LogSystemInit()
     MG.Info(DM.NameCN .. '数据初始化完毕！')
 end
 

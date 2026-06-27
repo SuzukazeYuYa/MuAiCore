@@ -47,6 +47,13 @@ local createLogFileName = function()
     return true
 end
 
+local clearAndNew = function()
+    onceLogData = {}
+    logCache = {}
+    curFileName = nil
+    return createLogFileName()
+end
+
 local logEnable = function(force)
     if force then
         return true
@@ -267,11 +274,11 @@ LogSystem.init = function(M)
         if #logCache > 0 and not saveLog() then
             return false
         end
-        clearLogData()
         sessionActive = false
         if logEnable() then
-            return createLogFileName()
+            return clearAndNew()
         end
+        clearLogData()
         return true
     end
 
@@ -289,11 +296,11 @@ LogSystem.init = function(M)
         if #logCache > 0 and not saveLog() then
             return false
         end
-        clearLogData()
         sessionActive = false
         if logEnable() then
-            return createLogFileName()
+            return clearAndNew()
         end
+        clearLogData()
         return true
     end
 
@@ -307,12 +314,12 @@ LogSystem.init = function(M)
             sessionActive = false
             return true
         end
+        -- 如果 wipe 触发失败数据没有清空，在下一次初始化时保存上一把并新建日志。
         if sessionActive then
             if #logCache > 0 and not saveLog() then
                 return false
             end
-            clearLogData()
-            if not createLogFileName() then
+            if not clearAndNew() then
                 return false
             end
         elseif curFileName == nil and not createLogFileName() then
