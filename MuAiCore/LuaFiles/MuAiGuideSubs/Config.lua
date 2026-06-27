@@ -49,11 +49,12 @@ local LoadUIConfig = function(M)
     M.Config.DmuCustomList = M.LoadFileList(M.Config.DmuGuidePath, { 'GuideConfig.lua' })
     M.Config.DmuCustomListIndex = 1
 
-    local defDmuCatZCfg = M.CreateCatZDmuCfg()
+    local defDmuCatZCfg = M.CreateDmuMigCfg()
     M.Config.DmuCatZCfg = defDmuCatZCfg  -- 这里只是让编辑可以默认识别，无实际作用
     M.Config.DmuCatZCfg = M.LoadConfig(M.Config.DmuCatZMigPath, M.Config.DmuCatZMigFile, defDmuCatZCfg)
     M.Config.DmuCatZCfgPrevious = table.deepcopy(M.Config.DmuCatZCfg)
 
+    M.Config.DmuMig = {}
 end
 
 ---@param M MuAiGuide
@@ -383,8 +384,9 @@ Config.init = function(M)
         }
     end
 
-    M.CreateCatZDmuCfg = function()
+    M.CreateDmuMigCfg = function()
         return {
+            -- T减 --
             -- P1
             RevoltingRuinIII_1 = { p = 1, value = 1, nameCn = '恶狠狠毁荡' },
             LightingJudgment_1 = { p = 1, value = 1, nameCn = '超驱动' },
@@ -403,6 +405,37 @@ Config.init = function(M)
             -- P5
             ChaoticFlare_1 = { p = 5, value = 1, nameCn = '混沌核爆1' },
             ChaoticFlare_2 = { p = 5, value = 1, nameCn = '混沌核爆2' },
+            -- 团减--
+            Flaflare1 = { p = 1, Target = false, Field = false, nameCn = '呼啦啦爆炎1' },
+            Hyperdrive1 = { p = 1, Target = false, Field = false, nameCn = '超驱动1' },
+            LightOfJudgment = { p = 1, Target = false, Field = false, nameCn = '制裁之光2' },
+            Flaflare2 = { p = 1, team = true, Target = false, Field = false, nameCn = '呼啦啦爆炎2' },
+            TwinArms = { p = 2, team = true, Target = false, Field = false, nameCn = '终末双腕1' },
+            Forsaken1 = { p = 2, team = true, Target = false, Field = false, nameCn = '遗弃末世1' },
+            LightOfJudgment2 = { p = 2, team = true, Target = false, Field = false, nameCn = '制裁之光' },
+            TwinArms2 = { p = 2, team = true, Target = false, Field = false, nameCn = '终末双腕2' },
+            Bowbow = { p = 3, team = true, Target = false, Field = false, nameCn = '深层痛楚' },
+            BlazeTsunami1 = { p = 3, team = true, Target = false, Field = false, nameCn = '烈焰/海啸1' },
+            BlazeTsunami2 = { p = 3, team = true, Target = false, Field = false, nameCn = '烈焰/海啸2' },
+            VacuumWave = { p = 3, team = true, Target = false, Field = false, nameCn = '真空波' },
+            ThunderIII_T_2 = { p = 3, team = true, Target = false, Field = false, nameCn = '暴雷2' },
+            ThunderIII_T_3 = { p = 3, team = true, Target = false, Field = false, nameCn = '暴雷3' },
+            Shockwave1 = { p = 3, team = true, Target = false, Field = false, nameCn = '冲击波1' },
+            ThunderIII_T_4 = { p = 3, team = true, Target = false, Field = false, nameCn = '暴雷5' },
+            Shockwave2 = { p = 3, team = true, Target = false, Field = false, nameCn = '冲击波2' },
+            Shockwave3 = { p = 3, team = true, Target = false, Field = false, nameCn = '冲击波3' },
+            Blaze = { p = 3, team = true, Target = false, Field = false, nameCn = '轰击' },
+            GrandCross1 = { p = 4, team = true, Target = false, Field = false, nameCn = '大十字1' },
+            GrandCross2 = { p = 4, team = true, Target = false, Field = false, nameCn = '大十字2' },
+            GrandCross3 = { p = 4, team = true, Target = false, Field = false, nameCn = '大十字3' },
+            UltimaUpsideDown1 = { p = 4, team = true, Target = false, Field = false, nameCn = '扑腾腾究极1' },
+            UltimaUpsideDown2 = { p = 4, team = true, Target = false, Field = false, nameCn = '扑腾腾究极2' },
+            ConsecutiveUltima1 = { p = 5, team = true, Target = false, Field = false, nameCn = '连续究极1' },
+            MaddeningOrchestra1 = { p = 5, team = true, Target = false, Field = false, nameCn = '癫狂交响曲1' },
+            ConsecutiveUltima2 = { p = 5, team = true, Target = false, Field = false, nameCn = '连续究极2' },
+            MaddeningOrchestra2 = { p = 5, team = true, Target = false, Field = false, nameCn = '癫狂交响曲2' },
+            Forsaken1_P5 = { p = 5, team = true, Target = false, Field = false, nameCn = '遗弃末世1234' },
+            Forsaken2_P5 = { p = 5, team = true, Target = false, Field = false, nameCn = '遗弃末世5678' },
         }
     end
 
@@ -466,7 +499,7 @@ Config.init = function(M)
             FolderCreate(path)
         end
         FileSave(saveFile, table)
-        M.InfoNoLog('已将当前设置保存到配置[' .. fileName .. ']。')
+        M.ShowMsgUI(3, { ('已将当前设置保存到配置[' .. fileName .. ']！') })
     end
     --- 读取设置信息
     --- @param path string 路径(最后不带\\)
@@ -503,9 +536,24 @@ Config.init = function(M)
             end
             FileSave(saveFile, curConfig)
             M.Config[configName .. 'Previous'] = table.deepcopy(curConfig)
-            --d('[MuAiCore]存档' .. fileName .. '已更新')
         end
     end
+
+    M.SaveConfigJob = function(path, fileName, curConfig, preConfig)
+        if curConfig == nil or preConfig == nil then
+            return false
+        end
+        if not table.deepcompare(curConfig, preConfig) then
+            local saveFile = path .. '\\' .. fileName
+            if (not FolderExists(path)) then
+                FolderCreate(path)
+            end
+            FileSave(saveFile, curConfig)
+            return true
+        end
+        return false
+    end
+    
     LoadUIConfig(M)
 end
 

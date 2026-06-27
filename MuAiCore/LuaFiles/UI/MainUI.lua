@@ -585,13 +585,31 @@ local drawRaidSettingTab = function(M)
                 M.FruConfigUI.open = false
                 M.FruMitigationUI.open = false
             end
-            GUI:SameLine(0, 8)
-            GUI:Button('CatZTankUI', 150, 25)
-            if GUI:IsItemClicked(0) then
-                M.CatZDmuTankUI.open = not M.CatZDmuTankUI.open
-                M.DancingMadUI.open = false
-                M.FruConfigUI.open = false
-                M.FruMitigationUI.open = false
+            
+            if M.IsTank(Player.job) then
+                GUI:SameLine(0, 8)
+                GUI:Button('CatZTankUI', 150, 25)
+                if M.DmuDpsUI.open then
+                    M.DmuDpsUI.open = false
+                end
+                if GUI:IsItemClicked(0) then
+                    M.CatZDmuTankUI.open = not M.CatZDmuTankUI.open
+                    M.DancingMadUI.open = false
+                    M.FruConfigUI.open = false
+                    M.FruMitigationUI.open = false
+                end
+            elseif M.IsDps(Player.job) then
+                GUI:SameLine(0, 8)
+                GUI:Button('DPS减伤UI', 150, 25)
+                if M.CatZDmuTankUI.open then
+                    M.CatZDmuTankUI.open = false
+                end
+                if GUI:IsItemClicked(0) then
+                    M.DmuDpsUI.open = not M.DmuDpsUI.open
+                    M.DancingMadUI.open = false
+                    M.FruConfigUI.open = false
+                    M.FruMitigationUI.open = false
+                end
             end
         end
         if DmuCfgChanged then

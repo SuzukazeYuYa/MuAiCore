@@ -20,6 +20,7 @@ DancingMadUI.draw = function()
             GUI:Button('打开存档位置', 150, 22)
             if GUI:IsItemClicked(0) then
                 local cmd = string.format('explorer "%s"', M.Config.DmuGuidePath)
+                d(cmd)
                 local handle = io.popen(cmd)
                 if handle then
                     handle:close()

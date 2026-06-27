@@ -1,35 +1,5 @@
-local CatZDmuTankUI = {}
-
-local dropDrownList = { "自己减伤", "自己无敌", "搭档减伤", "搭档无敌", "分摊" }
-local dropDrownListP3 = { "自己减伤", "自己无敌", "搭档减伤", "搭档无敌", "分摊", "换T先吃", "换T后吃" }
+local DmuDpsUI = {}
 local wide = 350
-local keys = {
-    -- P1,
-    'RevoltingRuinIII_1',
-    'LightingJudgment_1',
-    'RevoltingRuinIII_2',
-    'LightingJudgment_2',
-    -- P2,
-    'UltimateEmbrace_1',
-    'WingOfDestruction',
-    'UltimateEmbrace_2',
-    -- P3,
-    'ThunderIII_1',
-    'ThunderIII_2',
-    'ThunderIII_3',
-    'ThunderIII_4',
-    'ThunderIII_5',
-    --'ThunderIII_6',
-    --'ThunderIII_7',
-    --'ThunderIII_8',
-    --'ThunderIII_9',
-    --'ThunderIII_10',
-    -- P4
-    -- P5
-    'ChaoticFlare_1',
-    'ChaoticFlare_2',
-}
-
 local key2 = {
     'Flaflare1',
     'Hyperdrive1',
@@ -62,17 +32,27 @@ local key2 = {
     'Forsaken1_P5',
     'Forsaken2_P5',
 }
-
 local jobMap = {
-    --- TANK
-    [19] = { "雪仇", "幕帘" },
-    [21] = { "雪仇", "摆脱" },
-    [32] = { "雪仇", "步道" },
-    [37] = { "雪仇", "光心" },
+    --- Melee
+    [34] = { "牵制" },
+    [20] = { "牵制", "真言" },
+    [22] = { "牵制" },
+    [30] = { "牵制" },
+    [39] = { "牵制" },
+    [41] = { "牵制" },
+    --- Range
+    [31] = { "扳手", "策动", },
+    [23] = { "大地神", "行吟", },
+    [38] = { nil, "桑巴" },
+    --- Magic
+    [27] = { "混乱" },
+    [42] = { "混乱", "画盾" },
+    [25] = { "混乱", },
+    [35] = { "混乱", "抗死" },
 }
 
-
 local playerLstJob
+local singleLine = false
 local newCfgMode = false
 local newFileName = ""
 local fileList = {}
@@ -95,30 +75,30 @@ local onJobChange = function()
         local defCfg = M.CreateDmuMigCfg()
         M.Config.DmuMig[Player.job].current = M.LoadConfig(getFilePath(), getConfigName(), defCfg)
         M.Config.DmuMig[Player.job].previous = table.deepcopy(M.Config.DmuMig[Player.job].current)
-        d(M.Config.DmuMig[Player.job].current)
     end
 end
 
-CatZDmuTankUI.draw = function()
+DmuDpsUI.draw = function()
     local M = MuAiGuide
-    if not M.CatZDmuTankUI.open then
+    if not M.DmuDpsUI.open then
         return
     end
-    if not M.IsTank(Player.job) then
-        M.CatZDmuTankUI.open = false
+    if not M.IsDps(Player.job) then
+        M.DmuDpsUI.open = false
         newCfgMode = false
         return
     end
     if playerLstJob ~= Player.job then
+        -- 职业变了，需要切换下配置
         onJobChange()
     end
+    local jobValue = jobMap[Player.job]
     GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
     GUI:SetNextWindowSize(wide, 0, GUI.SetCond_Appearing)
-    M.CatZDmuTankUI.visible, M.CatZDmuTankUI.open = GUI:Begin("CatZ Dmu Mitigation Setting", M.CatZDmuTankUI.open)
-    if M.CatZDmuTankUI.visible then
-        GUI:TextColored(1, 1, 0, 1, '本插件仅为CatZ的时间轴提供减伤控制UI,')
-        GUI:TextColored(1, 1, 0, 1, '如果需要对应的时间轴自行寻找CatZ的开源')
-        GUI:TextColored(1, 1, 0, 1, '链接, 本插件不提供该时间轴文件.')
+    M.DmuDpsUI.visible, M.DmuDpsUI.open = GUI:Begin("Dmu Mitigation Setting", M.DmuDpsUI.open)
+    if M.DmuDpsUI.visible then
+        GUI:TextColored(1, 1, 0, 1, '本插件暂时仅提供UI控制，暂未制作相关减伤轴,')
+        GUI:TextColored(1, 1, 0, 1, '有需要可以联系本人获取相关API')
         ------------------------------------------------
         GUI:AlignFirstTextHeightToWidgets()
         GUI:BulletText('配置文件工具')
@@ -129,6 +109,7 @@ CatZDmuTankUI.draw = function()
                 FolderCreate(getFilePath())
             end
             local cmd = string.format('explorer "%s"', getFilePath())
+            d(cmd)
             local handle = io.popen(cmd)
             if handle then
                 handle:close()
@@ -218,79 +199,48 @@ CatZDmuTankUI.draw = function()
 
         GUI:Separator()
         ------------------------------------------------
-        if GUI:CollapsingHeader('死刑') then
-            local curP = 0
-            GUI:Columns(2, 'CNName and Value', false)
-            local p3Pull = false
-            for i = 1, #keys do
-                local curConfig = M.Config.DmuMig[Player.job].current[keys[i]]
-                if curP ~= curConfig.p then
-                    GUI:Columns(1)
-                    GUI:Separator()
-                    GUI:BulletText('P' .. curConfig.p)
-                    GUI:Separator()
+        if jobValue[1] == nil or jobValue[2] == nil then
+            singleLine = true
+        else
+            singleLine = false
+        end
+        local curP = 0
+        if singleLine then
+            GUI:Columns(2, 'TeamValue', false)
+        else
+            GUI:Columns(3, 'TeamValue', false)
+        end
+        for i = 1, #key2 do
+            local curConfig = M.Config.DmuMig[Player.job].current[key2[i]]
+            if curP ~= curConfig.p then
+                GUI:Columns(1)
+                GUI:Separator()
+                GUI:BulletText('P' .. curConfig.p)
+                GUI:Separator()
+                if singleLine then
                     GUI:Columns(2)
-                    curP = curConfig.p
-                end
-                local itemList
-                if curP == 3 then
-                    itemList = dropDrownListP3
-                    if not p3Pull then
-                        p3Pull = true
-                        GUI:AlignFirstTextHeightToWidgets()
-                        GUI:Text('  谁拉艾克斯迪斯')
-                        GUI:NextColumn()
-                        M.Config.DmuCfg.P3.ExDeathTank = GUI:Combo('##ExDeathTank', M.Config.DmuCfg.P3.ExDeathTank, { 'ST', 'MT' }, 2)
-                        GUI:NextColumn()
-                    end
                 else
-                    itemList = dropDrownList
+                    GUI:Columns(3)
                 end
-                GUI:AlignFirstTextHeightToWidgets()
-                GUI:Text('  ' .. curConfig.nameCn)
-                GUI:NextColumn()
-                curConfig.value = GUI:Combo("##" .. keys[i], curConfig.value, itemList, #itemList)
+                curP = curConfig.p
+            end
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text('  ' .. curConfig.nameCn)
+            GUI:NextColumn()
+            if jobValue[1] ~= nil then
+                curConfig.Target = GUI:Checkbox(jobValue[1] .. "##" .. key2[i], curConfig.Target)
                 GUI:NextColumn()
             end
-        end
-        GUI:Columns(1)
-        if GUI:CollapsingHeader('团减') then
-            local curP = 0
-            GUI:Columns(3, 'TeamValue', false)
-            for i = 1, #key2 do
-                local curConfig = M.Config.DmuMig[Player.job].current[key2[i]]
-                if curP ~= curConfig.p then
-                    GUI:Columns(1)
-                    GUI:Separator()
-                    GUI:BulletText('P' .. curConfig.p)
-                    GUI:Separator()
-                    GUI:Columns(3)
-                    curP = curConfig.p
-                end
-                GUI:AlignFirstTextHeightToWidgets()
-                GUI:Text('  ' .. curConfig.nameCn)
-                GUI:NextColumn()
-                local jobValue = jobMap[Player.job]
-                if jobValue[1] ~= nil then
-                    curConfig.Target = GUI:Checkbox(jobValue[1] .. "##" .. key2[i], curConfig.Target)
-                else
-                    GUI:Dummy()
-                end
-                GUI:NextColumn()
-                if jobValue[2] ~= nil then
-                    curConfig.Field = GUI:Checkbox(jobValue[2] .. "##" .. key2[i], curConfig.Field)
-                else
-                    GUI:Dummy()
-                end
+            if jobValue[2] ~= nil then
+                curConfig.Field = GUI:Checkbox(jobValue[2] .. "##" .. key2[i], curConfig.Field)
                 GUI:NextColumn()
             end
         end
     end
-    --M.SaveConfig(M.Config.DmuCatZMigPath, M.Config.DmuCatZMigFile, 'DmuCatZCfg')
+    GUI:SetWindowSize(wide, 0)
     if M.SaveConfigJob(getFilePath(), getConfigName(), M.Config.DmuMig[Player.job].current, M.Config.DmuMig[Player.job].previous) then
         M.Config.DmuMig[Player.job].previous = table.deepcopy(M.Config.DmuMig[Player.job].current)
     end
-    GUI:SetWindowSize(wide, 0)
     GUI:End()
 end
-return CatZDmuTankUI
+return DmuDpsUI
