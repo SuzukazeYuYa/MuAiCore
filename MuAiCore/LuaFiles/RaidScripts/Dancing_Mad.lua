@@ -497,6 +497,7 @@ local dataInit = function()
         end
         return buffList[buffId]
     end
+    MG.LogSystemInit()
     MG.Info(DM.NameCN .. '数据初始化完毕！')
 end
 
@@ -721,27 +722,11 @@ end
 --- 中心点
 DM.Center = { x = 100, y = 0, z = 100 }
 
---- 切换状态
 DM.ChangeState = function(stateName)
     local state = DM.State[stateName]
     if state == nil then
         -- 输出错误日志
-        MG.Debug('[错误]切换状态失败，状态不存在：' .. stateName)
-        MG.Debug('调用堆栈：' .. debug.traceback()) -- 打印完整调用栈
-        -- 直接抛出 Lua 异常，强制中断，避免继续执行
-        error('ChangeState 禁止传入 nil 状态！')
-        return
-    end
-    MG.DancingMad.CurrentState = state
-    MG.Info(DM.NameCN .. '阶段切换：' .. stateName, false, true)
-end
-
-DM.ChangeState = function(stateName)
-    local state = DM.State[stateName]
-    if state == nil then
-        -- 输出错误日志
-        local traceback = debug ~= nil and debug.traceback ~= nil and debug.traceback()
-                or 'debug.traceback unavailable'
+        local traceback = debug ~= nil and debug.traceback ~= nil and debug.traceback() or 'debug.traceback unavailable'
         MG.LogError('Error', '切换状态失败，状态不存在：' .. tostring(stateName), {
             traceback = traceback,
         }, true)
@@ -753,13 +738,6 @@ DM.ChangeState = function(stateName)
     local oldStateName = DM.StateNames[oldState] or tostring(oldState)
     MG.DancingMad.CurrentState = state
     MG.Info(DM.NameCN .. '阶段切换：' .. oldStateName .. ' -> ' .. stateName, false, true)
-    --if stateName == 'P4Start' and MG.Config ~= nil and MG.Config.DmuCfg ~= nil then
-    --    DM.DebugLog('P4Config', 'P4配置快照', {
-    --        enable = MG.Config.DmuCfg.Enable,
-    --        debugLog = MG.Config.DmuCfg.DebugLog,
-    --        p4 = MG.Config.DmuCfg.P4,
-    --    })
-    --end
 end
 
 --- 切到下一个状态

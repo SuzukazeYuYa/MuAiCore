@@ -43,7 +43,7 @@ ArgusEvents.init = function(M)
                 )
             end
             if M.Develop.PrintChannelInfo then
-                M.InfoNoLog('[' .. M.InfoNoLogTime()
+                M.InfoNoLog('[' .. M.InfoTime()
                         .. ']开始读条，实体名称：' .. entity.name .. ', 技能ID：' .. spellID .. '，判定时间：' .. channelTimeMax)
             end
         end
@@ -59,7 +59,7 @@ ArgusEvents.init = function(M)
             if entity == nil or entity.charType == 4 or entity.charType == 2 then
                 return
             end
-            M.InfoNoLog('[' .. M.InfoNoLogTime()
+            M.InfoNoLog('[' .. M.InfoTime()
                     .. ']OnEntityCast，实体名称：' .. entity.name .. ',SpellID：' .. spellID)
         end
     end
@@ -86,7 +86,7 @@ ArgusEvents.init = function(M)
             )
         end
         if M.Develop.PrintMarkId then
-            M.InfoNoLog('[' .. M.InfoNoLogTime()
+            M.InfoNoLog('[' .. M.InfoTime()
                     .. ']添加标记，实体名称：' .. ent.name .. ', 标记ID：' .. markerID .. '。')
         end
 

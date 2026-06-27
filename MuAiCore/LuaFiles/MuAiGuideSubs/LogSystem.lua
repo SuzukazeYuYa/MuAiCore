@@ -10,7 +10,6 @@ local LogSystem = {}
 local onceLogData = {}
 local logCache = {}
 local curFileName
-
 local logValue
 
 local escapePattern = function(str)
@@ -32,6 +31,12 @@ local createLogFileName = function()
         curFileName = safeFileName(MuAiGuide.CurRaidScript.NameCN .. '_' .. os.date('%Y%m%d_%H%M%S')) .. '.log'
     end
     MuAiGuide.Debug('创建新日志: ' .. curFileName)
+end
+
+local clearAndNew = function()
+    onceLogData = {}
+    logCache = {}
+    createLogFileName()
 end
 
 local logEnable = function(force)
@@ -237,9 +242,7 @@ LogSystem.init = function(M)
 
     M.LogSystemEnter = function()
         if logEnable() then
-            onceLogData = {}
-            logCache = {}
-            createLogFileName()
+            clearAndNew()
         end
     end
 
@@ -253,21 +256,18 @@ LogSystem.init = function(M)
 
     --- 日志系统-团灭
     M.LogSystemWipe = function()
-        saveLog()
         -- 执行保存，清空数据，创建新文件
-        onceLogData = {}
-        logCache = {}
-        createLogFileName()
+        saveLog()
+        clearAndNew()
     end
 
     --- 日志系统初始化（需要在副本初始化时候调用）
     M.LogSystemInit = function()
         if table.size(logCache) > 0 then
+            -- 如果wipe触发失败数据没有清空
+            -- 这里进行保存和处理新建log名称
             saveLog()
-            --如果wipe触发失败，要在这里处理
-            onceLogData = {}
-            logCache = {}
-            createLogFileName()
+            clearAndNew()
         elseif curFileName == nil then
             createLogFileName()
         end
