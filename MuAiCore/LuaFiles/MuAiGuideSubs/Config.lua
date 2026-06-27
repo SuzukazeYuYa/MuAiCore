@@ -328,7 +328,7 @@ Config.init = function(M)
                 -- 1职能固定，2扇左钢右 3职固Uptime
                 fixType = 1,
                 -- 踩塔开启指挥模式
-                towerGuide = false,
+                --towerGuide = false,
                 -- 踩塔结束之后去哪 1 -> A, 2 -> 两塔中间
                 endTower = 1,
                 -- 1.只画一次，2.绘制预览

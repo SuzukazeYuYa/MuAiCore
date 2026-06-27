@@ -30,6 +30,7 @@ local doSubEvents = function(eventName, ...)
                 MG.Debug('错误信息:' .. tostring(err))
                 MG.Debug('调用堆栈:' .. traceback)
                 d('----------------------------------------------------')
+                
             end
         end
     end
@@ -961,13 +962,17 @@ DM.CommonGuide = function()
             and MG.DancingMad.IceType ~= nil and MG.DancingMad.ThunderType ~= nil then
         local far, near = DM.CalcMixPoint(MG.DancingMad.ThunderType, MG.DancingMad.IceType)
         local player = MG.GetPlayer()
-        local disF = TensorCore.getDistance2d(far, player.pos)
-        local disN = TensorCore.getDistance2d(near, player.pos)
         local guidePos
-        if disN > disF then
-            guidePos = far
-        else
+        if MG.IsTank(player.job) or MG.IsMelee(player.job) then
             guidePos = near
+        else
+            local disF = TensorCore.getDistance2d(far, player.pos)
+            local disN = TensorCore.getDistance2d(near, player.pos)
+            if disN > disF then
+                guidePos = far
+            else
+                guidePos = near
+            end
         end
         MG.FrameDirect(guidePos.x, guidePos.z)
     end

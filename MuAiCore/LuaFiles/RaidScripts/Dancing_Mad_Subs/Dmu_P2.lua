@@ -897,9 +897,9 @@ Dmu_P2.Update = function()
             showOrderLog(Data().Towers.standBy, ' 闲人顺序：')
             loged[wave] = true
         end
-        if Cfg().towerGuide then
-            checkAndMarkMember(wave)
-        end
+        --if Cfg().towerGuide then
+        --    checkAndMarkMember(wave)
+        --end
         if Cfg().draw then
             local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
             local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 2)

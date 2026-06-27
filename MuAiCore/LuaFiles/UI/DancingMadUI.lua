@@ -20,7 +20,6 @@ DancingMadUI.draw = function()
             GUI:Button('打开存档位置', 150, 22)
             if GUI:IsItemClicked(0) then
                 local cmd = string.format('explorer "%s"', M.Config.DmuGuidePath)
-                d(cmd)
                 local handle = io.popen(cmd)
                 if handle then
                     handle:close()
@@ -363,15 +362,13 @@ DancingMadUI.draw = function()
                 GUI:SetTooltip('修改这里选项为CCHH或者盗火下面两个选项\n会自动修改, 如果你打的是标准的CCHH或者\n盗火, 请勿手动修改下方的两个设置')
             end
             if takeTowerTypeChanged then
-                d('takeTowerTypeChanged')
-                d(M.Config.DmuCfg.P3.takeTowerType)
                 if M.Config.DmuCfg.P3.takeTowerType == 2 then
                     M.Config.DmuCfg.P3.towerGround = 2
                     M.Config.DmuCfg.P3.towerHeading = 1
                 else
                     if M.Config.DmuCfg.P3.takeTowerType == 3 then
                         M.Config.DmuCfg.P3.towerGround = 1
-                        M.Config.DmuCfg.P3.towerHeading = 2
+                        M.Config.DmuCfg.P3.towerHeading = 1
                     end
                 end
             end
