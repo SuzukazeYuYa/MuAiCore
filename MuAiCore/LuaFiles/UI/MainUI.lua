@@ -348,8 +348,7 @@ local drawBaseSettingTab = function(M)
     GUI:NextColumn()
     local urlChange
     M.Config.Main.DownLoadSource, urlChange = GUI:Combo('##DownLoadSource', M.Config.Main.DownLoadSource, { 'GitHub', '腾讯云' }, 2)
-    
-    
+
     GUI:NextColumn()
     GUI:Dummy(6, 0)
     GUI:SameLine()
@@ -449,8 +448,14 @@ local drawBaseSettingTab = function(M)
         M.Config.Main.TargetPosSize, targetPointSize = GUI:SliderFloat('##TargetPointSize', M.Config.Main.TargetPosSize, 1, 30)
         GUI:PopItemWidth()
     end
-    GUI:Separator()
     GUI:Columns(1)
+    GUI:Dummy(15, 0)
+    GUI:SameLine(0, 0)
+    M.Config.Main.LogEnable = GUI:Checkbox('输出调试日志##LogEnable', M.Config.Main.LogEnable)
+    if GUI:IsItemHovered() then
+        GUI:SetTooltip('日志会写入MuAiCore\\Log，并脱敏队员名称')
+    end
+    GUI:Separator()
     GUI:Dummy(0, 0)
     GUI:Dummy(6, 0)
     GUI:SameLine()
@@ -553,7 +558,7 @@ local drawRaidSettingTab = function(M)
         GUI:Button('减伤设置', 150, 25)
         if GUI:IsItemClicked(0) then
             if M.IsHealer(Player.job) then
-                M.Info('不支持治疗职业<se.1>')
+                M.InfoNoLog('不支持治疗职业<se.1>')
             else
                 M.FruMitigationUI.open = not M.FruMitigationUI.open
                 M.FruConfigUI.open = false
@@ -750,7 +755,7 @@ local drawToolsTab = function(M)
         if curSp ~= gDevHackRunningSpeed then
             gDevHackRunningSpeed = curSp
             Player:SetSpeed(1, gDevHackRunningSpeed, gDevHackBackwardsSpeed, gDevHackStrafeSpeed, gDevHackWalkingSpeed)
-            M.Info('移动速度修改为：' .. gDevHackRunningSpeed)
+            M.InfoNoLog('移动速度修改为：' .. gDevHackRunningSpeed)
         end
     end
     GUI:SameLine()
@@ -801,7 +806,7 @@ local drawToolsTab = function(M)
         if curSp ~= gDevHackMountRunningSpeed then
             gDevHackMountRunningSpeed = curSp
             Player:SetSpeed(2, gDevHackMountRunningSpeed, gDevHackMountBackwardsSpeed, gDevHackMountStrafeSpeed, gDevHackMountWalkingSpeed)
-            M.Info('地面坐骑速度修改为：' .. gDevHackMountRunningSpeed)
+            M.InfoNoLog('地面坐骑速度修改为：' .. gDevHackMountRunningSpeed)
         end
     end
     GUI:SameLine()
@@ -822,9 +827,9 @@ local drawToolsTab = function(M)
         M.Config.Main.AttackRangeReplace = AttackRangeReplace
         MoogleTelegraphs.Settings.DrawAttackRange = not M.Config.Main.AttackRangeReplace
         if AttackRangeReplace == true then
-            M.Info('已接管攻击范围显示，[MoogleTelegraphs]的攻击范围显示已关闭。')
+            M.InfoNoLog('已接管攻击范围显示，[MoogleTelegraphs]的攻击范围显示已关闭。')
         else
-            M.Info('已取消攻击范围显示接管，[MoogleTelegraphs]的攻击范围显示已开启。')
+            M.InfoNoLog('已取消攻击范围显示接管，[MoogleTelegraphs]的攻击范围显示已开启。')
         end
     end
     if M.Config.Main.AttackRangeHelper then
@@ -881,7 +886,7 @@ local drawDeveloperTab = function(M)
                 else
                     M.Develop.JobView = true
                     M.GetSelfPos()
-                    M.Info('进入视角调试模式, 当前视角：' .. M.SelfPos)
+                    M.InfoNoLog('进入视角调试模式, 当前视角：' .. M.SelfPos)
                 end
             else
                 M.ShowMsgUI(3, { '当前没有加入小队！' })
@@ -894,7 +899,7 @@ local drawDeveloperTab = function(M)
         if GUI:IsItemClicked(0) then
             M.Develop.JobView = false
             M.GetSelfPos()
-            M.Info('退出视角调试, 视角还原到：' .. M.SelfPos)
+            M.InfoNoLog('退出视角调试, 视角还原到：' .. M.SelfPos)
         end
     end
     GUI:Separator()
@@ -913,7 +918,7 @@ local drawDeveloperTab = function(M)
     GUI:SameLine()
     GUI:Button('重载副本脚本', 120, 20)
     if GUI:IsItemClicked(0) then
-        M.LoadRaidScripts()
+        M.LoadRaidScripts(true)
     end
     GUI:SameLine(205, 0)
     GUI:Button('重载MuAiGuide', 120, 20)
@@ -1065,7 +1070,7 @@ local drawCommon = function(M)
     GUI:Button('点此加入', 145, 20)
     if GUI:IsItemClicked(0) then
         io.popen('start https://qm.qq.com/q/BGzv02jsiI')
-        M.Info('加群答案为：MuAiCore(注意大小写)<se.1>')
+        M.InfoNoLog('加群答案为：MuAiCore(注意大小写)<se.1>')
     end
 
     GUI:SameLine()

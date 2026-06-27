@@ -141,7 +141,7 @@ FruFastCfg.init = function(M)
             drawWinPolarizing = M.Config.FruCfg.drawWinPolarizing,
         }
         M.Config.FruCfg = configTbl1
-        M.Info("已切换为莫古力&MMW攻略默认配置。")
+        M.InfoNoLog("已切换为莫古力&MMW攻略默认配置。")
     end
     --- 快速日基
     M.FastFruJapanConfig = function()
@@ -278,7 +278,7 @@ FruFastCfg.init = function(M)
             drawWinPolarizing = M.Config.FruCfg.drawWinPolarizing,
         }
         M.Config.FruCfg = configTbl2
-        M.Info("已切换为日基攻略默认配置。")
+        M.InfoNoLog("已切换为日基攻略默认配置。")
     end
     --- 快速莫灵喵
     M.FastFruMLM = function()
@@ -418,7 +418,7 @@ FruFastCfg.init = function(M)
             drawWinPolarizing = M.Config.FruCfg.drawWinPolarizing,
         }
         M.Config.FruCfg = configTbl1
-        M.Info("已切换到莫灵喵默认设置，请根据组内情况调整可选配置。")
+        M.InfoNoLog("已切换到莫灵喵默认设置，请根据组内情况调整可选配置。")
     end
 end
 

@@ -7,203 +7,7 @@ DM.SubScripts = nil
 ---@type MuAiGuide
 local MG
 
-local debugFolderName = 'debuglogs'
-
-local escapePattern = function(str)
-    return tostring(str):gsub('(%W)', '%%%1')
-end
-
-local getDebugPath = function()
-    return GetLuaModsPath() .. 'MuAiCore\\' .. debugFolderName
-end
-
-local safeFileName = function(str)
-    return tostring(str):gsub('[\\/:*?"<>|]', '_')
-end
-
-local createDebugFileName = function()
-    return safeFileName(DM.NameCN .. '_' .. os.date('%Y%m%d_%H%M%S')) .. '.log'
-end
-
-local debugEnable = function(force)
-    if force then
-        return true
-    end
-    return MG ~= nil
-            and MG.Config ~= nil
-            and MG.Config.DmuCfg ~= nil
-            and MG.Config.DmuCfg.DebugLog == true
-end
-
-local getDebugTime = function()
-    if MG ~= nil and MG.InfoTime ~= nil then
-        return MG.InfoTime()
-    end
-    return tostring(TensorReactions_CurrentCombatTimer or 0)
-end
-
-local getRoleByEntityID = function(entityID)
-    if MG == nil or MG.Party == nil then
-        return nil
-    end
-    for job, member in pairs(MG.Party) do
-        if member ~= nil and member.id == entityID then
-            return job
-        end
-    end
-    return nil
-end
-
-local safeString = function(str)
-    str = tostring(str)
-    if MG ~= nil and MG.Party ~= nil then
-        for job, member in pairs(MG.Party) do
-            if member ~= nil and member.name ~= nil and member.name ~= '' then
-                str = str:gsub(escapePattern(member.name), job)
-            end
-        end
-    end
-    return str
-end
-
-local debugValue
-
-local debugPos = function(pos)
-    if pos == nil then
-        return 'nil'
-    end
-    return string.format('{x=%.3f,y=%.3f,z=%.3f}',
-            tonumber(pos.x or 0) or 0,
-            tonumber(pos.y or 0) or 0,
-            tonumber(pos.z or 0) or 0)
-end
-
-local debugTable = function(tbl, deep)
-    if tbl.x ~= nil and tbl.z ~= nil then
-        return debugPos(tbl)
-    end
-    if tbl.id ~= nil and (tbl.pos ~= nil or tbl.job ~= nil or tbl.contentid ~= nil or tbl.name ~= nil) then
-        local role = getRoleByEntityID(tbl.id)
-        local info = '{entity=' .. tostring(role or tbl.id)
-        if tbl.job ~= nil then
-            info = info .. ',job=' .. tostring(tbl.job)
-        end
-        if tbl.contentid ~= nil then
-            info = info .. ',contentid=' .. tostring(tbl.contentid)
-        end
-        if tbl.pos ~= nil then
-            info = info .. ',pos=' .. debugPos(tbl.pos)
-        end
-        return info .. '}'
-    end
-    if deep >= 2 then
-        return '{...}'
-    end
-    local parts = {}
-    local count = 0
-    for key, value in pairs(tbl) do
-        count = count + 1
-        if count > 16 then
-            table.insert(parts, '...')
-            break
-        end
-        table.insert(parts, safeString(key) .. '=' .. debugValue(value, deep + 1))
-    end
-    return '{' .. table.concat(parts, ',') .. '}'
-end
-
-debugValue = function(value, deep)
-    deep = deep or 0
-    if value == nil then
-        return 'nil'
-    end
-    if type(value) == 'table' then
-        return debugTable(value, deep)
-    end
-    if type(value) == 'string' then
-        return safeString(value)
-    end
-    return tostring(value)
-end
-
-DM.DebugCount = function(tbl)
-    local count = 0
-    for _, _ in pairs(tbl or {}) do
-        count = count + 1
-    end
-    return count
-end
-
-DM.DebugEntityID = function(entityID)
-    return getRoleByEntityID(entityID) or tostring(entityID)
-end
-
-DM.DebugEntityList = function(list)
-    local result = {}
-    for i = 1, #(list or {}) do
-        table.insert(result, DM.DebugEntityID(list[i]))
-    end
-    return table.concat(result, ',')
-end
-
-DM.DebugLog = function(eventName, msg, data, force)
-    if not debugEnable(force) then
-        return
-    end
-    local path = getDebugPath()
-    if not FolderExists(path) then
-        FolderCreate(path)
-    end
-    local fileName = createDebugFileName()
-    if MG ~= nil and MG.DancingMad ~= nil then
-        if MG.DancingMad.DebugLogFileName == nil then
-            MG.DancingMad.DebugLogFileName = fileName
-        end
-        fileName = MG.DancingMad.DebugLogFileName
-    end
-    local filePath = path .. '\\' .. fileName
-    local file = io.open(filePath, 'a')
-    if file == nil then
-        return
-    end
-    local line = '[' .. getDebugTime() .. '][' .. eventName .. '] ' .. safeString(msg)
-    if data ~= nil then
-        line = line .. ' | ' .. debugValue(data, 0)
-    end
-    file:write(line .. '\n')
-    file:close()
-end
-
-DM.DebugProblem = function(eventName, msg, data, force)
-    DM.DebugLog(eventName, '[问题]' .. msg, data, force)
-end
-
-DM.DebugOnce = function(eventName, key, msg, data, force)
-    if not debugEnable(force) then
-        return
-    end
-    if MG ~= nil and MG.DancingMad ~= nil then
-        MG.DancingMad.DebugOnce = MG.DancingMad.DebugOnce or {}
-        local cacheKey = eventName .. ':' .. tostring(key)
-        if MG.DancingMad.DebugOnce[cacheKey] then
-            return
-        end
-        MG.DancingMad.DebugOnce[cacheKey] = true
-    end
-    DM.DebugLog(eventName, msg, data, force)
-end
-
-DM.Info = function(msg)
-    MG.Info(msg)
-    DM.DebugLog('State', msg)
-end
-
-DM.ArrInfo = function(msg)
-    MG.ArrInfo(msg)
-    DM.DebugLog('State', msg)
-end
-
--- 执行子脚本
+--- 执行子脚本
 local doSubEvents = function(eventName, ...)
     if not MG.Config.DmuCfg.Enable or MG.DancingMad == nil then
         return
@@ -217,17 +21,15 @@ local doSubEvents = function(eventName, ...)
         then
             local ok, err = pcall(script[eventName], ...)
             if not ok then
-                MG.Debug(script.StateName .. '执行' .. eventName .. '失败！')
                 d('----------------------------------------------------')
+                local traceback = debug ~= nil and debug.traceback ~= nil and debug.traceback() or 'debug.traceback unavailable'
+                MG.LogError('Error',
+                        script.StateName .. '执行' .. eventName .. '失败',
+                        { err = tostring(err), traceback = traceback },
+                        true)
                 MG.Debug('错误信息:' .. tostring(err))
-                local traceback = debug ~= nil and debug.traceback ~= nil and debug.traceback()
-                        or 'debug.traceback unavailable'
                 MG.Debug('调用堆栈:' .. traceback)
                 d('----------------------------------------------------')
-                DM.DebugProblem('Error', script.StateName .. '执行' .. eventName .. '失败', {
-                    err = tostring(err),
-                    traceback = traceback,
-                }, true)
             end
         end
     end
@@ -247,7 +49,6 @@ local dataInit = function()
         IceThunderTimer = 0,
         IceType = nil,
         ThunderType = nil,
-        DebugOnce = {},
         -- 阶段变量
         P1 = {
             Death = {
@@ -678,7 +479,7 @@ local dataInit = function()
                 OnCast = {}
             },
             Forsaken = {
-                wave = 1, 
+                wave = 1,
                 Guide = {}
             }
         },
@@ -696,7 +497,7 @@ local dataInit = function()
         end
         return buffList[buffId]
     end
-    DM.Info(DM.NameCN .. '数据初始化完毕！')
+    MG.Info(DM.NameCN .. '数据初始化完毕！')
 end
 
 local developForceChange = function(stateName)
@@ -926,10 +727,22 @@ DM.ChangeState = function(stateName)
     if state == nil then
         -- 输出错误日志
         MG.Debug('[错误]切换状态失败，状态不存在：' .. stateName)
+        MG.Debug('调用堆栈：' .. debug.traceback()) -- 打印完整调用栈
+        -- 直接抛出 Lua 异常，强制中断，避免继续执行
+        error('ChangeState 禁止传入 nil 状态！')
+        return
+    end
+    MG.DancingMad.CurrentState = state
+    MG.Info(DM.NameCN .. '阶段切换：' .. stateName, false, true)
+end
+
+DM.ChangeState = function(stateName)
+    local state = DM.State[stateName]
+    if state == nil then
+        -- 输出错误日志
         local traceback = debug ~= nil and debug.traceback ~= nil and debug.traceback()
                 or 'debug.traceback unavailable'
-        MG.Debug('调用堆栈：' .. traceback) -- 打印完整调用栈
-        DM.DebugProblem('Error', '切换状态失败，状态不存在：' .. tostring(stateName), {
+        MG.LogError('Error', '切换状态失败，状态不存在：' .. tostring(stateName), {
             traceback = traceback,
         }, true)
         -- 直接抛出 Lua 异常，强制中断，避免继续执行
@@ -939,27 +752,21 @@ DM.ChangeState = function(stateName)
     local oldState = MG.DancingMad.CurrentState
     local oldStateName = DM.StateNames[oldState] or tostring(oldState)
     MG.DancingMad.CurrentState = state
-    local log = DM.NameCN .. '阶段切换：' .. stateName
-    DM.ArrInfo(log)
-    DM.DebugLog('State', oldStateName .. ' -> ' .. stateName)
-    if stateName == 'P4Start' and MG.Config ~= nil and MG.Config.DmuCfg ~= nil then
-        DM.DebugLog('P4Config', 'P4配置快照', {
-            enable = MG.Config.DmuCfg.Enable,
-            debugLog = MG.Config.DmuCfg.DebugLog,
-            p4 = MG.Config.DmuCfg.P4,
-        })
-    end
+    MG.Info(DM.NameCN .. '阶段切换：' .. oldStateName .. ' -> ' .. stateName, false, true)
+    --if stateName == 'P4Start' and MG.Config ~= nil and MG.Config.DmuCfg ~= nil then
+    --    DM.DebugLog('P4Config', 'P4配置快照', {
+    --        enable = MG.Config.DmuCfg.Enable,
+    --        debugLog = MG.Config.DmuCfg.DebugLog,
+    --        p4 = MG.Config.DmuCfg.P4,
+    --    })
+    --end
 end
 
 --- 切到下一个状态
 DM.GoNextSate = function()
-    local oldState = MG.DancingMad.CurrentState
-    local oldStateName = DM.StateNames[oldState] or tostring(oldState)
     MG.DancingMad.CurrentState = MG.DancingMad.CurrentState + 1
-    local newStateName = DM.StateNames[MG.DancingMad.CurrentState]
-    local log = DM.NameCN .. '阶段切换：' .. newStateName
-    DM.ArrInfo(log)
-    DM.DebugLog('State', oldStateName .. ' -> ' .. tostring(newStateName))
+    local log = DM.NameCN .. '阶段切换：' .. DM.StateNames[MG.DancingMad.CurrentState]
+    MG.Info(log, false, true)
 end
 
 --- 是否在状态中
@@ -981,7 +788,7 @@ DM.OverState = function(stateName, include)
     local state = DM.State[stateName]
     if state == nil then
         -- 输出错误日志
-        d('[MuAiGuide][错误]状态不存在：' .. stateName)
+        MG.Debug('[错误]状态不存在：' .. stateName)
     end
     if include then
         return MG.DancingMad.CurrentState >= state
@@ -1011,7 +818,6 @@ end
 ---@return ThunderType
 DM.CalcThunderType = function(thundersAoe)
     local h2pi = MG.SetHeading2Pi(thundersAoe.heading)
-    DM.ArrInfo('CalcThunderType: ' .. thundersAoe.aoeID)
     if MG.IsSameDirection(h2pi, math.pi * 7 / 4) then
         if thundersAoe.x > 100 and thundersAoe.x < 107 then
             return DM.ThunderType.Right13
@@ -1301,12 +1107,7 @@ DM.Update = function()
 end
 
 DM.OnEnter = function()
-    MG.DancingMad = {
-        CurrentState = 1,
-        DebugOnce = {},
-    }
-    DM.DebugLog('State', '进入副本：' .. DM.NameCN)
-    -- MG.DancingMad.CurrentState = 0
+    MG.DancingMad = { CurrentState = 1 }
     MG.Develop.Reg('DancingMad')
     MG.Develop.LogState = function()
         printCurrentState()
@@ -1314,14 +1115,12 @@ DM.OnEnter = function()
     MG.Develop.ForceChange = function(stateName)
         developForceChange(stateName)
     end
+    MG.Log('State', '副本开始：' .. DM.NameCN)
 end
 
 DM.OnWipe = function()
-    DM.DebugLog('State', '灭团重置')
-    MG.DancingMad = {
-        CurrentState = 1,
-        DebugOnce = {},
-    }
+    MG.DancingMad = { CurrentState = 1 }
+    MG.Log('State', '灭团重置：' .. DM.NameCN)
 end
 
 return DM

@@ -141,7 +141,7 @@ FruMitigCfg.init = function(M)
         local defConfig = M.FruMitigation.LoadDefault()
         local path = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\MitigationDefault\\Fru"
         if not FolderExists(path) then
-            M.Info("读取默认配置失败，已关闭全部开关。")
+            M.InfoNoLog("读取默认配置失败，已关闭全部开关。")
             M.Config.FruMitigation = defConfig
             return
         else

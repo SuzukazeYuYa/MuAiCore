@@ -443,10 +443,10 @@ Drawers.init = function(M)
             if target ~= nil then
                 M.DirectToEnt(target.id, 5000)
             else
-                M.Info("附近没有任何玩家！")
+                M.InfoNoLog("附近没有任何玩家！")
             end
         else
-            M.Info("附近没有任何玩家！")
+            M.InfoNoLog("附近没有任何玩家！")
         end
     end
 

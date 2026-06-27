@@ -10,7 +10,7 @@ local raidScript
 ---@param M MuAiGuide
 RaidMgr.init = function(M)
     --- 读取副本脚本
-    M.LoadRaidScripts = function()
+    M.LoadRaidScripts = function(isReload)
         raidScript = {}
         local folderPath = MuAiGuideRoot .. "RaidScripts"
         local list = FolderList(folderPath)
@@ -37,21 +37,24 @@ RaidMgr.init = function(M)
         if M.CurRaidScript ~= nil and raidScript[Player.localmapid] ~= nil then
             M.CurRaidScript = raidScript[Player.localmapid]
         end
-        if cnter == table.size(list) then
-            M.Info('重载副本脚本成功。')
-        else
-            M.Info('重载副本脚本失败，部分脚本未能正确加载。')
+        if isReload then
+            if cnter == table.size(list) then
+                M.InfoNoLog('重载副本脚本成功。')
+            else
+                M.InfoNoLog('重载副本脚本失败，部分脚本未能正确加载。')
+            end
         end
     end
-    
     M.RaidMapCheck = function()
         if M.CurRaidScript == nil and raidScript[Player.localmapid] ~= nil then
             -- 进入副本
             M.CurRaidScript = raidScript[Player.localmapid]
             M.CurRaidScript.OnEnter()
             M.Debug("进入副本：" .. M.CurRaidScript.NameCN)
+            M.LogSystemEnter()
         elseif M.CurRaidScript ~= nil then
             M.Debug("离开副本：" .. M.CurRaidScript.NameCN)
+            M.LogSystemLeave()
             M.CurRaidScript = nil
             M.CurRaidBoss = nil
         end
@@ -69,9 +72,11 @@ RaidMgr.init = function(M)
             raidScript[-1].Update()
         end
     end
+    
     M.OnWipe = function()
         if raidScript and raidScript[Player.localmapid] then
             raidScript[Player.localmapid].OnWipe()
+            M.LogSystemWipe()
         end
     end
 end

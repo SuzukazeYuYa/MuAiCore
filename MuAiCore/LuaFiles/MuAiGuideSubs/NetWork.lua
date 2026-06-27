@@ -115,7 +115,6 @@ NetWork.init = function(M)
                 if f then
                     f:close()
                 end
-                local msg = '[MuAiGuide]赞助人的[' .. spName.id .. ']头像图标' .. spName.icon .. '.png下载成功！'
             end
         end
     end
@@ -157,11 +156,11 @@ NetWork.init = function(M)
 
         -- 下载文件
         local function downloadFile(url, destination)
-            d("[MuAiGuide]正在下载文件...")
+            d("[MuAiCore]正在下载文件...")
             d('当前源' .. gitZipUrl)
             local cmd = 'curl -L -o "' .. destination .. '" "' .. url .. '"'
             runCommand(cmd)
-            d("[MuAiGuide]文件下载完成: " .. destination)
+            d("[MuAiCore]文件下载完成: " .. destination)
         end
         updateTime = nil
         updateNeedReLoad = false
@@ -174,13 +173,13 @@ NetWork.init = function(M)
 
         -- 检查下载是否成功
         if not io.open(zipFilePath) then
-            d("[MuAiGuide]下载失败，无法找到 Zip 文件。")
+            d("[MuAiCore]下载失败，无法找到 Zip 文件。")
             return
         end
 
         -- 解压 Zip 文件
         runCommand('powershell -Command "Expand-Archive -Path \'' .. zipFilePath .. '\' -DestinationPath \'' .. extractPath .. '\'"')
-        d("[MuAiGuide]解压完成，开始替换更新文件...")
+        d("[MuAiCore]解压完成，开始替换更新文件...")
         local exPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\Extracted\\MuAiCore-main"
         local excludeFiles = {
             ".gitignore",
@@ -223,9 +222,9 @@ NetWork.init = function(M)
                         end
                         -- 如果目标文件存在，比较文件内容
                         if FileExists(destFile) then
-                            d("[MuAiGuide]更新：" .. destFile)
+                            d("[MuAiCore]更新：" .. destFile)
                         else
-                            d("[MuAiGuide]新增：" .. destFile)
+                            d("[MuAiCore]新增：" .. destFile)
                         end
                         runCommand("copy /Y " .. srcFile .. " " .. destFile)
                     end

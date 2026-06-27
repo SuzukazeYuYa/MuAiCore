@@ -442,7 +442,7 @@ FruMitigationUI.draw = function()
                             table.insert(M.Config.FruMitigationCustomList, newFileName)
                         end
                     else
-                        M.Info("已存在该名称文件或者名称不合法,无法创建!")
+                        M.InfoNoLog("已存在该名称文件或者名称不合法,无法创建!")
                     end
                 end
                 GUI:SameLine()

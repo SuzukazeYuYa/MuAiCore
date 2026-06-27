@@ -30,7 +30,7 @@ FruConfigUI.draw = function()
                     GUI:Button("国野主流", 130, 20)
                     if GUI:IsItemClicked(0) then
                         M.Config.FruCfg = M.CreateFruDefaultCfg()
-                        M.Info("已切换为国服野队主流配置，但是细节仍需检查<se.3>。")
+                        M.InfoNoLog("已切换为国服野队主流配置，但是细节仍需检查<se.3>。")
                     end
                     GUI:SameLine(0, 30)
                     GUI:Button("日基", 130, 20)
@@ -85,7 +85,7 @@ FruConfigUI.draw = function()
                                     table.insert(M.Config.FruCustomList, newFileName)
                                 end
                             else
-                                M.Info("已存在该名称文件或者名称不合法,无法创建!")
+                                M.InfoNoLog("已存在该名称文件或者名称不合法,无法创建!")
                             end
                         end
                         GUI:SameLine()
@@ -708,7 +708,7 @@ FruConfigUI.draw = function()
                                 Left = { "H1", "H2" },
                                 Right = { "D3", "D4" },
                             }
-                            M.Info("近战踩1塔。")
+                            M.InfoNoLog("近战踩1塔。")
                         end
                         GUI:SameLine()
                         GUI:Button("治疗踩下塔", 115, 20)
@@ -718,7 +718,7 @@ FruConfigUI.draw = function()
                                 Left = { "D1", "D2" },
                                 Right = { "D3", "D4" },
                             }
-                            M.Info("治疗踩1塔。")
+                            M.InfoNoLog("治疗踩1塔。")
                         end
                         GUI:Text("   ----------------------------------")
                         M.UITool.AddLabel("   正下塔：", true)
