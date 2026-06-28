@@ -714,6 +714,27 @@ Dmu_P4.Update = function()
 
             end
             if table.size(Data().Eye1.Owner) >= 2 then
+                if AnyoneCore ~= nil and Cfg().draw then
+                    local text
+                    if Data().Eye1.type then
+                        text = 'Real'
+                    else
+                        text = 'Fake'
+                    end
+                    for i, id in pairs(Data().Eye1.Owner) do
+                        local buff = TensorCore.getBuff(id, 5543)
+                        if buff ~= nil then
+                            AnyoneCore.addTimedWorldTextOnEnt(
+                                    buff.duration * 1000 + 1000,
+                                    text,
+                                    id,
+                                    GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
+                                    true, 2, 1
+                            )
+                        end
+                    end
+                    Data().Eye1.wasDraw = true
+                end
                 MG.LogOnce('P4Eye', 'owner_1', '第一次石化眼目标缓存', {
                     owner = MG.LogEntityList(Data().Eye1.Owner),
                     real = Data().Eye1.type,
@@ -779,10 +800,6 @@ Dmu_P4.Update = function()
                         debugGuideData('P4Eye', 'guide_1', '第一次石化眼指路数据生成', Data().Eye1.GuidePos, {
                             thunderType = tType,
                             real = Data().Eye1.type,
-                        })
-                    else
-                        MG.LogOnce('P4Eye', 'missing_eye1_thunder', '[问题]第一次石化眼缺少雷类型，无法生成指路', {
-                            owner = MG.LogEntityList(Data().Eye1.Owner),
                         })
                     end
                 else
@@ -931,6 +948,27 @@ Dmu_P4.Update = function()
                 end
             end
             if table.size(Data().Eye2.Owner) >= 2 then
+                if AnyoneCore ~= nil and Cfg().draw and not Data().Eye2.wasDraw then
+                    local text
+                    if Data().Eye2.type then
+                        text = 'Real'
+                    else
+                        text = 'Fake'
+                    end
+                    for _, id in pairs(Data().Eye2.Owner) do
+                        local buff = TensorCore.getBuff(id, 5543)
+                        if buff ~= nil then
+                            AnyoneCore.addTimedWorldTextOnEnt(
+                                    buff.duration * 1000 + 1000,
+                                    text,
+                                    id,
+                                    GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
+                                    true, 2, 1
+                            )
+                        end
+                    end
+                    Data().Eye2.wasDraw = true
+                end
                 MG.LogOnce('P4Eye', 'owner_2', '第二次石化眼目标缓存', {
                     owner = MG.LogEntityList(Data().Eye2.Owner),
                     real = Data().Eye2.type,
@@ -1048,11 +1086,6 @@ Dmu_P4.Update = function()
                     count = MG.LogCount(Data().WaterFire2.Guide2),
                 })
             end
-        else
-            MG.LogOnce('P4WaterFire', 'missing_2_put', '[问题]第二次火水缺少冰雷类型，无法生成最终指路', {
-                thunderType = Data().WaterFire2.ThunderType,
-                iceType = Data().WaterFire2.IceType,
-            })
         end
     end
 end

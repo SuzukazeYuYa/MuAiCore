@@ -249,19 +249,37 @@ local guideAndDrawL2L3 = function(lineData)
     if Cfg().guide then
         if lineData.Guide2 == nil then
             lineData.Guide2 = {}
-            for job, member in pairs(MG.Party) do
-                if table.contains(lineData.DisPlayers, member.id) then
-                    if job == 'MT' or job == 'D1' then
-                        lineData.Guide2[job] = { x = 108, y = 0, z = 95 }
-                    elseif job == 'ST' or job == 'D2' then
-                        lineData.Guide2[job] = { x = 92, y = 0, z = 105 }
-                    elseif job == 'H1' or job == 'D3' then
-                        lineData.Guide2[job] = { x = 88, y = 0, z = 94 }
-                    elseif job == 'H2' or job == 'D4' then
-                        lineData.Guide2[job] = { x = 112, y = 0, z = 106 }
+            if Cfg().Line2Type == 1 then
+                for job, member in pairs(MG.Party) do
+                    if table.contains(lineData.DisPlayers, member.id) then
+                        if job == 'MT' or job == 'D1' then
+                            lineData.Guide2[job] = { x = 108, y = 0, z = 95 }
+                        elseif job == 'ST' or job == 'D2' then
+                            lineData.Guide2[job] = { x = 92, y = 0, z = 105 }
+                        elseif job == 'H1' or job == 'D3' then
+                            lineData.Guide2[job] = { x = 88, y = 0, z = 94 }
+                        elseif job == 'H2' or job == 'D4' then
+                            lineData.Guide2[job] = { x = 112, y = 0, z = 106 }
+                        end
+                    else
+                        lineData.Guide2[job] = { x = 100, y = 0, z = 100 }
                     end
-                else
-                    lineData.Guide2[job] = { x = 100, y = 0, z = 100 }
+                end
+            else
+                for job, member in pairs(MG.Party) do
+                    if table.contains(lineData.DisPlayers, member.id) then
+                        if job == 'MT' or job == 'D3' then
+                            lineData.Guide2[job] = { x = 108, y = 0, z = 95 }
+                        elseif job == 'ST' or job == 'D4' then
+                            lineData.Guide2[job] = { x = 92, y = 0, z = 105 }
+                        elseif job == 'H1' or job == 'D1' then
+                            lineData.Guide2[job] = { x = 88, y = 0, z = 94 }
+                        elseif job == 'H2' or job == 'D2' then
+                            lineData.Guide2[job] = { x = 112, y = 0, z = 106 }
+                        end
+                    else
+                        lineData.Guide2[job] = { x = 100, y = 0, z = 100 }
+                    end
                 end
             end
         else

@@ -553,6 +553,8 @@ local drawRaidSettingTab = function(M)
             M.FruConfigUI.open = not M.FruConfigUI.open
             M.FruMitigationUI.open = false
             M.DancingMadUI.open = false
+            M.DmuDpsUI.open = false
+            M.CatZDmuTankUI.open = false
         end
         GUI:SameLine()
         GUI:Button('减伤设置', 150, 25)
@@ -564,12 +566,10 @@ local drawRaidSettingTab = function(M)
                 M.FruConfigUI.open = false
             end
             M.DancingMadUI.open = false
+            M.DmuDpsUI.open = false
             M.CatZDmuTankUI.open = false
         end
         GUI:Dummy(0, 7)
-        --GUI:AlignFirstTextHeightToWidgets()
-        --GUI:BulletText('妖星乱舞绝境战 ')
-        --GUI:SameLine()
         local DmuCfgChanged
         M.Config.DmuCfg.Enable, DmuCfgChanged = GUI:Checkbox('妖星乱舞绝境战##DmuEnable', M.Config.DmuCfg.Enable)
         if GUI:IsItemHovered() then

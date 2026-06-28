@@ -414,6 +414,7 @@ local dataInit = function()
                 Owner = nil,
                 LostTimer = 0,
                 Locked = false,
+                wasDraw = false,
             },
             Eye2 = {
                 GuidePos = nil,
@@ -422,6 +423,7 @@ local dataInit = function()
                 Owner = nil,
                 LostTimer = 0,
                 Locked = false,
+                wasDraw = false,
             },
             MoveOrStopHit = nil,
             StateVfx = {},

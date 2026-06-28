@@ -321,6 +321,8 @@ Config.init = function(M)
                 autoLookAt = true,
                 transUnOpt = false,
                 hardLock = false,
+                -- 1 MS 2 A:T远 C:奶近
+                Line2Type = 1,
                 BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
             },
             P2 = {
@@ -384,6 +386,7 @@ Config.init = function(M)
         }
     end
 
+    --- 创建默认减伤配置
     M.CreateDmuMigCfg = function()
         return {
             -- T减 --
