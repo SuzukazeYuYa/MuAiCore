@@ -51,31 +51,11 @@ local jobMap = {
     [35] = { "混乱", "抗死" },
 }
 
-local playerLstJob
 local singleLine = false
-local newCfgMode = false
 local newFileName = ""
-local fileList = {}
 local fileListIndex = 1
 local getFilePath = function()
     return MuAiGuide.Config.DmuMitig .. '\\' .. Player.job
-end
-
-local getConfigName = function()
-    return 'Config.lua'
-end
-
-local onJobChange = function()
-    local M = MuAiGuide
-    playerLstJob = Player.job
-    newCfgMode = false
-    fileList = M.LoadFileList(getFilePath(), { getConfigName() })
-    if M.Config.DmuMig[Player.job] == nil then
-        M.Config.DmuMig[Player.job] = {}
-        local defCfg = M.CreateDmuMigCfg()
-        M.Config.DmuMig[Player.job].current = M.LoadConfig(getFilePath(), getConfigName(), defCfg)
-        M.Config.DmuMig[Player.job].previous = table.deepcopy(M.Config.DmuMig[Player.job].current)
-    end
 end
 
 DmuDpsUI.draw = function()
@@ -85,20 +65,17 @@ DmuDpsUI.draw = function()
     end
     if not M.IsDps(Player.job) then
         M.DmuDpsUI.open = false
-        newCfgMode = false
         return
     end
-    if playerLstJob ~= Player.job then
-        -- 职业变了，需要切换下配置
-        onJobChange()
-    end
     local jobValue = jobMap[Player.job]
+    local fileList = M.Config.DmuMitigJobConfigs
+    local newCfgMode = M.Config.DmuMitigNewMode
     GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
     GUI:SetNextWindowSize(wide, 0, GUI.SetCond_Appearing)
     M.DmuDpsUI.visible, M.DmuDpsUI.open = GUI:Begin("Dmu Mitigation Setting", M.DmuDpsUI.open)
     if M.DmuDpsUI.visible then
         GUI:TextColored(1, 1, 0, 1, '本插件暂时仅提供UI控制，暂未制作相关减伤轴,')
-        GUI:TextColored(1, 1, 0, 1, '有需要可以联系本人获取相关API')
+        GUI:TextColored(1, 1, 0, 1, '有需要可以联系本人获取相关API，自行制作')
         ------------------------------------------------
         GUI:AlignFirstTextHeightToWidgets()
         GUI:BulletText('配置文件工具')
@@ -140,7 +117,7 @@ DmuDpsUI.draw = function()
             GUI:Button("确认", 100, 20)
             if GUI:IsItemClicked(0) then
                 if not havaSame and newFileName ~= nil and #newFileName > 0 then
-                    M.SaveFileConfig(getFilePath(), newFileName, M.Config.DmuMig[Player.job].current)
+                    M.SaveFileConfig(getFilePath(), newFileName, M.Config.DmuDpsCfg)
                     newCfgMode = false
                     if newFileName ~= fileList[fileListIndex] then
                         table.insert(fileList, newFileName)
@@ -181,7 +158,7 @@ DmuDpsUI.draw = function()
                     local fileName = fileList[fileListIndex]
                     local defCfg = M.CreateDmuMigCfg()
                     d(fileName)
-                    M.Config.DmuMig[Player.job].current = M.LoadFileConfig(getFilePath(), fileName, defCfg)
+                    M.Config.DmuDpsCfg = M.LoadFileConfig(getFilePath(), fileName, defCfg)
                 end
                 GUI:SameLine()
                 GUI:Button("新建配置", 90, 20)
@@ -192,7 +169,7 @@ DmuDpsUI.draw = function()
                 GUI:SameLine()
                 GUI:Button("保存到此配置", 100, 20)
                 if GUI:IsItemClicked(0) then
-                    M.SaveFileConfig(getFilePath(), newFileName, M.Config.DmuMig[Player.job].current)
+                    M.SaveFileConfig(getFilePath(), newFileName, M.Config.DmuDpsCfg)
                 end
             end
         end
@@ -211,7 +188,7 @@ DmuDpsUI.draw = function()
             GUI:Columns(3, 'TeamValue', false)
         end
         for i = 1, #key2 do
-            local curConfig = M.Config.DmuMig[Player.job].current[key2[i]]
+            local curConfig = M.Config.DmuDpsCfg[key2[i]]
             if curP ~= curConfig.p then
                 GUI:Columns(1)
                 GUI:Separator()
@@ -238,8 +215,8 @@ DmuDpsUI.draw = function()
         end
     end
     GUI:SetWindowSize(wide, 0)
-    if M.SaveConfigJob(getFilePath(), getConfigName(), M.Config.DmuMig[Player.job].current, M.Config.DmuMig[Player.job].previous) then
-        M.Config.DmuMig[Player.job].previous = table.deepcopy(M.Config.DmuMig[Player.job].current)
+    if M.SaveConfigJob(getFilePath(), 'Config.lua', M.Config.DmuDpsCfg, M.Config.DmuDpsCfgPrevious) then
+        M.Config.DmuDpsCfgPrevious = table.deepcopy(M.Config.DmuDpsCfg)
     end
     GUI:End()
 end

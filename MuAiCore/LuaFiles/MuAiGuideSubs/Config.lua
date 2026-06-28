@@ -49,10 +49,10 @@ local LoadUIConfig = function(M)
     M.Config.DmuCustomList = M.LoadFileList(M.Config.DmuGuidePath, { 'GuideConfig.lua' })
     M.Config.DmuCustomListIndex = 1
 
-    local defDmuCatZCfg = M.CreateDmuMigCfg()
-    M.Config.DmuCatZCfg = defDmuCatZCfg  -- 这里只是让编辑可以默认识别，无实际作用
-    M.Config.DmuCatZCfg = M.LoadConfig(M.Config.DmuCatZMigPath, M.Config.DmuCatZMigFile, defDmuCatZCfg)
-    M.Config.DmuCatZCfgPrevious = table.deepcopy(M.Config.DmuCatZCfg)
+    --local defDmuCatZCfg = M.CreateDmuMigCfg()
+    --M.Config.DmuCatZCfg = defDmuCatZCfg  -- 这里只是让编辑可以默认识别，无实际作用
+    --M.Config.DmuCatZCfg = M.LoadConfig(M.Config.DmuCatZMigPath, M.Config.DmuCatZMigFile, defDmuCatZCfg)
+    --M.Config.DmuCatZCfgPrevious = table.deepcopy(M.Config.DmuCatZCfg)
 
     M.Config.DmuMig = {}
 end
@@ -439,6 +439,20 @@ Config.init = function(M)
         }
     end
 
+    M.DumCfgJobChange = function()
+        local filePath = M.Config.DmuMitig .. '\\' .. Player.job
+        M.Config.DmuMitigJobConfigs = M.LoadFileList(filePath, { 'Config.lua' })
+        M.Config.DmuMitigNewMode = false
+        local defCfg = M.CreateDmuMigCfg()
+        local curCfg = M.LoadConfig(filePath, 'Config.lua', defCfg)
+        if M.IsTank(Player.job) then
+            M.Config.DmuCatZCfg = curCfg
+            M.Config.DmuCatZCfgPrevious = table.deepcopy(curCfg)
+        else
+            M.Config.DmuDpsCfg = curCfg
+            M.Config.DmuDpsCfgPrevious = table.deepcopy(curCfg)
+        end
+    end
     --- 同步配置字段
     M.SyncNestedFields = function(saveData, defaultData)
         for key, value in pairs(defaultData) do
@@ -492,6 +506,7 @@ Config.init = function(M)
         M.ShowMsgUI(3, { ('加载配置[' .. fileName .. ']失败！') })
         return defConfig
     end
+
     --- 将表格序列化到文件
     M.SaveFileConfig = function(path, fileName, table)
         local saveFile = path .. '\\' .. fileName .. '.lua'
@@ -501,6 +516,7 @@ Config.init = function(M)
         FileSave(saveFile, table)
         M.ShowMsgUI(3, { ('已将当前设置保存到配置[' .. fileName .. ']！') })
     end
+
     --- 读取设置信息
     --- @param path string 路径(最后不带\\)
     --- @param fileName string 文件名
@@ -553,7 +569,7 @@ Config.init = function(M)
         end
         return false
     end
-    
+
     LoadUIConfig(M)
 end
 

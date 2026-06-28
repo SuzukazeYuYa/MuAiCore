@@ -207,6 +207,7 @@ end
 ---@param M MuAiGuide
 local onPlayerChangeJob = function()
     MG.FruMitigation.ChangeJob()
+    MG.DumCfgJobChange()
 end
 
 ---@param M MuAiGuide
@@ -221,6 +222,9 @@ end
 local onJobChangeCheck = function()
     if lastJob ~= Player.job then
         onPlayerChangeJob()
+        if lastJob ~= nil and lastJob > 0 then
+            MG.Debug('职业切换' .. MG.GetJobFullNameById(lastJob) .. ' -> ' .. MG.GetJobFullNameById(Player.job))
+        end
         lastJob = Player.job
     end
 end

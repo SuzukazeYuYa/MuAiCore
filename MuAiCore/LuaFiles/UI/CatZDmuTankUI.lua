@@ -71,32 +71,10 @@ local jobMap = {
     [37] = { "雪仇", "光心" },
 }
 
-
-local playerLstJob
-local newCfgMode = false
 local newFileName = ""
-local fileList = {}
 local fileListIndex = 1
 local getFilePath = function()
     return MuAiGuide.Config.DmuMitig .. '\\' .. Player.job
-end
-
-local getConfigName = function()
-    return 'Config.lua'
-end
-
-local onJobChange = function()
-    local M = MuAiGuide
-    playerLstJob = Player.job
-    newCfgMode = false
-    fileList = M.LoadFileList(getFilePath(), { getConfigName() })
-    if M.Config.DmuMig[Player.job] == nil then
-        M.Config.DmuMig[Player.job] = {}
-        local defCfg = M.CreateDmuMigCfg()
-        M.Config.DmuMig[Player.job].current = M.LoadConfig(getFilePath(), getConfigName(), defCfg)
-        M.Config.DmuMig[Player.job].previous = table.deepcopy(M.Config.DmuMig[Player.job].current)
-        d(M.Config.DmuMig[Player.job].current)
-    end
 end
 
 CatZDmuTankUI.draw = function()
@@ -109,9 +87,8 @@ CatZDmuTankUI.draw = function()
         newCfgMode = false
         return
     end
-    if playerLstJob ~= Player.job then
-        onJobChange()
-    end
+    local fileList = M.Config.DmuMitigJobConfigs
+    local newCfgMode = M.Config.DmuMitigNewMode
     GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
     GUI:SetNextWindowSize(wide, 0, GUI.SetCond_Appearing)
     M.CatZDmuTankUI.visible, M.CatZDmuTankUI.open = GUI:Begin("CatZ Dmu Mitigation Setting", M.CatZDmuTankUI.open)
@@ -159,7 +136,7 @@ CatZDmuTankUI.draw = function()
             GUI:Button("确认", 100, 20)
             if GUI:IsItemClicked(0) then
                 if not havaSame and newFileName ~= nil and #newFileName > 0 then
-                    M.SaveFileConfig(getFilePath(), newFileName, M.Config.DmuMig[Player.job].current)
+                    M.SaveFileConfig(getFilePath(), newFileName, M.Config.DmuCatZCfg)
                     newCfgMode = false
                     if newFileName ~= fileList[fileListIndex] then
                         table.insert(fileList, newFileName)
@@ -200,7 +177,7 @@ CatZDmuTankUI.draw = function()
                     local fileName = fileList[fileListIndex]
                     local defCfg = M.CreateDmuMigCfg()
                     d(fileName)
-                    M.Config.DmuMig[Player.job].current = M.LoadFileConfig(getFilePath(), fileName, defCfg)
+                    M.Config.DmuCatZCfg = M.LoadFileConfig(getFilePath(), fileName, defCfg)
                 end
                 GUI:SameLine()
                 GUI:Button("新建配置", 90, 20)
@@ -211,7 +188,7 @@ CatZDmuTankUI.draw = function()
                 GUI:SameLine()
                 GUI:Button("保存到此配置", 100, 20)
                 if GUI:IsItemClicked(0) then
-                    M.SaveFileConfig(getFilePath(), newFileName, M.Config.DmuMig[Player.job].current)
+                    M.SaveFileConfig(getFilePath(), newFileName, M.Config.DmuCatZCfg)
                 end
             end
         end
@@ -223,7 +200,7 @@ CatZDmuTankUI.draw = function()
             GUI:Columns(2, 'CNName and Value', false)
             local p3Pull = false
             for i = 1, #keys do
-                local curConfig = M.Config.DmuMig[Player.job].current[keys[i]]
+                local curConfig = M.Config.DmuCatZCfg[keys[i]]
                 if curP ~= curConfig.p then
                     GUI:Columns(1)
                     GUI:Separator()
@@ -258,7 +235,7 @@ CatZDmuTankUI.draw = function()
             local curP = 0
             GUI:Columns(3, 'TeamValue', false)
             for i = 1, #key2 do
-                local curConfig = M.Config.DmuMig[Player.job].current[key2[i]]
+                local curConfig = M.Config.DmuCatZCfg[key2[i]]
                 if curP ~= curConfig.p then
                     GUI:Columns(1)
                     GUI:Separator()
@@ -286,9 +263,8 @@ CatZDmuTankUI.draw = function()
             end
         end
     end
-    --M.SaveConfig(M.Config.DmuCatZMigPath, M.Config.DmuCatZMigFile, 'DmuCatZCfg')
-    if M.SaveConfigJob(getFilePath(), getConfigName(), M.Config.DmuMig[Player.job].current, M.Config.DmuMig[Player.job].previous) then
-        M.Config.DmuMig[Player.job].previous = table.deepcopy(M.Config.DmuMig[Player.job].current)
+    if M.SaveConfigJob(getFilePath(), 'Config.lua', M.Config.DmuCatZCfg, M.Config.DmuCatZCfgPrevious) then
+        M.Config.DmuCatZCfgPrevious = table.deepcopy(M.Config.DmuCatZCfg)
     end
     GUI:SetWindowSize(wide, 0)
     GUI:End()
