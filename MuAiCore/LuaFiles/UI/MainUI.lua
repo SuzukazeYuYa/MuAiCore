@@ -346,9 +346,9 @@ local drawBaseSettingTab = function(M)
     GUI:AlignFirstTextHeightToWidgets()
     GUI:Text('更新下载源：  ')
     GUI:NextColumn()
-    local urlChange
-    M.Config.Main.DownLoadSource, urlChange = GUI:Combo('##DownLoadSource', M.Config.Main.DownLoadSource, { 'GitHub', '腾讯云' }, 2)
-
+    GUI:PushItemWidth(123)
+    M.Config.Main.DownLoadSource = GUI:Combo('##DownLoadSource', M.Config.Main.DownLoadSource, { 'GitHub', '腾讯云' }, 2)
+    GUI:PopItemWidth()
     GUI:NextColumn()
     GUI:Dummy(6, 0)
     GUI:SameLine()
@@ -1191,13 +1191,9 @@ MainUI.draw = function()
             M.FruMitigationUI.open = false
             M.DancingMadUI.open = false
             M.CatZDmuTankUI.open = false
+            M.DmuDpsUI.open = false
         end
         drawCommon(M)
-        --GUI:Button('测试')
-        --if GUI:IsItemClicked(0) then
-        --   
-        --    
-        --end
     end
     M.SaveConfig(M.Config.MainPath, M.Config.MainFile, 'Main')
     GUI:SetWindowSize(355, 0)

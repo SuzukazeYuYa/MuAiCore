@@ -2,12 +2,12 @@ local DmuDpsUI = {}
 local wide = 350
 local key2 = {
     'Flaflare1',
-    'Hyperdrive1',
-    'LightOfJudgment',
+    'LightOfJudgment1',
+    'LightOfJudgment2',
     'Flaflare2',
     'TwinArms',
     'Forsaken1',
-    'LightOfJudgment2',
+    'LightOfJudgment3',
     'TwinArms2',
     'Bowbow',
     'BlazeTsunami1',
@@ -72,6 +72,13 @@ DmuDpsUI.draw = function()
     local newCfgMode = M.Config.DmuMitigNewMode
     GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
     GUI:SetNextWindowSize(wide, 0, GUI.SetCond_Appearing)
+    if jobValue[1] == nil or jobValue[2] == nil then
+        singleLine = true
+        wide = 340
+    else
+        singleLine = false
+        wide = 360
+    end
     M.DmuDpsUI.visible, M.DmuDpsUI.open = GUI:Begin("Dmu Mitigation Setting", M.DmuDpsUI.open)
     if M.DmuDpsUI.visible then
         GUI:TextColored(1, 1, 0, 1, '本插件暂时仅提供UI控制，暂未制作相关减伤轴,')
@@ -157,7 +164,6 @@ DmuDpsUI.draw = function()
                 if GUI:IsItemClicked(0) then
                     local fileName = fileList[fileListIndex]
                     local defCfg = M.CreateDmuMigCfg()
-                    d(fileName)
                     M.Config.DmuDpsCfg = M.LoadFileConfig(getFilePath(), fileName, defCfg)
                 end
                 GUI:SameLine()
@@ -174,18 +180,21 @@ DmuDpsUI.draw = function()
             end
         end
 
-        GUI:Separator()
+        --GUI:Separator()
         ------------------------------------------------
-        if jobValue[1] == nil or jobValue[2] == nil then
-            singleLine = true
-        else
-            singleLine = false
-        end
         local curP = 0
+
         if singleLine then
-            GUI:Columns(2, 'TeamValue', false)
+            GUI:Columns(3, 'TeamValue', true)
+            GUI:SetColumnWidth(0, 68)
+            GUI:SetColumnWidth(1, 100)
+            GUI:SetColumnWidth(2, 80)
         else
-            GUI:Columns(3, 'TeamValue', false)
+            GUI:Columns(4, 'TeamValue', true)
+            GUI:SetColumnWidth(0, 68)
+            GUI:SetColumnWidth(1, 100)
+            GUI:SetColumnWidth(2, 80)
+            GUI:SetColumnWidth(3, 80)
         end
         for i = 1, #key2 do
             local curConfig = M.Config.DmuDpsCfg[key2[i]]
@@ -195,14 +204,24 @@ DmuDpsUI.draw = function()
                 GUI:BulletText('P' .. curConfig.p)
                 GUI:Separator()
                 if singleLine then
-                    GUI:Columns(2)
-                else
                     GUI:Columns(3)
+                    GUI:SetColumnWidth(0, 68)
+                    GUI:SetColumnWidth(1, 100)
+                    GUI:SetColumnWidth(2, 80)
+                else
+                    GUI:Columns(4)
+                    GUI:SetColumnWidth(0, 68)
+                    GUI:SetColumnWidth(1, 100)
+                    GUI:SetColumnWidth(2, 80)
+                    GUI:SetColumnWidth(3, 80)
                 end
                 curP = curConfig.p
             end
             GUI:AlignFirstTextHeightToWidgets()
-            GUI:Text('  ' .. curConfig.nameCn)
+            GUI:Text('  ' .. curConfig.time)
+            GUI:NextColumn()
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(curConfig.nameCn)
             GUI:NextColumn()
             if jobValue[1] ~= nil then
                 curConfig.Target = GUI:Checkbox(jobValue[1] .. "##" .. key2[i], curConfig.Target)

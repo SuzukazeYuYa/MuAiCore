@@ -2,7 +2,7 @@ local CatZDmuTankUI = {}
 
 local dropDrownList = { "自己减伤", "自己无敌", "搭档减伤", "搭档无敌", "分摊" }
 local dropDrownListP3 = { "自己减伤", "自己无敌", "搭档减伤", "搭档无敌", "分摊", "换T先吃", "换T后吃" }
-local wide = 350
+local wide = 380
 local keys = {
     -- P1,
     'RevoltingRuinIII_1',
@@ -32,12 +32,12 @@ local keys = {
 
 local key2 = {
     'Flaflare1',
-    'Hyperdrive1',
-    'LightOfJudgment',
+    'LightOfJudgment1',
+    'LightOfJudgment2',
     'Flaflare2',
     'TwinArms',
     'Forsaken1',
-    'LightOfJudgment2',
+    'LightOfJudgment3',
     'TwinArms2',
     'Bowbow',
     'BlazeTsunami1',
@@ -65,10 +65,10 @@ local key2 = {
 
 local jobMap = {
     --- TANK
-    [19] = { "雪仇", "幕帘" },
+    [19] = { "雪仇", "圣光幕帘" },
     [21] = { "雪仇", "摆脱" },
-    [32] = { "雪仇", "步道" },
-    [37] = { "雪仇", "光心" },
+    [32] = { "雪仇", "暗黑步道" },
+    [37] = { "雪仇", "光之心" },
 }
 
 local newFileName = ""
@@ -192,8 +192,6 @@ CatZDmuTankUI.draw = function()
                 end
             end
         end
-
-        GUI:Separator()
         ------------------------------------------------
         if GUI:CollapsingHeader('死刑') then
             local curP = 0
@@ -234,6 +232,10 @@ CatZDmuTankUI.draw = function()
         if GUI:CollapsingHeader('团减') then
             local curP = 0
             GUI:Columns(3, 'TeamValue', false)
+            GUI:SetColumnWidth(0, 68)
+            GUI:SetColumnWidth(1, 100)
+            GUI:SetColumnWidth(2, 80)
+            GUI:SetColumnWidth(3, 100)
             for i = 1, #key2 do
                 local curConfig = M.Config.DmuCatZCfg[key2[i]]
                 if curP ~= curConfig.p then
@@ -241,11 +243,19 @@ CatZDmuTankUI.draw = function()
                     GUI:Separator()
                     GUI:BulletText('P' .. curConfig.p)
                     GUI:Separator()
-                    GUI:Columns(3)
                     curP = curConfig.p
+                    GUI:Columns(4)
+                    GUI:SetColumnWidth(0, 68)
+                    GUI:SetColumnWidth(1, 100)
+                    GUI:SetColumnWidth(2, 80)
+                    GUI:SetColumnWidth(3, 100)
                 end
                 GUI:AlignFirstTextHeightToWidgets()
-                GUI:Text('  ' .. curConfig.nameCn)
+               -- GUI:Text('  [' .. curConfig.time .. ']')
+                GUI:Text('  ' .. curConfig.time)
+                GUI:NextColumn()
+                GUI:AlignFirstTextHeightToWidgets()
+                GUI:Text(curConfig.nameCn)
                 GUI:NextColumn()
                 local jobValue = jobMap[Player.job]
                 if jobValue[1] ~= nil then
