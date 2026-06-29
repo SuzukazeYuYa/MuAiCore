@@ -350,10 +350,11 @@ Config.init = function(M)
                 kickType = 1,
                 -- 击退前自动选中小艾
                 autoTargetEx = false,
-                -- 标记类型，1 关闭； 2  标记自己；  3 标记全队;
+                -- 标记类型，1 关闭； 2  随机标记自己；  3 标记全队,  4, 精确标记自己
                 markType = 1,
                 takeLineAttack12 = false,
                 takeLineStop22 = false,
+                markOrderSelf = { 'MT', 'ST', 'D1', 'D2', 'D3', 'D4', 'H1', 'H2' },
                 markOrder = { 'D1', 'D2', 'D3', 'D4', 'MT', 'ST', 'H2', 'H1' },
                 delayMark = true,
                 -- 踩塔基础类型

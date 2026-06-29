@@ -582,6 +582,7 @@ local drawRaidSettingTab = function(M)
             if GUI:IsItemClicked(0) then
                 M.DancingMadUI.open = not M.DancingMadUI.open
                 M.CatZDmuTankUI.open = false
+                M.DmuDpsUI.open = false
                 M.FruConfigUI.open = false
                 M.FruMitigationUI.open = false
             end

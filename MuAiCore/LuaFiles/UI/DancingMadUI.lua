@@ -143,7 +143,7 @@ DancingMadUI.draw = function()
             GUI:SameLine(0, 0)
             M.Config.DmuCfg.BindEffect = GUI:Checkbox('屏蔽真假AOE特效##effectBind', M.Config.DmuCfg.BindEffect)
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('勾选后屏蔽特效, 并且采用A+画紫色危险区\n未勾选使用ImGui画图显示黄色危险区')
+                GUI:SetTooltip('勾选后屏蔽特效, 并且采用A+画紫色危险区\n\n未勾选使用ImGui画图显示黄色危险区')
             end
         end
         if M.Config.DmuCfg.P1.enable and GUI:CollapsingHeader('P1 凯夫卡·众神之像') then
@@ -170,11 +170,11 @@ DancingMadUI.draw = function()
             GUI:BulletText('二神')
             GUI:Dummy(15, 0)
             GUI:SameLine(0, 0)
-            GUI:AlignFirstTextHeightToWidgets()     
+            GUI:AlignFirstTextHeightToWidgets()
             GUI:Text(' 站位方案: ')
             GUI:SameLine(0, 30)
             GUI:PushItemWidth(130)
-            M.Config.DmuCfg.P1.Line2Type = GUI:Combo('##P1Line2Type', M.Config.DmuCfg.P1.Line2Type, { 'MT组上/ST组下', 'T远上/近奶下', }, 2)
+            M.Config.DmuCfg.P1.Line2Type = GUI:Combo('##P1Line2Type', M.Config.DmuCfg.P1.Line2Type, { 'MT组上/ST组下', 'T远上/奶近下', }, 2)
             GUI:PopItemWidth()
             GUI:Dummy(0, 0)
             GUI:Dummy(0, 0)
@@ -188,7 +188,7 @@ DancingMadUI.draw = function()
             GUI:SameLine(0, 0)
             M.Config.DmuCfg.P1.transUnOpt = GUI:Checkbox('开启近战负优化[寿司优化]##P1transUnOpt', M.Config.DmuCfg.P1.transUnOpt)
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('启动后混乱在外, 睡眠在内 \n纯粹是特么的负优化！')
+                GUI:SetTooltip('启动后混乱在外, 睡眠在内 \n\n纯粹是特么的负优化！')
             end
             GUI:Dummy(0, 0)
             GUI:Dummy(0, 0)
@@ -204,7 +204,7 @@ DancingMadUI.draw = function()
                 GUI:SameLine(0, 13)
                 M.Config.DmuCfg.P1.hardLock = GUI:Checkbox('使用更严格的硬锁定##P1HardLockFace', M.Config.DmuCfg.P1.hardLock)
                 if GUI:IsItemHovered() then
-                    GUI:SetTooltip('开启后会完全禁止可能会改变面向的事, \n约等于停手, 请谨慎使用')
+                    GUI:SetTooltip('开启后会完全禁止可能会改变面向的事, \n\n约等于停手, 请谨慎使用')
                 end
             end
         end
@@ -239,7 +239,7 @@ DancingMadUI.draw = function()
             GUI:AlignFirstTextHeightToWidgets()
             GUI:Text(' 画图方案: ')
             GUI:SameLine(0, 0)
-            GUI:PushItemWidth(130)
+            GUI:PushItemWidth(140)
             M.Config.DmuCfg.P2.trineDrawType = GUI:Combo('##trineDrawType', M.Config.DmuCfg.P2.trineDrawType, { '只画当前一次', '当前和下次预览' }, 2)
             GUI:PopItemWidth()
         end
@@ -285,14 +285,14 @@ DancingMadUI.draw = function()
                 GUI:SameLine(0, 13)
                 M.Config.DmuCfg.P3.HardLockFace = GUI:Checkbox('使用更严格的硬锁定##HardLockFace', M.Config.DmuCfg.P3.HardLockFace)
                 if GUI:IsItemHovered() then
-                    GUI:SetTooltip('开启后会完全禁止可能会改变面向的事, \n约等于停手, 请谨慎使用')
+                    GUI:SetTooltip('开启后会完全禁止可能会改变面向的事, \n\n约等于停手, 请谨慎使用')
                 end
             end
             GUI:Dummy(10, 0)
             GUI:SameLine()
             M.Config.DmuCfg.P3.autoTargetEx = GUI:Checkbox('击退前自动切换到EX防止出现锁面向问题##autoTargetEx', M.Config.DmuCfg.P3.autoTargetEx)
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('BUFF剩余5秒锁定, BUFF消失停止, 检查\n到目标不对会一直tab小艾，谨慎使用!')
+                GUI:SetTooltip('BUFF剩余5秒锁定, BUFF消失停止, 检查\n\n到目标不对会一直tab小艾, 谨慎使用!')
             end
             GUI:BulletText('二运')
             GUI:Dummy(0, 0)
@@ -300,7 +300,7 @@ DancingMadUI.draw = function()
             GUI:TextColored(1, 0, 0, 1, ' 攻略: 盗火, 按标记顺序')
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
-            GUI:Text(' 以巨大凯夫卡为12点顺时针找线')
+            GUI:TextColored(1, 0, 0, 1,' 以巨大凯夫卡为12点顺时针找线')
             GUI:Dummy(20, 0)
             GUI:SameLine(0, 0)
             M.Config.DmuCfg.P3.takeLineAttack12 = GUI:Checkbox('攻击1接两根##takeLineAttack12', M.Config.DmuCfg.P3.takeLineAttack12)
@@ -317,18 +317,32 @@ DancingMadUI.draw = function()
             GUI:AlignFirstTextHeightToWidgets()
             GUI:Text(' 标记类型:  ')
             GUI:SameLine()
-            GUI:PushItemWidth(100)
-            M.Config.DmuCfg.P3.markType = GUI:Combo('##P3markType', M.Config.DmuCfg.P3.markType, { '不标记', '标记自身', '标记全队' }, 3)
+            GUI:PushItemWidth(150)
+            M.Config.DmuCfg.P3.markType = GUI:Combo('##P3markType', M.Config.DmuCfg.P3.markType, { '不标记', '标记自身(随机)', '标记全队', '标记自身(优先级)' }, 4)
             GUI:PopItemWidth()
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('标记全队：如果有人噶了导致没有BUFF会不标记')
+                GUI:SetTooltip('标记自身(随机): 龙诗同款,自动123先到先得\n\n标记全队: 如果有人噶了导致没有BUFF会不标记\n\n标记自身(优先级): 按照设置的优先级分配123, 如果有人嘎了没BUFF可能会错\n\n  举例, 假设优先级为[MT,ST,D1,D2,D3,D4,H1,H2], \n\n  1.你是D3 buff为第2目标, 且同组点名为MT,D1,D3, 此时你标记为锁链3\n\n  2.你是H1 buff为第1目标, 且同组点名为MT,H1,H2, 此时你标记为攻击2 \n\n注意: “标记全队”和“标记自身(优先级)”这两种优先级设置为不同配置, 不通用, 需要分别填写!\n另外如果有人抢了标记, 插件是不给你补的, 你得自己手动补一下!')
             end
-            if M.Config.DmuCfg.P3.markType == 2 then
+            if M.Config.DmuCfg.P3.markType == 2 or M.Config.DmuCfg.P3.markType == 4 then
                 GUI:Dummy(10, 0)
                 GUI:SameLine()
                 M.Config.DmuCfg.P3.delayMark = GUI:Checkbox('延迟标记##p3delayMark', M.Config.DmuCfg.P3.delayMark)
                 if GUI:IsItemHovered() then
                     GUI:SetTooltip('勾选后会自动检查队友标记情况, 有标记才会标记自己; 否则Buff出来就标.')
+                end
+                if M.Config.DmuCfg.P3.markType == 4 then
+                    GUI:Dummy(12, 0)
+                    GUI:SameLine(0, 0)
+                    GUI:AlignFirstTextHeightToWidgets()
+                    GUI:Text(' 标记优先级  ')
+                    GUI:SameLine(0, 0)
+                    GUI:PushItemWidth(175)
+                    local p3mkOrderSelf, p3mkOrderSelfChanged = GUI:InputText('##P3markOrder',
+                            M.StringJoin(M.Config.DmuCfg.P3.markOrderSelf, ','), GUI.InputTextFlags_CharsNoBlank)
+                    GUI:PopItemWidth()
+                    if p3mkOrderSelfChanged then
+                        M.Config.DmuCfg.P3.markOrderSelf = M.StringSplit(p3mkOrderSelf, ',')
+                    end
                 end
             elseif M.Config.DmuCfg.P3.markType == 3 then
                 GUI:Dummy(12, 0)
@@ -358,7 +372,7 @@ DancingMadUI.draw = function()
             local takeTowerTypeChanged
             M.Config.DmuCfg.P3.takeTowerType, takeTowerTypeChanged = GUI:Combo('##takeTowerType', M.Config.DmuCfg.P3.takeTowerType, { '关闭放圈', 'NOCCHH', '盗火', }, 3)
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('修改这里选项为CCHH或者盗火下面两个选项\n会自动修改, 如果你打的是标准的CCHH或者\n盗火, 请勿手动修改下方的两个设置')
+                GUI:SetTooltip('修改这里选项为CCHH或者盗火时, 下面两个选项\n\n会自动修改, 如果你打的是标准的CCHH或者\n\n盗火, 请勿手动修改下方的两个设置')
             end
             if takeTowerTypeChanged then
                 if M.Config.DmuCfg.P3.takeTowerType == 2 then
@@ -387,7 +401,7 @@ DancingMadUI.draw = function()
             GUI:PushItemWidth(100)
             M.Config.DmuCfg.P3.towerGround = GUI:Combo('##P3towerGround', M.Config.DmuCfg.P3.towerGround, { '面基', '场基' }, 2)
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('面基:以当前自身面向BOSS时的左右分组踩塔\n场基:以当前12点为基准进行左右分组踩塔')
+                GUI:SetTooltip('面基:以当前自身面向BOSS时的左右分组踩塔\n\n场基:以当前12点为基准进行左右分组踩塔')
             end
             GUI:PopItemWidth()
         end
@@ -409,16 +423,22 @@ DancingMadUI.draw = function()
             GUI:Text(' 石化眼站位:  ')
             GUI:SameLine(0, 30)
             GUI:PushItemWidth(120)
-            M.Config.DmuCfg.P4.eyeType = GUI:Combo('##P4eyeType', M.Config.DmuCfg.P4.eyeType, { '盗火固定式', '常规-眼进人群出', 'MMW人群不动眼动', '瞎站(关闭)' }, 4)
+            M.Config.DmuCfg.P4.eyeType = GUI:Combo('##P4eyeType', M.Config.DmuCfg.P4.eyeType, { '盗火固定式', '眼进人群出', '眼动人前人后', '其他(关闭)' }, 4)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('盗火固定式: 全员根据自己职能站位, 甚至不需要调整面向\n\n眼进人群出: 眼进圈, 其他人出去, 大家根据真假调整面向(只有眼睛有指路)\n\n眼动人前人后: 人群不动根据雷安全区站在AC方向目标圈上, 眼根据真假进圈或者人群背后(仅支持标准AC站位)')
+            end
             GUI:PopItemWidth()
             GUI:Dummy(10, 0)
             GUI:SameLine()
             M.Config.DmuCfg.P4.autoLook = GUI:Checkbox('自动调整面向##p4LockFace', M.Config.DmuCfg.P4.autoLook)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('看向/背对点名2人连线中点, 如果2人离得很远, \n\n且解法为非共线站位, 还是可能吃!')
+            end
             if M.Config.DmuCfg.P4.autoLook then
                 GUI:SameLine(0, 13)
                 M.Config.DmuCfg.P4.harkLock = GUI:Checkbox('使用更严格的硬锁定##P4HardLockFace', M.Config.DmuCfg.P4.harkLock)
                 if GUI:IsItemHovered() then
-                    GUI:SetTooltip('开启后会完全禁止可能会改变面向的事, \n约等于停手, 请谨慎使用')
+                    GUI:SetTooltip('开启后会完全禁止可能会改变面向的事, \n\n约等于停手, 请谨慎使用')
                 end
             end
         end
@@ -460,9 +480,12 @@ DancingMadUI.draw = function()
             GUI:PushItemWidth(100)
             groundCntValue, groundCntChanged = GUI:InputInt('##P5groundCnt', M.Config.DmuCfg.P5.groundCnt, 1, 1)
             GUI:PopItemWidth()
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('预警颜色: 第1~5个圈颜色分别为红、橙、黄、靛蓝、绿, 超过5个固定为绿色\n\n请根据自身情况调整数量, 建议3~4, 数量过多可能会花!\n\nPS: 设置为0表示关闭')
+            end
             if groundCntChanged then
-                if groundCntValue < 2 then
-                    M.Config.DmuCfg.P5.groundCnt = 2
+                if groundCntValue < 0 then
+                    M.Config.DmuCfg.P5.groundCnt = 0
                 elseif groundCntValue > 7 then
                     M.Config.DmuCfg.P5.groundCnt = 7
                 else
@@ -473,6 +496,9 @@ DancingMadUI.draw = function()
             GUI:Dummy(0, 0)
             GUI:SameLine()
             GUI:BulletText('遗弃末世（软狂暴）')
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:TextColored(1, 0, 0, 1, ' 攻略: 斜点出发, 全顺, 其他方案请选择关闭!')
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:AlignFirstTextHeightToWidgets()

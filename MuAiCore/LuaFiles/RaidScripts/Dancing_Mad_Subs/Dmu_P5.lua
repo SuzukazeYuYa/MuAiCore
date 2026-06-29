@@ -245,7 +245,7 @@ local getIndexTable = function(startIdx, n)
 end
 
 local drawingGroudFire = function()
-    if not Cfg().draw then
+    if not Cfg().draw and Cfg().groundCnt <= 0 then
         return
     end
     --for id, aoeInfo in pairs(Data().GroundFire.OnCreate) do

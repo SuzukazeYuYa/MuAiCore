@@ -80,8 +80,9 @@ DmuDpsUI.draw = function()
     end
     M.DmuDpsUI.visible, M.DmuDpsUI.open = GUI:Begin("Dmu Mitigation Setting", M.DmuDpsUI.open)
     if M.DmuDpsUI.visible then
-        GUI:TextColored(1, 1, 0, 1, '本插件暂时仅提供UI控制，暂未制作相关减伤轴,')
-        GUI:TextColored(1, 1, 0, 1, '有需要可以联系本人获取相关API，自行制作')
+        GUI:TextColored(1, 1, 0, 1, '本插件暂时仅提供UI控制，本人未制作相关减伤轴,')
+        GUI:TextColored(1, 1, 0, 1, '有需要可以自行制作, 或使用其他人做好的时间轴, ')
+        GUI:TextColored(1, 1, 0, 1, '本插件将尽可能的提供技术支持!')
         ------------------------------------------------
         GUI:AlignFirstTextHeightToWidgets()
         GUI:BulletText('配置文件工具')

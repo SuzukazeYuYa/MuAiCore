@@ -30,7 +30,7 @@ local doSubEvents = function(eventName, ...)
                 MG.Debug('错误信息:' .. tostring(err))
                 MG.Debug('调用堆栈:' .. traceback)
                 d('----------------------------------------------------')
-                
+
             end
         end
     end
@@ -962,18 +962,19 @@ DM.CommonGuide = function()
     if ((DM.OverState('P1Start', true) and DM.BeLowState('P1End') and MG.Config.DmuCfg.P1.guide)
             or (DM.OverState('P4Start', true) and DM.BeLowState('P4End') and MG.Config.DmuCfg.P4.guide))
             and MG.DancingMad.IceType ~= nil and MG.DancingMad.ThunderType ~= nil then
-        local far, near = DM.CalcMixPoint(MG.DancingMad.ThunderType, MG.DancingMad.IceType)
+        local far, near, _, same = DM.CalcMixPoint(MG.DancingMad.ThunderType, MG.DancingMad.IceType)
         local player = MG.GetPlayer()
         local guidePos
-        if MG.IsTank(player.job) or MG.IsMelee(player.job) then
+        --近战且2个坐标不等
+        if (MG.IsTank(player.job) or MG.IsMelee(player.job)) and (not same) then
             guidePos = near
         else
             local disF = TensorCore.getDistance2d(far, player.pos)
             local disN = TensorCore.getDistance2d(near, player.pos)
-            if disN > disF then
-                guidePos = far
-            else
+            if disN < disF then
                 guidePos = near
+            else
+                guidePos = far
             end
         end
         MG.FrameDirect(guidePos.x, guidePos.z)
