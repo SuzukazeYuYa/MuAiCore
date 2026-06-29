@@ -69,7 +69,6 @@ DmuDpsUI.draw = function()
     end
     local jobValue = jobMap[Player.job]
     local fileList = M.Config.DmuMitigJobConfigs
-    local newCfgMode = M.Config.DmuMitigNewMode
     GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
     GUI:SetNextWindowSize(wide, 0, GUI.SetCond_Appearing)
     if jobValue[1] == nil or jobValue[2] == nil then
@@ -99,7 +98,7 @@ DmuDpsUI.draw = function()
                 handle:close()
             end
         end
-        if newCfgMode then
+        if M.Config.DmuMitigNewMode then
             GUI:Dummy(20, 0)
             GUI:SameLine(0, 0)
             M.UITool.AddLabel("新配置名：", false)
@@ -125,7 +124,7 @@ DmuDpsUI.draw = function()
             if GUI:IsItemClicked(0) then
                 if not havaSame and newFileName ~= nil and #newFileName > 0 then
                     M.SaveFileConfig(getFilePath(), newFileName, M.Config.DmuDpsCfg)
-                    newCfgMode = false
+                    M.Config.DmuMitigNewMode = false
                     if newFileName ~= fileList[fileListIndex] then
                         table.insert(fileList, newFileName)
                     end
@@ -137,7 +136,7 @@ DmuDpsUI.draw = function()
             GUI:Button("取消", 100, 20)
             if GUI:IsItemClicked(0) then
                 newFileName = fileList[fileListIndex]
-                newCfgMode = false
+                M.Config.DmuMitigNewMode = false
             end
         else
             GUI:Dummy(20, 0)
@@ -155,7 +154,7 @@ DmuDpsUI.draw = function()
                 GUI:Button("新建配置", 90, 20)
                 if GUI:IsItemClicked(0) then
                     newFileName = ""
-                    newCfgMode = true
+                    M.Config.DmuMitigNewMode = true
                 end
             else
                 GUI:Dummy(20, 0)
@@ -170,7 +169,7 @@ DmuDpsUI.draw = function()
                 GUI:Button("新建配置", 90, 20)
                 if GUI:IsItemClicked(0) then
                     newFileName = ""
-                    newCfgMode = true
+                    M.Config.DmuMitigNewMode = true
                 end
                 GUI:SameLine()
                 GUI:Button("保存到此配置", 100, 20)
