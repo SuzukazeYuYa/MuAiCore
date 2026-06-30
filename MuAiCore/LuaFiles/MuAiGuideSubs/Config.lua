@@ -443,6 +443,9 @@ Config.init = function(M)
     end
 
     M.DumCfgJobChange = function()
+        if Player == nil or Player.job == nil then
+            return
+        end
         local filePath = M.Config.DmuMitig .. '\\' .. Player.job
         M.Config.DmuMitigJobConfigs = M.LoadFileList(filePath, { 'Config.lua' })
         M.Config.DmuMitigNewMode = false
