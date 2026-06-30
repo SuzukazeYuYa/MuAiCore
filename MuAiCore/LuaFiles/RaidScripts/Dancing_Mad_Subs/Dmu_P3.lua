@@ -1266,7 +1266,7 @@ Dmu_P3.Update = function()
                             end)
                             local markType
                             if buffType == 3004 then
-                                markType = 'attck'
+                                markType = 'attack'
                             elseif buffType == 3005 then
                                 markType = 'bind'
                             elseif buffType == 3006 then
