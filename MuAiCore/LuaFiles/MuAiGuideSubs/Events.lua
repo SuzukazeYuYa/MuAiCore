@@ -220,6 +220,9 @@ end
 
 ---@param M MuAiGuide
 local onJobChangeCheck = function()
+    if Player == nil or Player.job == nil then
+        return
+    end
     if lastJob ~= Player.job then
         onPlayerChangeJob()
         if lastJob ~= nil and lastJob > 0 then
