@@ -4,7 +4,7 @@
     MuAiGuide逻辑总脚本
 ===========================
 ]]
-M.VERSION = 324
+M.VERSION = 327
 M.GlobalGuideY = nil
 M.IsInit = false;
 --- 输出信息到控制台 
@@ -48,6 +48,7 @@ for i = 1, #modules do
 end
 M.IsInit = true
 M.FruMitigation.ChangeJob()
+M.DumCfgJobChange()
 M.CheckVersion(true)
 M.GetSponsorsList()
 M.Debug('基础模块加载完成')

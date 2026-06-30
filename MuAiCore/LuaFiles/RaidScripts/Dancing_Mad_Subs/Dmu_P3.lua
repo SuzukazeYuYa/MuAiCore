@@ -728,9 +728,7 @@ Dmu_P3.OnEntityChannel = function(entityID, spellID, _)
             Data().Chaos = boss
         end
         if DM.OverState('P3UltimaBlaster', true) then
-            if Cfg().markType == 3 then
-                DM.ClearMarks()
-            end
+            DM.ClearMarks()
         end
     elseif spellID == 47869 or spellID == 47870 then
         --经度聚爆 纬度聚爆
@@ -1137,7 +1135,7 @@ Dmu_P3.Update = function()
                             -- 这个做特特殊处理
                             if Cfg().kickType == 3 then
                                 Data().WacuumWave.AfterKick[job] = TensorCore.getPosInDirection(exDeath.pos, curDir, 15)
-                            elseif Cfg().kickType == 2  then
+                            elseif Cfg().kickType == 2 then
                                 if job == 'ST' or job == 'D2' then
                                     Data().WacuumWave.AfterKick[job] = TensorCore.getPosInDirection(exDeath.pos, curDir, 15)
                                 elseif job == 'MT' or job == 'D1' then
@@ -1230,9 +1228,9 @@ Dmu_P3.Update = function()
 
     if DM.InState('P3BlackHoleStart') then
         if Cfg().markType ~= 1 and not Data().Mark.Finish then
-            if Cfg().markType == 2 then
+            if Cfg().markType == 2 or Cfg().markType == 4 then
                 if Cfg().delayMark then
-                    MG.OnCurrentPartyDo(function(job, member)
+                    MG.OnCurrentPartyDo(function(_, member)
                         if member.marker ~= nil and member.marker > 0 then
                             Data().Mark.AnyHasMark = true
                             return true
@@ -1240,15 +1238,46 @@ Dmu_P3.Update = function()
                     end)
                 end
                 if not Cfg().delayMark or Data().Mark.AnyHasMark then
-                    if Data().Mark.JobDelay == nil then
-                        Data().Mark.JobDelay = (MG.IndexOf(MG.JobPosName, MG.SelfPos) - 1) * 200
-                    end
-                    if Data().Mark.JobDelayTimer == 0 then
-                        Data().Mark.JobDelayTimer = Now()
-                    elseif TimeSince(Data().Mark.JobDelayTimer) > Data().Mark.JobDelay then
-                        markSelfMacro()
-                        if Data().Mark.SelfType ~= 0 then
-                            Data().Mark.Finish = true
+                    if Cfg().markType == 2 then
+                        if Data().Mark.JobDelay == nil then
+                            Data().Mark.JobDelay = (MG.IndexOf(MG.JobPosName, MG.SelfPos) - 1) * 200
+                        end
+                        if Data().Mark.JobDelayTimer == 0 then
+                            Data().Mark.JobDelayTimer = Now()
+                        elseif TimeSince(Data().Mark.JobDelayTimer) > Data().Mark.JobDelay then
+                            markSelfMacro()
+                            if Data().Mark.SelfType ~= 0 then
+                                Data().Mark.Finish = true
+                            end
+                        end
+                    else
+                        -- 获取自己的类型
+                        local player = TensorCore.mGetPlayer()
+                        local buffType = getBuffType(player)
+                        if buffType ~= 0 then
+                            local sameBuff = {}
+                            for job, member in pairs(MG.Party) do
+                                if TensorCore.hasBuff(member.id, buffType) then
+                                    table.insert(sameBuff, job)
+                                end
+                            end
+                            table.sort(sameBuff, function(a, b)
+                                return MG.IndexOf(Cfg().markOrderSelf, a) < MG.IndexOf(Cfg().markOrderSelf, b)
+                            end)
+                            local markType
+                            if buffType == 3004 then
+                                markType = 'attck'
+                            elseif buffType == 3005 then
+                                markType = 'bind'
+                            elseif buffType == 3006 then
+                                markType = 'stop'
+                            end
+                            if markType ~= nil then
+                                local selfMark = markType .. tostring(MG.IndexOf(sameBuff, MG.SelfPos))
+                                SendTextCommand('/mk ' .. selfMark .. ' <me>')
+                                MG.Info('当前为优先级摇号模式，计算结果为：' .. selfMark)
+                                Data().Mark.Finish = true
+                            end
                         end
                     end
                 end

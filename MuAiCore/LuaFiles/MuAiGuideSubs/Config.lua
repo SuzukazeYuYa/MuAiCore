@@ -49,11 +49,12 @@ local LoadUIConfig = function(M)
     M.Config.DmuCustomList = M.LoadFileList(M.Config.DmuGuidePath, { 'GuideConfig.lua' })
     M.Config.DmuCustomListIndex = 1
 
-    local defDmuCatZCfg = M.CreateCatZDmuCfg()
-    M.Config.DmuCatZCfg = defDmuCatZCfg  -- 这里只是让编辑可以默认识别，无实际作用
-    M.Config.DmuCatZCfg = M.LoadConfig(M.Config.DmuCatZMigPath, M.Config.DmuCatZMigFile, defDmuCatZCfg)
-    M.Config.DmuCatZCfgPrevious = table.deepcopy(M.Config.DmuCatZCfg)
+    --local defDmuCatZCfg = M.CreateDmuMigCfg()
+    --M.Config.DmuCatZCfg = defDmuCatZCfg  -- 这里只是让编辑可以默认识别，无实际作用
+    --M.Config.DmuCatZCfg = M.LoadConfig(M.Config.DmuCatZMigPath, M.Config.DmuCatZMigFile, defDmuCatZCfg)
+    --M.Config.DmuCatZCfgPrevious = table.deepcopy(M.Config.DmuCatZCfg)
 
+    M.Config.DmuMig = {}
 end
 
 ---@param M MuAiGuide
@@ -319,6 +320,8 @@ Config.init = function(M)
                 autoLookAt = true,
                 transUnOpt = false,
                 hardLock = false,
+                -- 1 MS 2 A:T远 C:奶近
+                Line2Type = 1,
                 BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
             },
             P2 = {
@@ -326,7 +329,7 @@ Config.init = function(M)
                 -- 1职能固定，2扇左钢右 3职固Uptime
                 fixType = 1,
                 -- 踩塔开启指挥模式
-                towerGuide = false,
+                --towerGuide = false,
                 -- 踩塔结束之后去哪 1 -> A, 2 -> 两塔中间
                 endTower = 1,
                 -- 1.只画一次，2.绘制预览
@@ -346,10 +349,11 @@ Config.init = function(M)
                 kickType = 1,
                 -- 击退前自动选中小艾
                 autoTargetEx = false,
-                -- 标记类型，1 关闭； 2  标记自己；  3 标记全队;
+                -- 标记类型，1 关闭； 2  随机标记自己；  3 标记全队,  4, 精确标记自己
                 markType = 1,
                 takeLineAttack12 = false,
                 takeLineStop22 = false,
+                markOrderSelf = { 'MT', 'ST', 'D1', 'D2', 'D3', 'D4', 'H1', 'H2' },
                 markOrder = { 'D1', 'D2', 'D3', 'D4', 'MT', 'ST', 'H2', 'H1' },
                 delayMark = true,
                 -- 踩塔基础类型
@@ -382,8 +386,10 @@ Config.init = function(M)
         }
     end
 
-    M.CreateCatZDmuCfg = function()
+    --- 创建默认减伤配置
+    M.CreateDmuMigCfg = function()
         return {
+            -- T减 --
             -- P1
             RevoltingRuinIII_1 = { p = 1, value = 1, nameCn = '恶狠狠毁荡' },
             LightingJudgment_1 = { p = 1, value = 1, nameCn = '超驱动' },
@@ -402,9 +408,54 @@ Config.init = function(M)
             -- P5
             ChaoticFlare_1 = { p = 5, value = 1, nameCn = '混沌核爆1' },
             ChaoticFlare_2 = { p = 5, value = 1, nameCn = '混沌核爆2' },
+            -- 团减--
+            Flaflare1 = { p = 1, Target = false, Field = false, nameCn = '呼啦啦爆炎1', time = 45.9 },
+            LightOfJudgment1 = { p = 1, Target = false, Field = false, nameCn = '制裁之光1', time = 62.6 },
+            LightOfJudgment2 = { p = 1, Target = false, Field = false, nameCn = '制裁之光2', time = 132.3 },
+            Flaflare2 = { p = 1, team = true, Target = false, Field = false, nameCn = '呼啦啦爆炎2', time = 187.1 },
+            TwinArms = { p = 2, team = true, Target = false, Field = false, nameCn = '终末双腕1', time = 220.1 },
+            Forsaken1 = { p = 2, team = true, Target = false, Field = false, nameCn = '遗弃末世1', time = 235.3 },
+            LightOfJudgment3 = { p = 2, team = true, Target = false, Field = false, nameCn = '制裁之光', time = 341.7 },
+            TwinArms2 = { p = 2, team = true, Target = false, Field = false, nameCn = '终末双腕2', time = 377.3 },
+            Bowbow = { p = 3, team = true, Target = false, Field = false, nameCn = '深层痛楚', time = 450 },
+            BlazeTsunami1 = { p = 3, team = true, Target = false, Field = false, nameCn = '烈焰/海啸1', time = 470.2 },
+            BlazeTsunami2 = { p = 3, team = true, Target = false, Field = false, nameCn = '烈焰/海啸2', time = 497.2 },
+            VacuumWave = { p = 3, team = true, Target = false, Field = false, nameCn = '真空波', time = 514.4 },
+            ThunderIII_T_2 = { p = 3, team = true, Target = false, Field = false, nameCn = '暴雷2', time = 540 },
+            ThunderIII_T_3 = { p = 3, team = true, Target = false, Field = false, nameCn = '暴雷3', time = 557.2 },
+            Shockwave1 = { p = 3, team = true, Target = false, Field = false, nameCn = '冲击波1', time = 578 },
+            ThunderIII_T_4 = { p = 3, team = true, Target = false, Field = false, nameCn = '暴雷5', time = 640 },
+            Shockwave2 = { p = 3, team = true, Target = false, Field = false, nameCn = '冲击波2', time = 608.4 },
+            Shockwave3 = { p = 3, team = true, Target = false, Field = false, nameCn = '冲击波3', time = 676.3 },
+            Blaze = { p = 3, team = true, Target = false, Field = false, nameCn = '轰击', time = 710.7 },
+            GrandCross1 = { p = 4, team = true, Target = false, Field = false, nameCn = '大十字1', time = 826 },
+            GrandCross2 = { p = 4, team = true, Target = false, Field = false, nameCn = '大十字2', time = 841.1 },
+            GrandCross3 = { p = 4, team = true, Target = false, Field = false, nameCn = '大十字3', time = 856 },
+            UltimaUpsideDown1 = { p = 4, team = true, Target = false, Field = false, nameCn = '扑腾腾究极1', time = 895.5 },
+            UltimaUpsideDown2 = { p = 4, team = true, Target = false, Field = false, nameCn = '扑腾腾究极2', time = 934.7 },
+            ConsecutiveUltima1 = { p = 5, team = true, Target = false, Field = false, nameCn = '连续究极1', time = 975.9 },
+            MaddeningOrchestra1 = { p = 5, team = true, Target = false, Field = false, nameCn = '癫狂交响曲1', time = 1003.4 },
+            ConsecutiveUltima2 = { p = 5, team = true, Target = false, Field = false, nameCn = '连续究极2', time = 1057.7 },
+            MaddeningOrchestra2 = { p = 5, team = true, Target = false, Field = false, nameCn = '癫狂交响曲2', time = 1098.6 },
+            Forsaken1_P5 = { p = 5, team = true, Target = false, Field = false, nameCn = '遗弃末世1234', time = 1138.4 },
+            Forsaken2_P5 = { p = 5, team = true, Target = false, Field = false, nameCn = '遗弃末世5678', time = 1154.7 },
         }
     end
 
+    M.DumCfgJobChange = function()
+        local filePath = M.Config.DmuMitig .. '\\' .. Player.job
+        M.Config.DmuMitigJobConfigs = M.LoadFileList(filePath, { 'Config.lua' })
+        M.Config.DmuMitigNewMode = false
+        local defCfg = M.CreateDmuMigCfg()
+        local curCfg = M.LoadConfig(filePath, 'Config.lua', defCfg)
+        if M.IsTank(Player.job) then
+            M.Config.DmuCatZCfg = curCfg
+            M.Config.DmuCatZCfgPrevious = table.deepcopy(curCfg)
+        else
+            M.Config.DmuDpsCfg = curCfg
+            M.Config.DmuDpsCfgPrevious = table.deepcopy(curCfg)
+        end
+    end
     --- 同步配置字段
     M.SyncNestedFields = function(saveData, defaultData)
         for key, value in pairs(defaultData) do
@@ -458,6 +509,7 @@ Config.init = function(M)
         M.ShowMsgUI(3, { ('加载配置[' .. fileName .. ']失败！') })
         return defConfig
     end
+
     --- 将表格序列化到文件
     M.SaveFileConfig = function(path, fileName, table)
         local saveFile = path .. '\\' .. fileName .. '.lua'
@@ -465,8 +517,9 @@ Config.init = function(M)
             FolderCreate(path)
         end
         FileSave(saveFile, table)
-        M.InfoNoLog('已将当前设置保存到配置[' .. fileName .. ']。')
+        M.ShowMsgUI(3, { ('已将当前设置保存到配置[' .. fileName .. ']！') })
     end
+
     --- 读取设置信息
     --- @param path string 路径(最后不带\\)
     --- @param fileName string 文件名
@@ -502,9 +555,24 @@ Config.init = function(M)
             end
             FileSave(saveFile, curConfig)
             M.Config[configName .. 'Previous'] = table.deepcopy(curConfig)
-            --d('[MuAiCore]存档' .. fileName .. '已更新')
         end
     end
+
+    M.SaveConfigJob = function(path, fileName, curConfig, preConfig)
+        if curConfig == nil or preConfig == nil then
+            return false
+        end
+        if not table.deepcompare(curConfig, preConfig) then
+            local saveFile = path .. '\\' .. fileName
+            if (not FolderExists(path)) then
+                FolderCreate(path)
+            end
+            FileSave(saveFile, curConfig)
+            return true
+        end
+        return false
+    end
+
     LoadUIConfig(M)
 end
 

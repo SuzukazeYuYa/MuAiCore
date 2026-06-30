@@ -346,9 +346,9 @@ local drawBaseSettingTab = function(M)
     GUI:AlignFirstTextHeightToWidgets()
     GUI:Text('更新下载源：  ')
     GUI:NextColumn()
-    local urlChange
-    M.Config.Main.DownLoadSource, urlChange = GUI:Combo('##DownLoadSource', M.Config.Main.DownLoadSource, { 'GitHub', '腾讯云' }, 2)
-
+    GUI:PushItemWidth(123)
+    M.Config.Main.DownLoadSource = GUI:Combo('##DownLoadSource', M.Config.Main.DownLoadSource, { 'GitHub', '腾讯云' }, 2)
+    GUI:PopItemWidth()
     GUI:NextColumn()
     GUI:Dummy(6, 0)
     GUI:SameLine()
@@ -553,6 +553,8 @@ local drawRaidSettingTab = function(M)
             M.FruConfigUI.open = not M.FruConfigUI.open
             M.FruMitigationUI.open = false
             M.DancingMadUI.open = false
+            M.DmuDpsUI.open = false
+            M.CatZDmuTankUI.open = false
         end
         GUI:SameLine()
         GUI:Button('减伤设置', 150, 25)
@@ -564,12 +566,10 @@ local drawRaidSettingTab = function(M)
                 M.FruConfigUI.open = false
             end
             M.DancingMadUI.open = false
+            M.DmuDpsUI.open = false
             M.CatZDmuTankUI.open = false
         end
         GUI:Dummy(0, 7)
-        --GUI:AlignFirstTextHeightToWidgets()
-        --GUI:BulletText('妖星乱舞绝境战 ')
-        --GUI:SameLine()
         local DmuCfgChanged
         M.Config.DmuCfg.Enable, DmuCfgChanged = GUI:Checkbox('妖星乱舞绝境战##DmuEnable', M.Config.DmuCfg.Enable)
         if GUI:IsItemHovered() then
@@ -582,16 +582,35 @@ local drawRaidSettingTab = function(M)
             if GUI:IsItemClicked(0) then
                 M.DancingMadUI.open = not M.DancingMadUI.open
                 M.CatZDmuTankUI.open = false
+                M.DmuDpsUI.open = false
                 M.FruConfigUI.open = false
                 M.FruMitigationUI.open = false
             end
-            GUI:SameLine(0, 8)
-            GUI:Button('CatZTankUI', 150, 25)
-            if GUI:IsItemClicked(0) then
-                M.CatZDmuTankUI.open = not M.CatZDmuTankUI.open
-                M.DancingMadUI.open = false
-                M.FruConfigUI.open = false
-                M.FruMitigationUI.open = false
+
+            if M.IsTank(Player.job) then
+                GUI:SameLine(0, 8)
+                GUI:Button('CatZTankUI', 150, 25)
+                if M.DmuDpsUI.open then
+                    M.DmuDpsUI.open = false
+                end
+                if GUI:IsItemClicked(0) then
+                    M.CatZDmuTankUI.open = not M.CatZDmuTankUI.open
+                    M.DancingMadUI.open = false
+                    M.FruConfigUI.open = false
+                    M.FruMitigationUI.open = false
+                end
+            elseif M.IsDps(Player.job) then
+                GUI:SameLine(0, 8)
+                GUI:Button('DPS减伤UI', 150, 25)
+                if M.CatZDmuTankUI.open then
+                    M.CatZDmuTankUI.open = false
+                end
+                if GUI:IsItemClicked(0) then
+                    M.DmuDpsUI.open = not M.DmuDpsUI.open
+                    M.DancingMadUI.open = false
+                    M.FruConfigUI.open = false
+                    M.FruMitigationUI.open = false
+                end
             end
         end
         if DmuCfgChanged then
@@ -1177,13 +1196,9 @@ MainUI.draw = function()
             M.FruMitigationUI.open = false
             M.DancingMadUI.open = false
             M.CatZDmuTankUI.open = false
+            M.DmuDpsUI.open = false
         end
         drawCommon(M)
-        --GUI:Button('测试')
-        --if GUI:IsItemClicked(0) then
-        --   
-        --    
-        --end
     end
     M.SaveConfig(M.Config.MainPath, M.Config.MainFile, 'Main')
     GUI:SetWindowSize(355, 0)
