@@ -371,7 +371,9 @@ Config.init = function(M)
                 disType = 1,
                 -- 石化眼方案 1.盗火站位，2.盗火常规，3.MMW
                 eyeType = 1,
-                autoLook = true, harkLock = false,
+                autoLook = true,
+                harkLock = false,
+                sendMacro = false,
             },
             P5 = { enable = true, draw = true, guide = true,
                    isLeaning = false,

@@ -350,8 +350,146 @@ local ThunderWater = function(wave)
             })
         end
     end
-
 end
+
+local doSendMacro = function()
+    local msgList = { '动静剑：', '雷分散：', '石化眼：', '混沌火：', '动静剑：', '雷分散：', '石化眼：', '混沌水：' }
+    local added5547, added5548, eye1Type, eye2Type
+    for i = 1, 8 do
+        local jobPos = MG.JobPosName[i]
+        local member = MG.Party[jobPos]
+        local jobName = MG.GetJobNameById(member.job)
+
+        --region 诅咒指嚎，石化
+        local buff5543 = TensorCore.getBuff(member.id, 5543)
+        if buff5543 ~= nil then
+            if buff5543.duration > 35 then
+                if Data().Buff[jobPos][5543] then
+                    if not eye2Type then
+                        eye2Type = true
+                        msgList[7] = msgList[7] .. '真眼，背对点名：'
+                    end
+                else
+                    if not eye2Type then
+                        eye2Type = true
+                        msgList[7] = msgList[7] .. '假眼，看向点名：'
+                    end
+                end
+                msgList[7] = msgList[7] ..  jobName .. ' '
+            else
+                if Data().Buff[jobPos][5543] then
+                    if not eye1Type then
+                        eye1Type = true
+                        msgList[3] = msgList[3] .. '真眼，背对点名：'
+                    end
+                else
+                    if not eye1Type then
+                        eye1Type = true
+                        msgList[3] = msgList[3] .. '假眼，看向点名：'
+                    end
+                end
+                msgList[3] = msgList[3] .. jobName .. ' '
+            end
+        end
+        --endregion 诅咒指嚎，石化
+
+        --region 分散
+        --叉形闪电，8米钢铁
+        local buff5544 = TensorCore.getBuff(member.id, 5544)
+        if buff5544 ~= nil then
+            if buff5544.duration > 30 then
+                if Data().Buff[jobPos][5544] then
+                    msgList[6] = msgList[6] .. jobName .. ' '
+                end
+            else
+                if Data().Buff[jobPos][5544] then
+                    msgList[2] = msgList[2] .. jobName .. ' '
+                end
+            end
+        end
+
+        --水属性压缩，8米分摊
+        local buff5545 = TensorCore.getBuff(member.id, 5545)
+        if buff5544 ~= nil then
+            if buff5544.duration > 30 then
+                if not Data().Buff[jobPos][5544] then
+                    msgList[6] = msgList[6] ..  jobName .. ' '
+                end
+            else
+                if not Data().Buff[jobPos][5544] then
+                    msgList[2] = msgList[2] ..  jobName .. ' '
+                end
+            end
+        end
+        --endregion 分散
+
+        --region 加速度炸弹
+        local buff5546 = TensorCore.getBuff(member.id, 5546)
+        if buff5546 ~= nil then
+            if buff5546.duration > 30 then
+                if Data().Buff[jobPos][5546] then
+                    msgList[5] = msgList[5] ..  jobName .. ' 停，'
+                else
+                    msgList[5] = msgList[5] ..  jobName .. ' 动，'
+                end
+            else
+                if Data().Buff[jobPos][5546] then
+                    msgList[1] = msgList[1] .. jobName .. ' 停，'
+                else
+                    msgList[1] = msgList[1] .. jobName .. ' 动，'
+                end
+            end
+        end
+        --endregion 加速度炸弹
+
+        --region 放置钢铁/月环
+        if not added5547 then
+            --混沌之火，6米钢铁
+            local buff5547 = TensorCore.getBuff(member.id, 5547)
+            if buff5547 ~= nil then
+                added5547 = true
+            end
+            if buff5547 ~= nil then
+                if Data().Buff[jobPos][5547] then
+                    msgList[4] = msgList[4] .. '全体钢铁'
+                else
+                    msgList[4] = msgList[4] .. '全体月环'
+                end
+            end
+        end
+        if not added5548 then
+            --混沌之水，6米月环
+            local buff5548 = TensorCore.getBuff(member.id, 5548)
+            if buff5548 ~= nil then
+                if Data().Buff[jobPos][5548] then
+                    msgList[8] = msgList[8] .. '全体钢铁'
+                else
+                    msgList[8] = msgList[8] .. '全体月环'
+                end
+            end
+            added5548 = true
+        end
+        --endregion 放置钢铁/月环
+    end
+    local sendMark
+    if MG.IsVideo() then
+        sendMark = '/e '
+    else
+        sendMark = '/p '
+    end
+    for i = 1, 8 do
+        if i == 1 then
+            SendTextCommand(sendMark .. '-------------------------- 第一轮 -------------------------')
+        elseif i == 5 then
+            SendTextCommand(sendMark .. '-------------------------- 第二轮 -------------------------')
+        end
+        SendTextCommand(sendMark .. msgList[i])
+        if i == 8 then
+            SendTextCommand(sendMark .. '-------------------------- 宏结束 -------------------------')
+        end
+    end
+end
+
 --------------------------------------------- event function ---------------------------------------------
 --- 初始化
 --- @param dm DancingMad
@@ -359,6 +497,9 @@ end
 Dmu_P4.Init = function(dm, m)
     DM = dm
     MG = m
+    MG.Develop.TempDebug = function()
+        doSendMacro()
+    end
 end
 
 Dmu_P4.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
@@ -584,6 +725,10 @@ Dmu_P4.Update = function()
     end
     if DM.InState('P4ExDeathBuff3') then
         onAddNewBuff(buffExDeath, Data().ExDeath.Timer, Data().StateVfx[5])
+        if Cfg().sendMacro and not Data().MacroSend then
+            doSendMacro()
+            Data().MacroSend = true
+        end
     end
     -- 添加执行buff阶段 --
     if DM.InState('P4ExDeath3Judge') then
@@ -714,7 +859,7 @@ Dmu_P4.Update = function()
 
             end
             if table.size(Data().Eye1.Owner) >= 2 then
-                if AnyoneCore ~= nil and Cfg().draw then
+                if AnyoneCore ~= nil and Cfg().draw and not Data().Eye1.wasDraw then
                     local text
                     if Data().Eye1.type then
                         text = 'Real'

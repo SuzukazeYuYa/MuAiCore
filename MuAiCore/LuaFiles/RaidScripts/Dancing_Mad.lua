@@ -364,6 +364,7 @@ local dataInit = function()
             }
         },
         P4 = {
+            MacroSend = false,
             Chaos = {
                 CurrentIsReal = false,
                 Timer = 0,
@@ -528,19 +529,19 @@ local closeList = {
 local defineColors = function()
     -- 一次性创建所有颜色
     ---@type ShapeDrawer
-    DM.redDrawer = MG.CreateDrawer(1, 0, 0, nil, 2)
+    DM.redDrawer = MG.CreateDrawer(1, 0, 0, 0.3, 2)
     ---@type ShapeDrawer
-    DM.orangeDrawer = MG.CreateDrawer(1, 0.5, 0, nil, 2)
+    DM.orangeDrawer = MG.CreateDrawer(1, 0.5, 0, 0.3, 2)
     ---@type ShapeDrawer
-    DM.yellowDrawer = MG.CreateDrawer(1, 1, 0, nil, 2)
+    DM.yellowDrawer = MG.CreateDrawer(1, 1, 0, 0.3, 2)
     ---@type ShapeDrawer
-    DM.blueDrawer = MG.CreateDrawer(0, 0, 1, nil, 2)
+    DM.blueDrawer = MG.CreateDrawer(0, 0, 1, 0.3, 2)
     ---@type ShapeDrawer
-    DM.greenDrawer = MG.CreateDrawer(0, 1, 0, nil, 2)
+    DM.greenDrawer = MG.CreateDrawer(0, 1, 0, 0.3, 2)
     ---@type ShapeDrawer
-    DM.purpleDrawer = MG.CreateDrawer(1, 0, 1, nil, 2)
+    DM.purpleDrawer = MG.CreateDrawer(1, 0, 1, 0.3, 2)
     ---@type ShapeDrawer
-    DM.cyanDrawer = MG.CreateDrawer(0, 1, 1, nil, 2)
+    DM.cyanDrawer = MG.CreateDrawer(0, 1, 1, 0.3, 2)
     ---@type ShapeDrawer
     DM.litBlue = MG.CreateDrawer(0, 0.3, 0.5, 0.3, 2)
 end

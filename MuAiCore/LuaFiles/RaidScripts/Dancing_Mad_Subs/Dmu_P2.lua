@@ -185,7 +185,7 @@ local drawAllThingEnding = function()
                 dir = curCaster.pos.h
             end
             MG.CreateDrawer(1, 0.5, 0, nil, 2)
-              :addCone(curCaster.pos.x, curCaster.pos.y, curCaster.pos.z, 21, math.pi, dir)
+            :addRect(curCaster.pos.x, curCaster.pos.y, curCaster.pos.z, 25, 50, dir)
         end
     else
         Data().Towers.kickTimer = 0
