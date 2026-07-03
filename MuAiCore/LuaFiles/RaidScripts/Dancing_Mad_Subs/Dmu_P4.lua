@@ -410,13 +410,13 @@ local doSendMacro = function()
 
         --水属性压缩，8米分摊
         local buff5545 = TensorCore.getBuff(member.id, 5545)
-        if buff5544 ~= nil then
-            if buff5544.duration > 30 then
-                if not Data().Buff[jobPos][5544] then
+        if buff5545 ~= nil then
+            if buff5545.duration > 30 then
+                if not Data().Buff[jobPos][5545] then
                     msgList[6] = msgList[6] ..  jobName .. ' '
                 end
             else
-                if not Data().Buff[jobPos][5544] then
+                if not Data().Buff[jobPos][5545] then
                     msgList[2] = msgList[2] ..  jobName .. ' '
                 end
             end
