@@ -280,35 +280,21 @@ local drawSlapHappy = function()
     local curCaster = TensorCore.mGetEntity(Data().SlapHappy.CasterId)
     local curHeading = curCaster.pos.h
     local headingTable
+    local isRight = false
     if Data().SlapHappy.SkillId == 47846 then
         headingTable = {
             curHeading - math.pi * 3 / 4,
             curHeading - math.pi * 1 / 2,
             curHeading - math.pi * 1 / 4,
         }
-        local dir = TensorCore.getHeadingToTarget(DM.Center, TensorCore.mGetPlayer().pos)
-        DM.litBlue:addCone(100, 0, 100, 30, math.pi / 3, dir)
+        isRight = true
     elseif Data().SlapHappy.SkillId == 47847 then
         headingTable = {
             curHeading + math.pi * 3 / 4,
             curHeading + math.pi * 1 / 2,
             curHeading + math.pi * 1 / 4,
         }
-        local curMt = TensorCore.mGetEntity(MG.Party.MT.id)
-        local curH1 = TensorCore.mGetEntity(MG.Party.H1.id)
-        local curD1 = TensorCore.mGetEntity(MG.Party.D1.id)
-        local dirMt = TensorCore.getHeadingToTarget(DM.Center, curMt.pos)
-        local dirH1 = TensorCore.getHeadingToTarget(DM.Center, curH1.pos)
-        local dirD1 = TensorCore.getHeadingToTarget(DM.Center, curD1.pos)
-        if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
-            MG.CreateDrawer(0, 0, 0.2, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirMt)
-            MG.CreateDrawer(0, 0.2, 0, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirH1)
-            MG.CreateDrawer(0.2, 0, 0, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirD1)
-        else
-            MG.CreateDrawer(0, 0, 1, 0.1, 1):addCone(100, 0, 100, 20, math.pi / 3, dirMt)
-            MG.CreateDrawer(0, 1, 0, 0.1, 1):addCone(100, 0, 100, 20, math.pi / 3, dirH1)
-            MG.CreateDrawer(1, 0, 0, 0.1, 1):addCone(100, 0, 100, 20, math.pi / 3, dirD1)
-        end
+        isRight = false
     end
     for i = 1, 3 do
         local h = headingTable[i]
@@ -322,6 +308,54 @@ local drawSlapHappy = function()
         MG.CreateDrawer(0.9, 0.3, 0, 0.4):addCircle(pos.x, pos.y, pos.z, r3)
     end
     MG.CreateDrawer(0.7, 0.1, 0):addCircle(100, 0, 100, 6)
+    -- 如果开启范围画图
+    if Cfg().slapHappyDraw then
+        if isRight then
+            local dir = TensorCore.getHeadingToTarget(DM.Center, TensorCore.mGetPlayer().pos)
+            DM.litBlue:addCone(100, 0, 100, 30, math.pi / 3, dir)
+        else
+            local curMt = TensorCore.mGetEntity(MG.Party.MT.id)
+            local curH1 = TensorCore.mGetEntity(MG.Party.H1.id)
+            local curD1 = TensorCore.mGetEntity(MG.Party.D1.id)
+            local dirMt = TensorCore.getHeadingToTarget(DM.Center, curMt.pos)
+            local dirH1 = TensorCore.getHeadingToTarget(DM.Center, curH1.pos)
+            local dirD1 = TensorCore.getHeadingToTarget(DM.Center, curD1.pos)
+            if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
+                MG.CreateDrawer(0, 0, 0.2, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirMt)
+                MG.CreateDrawer(0, 0.2, 0, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirH1)
+                MG.CreateDrawer(0.2, 0, 0, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirD1)
+            else
+                MG.CreateDrawer(0, 0, 1, 0.1, 1):addCone(100, 0, 100, 20, math.pi / 3, dirMt)
+                MG.CreateDrawer(0, 1, 0, 0.1, 1):addCone(100, 0, 100, 20, math.pi / 3, dirH1)
+                MG.CreateDrawer(1, 0, 0, 0.1, 1):addCone(100, 0, 100, 20, math.pi / 3, dirD1)
+            end
+        end
+    end
+    
+    if Cfg().slapHappyDir then
+        if isRight then
+            local dir = curHeading + math.pi / 2
+            MG.CreateDrawer(1, 1, 1, 0.6, 0)
+              :addArrow(DM.Center.x, 0, DM.Center.z, dir, 10, 0.2, 0.5, 0.3, true)
+        else
+            local player = TensorCore.mGetPlayer()
+            local drawer, dir
+            if MG.IsTank(player.job) then
+                drawer = MG.CreateDrawer(0, 0.8, 1, 0.6, 0)
+                dir = curHeading - math.pi * 5 / 6
+            elseif MG.IsHealer(player.job) then
+                drawer = MG.CreateDrawer(0, 1, 0, 0.6, 0)
+                dir = curHeading - math.pi / 2
+            elseif MG.IsDps(player.job) then
+                drawer = MG.CreateDrawer(1, 0, 0, 0.6, 0)
+                dir = curHeading - math.pi / 6
+            end
+            if drawer ~= nil then
+                drawer:addArrow(DM.Center.x, 0, DM.Center.z, dir, 10, 0.2, 0.5, 0.3, true)
+            end
+        end
+    end
+    
     if TimeSince(Data().SlapHappy.Timer) > 9000 then
         Data().SlapHappy.OnDraw = false
         Data().SlapHappy.SkillId = 0
@@ -694,7 +728,7 @@ local autoTargetEx = function()
     local player = TensorCore.mGetPlayer()
     local buff = TensorCore.getBuff(player.id, 1602) --背对buff
     buff = buff or TensorCore.getBuff(player.id, 1603) --正对buff 无需获取
-    if buff == nil or buff.duration > 5 then
+    if buff == nil or buff.duration > 10 then
         return
     end
     local curTarget = TensorCore.mGetTarget()

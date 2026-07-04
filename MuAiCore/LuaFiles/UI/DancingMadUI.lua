@@ -292,15 +292,28 @@ DancingMadUI.draw = function()
             GUI:SameLine()
             M.Config.DmuCfg.P3.autoTargetEx = GUI:Checkbox('击退前自动切换到EX防止出现锁面向问题##autoTargetEx', M.Config.DmuCfg.P3.autoTargetEx)
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('BUFF剩余5秒锁定, BUFF消失停止, 检查\n\n到目标不对会一直tab小艾, 谨慎使用!')
+                GUI:SetTooltip('BUFF剩余10秒锁定, BUFF消失停止, 检查\n\n到目标不对会一直tab小艾, 谨慎使用!')
             end
             GUI:BulletText('二运')
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:TextColored(1, 0, 0, 1, ' 攻略: 盗火, 按标记顺序')
+
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:TextColored(1, 0, 0, 1, ' 以巨大凯夫卡为12点顺时针找线')
+            GUI:Dummy(10, 0)
+            GUI:SameLine()
+            M.Config.DmuCfg.P3.slapHappyDraw = GUI:Checkbox('响亮亮耳光-范围画图##slapHappyDraw', M.Config.DmuCfg.P3.slapHappyDraw)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('分摊/分散60度扇形画图开关.')
+            end
+            GUI:Dummy(10, 0)
+            GUI:SameLine()
+            M.Config.DmuCfg.P3.slapHappyDir = GUI:Checkbox('响亮亮耳光-站位箭头##slapHappyDir', M.Config.DmuCfg.P3.slapHappyDir)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('根据当前职能画一个你该去的地方的箭头')
+            end
             GUI:Dummy(20, 0)
             GUI:SameLine(0, 0)
             M.Config.DmuCfg.P3.takeLineAttack12 = GUI:Checkbox('攻击1接两根##takeLineAttack12', M.Config.DmuCfg.P3.takeLineAttack12)

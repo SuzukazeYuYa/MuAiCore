@@ -350,6 +350,8 @@ Config.init = function(M)
                 kickType = 1,
                 -- 击退前自动选中小艾
                 autoTargetEx = false,
+                slapHappyDraw = true,
+                slapHappyDir = true,
                 -- 标记类型，1 关闭； 2  随机标记自己；  3 标记全队,  4, 精确标记自己
                 markType = 1,
                 takeLineAttack12 = false,

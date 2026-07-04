@@ -963,7 +963,7 @@ DM.CommonGuide = function()
     if ((DM.OverState('P1Start', true) and DM.BeLowState('P1End') and MG.Config.DmuCfg.P1.guide)
             or (DM.OverState('P4Start', true) and DM.BeLowState('P4End') and MG.Config.DmuCfg.P4.guide))
             and MG.DancingMad.IceType ~= nil and MG.DancingMad.ThunderType ~= nil then
-        local far, near, _, same = DM.CalcMixPoint(MG.DancingMad.ThunderType, MG.DancingMad.IceType)
+        local near, far, _, same = DM.CalcMixPoint(MG.DancingMad.ThunderType, MG.DancingMad.IceType)
         local player = MG.GetPlayer()
         local guidePos
         --近战且2个坐标不等

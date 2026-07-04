@@ -503,9 +503,14 @@ Drawers.init = function(M)
     ---@return ShapeDrawer
     M.CreateDrawer = function(r, g, b, a, lineSize)
         local color = GUI:ColorConvertFloat4ToU32(r, g, b, a or 0.3)
-        lineSize = lineSize or 1
-        return Argus2.ShapeDrawer:new(color, color, color,
-                GUI:ColorConvertFloat4ToU32(1, 1, 1, 1), lineSize)
+        local lineColor = GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)
+        if lineSize == nil then
+            lineSize = 1
+        elseif lineSize == 0 then
+            lineColor = GUI:ColorConvertFloat4ToU32(1, 1, 1, 0)
+            lineSize = 1
+        end
+        return Argus2.ShapeDrawer:new(color, color, color, lineColor, lineSize)
     end
 
     --- 绘制一个圆（已废弃仿报错用）
