@@ -95,6 +95,10 @@ local dataInit = function()
                 offSetTh = { x = 1, y = 0, z = 0 },
                 offSetDps = { x = -1, y = 0, z = 0 }
             },
+            Half = {
+                Timer = 0,
+                offSetX = nil,
+            },
             -- 放黑泥1
             Line2 = {
                 dangerDir = nil,

@@ -19,6 +19,7 @@ local Data = function()
 end
 local mtGroup = { 'MT', 'H1', 'D1', 'D3' }
 local thGroup = { 'MT', 'ST', 'H1', 'H2' }
+local trGroup = { 'MT', 'ST', 'D3', 'D4' }
 local ArrowBuffs = {
     [4876] = 'up',
     [4877] = 'down',
@@ -181,9 +182,13 @@ local halfGroupAOE = function(entityID, a1, a2, a3)
     if obj.contentid == 2015164 then
         x = 90
         heading = -math.pi / 2
+        Data().Half.offSetX = 0.5
+        Data().Half.Timer = Now()
     elseif obj.contentid == 2015165 then
         x = 110
         heading = math.pi / 2
+        Data().Half.offSetX = -0.5
+        Data().Half.Timer = Now()
     else
         return
     end
@@ -269,13 +274,13 @@ local guideAndDrawL2L3 = function(lineData)
                 for job, member in pairs(MG.Party) do
                     if table.contains(lineData.DisPlayers, member.id) then
                         if job == 'MT' or job == 'D3' then
-                            lineData.Guide2[job] = { x = 108, y = 0, z = 95 }
+                            lineData.Guide2[job] = { x = 109, y = 0, z = 97 }
                         elseif job == 'ST' or job == 'D4' then
-                            lineData.Guide2[job] = { x = 92, y = 0, z = 105 }
+                            lineData.Guide2[job] = { x = 91, y = 0, z = 97 }
                         elseif job == 'H1' or job == 'D1' then
-                            lineData.Guide2[job] = { x = 88, y = 0, z = 94 }
+                            lineData.Guide2[job] = { x = 91, y = 0, z = 103 }
                         elseif job == 'H2' or job == 'D2' then
-                            lineData.Guide2[job] = { x = 112, y = 0, z = 106 }
+                            lineData.Guide2[job] = { x = 109, y = 0, z = 103 }
                         end
                     else
                         lineData.Guide2[job] = { x = 100, y = 0, z = 100 }
@@ -433,6 +438,26 @@ local drawFire = function(dataTable)
                 end
             end
         end
+    end
+end
+
+local checkHalf = function()
+    if Data().Half.Timer > 0 then
+        if TimeSince(Data().Half.Timer) > 5150 then
+            Data().Half.Timer = 0
+            Data().Half.offSetX = nil
+        end
+    end
+    if Data().Half.offSetX ~= nil and DM.BeLowState('P1DeathBfLine3') then
+        local guideData = {}
+        MG.OnCurrentPartyDo(function(job, member)
+            if Data().Half.offSetX > 0 and member.pos.x < 100 then
+                guideData[job] = { x = 101, y = 0, z = member.pos.z }
+            elseif Data().Half.offSetX < 0 and member.pos.x > 100 then
+                guideData[job] = { x = 99, y = 0, z = member.pos.z }
+            end
+        end)
+        MG.FrameMultiD(guideData)
     end
 end
 
@@ -599,6 +624,7 @@ Dmu_P1.Update = function()
     autoLookAtUpdate()
     CheckConeDeath()
     drawBuffKick()
+    checkHalf()
     if Cfg().draw
             and (DM.OverState('P1Line3_1', true) and DM.BeLowState('P1ShitBoom'))
             and Data().Line3.Shits ~= nil and table.size(Data().Line3.Shits) >= 0
@@ -875,12 +901,18 @@ Dmu_P1.Update = function()
         end
         if Cfg().guide then
             if Data().Line2.Guide1 == nil then
+                local groupBy
+                if Cfg().Line2Type == 1 then
+                    groupBy = mtGroup
+                else
+                    groupBy = trGroup
+                end
                 if Data().Line2.dangerDir ~= nil then
                     Data().Line2.Guide1 = {}
                     local dir = MG.SetHeading2Pi(Data().Line2.dangerDir)
                     if (math.pi / 2 < dir and dir < math.pi) or (math.pi * 3 / 2 < dir and dir < 2 * math.pi) then
                         for job, _ in pairs(MG.Party) do
-                            if table.contains(mtGroup, job) then
+                            if table.contains(groupBy, job) then
                                 Data().Line2.Guide1[job] = { x = 99.5, y = 0, z = 81 }
                             else
                                 Data().Line2.Guide1[job] = { x = 100.5, y = 0, z = 119 }
@@ -888,7 +920,7 @@ Dmu_P1.Update = function()
                         end
                     else
                         for job, _ in pairs(MG.Party) do
-                            if table.contains(mtGroup, job) then
+                            if table.contains(groupBy, job) then
                                 Data().Line2.Guide1[job] = { x = 100.5, y = 0, z = 81 }
                             else
                                 Data().Line2.Guide1[job] = { x = 99.5, y = 0, z = 119 }
@@ -899,7 +931,7 @@ Dmu_P1.Update = function()
                     if Data().Line2.Guide0 == nil then
                         Data().Line2.Guide0 = {}
                         for job, _ in pairs(MG.Party) do
-                            if table.contains(mtGroup, job) then
+                            if table.contains(groupBy, job) then
                                 Data().Line2.Guide0[job] = { x = 100, y = 0, z = 81 }
                             else
                                 Data().Line2.Guide0[job] = { x = 100, y = 0, z = 119 }
@@ -929,6 +961,12 @@ Dmu_P1.Update = function()
     end
     -- 第二次扇形死刑后
     if DM.InState('P1DeathBfLine3') then
+        local groupBy
+        if Cfg().Line2Type == 1 then
+            groupBy = mtGroup
+        else
+            groupBy = trGroup
+        end
         if Data().Line3.Guide1 == nil
                 or Data().Line3.GatherPlayers == nil
                 or table.size(Data().Line3.GatherPlayers) < 4 then
@@ -950,7 +988,7 @@ Dmu_P1.Update = function()
                 end
             end
             for job, member in pairs(MG.Party) do
-                if table.contains(mtGroup, job) then
+                if table.contains(groupBy, job) then
                     Data().Line3.Guide1[job] = { x = 100, y = 0, z = upZ + 6 }
                 else
                     Data().Line3.Guide1[job] = { x = 100, y = 0, z = downZ - 6 }
@@ -1001,9 +1039,7 @@ Dmu_P1.Update = function()
 
     -- 第二次传毒
     if DM.InState('P1Line3_2') then
-        if Data().Turn2.thGroupGuidePos == nil or
-                Data().Turn2.dpsGroupGuidePos == nil
-        then
+        if Data().Half.offSetX == nil then
             Data().Turn2.thGroupGuidePos = {
                 x = 100,
                 y = Data().Line3.UpShit.pos.y,
@@ -1015,10 +1051,20 @@ Dmu_P1.Update = function()
                 z = Data().Line3.DownShit.pos.z - 5.5
             }
         else
-            turnBuff(Data().Turn2, function()
-                return MG.IsAnyMemberHasBuff(5078, 40)
-            end)
+            Data().Turn2.thGroupGuidePos = {
+                x = 100 + Data().Half.offSetX,
+                y = Data().Line3.UpShit.pos.y,
+                z = Data().Line3.UpShit.pos.z + 5.5
+            }
+            Data().Turn2.dpsGroupGuidePos = {
+                x = 100 + Data().Half.offSetX,
+                y = Data().Line3.DownShit.pos.y,
+                z = Data().Line3.DownShit.pos.z - 5.5
+            }
         end
+        turnBuff(Data().Turn2, function()
+            return MG.IsAnyMemberHasBuff(5078, 40)
+        end)
     end
 
     if DM.InState('P1Turn2End') then
