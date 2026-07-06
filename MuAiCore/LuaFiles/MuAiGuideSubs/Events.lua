@@ -9,17 +9,28 @@ local autoPopMap = { 1238, 1122, 1325, 1327, 1317, 1363 }
 ---@type MuAiGuide
 local MG
 local lastBattleTime = 0
----@param M MuAiGuide
+
+local doPop = function()
+    MG.LoadParty()
+    if MG.MainUI.tabs ~= nil then
+        for i = 1, 6 do
+            MG.MainUI.tabs.tabs[i].isselected = i == 1
+        end
+    end
+    MG.OpenUI("MainUI")
+end
+
 local checkAndPopMainUI = function()
     MG.CloseAllUI()
     if table.contains(autoPopMap, Player.localmapid) then
-        MG.LoadParty()
-        if MG.MainUI.tabs ~= nil then
-            for i = 1, 6 do
-                MG.MainUI.tabs.tabs[i].isselected = i == 1
+        if Player.localmapid == 1363 then
+            -- 绝妖星
+            if MG.Config.DmuCfg.Enable then
+                doPop()
             end
+        else
+            doPop()
         end
-        MG.OpenUI("MainUI")
     end
 end
 
@@ -44,7 +55,6 @@ local disableDrawCheck = function()
     end
 end
 
----@param M MuAiGuide
 local MoogleExCheck = function()
     if MoogleTelegraphs and MoogleTelegraphs.Settings then
         disableDrawCheck()
@@ -59,7 +69,6 @@ local MoogleExCheck = function()
     end
 end
 
----@param M MuAiGuide
 local attackRangeReMake = function()
     if not MG.Config.Main.AttackRangeReplace
             or MoogleTelegraphs == nil or MoogleTelegraphs.Settings == nil
@@ -167,7 +176,6 @@ local attackRangeHackHelper = function()
     drawer:addCircle(curTarget.pos.x, curTarget.pos.y, curTarget.pos.z, radius)
 end
 
----@param M MuAiGuide
 local checkHotKeyPress = function()
     if GUI:IsKeyDown(MG.Config.Main.KeyBindFirst)
             and GUI:IsKeyPressed(MG.Config.Main.KeyBindSecond)
@@ -176,7 +184,6 @@ local checkHotKeyPress = function()
     end
 end
 
----@param M MuAiGuide
 local onMapChange = function()
     if Player.localmapid ~= nil then
         MG.Party = nil
@@ -204,13 +211,11 @@ local onWipeCheck = function()
     end
 end
 
----@param M MuAiGuide
 local onPlayerChangeJob = function()
     MG.FruMitigation.ChangeJob()
     MG.DumCfgJobChange()
 end
 
----@param M MuAiGuide
 local onMapChangeCheck = function()
     if Player.localmapid ~= 0 and lastMap ~= Player.localmapid then
         onMapChange()
@@ -218,12 +223,12 @@ local onMapChangeCheck = function()
     end
 end
 
----@param M MuAiGuide
 local onJobChangeCheck = function()
     if Player == nil or Player.job == nil then
         return
     end
-    if lastJob ~= Player.job then
+    -- 仅在战斗职业下才需要进行该处理
+    if lastJob ~= Player.job and table.contains(MG.JobIds, Player.job) then
         onPlayerChangeJob()
         if lastJob ~= nil and lastJob > 0 then
             MG.Debug('职业切换' .. MG.GetJobFullNameById(lastJob) .. ' -> ' .. MG.GetJobFullNameById(Player.job))

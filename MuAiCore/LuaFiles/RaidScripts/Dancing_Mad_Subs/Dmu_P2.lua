@@ -185,7 +185,7 @@ local drawAllThingEnding = function()
                 dir = curCaster.pos.h
             end
             MG.CreateDrawer(1, 0.5, 0, nil, 2)
-            :addRect(curCaster.pos.x, curCaster.pos.y, curCaster.pos.z, 25, 50, dir)
+              :addRect(curCaster.pos.x, curCaster.pos.y, curCaster.pos.z, 25, 50, dir)
         end
     else
         Data().Towers.kickTimer = 0
@@ -630,56 +630,30 @@ local drawTowerHeading = function()
     MG.CreateDrawer(1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, dir + math.pi, 39.5, 0.05, 0.5, 0.5, true)
 end
 
-local checkAndMarkMember = function(wave)
-    if not Data().Towers.marked[wave] then
-        local markCnt = 0
-        if wave > 1 then
-            MG.OnCurrentPartyDo(function(member, job)
-                if member.marker ~= nil and member.marker > 0 then
-                    markCnt = markCnt + 1
-                end
-            end)
-        end
-        if markCnt > 0 then
-            DM.ClearMarks()
+local drawWingsOfDestroy = function()
+    if Cfg().draw and Data().Trine.WingTimer ~= 0 and Data().Trine.WingId ~= 0 then
+        if TimeSince(Data().Trine.WingTimer) > 5000 then
+            Data().Trine.WingId = 0
+            Data().Trine.WingTimer = 0
             return
         end
-        Data().Towers.marked[wave] = true
-        local order = Data().Towers.groupOrders[wave]
-        local standBy = Data().Towers.standBy
-        if MG.Config.DmuCfg.P2.fixType == 3 and (wave % 2) ~= 0 then
-            local fixOrder = { 2, 1, 4, 3 }
-            for i = 1, #fixOrder do
-                local index = fixOrder[i]
-                local curMark = MG.HeadMark.Attack1 + (i - 1)
-                local curMember = MG.Party[order[index]]
-                MG.MarkParty(curMark, curMember.id)
-                if MG.IsVideo() then
-                    MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。', false, true)
+        if Data().Trine.boss == nil then
+            for _, ent in pairs(TensorCore.entityList("contentid=7131")) do
+                local model = Argus.getEntityModel(ent.id)
+                if model == 19506 then
+                    Data().Trine.boss = ent
                 end
             end
         else
-            for i = 1, #order do
-                local curMark = MG.HeadMark.Attack1 + (i - 1)
-                local curMember = MG.Party[order[i]]
-                MG.MarkParty(curMark, curMember.id)
-                if MG.IsVideo() then
-                    MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。', false, true)
-                end
-            end
-        end
-        for i = 1, #standBy do
-            local curMark
-            if i < 3 then
-                curMark = MG.HeadMark.Bind1 + (i - 1)
+            local curBoss = TensorCore.mGetEntity(Data().Trine.boss.id)
+            local heading
+            if Data().Trine.WingId == 47821 then
+                --打左边
+                heading = curBoss.pos.h + math.pi / 2
             else
-                curMark = MG.HeadMark.Stop1 + (i - 3)
+                heading = curBoss.pos.h - math.pi / 2
             end
-            local curMember = MG.Party[standBy[i]]
-            MG.MarkParty(curMark, curMember.id)
-            if MG.IsVideo() then
-                MG.Info('对' .. curMember.name .. '标注了“' .. MG.GetHeadMarkCN(curMark) .. '”标记。', false, true)
-            end
+            DM.purpleDrawer:addRect(100, 0, 100, 20, 40, heading)
         end
     end
 end
@@ -735,16 +709,8 @@ Dmu_P2.OnEntityChannel = function(entityID, spellID, _)
         end
     elseif spellID == 47821 or spellID == 47822 then
         -- 破坏之翼（左右刀）
-        if Cfg().draw then
-            local heading
-            if spellID == 47821 then
-                --打左边
-                heading = -math.pi / 2
-            else
-                heading = math.pi / 2
-            end
-            DM.purpleDrawer:addTimedRect(4000, 100, 0, 100, 20, 40, heading)
-        end
+        Data().Trine.WingId = spellID
+        Data().Trine.WingTimer = Now()
     elseif spellID == 50311 then
         Data().FarNearDeath.Timer = Now()
         Data().FarNearDeath.OnDraw = true
@@ -778,18 +744,11 @@ Dmu_P2.OnMarkerAdd = function(entityID, markerID)
     end
 end
 
-Dmu_P2.OnAOECreate = function(aoeInfo)
-end
-
 Dmu_P2.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
     local object = TensorCore.mGetEntity(entityID)
     if object.contentid == 2015154 or object.contentid == 2015155 then
         calcTrinePos(object, a1, a2, a3)
     end
-end
-
-Dmu_P2.OnAddEntityVFX = function(vfxID)
-
 end
 
 Dmu_P2.OnMapEffect = function(a1, a2, a3)
@@ -855,6 +814,7 @@ Dmu_P2.Update = function()
     drawAllThingEnding()
     resetKickTimer()
     drawTowerHeading()
+    drawWingsOfDestroy()
     if Data().FarNearDeath.OnDraw
             and Cfg().draw
             and Data().FarNearDeath.Timer > 0

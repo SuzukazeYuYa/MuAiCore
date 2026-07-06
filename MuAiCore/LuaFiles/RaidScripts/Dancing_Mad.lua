@@ -224,10 +224,13 @@ local dataInit = function()
                 marked = {}
             },
             Trine = {
+                boss = nil,
                 wave = 1,
                 TimerStart = 0,
                 Timer = 0,
                 DrawPos = {},
+                WingId = 0,
+                WingTimer = 0,
             },
             FarNearDeath = {
                 Timer = 0,
