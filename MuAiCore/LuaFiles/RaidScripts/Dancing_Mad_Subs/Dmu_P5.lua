@@ -171,7 +171,8 @@ local loadGuidePosAndNextStart = function()
                 break
             end
         end
-    else
+    end
+    if Data().Celestriad.GuideData[wave] ~= nil and table.size(Data().Celestriad.GuideData[wave]) > 0 then
         if Data().Celestriad.CatastrophicChoiceId == 0 then
             MG.FrameMultiD(Data().Celestriad.GuideData[wave])
         elseif Data().Celestriad.CatastrophicChoiceId == 49742 then

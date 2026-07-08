@@ -331,7 +331,7 @@ local drawSlapHappy = function()
             end
         end
     end
-    
+
     if Cfg().slapHappyDir then
         if isRight then
             local dir = curHeading + math.pi / 2
@@ -355,7 +355,7 @@ local drawSlapHappy = function()
             end
         end
     end
-    
+
     if TimeSince(Data().SlapHappy.Timer) > 9000 then
         Data().SlapHappy.OnDraw = false
         Data().SlapHappy.SkillId = 0
@@ -872,10 +872,15 @@ end
 Dmu_P3.OnAOECreate = function(aoeInfo)
     if aoeInfo.aoeID == 47885 then
         table.insert(Data().TakeTower.aoeCache, aoeInfo)
-        if table.size(Data().TakeTower.aoeCache) == 8 then
-            DM.ChangeState('P3AoePut1')
-        elseif table.size(Data().TakeTower.aoeCache) == 16 then
-            DM.ChangeState('P3AoePut2')
+        local aoeCnt = table.size(Data().TakeTower.aoeCache)
+        if 0 < aoeCnt and aoeCnt <= 8 then
+            if DM.BeLowState('P3AoePut1') then
+                DM.ChangeState('P3AoePut1')
+            end
+        elseif aoeCnt > 8 then
+            if DM.BeLowState('P3AoePut2') then
+                DM.ChangeState('P3AoePut2')
+            end
         end
     elseif aoeInfo.aoeID == 47856 then
         --table.insert(Data().TakeTower.castCache, aoeInfo)
@@ -1442,7 +1447,6 @@ Dmu_P3.Update = function()
             end
         end
         if DM.InState('P3AoePut1') then
-
             if Cfg().takeTowerType ~= 1 then
                 if Data().TakeTower.Put2Pos == nil or table.size(Data().TakeTower.Put2Pos) < 8 then
                     Data().TakeTower.Put2Pos = {}

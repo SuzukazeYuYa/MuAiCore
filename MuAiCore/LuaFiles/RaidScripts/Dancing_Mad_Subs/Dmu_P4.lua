@@ -375,7 +375,7 @@ local doSendMacro = function()
                         msgList[7] = msgList[7] .. '假眼，看向点名：'
                     end
                 end
-                msgList[7] = msgList[7] ..  jobName .. ' '
+                msgList[7] = msgList[7] .. jobName .. ' '
             else
                 if Data().Buff[jobPos][5543] then
                     if not eye1Type then
@@ -413,11 +413,11 @@ local doSendMacro = function()
         if buff5545 ~= nil then
             if buff5545.duration > 30 then
                 if not Data().Buff[jobPos][5545] then
-                    msgList[6] = msgList[6] ..  jobName .. ' '
+                    msgList[6] = msgList[6] .. jobName .. ' '
                 end
             else
                 if not Data().Buff[jobPos][5545] then
-                    msgList[2] = msgList[2] ..  jobName .. ' '
+                    msgList[2] = msgList[2] .. jobName .. ' '
                 end
             end
         end
@@ -428,9 +428,9 @@ local doSendMacro = function()
         if buff5546 ~= nil then
             if buff5546.duration > 30 then
                 if Data().Buff[jobPos][5546] then
-                    msgList[5] = msgList[5] ..  jobName .. ' 停，'
+                    msgList[5] = msgList[5] .. jobName .. ' 停，'
                 else
-                    msgList[5] = msgList[5] ..  jobName .. ' 动，'
+                    msgList[5] = msgList[5] .. jobName .. ' 动，'
                 end
             else
                 if Data().Buff[jobPos][5546] then
@@ -760,7 +760,7 @@ Dmu_P4.Update = function()
                     MG.CreateDrawer(1, 0, 0, nil, 1):addRect(posBoth.x, 0, posBoth.z, 40, 3, Data().ExDeath.DothBeamObj.pos.h)
                 end
                 if Cfg().guide then
-                    if Data().ExDeath.GuideData == nil then
+                    if Data().ExDeath.GuideData == nil or table.size(Data().ExDeath.GuideData) < 8 then
                         Data().ExDeath.GuideData = {}
                         for job, member in pairs(MG.Party) do
                             local buffMap = Data().Buff[job]
@@ -818,10 +818,13 @@ Dmu_P4.Update = function()
                         end
                         debugGuideData('P4ExDeath', 'guide_buff_3', '执行Buff指路数据生成', Data().ExDeath.GuideData)
                     else
-                        MG.FrameMultiD(Data().ExDeath.GuideData)
+
                         MG.LogOnce('P4ExDeath', 'draw_buff_3', '执行Buff调用FrameMultiD', {
                             count = MG.LogCount(Data().ExDeath.GuideData),
                         })
+                    end
+                    if Data().ExDeath.GuideData ~= nil and table.size(Data().ExDeath.GuideData) > 0 then
+                        MG.FrameMultiD(Data().ExDeath.GuideData)
                     end
                 end
             end
@@ -948,10 +951,12 @@ Dmu_P4.Update = function()
                         })
                     end
                 else
-                    MG.FrameMultiD(Data().Eye1.GuidePos)
                     MG.LogOnce('P4Eye', 'draw_1', '第一次石化眼调用FrameMultiD', {
                         count = MG.LogCount(Data().Eye1.GuidePos),
                     })
+                end
+                if Data().Eye1.GuidePos ~= nil and table.size(Data().Eye1.GuidePos) > 0 then
+                    MG.FrameMultiD(Data().Eye1.GuidePos)
                 end
             end
         end
@@ -984,10 +989,12 @@ Dmu_P4.Update = function()
                 guide2Count = MG.LogCount(Data().WaterFire1.Guide2),
             })
         else
-            MG.FrameMultiD(Data().WaterFire1.Guide1)
             MG.LogOnce('P4WaterFire', 'draw_1', '第一次火水调用FrameMultiD', {
                 count = MG.LogCount(Data().WaterFire1.Guide1),
             })
+        end
+        if Data().WaterFire1.Guide1 ~= nil and table.size(Data().WaterFire1.Guide1) > 0 then
+            MG.FrameMultiD(Data().WaterFire1.Guide1)
         end
     end
     if DM.InState('P4WaterFire1Put') then
@@ -1161,10 +1168,12 @@ Dmu_P4.Update = function()
                     real = Data().Eye2.type,
                 })
             else
-                MG.FrameMultiD(Data().Eye2.GuidePos)
                 MG.LogOnce('P4Eye', 'draw_2', '第二次石化眼调用FrameMultiD', {
                     count = MG.LogCount(Data().Eye2.GuidePos),
                 })
+            end
+            if Data().Eye2.GuidePos ~= nil and table.size(Data().Eye2.GuidePos) > 0 then
+                MG.FrameMultiD(Data().Eye2.GuidePos)
             end
         end
     end
@@ -1183,10 +1192,12 @@ Dmu_P4.Update = function()
                 type = Data().WaterFire2.Type,
             })
         else
-            MG.FrameMultiD(Data().WaterFire2.Guide1)
             MG.LogOnce('P4WaterFire', 'draw_2_before_put', '第二次火水集合调用FrameMultiD', {
                 count = MG.LogCount(Data().WaterFire2.Guide1),
             })
+        end
+        if Data().WaterFire2.Guide1 ~= nil and table.size(Data().WaterFire2.Guide1) > 0 then
+            MG.FrameMultiD(Data().WaterFire2.Guide1)
         end
     end
 
@@ -1226,10 +1237,12 @@ Dmu_P4.Update = function()
                     far = far,
                 })
             else
-                MG.FrameMultiD(Data().WaterFire2.Guide2)
                 MG.LogOnce('P4WaterFire', 'draw_2_put', '第二次火水放置后调用FrameMultiD', {
                     count = MG.LogCount(Data().WaterFire2.Guide2),
                 })
+            end
+            if Data().WaterFire2.Guide2 ~= nil and table.size(Data().WaterFire2.Guide2) > 0 then
+                MG.FrameMultiD(Data().WaterFire2.Guide2)
             end
         end
     end
