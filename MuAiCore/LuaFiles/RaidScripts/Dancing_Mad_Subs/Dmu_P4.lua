@@ -53,30 +53,50 @@ local buffChaos = {
     5548, --混沌之水，6米月环
 }
 
+-- 雷移动向量
+local moveDir = {
+    -- L13
+    [1] = { x = 0.354, y = 0, z = -0.354 },
+    -- L24
+    [2] = { x = -0.354, y = 0, z = 0.354 },
+    -- R13
+    [3] = { x = -0.354, y = 0, z = -0.354 },
+    -- L13
+    [4] = { x = 0.354, y = 0, z = 0.354 },
+}
+
 local eye1PosFix = {
     [1] = { -- L13
-        th = { x = 96.11, y = 0, z = 95.41 },
-        dps = { x = 104.59, y = 0, z = 103.89 },
-        g = { x = 101, y = 0, z = 99 },
-        real = { x = 106.00, y = 0, z = 94.00 },
+        th = { x = 95, y = 0, z = 95 },
+        dps = { x = 105, y = 0, z = 105 },
+        g = { x = 100, y = 0, z = 100 },
+        real = { x = 105, y = 0, z = 95 },
+        fakeTh = { x = 98, y = 0, z = 98 },
+        fakeDps = { x = 102, y = 0, z = 102 },
     },
     [2] = { -- L24
-        th = { x = 95.41, y = 0, z = 96.11 },
-        dps = { x = 103.89, y = 0, z = 104.59 },
-        g = { x = 99, y = 0, z = 101 },
-        real = { x = 94.00, y = 0, z = 106.00 },
+        th = { x = 95, y = 0, z = 95 },
+        dps = { x = 105, y = 0, z = 105 },
+        g = { x = 100, y = 0, z = 100 },
+        real = { x = 95, y = 0, z = 105 },
+        fakeTh = { x = 98, y = 0, z = 98 },
+        fakeDps = { x = 102, y = 0, z = 102 },
     },
     [3] = { -- R13
-        th = { x = 103.89, y = 0, z = 95.41 },
-        dps = { x = 95.41, y = 0, z = 95.41 },
-        g = { x = 99, y = 0, z = 99 },
-        real = { x = 94.00, y = 0, z = 94.00 },
+        th = { x = 105, y = 0, z = 95 },
+        dps = { x = 95, y = 0, z = 105 },
+        g = { x = 100, y = 0, z = 100 },
+        real = { x = 95, y = 0, z = 95 },
+        fakeTh = { x = 102, y = 0, z = 98 },
+        fakeDps = { x = 98, y = 0, z = 102 },
     },
     [4] = { -- R24
-        th = { x = 104.59, y = 0, z = 96.11 },
-        dps = { x = 96.11, y = 0, z = 104.59 },
-        g = { x = 101, y = 0, z = 101 },
-        real = { x = 106.00, y = 0, z = 106.00 },
+        th = { x = 105, y = 0, z = 95 },
+        dps = { x = 95, y = 0, z = 105 },
+        g = { x = 100, y = 0, z = 100 },
+        real = { x = 105, y = 0, z = 105 },
+        fakeTh = { x = 102, y = 0, z = 98 },
+        fakeDps = { x = 98, y = 0, z = 102 },
     },
 }
 
@@ -859,7 +879,6 @@ Dmu_P4.Update = function()
                         Data().Eye1.type = true
                     end
                 end
-
             end
             if table.size(Data().Eye1.Owner) >= 2 then
                 if AnyoneCore ~= nil and Cfg().draw and not Data().Eye1.wasDraw then
@@ -901,27 +920,33 @@ Dmu_P4.Update = function()
                         if Cfg().eyeType == 1 then
                             --盗火固定
                             local template = eye1PosFix[tType]
+                            local curMove = moveDir[tType]
                             for job, member in pairs(MG.Party) do
                                 if table.contains(Data().Eye1.Owner, member.id) then
                                     if Data().Eye1.type then
-                                        Data().Eye1.GuidePos[job] = template.real
+                                        Data().Eye1.GuidePos[job] = MG.VectorXZAdd(template.real, curMove)
                                     else
                                         if MG.IndexOf(MG.JobPosName, job) <= 4 then
-                                            Data().Eye1.GuidePos[job] = template.th
+                                            Data().Eye1.GuidePos[job] = MG.VectorXZAdd(template.fakeTh, curMove)
                                         else
-                                            Data().Eye1.GuidePos[job] = template.dps
+                                            Data().Eye1.GuidePos[job] = MG.VectorXZAdd(template.fakeDps, curMove)
                                         end
                                     end
                                 else
-                                    Data().Eye1.GuidePos[job] = template.g
+                                    if MG.IndexOf(MG.JobPosName, job) <= 4 then
+                                        Data().Eye1.GuidePos[job] = MG.VectorXZAdd(template.th, curMove)
+                                    else
+                                        Data().Eye1.GuidePos[job] = MG.VectorXZAdd(template.dps, curMove)
+                                    end
                                 end
                             end
                         elseif Cfg().eyeType == 2 then
                             --盗火常规
                             local template = eye1PosFix[tType]
+                            local curMove = moveDir[tType]
                             for job, member in pairs(MG.Party) do
                                 if table.contains(Data().Eye1.Owner, member.id) then
-                                    Data().Eye1.GuidePos[job] = template.g
+                                    Data().Eye1.GuidePos[job] = MG.VectorXZAdd(template.g, curMove)
                                 end
                             end
                         elseif Cfg().eyeType == 3 then
@@ -1133,19 +1158,19 @@ Dmu_P4.Update = function()
                     if Cfg().eyeType == 1 then
                         if table.contains(Data().Eye2.Owner, member.id) then
                             if Data().Eye2.type then
-                                Data().Eye2.GuidePos[job] = { x = 95, y = 0, z = 100 }
+                                Data().Eye2.GuidePos[job] = { x = 105, y = 0, z = 100 }
                             else
                                 if MG.IndexOf(MG.JobPosName, job) <= 4 then
-                                    Data().Eye2.GuidePos[job] = { x = 100, y = 0, z = 91 }
+                                    Data().Eye2.GuidePos[job] = { x = 100, y = 0, z = 98 }
                                 else
-                                    Data().Eye2.GuidePos[job] = { x = 100, y = 0, z = 109 }
+                                    Data().Eye2.GuidePos[job] = { x = 100, y = 0, z = 102 }
                                 end
                             end
                         else
                             if MG.IndexOf(MG.JobPosName, job) <= 4 then
-                                Data().Eye2.GuidePos[job] = { x = 100, y = 0, z = 98 }
+                                Data().Eye2.GuidePos[job] = { x = 100, y = 0, z = 94 }
                             else
-                                Data().Eye2.GuidePos[job] = { x = 100, y = 0, z = 102 }
+                                Data().Eye2.GuidePos[job] = { x = 100, y = 0, z = 106 }
                             end
                         end
                     elseif Cfg().eyeType == 2 then
