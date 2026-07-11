@@ -413,7 +413,11 @@ Dmu_P5.OnEntityChannel = function(entityID, spellID, _)
         end
     elseif spellID == 47934 or spellID == 47935 then
         for _, member in pairs(MG.Party) do
-            MG.CreateDrawer(1, 0, 1, 0.1):addTimedCircleOnEnt(5000, member.id, 5)
+            if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
+                MG.CreateDrawer(0.3, 0, 0.3, 0.1):addTimedCircleOnEnt(5000, member.id, 5)
+            else
+                MG.CreateDrawer(1, 0, 1, 0.1):addTimedCircleOnEnt(5000, member.id, 5)
+            end
         end
     elseif spellID == 47925 then
         DM.ChangeState('P5Forsaken')
