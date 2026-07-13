@@ -732,7 +732,7 @@ Dmu_P5.Update = function()
     if DM.InState('P5MaddeningOrchestra2End')
             or DM.InState('P5MaddeningOrchestra2_2End')
     then
-        if Data().MaddeningOrchestra.Guide3 == nil or table.size(Data().MaddeningOrchestra.Guide2) < 8 then
+        if Data().MaddeningOrchestra.Guide3 == nil or table.size(Data().MaddeningOrchestra.Guide3) < 8 then
             Data().MaddeningOrchestra.Guide3 = {}
             for job, member in pairs(MG.Party) do
                 if job == 'MT' or job == 'ST' then

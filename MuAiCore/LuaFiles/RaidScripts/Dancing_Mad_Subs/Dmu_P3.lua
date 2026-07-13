@@ -40,6 +40,15 @@ local Data = function()
     return MG.DancingMad.P3
 end
 
+--当前踩塔类型
+local takeTowerType = {
+    Left = 1,
+    Right = 2,
+    Mid = 3,
+    LeftNear = 4,
+    RightNear = 5,
+}
+
 --- 水火画图
 local drawFireWater = function(buffId)
     if not Cfg().draw then
@@ -703,7 +712,7 @@ end
 local drawTowerHeading = function()
     if not Cfg().draw
             or DM.BeLowState('P3BlackHole4_2')
-            or DM.OverState('P3Tower2', true)
+            or DM.OverState('P3TowerEnd', true)
     then
         return
     end
@@ -811,12 +820,8 @@ Dmu_P3.OnEntityChannel = function(entityID, spellID, _)
     elseif spellID == 47873 then
         Data().DamningEdict.OnDraw = true
         Data().DamningEdict.Timer = Now()
-        --elseif spellID == 47877 then
-        --if DM.OverState('P3Tower1', true) then
-        --    Data().TakeTower.Timer = Now()
-        --end
     elseif spellID == 47889 then
-        if DM.OverState('P3Tower2', true) and AnyoneCore ~= nil then
+        if DM.OverState('P3TowerEnd', true) and AnyoneCore ~= nil then
             AnyoneCore.addTimedWorldTextOnEnt(
                     6000,
                     'Move',
@@ -846,22 +851,71 @@ Dmu_P3.OnEntityCast = function(entityID, spellID, castPos)
             DM.GoNextSate()
         end
     elseif spellID == 47875 then
-        -- 分摊判定
+        -- 踩塔+分摊 中分摊判定
         if Data().TakeTower.boomPos == nil then
-            Data().TakeTower.boomPos = {
-                TensorCore.mGetEntity(Data().TakeTower.firstEntity).pos
-            }
+            Data().TakeTower.boomPos = { TensorCore.mGetEntity(Data().TakeTower.firstEntity).pos }
+            --第一次分摊，立刻修改分摊人的指路类型
+            for job, _ in pairs(Data().TakeTower.GuideTypes) do
+                if Data().TakeTower.isDps1st then
+                    if MG.IndexOf(MG.JobPosName, job) > 4 then
+                        if Data().TakeTower.Types[job] == takeTowerType.Left then
+                            Data().TakeTower.GuideTypes[job] = takeTowerType.LeftNear
+                        elseif Data().TakeTower.Types[job] == takeTowerType.Right then
+                            Data().TakeTower.GuideTypes[job] = takeTowerType.RightNear
+                        end
+                    end
+                else
+                    if MG.IndexOf(MG.JobPosName, job) <= 4 then
+                        if Data().TakeTower.Types[job] == takeTowerType.Left then
+                            Data().TakeTower.GuideTypes[job] = takeTowerType.LeftNear
+                        elseif Data().TakeTower.Types[job] == takeTowerType.Right then
+                            Data().TakeTower.GuideTypes[job] = takeTowerType.RightNear
+                        end
+                    end
+                end
+            end
         else
-            table.insert(Data().TakeTower.boomPos,
-                    TensorCore.mGetEntity(Data().TakeTower.secondEntity).pos)
+            table.insert(Data().TakeTower.boomPos, TensorCore.mGetEntity(Data().TakeTower.secondEntity).pos)
         end
     elseif spellID == 47856 then
         --跺脚判定
         Data().TakeTower.stampCnt = Data().TakeTower.stampCnt + 1
-        if Data().TakeTower.stampCnt == 2 then
-            DM.ChangeState('P3Tower1')
-        elseif Data().TakeTower.stampCnt == 4 then
-            DM.ChangeState('P3Tower2')
+        if Data().TakeTower.stampCnt < 3 then
+            local curStamp = Data().TakeTower.stampData[entityID]
+            if curStamp ~= nil then
+                for job, guideType in pairs(Data().TakeTower.GuideTypes) do
+                    if guideType == curStamp then
+                        if Data().TakeTower.isDps1st then
+                            if MG.IndexOf(MG.JobPosName, job) <= 4 then
+                                Data().TakeTower.GuideTypes[job] = takeTowerType.Mid
+                            end
+                        else
+                            if MG.IndexOf(MG.JobPosName, job) > 4 then
+                                Data().TakeTower.GuideTypes[job] = takeTowerType.Mid
+                            end
+                        end
+                    end
+                end
+                if curStamp == takeTowerType.Left then
+                    for job, guideType in pairs(Data().TakeTower.GuideTypes) do
+                        if guideType == takeTowerType.LeftNear then
+                            Data().TakeTower.GuideTypes[job] = takeTowerType.Left
+                        end
+                    end
+                end
+                if curStamp == takeTowerType.Right then
+                    for job, guideType in pairs(Data().TakeTower.GuideTypes) do
+                        if guideType == takeTowerType.RightNear then
+                            Data().TakeTower.GuideTypes[job] = takeTowerType.Right
+                        end
+                    end
+                end
+            else
+                MG.Log('Stamp', '当前跺脚踩踏位置计算失败: stampCnt = ' .. Data().TakeTower.stampCnt)
+            end
+        end
+        if Data().TakeTower.stampCnt == 4 then
+            DM.ChangeState('P3TowerEnd')
         end
     elseif spellID == 47878 then
         -- 分摊位置炸圈
@@ -883,12 +937,18 @@ Dmu_P3.OnAOECreate = function(aoeInfo)
             end
         end
     elseif aoeInfo.aoeID == 47856 then
-        --table.insert(Data().TakeTower.castCache, aoeInfo)
-        --if table.size(Data().TakeTower.castCache) == 2 then
-        --    Data().TakeTower.TimerTower1 = Now()
-        --elseif table.size(Data().TakeTower.castCache) == 4 then
-        --    Data().TakeTower.TimerTower2 = Now()
-        --end
+        -- 计算跺脚顺序，AOE先出，后Cast
+        if Data().TakeTower.stampData == nil then
+            Data().TakeTower.stampData = {}
+        end
+        local curPos = { x = aoeInfo.x, y = aoeInfo.y, z = aoeInfo.z }
+        local disLeft = TensorCore.getDistance2d(curPos, Data().TakeTower.Left)
+        local disRight = TensorCore.getDistance2d(curPos, Data().TakeTower.Right)
+        if disLeft < disRight then
+            Data().TakeTower.stampData[aoeInfo.entityID] = takeTowerType.Left
+        else
+            Data().TakeTower.stampData[aoeInfo.entityID] = takeTowerType.Right
+        end
     end
 end
 
@@ -910,36 +970,71 @@ Dmu_P3.OnMarkerAdd = function(entityID, markerID)
         else
             Data().TakeTower.secondEntity = entityID
         end
-        for job, member in pairs(MG.Party) do
-            if entityID == member.id and Data().TakeTower.isDps == nil then
-                local curDir = TensorCore.mGetEntity(Data().Kefka.id).pos.h
-                local left = TensorCore.getPosInDirection(DM.Center, curDir - math.pi / 2, 10)
-                local right = TensorCore.getPosInDirection(DM.Center, curDir + math.pi / 2, 10)
-                if Cfg().towerHeading == 2 then
-                    left, right = right, left
+        -- 踩塔数据初始化
+        if Data().TakeTower.isDps1st == nil then
+            local curDir = TensorCore.mGetEntity(Data().Kefka.id).pos.h
+            local left = TensorCore.getPosInDirection(DM.Center, curDir - math.pi / 2, 10)
+            local right = TensorCore.getPosInDirection(DM.Center, curDir + math.pi / 2, 10)
+            if Data().TakeTower.Left == nil or Data().TakeTower.Right == nil then
+                --记录场基左右坐标
+                Data().TakeTower.Left = left
+                Data().TakeTower.Right = right
+                Data().TakeTower.LeftNear = TensorCore.getPosInDirection(DM.Center, curDir - math.pi / 2, 4.5)
+                Data().TakeTower.RightNear = TensorCore.getPosInDirection(DM.Center, curDir + math.pi / 2, 4.5)
+            end
+            local markJob
+            for job, member in pairs(MG.Party) do
+                if entityID == member.id then
+                    markJob = job
+                    break
                 end
-                -- 先后踩踏的站位
-                local dpsFirst, thFirst
-                thFirst = { MT = DM.Center, ST = DM.Center, H1 = DM.Center, H2 = DM.Center,
-                            D1 = left, D3 = left, D2 = right, D4 = right, }
+            end
+            if MG.IndexOf(MG.JobPosName, markJob) <= 4 then
+                Data().TakeTower.isDps1st = false
+            else
+                Data().TakeTower.isDps1st = true
+            end
+            --计算踩塔类型
+            if Cfg().towerHeading == 1 then
                 if Cfg().towerGround == 1 then
-                    dpsFirst = { MT = right, ST = left, H1 = right, H2 = left,
-                                 D1 = DM.Center, D3 = DM.Center, D2 = DM.Center, D4 = DM.Center, }
+                    Data().TakeTower.Types = {
+                        MT = takeTowerType.Right, ST = takeTowerType.Left, H1 = takeTowerType.Right, H2 = takeTowerType.Left,
+                        D1 = takeTowerType.Left, D3 = takeTowerType.Left, D2 = takeTowerType.Right, D4 = takeTowerType.Right,
+                    }
                 else
-                    dpsFirst = { MT = left, ST = right, H1 = left, H2 = right,
-                                 D1 = DM.Center, D3 = DM.Center, D2 = DM.Center, D4 = DM.Center, }
+                    Data().TakeTower.Types = {
+                        MT = takeTowerType.Left, ST = takeTowerType.Right, H1 = takeTowerType.Left, H2 = takeTowerType.Right,
+                        D1 = takeTowerType.Left, D3 = takeTowerType.Left, D2 = takeTowerType.Right, D4 = takeTowerType.Right,
+                    }
                 end
-
+            else
+                if Cfg().towerGround == 1 then
+                    Data().TakeTower.Types = {
+                        MT = takeTowerType.Left, ST = takeTowerType.Right, H1 = takeTowerType.Left, H2 = takeTowerType.Right,
+                        D1 = takeTowerType.Right, D3 = takeTowerType.Right, D2 = takeTowerType.Left, D4 = takeTowerType.Left,
+                    }
+                else
+                    Data().TakeTower.Types = {
+                        MT = takeTowerType.Right, ST = takeTowerType.Left, H1 = takeTowerType.Right, H2 = takeTowerType.Left,
+                        D1 = takeTowerType.Right, D3 = takeTowerType.Right, D2 = takeTowerType.Left, D4 = takeTowerType.Left,
+                    }
+                end
+            end
+            Data().TakeTower.GuideTypes = {}
+            for job, takeType in pairs(Data().TakeTower.Types) do
                 if MG.IndexOf(MG.JobPosName, job) <= 4 then
-                    Data().TakeTower.isDps = false
-                    Data().TakeTower.Guide1 = thFirst
-                    Data().TakeTower.Guide2 = dpsFirst
+                    if Data().TakeTower.isDps1st then
+                        Data().TakeTower.GuideTypes[job] = takeType
+                    else
+                        Data().TakeTower.GuideTypes[job] = takeTowerType.Mid
+                    end
                 else
-                    Data().TakeTower.isDps = true
-                    Data().TakeTower.Guide1 = dpsFirst
-                    Data().TakeTower.Guide2 = thFirst
+                    if Data().TakeTower.isDps1st then
+                        Data().TakeTower.GuideTypes[job] = takeTowerType.Mid
+                    else
+                        Data().TakeTower.GuideTypes[job] = takeType
+                    end
                 end
-                break
             end
         end
     end
@@ -1115,7 +1210,7 @@ Dmu_P3.Update = function()
                     if Data().UmbraSmash.LeadPlayer == nil then
                         Data().UmbraSmash.LeadPlayer = farest
                     end
-                    DM.redDrawer:addCircle(farest.pos.x, farest.pos.y, farest.pos.z, 18)
+                    DM.redDrawer:addCircle(farest.pos.x, farest.pos.y, farest.pos.z, 19)
                 end
             else
                 if TimeSince(Data().UmbraSmash.Timer) < 4700 then
@@ -1124,7 +1219,7 @@ Dmu_P3.Update = function()
                         Data().UmbraSmash.drawPos = farest.pos
                     end
                     local pos = Data().UmbraSmash.drawPos
-                    DM.redDrawer:addCircle(pos.x, pos.y, pos.z, 18)
+                    DM.redDrawer:addCircle(pos.x, pos.y, pos.z, 19)
                 end
             end
         end
@@ -1132,7 +1227,7 @@ Dmu_P3.Update = function()
         if not Data().UmbraSmash.LeadEnd then
             if Data().UmbraSmash.Start
                     and Data().UmbraSmash.Timer ~= 0
-                    and TimeSince(Data().UmbraSmash.Timer) > 1500 then
+                    and TimeSince(Data().UmbraSmash.Timer) > 300 then
                 Data().UmbraSmash.LeadEnd = true
             elseif Cfg().guide then
                 if Cfg().superJump == 1 and MG.SelfPos == 'D3'
@@ -1418,7 +1513,6 @@ Dmu_P3.Update = function()
             if Cfg().takeTowerType ~= 1 then
                 if Data().TakeTower.Put1Pos == nil or table.size(Data().TakeTower.Put1Pos) < 8 then
                     Data().TakeTower.Put1Pos = {}
-
                     if Cfg().takeTowerType == 2 then
                         --CCHH
                         for job, _ in pairs(MG.Party) do
@@ -1441,7 +1535,8 @@ Dmu_P3.Update = function()
                             end
                         end
                     end
-                else
+                end
+                if Data().TakeTower.Put1Pos ~= nil or table.size(Data().TakeTower.Put1Pos) > 0 then
                     MG.FrameMultiD(Data().TakeTower.Put1Pos)
                 end
             end
@@ -1459,7 +1554,7 @@ Dmu_P3.Update = function()
                         local posHead = TensorCore.getPosInDirection(DM.Center, heading, 9)
                         local posBack = TensorCore.getPosInDirection(DM.Center, heading + math.pi, 9)
                         for job, _ in pairs(MG.Party) do
-                            if MG.IndexOf(MG.JobPosName) <= 4 then
+                            if MG.IndexOf(MG.JobPosName, job) <= 4 then
                                 Data().TakeTower.Put2Pos[job] = posHead
                             else
                                 Data().TakeTower.Put2Pos[job] = posBack
@@ -1480,22 +1575,39 @@ Dmu_P3.Update = function()
                             Data().TakeTower.Put2Pos[job] = TensorCore.getPosInDirection(DM.Center, curHeading, 13)
                         end
                     end
-                else
+
+                end
+                if Data().TakeTower.Put2Pos ~= nil or table.size(Data().TakeTower.Put2Pos) > 8 then
                     MG.FrameMultiD(Data().TakeTower.Put2Pos)
                 end
             end
         end
-        if DM.InState('P3AoePut2') and Data().TakeTower.Guide1 ~= nil then
-            MG.FrameMultiD(Data().TakeTower.Guide1)
-        end
-        if DM.InState('P3Tower1') and Data().TakeTower.Guide2 ~= nil then
-            MG.FrameMultiD(Data().TakeTower.Guide2)
-        end
-        if DM.InState('P3Tower2') then
-            if Cfg().draw and Data().TakeTower.boomPos ~= nil and table.size(Data().TakeTower.boomPos) >= 2 then
-                for _, pos in pairs(Data().TakeTower.boomPos) do
-                    DM.redDrawer:addCircle(pos.x, pos.y, pos.z, 6)
+        if DM.InState('P3AoePut2') then
+            if Data().TakeTower.isDps1st ~= nil then
+                for job, takeType in pairs(Data().TakeTower.GuideTypes) do
+                    if takeType == takeTowerType.Left then
+                        Data().TakeTower.GuidePos[job] = Data().TakeTower.Left
+                    elseif takeType == takeTowerType.Right then
+                        Data().TakeTower.GuidePos[job] = Data().TakeTower.Right
+                    elseif takeType == takeTowerType.Mid then
+                        Data().TakeTower.GuidePos[job] = DM.Center
+                    elseif takeType == takeTowerType.LeftNear then
+                        Data().TakeTower.GuidePos[job] = Data().TakeTower.LeftNear
+                    elseif takeType == takeTowerType.RightNear then
+                        Data().TakeTower.GuidePos[job] = Data().TakeTower.RightNear
+                    end
                 end
+            end
+            if table.size(Data().TakeTower.GuidePos) > 0 then
+                MG.FrameMultiD(Data().TakeTower.GuidePos)
+            end
+        end
+    end
+
+    if DM.InState('P3TowerEnd') then
+        if Cfg().draw and Data().TakeTower.boomPos ~= nil and table.size(Data().TakeTower.boomPos) >= 2 then
+            for _, pos in pairs(Data().TakeTower.boomPos) do
+                DM.redDrawer:addCircle(pos.x, pos.y, pos.z, 6)
             end
         end
     end

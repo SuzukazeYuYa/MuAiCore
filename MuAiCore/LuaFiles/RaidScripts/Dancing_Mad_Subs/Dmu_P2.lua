@@ -658,6 +658,26 @@ local drawWingsOfDestroy = function()
     end
 end
 
+local drawFarNearDeath = function()
+    if Cfg().draw
+            and Data().FarNearDeath.OnDraw
+            and Data().FarNearDeath.Timer > 0
+    then
+        if TimeSince(Data().FarNearDeath.Timer) < 4000 then
+            local curParty = MG.GetPartyPlayers()
+            table.sort(curParty, function(a, b)
+                local disA = TensorCore.getDistance2d(DM.Center, a.pos)
+                local disB = TensorCore.getDistance2d(DM.Center, b.pos)
+                return disA < disB
+            end)
+            DM.purpleDrawer:addCircle(curParty[1].pos.x, 0, curParty[1].pos.z, 6)
+            DM.purpleDrawer:addCircle(curParty[8].pos.x, 0, curParty[8].pos.z, 6)
+        else
+            Data().FarNearDeath.OnDraw = false
+            Data().FarNearDeath.Timer = 0
+        end
+    end
+end
 --------------------------------------------- event function ---------------------------------------------
 --- 初始化
 --- @param dm DancingMad
@@ -815,24 +835,7 @@ Dmu_P2.Update = function()
     resetKickTimer()
     drawTowerHeading()
     drawWingsOfDestroy()
-    if Data().FarNearDeath.OnDraw
-            and Cfg().draw
-            and Data().FarNearDeath.Timer > 0
-    then
-        if TimeSince(Data().FarNearDeath.Timer) < 5000 then
-            local curParty = MG.GetPartyPlayers()
-            table.sort(curParty, function(a, b)
-                local disA = TensorCore.getDistance2d(DM.Center, a.pos)
-                local disB = TensorCore.getDistance2d(DM.Center, b.pos)
-                return disA < disB
-            end)
-            DM.purpleDrawer:addCircle(curParty[1].pos.x, 0, curParty[1].pos.z, 6)
-            DM.purpleDrawer:addCircle(curParty[8].pos.x, 0, curParty[8].pos.z, 6)
-        else
-            Data().FarNearDeath.OnDraw = false
-            Data().FarNearDeath.Timer = 0
-        end
-    end
+    drawFarNearDeath()
     if DM.InState('P2T8InitMark') and Data().Towers.wave > 0 then
         local wave = Data().Towers.wave
         if Data().Towers.GuideData[wave] == nil or table.size(Data().Towers.GuideData[wave]) < 8 then

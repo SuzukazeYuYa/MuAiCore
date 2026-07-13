@@ -360,11 +360,11 @@ Config.init = function(M)
                 markOrder = { 'D1', 'D2', 'D3', 'D4', 'MT', 'ST', 'H2', 'H1' },
                 delayMark = true,
                 -- 踩塔基础类型
-                -- 1:其他 2:CCHH, 3:盗火，
+                --- 1:其他 2:CCHH, 3:盗火，
                 takeTowerType = 1,
-                -- 踩塔12点, 1 脚跟，2脚尖
+                --- 踩塔12点, 1 脚跟，2脚尖
                 towerHeading = 1,
-                -- 踩塔分组是面基是场基
+                --- 踩塔分组是面基是场基
                 towerGround = 1,
             },
             P4 = {

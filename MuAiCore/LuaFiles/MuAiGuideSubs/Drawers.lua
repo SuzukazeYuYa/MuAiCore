@@ -226,9 +226,9 @@ Drawers.init = function(M)
                 true
         )
         local newDraw2 = Argus2.ShapeDrawer:new(
-                (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 255 / 255, 1)),
-                (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 255 / 255, 1)),
-                (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 255 / 255, 1)),
+                (GUI:ColorConvertFloat4ToU32(1, 0, 1, 1)),
+                (GUI:ColorConvertFloat4ToU32(1, 0, 1, 1)),
+                (GUI:ColorConvertFloat4ToU32(1, 0, 1, 1)),
                 nil,
                 1
         )
@@ -250,7 +250,7 @@ Drawers.init = function(M)
         size = size or 0.5
         local drawer1Color = GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)
         local drawer2Color = GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 1)
-        local drawer3Color = GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)
+        local drawer3Color = GUI:ColorConvertFloat4ToU32(1, 0, 1, 1)
         local newDraw = Argus2.ShapeDrawer:new(drawer1Color, drawer1Color, drawer1Color, w_1, 2)
         local newDraw2 = Argus2.ShapeDrawer:new(drawer2Color, drawer2Color, drawer2Color, drawer2Color, 2)
         local newDraw3 = Argus2.ShapeDrawer:new(drawer3Color, drawer3Color, drawer3Color, nil, 1)

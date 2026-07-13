@@ -353,21 +353,26 @@ local dataInit = function()
                 Timer = 0,
             },
             TakeTower = {
+                Left = nil,
+                Right = nil,
+                LeftNear = nil,
+                RightNear = nil,
                 aoeCache = {},
                 castCache = {},
+                --- 当前跺脚次数
                 stampCnt = 0,
-                isDps = nil,
+                --- 跺脚数据
+                stampData = nil,
+                --- 是否DPS先分摊
+                isDps1st = nil,
                 firstEntity = nil,
                 secondEntity = nil,
                 boomPos = nil,
-                isDps = nil,
                 Put1Pos = nil,
                 Put2Pos = nil,
-                Guide1 = nil,
-                Guide2 = nil,
-                Timer = 0,
-                TimerTower1 = 0,
-                TimerTower2 = 0,
+                Types = {},
+                GuideTypes = nil,
+                GuidePos = {}
             }
         },
         P4 = {
@@ -642,8 +647,7 @@ DM.StateNames = {
     'P3BlackHole4_2',
     'P3AoePut1',
     'P3AoePut2',
-    'P3Tower1',
-    'P3Tower2',
+    'P3TowerEnd',
     'P3End',
     --- P4 ---
     'P4Start',
