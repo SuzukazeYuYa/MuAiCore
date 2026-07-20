@@ -67,7 +67,7 @@ FruConfigUI.draw = function()
                             local fileName = NewFileName
                             if M.ContainsIgnoreCase(M.Config.FruCustomList, fileName)
                                     or string.lower(fileName) == "guideconfig"
-                                    or NewFileName == "" or #NewFileName == 0
+                                    or not M.IsValidConfigName(NewFileName)
                             then
                                 GUI:TextColored(1, 0, 0, 1, "已存在该名称文件或者名称不合法,无法创建!")
                                 havaSame = true
@@ -78,11 +78,12 @@ FruConfigUI.draw = function()
                         GUI:PopItemWidth()
                         GUI:Button("确认", 100, 20)
                         if GUI:IsItemClicked(0) then
-                            if not havaSame and newFileName ~= nil and #newFileName > 0 then
-                                M.SaveFileConfig(M.Config.FruGuidePath, newFileName, M.Config.FruCfg)
-                                newMode = false
-                                if newFileName ~= M.Config.FruCustomList[M.Config.FruCustomListIndex] then
-                                    table.insert(M.Config.FruCustomList, newFileName)
+                            if not havaSame and M.IsValidConfigName(newFileName) then
+                                if M.SaveFileConfig(M.Config.FruGuidePath, newFileName, M.Config.FruCfg) then
+                                    newMode = false
+                                    if newFileName ~= M.Config.FruCustomList[M.Config.FruCustomListIndex] then
+                                        table.insert(M.Config.FruCustomList, newFileName)
+                                    end
                                 end
                             else
                                 M.InfoNoLog("已存在该名称文件或者名称不合法,无法创建!")

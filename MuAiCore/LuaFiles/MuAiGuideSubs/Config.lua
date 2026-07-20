@@ -4,6 +4,32 @@ local Config = {}
     配置文件处理模块
 ===========================
 ]]
+local reservedFileNames = {
+    CON = true,
+    PRN = true,
+    AUX = true,
+    NUL = true,
+}
+for index = 1, 9 do
+    reservedFileNames['COM' .. index] = true
+    reservedFileNames['LPT' .. index] = true
+end
+
+Config.isValidConfigName = function(fileName)
+    if type(fileName) ~= 'string' or fileName == '' or #fileName > 120 then
+        return false
+    end
+    if fileName:find('..', 1, true)
+            or fileName:find('[<>:"/\\|%?%*%c]')
+            or fileName:find('%s')
+            or fileName:sub(-1) == '.'
+    then
+        return false
+    end
+    local stem = string.upper(fileName:match('^[^%.]+') or fileName)
+    return not reservedFileNames[stem]
+end
+
 ---@param M MuAiGuide
 local LoadUIConfig = function(M)
     M.Config = {}
@@ -315,7 +341,6 @@ Config.init = function(M)
         return {
             Enable = true,
             BindEffect = true,
-            DebugLog = false,
             P1 = {
                 enable = true, draw = true, guide = true,
                 autoLookAt = true,
@@ -357,7 +382,7 @@ Config.init = function(M)
                 takeLineAttack12 = false,
                 takeLineStop22 = false,
                 markOrderSelf = { 'MT', 'ST', 'D1', 'D2', 'D3', 'D4', 'H1', 'H2' },
-                markOrder = { 'D1', 'D2', 'D3', 'D4', 'MT', 'ST', 'H2', 'H1' },
+                markOrder = { 'MT', 'ST', 'D1', 'D2', 'D3', 'D4', 'H1', 'H2' },
                 delayMark = true,
                 -- 踩塔基础类型
                 --- 1:其他 2:CCHH, 3:盗火，
@@ -480,6 +505,9 @@ Config.init = function(M)
             end
         end
     end
+
+    M.IsValidConfigName = Config.isValidConfigName
+
     --- 读取存档名称
     M.LoadFileList = function(path, except)
         local files = { 'None' }
@@ -503,13 +531,17 @@ Config.init = function(M)
     end
     --- 读取序列化的表格文件
     M.LoadFileConfig = function(path, fileName, defConfig)
+        if not M.IsValidConfigName(fileName) then
+            M.ShowMsgUI(3, { '配置名不合法，已拒绝加载。' })
+            return defConfig
+        end
         local saveFile = path .. '\\' .. fileName .. '.lua'
 
         if (not FolderExists(path)) then
             FolderCreate(path)
         end
         local config = FileLoad(saveFile)
-        if config ~= nil then
+        if type(config) == 'table' then
             M.SyncNestedFields(config, defConfig)
             M.ShowMsgUI(3, { ('加载配置[' .. fileName .. ']成功！') })
             return config
@@ -520,12 +552,20 @@ Config.init = function(M)
 
     --- 将表格序列化到文件
     M.SaveFileConfig = function(path, fileName, table)
+        if not M.IsValidConfigName(fileName) then
+            M.ShowMsgUI(3, { '配置名不合法，已拒绝保存。' })
+            return false
+        end
         local saveFile = path .. '\\' .. fileName .. '.lua'
         if (not FolderExists(path)) then
             FolderCreate(path)
         end
-        FileSave(saveFile, table)
-        M.ShowMsgUI(3, { ('已将当前设置保存到配置[' .. fileName .. ']！') })
+        if FileSave(saveFile, table) then
+            M.ShowMsgUI(3, { ('已将当前设置保存到配置[' .. fileName .. ']！') })
+            return true
+        end
+        M.ShowMsgUI(3, { ('保存配置[' .. fileName .. ']失败，请检查目录权限！') })
+        return false
     end
 
     --- 读取设置信息
@@ -539,7 +579,7 @@ Config.init = function(M)
         end
         local saveFile = path .. '\\' .. fileName
         local config = FileLoad(saveFile)
-        if config ~= nil then
+        if type(config) == 'table' then
             M.SyncNestedFields(config, defaultCfg)
             return config
         end
@@ -561,9 +601,14 @@ Config.init = function(M)
             if (not FolderExists(path)) then
                 FolderCreate(path)
             end
-            FileSave(saveFile, curConfig)
-            M.Config[configName .. 'Previous'] = table.deepcopy(curConfig)
+            if FileSave(saveFile, curConfig) then
+                M.Config[configName .. 'Previous'] = table.deepcopy(curConfig)
+                return true
+            end
+            M.LogError('Config', '保存配置失败', { file = saveFile, config = configName }, true)
+            return false
         end
+        return true
     end
 
     M.SaveConfigJob = function(path, fileName, curConfig, preConfig)
@@ -575,8 +620,11 @@ Config.init = function(M)
             if (not FolderExists(path)) then
                 FolderCreate(path)
             end
-            FileSave(saveFile, curConfig)
-            return true
+            if FileSave(saveFile, curConfig) then
+                return true
+            end
+            M.LogError('Config', '保存职业配置失败', { file = saveFile }, true)
+            return false
         end
         return false
     end

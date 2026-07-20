@@ -7,6 +7,10 @@ local DM
 ---@type MuAiGuide
 local MG
 
+-- OnEntityChannel 到实际结算存在帧级抖动，按实战日志上界保留余量。
+local damningEdictDrawDuration = 5200
+local umbraSmashDrawDuration = 5400
+
 local markIndex = {
     [336] = 1,
     [337] = 2,
@@ -40,6 +44,20 @@ local Data = function()
     return MG.DancingMad.P3
 end
 
+local getLiveEntity = function(entityId, eventName, key)
+    if entityId == nil then
+        MG.LogOnce(eventName, key .. '_missing_id', '实体解析跳过：ID不存在')
+        return nil
+    end
+    local entity = TensorCore.mGetEntity(entityId)
+    if entity == nil or entity.pos == nil then
+        MG.LogOnce(eventName, key .. '_' .. tostring(entityId),
+                '实体解析跳过：当前帧实体不可用', { entityID = entityId })
+        return nil
+    end
+    return entity
+end
+
 --当前踩塔类型
 local takeTowerType = {
     Left = 1,
@@ -64,6 +82,11 @@ local drawFireWater = function(buffId)
         drawer = DM.cyanDrawer
         object = Data().Elements.Water
     end
+    if object == nil or object.pos == nil then
+        MG.LogOnce('P3Elements', 'missing_element_' .. tostring(buffId),
+                '元素绘制跳过：场地实体不可用', { buffID = buffId })
+        return
+    end
 
     local anyHasBuff = false
     for _, member in pairs(MG.Party) do
@@ -72,7 +95,11 @@ local drawFireWater = function(buffId)
             anyHasBuff = true
             if buff.duration < 7 then
                 local curMember = TensorCore.mGetEntity(member.id)
-                if buffId == 1600 then
+                if curMember == nil or curMember.pos == nil then
+                    MG.LogOnce('P3Elements', 'missing_buff_member_' .. tostring(member.id) .. '_' .. tostring(buffId),
+                            '元素绘制跳过：Buff持有者实体不可用',
+                            { entityID = member.id, buffID = buffId }, true)
+                elseif buffId == 1600 then
                     drawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 5, 5)
                 elseif buffId == 1601 then
                     drawer:addDonut(curMember.pos.x, curMember.pos.y, curMember.pos.z, 4, 10)
@@ -100,8 +127,15 @@ local drawFireWater = function(buffId)
         if anyHasBuff or Data().Elements.BuffEndTimer[buffId] ~= 0
                 and TimeSince(Data().Elements.BuffEndTimer[buffId]) < 2000 then
             local curFramePlayer = {}
-            for _, member in pairs(MG.Party) do
-                table.insert(curFramePlayer, TensorCore.mGetEntity(member.id))
+            for job, member in pairs(MG.Party) do
+                local curMember = TensorCore.mGetEntity(member.id)
+                if curMember == nil or curMember.pos == nil then
+                    MG.LogOnce('P3Elements', 'missing_sort_member_' .. tostring(job) .. '_' .. tostring(buffId),
+                            '元素距离排序跳过：队员实体不可用',
+                            { job = job, entityID = member.id, buffID = buffId }, true)
+                    return
+                end
+                table.insert(curFramePlayer, curMember)
             end
             table.sort(curFramePlayer, function(a, b)
                 if a.alive and not b.alive then
@@ -128,7 +162,11 @@ local drawImplosion = function()
     if not Cfg().draw or Data().Implosion.OnDraw == false or Data().Implosion.Timer <= 0 then
         return
     end
-    local pos = TensorCore.mGetEntity(Data().Chaos.id).pos
+    local chaos = getLiveEntity(Data().Chaos and Data().Chaos.id, 'P3Implosion', 'chaos')
+    if chaos == nil then
+        return
+    end
+    local pos = chaos.pos
     local timeSince = TimeSince(Data().Implosion.Timer)
     local skillId = Data().Implosion.skillId
     if timeSince < 8000 then
@@ -162,6 +200,9 @@ local lockFaceCheck = function()
         return
     end
     local player = TensorCore.mGetPlayer()
+    if player == nil or player.pos == nil then
+        return
+    end
     if Data().LockFace.buffType == 0 then
         local buff1602 = TensorCore.getBuff(player.id, 1602) --背对buff
         --local buff1603 = TensorCore.getBuff(player.id, 1603) --正对buff 无需获取
@@ -171,7 +212,10 @@ local lockFaceCheck = function()
             Data().LockFace.buffType = 1603
         end
     else
-        local curBoss = TensorCore.mGetEntity(Data().ExDeath.id)
+        local curBoss = getLiveEntity(Data().ExDeath and Data().ExDeath.id, 'P3LockFace', 'exdeath')
+        if curBoss == nil then
+            return
+        end
         local curBuff = TensorCore.getBuff(player.id, Data().LockFace.buffType)
         if curBuff ~= nil then
             local during = 5.5
@@ -229,7 +273,10 @@ local drawThunderIII = function()
     end
     if TimeSince(Data().ThunderIII.Timer) < 8500 then
         local curTarget, distance
-        local curEx = TensorCore.mGetEntity(Data().ExDeath.id)
+        local curEx = getLiveEntity(Data().ExDeath and Data().ExDeath.id, 'P3ThunderIII', 'exdeath')
+        if curEx == nil then
+            return
+        end
         MG.OnCurrentPartyDo(function(job, member)
             local dis = TensorCore.getDistance2d(curEx.pos, member.pos)
             if curTarget == nil or distance == nil or dis < distance then
@@ -286,7 +333,10 @@ local drawSlapHappy = function()
     local r3 = 14
     local r = 10
     local distance = { r * 1.414, r, r * 1.414, }
-    local curCaster = TensorCore.mGetEntity(Data().SlapHappy.CasterId)
+    local curCaster = getLiveEntity(Data().SlapHappy.CasterId, 'P3SlapHappy', 'caster')
+    if curCaster == nil then
+        return
+    end
     local curHeading = curCaster.pos.h
     local headingTable
     local isRight = false
@@ -320,12 +370,19 @@ local drawSlapHappy = function()
     -- 如果开启范围画图
     if Cfg().slapHappyDraw then
         if isRight then
-            local dir = TensorCore.getHeadingToTarget(DM.Center, TensorCore.mGetPlayer().pos)
+            local player = TensorCore.mGetPlayer()
+            if player == nil or player.pos == nil then
+                return
+            end
+            local dir = TensorCore.getHeadingToTarget(DM.Center, player.pos)
             DM.litBlue:addCone(100, 0, 100, 30, math.pi / 3, dir)
         else
-            local curMt = TensorCore.mGetEntity(MG.Party.MT.id)
-            local curH1 = TensorCore.mGetEntity(MG.Party.H1.id)
-            local curD1 = TensorCore.mGetEntity(MG.Party.D1.id)
+            local curMt = getLiveEntity(MG.Party.MT and MG.Party.MT.id, 'P3SlapHappy', 'mt')
+            local curH1 = getLiveEntity(MG.Party.H1 and MG.Party.H1.id, 'P3SlapHappy', 'h1')
+            local curD1 = getLiveEntity(MG.Party.D1 and MG.Party.D1.id, 'P3SlapHappy', 'd1')
+            if curMt == nil or curH1 == nil or curD1 == nil then
+                return
+            end
             local dirMt = TensorCore.getHeadingToTarget(DM.Center, curMt.pos)
             local dirH1 = TensorCore.getHeadingToTarget(DM.Center, curH1.pos)
             local dirD1 = TensorCore.getHeadingToTarget(DM.Center, curD1.pos)
@@ -376,7 +433,10 @@ local drawLookUponMe = function()
     if not Cfg().draw or not Data().LookUponMe.OnDraw then
         return
     end
-    local curCaster = TensorCore.mGetEntity(Data().LookUponMe.CasterId)
+    local curCaster = getLiveEntity(Data().LookUponMe.CasterId, 'P3LookUponMe', 'caster')
+    if curCaster == nil then
+        return
+    end
     local curHeading = curCaster.pos.h
     MG.CreateDrawer(1, 0.1, 0):addCenteredRect(100, 0, 100, 40, 16, curHeading)
     if TimeSince(Data().LookUponMe.Timer) > 5700 then
@@ -391,10 +451,13 @@ local drawDamningEdict = function()
     if not Cfg().draw or not Data().DamningEdict.OnDraw then
         return
     end
-    local curCaster = TensorCore.mGetEntity(Data().Chaos.id)
+    local curCaster = getLiveEntity(Data().Chaos and Data().Chaos.id, 'P3DamningEdict', 'chaos')
+    if curCaster == nil then
+        return
+    end
     local curHeading = curCaster.pos.h
     MG.CreateDrawer(1, 0.5, 0):addRect(curCaster.pos.x, 0, curCaster.pos.z, 50, 50, curHeading)
-    if TimeSince(Data().DamningEdict.Timer) > 5000 then
+    if TimeSince(Data().DamningEdict.Timer) > damningEdictDrawDuration then
         Data().DamningEdict.OnDraw = false
         Data().DamningEdict.CasterId = 0
         Data().DamningEdict.Timer = 0
@@ -402,11 +465,20 @@ local drawDamningEdict = function()
 end
 
 local getFarestFromChaos = function()
-    local curChaos = TensorCore.mGetEntity(Data().Chaos.id)
+    local curChaos = getLiveEntity(Data().Chaos and Data().Chaos.id, 'P3UmbraSmash', 'chaos')
+    if curChaos == nil then
+        return nil
+    end
     local distance = 0
     local farest = nil
-    for _, member in pairs(MG.Party) do
+    for job, member in pairs(MG.Party) do
         local curMember = TensorCore.mGetEntity(member.id)
+        if curMember == nil or curMember.pos == nil then
+            MG.LogOnce('P3UmbraSmash', 'missing_member_' .. tostring(job),
+                    '超级跳远离计算跳过：队员实体不可用',
+                    { job = job, entityID = member.id }, true)
+            return nil
+        end
         local dis = TensorCore.getDistance2d(curChaos.pos, curMember.pos)
         if farest == nil or dis > distance then
             distance = dis
@@ -426,7 +498,7 @@ local getEntTethers = function(contentId, tetherType)
         for _, tether in pairs(tethers) do
             if tetherType == tether.type then
                 local object = TensorCore.mGetEntity(sourceId)
-                if object.contentid == contentId then
+                if object ~= nil and object.contentid == contentId then
                     table.insert(result, {
                         sourceid = sourceId,
                         targetid = tether.targetid,
@@ -463,10 +535,12 @@ local drawBlackHole = function()
             return
         end
         for _, tether in pairs(tethers) do
-            local object = TensorCore.mGetEntity(tether.sourceid)
-            local target = TensorCore.mGetEntity(tether.targetid)
-            local dir = TensorCore.getHeadingToTarget(object.pos, target.pos)
-            DM.litBlue:addRect(object.pos.x, object.pos.y, object.pos.z, 40, 6, dir)
+            local object = getLiveEntity(tether.sourceid, 'P3BlackHole', 'source')
+            local target = getLiveEntity(tether.targetid, 'P3BlackHole', 'target')
+            if object ~= nil and target ~= nil then
+                local dir = TensorCore.getHeadingToTarget(object.pos, target.pos)
+                DM.litBlue:addRect(object.pos.x, object.pos.y, object.pos.z, 40, 6, dir)
+            end
         end
     end
 end
@@ -568,7 +642,10 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
             --初始化表格
             data.sourceObject[curState] = {}
             -- 获取当前BOSS面向
-            local bigKfk = TensorCore.mGetEntity(Data().Kefka.id)
+            local bigKfk = getLiveEntity(Data().Kefka and Data().Kefka.id, 'P3Line', 'kefka')
+            if bigKfk == nil then
+                return
+            end
             -- 实际计算的12点是BOSS面向的反方向
             local dir = bigKfk.pos.h + math.pi
             -- 从12点开始正点找线
@@ -578,10 +655,12 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                 -- 分析场内线情况并且将其按照12点排序，且将线出发点的黑洞缓存下来
                 for _, tether in pairs(tethers) do
                     local fromObj = TensorCore.mGetEntity(tether.sourceid)
-                    local teDir = TensorCore.getHeadingToTarget(DM.Center, fromObj.pos)
-                    if MG.IsSameDirection(MG.SetHeading2Pi(teDir), curDir, 0.1) then
+                    if fromObj ~= nil and fromObj.pos ~= nil then
+                        local teDir = TensorCore.getHeadingToTarget(DM.Center, fromObj.pos)
+                        if MG.IsSameDirection(MG.SetHeading2Pi(teDir), curDir, 0.1) then
                         --如果当前面向近似于黑洞方向，则添加到表格，这样循环过后会生成一个自然有序列
-                        table.insert(data.sourceObject[curState], fromObj)
+                            table.insert(data.sourceObject[curState], fromObj)
+                        end
                     end
                 end
             end
@@ -600,8 +679,17 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
             local curJob = Data().BlackHolds.MarkedPlayers[curMark]
             local curSourceObj = data.sourceObject[curState][i]
             if curJob ~= nil then
+                if curSourceObj == nil or curSourceObj.pos == nil then
+                    MG.LogOnce('P3Line', 'missing_source_' .. tostring(curState) .. '_' .. tostring(i),
+                            '接线指路等待：黑洞实体不完整')
+                    return
+                end
                 --如果当前标记的人没有找到，跳过
-                local curPlayer = TensorCore.mGetEntity(MG.Party[curJob].id)
+                local partyMember = MG.Party[curJob]
+                local curPlayer = getLiveEntity(partyMember and partyMember.id, 'P3Line', 'player_' .. tostring(curJob))
+                if curPlayer == nil then
+                    return
+                end
                 local tethers = Argus.getTethersOnEnt(curSourceObj.id)
                 local curTarget
                 if tethers ~= nil then
@@ -617,7 +705,10 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                         local fromDir = TensorCore.getHeadingToTarget(DM.Center, curSourceObj.pos)
                         if DM.InState('P3BlackHole4_1') then
                             local dir = MG.SetHeading2Pi(fromDir)
-                            local bigKfk = TensorCore.mGetEntity(Data().Kefka.id)
+                            local bigKfk = getLiveEntity(Data().Kefka and Data().Kefka.id, 'P3Line', 'kefka_guide')
+                            if bigKfk == nil then
+                                return
+                            end
                             local front = MG.SetHeading2Pi(bigKfk.pos.h)
                             local back = MG.SetHeading2Pi(bigKfk.pos.h + math.pi)
                             local guidePos
@@ -626,6 +717,7 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                             else
                                 guidePos = TensorCore.getPosInDirection(curSourceObj.pos, front, 4)
                             end
+                            guideData[curJob] = guidePos
                         else
                             if isDouble then
                                 table.insert(doubleLinePos, curSourceObj.pos)
@@ -659,11 +751,16 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                                     focusPlayer = curTarget
                                 else
                                     local targetJob = Data().BlackHolds.MarkedPlayers[targetMark]
-                                    focusPlayer = TensorCore.mGetEntity(MG.Party[targetJob].id)
+                                    local targetMember = targetJob and MG.Party[targetJob] or nil
+                                    focusPlayer = getLiveEntity(targetMember and targetMember.id,
+                                            'P3Line', 'focus_' .. tostring(targetJob))
                                 end
                             end
                         else
                             focusPlayer = curTarget
+                        end
+                        if focusPlayer == nil or focusPlayer.pos == nil then
+                            return
                         end
                         -- takeLineData[curJob] = { posObj = curSourceObj.pos, posPlayer = focusPlayer.pos, disObj = 4.5, disPlayer = 3, }
                         if takeLineData[curJob] == nil then
@@ -681,12 +778,18 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                 local mid = MG.GetMidPos(doubleLinePos[1], doubleLinePos[2])
                 if TensorCore.getDistance2d(DM.Center, mid) < 2 then
                     --倒霉孩子 打场中了
-                    local bigKfk = TensorCore.mGetEntity(Data().Kefka.id)
-                    local dir1 = bigKfk.h + math.pi / 2
-                    local dir2 = bigKfk.h - math.pi / 2
+                    local bigKfk = getLiveEntity(Data().Kefka and Data().Kefka.id,
+                            'P3Line', 'double_kefka')
+                    local doubleMember = MG.Party[doubleJob]
+                    local curPlayer = getLiveEntity(doubleMember and doubleMember.id,
+                            'P3Line', 'double_player_' .. tostring(doubleJob))
+                    if bigKfk == nil or curPlayer == nil then
+                        return
+                    end
+                    local dir1 = bigKfk.pos.h + math.pi / 2
+                    local dir2 = bigKfk.pos.h - math.pi / 2
                     local pos1 = TensorCore.getPosInDirection(DM.Center, dir1, 12)
                     local pos2 = TensorCore.getPosInDirection(DM.Center, dir2, 12)
-                    local curPlayer = TensorCore.mGetEntity(MG.Party[doubleJob].id)
                     local dis1 = TensorCore.getDistance2d(curPlayer.pos, pos1)
                     local dis2 = TensorCore.getDistance2d(curPlayer.pos, pos2)
                     --根据当前位置，判断去左还是右边
@@ -716,7 +819,7 @@ local drawTowerHeading = function()
     then
         return
     end
-    local kfk = TensorCore.mGetEntity(Data().Kefka.id)
+    local kfk = getLiveEntity(Data().Kefka and Data().Kefka.id, 'P3Tower', 'heading_kefka')
     if kfk ~= nil then
         local heading
         if Cfg().towerHeading == 1 then
@@ -764,11 +867,11 @@ end
 Dmu_P3.OnEntityChannel = function(entityID, spellID, _)
     if spellID == 49890 or spellID == 49891 then
         --决战
-        local boss = TensorCore.mGetEntity(entityID)
-        if boss.contentid == 6052 then
-            Data().ExDeath = boss
-        elseif boss.contentid == 7691 then
+        local boss = TensorCore.mGetEntity(entityID) or { id = entityID }
+        if spellID == 49890 then
             Data().Chaos = boss
+        else
+            Data().ExDeath = boss
         end
         if DM.OverState('P3UltimaBlaster', true) then
             DM.ClearMarks()
@@ -841,6 +944,16 @@ Dmu_P3.OnEntityCast = function(entityID, spellID, castPos)
         end
     elseif spellID == 47843 then
         local obj = TensorCore.mGetEntity(entityID)
+        for _, line in pairs(Data().UltimaBlaster.Lines) do
+            if line.id == entityID then
+                return
+            end
+        end
+        if obj == nil then
+            obj = { id = entityID }
+            MG.LogOnce('P3UltimaBlaster', 'pending_line_' .. tostring(entityID),
+                    '终极双线实体尚未可用，已保留ID等待后续帧')
+        end
         table.insert(Data().UltimaBlaster.Lines, obj)
     elseif spellID == 47868 then
         local timer = Data().BlackHolds.JumpTimer
@@ -852,31 +965,63 @@ Dmu_P3.OnEntityCast = function(entityID, spellID, castPos)
         end
     elseif spellID == 47875 then
         -- 踩塔+分摊 中分摊判定
-        if Data().TakeTower.boomPos == nil then
-            Data().TakeTower.boomPos = { TensorCore.mGetEntity(Data().TakeTower.firstEntity).pos }
+        local boomIndex = (Data().TakeTower.boomCount or 0) + 1
+        if boomIndex > 2 then
+            return
+        end
+        local takeTower = Data().TakeTower
+        if boomIndex == 1
+                and type(takeTower.GuideTypes) == 'table'
+                and type(takeTower.Types) == 'table' then
             --第一次分摊，立刻修改分摊人的指路类型
-            for job, _ in pairs(Data().TakeTower.GuideTypes) do
-                if Data().TakeTower.isDps1st then
+            for job, _ in pairs(takeTower.GuideTypes) do
+                if takeTower.isDps1st then
                     if MG.IndexOf(MG.JobPosName, job) > 4 then
-                        if Data().TakeTower.Types[job] == takeTowerType.Left then
-                            Data().TakeTower.GuideTypes[job] = takeTowerType.LeftNear
-                        elseif Data().TakeTower.Types[job] == takeTowerType.Right then
-                            Data().TakeTower.GuideTypes[job] = takeTowerType.RightNear
+                        if takeTower.Types[job] == takeTowerType.Left then
+                            takeTower.GuideTypes[job] = takeTowerType.LeftNear
+                        elseif takeTower.Types[job] == takeTowerType.Right then
+                            takeTower.GuideTypes[job] = takeTowerType.RightNear
                         end
                     end
                 else
                     if MG.IndexOf(MG.JobPosName, job) <= 4 then
-                        if Data().TakeTower.Types[job] == takeTowerType.Left then
-                            Data().TakeTower.GuideTypes[job] = takeTowerType.LeftNear
-                        elseif Data().TakeTower.Types[job] == takeTowerType.Right then
-                            Data().TakeTower.GuideTypes[job] = takeTowerType.RightNear
+                        if takeTower.Types[job] == takeTowerType.Left then
+                            takeTower.GuideTypes[job] = takeTowerType.LeftNear
+                        elseif takeTower.Types[job] == takeTowerType.Right then
+                            takeTower.GuideTypes[job] = takeTowerType.RightNear
                         end
                     end
                 end
             end
-        else
-            table.insert(Data().TakeTower.boomPos, TensorCore.mGetEntity(Data().TakeTower.secondEntity).pos)
         end
+        takeTower.boomCount = boomIndex
+        local targetID
+        if boomIndex == 1 then
+            targetID = takeTower.firstEntity
+        else
+            targetID = takeTower.secondEntity
+        end
+        local target = targetID ~= nil and TensorCore.mGetEntity(targetID) or nil
+        if target == nil or target.pos == nil then
+            MG.LogOnce('P3Tower', 'missing_boom_target_' .. tostring(boomIndex),
+                    '顶起AOE位置快照失败：结算时目标实体不可用', {
+                        index = boomIndex,
+                        entityID = targetID,
+                    })
+            return
+        end
+        takeTower.boomPos = takeTower.boomPos or {}
+        takeTower.boomPos[boomIndex] = {
+            x = target.pos.x,
+            y = target.pos.y or 0,
+            z = target.pos.z,
+        }
+        MG.Log('P3Tower', '顶起AOE位置快照', {
+            index = boomIndex,
+            entityID = targetID,
+            x = target.pos.x,
+            z = target.pos.z,
+        })
     elseif spellID == 47856 then
         --跺脚判定
         Data().TakeTower.stampCnt = Data().TakeTower.stampCnt + 1
@@ -952,6 +1097,75 @@ Dmu_P3.OnAOECreate = function(aoeInfo)
     end
 end
 
+local prepareTakeTowerGuides = function()
+    local takeTower = Data().TakeTower
+    if takeTower.isDps1st ~= nil or takeTower.firstEntity == nil then
+        return
+    end
+    local kefka = getLiveEntity(Data().Kefka and Data().Kefka.id, 'P3Tower', 'kefka')
+    if kefka == nil then
+        return
+    end
+    local markJob
+    for job, member in pairs(MG.Party) do
+        if takeTower.firstEntity == member.id then
+            markJob = job
+            break
+        end
+    end
+    if markJob == nil then
+        MG.LogOnce('P3Tower', 'first_target_not_in_party',
+                '踩塔指路等待：第一个分摊目标不在小队快照中', {
+                    entityID = takeTower.firstEntity,
+                })
+        return
+    end
+
+    local curDir = kefka.pos.h
+    if takeTower.Left == nil or takeTower.Right == nil then
+        takeTower.Left = TensorCore.getPosInDirection(DM.Center, curDir - math.pi / 2, 10)
+        takeTower.Right = TensorCore.getPosInDirection(DM.Center, curDir + math.pi / 2, 10)
+        takeTower.LeftNear = TensorCore.getPosInDirection(DM.Center, curDir - math.pi / 2, 4.5)
+        takeTower.RightNear = TensorCore.getPosInDirection(DM.Center, curDir + math.pi / 2, 4.5)
+    end
+    takeTower.isDps1st = MG.IndexOf(MG.JobPosName, markJob) > 4
+
+    -- 计算场基左右和面背方案对应的踩塔类型。
+    if Cfg().towerHeading == 1 then
+        if Cfg().towerGround == 1 then
+            takeTower.Types = {
+                MT = takeTowerType.Right, ST = takeTowerType.Left, H1 = takeTowerType.Right, H2 = takeTowerType.Left,
+                D1 = takeTowerType.Left, D3 = takeTowerType.Left, D2 = takeTowerType.Right, D4 = takeTowerType.Right,
+            }
+        else
+            takeTower.Types = {
+                MT = takeTowerType.Left, ST = takeTowerType.Right, H1 = takeTowerType.Left, H2 = takeTowerType.Right,
+                D1 = takeTowerType.Left, D3 = takeTowerType.Left, D2 = takeTowerType.Right, D4 = takeTowerType.Right,
+            }
+        end
+    elseif Cfg().towerGround == 1 then
+        takeTower.Types = {
+            MT = takeTowerType.Left, ST = takeTowerType.Right, H1 = takeTowerType.Left, H2 = takeTowerType.Right,
+            D1 = takeTowerType.Right, D3 = takeTowerType.Right, D2 = takeTowerType.Left, D4 = takeTowerType.Left,
+        }
+    else
+        takeTower.Types = {
+            MT = takeTowerType.Right, ST = takeTowerType.Left, H1 = takeTowerType.Right, H2 = takeTowerType.Left,
+            D1 = takeTowerType.Right, D3 = takeTowerType.Right, D2 = takeTowerType.Left, D4 = takeTowerType.Left,
+        }
+    end
+
+    takeTower.GuideTypes = {}
+    for job, takeType in pairs(takeTower.Types) do
+        local isSupport = MG.IndexOf(MG.JobPosName, job) <= 4
+        if isSupport == takeTower.isDps1st then
+            takeTower.GuideTypes[job] = takeType
+        else
+            takeTower.GuideTypes[job] = takeTowerType.Mid
+        end
+    end
+end
+
 Dmu_P3.OnMarkerAdd = function(entityID, markerID)
     if markIndex[markerID] ~= nil then
         for job, member in pairs(MG.Party) do
@@ -970,73 +1184,7 @@ Dmu_P3.OnMarkerAdd = function(entityID, markerID)
         else
             Data().TakeTower.secondEntity = entityID
         end
-        -- 踩塔数据初始化
-        if Data().TakeTower.isDps1st == nil then
-            local curDir = TensorCore.mGetEntity(Data().Kefka.id).pos.h
-            local left = TensorCore.getPosInDirection(DM.Center, curDir - math.pi / 2, 10)
-            local right = TensorCore.getPosInDirection(DM.Center, curDir + math.pi / 2, 10)
-            if Data().TakeTower.Left == nil or Data().TakeTower.Right == nil then
-                --记录场基左右坐标
-                Data().TakeTower.Left = left
-                Data().TakeTower.Right = right
-                Data().TakeTower.LeftNear = TensorCore.getPosInDirection(DM.Center, curDir - math.pi / 2, 4.5)
-                Data().TakeTower.RightNear = TensorCore.getPosInDirection(DM.Center, curDir + math.pi / 2, 4.5)
-            end
-            local markJob
-            for job, member in pairs(MG.Party) do
-                if entityID == member.id then
-                    markJob = job
-                    break
-                end
-            end
-            if MG.IndexOf(MG.JobPosName, markJob) <= 4 then
-                Data().TakeTower.isDps1st = false
-            else
-                Data().TakeTower.isDps1st = true
-            end
-            --计算踩塔类型
-            if Cfg().towerHeading == 1 then
-                if Cfg().towerGround == 1 then
-                    Data().TakeTower.Types = {
-                        MT = takeTowerType.Right, ST = takeTowerType.Left, H1 = takeTowerType.Right, H2 = takeTowerType.Left,
-                        D1 = takeTowerType.Left, D3 = takeTowerType.Left, D2 = takeTowerType.Right, D4 = takeTowerType.Right,
-                    }
-                else
-                    Data().TakeTower.Types = {
-                        MT = takeTowerType.Left, ST = takeTowerType.Right, H1 = takeTowerType.Left, H2 = takeTowerType.Right,
-                        D1 = takeTowerType.Left, D3 = takeTowerType.Left, D2 = takeTowerType.Right, D4 = takeTowerType.Right,
-                    }
-                end
-            else
-                if Cfg().towerGround == 1 then
-                    Data().TakeTower.Types = {
-                        MT = takeTowerType.Left, ST = takeTowerType.Right, H1 = takeTowerType.Left, H2 = takeTowerType.Right,
-                        D1 = takeTowerType.Right, D3 = takeTowerType.Right, D2 = takeTowerType.Left, D4 = takeTowerType.Left,
-                    }
-                else
-                    Data().TakeTower.Types = {
-                        MT = takeTowerType.Right, ST = takeTowerType.Left, H1 = takeTowerType.Right, H2 = takeTowerType.Left,
-                        D1 = takeTowerType.Right, D3 = takeTowerType.Right, D2 = takeTowerType.Left, D4 = takeTowerType.Left,
-                    }
-                end
-            end
-            Data().TakeTower.GuideTypes = {}
-            for job, takeType in pairs(Data().TakeTower.Types) do
-                if MG.IndexOf(MG.JobPosName, job) <= 4 then
-                    if Data().TakeTower.isDps1st then
-                        Data().TakeTower.GuideTypes[job] = takeType
-                    else
-                        Data().TakeTower.GuideTypes[job] = takeTowerType.Mid
-                    end
-                else
-                    if Data().TakeTower.isDps1st then
-                        Data().TakeTower.GuideTypes[job] = takeTowerType.Mid
-                    else
-                        Data().TakeTower.GuideTypes[job] = takeType
-                    end
-                end
-            end
-        end
+        prepareTakeTowerGuides()
     end
 end
 
@@ -1073,10 +1221,13 @@ Dmu_P3.Update = function()
     drawImplosion()
     drawTowerHeading()
     autoTargetEx()
+    prepareTakeTowerGuides()
     if Data().Elements.bigCircleTimer > 0 then
         if TimeSince(Data().Elements.bigCircleTimer) < 8500 then
-            local boss = TensorCore.mGetEntity(Data().ExDeath.id)
-            DM.purpleDrawer:addCircle(boss.pos.x, 0, boss.pos.z, 15)
+            local boss = getLiveEntity(Data().ExDeath and Data().ExDeath.id, 'P3Elements', 'big_circle_boss')
+            if boss ~= nil then
+                DM.purpleDrawer:addCircle(boss.pos.x, 0, boss.pos.z, 15)
+            end
         else
             Data().Elements.bigCircleTimer = 0
         end
@@ -1146,7 +1297,7 @@ Dmu_P3.Update = function()
                     end
                 end
                 table.sort(Data().Elements.FireBuff, function(a, b)
-                    return MG.IndexOf(Cfg().fireBuffOrder, a) < MG.IndexOf(Cfg().fireBuffOrder, a)
+                    return MG.IndexOf(Cfg().fireBuffOrder, a) < MG.IndexOf(Cfg().fireBuffOrder, b)
                 end)
                 Data().Elements.Guide2[Data().Elements.FireBuff[1]] = dis2
                 Data().Elements.Guide2[Data().Elements.FireBuff[2]] = dis1
@@ -1213,13 +1364,17 @@ Dmu_P3.Update = function()
                     DM.redDrawer:addCircle(farest.pos.x, farest.pos.y, farest.pos.z, 19)
                 end
             else
-                if TimeSince(Data().UmbraSmash.Timer) < 4700 then
+                if TimeSince(Data().UmbraSmash.Timer) < umbraSmashDrawDuration then
                     if Data().UmbraSmash.drawPos == nil then
                         local farest = getFarestFromChaos()
-                        Data().UmbraSmash.drawPos = farest.pos
+                        if farest ~= nil then
+                            Data().UmbraSmash.drawPos = farest.pos
+                        end
                     end
                     local pos = Data().UmbraSmash.drawPos
-                    DM.redDrawer:addCircle(pos.x, pos.y, pos.z, 19)
+                    if pos ~= nil then
+                        DM.redDrawer:addCircle(pos.x, pos.y, pos.z, 19)
+                    end
                 end
             end
         end
@@ -1243,7 +1398,10 @@ Dmu_P3.Update = function()
             local timeSince = TimeSince(Data().WacuumWave.Timer)
             if timeSince < 7700 then
                 local player = TensorCore.mGetPlayer()
-                local curEx = TensorCore.mGetEntity(Data().ExDeath.id)
+                local curEx = getLiveEntity(Data().ExDeath and Data().ExDeath.id, 'P3VacuumWave', 'exdeath')
+                if player == nil or player.pos == nil or curEx == nil then
+                    return
+                end
                 if Data().WacuumWave.BeforeKick == nil or Data().WacuumWave.AfterKick == nil then
                     Data().WacuumWave.BeforeKick = {}
                     Data().WacuumWave.AfterKick = {}
@@ -1260,7 +1418,7 @@ Dmu_P3.Update = function()
                         dirTable = { H1 = 0, MT = 0, ST = 0, H2 = 0,
                                      D3 = 0, D1 = 0, D2 = 0, D4 = 0 }
                     end
-                    local exDeath = TensorCore.mGetEntity(Data().ExDeath.id)
+                    local exDeath = curEx
                     if exDeath then
                         local dir = TensorCore.getHeadingToTarget(exDeath.pos, DM.Center)
                         for job, v in pairs(MG.Party) do
@@ -1313,43 +1471,54 @@ Dmu_P3.Update = function()
         end
         if Data().UltimaBlaster.GuideData == nil or table.size(Data().UltimaBlaster.GuideData) < 8 then
             if table.size(Data().UltimaBlaster.Lines) >= 2 and table.size(Data().UltimaBlaster.Markers) > 0 then
-                Data().UltimaBlaster.GuideData = {}
-                Data().UltimaBlaster.DrawData = {}
                 local line = Data().UltimaBlaster.Lines
-                local dir = TensorCore.getHeadingToTarget(DM.Center, line[1].pos)
-                if MG.GetClock(line[1].pos, line[2].pos) then
-                    for i = 1, 8 do
-                        local curDir = dir + (i - 1) * math.pi / 4
-                        local curPos = TensorCore.getPosInDirection(DM.Center, curDir, 20)
-                        local aimPos = TensorCore.getPosInDirection(DM.Center, curDir + math.pi + math.pi / 8, 19)
-                        Data().UltimaBlaster.DrawData[i] = { from = curPos, target = aimPos }
+                local firstLine = getLiveEntity(line[1].id, 'P3UltimaBlaster', 'line_1')
+                local secondLine = getLiveEntity(line[2].id, 'P3UltimaBlaster', 'line_2')
+                if firstLine ~= nil and secondLine ~= nil then
+                    line[1] = firstLine
+                    line[2] = secondLine
+                    Data().UltimaBlaster.GuideData = {}
+                    Data().UltimaBlaster.DrawData = {}
+                    local dir = TensorCore.getHeadingToTarget(DM.Center, line[1].pos)
+                    if MG.GetClock(line[1].pos, line[2].pos) then
+                        for i = 1, 8 do
+                            local curDir = dir + (i - 1) * math.pi / 4
+                            local curPos = TensorCore.getPosInDirection(DM.Center, curDir, 20)
+                            local aimPos = TensorCore.getPosInDirection(DM.Center, curDir + math.pi + math.pi / 8, 19)
+                            Data().UltimaBlaster.DrawData[i] = { from = curPos, target = aimPos }
+                        end
+                    else
+                        for i = 1, 8 do
+                            local curDir = dir - (i - 1) * math.pi / 4
+                            local curPos = TensorCore.getPosInDirection(DM.Center, curDir, 20)
+                            local aimPos = TensorCore.getPosInDirection(DM.Center, curDir + math.pi - math.pi / 8, 19)
+                            Data().UltimaBlaster.DrawData[i] = { from = curPos, target = aimPos }
+                        end
                     end
-                else
-                    for i = 1, 8 do
-                        local curDir = dir - (i - 1) * math.pi / 4
-                        local curPos = TensorCore.getPosInDirection(DM.Center, curDir, 20)
-                        local aimPos = TensorCore.getPosInDirection(DM.Center, curDir + math.pi - math.pi / 8, 19)
-                        Data().UltimaBlaster.DrawData[i] = { from = curPos, target = aimPos }
-                    end
-                end
-                for job, _ in pairs(MG.Party) do
-                    local curMark = Data().UltimaBlaster.Markers[job]
-                    if curMark ~= nil then
-                        local curIndex = markIndex[curMark]
-                        Data().UltimaBlaster.GuideData[job] = Data().UltimaBlaster.DrawData[curIndex].target
+                    for job, _ in pairs(MG.Party) do
+                        local curMark = Data().UltimaBlaster.Markers[job]
+                        if curMark ~= nil then
+                            local curIndex = markIndex[curMark]
+                            local drawData = Data().UltimaBlaster.DrawData[curIndex]
+                            if drawData ~= nil then
+                                Data().UltimaBlaster.GuideData[job] = drawData.target
+                            end
+                        end
                     end
                 end
             end
         end
-        if Cfg().draw then
+        if Cfg().draw and type(Data().UltimaBlaster.DrawData) == 'table' then
             for job, member in pairs(MG.Party) do
                 local curMark = Data().UltimaBlaster.Markers[job]
                 local curIndex = markIndex[curMark]
                 local curDrawData = Data().UltimaBlaster.DrawData[curIndex]
                 if curDrawData ~= nil then
                     local curMember = TensorCore.mGetEntity(member.id)
-                    local dir = TensorCore.getHeadingToTarget(curDrawData.from, curMember.pos)
-                    DM.litBlue:addRect(curDrawData.from.x, curDrawData.from.y, curDrawData.from.z, 40, 10, dir)
+                    if curMember ~= nil and curMember.pos ~= nil then
+                        local dir = TensorCore.getHeadingToTarget(curDrawData.from, curMember.pos)
+                        DM.litBlue:addRect(curDrawData.from.x, curDrawData.from.y, curDrawData.from.z, 40, 10, dir)
+                    end
                 end
             end
         end
@@ -1519,7 +1688,10 @@ Dmu_P3.Update = function()
                             Data().TakeTower.Put1Pos[job] = DM.Center
                         end
                     elseif Cfg().takeTowerType == 3 then
-                        local bigKfk = TensorCore.mGetEntity(Data().Kefka.id)
+                        local bigKfk = getLiveEntity(Data().Kefka and Data().Kefka.id, 'P3Tower', 'put1_kefka')
+                        if bigKfk == nil then
+                            return
+                        end
                         local heading = bigKfk.pos.h
                         if Cfg().towerHeading == 1 then
                             heading = heading + math.pi
@@ -1545,7 +1717,10 @@ Dmu_P3.Update = function()
             if Cfg().takeTowerType ~= 1 then
                 if Data().TakeTower.Put2Pos == nil or table.size(Data().TakeTower.Put2Pos) < 8 then
                     Data().TakeTower.Put2Pos = {}
-                    local bigKfk = TensorCore.mGetEntity(Data().Kefka.id)
+                    local bigKfk = getLiveEntity(Data().Kefka and Data().Kefka.id, 'P3Tower', 'put2_kefka')
+                    if bigKfk == nil then
+                        return
+                    end
                     local heading = bigKfk.pos.h
                     if Cfg().towerHeading == 1 then
                         heading = heading + math.pi

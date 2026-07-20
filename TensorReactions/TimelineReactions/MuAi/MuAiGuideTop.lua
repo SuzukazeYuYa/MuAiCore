@@ -1927,7 +1927,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "--[[\n    P5_1运转转后指路\n]]\nlocal drawTime = 4000\nlocal player = TensorCore.mGetPlayer()\n\nif data.P51YunLinkPosType == 1 or data.P51YunLinkPosType == 2 then\n    if TensorCore.hasBuff(player.id, 2534) then --如果有易伤 根据是否有小电视选择分散点\n        if TensorCore.hasBuff(player.id, 3452) or TensorCore.hasBuff(player.id, 3453) then\n            if TensorCore.isAnyEntityCasting(31639) then\n                MuAiGuide.DirectTo(data.P51YunDamageUpPosTvR.x, data.P51YunDamageUpPosTvR.z, drawTime)\n            else\n                MuAiGuide.DirectTo(data.P51YunDamageUpPosTvL.x, data.P51YunDamageUpPosTvL.z, drawTime)\n            end\n        else\n            if TensorCore.isAnyEntityCasting(31639) then\n                MuAiGuide.DirectTo(data.P51YunDamageUpPosR.x, data.P51YunDamageUpPosR.z, drawTime)\n            else\n                MuAiGuide.DirectTo(data.P51YunDamageUpPosL.x, data.P51YunDamageUpPosL.z, drawTime)\n            end\n        end\n    else\n        -- 没有易伤 根据是否有小电视判断 靠近场还是偏外\n        if TensorCore.hasBuff(player.id, 3452) or TensorCore.hasBuff(player.id, 3453) then\n            if TensorCore.isAnyEntityCasting(31639) then\n                MuAiGuide.DirectTo(data.P51YunCannonTvR.x, data.P51YunCannonTvR.z, drawTime)\n            else\n                MuAiGuide.DirectTo(data.P51YunCannonTvL.x, data.P51YunCannonTvL.z, drawTime)\n            end\n        else\n            if TensorCore.isAnyEntityCasting(31639) then\n                MuAiGuide.DirectTo(data.P51YunConnanR.x, data.P51YunConnanR.z, drawTime)\n            else\n                MuAiGuide.DirectTo(data.P51YunCannonTvL.x, data.P51YunCannonTvL.z, drawTime)\n            end\n        end\n    end\nelse\n    MuAiGuide.DirectTo(data.P51YunLinkEndPos.x, data.P51YunLinkEndPos.z, drawTime)\nend\nself.used = true\n",
+							actionLua = "--[[\n    P5_1运转转后指路\n]]\nlocal drawTime = 4000\nlocal player = TensorCore.mGetPlayer()\n\nif data.P51YunLinkPosType == 1 or data.P51YunLinkPosType == 2 then\n    if TensorCore.hasBuff(player.id, 2534) then --如果有易伤 根据是否有小电视选择分散点\n        if TensorCore.hasBuff(player.id, 3452) or TensorCore.hasBuff(player.id, 3453) then\n            if TensorCore.isAnyEntityCasting(31639) then\n                MuAiGuide.DirectTo(data.P51YunDamageUpPosTvR.x, data.P51YunDamageUpPosTvR.z, drawTime)\n            else\n                MuAiGuide.DirectTo(data.P51YunDamageUpPosTvL.x, data.P51YunDamageUpPosTvL.z, drawTime)\n            end\n        else\n            if TensorCore.isAnyEntityCasting(31639) then\n                MuAiGuide.DirectTo(data.P51YunDamageUpPosR.x, data.P51YunDamageUpPosR.z, drawTime)\n            else\n                MuAiGuide.DirectTo(data.P51YunDamageUpPosL.x, data.P51YunDamageUpPosL.z, drawTime)\n            end\n        end\n    else\n        -- 没有易伤 根据是否有小电视判断 靠近场还是偏外\n        if TensorCore.hasBuff(player.id, 3452) or TensorCore.hasBuff(player.id, 3453) then\n            if TensorCore.isAnyEntityCasting(31639) then\n                MuAiGuide.DirectTo(data.P51YunCannonTvR.x, data.P51YunCannonTvR.z, drawTime)\n            else\n                MuAiGuide.DirectTo(data.P51YunCannonTvL.x, data.P51YunCannonTvL.z, drawTime)\n            end\n        else\n            if TensorCore.isAnyEntityCasting(31639) then\n                MuAiGuide.DirectTo(data.P51YunConnanR.x, data.P51YunConnanR.z, drawTime)\n            else\n                MuAiGuide.DirectTo(data.P51YunConnanL.x, data.P51YunConnanL.z, drawTime)\n            end\n        end\n    end\nelse\n    MuAiGuide.DirectTo(data.P51YunLinkEndPos.x, data.P51YunLinkEndPos.z, drawTime)\nend\nself.used = true\n",
 							gVar = "ACR_RikuMNK2_CD",
 							uuid = "44f2185d-feef-ab49-abcc-c1b83f5d1535",
 							version = 2.1,
@@ -2676,6 +2676,14 @@ local tbl =
 						{
 							aType = "Lua",
 							actionLua = "local alpha = 0.4\nlocal drawer = Argus2.ShapeDrawer:new(\n    (GUI:ColorConvertFloat4ToU32(0 / 255, 255 / 255, 255 / 255, alpha)),\n    (GUI:ColorConvertFloat4ToU32(255 / 255, 255 / 255, 0 / 255, alpha)),\n    (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, alpha)),\n    (GUI:ColorConvertFloat4ToU32(255 / 255, 0 / 255, 0 / 255, 0.85)),\n    1\n)\n\nif data.p5trio3maleID == nil then\n    data.p5trio3maleID = {}\nend\nif data.p5trio3femaleID == nil then\n    data.p5trio3femaleID = {}\nend\n\nfor k, v in pairs(TensorCore.entityList(\"alive,contentid=12257\")) do\n    if Argus.getEntityModel(v) == 15721 then\n        --male\n        if Argus.isEntityVisible(v) then\n            local id, flag = Argus.getEntityTransforms(v.id)\n            if flag == 16 then\n                --circle\n                if not table.contains(data.p5trio3maleID, v.id) then\n                    d('钢铁')\n                    if table.size(data.p5trio3maleID) < 1 then\n                        drawer:addTimedCircle(12500, v.pos.x, v.pos.y, v.pos.z, 10, 0, true)\n                    else\n                        drawer:addTimedCircle(4000, v.pos.x, v.pos.y, v.pos.z, 10, 8500, true)\n                    end\n                    table.insert(data.p5trio3maleID, v.id)\n                end\n            elseif flag == 49 then\n                --donut\n                if not table.contains(data.p5trio3maleID, v.id) then\n                    d('月环')\n                    if table.size(data.p5trio3maleID) < 1 then\n                        drawer:addTimedDonut(12500, v.pos.x, v.pos.y, v.pos.z, 10, 50, 0, true)\n                    else\n                        drawer:addTimedDonut(4000, v.pos.x, v.pos.y, v.pos.z, 10, 50, 8500, true)\n                    end\n                    table.insert(data.p5trio3maleID, v.id)\n                end\n            end\n        end\n    end\nend\n\nfor k, v in pairs(TensorCore.entityList(\"alive,contentid=12258\")) do\n    if Argus.getEntityModel(v) == 15722 then\n        --female\n        if Argus.isEntityVisible(v) then\n            local id, flag = Argus.getEntityTransforms(v.id)\n            if flag == 16 then\n                --cross\n                if not table.contains(data.p5trio3femaleID, v.id) then\n                    d('十字')\n                    if table.size(data.p5trio3femaleID) < 1 then\n                        drawer:addTimedCross(12500, v.pos.x, v.pos.y, v.pos.z, 50, 10, v.pos.h, 0, true)\n                    else\n                        drawer:addTimedCross(4000, v.pos.x, v.pos.y, v.pos.z, 50, 10, v.pos.h, 8500, true)\n                    end\n                    table.insert(data.p5trio3femaleID, v.id)\n                end\n            elseif flag == 49 then\n                --in\n                if not table.contains(data.p5trio3femaleID, v.id) then\n                    d('脚刀')\n                    local left = TensorCore.getPosInDirection(v.pos, v.pos.h + math.pi / 2, 4)\n                    local right = TensorCore.getPosInDirection(v.pos, v.pos.h - math.pi / 2, 4)\n                    if table.size(data.p5trio3femaleID) < 1 then\n                        drawer:addTimedRect(12500, left.x, left.y, left.z, 20, 60, v.pos.h + math.pi / 2, 0, true)\n                        drawer:addTimedRect(12500, right.x, right.y, right.z, 20, 60, v.pos.h - math.pi / 2, 0, true)\n                    else\n                        drawer:addTimedRect(4000, left.x, left.y, left.z, 20, 60, v.pos.h + math.pi / 2, 8500, true)\n                        drawer:addTimedRect(4000, right.x, right.y, right.z, 20, 60, v.pos.h - math.pi / 2, 8500, true)\n                    end\n                    table.insert(data.p5trio3femaleID, v.id)\n                end\n            end\n        end\n    end\nend\nif table.size(data.p5trio3femaleID) + table.size(data.p5trio3maleID) == 4 then\n    self.used = true\nend",
+							conditions =
+							{
+
+								{
+									"5b816586-67e9-d347-a1f9-d777ca903b8a",
+									true,
+								},
+							},
 							uuid = "52fa6372-f8d2-7f3c-98fe-ba629702f9ba",
 							version = 2.1,
 						},
@@ -3288,14 +3296,22 @@ local tbl =
 				actions = 
 				{
 					
-					{
-						data = 
 						{
-							aType = "Lua",
-							actionLua = "local arrowPos = TensorCore.mGetEntity(eventArgs.entityID).pos\nif data.P6SecondArrow == nil then\n    local disSqrType = (arrowPos.x - 100) ^ 2 + (arrowPos.z - 100) ^ 2\n    local player = TensorCore.mGetPlayer()\n    local list\n    if disSqrType > 500 then\n        list = data.p6ArrowStayOut\n        data.P6SecondArrow = 1 --外\n    else\n        list = data.p6ArrowStayIn\n        data.P6SecondArrow = 2 --内\n    end\n    local groupPos = data.TopJobOrder[player.job]\n    if groupPos == 1 or groupPos == 4 then      -- H1 D1\n        data.P6SecondArrowIdx = 3\n    elseif groupPos == 2 or groupPos == 6 then  -- MT D3\n        data.P6SecondArrowIdx = 4\n    elseif groupPos == 3 or groupPos == 7 then  -- ST D4\n        data.P6SecondArrowIdx = 1\n    elseif groupPos == 5 or groupPos == 8 then  -- H2 D2\n        data.P6SecondArrowIdx = 2\n    end\n    MuAiGuide.DirectTo(list[data.P6SecondArrowIdx].x, list[data.P6SecondArrowIdx].z, 6000)\nend\n",
-							gVar = "ACR_TensorMagnum2_CD",
-							uuid = "9aa97312-8414-bbc4-aa1c-b477225b1c57",
-							version = 2.1,
+							data =
+							{
+								aType = "Lua",
+								actionLua = "local arrowPos = TensorCore.mGetEntity(eventArgs.entityID).pos\nif data.P6SecondArrow == nil then\n    local disSqrType = (arrowPos.x - 100) ^ 2 + (arrowPos.z - 100) ^ 2\n    local player = TensorCore.mGetPlayer()\n    local list\n    if disSqrType > 500 then\n        list = data.p6ArrowStayOut\n        data.P6SecondArrow = 1 --外\n    else\n        list = data.p6ArrowStayIn\n        data.P6SecondArrow = 2 --内\n    end\n    local groupPos = data.TopJobOrder[player.job]\n    if groupPos == 1 or groupPos == 4 then      -- H1 D1\n        data.P6SecondArrowIdx = 3\n    elseif groupPos == 2 or groupPos == 6 then  -- MT D3\n        data.P6SecondArrowIdx = 4\n    elseif groupPos == 3 or groupPos == 7 then  -- ST D4\n        data.P6SecondArrowIdx = 1\n    elseif groupPos == 5 or groupPos == 8 then  -- H2 D2\n        data.P6SecondArrowIdx = 2\n    end\n    MuAiGuide.DirectTo(list[data.P6SecondArrowIdx].x, list[data.P6SecondArrowIdx].z, 6000)\nend\n",
+								conditions =
+								{
+
+									{
+										"4b5958d8-2f4e-25c3-8d4a-dc9aef3d6e01",
+										true,
+									},
+								},
+								gVar = "ACR_TensorMagnum2_CD",
+								uuid = "9aa97312-8414-bbc4-aa1c-b477225b1c57",
+								version = 2.1,
 						},
 					},
 				},

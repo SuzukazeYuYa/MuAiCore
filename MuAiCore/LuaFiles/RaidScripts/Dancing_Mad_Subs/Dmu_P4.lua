@@ -5,6 +5,9 @@ local DM
 ---@type MuAiGuide
 local MG
 
+-- OnAOECreate 到实际结算存在帧级抖动，按实战日志上界保留余量。
+local chaosAoeDrawDuration = 5500
+
 local Cfg = function()
     return MG.Config.DmuCfg.P4
 end
@@ -180,6 +183,9 @@ local lockFaceCheck = function(eyeTable)
     if buff1 ~= nil then
         if buff1.duration < 1 and not eyeTable.Locked then
             local player = MG.GetPlayer()
+            if player == nil or player.pos == nil then
+                return
+            end
             local lookHeading
             if table.contains(buffOwner, player.id) then
                 --如果自己是眼
@@ -190,6 +196,9 @@ local lockFaceCheck = function(eyeTable)
                     other = buffOwner[1]
                 end
                 local otherObj = TensorCore.mGetEntity(other)
+                if otherObj == nil or otherObj.pos == nil then
+                    return
+                end
                 local heading = TensorCore.getHeadingToTarget(otherObj.pos, player.pos)
                 if eyeTable.type then
                     lookHeading = heading
@@ -199,6 +208,9 @@ local lockFaceCheck = function(eyeTable)
             else
                 local eye1 = TensorCore.mGetEntity(buffOwner[1])
                 local eye2 = TensorCore.mGetEntity(buffOwner[2])
+                if eye1 == nil or eye1.pos == nil or eye2 == nil or eye2.pos == nil then
+                    return
+                end
                 local backPos = MG.GetMidPos(eye1.pos, eye2.pos)
                 lookHeading = TensorCore.getHeadingToTarget(backPos, player.pos)
                 if not eyeTable.type then
@@ -298,7 +310,9 @@ local ThunderWater = function(wave)
             end
             if drawer ~= nil then
                 local curMember = TensorCore.mGetEntity(member.id)
-                drawer:addCircle(curMember.pos.x, 0, curMember.pos.z, 8)
+                if curMember ~= nil and curMember.pos ~= nil then
+                    drawer:addCircle(curMember.pos.x, 0, curMember.pos.z, 8)
+                end
             end
         end
     end
@@ -523,6 +537,13 @@ Dmu_P4.Init = function(dm, m)
 end
 
 Dmu_P4.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
+    if spellID == 49884 then
+        MG.LogOnce('P4Config', 'start', 'P4配置快照', {
+            enable = MG.Config.DmuCfg.Enable,
+            logEnable = MG.Config.Main.LogEnable,
+            p4 = Cfg(),
+        })
+    end
     if spellID == 50067
             or spellID == 50068
             or spellID == 50069
@@ -540,7 +561,7 @@ Dmu_P4.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
     end
     if spellID == 50069 then
         --死者暗黑光
-        Data().ExDeath.DeathBeamObj = TensorCore.mGetEntity(entityID)
+        Data().ExDeath.DeathBeamObj = TensorCore.mGetEntity(entityID) or { id = entityID }
         Data().ExDeath.DrawTimer = Now()
         MG.Log('P4ExDeath', '死者暗黑光读条缓存', {
             spellID = spellID,
@@ -550,7 +571,7 @@ Dmu_P4.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
         })
     elseif spellID == 50068 then
         --生者暗黑光
-        Data().ExDeath.AliveBeamObj = TensorCore.mGetEntity(entityID)
+        Data().ExDeath.AliveBeamObj = TensorCore.mGetEntity(entityID) or { id = entityID }
         Data().ExDeath.DrawTimer = Now()
         MG.Log('P4ExDeath', '生者暗黑光读条缓存', {
             spellID = spellID,
@@ -560,7 +581,7 @@ Dmu_P4.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
         })
     elseif spellID == 50070 then
         --生死之境界
-        Data().ExDeath.DothBeamObj = TensorCore.mGetEntity(entityID)
+        Data().ExDeath.DothBeamObj = TensorCore.mGetEntity(entityID) or { id = entityID }
         Data().ExDeath.DrawTimer = Now()
         MG.Log('P4ExDeath', '生死之境读条缓存', {
             spellID = spellID,
@@ -678,9 +699,9 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
             })
             if Cfg().draw then
                 if Data().WaterFire1.Type then
-                    MG.CreateDrawer(1, 0, 1, 0.1, 2):addTimedCircle(5000, aoeInfo.x, 0, aoeInfo.z, 6)
+                    MG.CreateDrawer(1, 0, 1, 0.1, 2):addTimedCircle(chaosAoeDrawDuration, aoeInfo.x, 0, aoeInfo.z, 6)
                 else
-                    MG.CreateDrawer(1, 0, 1, 0.1, 2):addTimedDonut(5000, aoeInfo.x, 0, aoeInfo.z, 6, 40)
+                    MG.CreateDrawer(1, 0, 1, 0.1, 2):addTimedDonut(chaosAoeDrawDuration, aoeInfo.x, 0, aoeInfo.z, 6, 40)
                 end
             end
             Data().WaterFire1.AoeTimer = Now()
@@ -695,9 +716,9 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
             })
             if Cfg().draw then
                 if Data().WaterFire2.Type then
-                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addTimedDonut(5000, aoeInfo.x, 0, aoeInfo.z, 6, 40)
+                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addTimedDonut(chaosAoeDrawDuration, aoeInfo.x, 0, aoeInfo.z, 6, 40)
                 else
-                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addTimedCircle(5000, aoeInfo.x, 0, aoeInfo.z, 6)
+                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addTimedCircle(chaosAoeDrawDuration, aoeInfo.x, 0, aoeInfo.z, 6)
                 end
             end
         end
@@ -752,9 +773,21 @@ Dmu_P4.Update = function()
     end
     -- 添加执行buff阶段 --
     if DM.InState('P4ExDeath3Judge') then
+        for _, key in ipairs({ 'DeathBeamObj', 'AliveBeamObj', 'DothBeamObj' }) do
+            local cached = Data().ExDeath[key]
+            if cached ~= nil and cached.id ~= nil then
+                local current = TensorCore.mGetEntity(cached.id)
+                if current ~= nil and current.pos ~= nil then
+                    Data().ExDeath[key] = current
+                end
+            end
+        end
         if Data().ExDeath.DeathBeamObj ~= nil
+                and Data().ExDeath.DeathBeamObj.pos ~= nil
                 and Data().ExDeath.AliveBeamObj ~= nil
+                and Data().ExDeath.AliveBeamObj.pos ~= nil
                 and Data().ExDeath.DothBeamObj ~= nil
+                and Data().ExDeath.DothBeamObj.pos ~= nil
         then
             if Data().ExDeath.deathDir == nil
                     or Data().ExDeath.deathDrawPos == nil
@@ -974,6 +1007,11 @@ Dmu_P4.Update = function()
                             thunderType = tType,
                             real = Data().Eye1.type,
                         })
+                    else
+                        MG.LogOnce('P4Eye', 'waiting_eye1_thunder', '第一次石化眼等待雷类型赋值', {
+                            hasThunderType = tType ~= nil,
+                            owner = MG.LogEntityList(Data().Eye1.Owner),
+                        })
                     end
                 else
                     MG.LogOnce('P4Eye', 'draw_1', '第一次石化眼调用FrameMultiD', {
@@ -1000,7 +1038,7 @@ Dmu_P4.Update = function()
             for job, v in pairs(MG.Party) do
                 Data().WaterFire1.Guide1[job] = { x = 100, y = 0, z = 100 }
                 if buffRF then
-                    if MG.IndexOf(MG.JobPosName, job) then
+                    if MG.IndexOf(MG.JobPosName, job) <= 4 then
                         Data().WaterFire1.Guide2[job] = { x = 100, y = 0, z = 90 }
                     else
                         Data().WaterFire1.Guide2[job] = { x = 100, y = 0, z = 110 }
@@ -1054,7 +1092,10 @@ Dmu_P4.Update = function()
             end
         end
         ThunderWater(2)
-        if Data().ThunderWater.Guide2Offset == nil then
+        if Cfg().guide
+                and Data().ThunderWater.Guide2Offset == nil
+                and type(Data().ThunderWater.Guide2) == 'table'
+        then
             if Data().ThunderWater.IceType ~= nil then
                 Data().ThunderWater.Guide2Offset = {}
                 if Data().ThunderWater.IceType == DM.IceType.danger13 then
@@ -1269,6 +1310,11 @@ Dmu_P4.Update = function()
             if Data().WaterFire2.Guide2 ~= nil and table.size(Data().WaterFire2.Guide2) > 0 then
                 MG.FrameMultiD(Data().WaterFire2.Guide2)
             end
+        else
+            MG.LogOnce('P4WaterFire', 'waiting_2_put', '第二次火水等待冰雷类型赋值', {
+                hasThunderType = Data().WaterFire2.ThunderType ~= nil,
+                hasIceType = Data().WaterFire2.IceType ~= nil,
+            })
         end
     end
 end

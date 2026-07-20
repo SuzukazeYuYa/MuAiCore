@@ -7,6 +7,9 @@ local DM
 ---@type MuAiGuide
 local MG
 
+-- 时间轴与实战判定点均为读条开始后 4.0 秒，不得由日志到达抖动延长。
+local farNearDeathDrawDuration = 4000
+
 local Cfg = function()
     return MG.Config.DmuCfg.P2
 end
@@ -646,6 +649,11 @@ local drawWingsOfDestroy = function()
             end
         else
             local curBoss = TensorCore.mGetEntity(Data().Trine.boss.id)
+            if curBoss == nil or curBoss.pos == nil then
+                MG.LogOnce('P2Trine', 'missing_wing_boss_' .. tostring(Data().Trine.boss.id),
+                        '终末双腕绘制跳过：当前帧Boss实体不可用')
+                return
+            end
             local heading
             if Data().Trine.WingId == 47821 then
                 --打左边
@@ -658,20 +666,37 @@ local drawWingsOfDestroy = function()
     end
 end
 
+local getDrawablePartyPlayers = function()
+    local drawablePlayers = {}
+    for _, member in pairs(MG.GetPartyPlayers()) do
+        if member ~= nil and member.pos ~= nil then
+            table.insert(drawablePlayers, member)
+        end
+    end
+    return drawablePlayers
+end
+
 local drawFarNearDeath = function()
     if Cfg().draw
             and Data().FarNearDeath.OnDraw
             and Data().FarNearDeath.Timer > 0
     then
-        if TimeSince(Data().FarNearDeath.Timer) < 4000 then
-            local curParty = MG.GetPartyPlayers()
-            table.sort(curParty, function(a, b)
-                local disA = TensorCore.getDistance2d(DM.Center, a.pos)
-                local disB = TensorCore.getDistance2d(DM.Center, b.pos)
-                return disA < disB
-            end)
-            DM.purpleDrawer:addCircle(curParty[1].pos.x, 0, curParty[1].pos.z, 6)
-            DM.purpleDrawer:addCircle(curParty[8].pos.x, 0, curParty[8].pos.z, 6)
+        if TimeSince(Data().FarNearDeath.Timer) < farNearDeathDrawDuration then
+            local curParty = getDrawablePartyPlayers()
+            if #curParty == 8 then
+                table.sort(curParty, function(a, b)
+                    local disA = TensorCore.getDistance2d(DM.Center, a.pos)
+                    local disB = TensorCore.getDistance2d(DM.Center, b.pos)
+                    return disA < disB
+                end)
+                DM.purpleDrawer:addCircle(curParty[1].pos.x, 0, curParty[1].pos.z, 6)
+                DM.purpleDrawer:addCircle(curParty[8].pos.x, 0, curParty[8].pos.z, 6)
+            else
+                MG.LogOnce('P2FarNearDeath', 'incomplete_party',
+                        '远近死刑绘制跳过：当前队员实体不完整', {
+                            count = #curParty,
+                        }, true)
+            end
         else
             Data().FarNearDeath.OnDraw = false
             Data().FarNearDeath.Timer = 0
@@ -737,6 +762,13 @@ Dmu_P2.OnEntityChannel = function(entityID, spellID, _)
     end
 end
 
+Dmu_P2.OnEntityCast = function(_, spellID, _)
+    if spellID == 50311 or spellID == 47823 then
+        Data().FarNearDeath.OnDraw = false
+        Data().FarNearDeath.Timer = 0
+    end
+end
+
 Dmu_P2.OnMarkerAdd = function(entityID, markerID)
     if 715 <= markerID and markerID <= 717 then
         Data().Towers.markCnt = Data().Towers.markCnt + 1
@@ -766,6 +798,13 @@ end
 
 Dmu_P2.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
     local object = TensorCore.mGetEntity(entityID)
+    if object == nil then
+        MG.LogOnce('P2Trine', 'missing_event_object_' .. tostring(entityID),
+                '异三角事件物体不可用，跳过本次回调', {
+                    entityID = entityID,
+                }, true)
+        return
+    end
     if object.contentid == 2015154 or object.contentid == 2015155 then
         calcTrinePos(object, a1, a2, a3)
     end
@@ -873,7 +912,10 @@ Dmu_P2.Update = function()
             for job, member in pairs(MG.Party) do
                 if table.contains(Data().Towers.doing, job) then
                     local curMember = TensorCore.mGetEntity(member.id)
-                    if TensorCore.getDistance2d(curMember.pos, left) < 4 or TensorCore.getDistance2d(curMember.pos, right) < 4 then
+                    if curMember ~= nil and curMember.pos ~= nil
+                            and (TensorCore.getDistance2d(curMember.pos, left) < 4
+                            or TensorCore.getDistance2d(curMember.pos, right) < 4)
+                    then
                         local curMark = Data().Towers.curMarks[job]
                         if curMark == 715 then
                             -- 分摊
@@ -888,10 +930,12 @@ Dmu_P2.Update = function()
                             for _, mmb in pairs(MG.Party) do
                                 if mmb.id ~= curMember.id then
                                     local memberNew = TensorCore.mGetEntity(mmb.id)
-                                    local distance = TensorCore.getDistance2d(memberNew.pos, curMember.pos)
-                                    if distance < dis then
-                                        dis = distance
-                                        nearest = memberNew
+                                    if memberNew ~= nil and memberNew.pos ~= nil then
+                                        local distance = TensorCore.getDistance2d(memberNew.pos, curMember.pos)
+                                        if distance < dis then
+                                            dis = distance
+                                            nearest = memberNew
+                                        end
                                     end
                                 end
                             end
@@ -905,12 +949,20 @@ Dmu_P2.Update = function()
                 end
             end
             if wave % 2 == 0 then
-                local curParty = MG.GetPartyPlayers()
-                table.sort(curParty, function(a, b)
-                    return TensorCore.getDistance2d(a.pos, DM.Center) < TensorCore.getDistance2d(b.pos, DM.Center)
-                end)
-                for i = 1, 4 do
-                    DM.purpleDrawer:addCircle(curParty[i].pos.x, 0, curParty[i].pos.z, 5)
+                local curParty = getDrawablePartyPlayers()
+                if #curParty >= 4 then
+                    table.sort(curParty, function(a, b)
+                        return TensorCore.getDistance2d(a.pos, DM.Center) < TensorCore.getDistance2d(b.pos, DM.Center)
+                    end)
+                    for i = 1, 4 do
+                        DM.purpleDrawer:addCircle(curParty[i].pos.x, 0, curParty[i].pos.z, 5)
+                    end
+                else
+                    MG.LogOnce('P2Tower', 'incomplete_party_wave_' .. tostring(wave),
+                            '塔绘制跳过：当前队员实体不足四人', {
+                                wave = wave,
+                                count = #curParty,
+                            }, true)
                 end
             end
         end

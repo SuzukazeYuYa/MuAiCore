@@ -5,27 +5,42 @@ local ArgusEvents = {}
 ===========================
 ]]
 
-local register = {
-    OnEntityChannel = false,
-    OnEntityCast = false,
-    OnMarkerAdd = false,
-    OnAOECreate = false,
-    OnEventObjectScriptFunc = false,
-    OnMapEffect = false,
-    OnAddEntityVFX = false,
-    OnTetherChange = false,
-    OnEntityAdd = false,
-}
+-- 注册状态放在全局桥中：Lua 热重载只替换当前 handler，不向 Argus 重复注册回调。
+local bridge = rawget(_G, 'MuAiCoreArgusEventBridge')
+if type(bridge) ~= 'table' then
+    bridge = { registered = {} }
+    rawset(_G, 'MuAiCoreArgusEventBridge', bridge)
+elseif type(bridge.registered) ~= 'table' then
+    bridge.registered = {}
+end
 
-local registerOK = false
+local function callRaidScript(M, eventName, ...)
+    local script = M.CurRaidScript
+    local callback = script ~= nil and script[eventName] or nil
+    if type(callback) == 'function' then
+        return callback(...)
+    end
+end
+
+local function createDispatcher(eventName)
+    return function(...)
+        local guide = rawget(_G, 'MuAiGuide')
+        local handlers = type(guide) == 'table' and guide.ArgusEventHandlers or nil
+        local handler = type(handlers) == 'table' and handlers[eventName] or nil
+        if type(handler) == 'function' then
+            return handler(...)
+        end
+    end
+end
 
 ---@param M MuAiGuide
 ArgusEvents.init = function(M)
+    local handlers = {}
+    M.ArgusEventHandlers = handlers
+
     --- 开始读条事件
-    local OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
-        if M.CurRaidScript ~= nil and M.CurRaidScript.OnEntityChannel ~= nil then
-            M.CurRaidScript.OnEntityChannel(entityID, spellID, targetID, channelTimeMax)
-        end
+    handlers.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
+        callRaidScript(M, 'OnEntityChannel', entityID, spellID, targetID, channelTimeMax)
         if M.Develop.ShowSkillId or M.Develop.PrintChannelInfo then
             local entity = TensorCore.mGetEntity(entityID)
             if entity == nil or entity.charType == 4 or entity.charType == 2 then
@@ -50,10 +65,8 @@ ArgusEvents.init = function(M)
     end
 
     --- 读条结束事件
-    local OnEntityCast = function(entityID, spellID, castPos)
-        if M.CurRaidScript ~= nil and M.CurRaidScript.OnEntityCast ~= nil then
-            M.CurRaidScript.OnEntityCast(entityID, spellID, castPos)
-        end
+    handlers.OnEntityCast = function(entityID, spellID, castPos)
+        callRaidScript(M, 'OnEntityCast', entityID, spellID, castPos)
         if M.Develop.PrintCastInfo then
             local entity = TensorCore.mGetEntity(entityID)
             if entity == nil or entity.charType == 4 or entity.charType == 2 then
@@ -64,14 +77,11 @@ ArgusEvents.init = function(M)
         end
     end
 
-    --- 添加标记时间事件
-    local OnMarkerAdd = function(entityID, markerID)
-        if M.CurRaidScript ~= nil and M.CurRaidScript.OnMarkerAdd ~= nil then
-            M.CurRaidScript.OnMarkerAdd(entityID, markerID)
-        end
-
-        local ent = TensorCore.mGetEntity(entityID)
-        if ent == nil then
+    --- 添加标记事件
+    handlers.OnMarkerAdd = function(entityID, markerID)
+        callRaidScript(M, 'OnMarkerAdd', entityID, markerID)
+        local entity = TensorCore.mGetEntity(entityID)
+        if entity == nil then
             return
         end
         if M.Develop.ShowMarkId then
@@ -87,18 +97,14 @@ ArgusEvents.init = function(M)
         end
         if M.Develop.PrintMarkId then
             M.InfoNoLog('[' .. M.InfoTime()
-                    .. ']添加标记，实体名称：' .. ent.name .. ', 标记ID：' .. markerID .. '。')
+                    .. ']添加标记，实体名称：' .. entity.name .. ', 标记ID：' .. markerID .. '。')
         end
-
     end
 
-    --- 注册AOE生成
+    --- 注册 AOE 生成事件
     ---@param aoeInfo DirectionalAOE
-    local OnAOECreate = function(aoeInfo)
-        if M.CurRaidScript ~= nil and M.CurRaidScript.OnAOECreate ~= nil then
-            M.CurRaidScript.OnAOECreate(aoeInfo)
-        end
-
+    handlers.OnAOECreate = function(aoeInfo)
+        callRaidScript(M, 'OnAOECreate', aoeInfo)
         if M.Develop.CacheAoeInfo then
             if M.Develop.AoeInfo[aoeInfo.aoeID] == nil then
                 M.Develop.AoeInfo[aoeInfo.aoeID] = {}
@@ -107,146 +113,127 @@ ArgusEvents.init = function(M)
         end
         if M.Develop.PrintAoeInfo then
             if aoeInfo.entityID then
-                local ent = TensorCore.mGetEntity(aoeInfo.entityID)
-                if ent.type == 1 then
+                local entity = TensorCore.mGetEntity(aoeInfo.entityID)
+                if entity ~= nil and entity.type == 1 then
                     return
                 end
             end
             M.InfoNoLog('[' .. M.InfoTime()
-                    .. ']AOE生成，名称：' .. aoeInfo.aoeName
-                    .. ', ID：' .. aoeInfo.aoeID
-                    .. '，类型：' .. aoeInfo.aoeCastType
-                    .. '，朝向：' .. aoeInfo.heading
+                    .. ']AOE生成，名称：' .. tostring(aoeInfo.aoeName)
+                    .. ', ID：' .. tostring(aoeInfo.aoeID)
+                    .. '，类型：' .. tostring(aoeInfo.aoeCastType)
+                    .. '，朝向：' .. tostring(aoeInfo.heading)
             )
         end
-
     end
 
-    --- 注册OnEventObjectScriptFunc
-    local OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
-        if M.CurRaidScript ~= nil and M.CurRaidScript.OnEventObjectScriptFunc ~= nil then
-            M.CurRaidScript.OnEventObjectScriptFunc(entityID, a1, a2, a3)
-        end
+    --- 注册场景物件脚本事件
+    handlers.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
+        callRaidScript(M, 'OnEventObjectScriptFunc', entityID, a1, a2, a3)
         if M.Develop.EventObjectScript then
-            M.Info('[' .. M.InfoTime() .. ']OnEventObjectScriptFunc: |' .. entityID .. '| ' .. a1 .. '|' .. a2 .. '|' .. a3 .. '|。')
+            M.Info('[' .. M.InfoTime() .. ']OnEventObjectScriptFunc: |'
+                    .. tostring(entityID) .. '| ' .. tostring(a1) .. '|' .. tostring(a2) .. '|' .. tostring(a3) .. '|。')
         end
     end
 
-    local OnMapEffect = function(a1, a2, a3)
-        if M.CurRaidScript ~= nil and M.CurRaidScript.OnMapEffect ~= nil then
-            M.CurRaidScript.OnMapEffect(a1, a2, a3)
-        end
+    --- 注册地图效果事件
+    handlers.OnMapEffect = function(a1, a2, a3)
+        callRaidScript(M, 'OnMapEffect', a1, a2, a3)
         if M.Develop.PrintMapEffect then
-            M.Info('[' .. M.InfoTime()
-                    .. ']OnMapEffect: |' .. a1 .. '|' .. a2 .. '|' .. a3 .. '|。')
+            M.Info('[' .. M.InfoTime() .. ']OnMapEffect: |'
+                    .. tostring(a1) .. '|' .. tostring(a2) .. '|' .. tostring(a3) .. '|。')
         end
     end
 
-    local OnAddEntityVFX = function(vfxID, vfxName, primaryEntityID, secondaryEntityID, time, a5, a6)
-        if M.CurRaidScript ~= nil and M.CurRaidScript.OnAddEntityVFX ~= nil then
-            M.CurRaidScript.OnAddEntityVFX(vfxID, vfxName, primaryEntityID, secondaryEntityID, time, a5, a6)
-        end
+    --- 注册实体 VFX 事件
+    handlers.OnAddEntityVFX = function(vfxID, vfxName, primaryEntityID, secondaryEntityID, time, a5, a6)
+        callRaidScript(M, 'OnAddEntityVFX', vfxID, vfxName, primaryEntityID, secondaryEntityID, time, a5, a6)
         if M.Develop.PrintVFXInfo then
-            local ent = TensorCore.mGetEntity(primaryEntityID)
+            local entity = TensorCore.mGetEntity(primaryEntityID)
+            if entity == nil then
+                return
+            end
             if M.Develop.VFXFilter then
                 if vfxID > M.Develop.VFXFilterMax or vfxID < M.Develop.VFXFilterMin then
                     return
                 end
-                if ent.type == 1 and M.Develop.VFXFilterNoPlayer then
+                if entity.type == 1 and M.Develop.VFXFilterNoPlayer then
                     return
                 end
             end
-            M.Info('[' .. M.InfoTime()
-                    .. ']' .. ent.name .. 'AddVFX，vfxID：' .. vfxID .. '，vfxName：' .. vfxName
-                    .. '，Other：|' .. primaryEntityID
-                    .. '|' .. secondaryEntityID
-                    .. '|' .. time
-                    .. '|' .. a5
-                    .. '|' .. a6 .. '|'
+            M.Info('[' .. M.InfoTime() .. ']' .. tostring(entity.name)
+                    .. 'AddVFX，vfxID：' .. tostring(vfxID)
+                    .. '，vfxName：' .. tostring(vfxName)
+                    .. '，Other：|' .. tostring(primaryEntityID)
+                    .. '|' .. tostring(secondaryEntityID)
+                    .. '|' .. tostring(time)
+                    .. '|' .. tostring(a5)
+                    .. '|' .. tostring(a6) .. '|'
             )
         end
     end
 
-    local OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID, newTetherID, newTetherFlags, newTargetID)
-        if M.CurRaidScript ~= nil and M.CurRaidScript.OnTetherChange ~= nil then
-            M.CurRaidScript.OnTetherChange(sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID, newTetherID, newTetherFlags, newTargetID)
-        end
+    --- 注册连线变化事件
+    handlers.OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID,
+            newTetherID, newTetherFlags, newTargetID)
+        return callRaidScript(M, 'OnTetherChange', sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID,
+                newTetherID, newTetherFlags, newTargetID)
     end
 
-    local OnEntityAdd = function(entityID, entityName)
-        if M.CurRaidScript ~= nil and M.CurRaidScript.OnEntityAdd ~= nil then
-            M.CurRaidScript.OnEntityAdd(entityID, entityName)
-        end
+    --- 注册实体生成事件
+    handlers.OnEntityAdd = function(entityID, entityName)
+        return callRaidScript(M, 'OnEntityAdd', entityID, entityName)
     end
 
-    --- 安全注册阿古斯（防止加载失败导致报错）
-    local registerArgus = function()
+    local registerComplete = false
+    -- Argus 可能晚于本模块就绪；允许后续重试，bridge.registered 保证每类事件只注册一次。
+    local function registerArgus()
         if Argus == nil then
-            return
+            return false
         end
-        if Argus.registerOnEntityChannel ~= nil and not register['OnEntityChannel'] then
-            Argus.registerOnEntityChannel(OnEntityChannel)
-            register['OnEntityChannel'] = true
-        end
+        local registrations = {
+            { 'OnEntityChannel', Argus.registerOnEntityChannel },
+            { 'OnEntityCast', Argus.registerOnEntityCast },
+            { 'OnMarkerAdd', Argus.registerOnMarkerAdd },
+            { 'OnAOECreate', Argus.registerOnAOECreateFunc },
+            { 'OnEventObjectScriptFunc', Argus.registerOnEventObjectScriptFunc },
+            { 'OnMapEffect', Argus.registerOnMapEffect },
+            { 'OnAddEntityVFX', Argus.registerOnAddEntityVFXFunc },
+            { 'OnTetherChange', Argus.registerOnTetherChange },
+            { 'OnEntityAdd', Argus.registerOnEntityAddFunc },
+        }
 
-        if Argus.registerOnEntityCast ~= nil and not register['OnEntityCast'] then
-            Argus.registerOnEntityCast(OnEntityCast)
-            register['OnEntityCast'] = true
-        end
-
-        if Argus.registerOnMarkerAdd ~= nil and not register['OnMarkerAdd'] then
-            Argus.registerOnMarkerAdd(OnMarkerAdd)
-            register['OnMarkerAdd'] = true
-        end
-        if Argus.registerOnAOECreateFunc ~= nil and not register['OnAOECreate'] then
-            Argus.registerOnAOECreateFunc(OnAOECreate)
-            register['OnAOECreate'] = true
-        end
-        if Argus.registerOnEventObjectScriptFunc ~= nil and not register['OnEventObjectScriptFunc'] then
-            Argus.registerOnEventObjectScriptFunc(OnEventObjectScriptFunc)
-            register['OnEventObjectScriptFunc'] = true
-        end
-        if Argus.registerOnMapEffect ~= nil and not register['OnMapEffect'] then
-            Argus.registerOnMapEffect(OnMapEffect)
-            register['OnMapEffect'] = true
-        end
-        if Argus.registerOnAddEntityVFXFunc ~= nil and not register['OnAddEntityVFX'] then
-            Argus.registerOnAddEntityVFXFunc(OnAddEntityVFX)
-            register['OnAddEntityVFX'] = true
-        end
-
-        if Argus.registerOnTetherChange ~= nil and not register['OnTetherChange'] then
-            Argus.registerOnTetherChange(OnTetherChange)
-            register['OnTetherChange'] = true
-        end
-
-        if Argus.registerOnEntityAddFunc ~= nil and not register['OnEntityAdd'] then
-            Argus.registerOnEntityAddFunc(OnEntityAdd)
-            register['OnEntityAdd'] = true
-        end
-    end
-    
-    M.CheckArgusRegister = function()
-        if registerOK then
-            return
-        end
-        if register == nil then
-            registerArgus()
-            return
-        end
-        local hasNotRegister = false
-        for _, state in pairs(register) do
-            if not state then
-                hasNotRegister = true
-                break
+        local allRegistered = true
+        for _, registration in ipairs(registrations) do
+            local eventName = registration[1]
+            local registerFunction = registration[2]
+            if not bridge.registered[eventName] then
+                if type(registerFunction) ~= 'function' then
+                    allRegistered = false
+                else
+                    local ok, err = pcall(registerFunction, createDispatcher(eventName))
+                    if ok then
+                        bridge.registered[eventName] = true
+                    else
+                        allRegistered = false
+                        M.LogOnce('ArgusEvents', 'register_' .. eventName,
+                                'Argus事件注册失败', { event = eventName, err = tostring(err) }, true)
+                    end
+                end
             end
         end
-        if hasNotRegister then
-            registerArgus()
-        else
-            registerOK = true
+        return allRegistered
+    end
+
+    M.CheckArgusRegister = function()
+        if registerComplete then
+            return
+        end
+        if registerArgus() then
+            registerComplete = true
             M.Debug('ArgusEvents:所有Argus事件函数注册完成')
         end
     end
 end
+
 return ArgusEvents

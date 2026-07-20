@@ -1,7 +1,7 @@
 local LogSystem = {}
 --[[
 ===================================
-    日志系统 
+    日志系统
     开发: String
     修改: MuAi
 ===================================
@@ -10,6 +10,8 @@ local LogSystem = {}
 local onceLogData = {}
 local logCache = {}
 local curFileName
+local sessionActive = false
+
 local logValue
 
 local escapePattern = function(str)
@@ -21,22 +23,35 @@ local safeFileName = function(str)
 end
 
 local createLogFileName = function()
-    if MuAiGuide == nil or MuAiGuide.CurRaidScript == nil or MuAiGuide.CurRaidScript.NameCN == nil then
+    if MuAiGuide == nil then
+        return false
+    end
+    if MuAiGuide.CurRaidScript == nil or MuAiGuide.CurRaidScript.NameCN == nil then
         if Player == nil or Player.localmapid == nil or Player.localmapid == 0 then
             MuAiGuide.Debug('创建新日志失败: 当前副本未找到且玩家地图为空！')
-            return
+            return false
         end
-        curFileName = safeFileName('Map_' .. tostring(Player.localmapid) .. '_' .. os.date('%Y%m%d_%H%M%S')) .. '.log'
+        curFileName = safeFileName('Map_' .. tostring(Player.localmapid) .. '_' .. os.date('%Y%m%d_%H%M%S'))
     else
-        curFileName = safeFileName(MuAiGuide.CurRaidScript.NameCN .. '_' .. os.date('%Y%m%d_%H%M%S')) .. '.log'
+        curFileName = safeFileName(MuAiGuide.CurRaidScript.NameCN .. '_' .. os.date('%Y%m%d_%H%M%S'))
+    end
+    local path = GetLuaModsPath() .. 'MuAiCore\\Log'
+    local baseName = curFileName
+    local suffix = 2
+    curFileName = baseName .. '.log'
+    while FileExists(path .. '\\' .. curFileName) do
+        curFileName = baseName .. '_' .. suffix .. '.log'
+        suffix = suffix + 1
     end
     MuAiGuide.Debug('创建新日志: ' .. curFileName)
+    return true
 end
 
 local clearAndNew = function()
     onceLogData = {}
     logCache = {}
-    createLogFileName()
+    curFileName = nil
+    return createLogFileName()
 end
 
 local logEnable = function(force)
@@ -69,7 +84,7 @@ local getRoleByEntityID = function(entityID)
 end
 
 local safeString = function(str)
-    str = tostring(str)
+    str = tostring(str):gsub('\r', '\\r'):gsub('\n', '\\n')
     if MuAiGuide ~= nil and MuAiGuide.Party ~= nil then
         for job, member in pairs(MuAiGuide.Party) do
             if member ~= nil and member.name ~= nil and member.name ~= '' then
@@ -139,26 +154,31 @@ logValue = function(value, deep)
 end
 
 local saveLog = function()
+    if #logCache == 0 then
+        return true
+    end
+    if curFileName == nil and not createLogFileName() then
+        return false
+    end
     local path = GetLuaModsPath() .. 'MuAiCore\\Log'
     if not FolderExists(path) then
         FolderCreate(path)
     end
 
-    if curFileName == nil then
-        MuAiGuide.Debug('保存日志失败: 文件名为空！')
-        return
-    end
-    if #logCache == 0 then
-        MuAiGuide.Debug('保存日志' .. curFileName .. '失败: 没有日志缓存！')
-        return
-    end
     local filePath = path .. '\\' .. curFileName
     local content = table.concat(logCache, "\n")
     if FileSave(filePath, content) then
         MuAiGuide.Debug('保存日志' .. curFileName .. '成功！')
-    else
-        MuAiGuide.Debug('保存日志' .. curFileName .. '失败！')
+        return true
     end
+    MuAiGuide.Debug('保存日志' .. curFileName .. '失败！')
+    return false
+end
+
+local clearLogData = function()
+    onceLogData = {}
+    logCache = {}
+    curFileName = nil
 end
 
 ---@param M MuAiGuide
@@ -168,13 +188,26 @@ LogSystem.init = function(M)
         return string.format('%.3f', TensorReactions_CurrentCombatTimer)
     end
 
-    M.InfoNoLog = function(msg)
+    M.InfoNoLog = function(msg, ttsOn)
+        if M.Config ~= nil and M.Config.Main ~= nil and not M.Config.Main.LogToEchoMsg then
+            return
+        end
         TensorCore.sendParsedChatMessage("/e {color:0,255,0}{resetcolor}" .. msg)
+        if ttsOn
+                and M.Config ~= nil
+                and M.Config.Main ~= nil
+                and M.Config.Main.TTS == true
+        then
+            TensorCore.addAlertText(0, msg, 1, 2, true)
+        end
     end
 
     --- 输出消息到聊天栏
     --- @param msg string
     M.Info = function(msg, ttsOn, arrOnly)
+        if M.CurRaidScript ~= nil then
+            M.Log('State', msg)
+        end
         if not M.Config.Main.LogToEchoMsg then
             return
         end
@@ -187,9 +220,6 @@ LogSystem.init = function(M)
         end
         if ttsOn and M.Config.Main.TTS == true then
             TensorCore.addAlertText(0, msg, 1, 2, true)
-        end
-        if M.CurRaidScript ~= nil then
-            M.Log('State', msg)
         end
     end
     M.LogCount = function(tbl)
@@ -241,36 +271,62 @@ LogSystem.init = function(M)
     end
 
     M.LogSystemEnter = function()
-        if logEnable() then
-            clearAndNew()
+        if #logCache > 0 and not saveLog() then
+            return false
         end
+        sessionActive = false
+        if logEnable() then
+            return clearAndNew()
+        end
+        clearLogData()
+        return true
     end
 
     M.LogSystemLeave = function()
-        if logEnable() then
-            saveLog()
-            onceLogData = {}
-            logCache = {}
+        if #logCache > 0 and not saveLog() then
+            return false
         end
+        clearLogData()
+        sessionActive = false
+        return true
     end
 
     --- 日志系统-团灭
     M.LogSystemWipe = function()
-        -- 执行保存，清空数据，创建新文件
-        saveLog()
-        clearAndNew()
+        if #logCache > 0 and not saveLog() then
+            return false
+        end
+        sessionActive = false
+        if logEnable() then
+            return clearAndNew()
+        end
+        clearLogData()
+        return true
     end
 
     --- 日志系统初始化（需要在副本初始化时候调用）
     M.LogSystemInit = function()
-        if table.size(logCache) > 0 then
-            -- 如果wipe触发失败数据没有清空
-            -- 这里进行保存和处理新建log名称
-            saveLog()
-            clearAndNew()
-        elseif curFileName == nil then
-            createLogFileName()
+        if not logEnable() then
+            if #logCache > 0 and not saveLog() then
+                return false
+            end
+            clearLogData()
+            sessionActive = false
+            return true
         end
+        -- 如果 wipe 触发失败数据没有清空，在下一次初始化时保存上一把并新建日志。
+        if sessionActive then
+            if #logCache > 0 and not saveLog() then
+                return false
+            end
+            if not clearAndNew() then
+                return false
+            end
+        elseif curFileName == nil and not createLogFileName() then
+            return false
+        end
+        sessionActive = true
+        return true
     end
 end
 

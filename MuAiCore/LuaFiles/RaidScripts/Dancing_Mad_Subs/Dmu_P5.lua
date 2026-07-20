@@ -5,6 +5,9 @@ local DM
 ---@type MuAiGuide
 local MG
 
+-- OnEntityChannel 到实际结算存在帧级抖动，按实战日志上界保留余量。
+local chaosVortexDrawDuration = 5200
+
 local Cfg = function()
     return MG.Config.DmuCfg.P5
 end
@@ -414,9 +417,9 @@ Dmu_P5.OnEntityChannel = function(entityID, spellID, _)
     elseif spellID == 47934 or spellID == 47935 then
         for _, member in pairs(MG.Party) do
             if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
-                MG.CreateDrawer(0.3, 0, 0.3, 0.1):addTimedCircleOnEnt(5000, member.id, 5)
+                MG.CreateDrawer(0.3, 0, 0.3, 0.1):addTimedCircleOnEnt(chaosVortexDrawDuration, member.id, 5)
             else
-                MG.CreateDrawer(1, 0, 1, 0.1):addTimedCircleOnEnt(5000, member.id, 5)
+                MG.CreateDrawer(1, 0, 1, 0.1):addTimedCircleOnEnt(chaosVortexDrawDuration, member.id, 5)
             end
         end
     elseif spellID == 47925 then
@@ -462,20 +465,48 @@ Dmu_P5.OnAOECreate = function(aoeInfo)
     end
 end
 
+local tryCommitCelestriadWave = function()
+    local cache = Data().Celestriad.castingCache
+    for entityID, entry in pairs(cache) do
+        if entry.dir == nil then
+            local obj = TensorCore.mGetEntity(entityID)
+            if obj ~= nil and obj.pos ~= nil then
+                if obj.contentid == nil or obj.contentid < 2015294 or obj.contentid > 2015296 then
+                    cache[entityID] = nil
+                else
+                    entry.Obj = obj
+                    entry.dir = TensorCore.getHeadingToTarget(DM.Center, obj.pos)
+                end
+            end
+        end
+    end
+    if table.size(cache) ~= 4 then
+        return
+    end
+    for _, entry in pairs(cache) do
+        if entry.dir == nil or entry.Obj == nil or entry.Obj.pos == nil then
+            return
+        end
+    end
+    Data().Celestriad.wave = Data().Celestriad.wave + 1
+    MG.Info('第' .. Data().Celestriad.wave .. '波踩塔。', false, true)
+    Data().Celestriad.CastingTowers[Data().Celestriad.wave] = cache
+    Data().Celestriad.castingCache = {}
+end
+
 Dmu_P5.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
     if a1 == 16 and a2 == 32 then
         local obj = TensorCore.mGetEntity(entityID)
-        if 2015294 <= obj.contentid and obj.contentid <= 2015296 then
+        if obj == nil or obj.pos == nil
+                or (obj.contentid ~= nil
+                and 2015294 <= obj.contentid and obj.contentid <= 2015296)
+        then
             Data().Celestriad.castingCache[entityID] = {
-                dir = TensorCore.getHeadingToTarget(DM.Center, obj.pos),
-                Obj = TensorCore.mGetEntity(entityID)
+                dir = obj ~= nil and obj.pos ~= nil
+                        and TensorCore.getHeadingToTarget(DM.Center, obj.pos) or nil,
+                Obj = obj or { id = entityID },
             }
-            if table.size(Data().Celestriad.castingCache) == 4 then
-                Data().Celestriad.wave = Data().Celestriad.wave + 1
-                MG.Info('第' .. Data().Celestriad.wave .. '波踩塔。', false, true)
-                Data().Celestriad.CastingTowers[Data().Celestriad.wave] = Data().Celestriad.castingCache
-                Data().Celestriad.castingCache = {}
-            end
+            tryCommitCelestriadWave()
         end
     elseif a1 == 1 and a2 == 64
             and Data().Celestriad.wave == 3
@@ -491,6 +522,7 @@ end
 Dmu_P5.Update = function()
     getBoss()
     drawingGroudFire()
+    tryCommitCelestriadWave()
     if DM.InState('P5Start') --P5UltimaRepeater1
             or DM.InState('P5UltimaRepeater2')
             or DM.InState('P5UltimaRepeater3')
@@ -691,7 +723,9 @@ Dmu_P5.Update = function()
                 end
             end
             local mt = TensorCore.mGetEntity(MG.Party.MT.id)
-            MG.CreateDrawer(1, 0.5, 0, 0.2, 2):addCircle(mt.pos.x, 0, mt.pos.z, 5)
+            if mt ~= nil and mt.pos ~= nil then
+                MG.CreateDrawer(1, 0.5, 0, 0.2, 2):addCircle(mt.pos.x, 0, mt.pos.z, 5)
+            end
         end
         -- 获取DebuffHD
         if Data().MaddeningOrchestra.Guide2 == nil or table.size(Data().MaddeningOrchestra.Guide2) < 8 then
@@ -699,7 +733,9 @@ Dmu_P5.Update = function()
                 Data().MaddeningOrchestra.Guide2 = {}
                 for job, member in pairs(MG.Party) do
                     if TensorCore.hasBuff(member.id, 2941) and job ~= 'MT' and job ~= 'ST' then
-                        table.insert(Data().MaddeningOrchestra.FirstHits, job)
+                        if not table.contains(Data().MaddeningOrchestra.FirstHits, job) then
+                            table.insert(Data().MaddeningOrchestra.FirstHits, job)
+                        end
                         Data().MaddeningOrchestra.Guide2[job] = Data().MaddeningOrchestra.GuideOut[job]
                     else
                         Data().MaddeningOrchestra.Guide2[job] = Data().MaddeningOrchestra.Guide1[job]
@@ -714,17 +750,21 @@ Dmu_P5.Update = function()
             end
         end
         if TimeSince(Data().MaddeningOrchestra.FirstHitTimer) > 4200 then
+            local secondHitFound = false
             for job, member in pairs(MG.Party) do
                 if job ~= 'MT' and job ~= 'ST'
                         and TensorCore.hasBuff(member.id, 2941)
                         and (not table.contains(Data().MaddeningOrchestra.FirstHits, job)) then
+                    secondHitFound = true
+                    break
                 end
+            end
+            if secondHitFound then
                 if DM.InState('P5MaddeningOrchestra1End') then
                     DM.ChangeState('P5MaddeningOrchestra2End')
                 else
                     DM.ChangeState('P5MaddeningOrchestra2_2End')
                 end
-                break
             end
         end
     end
@@ -734,6 +774,8 @@ Dmu_P5.Update = function()
     then
         if Data().MaddeningOrchestra.Guide3 == nil or table.size(Data().MaddeningOrchestra.Guide3) < 8 then
             Data().MaddeningOrchestra.Guide3 = {}
+            Data().MaddeningOrchestra.RedBuff = nil
+            Data().MaddeningOrchestra.BlueBuff = nil
             for job, member in pairs(MG.Party) do
                 if job == 'MT' or job == 'ST' then
                     if TensorCore.hasBuff(member.id, redBuffId) then
@@ -748,31 +790,41 @@ Dmu_P5.Update = function()
                 end
             end
         end
-        if Cfg().draw then
-            if Data().MaddeningOrchestra.RedBuff ~= nil then
+        local orchestraReady = table.size(Data().MaddeningOrchestra.Guide3) >= 8
+                and Data().MaddeningOrchestra.RedBuff ~= nil
+                and Data().MaddeningOrchestra.BlueBuff ~= nil
+        if orchestraReady then
+            if Cfg().draw then
                 local curPlayer = TensorCore.mGetEntity(Data().MaddeningOrchestra.RedBuff.id)
-                MG.CreateDrawer(1, 0.5, 0, 0.2, 2):addCircle(curPlayer.pos.x, 0, curPlayer.pos.z, 26)
+                if curPlayer ~= nil and curPlayer.pos ~= nil then
+                    MG.CreateDrawer(1, 0.5, 0, 0.2, 2):addCircle(curPlayer.pos.x, 0, curPlayer.pos.z, 26)
+                end
+                curPlayer = TensorCore.mGetEntity(Data().MaddeningOrchestra.BlueBuff.id)
+                if curPlayer ~= nil and curPlayer.pos ~= nil then
+                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addCircle(curPlayer.pos.x, 0, curPlayer.pos.z, 6)
+                end
             end
-            if Data().MaddeningOrchestra.BlueBuff ~= nil then
-                local curPlayer = TensorCore.mGetEntity(Data().MaddeningOrchestra.BlueBuff.id)
-                MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addCircle(curPlayer.pos.x, 0, curPlayer.pos.z, 6)
+            if Cfg().guide then
+                MG.FrameMultiD(Data().MaddeningOrchestra.Guide3)
             end
-        end
-        if Cfg().guide and Data().MaddeningOrchestra.Guide3 ~= nil then
-            MG.FrameMultiD(Data().MaddeningOrchestra.Guide3)
-        end
-        if not TensorCore.hasBuff(Data().MaddeningOrchestra.RedBuff.id, redBuffId)
-                and not TensorCore.hasBuff(Data().MaddeningOrchestra.BlueBuff.id, blueBuffId)
-        then
-            if DM.InState('P5MaddeningOrchestra2End') then
-                DM.ChangeState('P5UltimaRepeater2')
-            else
-                DM.ChangeState('P5UltimaRepeater4')
+            if not TensorCore.hasBuff(Data().MaddeningOrchestra.RedBuff.id, redBuffId)
+                    and not TensorCore.hasBuff(Data().MaddeningOrchestra.BlueBuff.id, blueBuffId)
+            then
+                if DM.InState('P5MaddeningOrchestra2End') then
+                    DM.ChangeState('P5UltimaRepeater2')
+                else
+                    DM.ChangeState('P5UltimaRepeater4')
+                end
             end
         end
     end
     if DM.InState('P5Celestriad') then
-        if Data().Celestriad.AllTowers == nil or table.size(Data().Celestriad.AllTowers) < 9 then
+        local towersReady = Data().Celestriad.AllTowers ~= nil
+                and table.size(Data().Celestriad.AllTowers) >= 9
+                and table.size(Data().Celestriad.TowerFire or {}) >= 3
+                and table.size(Data().Celestriad.TowerIce or {}) >= 3
+                and table.size(Data().Celestriad.TowerThunder or {}) >= 3
+        if not towersReady then
             Data().Celestriad.AllTowers = {}
             Data().Celestriad.TowerFire = {}
             Data().Celestriad.TowerIce = {}
@@ -844,7 +896,7 @@ Dmu_P5.Update = function()
         end
     end
     if DM.InState('P5BeforeEnd') then
-        local curBoss = TensorCore.mGetEntity(Data().Kefka.id)
+        local curBoss = Data().Kefka ~= nil and TensorCore.mGetEntity(Data().Kefka.id) or nil
         if curBoss ~= nil and (not curBoss.alive or curBoss.hp.current <= 0) then
             MG.InfoNoLog('-----------------------------------------------')
             MG.InfoNoLog('  恭喜通关' .. DM.NameCN .. '!')

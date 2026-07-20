@@ -152,11 +152,125 @@ GameTools.init = function(M)
         return members
     end
 
+    local getPartyMemberKey = function(member)
+        if member == nil then
+            return nil
+        end
+        local contentId = member.contentid or member.contentID or member.contentId or member.ContentID
+        if contentId ~= nil and tostring(contentId) ~= '' and tonumber(contentId) ~= 0 then
+            return 'cid:' .. tostring(contentId)
+        end
+        if member.name ~= nil and tostring(member.name) ~= '' then
+            return 'name:' .. tostring(member.name)
+        end
+        if member.id ~= nil then
+            return 'id:' .. tostring(member.id)
+        end
+        return nil
+    end
+
+    local getPartyMemberPairKey = function(member)
+        local key = getPartyMemberKey(member)
+        if key == nil or member == nil or member.job == nil then
+            return nil
+        end
+        return key .. '#job:' .. tostring(member.job)
+    end
+
+    local getPartyMembersSignature = function(members)
+        if members == nil or table.size(members) == 0 then
+            return nil
+        end
+        local parts = {}
+        for _, member in pairs(members) do
+            local pairKey = getPartyMemberPairKey(member)
+            if pairKey ~= nil then
+                table.insert(parts, pairKey)
+            end
+        end
+        table.sort(parts)
+        return table.concat(parts, '|'), #parts
+    end
+
+    local buildPartyMemberLookup = function(members)
+        local lookup = {}
+        for _, member in pairs(members or {}) do
+            local pairKey = getPartyMemberPairKey(member)
+            if pairKey ~= nil then
+                lookup[pairKey] = lookup[pairKey] or {}
+                table.insert(lookup[pairKey], member)
+            end
+        end
+        return lookup
+    end
+
+    M.RememberParty = function(reason)
+        if M.Party == nil or M.GetPartyCnt() == 0 then
+            return false
+        end
+        local roles = {}
+        local members = {}
+        for _, jobPos in ipairs(M.JobPosName) do
+            local member = M.Party[jobPos]
+            local pairKey = getPartyMemberPairKey(member)
+            if pairKey ~= nil then
+                roles[jobPos] = pairKey
+                table.insert(members, member)
+            end
+        end
+        local signature, count = getPartyMembersSignature(members)
+        if signature == nil or count ~= M.GetPartyCnt() then
+            return false
+        end
+        M.PartyMemory = {
+            roles = roles,
+            signature = signature,
+            count = count,
+            selfPos = M.SelfPos,
+            reason = reason,
+        }
+        return true
+    end
+
+    local tryRestoreRememberedParty = function(members)
+        local memory = M.PartyMemory
+        if memory == nil or memory.signature == nil or memory.roles == nil then
+            return false
+        end
+        local signature, count = getPartyMembersSignature(members)
+        if signature == nil or signature ~= memory.signature or count ~= memory.count then
+            return false
+        end
+        local lookup = buildPartyMemberLookup(members)
+        local restored = {}
+        for _, jobPos in ipairs(M.JobPosName) do
+            local pairKey = memory.roles[jobPos]
+            if pairKey ~= nil then
+                local list = lookup[pairKey]
+                if list == nil or #list == 0 then
+                    return false
+                end
+                restored[jobPos] = table.remove(list, 1)
+            end
+        end
+        M.Party = restored
+        M.SelfPos = nil
+        M.GetSelfPos()
+        if M.MultiGuide ~= nil and M.MultiGuide.RefreshDic ~= nil then
+            M.MultiGuide.RefreshDic()
+        end
+        M.Debug('复用小队列表记忆：队员和职业未变化')
+        return true
+    end
+
     --- 读取小队信息（初始化模块）
-    M.LoadParty = function()
-        M.Party = {}
+    M.LoadParty = function(forceReset)
         local jobOrder = M.Config.Main.JobOrder
         local members = M.GetPartyPlayers()
+        if forceReset ~= true and tryRestoreRememberedParty(members) then
+            return
+        end
+        M.Party = {}
         table.sort(members, function(p1, p2)
             return M.IndexOf(jobOrder, p1.job) < M.IndexOf(jobOrder, p2.job)
         end)
@@ -189,6 +303,7 @@ GameTools.init = function(M)
                 end
             end
             M.GetSelfPos()
+            M.RememberParty('load')
             return
         end
         if members == nil or (table.size(members) < 8 and table.size(members) ~= 4) then
@@ -268,6 +383,7 @@ GameTools.init = function(M)
         end
 
         M.GetSelfPos()
+        M.RememberParty('load')
     end
 
     --- 计算当前小队成员数量（可靠）
@@ -493,8 +609,8 @@ GameTools.init = function(M)
             if debuff ~= nil then
                 if time == nil then
                     return true
-                else
-                    return debuff.duration >= time
+                elseif debuff.duration >= time then
+                    return true
                 end
             end
         end

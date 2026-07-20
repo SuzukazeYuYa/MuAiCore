@@ -9,8 +9,38 @@ local raidScript
 --- 初始化
 ---@param M MuAiGuide
 RaidMgr.init = function(M)
+    -- 副本切换统一走离开/进入生命周期，避免重载或地图变化时重复触发脚本回调。
+    local leaveCurrentRaid = function()
+        local current = M.CurRaidScript
+        if current == nil then
+            return
+        end
+        M.Log('Lifecycle', '离开副本：' .. tostring(current.NameCN))
+        M.Debug('离开副本：' .. tostring(current.NameCN))
+        if type(current.OnLeave) == 'function' then
+            current.OnLeave()
+        end
+        M.LogSystemLeave()
+        M.CurRaidScript = nil
+        M.CurRaidBoss = nil
+    end
+
+    -- 进入副本
+    local enterRaid = function(script)
+        M.CurRaidScript = script
+        M.LogSystemEnter()
+        if type(script.OnEnter) == 'function' then
+            script.OnEnter()
+        end
+        M.Debug('进入副本：' .. tostring(script.NameCN))
+    end
+
     --- 读取副本脚本
     M.LoadRaidScripts = function(isReload)
+        if isReload and M.CurRaidScript ~= nil then
+            M.Log('Lifecycle', '重新加载副本脚本')
+            M.LogSystemInit()
+        end
         raidScript = {}
         local folderPath = MuAiGuideRoot .. "RaidScripts"
         local list = FolderList(folderPath)
@@ -34,9 +64,6 @@ RaidMgr.init = function(M)
                 cnter = cnter  + 1
             end
         end
-        if M.CurRaidScript ~= nil and raidScript[Player.localmapid] ~= nil then
-            M.CurRaidScript = raidScript[Player.localmapid]
-        end
         if isReload then
             if cnter == table.size(list) then
                 M.InfoNoLog('重载副本脚本成功。')
@@ -46,36 +73,36 @@ RaidMgr.init = function(M)
         end
     end
     M.RaidMapCheck = function()
-        if M.CurRaidScript == nil and raidScript[Player.localmapid] ~= nil then
-            -- 进入副本
-            M.CurRaidScript = raidScript[Player.localmapid]
-            M.CurRaidScript.OnEnter()
-            M.Debug("进入副本：" .. M.CurRaidScript.NameCN)
-            M.LogSystemEnter()
-        elseif M.CurRaidScript ~= nil then
-            M.Debug("离开副本：" .. M.CurRaidScript.NameCN)
-            M.LogSystemLeave()
-            M.CurRaidScript = nil
-            M.CurRaidBoss = nil
+        local nextScript = raidScript and raidScript[Player.localmapid] or nil
+        if M.CurRaidScript == nextScript then
+            return
+        end
+        leaveCurrentRaid()
+        if nextScript ~= nil then
+            enterRaid(nextScript)
         end
     end
 
     M.OnRaidUpdate = function()
-        if raidScript and raidScript[Player.localmapid] then
-            raidScript[Player.localmapid].Update()
-            if M.CurRaidScript == nil then
-                M.CurRaidScript = raidScript[Player.localmapid]
-            end
+        local currentScript = raidScript and raidScript[Player.localmapid] or nil
+        if M.CurRaidScript ~= currentScript then
+            M.RaidMapCheck()
+        end
+        if M.CurRaidScript ~= nil and type(M.CurRaidScript.Update) == 'function' then
+            M.CurRaidScript.Update()
         end
         -- 小工具扩展
         if raidScript[-1] ~= nil then
             raidScript[-1].Update()
         end
     end
-    
+
     M.OnWipe = function()
-        if raidScript and raidScript[Player.localmapid] then
-            raidScript[Player.localmapid].OnWipe()
+        local currentScript = raidScript and raidScript[Player.localmapid] or nil
+        if currentScript ~= nil and currentScript == M.CurRaidScript then
+            if type(currentScript.OnWipe) == 'function' then
+                currentScript.OnWipe()
+            end
             M.LogSystemWipe()
         end
     end

@@ -6,6 +6,64 @@ DM.ScriptName = 'Dancing_Mad';
 DM.SubScripts = nil
 ---@type MuAiGuide
 local MG
+local subEventErrors = {}
+local errorRetryInterval = 3000
+local errorLogInterval = 10000
+
+local function resetSubEventErrors()
+    subEventErrors = {}
+end
+
+local function canRunSubEvent(key, eventName)
+    local state = subEventErrors[key]
+    if eventName ~= 'Update' or state == nil or state.pausedAt == nil then
+        return true
+    end
+    if TimeSince(state.pausedAt) < errorRetryInterval then
+        return false
+    end
+    state.pausedAt = nil
+    return true
+end
+
+local function recordSubEventError(key, script, eventName, err)
+    local errorText = tostring(err)
+    local state = subEventErrors[key]
+    if state == nil or state.errorText ~= errorText then
+        state = {
+            errorText = errorText,
+            consecutive = 0,
+            suppressed = 0,
+            lastLogAt = nil,
+        }
+        subEventErrors[key] = state
+    end
+
+    state.consecutive = state.consecutive + 1
+    local shouldLog = state.lastLogAt == nil or TimeSince(state.lastLogAt) >= errorLogInterval
+    if shouldLog then
+        MG.LogError('Error',
+                script.StateName .. '执行' .. eventName .. '失败',
+                {
+                    err = errorText,
+                    suppressed = state.suppressed,
+                },
+                true)
+        MG.Debug('错误信息:' .. errorText)
+        if state.suppressed > 0 then
+            MG.Debug('已抑制相同错误:' .. tostring(state.suppressed) .. '次')
+        end
+        state.lastLogAt = Now()
+        state.suppressed = 0
+    else
+        state.suppressed = state.suppressed + 1
+    end
+
+    if eventName == 'Update' and state.consecutive >= 3 then
+        state.pausedAt = Now()
+        state.consecutive = 0
+    end
+end
 
 --- 执行子脚本
 local doSubEvents = function(eventName, ...)
@@ -19,18 +77,14 @@ local doSubEvents = function(eventName, ...)
                 and DM.OverState(script.StateName .. 'Start', true)
                 and DM.BeLowState(script.StateName .. 'End', true)
         then
-            local ok, err = pcall(script[eventName], ...)
-            if not ok then
-                d('----------------------------------------------------')
-                local traceback = debug ~= nil and debug.traceback ~= nil and debug.traceback() or 'debug.traceback unavailable'
-                MG.LogError('Error',
-                        script.StateName .. '执行' .. eventName .. '失败',
-                        { err = tostring(err), traceback = traceback },
-                        true)
-                MG.Debug('错误信息:' .. tostring(err))
-                MG.Debug('调用堆栈:' .. traceback)
-                d('----------------------------------------------------')
-
+            local errorKey = script.StateName .. ':' .. eventName
+            if canRunSubEvent(errorKey, eventName) then
+                local ok, err = pcall(script[eventName], ...)
+                if ok then
+                    subEventErrors[errorKey] = nil
+                else
+                    recordSubEventError(errorKey, script, eventName, err)
+                end
             end
         end
     end
@@ -368,6 +422,7 @@ local dataInit = function()
                 firstEntity = nil,
                 secondEntity = nil,
                 boomPos = nil,
+                boomCount = 0,
                 Put1Pos = nil,
                 Put2Pos = nil,
                 Types = {},
@@ -741,7 +796,8 @@ DM.ChangeState = function(stateName)
     local state = DM.State[stateName]
     if state == nil then
         -- 输出错误日志
-        local traceback = debug ~= nil and debug.traceback ~= nil and debug.traceback() or 'debug.traceback unavailable'
+        local traceback = debug ~= nil and debug.traceback ~= nil and debug.traceback()
+                or 'debug.traceback unavailable'
         MG.LogError('Error', '切换状态失败，状态不存在：' .. tostring(stateName), {
             traceback = traceback,
         }, true)
@@ -1105,6 +1161,7 @@ DM.Update = function()
 end
 
 DM.OnEnter = function()
+    resetSubEventErrors()
     MG.DancingMad = { CurrentState = 1 }
     MG.Develop.Reg('DancingMad')
     MG.Develop.LogState = function()
@@ -1117,6 +1174,7 @@ DM.OnEnter = function()
 end
 
 DM.OnWipe = function()
+    resetSubEventErrors()
     MG.DancingMad = { CurrentState = 1 }
     MG.Log('State', '灭团重置：' .. DM.NameCN)
 end

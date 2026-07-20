@@ -18,6 +18,35 @@ Drawers.init = function(M)
     local ZeroYMap = { 1238, 1122, 1325, 1327, 1363 }
     M.NotDelayGuides = {}
     M.NotDelayGuidesMulti = {}
+
+    local optionalNumber = function(value, defaultValue, caller, name)
+        if value == nil then
+            return defaultValue
+        end
+        if type(value) ~= "number" then
+            M.LogOnce('Drawers', caller .. '_invalid_' .. name,
+                    '绘图参数类型错误，已使用默认值', { caller = caller, parameter = name, valueType = type(value) })
+            return defaultValue
+        end
+        return value
+    end
+
+    local validDirectTarget = function(x, z, time, caller)
+        if type(x) == "number" and type(z) == "number" and type(time) == "number" then
+            return true
+        end
+        M.LogOnce('Drawers', caller .. '_invalid_target',
+                '指路跳过：坐标或持续时间不是数字',
+                { caller = caller, xType = type(x), zType = type(z), timeType = type(time) })
+        return false
+    end
+
+    local validEntity = function(entity)
+        local entityType = type(entity)
+        return (entityType == "table" or entityType == "userdata")
+                and entity.id ~= nil
+                and entity.pos ~= nil
+    end
     -- 画图工具定义
     --M.RedDrawer = Argus2.ShapeDrawer:new(r_03, r_03, r_03, w_1, 1)
     --M.GreenDrawer = Argus2.ShapeDrawer:new(g_03, g_03, g_03, w_1, 1)
@@ -64,7 +93,9 @@ Drawers.init = function(M)
                 nil,
                 nil,
                 true,
-                true
+                true,
+                0,
+                false
         )
 
         local colorU32PP = GUI:ColorConvertFloat4ToU32(1, 0, 1, 1)
@@ -84,15 +115,23 @@ Drawers.init = function(M)
     --- @param size? number 圈大小（默认0.5）
     --- @param delay? number 延迟执行（毫秒）
     M.DirectTo = function(x, z, time, size, delay)
+        if not validDirectTarget(x, z, time, 'direct_to') then
+            return false
+        end
         local color = M.Config.Main.GuideColor
-        size = size or 0.5
-        delay = delay or 0
+        size = optionalNumber(size, 0.5, 'direct_to', 'size')
+        delay = optionalNumber(delay, 0, 'direct_to', 'delay')
         if delay < 1 then
             M.CancelDir()
         end
         local curPlayer = M.GetPlayer()
         curPlayer = curPlayer or Player
+        if not validEntity(curPlayer) then
+            M.LogOnce('Drawers', 'direct_to_missing_player', '指路跳过：未找到当前玩家实体')
+            return false
+        end
         commonDirect(x, z, curPlayer, color, time, size, M.NotDelayGuides, delay)
+        return true
     end
 
     --- 绘制多人指路工具
@@ -101,17 +140,31 @@ Drawers.init = function(M)
     --- @param size? number 圈大小（默认0.5）
     --- @param delay? number 延迟执行（毫秒）
     M.MultiDirectTo = function(data, time, size, delay)
+        if type(data) ~= "table" or type(time) ~= "number" then
+            M.LogOnce('Drawers', 'multi_direct_invalid_input',
+                    '多人指路跳过：目标数据或持续时间无效',
+                    { dataType = type(data), timeType = type(time) })
+            return false
+        end
+        size = optionalNumber(size, 0.5, 'multi_direct', 'size')
+        delay = optionalNumber(delay, 0, 'multi_direct', 'delay')
         if M.MultiGuide.players == nil or table.size(M.MultiGuide.players) == 0 then
+            local player = M.GetPlayer() or Player
+            if not validEntity(player) then
+                M.LogOnce('Drawers', 'multi_direct_missing_player', '多人指路跳过：未找到当前玩家实体')
+                return false
+            end
             M.MultiGuide.players = {
                 [M.SelfPos] = {
-                    obj = M.GetPlayer(),
+                    obj = player,
                     color = M.Config.Main.GuideColor
                 }
             }
         end
+        local hasDrawn = false
         for job, multiData in pairs(M.MultiGuide.players) do
             local pos = data[job]
-            if pos ~= nil then
+            if type(pos) == "table" and validDirectTarget(pos.x, pos.z, time, 'multi_direct_' .. tostring(job)) then
                 if M.NotDelayGuidesMulti[job] == nil then
                     M.NotDelayGuidesMulti[job] = {}
                 end
@@ -124,10 +177,20 @@ Drawers.init = function(M)
                     end
                 end
                 local curPlayer = multiData.obj
+                if type(curPlayer) == "number" then
+                    curPlayer = TensorCore.mGetEntity(curPlayer)
+                end
                 local color = multiData.color
-                commonDirect(pos.x, pos. z, curPlayer.id, color, time, size, M.NotDelayGuidesMulti[job], delay)
+                if validEntity(curPlayer) and type(color) == "table" then
+                    commonDirect(pos.x, pos.z, curPlayer, color, time, size, M.NotDelayGuidesMulti[job], delay)
+                    hasDrawn = true
+                else
+                    M.LogOnce('Drawers', 'multi_direct_missing_entity_' .. tostring(job),
+                            '多人指路跳过：队员实体或颜色不可用', { job = job })
+                end
             end
         end
+        return hasDrawn
     end
 
     --- 绘制一个连到其他玩家的连线（矩形）
@@ -172,7 +235,9 @@ Drawers.init = function(M)
                 nil,
                 nil,
                 true,
-                true
+                true,
+                0,
+                false
         )
     end
 
@@ -223,7 +288,9 @@ Drawers.init = function(M)
                 nil,
                 nil,
                 true,
-                true
+                true,
+                0,
+                false
         )
         local newDraw2 = Argus2.ShapeDrawer:new(
                 (GUI:ColorConvertFloat4ToU32(1, 0, 1, 1)),
@@ -261,29 +328,96 @@ Drawers.init = function(M)
         newDraw3:addCircle(x, drawY, z, 0.03, true)
     end
 
+    local getLiveEntityPos = function(entityId, caller)
+        if entityId == nil then
+            M.LogOnce('Drawers', caller .. '_missing_id', '绘图跳过：实体ID不存在')
+            return nil
+        end
+        local entity = TensorCore.mGetEntity(entityId)
+        if entity == nil or entity.pos == nil then
+            M.LogOnce('Drawers', caller .. '_missing_entity_' .. tostring(entityId),
+                    '绘图跳过：当前帧实体不可用', { id = entityId })
+            return nil
+        end
+        return entity.pos
+    end
+
+    local getMultiGuideEntityId = function(multiData, caller)
+        if type(multiData) ~= 'table' then
+            M.LogOnce('Drawers', caller .. '_invalid_data', '多人指路跳过：玩家数据不是表', {
+                dataType = type(multiData),
+            })
+            return nil
+        end
+        local entity = multiData.obj
+        if type(entity) == 'number' then
+            return entity
+        end
+        local entityType = type(entity)
+        if (entityType == 'table' or entityType == 'userdata') and entity.id ~= nil then
+            return entity.id
+        end
+        M.LogOnce('Drawers', caller .. '_invalid_entity', '多人指路跳过：玩家实体引用无效', {
+            entityType = entityType,
+        })
+        return nil
+    end
+
     --- 帧指路OnFrame用
     --- @param x number 指路位置x
     --- @param z number 指路位置z
     --- @param size number 圆圈大小
     M.FrameDirect = function(x, z, size, color)
         local curPlayer = M.GetPlayer() or Player
-        local playerPos = TensorCore.mGetEntity(curPlayer.id).pos
+        if curPlayer == nil then
+            M.LogOnce('Drawers', 'frame_direct_missing_player', '帧指路跳过：未找到当前玩家')
+            return false
+        end
+        local playerPos = getLiveEntityPos(curPlayer.id, 'frame_direct')
+        if playerPos == nil then
+            return false
+        end
         local curColor = color or M.Config.Main.GuideColor
         commonFrameDirect(x, z, playerPos, curColor, size)
+        return true
     end
 
     --- 帧指路OnFrame用
     --- @param data table 数据表 key job, value 位置
     --- @param size number 圆圈大小
     M.FrameMultiD = function(data, size)
-        for job, multiData in pairs(M.MultiGuide.players) do
-            local pos = data[job]
-            if pos ~= nil then
-                local playerPos = TensorCore.mGetEntity(multiData.obj.id).pos
-                local color = multiData.color
-                commonFrameDirect(pos.x, pos.z, playerPos, color, size)
+        local hasDrawn = false
+        local selfDrawn = false
+        local curPlayer = M.GetPlayer() or Player
+        local curPlayerId = curPlayer ~= nil and curPlayer.id or nil
+        local multiPlayers = M.MultiGuide.players or {}
+        for job, multiData in pairs(multiPlayers) do
+            local caller = 'frame_multi_' .. tostring(job)
+            local entityId = getMultiGuideEntityId(multiData, caller)
+            local isCurrentPlayer = curPlayerId ~= nil and entityId == curPlayerId
+            local pos = isCurrentPlayer and data[M.SelfPos] or data[job]
+            if pos ~= nil and not (job == M.SelfPos and curPlayerId ~= nil and not isCurrentPlayer) then
+                local playerPos = entityId ~= nil and getLiveEntityPos(entityId, caller) or nil
+                if playerPos ~= nil then
+                    commonFrameDirect(pos.x, pos.z, playerPos, multiData.color, size)
+                    hasDrawn = true
+                    selfDrawn = selfDrawn or isCurrentPlayer
+                end
             end
         end
+        if not selfDrawn and data[M.SelfPos] ~= nil then
+            local fallbackDrawn = M.FrameDirect(data[M.SelfPos].x, data[M.SelfPos].z, size)
+            if fallbackDrawn then
+                local fallbackReason = multiPlayers[M.SelfPos] == nil and 'missing' or 'stale'
+                M.LogOnce('Drawers', 'frame_multi_self_fallback_' .. fallbackReason,
+                        '多人指路名单未包含有效的本人映射，已使用本人指路', {
+                            reason = fallbackReason,
+                            selfPos = M.SelfPos,
+                        }, true)
+            end
+            hasDrawn = fallbackDrawn or hasDrawn
+        end
+        return hasDrawn
     end
 
     --- 计算点 P 到线段 AB 的最近投影点
@@ -357,7 +491,10 @@ Drawers.init = function(M)
     M.MultiTakeLine = function(guideData, size)
         for job, multiData in pairs(M.MultiGuide.players) do
             local curJobData = guideData[job]
-            if curJobData ~= nil and table.size(curJobData) > 0 then
+            local caller = 'multi_take_line_' .. tostring(job)
+            local entityId = getMultiGuideEntityId(multiData, caller)
+            local playerPos = entityId ~= nil and getLiveEntityPos(entityId, caller) or nil
+            if playerPos ~= nil and curJobData ~= nil and table.size(curJobData) > 0 then
                 for i = 1, #curJobData do
                     local data = curJobData[i]
                     local color = data.color or { r = 1, g = 0, b = 0 }
@@ -367,7 +504,6 @@ Drawers.init = function(M)
                             (GUI:ColorConvertFloat4ToU32(0, 0, 0, 0)),
                             (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 1)), 3)
                     drawer:addLine(data.posPlayer.x, data.posPlayer.y, data.posPlayer.z, data.posObj.x, data.posObj.y, data.posObj.z, 4, 0)
-                    local playerPos = TensorCore.mGetEntity(multiData.obj.id).pos
                     local isInLine, nearestPos, isClosePlayer = getLinePos(data.posPlayer, data.posObj, playerPos)
                     local guidePos
                     local disPlayer = data.disPlayer or 2

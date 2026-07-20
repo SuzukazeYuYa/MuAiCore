@@ -34,16 +34,19 @@ UIMgr.init = function(M)
             if type(uiTable) ~= 'table' then
                 M.Debug('    加载' .. uiName .. '失败:')
                 d(uiTable)
+            elseif type(uiTable.draw) ~= 'function' then
+                M.Debug('    加载' .. uiName .. '失败: 缺少draw函数')
+            else
+                if M[uiName] == nil then
+                    M[uiName] = {
+                        open = false,
+                        visible = false,
+                    }
+                end
+                M.UIMap[uiName] = uiTable
+                table.insert(M.UINames, uiName)
+                M.Debug('     加载UI模块:' .. uiName)
             end
-            if not isReload then
-                M[uiName] = {
-                    open = false,
-                    visible = false,
-                }
-            end
-            M.UIMap[uiName] = uiTable
-            table.insert(M.UINames, uiName)
-            M.Debug('     加载UI模块:' .. uiName)
         end
         M.Debug('   加载UI模块完毕')
         if M.MainUI ~= nil then
@@ -56,8 +59,12 @@ UIMgr.init = function(M)
             M.LoadUI(true)
         end
         for _, uiName in pairs(M.UINames) do
-            if M[uiName].open then
-                local ok, err = pcall(M.UIMap[uiName].draw)
+            local uiState = M[uiName]
+            local uiModule = M.UIMap[uiName]
+            if uiState ~= nil and uiState.open
+                    and uiModule ~= nil and type(uiModule.draw) == 'function'
+            then
+                local ok, err = pcall(uiModule.draw)
                 if not ok then
                     MuAiGuide.Debug('UI模块加载失败:' .. uiName .. ', 错误信息:' .. err)
                 end

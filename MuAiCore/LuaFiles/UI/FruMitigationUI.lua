@@ -406,7 +406,7 @@ FruMitigationUI.draw = function()
                 GUI:SameLine(0, 10)
                 GUI:Button("读取D4默认", 90, 20)
                 if GUI:IsItemClicked(0) then
-                    M.FruMitigation.LoadDefaultByName("magic_d2_default.lua")
+                    M.FruMitigation.LoadDefaultByName("magic_d4_default.lua")
                 end
             end
 
@@ -421,7 +421,7 @@ FruMitigationUI.draw = function()
                 if NewFileNameChanged then
                     if M.ContainsIgnoreCase(M.Config.FruMitigationCustomList, NewFileName)
                             or string.lower(NewFileName) == "frumitigation"
-                            or NewFileName == "" or #NewFileName == 0
+                            or not M.IsValidConfigName(NewFileName)
                     then
                         GUI:TextColored(1, 0, 0, 1, "已存在该名称文件或者名称不合法,无法创建!")
                         havaSame = true
@@ -434,12 +434,13 @@ FruMitigationUI.draw = function()
                 GUI:SameLine()
                 GUI:Button("确认", 100, 20)
                 if GUI:IsItemClicked(0) then
-                    if not havaSame and newFileName ~= nil and #newFileName > 0 then
+                    if not havaSame and M.IsValidConfigName(newFileName) then
                         local path = M.Config.FruMitigationPath .. "\\" .. M.GetJobNameById(Player.job)
-                        M.SaveFileConfig(path, newFileName, M.Config.FruMitigation)
-                        newMode = false
-                        if newFileName ~= M.Config.FruMitigationCustomList[M.Config.FruMitigationCustomListIndex] then
-                            table.insert(M.Config.FruMitigationCustomList, newFileName)
+                        if M.SaveFileConfig(path, newFileName, M.Config.FruMitigation) then
+                            newMode = false
+                            if newFileName ~= M.Config.FruMitigationCustomList[M.Config.FruMitigationCustomListIndex] then
+                                table.insert(M.Config.FruMitigationCustomList, newFileName)
+                            end
                         end
                     else
                         M.InfoNoLog("已存在该名称文件或者名称不合法,无法创建!")

@@ -118,9 +118,9 @@ local CheckConeDeath = function()
                         Data().Death.MT = TensorCore.getEntityByGroup("Main Tank", "Nearest")
                     else
                         local curMt = TensorCore.mGetEntity(Data().Death.MT.id)
-                        local dir = TensorCore.getHeadingToTarget(MG.CurRaidBoss.pos, curMt.pos)
                         local curBoss = MG.GetCurRaidBoss()
-                        if curBoss ~= nil then
+                        if curMt ~= nil and curMt.pos ~= nil and curBoss ~= nil then
+                            local dir = TensorCore.getHeadingToTarget(curBoss.pos, curMt.pos)
                             DM.redDrawer:addCone(curBoss.pos.x, curBoss.pos.y, curBoss.pos.z, 30, math.pi * 2 / 3, dir)
                         end
                     end
@@ -129,17 +129,19 @@ local CheckConeDeath = function()
                 if Cfg().draw then
                     if Data().Death.ST == nil then
                         local curMt = TensorCore.getEntityByGroup("Main Tank", "Nearest")
-                        for job, member in pairs(MG.Party) do
-                            if (job == 'MT' or job == 'ST') and member.id ~= curMt then
-                                Data().Death.ST = member
-                                break
+                        if curMt ~= nil then
+                            for job, member in pairs(MG.Party) do
+                                if (job == 'MT' or job == 'ST') and member.id ~= curMt.id then
+                                    Data().Death.ST = member
+                                    break
+                                end
                             end
                         end
                     else
-                        local cur = TensorCore.mGetEntity(Data().Death.MT.id)
-                        local dir = TensorCore.getHeadingToTarget(MG.CurRaidBoss.pos, cur.pos)
+                        local cur = TensorCore.mGetEntity(Data().Death.ST.id)
                         local curBoss = MG.GetCurRaidBoss()
-                        if curBoss ~= nil then
+                        if cur ~= nil and cur.pos ~= nil and curBoss ~= nil then
+                            local dir = TensorCore.getHeadingToTarget(curBoss.pos, cur.pos)
                             DM.redDrawer:addCone(curBoss.pos.x, curBoss.pos.y, curBoss.pos.z, 30, math.pi * 2 / 3, dir)
                         end
                     end
@@ -502,7 +504,14 @@ end
 Dmu_P1.OnEntityCast = function(entityID, spellID, castPos)
     if spellID == 50722 then
         local mt = TensorCore.getEntityByGroup("Main Tank", "Nearest")
-        MG.CreateDrawer(1, 0.5, 0, nil, 2):addTimedCircleOnEnt(9000, mt.id, 5)
+        if mt ~= nil then
+            MG.CreateDrawer(1, 0.5, 0, nil, 2):addTimedCircleOnEnt(9000, mt.id, 5)
+        else
+            MG.LogOnce('P1Death', 'missing_main_tank_cast', '死刑绘制跳过：未找到主坦实体', {
+                entityID = entityID,
+                spellID = spellID,
+            }, true)
+        end
     elseif spellID == 47801 or spellID == 47802 then
         -- 唰啦啦传送
         if DM.BeLowState('P1TeleTrouncing') then
@@ -818,8 +827,12 @@ Dmu_P1.Update = function()
                     table.insert(shoot, job)
                 end
             end
-            if table.size(shoot) >= 4 then
+            if table.size(shoot) == 4 then
                 Data().Beam.Shoot = shoot
+            elseif table.size(shoot) > 4 then
+                MG.LogOnce('P1Beam', 'invalid_shoot_count', '激光命中人数异常，等待本轮数据稳定', {
+                    count = table.size(shoot),
+                }, true)
             end
         end
         --计算没被射的人
@@ -838,24 +851,27 @@ Dmu_P1.Update = function()
 
         -- 激光判定小于4秒，指路踩塔
         if TimeSince(Data().Beam.Time) < 4000 then
-            if table.size(Data().Beam.Shoot) >= 4
-                    and table.size(Data().Tower.Aoe) >= 4
+            if table.size(Data().Beam.Shoot) == 4
+                    and table.size(Data().Beam.UnShoot) == 4
+                    and table.size(Data().Tower.Aoe) == 4
             then
                 if Cfg().guide then
                     -- 计算踩塔指路位置
                     if Data().Tower.GuideData == nil then
-                        Data().Tower.GuideData = {}
+                        local guideData = {}
                         for _, job in pairs(Data().Beam.Order) do
+                            local curIdx
                             if table.contains(Data().Beam.Shoot, job) then
-                                local curIdx = MG.IndexOf(Data().Beam.Shoot, job)
+                                curIdx = MG.IndexOf(Data().Beam.Shoot, job)
                                 local tower = Data().Tower.Aoe[curIdx]
-                                Data().Tower.GuideData[job] = { x = tower.x, z = tower.z + 5 }
+                                guideData[job] = { x = tower.x, z = tower.z + 5 }
                             else
-                                local curIdx = MG.IndexOf(Data().Beam.UnShoot, job)
+                                curIdx = MG.IndexOf(Data().Beam.UnShoot, job)
                                 local tower = Data().Tower.Aoe[curIdx]
-                                Data().Tower.GuideData[job] = { x = tower.x, z = tower.z }
+                                guideData[job] = { x = tower.x, z = tower.z }
                             end
                         end
+                        Data().Tower.GuideData = guideData
                     else
                         MG.FrameMultiD(Data().Tower.GuideData)
                     end

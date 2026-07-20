@@ -186,6 +186,10 @@ end
 
 local onMapChange = function()
     if Player.localmapid ~= nil then
+        lastBattleTime = 0
+        if MG.RememberParty ~= nil then
+            MG.RememberParty('map-change')
+        end
         MG.Party = nil
         MG.SelfPos = nil
         checkAndPopMainUI()
@@ -200,6 +204,12 @@ end
 local onWipeCheck = function()
     if TensorReactions_CurrentCombatTimer ~= nil and TensorReactions_CurrentCombatTimer ~= 0 then
         if lastBattleTime ~= TensorReactions_CurrentCombatTimer then
+            if lastBattleTime == nil
+                    or lastBattleTime == 0
+                    or TensorReactions_CurrentCombatTimer < lastBattleTime
+            then
+                MG.LogSystemInit()
+            end
             lastBattleTime = TensorReactions_CurrentCombatTimer
         end
     else

@@ -120,7 +120,7 @@ CatZDmuTankUI.draw = function()
                 local fileName = NewFileName
                 if M.ContainsIgnoreCase(fileList, fileName)
                         or string.lower(fileName) == "guideconfig"
-                        or NewFileName == "" or #NewFileName == 0
+                        or not M.IsValidConfigName(NewFileName)
                 then
                     GUI:TextColored(1, 0, 0, 1, "已存在该名称文件或者名称不合法,无法创建!")
                     havaSame = true
@@ -133,11 +133,12 @@ CatZDmuTankUI.draw = function()
             GUI:SameLine(0, 0)
             GUI:Button("确认", 100, 20)
             if GUI:IsItemClicked(0) then
-                if not havaSame and newFileName ~= nil and #newFileName > 0 then
-                    M.SaveFileConfig(getFilePath(), newFileName, M.Config.DmuCatZCfg)
-                    M.Config.DmuMitigNewMode = false
-                    if newFileName ~= fileList[fileListIndex] then
-                        table.insert(fileList, newFileName)
+                if not havaSame and M.IsValidConfigName(newFileName) then
+                    if M.SaveFileConfig(getFilePath(), newFileName, M.Config.DmuCatZCfg) then
+                        M.Config.DmuMitigNewMode = false
+                        if newFileName ~= fileList[fileListIndex] then
+                            table.insert(fileList, newFileName)
+                        end
                     end
                 else
                     M.ShowMsgUI(3, { "已存在该名称文件或者名称不合法,无法创建!" })

@@ -2,6 +2,260 @@ local DancingMadUI = {}
 local wide = 350
 local newCfgMode = false
 local newFileName = ""
+local p3MarkOrderDefault = { 'MT', 'ST', 'D1', 'D2', 'D3', 'D4', 'H1', 'H2' }
+local p3MarkOrderGroupDefault = { 'T', 'D', 'H' }
+local p3MarkOrderGroups = {
+    T = { 'MT', 'ST' },
+    D = { 'D1', 'D2', 'D3', 'D4' },
+    H = { 'H1', 'H2' },
+}
+local p3MarkOrderRoleGroup = {
+    MT = 'T',
+    ST = 'T',
+    D1 = 'D',
+    D2 = 'D',
+    D3 = 'D',
+    D4 = 'D',
+    H1 = 'H',
+    H2 = 'H',
+}
+local p3MarkOrderDetailGroup = nil
+local p3MarkOrderDrag = nil
+local p3MarkOrderValueOffset = 88
+
+local normalizeP3MarkOrder = function(order)
+    local result, seen = {}, {}
+    local function add(role)
+        if role == nil then
+            return
+        end
+        role = tostring(role)
+        if role ~= '' and table.contains(MuAiGuide.JobPosName, role) and seen[role] ~= true then
+            table.insert(result, role)
+            seen[role] = true
+        end
+    end
+    if type(order) == 'table' then
+        for _, role in ipairs(order) do
+            add(role)
+        end
+    end
+    for _, role in ipairs(p3MarkOrderDefault) do
+        add(role)
+    end
+    return result
+end
+
+local setP3MarkOrder = function(order)
+    local M = MuAiGuide
+    order = normalizeP3MarkOrder(order)
+    M.Config.DmuCfg.P3.markOrderSelf = {}
+    M.Config.DmuCfg.P3.markOrder = {}
+    for index, role in ipairs(order) do
+        M.Config.DmuCfg.P3.markOrderSelf[index] = role
+        M.Config.DmuCfg.P3.markOrder[index] = role
+    end
+end
+
+local getP3MarkOrderState = function(sourceOrder)
+    local order = normalizeP3MarkOrder(sourceOrder)
+    local groupOrder, roleOrders, seenGroups = {}, {}, {}
+    for _, group in ipairs(p3MarkOrderGroupDefault) do
+        roleOrders[group] = {}
+    end
+    for _, role in ipairs(order) do
+        local group = p3MarkOrderRoleGroup[role]
+        if group ~= nil then
+            if seenGroups[group] ~= true then
+                table.insert(groupOrder, group)
+                seenGroups[group] = true
+            end
+            table.insert(roleOrders[group], role)
+        end
+    end
+    for _, group in ipairs(p3MarkOrderGroupDefault) do
+        if seenGroups[group] ~= true then
+            table.insert(groupOrder, group)
+        end
+        local seenRoles = {}
+        for _, role in ipairs(roleOrders[group]) do
+            seenRoles[role] = true
+        end
+        for _, role in ipairs(p3MarkOrderGroups[group]) do
+            if seenRoles[role] ~= true then
+                table.insert(roleOrders[group], role)
+            end
+        end
+    end
+    return groupOrder, roleOrders
+end
+
+local buildP3MarkOrder = function(groupOrder, roleOrders)
+    local result, seenGroups = {}, {}
+    for _, group in ipairs(groupOrder or {}) do
+        if p3MarkOrderGroups[group] ~= nil and seenGroups[group] ~= true then
+            seenGroups[group] = true
+            local seenRoles = {}
+            for _, role in ipairs(roleOrders[group] or {}) do
+                if p3MarkOrderRoleGroup[role] == group and seenRoles[role] ~= true then
+                    table.insert(result, role)
+                    seenRoles[role] = true
+                end
+            end
+            for _, role in ipairs(p3MarkOrderGroups[group]) do
+                if seenRoles[role] ~= true then
+                    table.insert(result, role)
+                end
+            end
+        end
+    end
+    for _, group in ipairs(p3MarkOrderGroupDefault) do
+        if seenGroups[group] ~= true then
+            for _, role in ipairs(p3MarkOrderGroups[group]) do
+                table.insert(result, role)
+            end
+        end
+    end
+    return normalizeP3MarkOrder(result)
+end
+
+local moveP3MarkOrderItem = function(list, fromIndex, toIndex)
+    if type(list) ~= 'table' then
+        return nil
+    end
+    toIndex = math.floor(tonumber(toIndex) or fromIndex)
+    if toIndex < 1 then
+        toIndex = 1
+    elseif toIndex > #list then
+        toIndex = #list
+    end
+    if fromIndex == toIndex then
+        return nil
+    end
+    local result = {}
+    for index, value in ipairs(list) do
+        result[index] = value
+    end
+    local item = table.remove(result, fromIndex)
+    if item == nil then
+        return nil
+    end
+    table.insert(result, toIndex, item)
+    return result
+end
+
+local drawP3MarkOrderChip = function(label, id, width, tooltip)
+    local clicked = GUI:Button(label .. '##' .. id, width, 22)
+    local hovered = GUI:IsItemHovered(GUI.HoveredFlags_AllowWhenBlockedByPopup
+            + GUI.HoveredFlags_AllowWhenBlockedByActiveItem
+            + GUI.HoveredFlags_AllowWhenOverlapped)
+    if tooltip ~= nil and GUI:IsItemHovered() then
+        GUI:SetTooltip(tooltip)
+    end
+    return clicked, hovered
+end
+
+local finishP3MarkOrderDrag = function()
+    if p3MarkOrderDrag ~= nil and not GUI:IsMouseDown(0) then
+        p3MarkOrderDrag = nil
+    end
+end
+
+local toggleP3MarkOrderDetailGroup = function(group)
+    if p3MarkOrderDetailGroup == group then
+        p3MarkOrderDetailGroup = nil
+    else
+        p3MarkOrderDetailGroup = group
+    end
+end
+
+local drawP3MarkOrderEditor = function(sourceOrder)
+    local M = MuAiGuide
+    local groupOrder, roleOrders = getP3MarkOrderState(sourceOrder)
+    local changedOrder = nil
+    GUI:Dummy(12, 0)
+    GUI:SameLine(0, 0)
+    GUI:AlignFirstTextHeightToWidgets()
+    GUI:Text('目标优先级')
+    GUI:SameLine(96, 0)
+    GUI:TextColored(0.75, 0.75, 0.75, 1, '左侧优先，拖 H/D/T 调整，点开细分')
+
+    GUI:Dummy(12, 0)
+    GUI:SameLine(0, 0)
+    GUI:AlignFirstTextHeightToWidgets()
+    GUI:Text('标记目标')
+    GUI:SameLine(p3MarkOrderValueOffset, 0)
+    for index, group in ipairs(groupOrder) do
+        if index > 1 then
+            GUI:SameLine(0, 4)
+            GUI:Text('>')
+            GUI:SameLine(0, 4)
+        end
+        local clicked, hovered = drawP3MarkOrderChip(group, 'p3MarkOrderGroup' .. group, 30,
+                '按住拖动调整优先级；点击编辑 ' .. group .. ' 组内部顺序: ' .. M.StringJoin(roleOrders[group], '/'))
+        if clicked == true and (p3MarkOrderDrag == nil or p3MarkOrderDrag.moved ~= true) then
+            toggleP3MarkOrderDetailGroup(group)
+        end
+        if hovered == true and GUI:IsMouseDown(0) then
+            if p3MarkOrderDrag == nil or p3MarkOrderDrag.scope ~= 'group' then
+                p3MarkOrderDrag = { scope = 'group', item = group, index = index, moved = false }
+            elseif p3MarkOrderDrag.item ~= group then
+                local newGroupOrder = moveP3MarkOrderItem(groupOrder, p3MarkOrderDrag.index, index)
+                if newGroupOrder ~= nil then
+                    p3MarkOrderDrag.index = index
+                    p3MarkOrderDrag.moved = true
+                    groupOrder = newGroupOrder
+                    changedOrder = buildP3MarkOrder(newGroupOrder, roleOrders)
+                end
+            end
+        end
+    end
+    if changedOrder ~= nil then
+        setP3MarkOrder(changedOrder)
+        groupOrder, roleOrders = getP3MarkOrderState(changedOrder)
+    end
+
+    GUI:Dummy(12, 0)
+    GUI:SameLine(p3MarkOrderValueOffset, 0)
+    GUI:TextColored(0.75, 0.75, 0.75, 1, M.StringJoin(buildP3MarkOrder(groupOrder, roleOrders), '/'))
+
+    finishP3MarkOrderDrag()
+    if p3MarkOrderDetailGroup == nil or roleOrders[p3MarkOrderDetailGroup] == nil then
+        return
+    end
+
+    GUI:Dummy(12, 0)
+    GUI:SameLine(0, 0)
+    GUI:AlignFirstTextHeightToWidgets()
+    GUI:Text(p3MarkOrderDetailGroup .. ' 细分')
+    GUI:SameLine(p3MarkOrderValueOffset, 0)
+    local roles = roleOrders[p3MarkOrderDetailGroup]
+    for index, role in ipairs(roles) do
+        if index > 1 then
+            GUI:SameLine(0, 4)
+            GUI:Text('>')
+            GUI:SameLine(0, 4)
+        end
+        local _, hovered = drawP3MarkOrderChip(role, 'p3MarkOrderRole' .. p3MarkOrderDetailGroup .. role, 34,
+                '按住拖动调整 ' .. p3MarkOrderDetailGroup .. ' 组内部优先级')
+        if hovered == true and GUI:IsMouseDown(0) then
+            local scope = 'role.' .. p3MarkOrderDetailGroup
+            if p3MarkOrderDrag == nil or p3MarkOrderDrag.scope ~= scope then
+                p3MarkOrderDrag = { scope = scope, item = role, index = index, moved = false }
+            elseif p3MarkOrderDrag.item ~= role then
+                local newRoles = moveP3MarkOrderItem(roles, p3MarkOrderDrag.index, index)
+                if newRoles ~= nil then
+                    p3MarkOrderDrag.index = index
+                    p3MarkOrderDrag.moved = true
+                    roleOrders[p3MarkOrderDetailGroup] = newRoles
+                    roles = newRoles
+                    setP3MarkOrder(buildP3MarkOrder(groupOrder, roleOrders))
+                end
+            end
+        end
+    end
+    finishP3MarkOrderDrag()
+end
 
 DancingMadUI.draw = function()
     local M = MuAiGuide
@@ -36,7 +290,7 @@ DancingMadUI.draw = function()
                     local fileName = NewFileName
                     if M.ContainsIgnoreCase(M.Config.DmuCustomList, fileName)
                             or string.lower(fileName) == "guideconfig"
-                            or NewFileName == "" or #NewFileName == 0
+                            or not M.IsValidConfigName(NewFileName)
                     then
                         GUI:TextColored(1, 0, 0, 1, "已存在该名称文件或者名称不合法,无法创建!")
                         havaSame = true
@@ -49,11 +303,12 @@ DancingMadUI.draw = function()
                 GUI:SameLine(0, 0)
                 GUI:Button("确认", 100, 20)
                 if GUI:IsItemClicked(0) then
-                    if not havaSame and newFileName ~= nil and #newFileName > 0 then
-                        M.SaveFileConfig(M.Config.DmuGuidePath, newFileName, M.Config.DmuCfg)
-                        newCfgMode = false
-                        if newFileName ~= M.Config.DmuCustomList[M.Config.DmuCustomListIndex] then
-                            table.insert(M.Config.DmuCustomList, newFileName)
+                    if not havaSame and M.IsValidConfigName(newFileName) then
+                        if M.SaveFileConfig(M.Config.DmuGuidePath, newFileName, M.Config.DmuCfg) then
+                            newCfgMode = false
+                            if newFileName ~= M.Config.DmuCustomList[M.Config.DmuCustomListIndex] then
+                                table.insert(M.Config.DmuCustomList, newFileName)
+                            end
                         end
                     else
                         M.ShowMsgUI(3, { "已存在该名称文件或者名称不合法,无法创建!" })
@@ -334,7 +589,7 @@ DancingMadUI.draw = function()
             M.Config.DmuCfg.P3.markType = GUI:Combo('##P3markType', M.Config.DmuCfg.P3.markType, { '不标记', '标记自身(随机)', '标记全队', '标记自身(优先级)' }, 4)
             GUI:PopItemWidth()
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('标记自身(随机): 龙诗同款,自动123先到先得\n\n标记全队: 如果有人噶了导致没有BUFF会不标记\n\n标记自身(优先级): 按照设置的优先级分配123, 如果有人嘎了没BUFF可能会错\n\n  举例, 假设优先级为[MT,ST,D1,D2,D3,D4,H1,H2], \n\n  1.你是D3 buff为第2目标, 且同组点名为MT,D1,D3, 此时你标记为锁链3\n\n  2.你是H1 buff为第1目标, 且同组点名为MT,H1,H2, 此时你标记为攻击2 \n\n注意: “标记全队”和“标记自身(优先级)”这两种优先级设置为不同配置, 不通用, 需要分别填写!\n另外如果有人抢了标记, 插件是不给你补的, 你得自己手动补一下!')
+                GUI:SetTooltip('标记自身(随机): 龙诗同款,自动123先到先得\n\n标记全队: 如果有人噶了导致没有BUFF会不标记\n\n标记自身(优先级): 按照设置的优先级分配123, 如果有人嘎了没BUFF可能会错\n\n  举例, 假设优先级为[MT,ST,D1,D2,D3,D4,H1,H2], \n\n  1.你是D3 buff为第2目标, 且同组点名为MT,D1,D3, 此时你标记为锁链3\n\n  2.你是H1 buff为第1目标, 且同组点名为MT,H1,H2, 此时你标记为攻击2 \n\n标记全队和标记自身(优先级)共用同一套标记优先级。\n另外如果有人抢了标记, 插件是不给你补的, 你得自己手动补一下!')
             end
             if M.Config.DmuCfg.P3.markType == 2 or M.Config.DmuCfg.P3.markType == 4 then
                 GUI:Dummy(10, 0)
@@ -344,32 +599,10 @@ DancingMadUI.draw = function()
                     GUI:SetTooltip('勾选后会自动检查队友标记情况, 有标记才会标记自己; 否则Buff出来就标.')
                 end
                 if M.Config.DmuCfg.P3.markType == 4 then
-                    GUI:Dummy(12, 0)
-                    GUI:SameLine(0, 0)
-                    GUI:AlignFirstTextHeightToWidgets()
-                    GUI:Text(' 标记优先级  ')
-                    GUI:SameLine(0, 0)
-                    GUI:PushItemWidth(175)
-                    local p3mkOrderSelf, p3mkOrderSelfChanged = GUI:InputText('##P3markOrder',
-                            M.StringJoin(M.Config.DmuCfg.P3.markOrderSelf, ','), GUI.InputTextFlags_CharsNoBlank)
-                    GUI:PopItemWidth()
-                    if p3mkOrderSelfChanged then
-                        M.Config.DmuCfg.P3.markOrderSelf = M.StringSplit(p3mkOrderSelf, ',')
-                    end
+                    drawP3MarkOrderEditor(M.Config.DmuCfg.P3.markOrderSelf)
                 end
             elseif M.Config.DmuCfg.P3.markType == 3 then
-                GUI:Dummy(12, 0)
-                GUI:SameLine(0, 0)
-                GUI:AlignFirstTextHeightToWidgets()
-                GUI:Text(' 标记优先级  ')
-                GUI:SameLine(0, 0)
-                GUI:PushItemWidth(175)
-                local p3mkOrder, p3mkOrderChanged = GUI:InputText('##P3markOrder',
-                        M.StringJoin(M.Config.DmuCfg.P3.markOrder, ','), GUI.InputTextFlags_CharsNoBlank)
-                GUI:PopItemWidth()
-                if p3mkOrderChanged then
-                    M.Config.DmuCfg.P3.markOrder = M.StringSplit(p3mkOrder, ',')
-                end
+                drawP3MarkOrderEditor(M.Config.DmuCfg.P3.markOrder)
             end
             GUI:AlignFirstTextHeightToWidgets()
             GUI:BulletText('放圈踩塔')

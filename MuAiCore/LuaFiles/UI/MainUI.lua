@@ -335,7 +335,7 @@ local drawJobTab = function(M)
     GUI:SameLine()
     GUI:Button('重新加载小队列表', 310, 30)
     if GUI:IsItemClicked(0) then
-        M.LoadParty()
+        M.LoadParty(true)
     end
 end
 ---@param M MuAiGuide
@@ -586,7 +586,7 @@ local drawRaidSettingTab = function(M)
                 M.FruConfigUI.open = false
                 M.FruMitigationUI.open = false
             end
-            
+
             if M.IsTank(Player.job) then
                 GUI:SameLine(0, 8)
                 GUI:Button('CatZTankUI', 150, 25)
@@ -942,8 +942,22 @@ local drawDeveloperTab = function(M)
     GUI:SameLine(205, 0)
     GUI:Button('重载MuAiGuide', 120, 20)
     if GUI:IsItemClicked(0) then
-        M.CloseAllUI()
-        MuAiGuide = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
+        local candidate = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
+        local valid = type(candidate) == 'table'
+                and candidate.IsInit == true
+                and type(candidate.Update) == 'function'
+                and type(candidate.DrawUIs) == 'function'
+                and type(candidate.LogSystemLeave) == 'function'
+        if valid then
+            M.CloseAllUI()
+            if M.CurRaidScript ~= nil then
+                M.Log('Lifecycle', '重新初始化插件')
+            end
+            M.LogSystemLeave()
+            MuAiGuide = candidate
+        else
+            M.ShowMsgUI(3, { '重载MuAiGuide失败，当前实例已保留。', tostring(candidate) })
+        end
     end
     GUI:Dummy(6, 0)
     GUI:Dummy(6, 0)
