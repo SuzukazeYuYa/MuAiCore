@@ -1299,8 +1299,8 @@ Dmu_P3.Update = function()
                 table.sort(Data().Elements.FireBuff, function(a, b)
                     return MG.IndexOf(Cfg().fireBuffOrder, a) < MG.IndexOf(Cfg().fireBuffOrder, b)
                 end)
-                Data().Elements.Guide2[Data().Elements.FireBuff[1]] = dis2
-                Data().Elements.Guide2[Data().Elements.FireBuff[2]] = dis1
+                Data().Elements.Guide2[Data().Elements.FireBuff[1]] = dis1
+                Data().Elements.Guide2[Data().Elements.FireBuff[2]] = dis2
                 -- 这里将最终指路进行拷贝，修改MT ST的初始位置
                 Data().Elements.Guide1 = table.deepcopy(Data().Elements.Guide2)
                 if TensorCore.hasBuff(MG.Party.MT.id, 4194) then

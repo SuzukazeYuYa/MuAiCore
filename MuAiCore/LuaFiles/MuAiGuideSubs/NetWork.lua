@@ -367,13 +367,8 @@ NetWork.init = function(M)
             return
         end
 
-        local systemTemp = os.getenv('TEMP') or os.getenv('TMP')
-        if systemTemp == nil or systemTemp == '' then
-            M.ShowMsgUI(3, { '更新失败：无法获取系统临时目录。' })
-            return
-        end
-
-        local tempPath = systemTemp .. "\\MuAiCoreUpdater\\" .. tostring(os.time())
+        -- Minion 的 Lua 沙箱不提供 os.getenv，更新工作目录固定放在 LuaMods 之外。
+        local tempPath = GetStartupPath() .. "\\MuAiCoreUpdater_" .. tostring(os.time())
         local replacePath = GetStartupPath() .. "\\LuaMods"
         local zipFilePath = tempPath .. "\\repository.zip"
         local extractPath = tempPath .. "\\Extracted"
