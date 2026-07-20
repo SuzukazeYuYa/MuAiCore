@@ -37,11 +37,13 @@ RaidMgr.init = function(M)
 
     --- 读取副本脚本
     M.LoadRaidScripts = function(isReload)
-        if isReload and M.CurRaidScript ~= nil then
-            M.Log('Lifecycle', '重新加载副本脚本')
-            M.LogSystemInit()
-        end
-        raidScript = {}
+        local previousCurrent = M.CurRaidScript
+        local currentMapId = Player.localmapid
+        local preserveCurrentState = isReload
+                and previousCurrent ~= nil
+                and previousCurrent.MapId == currentMapId
+
+        local loadedScripts = {}
         local folderPath = MuAiGuideRoot .. "RaidScripts"
         local list = FolderList(folderPath)
         local cnter = 0
@@ -55,7 +57,7 @@ RaidMgr.init = function(M)
                 d(script)
                 M.Debug('-----------------------')
             else
-                raidScript[script.MapId] = script
+                loadedScripts[script.MapId] = script
                 if script.Init ~= nil then
                     -- 此处为脚本定义初始化，和进入副本之后逻辑不同
                     script.Init(M)
@@ -64,6 +66,18 @@ RaidMgr.init = function(M)
                 cnter = cnter  + 1
             end
         end
+        if preserveCurrentState then
+            local reloadedCurrent = loadedScripts[currentMapId]
+            if reloadedCurrent ~= nil then
+                -- 手动热重载只替换函数实现，不触发 OnLeave/OnEnter，保留当前机制进度。
+                M.CurRaidScript = reloadedCurrent
+            else
+                -- 当前副本脚本加载失败时继续使用旧实例，便于修正代码后再次重载。
+                loadedScripts[currentMapId] = previousCurrent
+                M.CurRaidScript = previousCurrent
+            end
+        end
+        raidScript = loadedScripts
         if isReload then
             if cnter == table.size(list) then
                 M.InfoNoLog('重载副本脚本成功。')
