@@ -403,6 +403,7 @@ Config.init = function(M)
                 sendMacro = false,
             },
             P5 = { enable = true, draw = true, guide = true,
+                   groundFireGuide = true,
                    isLeaning = false,
                    jobOrder = { 'H2', 'D2', 'D4', 'ST', 'MT', 'D3', 'H1', 'D1' },
                 -- 画地火的数量

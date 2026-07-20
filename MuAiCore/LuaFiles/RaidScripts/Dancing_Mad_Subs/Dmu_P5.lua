@@ -12,6 +12,10 @@ local Cfg = function()
     return MG.Config.DmuCfg.P5
 end
 
+local groundFireGuideEnabled = function()
+    return Cfg().guide and Cfg().groundFireGuide
+end
+
 local Data = function()
     if MG.DancingMad == nil then
         return nil
@@ -200,121 +204,419 @@ local loadGuidePosAndNextStart = function()
     end
 end
 
+local groundFireStep = math.sqrt(50)
+local groundFireGroupWindow = 200
+local groundFireCastMatchDistanceSq = 0.25 * 0.25
+
+-- 地火状态分两层：Lines 记录日志还原出的真实七连爆炸，Guides 为八个职能分别保存两步法路线。
+-- 攻略两步法以每名玩家所在的 3x3 小格为基准；左右列表示该小格会被哪一列地火扫过。
+local groundFireGuidePos = {
+    MT = { left = 3, right = 3, x = 100, z = 100 },
+    ST = { left = 3, right = 3, x = 100, z = 100 },
+    D1 = { left = 3, right = 3, x = 100, z = 100 },
+    D2 = { left = 3, right = 3, x = 100, z = 100 },
+    D3 = { left = 4, right = 2, x = 100, z = 90 },
+    D4 = { left = 2, right = 4, x = 100, z = 110 },
+    H1 = { left = 2, right = 2, x = 90, z = 100 },
+    H2 = { left = 4, right = 4, x = 110, z = 100 },
+}
+
+local groundFireGuideRoles = { 'MT', 'ST', 'H1', 'H2', 'D1', 'D2', 'D3', 'D4' }
+
+local newGroundFireGuide = function(job)
+    local pos = groundFireGuidePos[job]
+    return {
+        left = pos.left,
+        right = pos.right,
+        x = pos.x,
+        z = pos.z,
+        Seen = {},
+        Rels = {},
+        Points = {},
+        Hits = {},
+        PointTriggers = {},
+        CurrentPointIndex = nil,
+    }
+end
+
+local newGroundFireGuides = function()
+    local guides = {}
+    for _, job in ipairs(groundFireGuideRoles) do
+        guides[job] = newGroundFireGuide(job)
+    end
+    return guides
+end
+
+local resetGroundFire = function()
+    Data().GroundFire = {
+        Info = {},
+        Lines = {},
+        PendingByEntity = {},
+        SeenStarts = {},
+        LineCount = 0,
+        GroupCount = 0,
+        LastGroupAt = nil,
+        Guides = newGroundFireGuides(),
+        GuideEnabled = nil,
+    }
+end
+
+local groundFireState = function()
+    local state = Data().GroundFire
+    if state == nil or state.Lines == nil then
+        resetGroundFire()
+        state = Data().GroundFire
+    end
+    state.Info = state.Info or {}
+    state.Lines = state.Lines or {}
+    state.PendingByEntity = state.PendingByEntity or {}
+    state.SeenStarts = state.SeenStarts or {}
+    state.LineCount = state.LineCount or 0
+    state.GroupCount = state.GroupCount or 0
+    state.Guides = state.Guides or newGroundFireGuides()
+    return state
+end
+
+local groundFireGuideActive = function()
+    local state = groundFireState()
+    local enabled = groundFireGuideEnabled()
+    if state.GuideEnabled ~= enabled then
+        state.GuideEnabled = enabled
+        state.Guides = newGroundFireGuides()
+    end
+    return enabled
+end
+
+local groundFireGuideState = function(job)
+    return groundFireState().Guides[job]
+end
+
+local groundFireDirFromPair = function(a, b)
+    if a == 1 and b == 1 then return 3 end
+    if a == 1 and b == 2 then return 0 end
+    if a == 2 and b == 1 then return 2 end
+    if a == 2 and b == 2 then return 1 end
+end
+
+local groundFireCardinalPoints = function(x, z, dir4, clockwise)
+    if dir4 == 0 then
+        return { { x = x, y = 0, z = z - 5 }, clockwise and { x = x + 5, y = 0, z = z } or { x = x - 5, y = 0, z = z }, { x = x, y = 0, z = z + 5 } }
+    elseif dir4 == 1 then
+        return { { x = x - 5, y = 0, z = z }, clockwise and { x = x, y = 0, z = z - 5 } or { x = x, y = 0, z = z + 5 }, { x = x + 5, y = 0, z = z } }
+    elseif dir4 == 2 then
+        return { { x = x, y = 0, z = z + 5 }, clockwise and { x = x - 5, y = 0, z = z } or { x = x + 5, y = 0, z = z }, { x = x, y = 0, z = z - 5 } }
+    end
+    return { { x = x + 5, y = 0, z = z }, clockwise and { x = x, y = 0, z = z + 5 } or { x = x, y = 0, z = z - 5 }, { x = x - 5, y = 0, z = z } }
+end
+
+local groundFireDiagonalPoint = function(x, z, dirN4)
+    local dx = (dirN4 == 0 or dirN4 == 1) and -2.5 or 2.5
+    local dz = (dirN4 == 0 or dirN4 == 3) and -2.5 or 2.5
+    return { x = x + dx, y = 0, z = z + dz }
+end
+
+local groundFirePointInHit = function(point, hit)
+    local dx = point.x - hit.x
+    local dz = point.z - hit.z
+    return dx * dx + dz * dz < hit.radius * hit.radius
+end
+
+local updateGroundFirePointTriggers = function(state)
+    -- 路线点只有在覆盖它的最后一枚地火结算后才前移，避免仅按固定时间提前换点。
+    local nextOrder
+    state.PointTriggers = {}
+    for i = #state.Points, 1, -1 do
+        local triggerOrder
+        for _, hit in ipairs(state.Hits) do
+            if (nextOrder == nil or hit.order < nextOrder)
+                    and groundFirePointInHit(state.Points[i], hit)
+                    and (triggerOrder == nil or hit.order > triggerOrder)
+            then
+                triggerOrder = hit.order
+            end
+        end
+        state.PointTriggers[i] = triggerOrder or 0
+        nextOrder = state.PointTriggers[i]
+    end
+end
+
+local groundFireTriggerResolved = function(state, pointIndex)
+    local triggerOrder = state.PointTriggers[pointIndex]
+    if triggerOrder == nil then
+        return false
+    elseif triggerOrder == 0 then
+        return true
+    end
+    local found = false
+    for _, hit in ipairs(state.Hits) do
+        if hit.order == triggerOrder and groundFirePointInHit(state.Points[pointIndex], hit) then
+            found = true
+            if not hit.resolved then
+                return false
+            end
+        end
+    end
+    return found
+end
+
+local updateGroundFireCurrentPoint = function(state)
+    local pointIndex
+    for i = 1, #state.Points do
+        if not groundFireTriggerResolved(state, i) then
+            break
+        end
+        pointIndex = i
+    end
+    state.CurrentPointIndex = pointIndex
+end
+
+local setGroundFireGuideRoute = function(state, points)
+    state.Points = points
+    updateGroundFirePointTriggers(state)
+    updateGroundFireCurrentPoint(state)
+end
+
+local appendGroundFireGuideRoute = function(state, points)
+    for _, point in ipairs(points) do
+        table.insert(state.Points, point)
+    end
+    updateGroundFirePointTriggers(state)
+    updateGroundFireCurrentPoint(state)
+end
+
+local tryBuildGroundFireRoute = function(state)
+    local r = state.Rels
+    local relCount = #r
+    local isRel = function(rel) return rel == 1 or rel == 2 end
+    local buildFull = function(dir4, clockwise)
+        if dir4 == nil or state.Done then return end
+        state.Done = true
+        setGroundFireGuideRoute(state, groundFireCardinalPoints(state.x, state.z, dir4, clockwise))
+    end
+
+    -- 信息未收齐时先给第一步斜角；收齐 14/25/36 的相对列关系后再补完整路线。
+    if relCount <= 3 and isRel(r[relCount]) and not state.InitialDone then
+        local dirN4 = relCount == 2 and (r[relCount] == 1 and 2 or 0) or (r[relCount] == 1 and 3 or 1)
+        state.InitialDone = true
+        setGroundFireGuideRoute(state, { groundFireDiagonalPoint(state.x, state.z, dirN4) })
+    end
+
+    if relCount == 2 then
+        if isRel(r[1]) and isRel(r[2]) then
+            buildFull(groundFireDirFromPair(r[1], r[2]), r[1] == r[2])
+        elseif isRel(r[1]) and r[2] == 0 and not state.HalfDone then
+            local dirN4 = r[1] == 1 and 3 or 1
+            state.HalfDone = true
+            setGroundFireGuideRoute(state, {
+                groundFireDiagonalPoint(state.x, state.z, dirN4),
+                groundFireDiagonalPoint(state.x, state.z, (dirN4 + 2) % 4),
+            })
+        end
+    elseif relCount == 3 and r[1] == 0 and isRel(r[2]) and isRel(r[3]) then
+        buildFull(groundFireDirFromPair(r[3], r[2]), r[2] ~= r[3])
+    elseif relCount == 4 then
+        if r[1] == 0 and r[2] == 0 and isRel(r[3]) and isRel(r[4]) then
+            buildFull(groundFireDirFromPair(r[3], r[4]), r[3] == r[4])
+        elseif isRel(r[1]) and r[2] == 0 and isRel(r[4]) and not state.Done then
+            local points = groundFireCardinalPoints(state.x, state.z,
+                    groundFireDirFromPair(r[1], r[4]), r[1] == r[4])
+            state.Done = true
+            appendGroundFireGuideRoute(state, { points[2], points[3] })
+        end
+    end
+end
+
+local recordGroundFireGuideLineForState = function(state, line)
+    if state.Seen[line.id] then
+        return
+    end
+    state.Seen[line.id] = true
+    for step = 0, 6 do
+        local pos = line.pos[step + 1]
+        table.insert(state.Hits, {
+            lineID = line.id,
+            step = step,
+            order = line.group * 10 + step,
+            x = pos.x,
+            z = pos.z,
+            radius = line.radius,
+            resolved = false,
+        })
+    end
+    updateGroundFirePointTriggers(state)
+    updateGroundFireCurrentPoint(state)
+
+    -- 每组两条平行线只取靠 3x3 小格一侧的一条做 14/25/36 判定；另一条仍参与真实范围计算。
+    local col = (math.floor(((line.pos[1].x - 70) / 5) + 0.5) % 7) + 1
+    if col > 3 then
+        return
+    end
+    local candidateCol = line.pos[1].x < 100 and state.left or state.right
+    table.insert(state.Rels, (col + 1 - candidateCol) % 3)
+    tryBuildGroundFireRoute(state)
+end
+
+local recordGroundFireGuideLine = function(line)
+    if not groundFireGuideActive() then
+        return
+    end
+    for _, job in ipairs(groundFireGuideRoles) do
+        recordGroundFireGuideLineForState(groundFireGuideState(job), line)
+    end
+end
+
 ---@param aoeInfo DirectionalAOE
 local startGroundFire = function(aoeInfo)
-    if not Cfg().draw then
+    if not Cfg().draw and not groundFireGuideActive() then
         return
     end
-    Data().GroundFire.OnCreate[aoeInfo.entityID] = aoeInfo
-    local pos = { x = aoeInfo.x, y = 0, z = aoeInfo.z }
-    if Data().GroundFire.AoePos[aoeInfo.entityID] == nil then
-        Data().GroundFire.AoePos[aoeInfo.entityID] = { pos }
-    end
-    local length = 7
-    for i = 2, 7 do
-        local curLength = (i - 1) * length
-        table.insert(Data().GroundFire.AoePos[aoeInfo.entityID], TensorCore.getPosInDirection(pos, aoeInfo.heading, curLength))
-    end
-
-end
-
-local castGroundFire = function(entityId, spellID)
-    if not Cfg().draw then
+    local state = groundFireState()
+    local startKey = tostring(aoeInfo.entityID)
+            .. ':' .. tostring(math.floor(aoeInfo.x * 100 + 0.5))
+            .. ':' .. tostring(math.floor(aoeInfo.z * 100 + 0.5))
+            .. ':' .. tostring(math.floor(aoeInfo.heading * 10000 + 0.5))
+    if state.SeenStarts[startKey] then
         return
     end
-    local aoeInfo = Data().GroundFire.OnCreate[entityId]
-    local aoeData = Data().GroundFire.AoePos[entityId]
-    table.insert(Data().GroundFire.Info, {
-        aoe = aoeInfo,
-        pos = aoeData,
-        castTimer = Now()
-    })
-    Data().GroundFire.OnCreate[entityId] = nil
-    Data().GroundFire.AoePos[entityId] = nil
+    state.SeenStarts[startKey] = true
+    -- 同一批两条平行线在日志中几乎同时出现，按 200ms 窗口归为同一组。
+    local now = Now()
+    if state.LastGroupAt == nil or now - state.LastGroupAt > groundFireGroupWindow then
+        state.GroupCount = state.GroupCount + 1
+        state.LastGroupAt = now
+    end
+    state.LineCount = state.LineCount + 1
+    local line = {
+        id = state.LineCount,
+        entityID = aoeInfo.entityID,
+        group = state.GroupCount,
+        radius = tonumber(aoeInfo.aoeLength) or 6,
+        pos = {},
+        resolvedStep = 0,
+        active = false,
+    }
+    for step = 0, 6 do
+        line.pos[step + 1] = {
+            x = aoeInfo.x + math.sin(aoeInfo.heading) * groundFireStep * step,
+            y = 0,
+            z = aoeInfo.z + math.cos(aoeInfo.heading) * groundFireStep * step,
+        }
+    end
+    table.insert(state.Lines, line)
+    state.PendingByEntity[line.entityID] = line
+    recordGroundFireGuideLine(line)
 end
 
-local getIndexTable = function(startIdx, n)
-    local targetEnd = startIdx + n - 1
-    local endValue
-    if targetEnd > 7 then
-        endValue = 7
+local groundFireCastPosition = function(entityID, castPos)
+    if type(castPos) == 'table' and castPos.x ~= nil and castPos.z ~= nil then
+        return castPos
+    end
+    local entity = TensorCore.mGetEntity(entityID)
+    if entity ~= nil and entity.pos ~= nil and entity.pos.x ~= nil and entity.pos.z ~= nil then
+        return entity.pos
+    end
+end
+
+local findGroundFireLineForStep = function(pos)
+    if pos == nil then
+        return nil, nil
+    end
+    -- 后续爆炸按实测施法坐标匹配预计算轨迹，并优先较早组，防止并行线路串线。
+    local bestLine, bestIndex, bestDistanceSq
+    for _, line in ipairs(groundFireState().Lines) do
+        local index = line.resolvedStep + 1
+        local target = line.pos[index]
+        if line.active and target ~= nil then
+            local dx = target.x - pos.x
+            local dz = target.z - pos.z
+            local distanceSq = dx * dx + dz * dz
+            if distanceSq <= groundFireCastMatchDistanceSq
+                    and (bestDistanceSq == nil
+                        or line.group < bestLine.group
+                        or line.group == bestLine.group and distanceSq < bestDistanceSq
+                        or line.group == bestLine.group and distanceSq == bestDistanceSq and line.id < bestLine.id)
+            then
+                bestLine = line
+                bestIndex = index
+                bestDistanceSq = distanceSq
+            end
+        end
+    end
+    return bestLine, bestIndex
+end
+
+local markGroundFireGuideResolvedForState = function(state, line, resolvedIndex)
+    for _, hit in ipairs(state.Hits) do
+        if hit.lineID == line.id and hit.step <= resolvedIndex - 1 then
+            hit.resolved = true
+        end
+    end
+    updateGroundFirePointTriggers(state)
+    updateGroundFireCurrentPoint(state)
+end
+
+local markGroundFireGuideResolved = function(line, resolvedIndex)
+    if not groundFireGuideActive() then
+        return
+    end
+    for _, job in ipairs(groundFireGuideRoles) do
+        markGroundFireGuideResolvedForState(groundFireGuideState(job), line, resolvedIndex)
+    end
+end
+
+local castGroundFire = function(entityID, spellID, castPos)
+    local state = groundFireState()
+    local line, resolvedIndex
+    if spellID == 47932 then
+        line = state.PendingByEntity[entityID]
+        resolvedIndex = 1
     else
-        endValue = targetEnd
+        line, resolvedIndex = findGroundFireLineForStep(groundFireCastPosition(entityID, castPos))
     end
-    local result = {}
-    for i = startIdx, endValue do
-        table.insert(result, i)
+    if line == nil or resolvedIndex == nil or resolvedIndex <= line.resolvedStep then
+        return
     end
-    return result
+    line.resolvedStep = resolvedIndex
+    if not line.active then
+        line.active = true
+        state.PendingByEntity[entityID] = nil
+        table.insert(state.Info, line)
+    end
+    markGroundFireGuideResolved(line, resolvedIndex)
+end
+
+local drawingGroundFireGuide = function()
+    if not groundFireGuideActive() then
+        return
+    end
+    -- FrameMultiD 按当前玩家职能取点，因此指导者模式与本人模式使用同一份机制状态。
+    local guideData = {}
+    for _, job in ipairs(groundFireGuideRoles) do
+        local state = groundFireGuideState(job)
+        local pointIndex = state.CurrentPointIndex
+        local point = pointIndex ~= nil and state.Points[pointIndex] or nil
+        if point ~= nil then
+            guideData[job] = point
+        end
+    end
+    if next(guideData) ~= nil then
+        MG.FrameMultiD(guideData, 0.45)
+    end
 end
 
 local drawingGroudFire = function()
-    if not Cfg().draw and Cfg().groundCnt <= 0 then
+    if not Cfg().draw or Cfg().groundCnt <= 0 then
         return
     end
-    --for id, aoeInfo in pairs(Data().GroundFire.OnCreate) do
-    --    local curTable = Data().GroundFire.AoePos[aoeInfo.entityID]
-    --    if curTable ~= nil and TimeSince(aoeInfo.startTime) < aoeInfo.duration * 1000 then
-    --        DM.redDrawer:addCircle(curTable[1].x, 0, curTable[1].z, 6)
-    --        DM.orangeDrawer:addCircle(curTable[2].x, 0, curTable[2].z, 6)
-    --        DM.yellowDrawer:addCircle(curTable[3].x, 0, curTable[3].z, 6)
-    --    else
-    --        Data().GroundFire.OnCreate[id] = nil
-    --    end
-    --end
-    for i = 1, #Data().GroundFire.Info do
-        local info = Data().GroundFire.Info[i]
-        local curTable = info.pos
-        if curTable ~= nil then
-            local s = TimeSince(info.castTimer)
-            local indexTable = {}
-            if s < 520 then
-                indexTable = getIndexTable(1, Cfg().groundCnt)
-            elseif s < 1040 then
-                indexTable = getIndexTable(2, Cfg().groundCnt)
-            elseif s < 1560 then
-                indexTable = getIndexTable(3, Cfg().groundCnt)
-            elseif s < 2080 then
-                indexTable = getIndexTable(4, Cfg().groundCnt)
-            elseif s < 2600 then
-                indexTable = getIndexTable(5, Cfg().groundCnt)
-            elseif s < 3120 then
-                indexTable = getIndexTable(6, Cfg().groundCnt)
-            elseif s < 3640 then
-                indexTable = getIndexTable(7, Cfg().groundCnt)
-            end
-            if s < 3640 then
-                for j = 1, #indexTable do
-                    local idx = indexTable[j]
-                    if curTable[idx] ~= nil then
-                        local drawer
-                        if j == 1 then
-                            drawer = DM.redDrawer
-                        elseif j == 2 then
-                            drawer = DM.orangeDrawer
-                        elseif j == 3 then
-                            drawer = DM.yellowDrawer
-                        elseif j == 4 then
-                            drawer = DM.cyanDrawer
-                        else
-                            drawer = DM.greenDrawer
-                        end
-                        drawer:addCircle(curTable[idx].x, 0, curTable[idx].z, 6)
-                    end
-                end
-            else
-                table.insert(Data().GroundFire.OverTime, i)
+    local drawers = { DM.redDrawer, DM.orangeDrawer, DM.yellowDrawer, DM.cyanDrawer, DM.greenDrawer }
+    for _, line in ipairs(groundFireState().Info) do
+        for offset = 0, Cfg().groundCnt - 1 do
+            local pos = line.pos[line.resolvedStep + offset + 1]
+            if pos ~= nil then
+                local drawer = drawers[math.min(offset + 1, #drawers)]
+                drawer:addCircle(pos.x, 0, pos.z, line.radius)
             end
         end
-    end
-    if table.size(Data().GroundFire.OverTime) > 0 then
-        table.sort(Data().GroundFire.OverTime, function(a, b)
-            return a > b
-        end)
-        for _, idx in ipairs(Data().GroundFire.OverTime) do
-            table.remove(Data().GroundFire.Info, idx)
-        end
-        Data().GroundFire.OverTime = {}
     end
 end
 
@@ -442,8 +744,10 @@ Dmu_P5.OnEntityCast = function(entityID, spellID, castPos)
         end
     elseif spellID == 49742 or spellID == 49743 then
         Data().Celestriad.CatastrophicChoiceId = 0
-    elseif spellID == 47932 then
-        castGroundFire(entityID, spellID)
+    elseif spellID == 47932 or spellID == 47933 then
+        castGroundFire(entityID, spellID, castPos)
+    elseif spellID == 47934 or spellID == 47935 then
+        resetGroundFire()
     end
 end
 
@@ -522,6 +826,7 @@ end
 Dmu_P5.Update = function()
     getBoss()
     drawingGroudFire()
+    drawingGroundFireGuide()
     tryCommitCelestriadWave()
     if DM.InState('P5Start') --P5UltimaRepeater1
             or DM.InState('P5UltimaRepeater2')

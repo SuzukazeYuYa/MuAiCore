@@ -544,10 +544,14 @@ local dataInit = function()
             },
             GroundFire = {
                 Info = {},
-                OverTime = {},
-                OnCreate = {},
-                AoePos = {},
-                OnCast = {}
+                Lines = {},
+                PendingByEntity = {},
+                SeenStarts = {},
+                LineCount = 0,
+                GroupCount = 0,
+                LastGroupAt = nil,
+                Guides = nil,
+                GuideEnabled = nil,
             },
             Forsaken = {
                 wave = 1,

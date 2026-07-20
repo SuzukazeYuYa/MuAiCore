@@ -723,6 +723,12 @@ DancingMadUI.draw = function()
             GUI:SameLine()
             GUI:BulletText('混沌末世（地火）')
             GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            M.Config.DmuCfg.P5.groundFireGuide = GUI:Checkbox('两步法指路##P5groundFireGuide',
+                    M.Config.DmuCfg.P5.groundFireGuide)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('单独控制混沌末世的两步法动态指路；同时需要开启P5“是否指路”')
+            end
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:AlignFirstTextHeightToWidgets()
