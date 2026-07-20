@@ -408,6 +408,8 @@ Config.init = function(M)
                    jobOrder = { 'H2', 'D2', 'D4', 'ST', 'MT', 'D3', 'H1', 'D1' },
                 -- 画地火的数量
                    groundCnt = 3,
+                --是否显示黑洞范围
+                   showBlackHole = true,
                 -- 软狂暴跑路类型
                 -- 1、全顺，2关闭
                    forsakenType = 1,

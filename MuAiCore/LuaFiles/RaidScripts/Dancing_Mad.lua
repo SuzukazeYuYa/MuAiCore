@@ -502,6 +502,7 @@ local dataInit = function()
         P5 = {
             Kefka = nil,
             UltimaRepeater = {},
+            DisChannel = 0,
             Blood = {
                 Cross12 = nil,
                 Cross23 = nil,
@@ -555,7 +556,9 @@ local dataInit = function()
             },
             Forsaken = {
                 wave = 1,
-                Guide = {}
+                AoeInfos = {},
+                Guide = {},
+                hasCast = {}
             }
         },
     }

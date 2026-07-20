@@ -21,7 +21,7 @@ local p3MarkOrderRoleGroup = {
 }
 local p3MarkOrderDetailGroup = nil
 local p3MarkOrderDrag = nil
-local p3MarkOrderValueOffset = 88
+local p3MarkOrderValueOffset = 90
 
 local normalizeP3MarkOrder = function(order)
     local result, seen = {}, {}
@@ -176,14 +176,13 @@ local drawP3MarkOrderEditor = function(sourceOrder)
     GUI:Dummy(12, 0)
     GUI:SameLine(0, 0)
     GUI:AlignFirstTextHeightToWidgets()
-    GUI:Text('目标优先级')
-    GUI:SameLine(96, 0)
-    GUI:TextColored(0.75, 0.75, 0.75, 1, '左侧优先，拖 H/D/T 调整，点开细分')
-
+    GUI:Text(' 目标优先级')
+    GUI:SameLine(102, 0)
+    GUI:TextColored(0.75, 0.75, 0.75, 1, '左侧优先, 拖 H/D/T 调整, 点开细分')
     GUI:Dummy(12, 0)
     GUI:SameLine(0, 0)
     GUI:AlignFirstTextHeightToWidgets()
-    GUI:Text('标记目标')
+    GUI:Text(' 标记目标 ')
     GUI:SameLine(p3MarkOrderValueOffset, 0)
     for index, group in ipairs(groupOrder) do
         if index > 1 then
@@ -722,12 +721,12 @@ DancingMadUI.draw = function()
             GUI:Dummy(0, 0)
             GUI:SameLine()
             GUI:BulletText('混沌末世（地火）')
-            GUI:Dummy(0, 0)
-            GUI:SameLine(20, 0)
+            GUI:Dummy(10, 0)
+            GUI:SameLine()
             M.Config.DmuCfg.P5.groundFireGuide = GUI:Checkbox('两步法指路##P5groundFireGuide',
                     M.Config.DmuCfg.P5.groundFireGuide)
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('单独控制混沌末世的两步法动态指路；同时需要开启P5“是否指路”')
+                GUI:SetTooltip('单独控制混沌末世的两步法动态指路；同时需要开启P5“是否指路”\n\nPS: 本功能由String佬开发, 感谢！~')
             end
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
@@ -757,6 +756,9 @@ DancingMadUI.draw = function()
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:TextColored(1, 0, 0, 1, ' 攻略: 斜点出发, 全顺, 其他方案请选择关闭!')
+            GUI:Dummy(10, 0)
+            GUI:SameLine()
+            M.Config.DmuCfg.P5.showBlackHole = GUI:Checkbox('显示黑洞范围##P5showBlackHole', M.Config.DmuCfg.P5.showBlackHole)
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:AlignFirstTextHeightToWidgets()

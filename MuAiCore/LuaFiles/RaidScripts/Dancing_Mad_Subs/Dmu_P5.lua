@@ -12,15 +12,19 @@ local Cfg = function()
     return MG.Config.DmuCfg.P5
 end
 
-local groundFireGuideEnabled = function()
-    return Cfg().guide and Cfg().groundFireGuide
-end
-
 local Data = function()
     if MG.DancingMad == nil then
         return nil
     end
     return MG.DancingMad.P5
+end
+
+local groundFireGuideEnabled = function()
+    if Data().DisChannel ~= 0 then
+        return Cfg().guide and Cfg().groundFireGuide
+        and TimeSince(Data().DisChannel) < chaosVortexDrawDuration - 2000
+    end
+    return Cfg().guide and Cfg().groundFireGuide
 end
 
 local floodPos = {
@@ -292,10 +296,18 @@ local groundFireGuideState = function(job)
 end
 
 local groundFireDirFromPair = function(a, b)
-    if a == 1 and b == 1 then return 3 end
-    if a == 1 and b == 2 then return 0 end
-    if a == 2 and b == 1 then return 2 end
-    if a == 2 and b == 2 then return 1 end
+    if a == 1 and b == 1 then
+        return 3
+    end
+    if a == 1 and b == 2 then
+        return 0
+    end
+    if a == 2 and b == 1 then
+        return 2
+    end
+    if a == 2 and b == 2 then
+        return 1
+    end
 end
 
 local groundFireCardinalPoints = function(x, z, dir4, clockwise)
@@ -387,9 +399,13 @@ end
 local tryBuildGroundFireRoute = function(state)
     local r = state.Rels
     local relCount = #r
-    local isRel = function(rel) return rel == 1 or rel == 2 end
+    local isRel = function(rel)
+        return rel == 1 or rel == 2
+    end
     local buildFull = function(dir4, clockwise)
-        if dir4 == nil or state.Done then return end
+        if dir4 == nil or state.Done then
+            return
+        end
         state.Done = true
         setGroundFireGuideRoute(state, groundFireCardinalPoints(state.x, state.z, dir4, clockwise))
     end
@@ -532,9 +548,9 @@ local findGroundFireLineForStep = function(pos)
             local distanceSq = dx * dx + dz * dz
             if distanceSq <= groundFireCastMatchDistanceSq
                     and (bestDistanceSq == nil
-                        or line.group < bestLine.group
-                        or line.group == bestLine.group and distanceSq < bestDistanceSq
-                        or line.group == bestLine.group and distanceSq == bestDistanceSq and line.id < bestLine.id)
+                    or line.group < bestLine.group
+                    or line.group == bestLine.group and distanceSq < bestDistanceSq
+                    or line.group == bestLine.group and distanceSq == bestDistanceSq and line.id < bestLine.id)
             then
                 bestLine = line
                 bestIndex = index
@@ -724,6 +740,7 @@ Dmu_P5.OnEntityChannel = function(entityID, spellID, _)
                 MG.CreateDrawer(1, 0, 1, 0.1):addTimedCircleOnEnt(chaosVortexDrawDuration, member.id, 5)
             end
         end
+        Data().DisChannel = Now()
     elseif spellID == 47925 then
         DM.ChangeState('P5Forsaken')
     elseif spellID == 47930 then
@@ -748,6 +765,8 @@ Dmu_P5.OnEntityCast = function(entityID, spellID, castPos)
         castGroundFire(entityID, spellID, castPos)
     elseif spellID == 47934 or spellID == 47935 then
         resetGroundFire()
+    elseif spellID == 47927 then
+        table.insert(Data().Forsaken.hasCast, entityID)
     end
 end
 
@@ -763,6 +782,8 @@ Dmu_P5.OnAOECreate = function(aoeInfo)
         end
     elseif aoeInfo.aoeID == 47932 then
         startGroundFire(aoeInfo)
+    elseif aoeInfo.aoeID == 47927 then
+        table.insert(Data().Forsaken.AoeInfos, aoeInfo)
     elseif aoeInfo.aoeID == 47928 then
         --软狂暴脚下出现黄圈
         Data().Forsaken.wave = Data().Forsaken.wave + 1
@@ -822,7 +843,6 @@ Dmu_P5.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
         end
     end
 end
-
 Dmu_P5.Update = function()
     getBoss()
     drawingGroudFire()
@@ -1176,15 +1196,48 @@ Dmu_P5.Update = function()
             else
                 local curBoss = Data().Celestriad.BossOnDraw
                 if Data().Celestriad.CatastrophicChoiceId == 49742 then
-                    MG.CreateDrawer(1, 0, 0, 0.3, 2):addCircle(curBoss.pos.x, 0, curBoss.pos.z, 10)
+                    if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
+                        local drawer = MG.CreateDrawer(0, 0, 0, 1, 2)
+                        drawer:setGradient(0, 0.15, 0)
+                        drawer:addCircle(curBoss.pos.x, 0, curBoss.pos.z, 10)
+                    else
+                        MG.CreateDrawer(1, 0, 0, 0.3, 2):addCircle(curBoss.pos.x, 0, curBoss.pos.z, 10)
+                    end
                 elseif Data().Celestriad.CatastrophicChoiceId == 49743 then
-                    MG.CreateDrawer(1, 0, 0, 0.4, 2):addDonut(curBoss.pos.x, 0, curBoss.pos.z, 10, 25)
+                    if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
+                        local drawer = MG.CreateDrawer(0, 0, 0, 1, 2)
+                        drawer:setGradient(0, 0.15, 0)
+                        drawer:addDonut(curBoss.pos.x, 0, curBoss.pos.z, 10, 25)
+                    else
+                        MG.CreateDrawer(1, 0, 0, 0.4, 2):addDonut(curBoss.pos.x, 0, curBoss.pos.z, 10, 25)
+                    end
                 end
             end
         end
         loadGuidePosAndNextStart()
     end
 
+    if Cfg().showBlackHole and DM.InState('P5Forsaken') or DM.InState('P5BeforeEnd') then
+        if Data().Forsaken.AoeInfos ~= nil and table.size(Data().Forsaken.AoeInfos) > 0 then
+            for _, aoeInfo in pairs(Data().Forsaken.AoeInfos) do
+                local timeSince = TimeSince(aoeInfo.startTime)
+                local endTime = aoeInfo.duration * 1000 - 500
+                if timeSince < 2500 then
+                    local color = GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)
+                    local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(0, 1, 0, 1), 3)
+                    drawer:addCircle(aoeInfo.x, 0, aoeInfo.z, 8, true)
+                elseif timeSince < endTime then
+                    local color = GUI:ColorConvertFloat4ToU32(1, 1, 0, 0)
+                    local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 1, 0, 1), 3)
+                    drawer:addCircle(aoeInfo.x, 0, aoeInfo.z, 8, true)
+                else
+                    local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
+                    local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 3)
+                    drawer:addCircle(aoeInfo.x, 0, aoeInfo.z, 8, true)
+                end
+            end
+        end
+    end
     if DM.InState('P5Forsaken') then
         if Cfg().guide and Cfg().forsakenType == 1 then
             if Data().Forsaken.Guide[Data().Forsaken.wave] == nil then

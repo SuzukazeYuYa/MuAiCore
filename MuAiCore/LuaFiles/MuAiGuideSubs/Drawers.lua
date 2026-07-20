@@ -646,7 +646,9 @@ Drawers.init = function(M)
             lineColor = GUI:ColorConvertFloat4ToU32(1, 1, 1, 0)
             lineSize = 1
         end
-        return Argus2.ShapeDrawer:new(color, color, color, lineColor, lineSize)
+        local drawer = Argus2.ShapeDrawer:new(color, color, color, lineColor, lineSize)
+        drawer:setRenderFlags(0)
+        return drawer
     end
 
     --- 绘制一个圆（已废弃仿报错用）
