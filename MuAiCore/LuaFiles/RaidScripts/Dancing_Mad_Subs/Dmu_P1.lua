@@ -95,13 +95,13 @@ local drawBuffKick = function()
     if needDo then
         local player = TensorCore.mGetPlayer()
         for _, curMember in pairs(buffPlayer) do
-            DM.cyanDrawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 6)
+            DM.cyanDrawer:addCircle(curMember.pos.x, MG.drawerY, curMember.pos.z, 6)
             if not table.contains(buffPlayerId, player.id) then
                 local distance = TensorCore.getDistance2d(curMember.pos, player.pos)
                 if distance < 6 then
                     local kickDis = 15
                     local heading = TensorCore.getHeadingToTarget(curMember.pos, player.pos)
-                    DM.greenDrawer:addArrow(player.pos.x, player.pos.y, player.pos.z, heading, kickDis - 0.4, 0.2, 0.4, 0.2, true)
+                    DM.greenDrawer:addArrow(player.pos.x, MG.drawerY, player.pos.z, heading, kickDis - 0.4, 0.2, 0.4, 0.2, true)
                 end
             end
         end
@@ -121,7 +121,7 @@ local CheckConeDeath = function()
                         local curBoss = MG.GetCurRaidBoss()
                         if curMt ~= nil and curMt.pos ~= nil and curBoss ~= nil then
                             local dir = TensorCore.getHeadingToTarget(curBoss.pos, curMt.pos)
-                            DM.redDrawer:addCone(curBoss.pos.x, curBoss.pos.y, curBoss.pos.z, 30, math.pi * 2 / 3, dir)
+                            DM.redDrawer:addCone(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 30, math.pi * 2 / 3, dir)
                         end
                     end
                 end
@@ -142,7 +142,7 @@ local CheckConeDeath = function()
                         local curBoss = MG.GetCurRaidBoss()
                         if cur ~= nil and cur.pos ~= nil and curBoss ~= nil then
                             local dir = TensorCore.getHeadingToTarget(curBoss.pos, cur.pos)
-                            DM.redDrawer:addCone(curBoss.pos.x, curBoss.pos.y, curBoss.pos.z, 30, math.pi * 2 / 3, dir)
+                            DM.redDrawer:addCone(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 30, math.pi * 2 / 3, dir)
                         end
                     end
                 end
@@ -195,7 +195,7 @@ local halfGroupAOE = function(entityID, a1, a2, a3)
         return
     end
     if Cfg().draw then
-        DM.purpleDrawer:addTimedCenteredRect(5150, x, 0, 100, 20, 42, heading)
+        DM.purpleDrawer:addTimedCenteredRect(5150, x, MG.drawerY, 100, 20, 42, heading)
     end
 end
 
@@ -250,7 +250,7 @@ local guideAndDrawL2L3 = function(lineData)
     if Cfg().draw then
         for _, id in pairs(lineData.DisPlayers) do
             local player = TensorCore.mGetEntity(id)
-            MG.CreateDrawer(1, 0.5, 0, 0.3, 2):addCircle(player.pos.x, player.pos.y, player.pos.z, 5)
+            MG.CreateDrawer(1, 0.5, 0, 0.3, 2):addCircle(player.pos.x, MG.drawerY, player.pos.z, 5)
         end
     end
     if Cfg().guide then
@@ -422,21 +422,21 @@ local drawFire = function(dataTable)
         if dataTable.BossMark == 673 then
             --火是假的
             if dataTable.PlayerMark == 127 then
-                DM.greenDrawer:addTimedCircleOnEnt(drawTime, TensorCore.mGetPlayer().id, radius)
+                MG.CreateDrawer(0, 1, 0, 0.3, 2, -1):addTimedCircleOnEnt(drawTime, TensorCore.mGetPlayer().id, radius)
             else
                 for _, member in pairs(MG.Party) do
-                    DM.redDrawer:addTimedCircleOnEnt(drawTime, member.id, radius)
+                    MG.CreateDrawer(1, 0, 0, 0.3, 2, -1):addTimedCircleOnEnt(drawTime, member.id, radius)
                 end
             end
         else
             --真的
             if dataTable.PlayerMark == 127 then
                 for _, member in pairs(MG.Party) do
-                    DM.redDrawer:addTimedCircleOnEnt(drawTime, member.id, radius)
+                    MG.CreateDrawer(1, 0, 0, 0.3, 2, -1):addTimedCircleOnEnt(drawTime, member.id, radius)
                 end
             else
                 for _, id in pairs(dataTable.GatherPlayers) do
-                    DM.greenDrawer:addTimedCircleOnEnt(drawTime, id, radius)
+                    MG.CreateDrawer(0, 1, 0, 0.3, 2, -1):addTimedCircleOnEnt(drawTime, id, radius)
                 end
             end
         end
@@ -505,7 +505,7 @@ Dmu_P1.OnEntityCast = function(entityID, spellID, castPos)
     if spellID == 50722 then
         local mt = TensorCore.getEntityByGroup("Main Tank", "Nearest")
         if mt ~= nil then
-            MG.CreateDrawer(1, 0.5, 0, nil, 2):addTimedCircleOnEnt(9000, mt.id, 5)
+            MG.CreateDrawer(1, 0.5, 0, nil, 2, -1):addTimedCircleOnEnt(9000, mt.id, 5)
         else
             MG.LogOnce('P1Death', 'missing_main_tank_cast', '死刑绘制跳过：未找到主坦实体', {
                 entityID = entityID,
@@ -641,7 +641,7 @@ Dmu_P1.Update = function()
         for _, ent in pairs(Data().Line3.Shits) do
             local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
             local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 2)
-            drawer:addCircle(ent.pos.x, ent.pos.y, ent.pos.z, 5, true)
+            drawer:addCircle(ent.pos.x, MG.drawerY, ent.pos.z, 5, true)
         end
     end
     -- 一神击退范围画图
@@ -654,7 +654,7 @@ Dmu_P1.Update = function()
                 local from = TensorCore.mGetEntity(tether.partnerid)
                 if from ~= nil then
                     local heading = TensorCore.getHeadingToTarget(from.pos, player.pos)
-                    DM.greenDrawer:addArrow(player.pos.x, player.pos.y, player.pos.z,
+                    DM.greenDrawer:addArrow(player.pos.x, MG.drawerY, player.pos.z,
                             heading, kickDis - 0.4, 0.2, 0.4, 0.2, true)
                 end
             end
@@ -783,7 +783,8 @@ Dmu_P1.Update = function()
                 local curMember = TensorCore.mGetEntity(member.id)
                 if curMember ~= nil then
                     local dir = TensorCore.getHeadingToTarget(point, curMember.pos)
-                    DM.cyanDrawer:addRect(point.x, point.y, point.z, 60, 6, dir, false)
+                    MG.CreateDrawer(0, 1, 1, 0.3, 2, 1)
+                    :addRect(point.x, MG.drawerY, point.z, 60, 6, dir, false)
                 end
             end
         end
@@ -911,7 +912,7 @@ Dmu_P1.Update = function()
             if Cfg().draw then
                 for _, id in pairs(Data().Line2.GatherPlayers) do
                     local player = TensorCore.mGetEntity(id)
-                    MG.CreateDrawer(0.2, 0, 0.6, 0.3, 2):addCircle(player.pos.x, player.pos.y, player.pos.z, 5)
+                    MG.CreateDrawer(0.2, 0, 0.6, 0.3, 2):addCircle(player.pos.x, MG.drawerY, player.pos.z, 5)
                 end
             end
         end
@@ -1028,7 +1029,7 @@ Dmu_P1.Update = function()
             if Cfg().draw then
                 for _, id in pairs(Data().Line3.GatherPlayers) do
                     local player = TensorCore.mGetEntity(id)
-                    MG.CreateDrawer(0.2, 0, 0.6, 0.3, 2):addCircle(player.pos.x, player.pos.y, player.pos.z, 5)
+                    MG.CreateDrawer(0.2, 0, 0.6, 0.3, 2):addCircle(player.pos.x, MG.drawerY, player.pos.z, 5)
                 end
             end
         end
@@ -1242,7 +1243,7 @@ Dmu_P1.Update = function()
                 for _, job in pairs(Data().LastLink.SleepGroup) do
                     local player = TensorCore.mGetEntity(MG.Party[job].id)
                     MG.CreateDrawer(0.2, 0, 0.6, 0.3, 2)
-                      :addCircle(player.pos.x, player.pos.y, player.pos.z, 5)
+                      :addCircle(player.pos.x, MG.drawerY, player.pos.z, 5)
                 end
             end
         end

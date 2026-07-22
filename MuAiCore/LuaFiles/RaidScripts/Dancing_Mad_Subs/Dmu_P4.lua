@@ -311,7 +311,7 @@ local ThunderWater = function(wave)
             if drawer ~= nil then
                 local curMember = TensorCore.mGetEntity(member.id)
                 if curMember ~= nil and curMember.pos ~= nil then
-                    drawer:addCircle(curMember.pos.x, 0, curMember.pos.z, 8)
+                    drawer:addCircle(curMember.pos.x, MG.drawerY, curMember.pos.z, 8)
                 end
             end
         end
@@ -699,9 +699,9 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
             })
             if Cfg().draw then
                 if Data().WaterFire1.Type then
-                    MG.CreateDrawer(1, 0, 1, 0.1, 2):addTimedCircle(chaosAoeDrawDuration, aoeInfo.x, 0, aoeInfo.z, 6)
+                    MG.CreateDrawer(1, 0, 0, 0.1, 2, 0.1):addTimedCircle(chaosAoeDrawDuration, aoeInfo.x, MG.drawerY, aoeInfo.z, 6)
                 else
-                    MG.CreateDrawer(1, 0, 1, 0.1, 2):addTimedDonut(chaosAoeDrawDuration, aoeInfo.x, 0, aoeInfo.z, 6, 40)
+                    MG.CreateDrawer(1, 0, 0, 0.1, 2, 0.1):addTimedDonut(chaosAoeDrawDuration, aoeInfo.x, MG.drawerY, aoeInfo.z, 6, 30)
                 end
             end
             Data().WaterFire1.AoeTimer = Now()
@@ -716,9 +716,9 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
             })
             if Cfg().draw then
                 if Data().WaterFire2.Type then
-                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addTimedDonut(chaosAoeDrawDuration, aoeInfo.x, 0, aoeInfo.z, 6, 40)
+                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2, 0.1):addTimedDonut(chaosAoeDrawDuration, aoeInfo.x, MG.drawerY, aoeInfo.z, 6, 40)
                 else
-                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addTimedCircle(chaosAoeDrawDuration, aoeInfo.x, 0, aoeInfo.z, 6)
+                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2, 0.1):addTimedCircle(chaosAoeDrawDuration, aoeInfo.x, MG.drawerY, aoeInfo.z, 6)
                 end
             end
         end
@@ -808,9 +808,9 @@ Dmu_P4.Update = function()
                     local posDeath = Data().ExDeath.deathDrawPos
                     local posAlive = Data().ExDeath.aliveDrawPos
                     local posBoth = Data().ExDeath.DothBeamObj.pos
-                    MG.CreateDrawer(0, 0, 1, nil, 1):addRect(posDeath.x, 0, posDeath.z, 40, 20, Data().ExDeath.DeathBeamObj.pos.h)
-                    MG.CreateDrawer(1, 0, 1, nil, 1):addRect(posAlive.x, 0, posAlive.z, 40, 20, Data().ExDeath.AliveBeamObj.pos.h)
-                    MG.CreateDrawer(1, 0, 0, nil, 1):addRect(posBoth.x, 0, posBoth.z, 40, 3, Data().ExDeath.DothBeamObj.pos.h)
+                    MG.CreateDrawer(0, 0, 1, nil, 1):addRect(posDeath.x, MG.drawerY, posDeath.z, 40, 20, Data().ExDeath.DeathBeamObj.pos.h)
+                    MG.CreateDrawer(1, 0, 1, nil, 1):addRect(posAlive.x, MG.drawerY, posAlive.z, 40, 20, Data().ExDeath.AliveBeamObj.pos.h)
+                    MG.CreateDrawer(1, 0, 0, nil, 1):addRect(posBoth.x, MG.drawerY, posBoth.z, 40, 3, Data().ExDeath.DothBeamObj.pos.h)
                 end
                 if Cfg().guide then
                     if Data().ExDeath.GuideData == nil or table.size(Data().ExDeath.GuideData) < 8 then

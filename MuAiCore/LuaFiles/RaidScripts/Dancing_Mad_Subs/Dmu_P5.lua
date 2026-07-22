@@ -22,7 +22,7 @@ end
 local groundFireGuideEnabled = function()
     if Data().DisChannel ~= 0 then
         return Cfg().guide and Cfg().groundFireGuide
-        and TimeSince(Data().DisChannel) < chaosVortexDrawDuration - 2000
+                and TimeSince(Data().DisChannel) < chaosVortexDrawDuration - 2000
     end
     return Cfg().guide and Cfg().groundFireGuide
 end
@@ -87,11 +87,11 @@ local inBlood = function(aoe, point)
 end
 
 local drawCurBlood = function(index1, index2)
-    DM.redDrawer:addRect(Data().Blood.Aoe[index1].x, 0, Data().Blood.Aoe[index1].z, 40, 10, Data().Blood.Aoe[index1].heading)
-    DM.redDrawer:addRect(Data().Blood.AoeOut[index1].x, 0, Data().Blood.AoeOut[index1].z, 40, 10, Data().Blood.AoeOut[index1].heading)
+    DM.redDrawer:addRect(Data().Blood.Aoe[index1].x, MG.drawerY, Data().Blood.Aoe[index1].z, 40, 10, Data().Blood.Aoe[index1].heading)
+    DM.redDrawer:addRect(Data().Blood.AoeOut[index1].x, MG.drawerY, Data().Blood.AoeOut[index1].z, 40, 10, Data().Blood.AoeOut[index1].heading)
     if index2 ~= nil then
-        DM.yellowDrawer:addRect(Data().Blood.Aoe[index2].x, 0, Data().Blood.Aoe[index2].z, 40, 10, Data().Blood.Aoe[index2].heading)
-        DM.yellowDrawer:addRect(Data().Blood.AoeOut[index2].x, 0, Data().Blood.AoeOut[index2].z, 40, 10, Data().Blood.AoeOut[index2].heading)
+        DM.yellowDrawer:addRect(Data().Blood.Aoe[index2].x, MG.drawerY, Data().Blood.Aoe[index2].z, 40, 10, Data().Blood.Aoe[index2].heading)
+        DM.yellowDrawer:addRect(Data().Blood.AoeOut[index2].x, MG.drawerY, Data().Blood.AoeOut[index2].z, 40, 10, Data().Blood.AoeOut[index2].heading)
     end
 end
 
@@ -630,7 +630,7 @@ local drawingGroudFire = function()
             local pos = line.pos[line.resolvedStep + offset + 1]
             if pos ~= nil then
                 local drawer = drawers[math.min(offset + 1, #drawers)]
-                drawer:addCircle(pos.x, 0, pos.z, line.radius)
+                drawer:addCircle(pos.x, MG.drawerY, pos.z, line.radius)
             end
         end
     end
@@ -735,9 +735,9 @@ Dmu_P5.OnEntityChannel = function(entityID, spellID, _)
     elseif spellID == 47934 or spellID == 47935 then
         for _, member in pairs(MG.Party) do
             if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
-                MG.CreateDrawer(0.3, 0, 0.3, 0.1):addTimedCircleOnEnt(chaosVortexDrawDuration, member.id, 5)
+                MG.CreateDrawer(0.3, 0, 0.3, 0.1, 2, -1):addTimedCircleOnEnt(chaosVortexDrawDuration, member.id, 5)
             else
-                MG.CreateDrawer(1, 0, 1, 0.1):addTimedCircleOnEnt(chaosVortexDrawDuration, member.id, 5)
+                MG.CreateDrawer(1, 0, 1, 0.1, 2, -1):addTimedCircleOnEnt(chaosVortexDrawDuration, member.id, 5)
             end
         end
         Data().DisChannel = Now()
@@ -998,7 +998,7 @@ Dmu_P5.Update = function()
                 else
                     drawer = MG.CreateDrawer(0, 0.5, 1, 0.2, 2)
                 end
-                drawer:addCircle(member.pos.x, 0, member.pos.z, 5)
+                drawer:addCircle(member.pos.x, MG.drawerY, member.pos.z, 5)
             end)
         end
         if Data().MaddeningOrchestra.Guide1 == nil or table.size(Data().MaddeningOrchestra.Guide1) < 8 then
@@ -1044,12 +1044,12 @@ Dmu_P5.Update = function()
             for i = 1, #curParty do
                 local member = curParty[i]
                 if i < 4 then
-                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addCircle(member.pos.x, 0, member.pos.z, 5)
+                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addCircle(member.pos.x, MG.drawerY, member.pos.z, 5)
                 end
             end
             local mt = TensorCore.mGetEntity(MG.Party.MT.id)
             if mt ~= nil and mt.pos ~= nil then
-                MG.CreateDrawer(1, 0.5, 0, 0.2, 2):addCircle(mt.pos.x, 0, mt.pos.z, 5)
+                MG.CreateDrawer(1, 0.5, 0, 0.2, 2):addCircle(mt.pos.x, MG.drawerY, mt.pos.z, 5)
             end
         end
         -- 获取DebuffHD
@@ -1122,11 +1122,11 @@ Dmu_P5.Update = function()
             if Cfg().draw then
                 local curPlayer = TensorCore.mGetEntity(Data().MaddeningOrchestra.RedBuff.id)
                 if curPlayer ~= nil and curPlayer.pos ~= nil then
-                    MG.CreateDrawer(1, 0.5, 0, 0.2, 2):addCircle(curPlayer.pos.x, 0, curPlayer.pos.z, 26)
+                    MG.CreateDrawer(1, 0.5, 0, 0.2, 2):addCircle(curPlayer.pos.x, MG.drawerY, curPlayer.pos.z, 26)
                 end
                 curPlayer = TensorCore.mGetEntity(Data().MaddeningOrchestra.BlueBuff.id)
                 if curPlayer ~= nil and curPlayer.pos ~= nil then
-                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addCircle(curPlayer.pos.x, 0, curPlayer.pos.z, 6)
+                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addCircle(curPlayer.pos.x, MG.drawerY, curPlayer.pos.z, 6)
                 end
             end
             if Cfg().guide then
@@ -1199,9 +1199,9 @@ Dmu_P5.Update = function()
                     if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
                         local drawer = MG.CreateDrawer(0, 0, 0, 1, 2)
                         drawer:setGradient(0, 0.15, 0)
-                        drawer:addCircle(curBoss.pos.x, 0, curBoss.pos.z, 10)
+                        drawer:addCircle(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10)
                     else
-                        MG.CreateDrawer(1, 0, 0, 0.3, 2):addCircle(curBoss.pos.x, 0, curBoss.pos.z, 10)
+                        MG.CreateDrawer(1, 0, 0, 0.3, 2):addCircle(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10)
                     end
                 elseif Data().Celestriad.CatastrophicChoiceId == 49743 then
                     if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
@@ -1209,7 +1209,7 @@ Dmu_P5.Update = function()
                         drawer:setGradient(0, 0.15, 0)
                         drawer:addDonut(curBoss.pos.x, 0, curBoss.pos.z, 10, 25)
                     else
-                        MG.CreateDrawer(1, 0, 0, 0.4, 2):addDonut(curBoss.pos.x, 0, curBoss.pos.z, 10, 25)
+                        MG.CreateDrawer(1, 0, 0, 0.4, 2):addDonut(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10, 25)
                     end
                 end
             end
@@ -1225,15 +1225,15 @@ Dmu_P5.Update = function()
                 if timeSince < 2500 then
                     local color = GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)
                     local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(0, 1, 0, 1), 3)
-                    drawer:addCircle(aoeInfo.x, 0, aoeInfo.z, 8, true)
+                    drawer:addCircle(aoeInfo.x, MG.drawerY, aoeInfo.z, 8, true)
                 elseif timeSince < endTime then
                     local color = GUI:ColorConvertFloat4ToU32(1, 1, 0, 0)
                     local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 1, 0, 1), 3)
-                    drawer:addCircle(aoeInfo.x, 0, aoeInfo.z, 8, true)
+                    drawer:addCircle(aoeInfo.x, MG.drawerY, aoeInfo.z, 8, true)
                 else
                     local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
                     local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 3)
-                    drawer:addCircle(aoeInfo.x, 0, aoeInfo.z, 8, true)
+                    drawer:addCircle(aoeInfo.x, MG.drawerY, aoeInfo.z, 8, true)
                 end
             end
         end

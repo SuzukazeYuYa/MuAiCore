@@ -617,7 +617,7 @@ local defineColors = function()
     ---@type ShapeDrawer
     DM.cyanDrawer = MG.CreateDrawer(0, 1, 1, 0.3, 2)
     ---@type ShapeDrawer
-    DM.litBlue = MG.CreateDrawer(0, 0.3, 0.5, 0.3, 2)
+    DM.litBlue = MG.CreateDrawer(0, 0.5, 1, 0.3, 2)
 end
 
 --- 屏蔽特效
@@ -1011,9 +1011,9 @@ DM.CommonDraw = function()
         for id, aoeInfo in pairs(MG.DancingMad.Casting) do
             if aoeInfo.aoeCastType == 13 then
                 if MG.Config.DmuCfg.BindEffect then
-                    DM.purpleDrawer:addCone(aoeInfo.x, 0, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading)
+                    DM.purpleDrawer:addCone(aoeInfo.x, 0, aoeInfo.z, 30, math.pi / 2, aoeInfo.heading)
                 else
-                    DM.yellowDrawer:addCone(aoeInfo.x, 0, aoeInfo.z, 20, math.pi / 2, aoeInfo.heading, true)
+                    DM.yellowDrawer:addCone(aoeInfo.x, 0, aoeInfo.z, 30, math.pi / 2, aoeInfo.heading, true)
                 end
             elseif aoeInfo.aoeCastType == 12 then
                 if MG.Config.DmuCfg.BindEffect then

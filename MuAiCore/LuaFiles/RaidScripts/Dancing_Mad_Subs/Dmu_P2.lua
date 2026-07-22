@@ -140,7 +140,6 @@ function GetFarIntersection(h, centerPt, r)
     if delta < 0 then
         return nil
     end
-    d(12344)
     local sqrtD = math.sqrt(delta)
     -- 两个t参数，t绝对值越大离中心越远
     local t1 = (-B - sqrtD) / 2
@@ -188,7 +187,7 @@ local drawAllThingEnding = function()
                 dir = curCaster.pos.h
             end
             MG.CreateDrawer(1, 0.5, 0, nil, 2)
-              :addRect(curCaster.pos.x, curCaster.pos.y, curCaster.pos.z, 25, 50, dir)
+              :addRect(curCaster.pos.x, MG.drawerY, curCaster.pos.z, 25, 50, dir)
         end
     else
         Data().Towers.kickTimer = 0
@@ -666,7 +665,7 @@ local drawWingsOfDestroy = function()
             else
                 heading = curBoss.pos.h - math.pi / 2
             end
-            DM.purpleDrawer:addRect(100, 0, 100, 20, 40, heading)
+            DM.purpleDrawer:addRect(100, MG.drawerY, 100, 20, 40, heading)
         end
     end
 end
@@ -694,8 +693,8 @@ local drawFarNearDeath = function()
                     local disB = TensorCore.getDistance2d(DM.Center, b.pos)
                     return disA < disB
                 end)
-                DM.purpleDrawer:addCircle(curParty[1].pos.x, 0, curParty[1].pos.z, 6)
-                DM.purpleDrawer:addCircle(curParty[8].pos.x, 0, curParty[8].pos.z, 6)
+                DM.purpleDrawer:addCircle(curParty[1].pos.x, MG.drawerY, curParty[1].pos.z, 6)
+                DM.purpleDrawer:addCircle(curParty[8].pos.x, MG.drawerY, curParty[8].pos.z, 6)
             else
                 MG.LogOnce('P2FarNearDeath', 'incomplete_party',
                         '远近死刑绘制跳过：当前队员实体不完整', {
@@ -909,8 +908,8 @@ Dmu_P2.Update = function()
             local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 2)
             local left = Data().Towers.spawn[wave].left
             local right = Data().Towers.spawn[wave].right
-            drawer:addCircle(left.x, 0, left.z, 4, true)
-            drawer:addCircle(right.x, 0, right.z, 4, true)
+            drawer:addCircle(left.x, MG.drawerY, left.z, 4, true)
+            drawer:addCircle(right.x, MG.drawerY, right.z, 4, true)
             for job, member in pairs(MG.Party) do
                 if table.contains(Data().Towers.doing, job) then
                     local curMember = TensorCore.mGetEntity(member.id)
@@ -921,12 +920,11 @@ Dmu_P2.Update = function()
                         local curMark = Data().Towers.curMarks[job]
                         if curMark == 715 then
                             -- 分摊
-                            DM.greenDrawer:addCircle(curMember.pos.x, 0, curMember.pos.z, 5)
+                            DM.greenDrawer:addCircle(curMember.pos.x, MG.drawerY, curMember.pos.z, 5)
                         elseif curMark == 716 then
                             -- 钢铁
-                            DM.redDrawer:addCircle(curMember.pos.x, 0, curMember.pos.z, 5)
+                            DM.redDrawer:addCircle(curMember.pos.x, MG.drawerY, curMember.pos.z, 5)
                         elseif curMark == 717 then
-
                             -- 扇形
                             local nearest = nil
                             local dis = 1000
@@ -945,8 +943,8 @@ Dmu_P2.Update = function()
 
                             if nearest ~= nil then
                                 local dir = TensorCore.getHeadingToTarget(curMember.pos, nearest.pos)
-                                MG.CreateDrawer(0, 0.5, 1, 0.3)
-                                  :addCone(curMember.pos.x, 0, curMember.pos.z, 40, math.pi / 2, dir)
+                                MG.CreateDrawer(0, 0.6, 1, 0.3, 2, 13)
+                                  :addCone(curMember.pos.x, MG.drawerY, curMember.pos.z, 40, math.pi / 2, dir)
                             end
 
                         end
@@ -960,7 +958,7 @@ Dmu_P2.Update = function()
                         return TensorCore.getDistance2d(a.pos, DM.Center) < TensorCore.getDistance2d(b.pos, DM.Center)
                     end)
                     for i = 1, 4 do
-                        DM.purpleDrawer:addCircle(curParty[i].pos.x, 0, curParty[i].pos.z, 5)
+                        DM.purpleDrawer:addCircle(curParty[i].pos.x, MG.drawerY, curParty[i].pos.z, 5)
                     end
                 else
                     MG.LogOnce('P2Tower', 'incomplete_party_wave_' .. tostring(wave),
@@ -1059,12 +1057,12 @@ Dmu_P2.Update = function()
             end
             if index ~= nil and Data().Trine.DrawPos[index] ~= nil then
                 for _, drawPos in pairs(Data().Trine.DrawPos[index]) do
-                    DM.redDrawer:addCircle(drawPos.x, 0, drawPos.z, 6)
+                    DM.redDrawer:addCircle(drawPos.x, MG.drawerY, drawPos.z, 6)
                 end
             end
             if Cfg().trineDrawType == 2 and preIndex ~= nil and Data().Trine.DrawPos[preIndex] ~= nil then
                 for _, drawPos in pairs(Data().Trine.DrawPos[preIndex]) do
-                    DM.yellowDrawer:addCircle(drawPos.x, 0, drawPos.z, 6)
+                    DM.yellowDrawer:addCircle(drawPos.x, MG.drawerY, drawPos.z, 6)
                 end
             end
         end

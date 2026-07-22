@@ -79,7 +79,7 @@ local drawFireWater = function(buffId)
         drawer = DM.redDrawer
         object = Data().Elements.Fire
     elseif buffId == 1601 then
-        drawer = DM.cyanDrawer
+        drawer = DM.litBlue
         object = Data().Elements.Water
     end
     if object == nil or object.pos == nil then
@@ -100,9 +100,9 @@ local drawFireWater = function(buffId)
                             '元素绘制跳过：Buff持有者实体不可用',
                             { entityID = member.id, buffID = buffId }, true)
                 elseif buffId == 1600 then
-                    drawer:addCircle(curMember.pos.x, curMember.pos.y, curMember.pos.z, 5, 5)
+                    drawer:addCircle(curMember.pos.x, MG.drawerY, curMember.pos.z, 5, 5)
                 elseif buffId == 1601 then
-                    drawer:addDonut(curMember.pos.x, curMember.pos.y, curMember.pos.z, 4, 10)
+                    drawer:addDonut(curMember.pos.x, MG.drawerY, curMember.pos.z, 4, 10)
                 end
                 if Data().Elements.BuffStart[buffId] == false then
                     Data().Elements.BuffStart[buffId] = true
@@ -147,11 +147,11 @@ local drawFireWater = function(buffId)
                 end
             end)
             if buffId == 1600 then
-                drawer:addDonut(curFramePlayer[1].pos.x, curFramePlayer[1].pos.y, curFramePlayer[1].pos.z, 4, 10)
-                drawer:addDonut(curFramePlayer[2].pos.x, curFramePlayer[2].pos.y, curFramePlayer[2].pos.z, 4, 10)
+                drawer:addDonut(curFramePlayer[1].pos.x, MG.drawerY, curFramePlayer[1].pos.z, 4, 10)
+                drawer:addDonut(curFramePlayer[2].pos.x, MG.drawerY, curFramePlayer[2].pos.z, 4, 10)
             elseif buffId == 1601 then
-                drawer:addCircle(curFramePlayer[1].pos.x, curFramePlayer[1].pos.y, curFramePlayer[1].pos.z, 5)
-                drawer:addCircle(curFramePlayer[2].pos.x, curFramePlayer[2].pos.y, curFramePlayer[2].pos.z, 5)
+                drawer:addCircle(curFramePlayer[1].pos.x, MG.drawerY, curFramePlayer[1].pos.z, 5)
+                drawer:addCircle(curFramePlayer[2].pos.x, MG.drawerY, curFramePlayer[2].pos.z, 5)
             end
         end
     end
@@ -173,19 +173,19 @@ local drawImplosion = function()
         if skillId == 47869 then
             if timeSince < 5500 then
                 --先打前后
-                DM.redDrawer:addCone(pos.x, pos.y, pos.z, 40, math.pi / 2, pos.h)
-                DM.redDrawer:addCone(pos.x, pos.y, pos.z, 40, math.pi / 2, pos.h + math.pi)
+                DM.redDrawer:addCone(pos.x, MG.drawerY, pos.z, 40, math.pi / 2, pos.h)
+                DM.redDrawer:addCone(pos.x, MG.drawerY, pos.z, 40, math.pi / 2, pos.h + math.pi)
             else
-                DM.redDrawer:addCone(pos.x, pos.y, pos.z, 40, math.pi / 2, pos.h + math.pi / 2)
-                DM.redDrawer:addCone(pos.x, pos.y, pos.z, 40, math.pi / 2, pos.h - math.pi / 2)
+                DM.redDrawer:addCone(pos.x, MG.drawerY, pos.z, 40, math.pi / 2, pos.h + math.pi / 2)
+                DM.redDrawer:addCone(pos.x, MG.drawerY, pos.z, 40, math.pi / 2, pos.h - math.pi / 2)
             end
         elseif skillId == 47870 then
             if timeSince < 5500 then
-                DM.redDrawer:addCone(pos.x, pos.y, pos.z, 40, math.pi / 2, pos.h + math.pi / 2)
-                DM.redDrawer:addCone(pos.x, pos.y, pos.z, 40, math.pi / 2, pos.h - math.pi / 2)
+                DM.redDrawer:addCone(pos.x, MG.drawerY, pos.z, 40, math.pi / 2, pos.h + math.pi / 2)
+                DM.redDrawer:addCone(pos.x, MG.drawerY, pos.z, 40, math.pi / 2, pos.h - math.pi / 2)
             else
-                DM.redDrawer:addCone(pos.x, pos.y, pos.z, 40, math.pi / 2, pos.h)
-                DM.redDrawer:addCone(pos.x, pos.y, pos.z, 40, math.pi / 2, pos.h + math.pi)
+                DM.redDrawer:addCone(pos.x, MG.drawerY, pos.z, 40, math.pi / 2, pos.h)
+                DM.redDrawer:addCone(pos.x, MG.drawerY, pos.z, 40, math.pi / 2, pos.h + math.pi)
             end
         end
     else
@@ -285,7 +285,7 @@ local drawThunderIII = function()
             end
         end)
         if curTarget ~= nil then
-            DM.purpleDrawer:addCircle(curTarget.pos.x, curTarget.pos.y, curTarget.pos.z, 5)
+            DM.purpleDrawer:addCircle(curTarget.pos.x, MG.drawerY, curTarget.pos.z, 5)
         end
     else
         Data().ThunderIII.Timer = 0
@@ -364,9 +364,9 @@ local drawSlapHappy = function()
         elseif i == 3 then
             pos = TensorCore.getPosInDirection(pos, curCaster.pos.h, 4)
         end
-        MG.CreateDrawer(0.9, 0.3, 0, 0.4):addCircle(pos.x, pos.y, pos.z, r3)
+        MG.CreateDrawer(0.9, 0.3, 0, 0.4):addCircle(pos.x, MG.drawerY, pos.z, r3)
     end
-    MG.CreateDrawer(0.7, 0.1, 0):addCircle(100, 0, 100, 6)
+    MG.CreateDrawer(0.7, 0.1, 0):addCircle(100, MG.drawerY, 100, 6)
     -- 如果开启范围画图
     if Cfg().slapHappyDraw then
         if isRight then
@@ -375,7 +375,7 @@ local drawSlapHappy = function()
                 return
             end
             local dir = TensorCore.getHeadingToTarget(DM.Center, player.pos)
-            DM.litBlue:addCone(100, 0, 100, 30, math.pi / 3, dir)
+            DM.litBlue:addCone(100, MG.drawerY, 100, 30, math.pi / 3, dir)
         else
             local curMt = getLiveEntity(MG.Party.MT and MG.Party.MT.id, 'P3SlapHappy', 'mt')
             local curH1 = getLiveEntity(MG.Party.H1 and MG.Party.H1.id, 'P3SlapHappy', 'h1')
@@ -387,13 +387,13 @@ local drawSlapHappy = function()
             local dirH1 = TensorCore.getHeadingToTarget(DM.Center, curH1.pos)
             local dirD1 = TensorCore.getHeadingToTarget(DM.Center, curD1.pos)
             if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
-                MG.CreateDrawer(0, 0, 0.2, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirMt)
-                MG.CreateDrawer(0, 0.2, 0, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirH1)
-                MG.CreateDrawer(0.2, 0, 0, 0.4):addCone(100, 0, 100, 20, math.pi / 3, dirD1)
+                MG.CreateDrawer(0, 0, 0.2, 0.4):addCone(100, MG.drawerY, 100, 20, math.pi / 3, dirMt)
+                MG.CreateDrawer(0, 0.2, 0, 0.4):addCone(100, MG.drawerY, 100, 20, math.pi / 3, dirH1)
+                MG.CreateDrawer(0.2, 0, 0, 0.4):addCone(100, MG.drawerY, 100, 20, math.pi / 3, dirD1)
             else
-                MG.CreateDrawer(0, 0, 1, 0.1, 1):addCone(100, 0, 100, 20, math.pi / 3, dirMt)
-                MG.CreateDrawer(0, 1, 0, 0.1, 1):addCone(100, 0, 100, 20, math.pi / 3, dirH1)
-                MG.CreateDrawer(1, 0, 0, 0.1, 1):addCone(100, 0, 100, 20, math.pi / 3, dirD1)
+                MG.CreateDrawer(0, 0, 1, 0.1, 1):addCone(100, MG.drawerY, 100, 20, math.pi / 3, dirMt)
+                MG.CreateDrawer(0, 1, 0, 0.1, 1):addCone(100, MG.drawerY, 100, 20, math.pi / 3, dirH1)
+                MG.CreateDrawer(1, 0, 0, 0.1, 1):addCone(100, MG.drawerY, 100, 20, math.pi / 3, dirD1)
             end
         end
     end
@@ -438,7 +438,7 @@ local drawLookUponMe = function()
         return
     end
     local curHeading = curCaster.pos.h
-    MG.CreateDrawer(1, 0.1, 0):addCenteredRect(100, 0, 100, 40, 16, curHeading)
+    MG.CreateDrawer(1, 0.1, 0):addCenteredRect(100, MG.drawerY, 100, 40, 16, curHeading)
     if TimeSince(Data().LookUponMe.Timer) > 5700 then
         Data().LookUponMe.OnDraw = false
         Data().LookUponMe.CasterId = 0
@@ -456,7 +456,7 @@ local drawDamningEdict = function()
         return
     end
     local curHeading = curCaster.pos.h
-    MG.CreateDrawer(1, 0.5, 0):addRect(curCaster.pos.x, 0, curCaster.pos.z, 50, 50, curHeading)
+    MG.CreateDrawer(1, 0.5, 0):addRect(curCaster.pos.x, MG.drawerY, curCaster.pos.z, 50, 50, curHeading)
     if TimeSince(Data().DamningEdict.Timer) > damningEdictDrawDuration then
         Data().DamningEdict.OnDraw = false
         Data().DamningEdict.CasterId = 0
@@ -528,7 +528,7 @@ local drawBlackHole = function()
     local endState = 'P3BlackHole' .. tostring(curWave) .. '_' .. tostring(endCnt)
     if DM.OverState(startState, true) and DM.BeLowState(endState, true) then
         for _, obj in pairs(Data().BlackHolds.Object[curWave]) do
-            MG.CreateDrawer(1, 0, 0, 0.4, 1):addCircle(obj.pos.x, obj.pos.y, obj.pos.z, 2, true)
+            MG.CreateDrawer(1, 0, 0, 0.4, 1):addCircle(obj.pos.x, MG.drawerY, obj.pos.z, 2)
         end
         local tethers = getEntTethers(8343, 84)
         if tethers == nil or table.size(tethers) == 0 then
@@ -539,7 +539,8 @@ local drawBlackHole = function()
             local target = getLiveEntity(tether.targetid, 'P3BlackHole', 'target')
             if object ~= nil and target ~= nil then
                 local dir = TensorCore.getHeadingToTarget(object.pos, target.pos)
-                DM.litBlue:addRect(object.pos.x, object.pos.y, object.pos.z, 40, 6, dir)
+                MG.CreateDrawer(0, 0.5, 1, 0.3, 2, 1)
+                  :addRect(object.pos.x, MG.drawerY, object.pos.z, 40, 6, dir)
             end
         end
     end
@@ -658,7 +659,7 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                     if fromObj ~= nil and fromObj.pos ~= nil then
                         local teDir = TensorCore.getHeadingToTarget(DM.Center, fromObj.pos)
                         if MG.IsSameDirection(MG.SetHeading2Pi(teDir), curDir, 0.1) then
-                        --如果当前面向近似于黑洞方向，则添加到表格，这样循环过后会生成一个自然有序列
+                            --如果当前面向近似于黑洞方向，则添加到表格，这样循环过后会生成一个自然有序列
                             table.insert(data.sourceObject[curState], fromObj)
                         end
                     end
@@ -1226,7 +1227,7 @@ Dmu_P3.Update = function()
         if TimeSince(Data().Elements.bigCircleTimer) < 8500 then
             local boss = getLiveEntity(Data().ExDeath and Data().ExDeath.id, 'P3Elements', 'big_circle_boss')
             if boss ~= nil then
-                DM.purpleDrawer:addCircle(boss.pos.x, 0, boss.pos.z, 15)
+                DM.purpleDrawer:addCircle(boss.pos.x, MG.drawerY, boss.pos.z, 15)
             end
         else
             Data().Elements.bigCircleTimer = 0
@@ -1361,7 +1362,8 @@ Dmu_P3.Update = function()
                     if Data().UmbraSmash.LeadPlayer == nil then
                         Data().UmbraSmash.LeadPlayer = farest
                     end
-                    DM.redDrawer:addCircle(farest.pos.x, farest.pos.y, farest.pos.z, 19)
+                    MG.CreateDrawer(1, 0, 0, 0.3, 2, 10)
+                      :addCircle(farest.pos.x, MG.drawerY, farest.pos.z, 19)
                 end
             else
                 if TimeSince(Data().UmbraSmash.Timer) < umbraSmashDrawDuration then
@@ -1373,7 +1375,8 @@ Dmu_P3.Update = function()
                     end
                     local pos = Data().UmbraSmash.drawPos
                     if pos ~= nil then
-                        DM.redDrawer:addCircle(pos.x, pos.y, pos.z, 19)
+                        MG.CreateDrawer(1, 0, 0, 0.3, 2, 10)
+                          :addCircle(pos.x, MG.drawerY, pos.z, 19)
                     end
                 end
             end
@@ -1443,7 +1446,7 @@ Dmu_P3.Update = function()
                 end
                 if Cfg().draw and timeSince > 4000 then
                     DM.greenDrawer:addArrow(
-                            player.pos.x, player.pos.y, player.pos.z,
+                            player.pos.x, MG.drawerY, player.pos.z,
                             TensorCore.getHeadingToTarget(curEx.pos, player.pos),
                             9.6, 0.2, 0.4, 0.2, true
                     )
@@ -1453,9 +1456,9 @@ Dmu_P3.Update = function()
                 end
             elseif timeSince < 12700 then
                 if Cfg().draw then
-                    local drawer = MG.CreateDrawer(0.1, 0.5, 0, 0.1)
+                    local drawer = MG.CreateDrawer(0.1, 0.5, 0, 0.1, 2, 0.1)
                     MG.OnCurrentPartyDo(function(job, member)
-                        drawer:addCircle(member.pos.x, member.pos.y, member.pos.z, 6)
+                        drawer:addCircle(member.pos.x, MG.drawerY, member.pos.z, 6)
                     end)
                 end
                 if table.size(Data().WacuumWave.AfterKick) > 0 then
@@ -1517,7 +1520,8 @@ Dmu_P3.Update = function()
                     local curMember = TensorCore.mGetEntity(member.id)
                     if curMember ~= nil and curMember.pos ~= nil then
                         local dir = TensorCore.getHeadingToTarget(curDrawData.from, curMember.pos)
-                        DM.litBlue:addRect(curDrawData.from.x, curDrawData.from.y, curDrawData.from.z, 40, 10, dir)
+                        MG.CreateDrawer(0, 0.5, 1, 0.3, 2, 1.5)
+                          :addRect(curDrawData.from.x, MG.drawerY, curDrawData.from.z, 40, 10, dir)
                     end
                 end
             end
@@ -1782,7 +1786,7 @@ Dmu_P3.Update = function()
     if DM.InState('P3TowerEnd') then
         if Cfg().draw and Data().TakeTower.boomPos ~= nil and table.size(Data().TakeTower.boomPos) >= 2 then
             for _, pos in pairs(Data().TakeTower.boomPos) do
-                DM.redDrawer:addCircle(pos.x, pos.y, pos.z, 6)
+                DM.redDrawer:addCircle(pos.x, MG.drawerY, pos.z, 6)
             end
         end
     end
