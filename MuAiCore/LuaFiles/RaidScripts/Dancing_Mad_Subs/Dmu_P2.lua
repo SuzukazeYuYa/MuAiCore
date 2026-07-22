@@ -140,7 +140,7 @@ function GetFarIntersection(h, centerPt, r)
     if delta < 0 then
         return nil
     end
-
+    d(12344)
     local sqrtD = math.sqrt(delta)
     -- 两个t参数，t绝对值越大离中心越远
     local t1 = (-B - sqrtD) / 2
@@ -553,11 +553,14 @@ local type3FixPos = function(wave)
             break
         end
     end
+
     if curGather ~= nil then
         local leftHeading = TensorCore.getHeadingToTarget(DM.Center, leftTower)
         local guidePos = GetFarIntersection(leftHeading, curGather.pos, 4.6)
-        -- 如果当前计算位置超过塔范围，那么使用原始位置
-        if TensorCore.getDistance2d(guidePos, leftTower) < 3.8 then
+        if guidePos == nil then
+            return Data().Towers.GuideData[wave]
+        elseif TensorCore.getDistance2d(guidePos, leftTower) < 3.8 then
+            -- 如果当前计算位置超过塔范围，那么使用原始位置
             curGuidePos = guidePos
         end
     end
@@ -576,10 +579,12 @@ local guideFuturePastOrTakeTower = function()
     local wave = Data().Towers.wave
     local guideData
     if Cfg().fixType == 3 then
+
         guideData = type3FixPos(wave)
     else
         guideData = Data().Towers.GuideData[wave]
     end
+
     if not table.contains(waves, wave) then
         if Cfg().guide then
             MG.FrameMultiD(guideData, 0.3)
@@ -899,9 +904,6 @@ Dmu_P2.Update = function()
             showOrderLog(Data().Towers.standBy, ' 闲人顺序：')
             loged[wave] = true
         end
-        --if Cfg().towerGuide then
-        --    checkAndMarkMember(wave)
-        --end
         if Cfg().draw then
             local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
             local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 2)
@@ -924,6 +926,7 @@ Dmu_P2.Update = function()
                             -- 钢铁
                             DM.redDrawer:addCircle(curMember.pos.x, 0, curMember.pos.z, 5)
                         elseif curMark == 717 then
+
                             -- 扇形
                             local nearest = nil
                             local dis = 1000
@@ -939,11 +942,13 @@ Dmu_P2.Update = function()
                                     end
                                 end
                             end
+
                             if nearest ~= nil then
                                 local dir = TensorCore.getHeadingToTarget(curMember.pos, nearest.pos)
                                 MG.CreateDrawer(0, 0.5, 1, 0.3)
                                   :addCone(curMember.pos.x, 0, curMember.pos.z, 40, math.pi / 2, dir)
                             end
+
                         end
                     end
                 end
