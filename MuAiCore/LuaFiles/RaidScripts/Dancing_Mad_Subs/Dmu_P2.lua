@@ -904,12 +904,20 @@ Dmu_P2.Update = function()
             loged[wave] = true
         end
         if Cfg().draw then
-            local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
-            local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 2)
             local left = Data().Towers.spawn[wave].left
             local right = Data().Towers.spawn[wave].right
-            drawer:addCircle(left.x, MG.drawerY, left.z, 4, true)
-            drawer:addCircle(right.x, MG.drawerY, right.z, 4, true)
+            local out = 4
+            local inner
+            if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
+                inner = out - 0.12
+            else
+                out = out - 0.035
+                inner = out - 0.05
+            end
+            local drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
+            drawer:setRenderFlags(256)
+            drawer:addDonut(left.x, MG.drawerY, left.z, inner, out)
+            drawer:addDonut(right.x, MG.drawerY, right.z, inner, out)
             for job, member in pairs(MG.Party) do
                 if table.contains(Data().Towers.doing, job) then
                     local curMember = TensorCore.mGetEntity(member.id)

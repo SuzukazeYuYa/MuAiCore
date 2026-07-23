@@ -1219,22 +1219,27 @@ Dmu_P5.Update = function()
 
     if Cfg().showBlackHole and DM.InState('P5Forsaken') or DM.InState('P5BeforeEnd') then
         if Data().Forsaken.AoeInfos ~= nil and table.size(Data().Forsaken.AoeInfos) > 0 then
+            local out = 8.1
+            local inner
+            if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
+                inner = out - 0.15
+            else
+                out = out - 0.035
+                inner = out - 0.08
+            end
             for _, aoeInfo in pairs(Data().Forsaken.AoeInfos) do
+                local drawer
                 local timeSince = TimeSince(aoeInfo.startTime)
                 local endTime = aoeInfo.duration * 1000 - 500
                 if timeSince < 2500 then
-                    local color = GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)
-                    local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(0, 1, 0, 1), 3)
-                    drawer:addCircle(aoeInfo.x, MG.drawerY, aoeInfo.z, 8, true)
+                    drawer = MG.CreateDrawer(0, 1, 0, 1, 0, 0)
                 elseif timeSince < endTime then
-                    local color = GUI:ColorConvertFloat4ToU32(1, 1, 0, 0)
-                    local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 1, 0, 1), 3)
-                    drawer:addCircle(aoeInfo.x, MG.drawerY, aoeInfo.z, 8, true)
+                    drawer = MG.CreateDrawer(1, 1, 0, 1, 0, 0)
                 else
-                    local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
-                    local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 3)
-                    drawer:addCircle(aoeInfo.x, MG.drawerY, aoeInfo.z, 8, true)
+                    drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
                 end
+                drawer:setRenderFlags(256)
+                drawer:addDonut(aoeInfo.x, MG.drawerY, aoeInfo.z, inner, out)
             end
         end
     end

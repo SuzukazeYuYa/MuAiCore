@@ -638,10 +638,17 @@ Dmu_P1.Update = function()
             and (DM.OverState('P1Line3_1', true) and DM.BeLowState('P1ShitBoom'))
             and Data().Line3.Shits ~= nil and table.size(Data().Line3.Shits) >= 0
     then
+        local out = 5.05
+        local inner
+        if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
+            inner = out - 0.15
+        else
+            inner = out - 0.08
+        end
+        local drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
+        drawer:setRenderFlags(256)
         for _, ent in pairs(Data().Line3.Shits) do
-            local color = GUI:ColorConvertFloat4ToU32(1, 0, 0, 0)
-            local drawer = Argus2.ShapeDrawer:new(color, color, color, GUI:ColorConvertFloat4ToU32(1, 0, 0, 1), 2)
-            drawer:addCircle(ent.pos.x, MG.drawerY, ent.pos.z, 5, true)
+            drawer:addDonut(ent.pos.x, MG.drawerY, ent.pos.z, inner, out)
         end
     end
     -- 一神击退范围画图
@@ -784,7 +791,7 @@ Dmu_P1.Update = function()
                 if curMember ~= nil then
                     local dir = TensorCore.getHeadingToTarget(point, curMember.pos)
                     MG.CreateDrawer(0, 1, 1, 0.3, 2, 1)
-                    :addRect(point.x, MG.drawerY, point.z, 60, 6, dir, false)
+                      :addRect(point.x, MG.drawerY, point.z, 60, 6, dir, false)
                 end
             end
         end
