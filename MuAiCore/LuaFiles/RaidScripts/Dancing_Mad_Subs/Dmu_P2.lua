@@ -236,8 +236,20 @@ local initGroups = function()
         table.insert(Data().Towers.groupB, 'D3')
     end
 
-    -- 如果是扇左钢右，对B组进行调整
+    -- 扇左钢右的换组站位必须沿用初始点名，不能被后续轮次头标覆盖。
     if MG.Config.DmuCfg.P2.fixType == 2 then
+        local groupA = Data().Towers.groupA
+        local firstPairHasCone = Data().Towers.curMarks[groupA[1]] == 717
+                or Data().Towers.curMarks[groupA[2]] == 717
+        local secondPairHasCone = Data().Towers.curMarks[groupA[3]] == 717
+                or Data().Towers.curMarks[groupA[4]] == 717
+        assert(firstPairHasCone ~= secondPairHasCone, '扇左钢右初始分组异常：A组扇形二人组不唯一')
+        if firstPairHasCone then
+            Data().Towers.groupAStandByOrder = { groupA[1], groupA[2], groupA[3], groupA[4] }
+        else
+            Data().Towers.groupAStandByOrder = { groupA[3], groupA[4], groupA[1], groupA[2] }
+        end
+
         local group = Data().Towers.groupB
         local mark1 = Data().Towers.curMarks[group[1]]
         if mark1 == 717 then
@@ -319,7 +331,7 @@ local calcGuidePos = function(wave, isFix)
     end
     local guideData = {}
     if Cfg().fixType == 2 and wave >= 4 and wave < 8 and not isFix then
-        Data().Towers.standBy = calcConeLeft(Data().Towers.standBy)
+        Data().Towers.standBy = table.deepcopy(Data().Towers.groupAStandByOrder)
     end
     for i = 1, 4 do
         local curDoingJob = Data().Towers.groupOrders[wave][i]

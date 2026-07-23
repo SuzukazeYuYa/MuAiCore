@@ -245,6 +245,7 @@ local dataInit = function()
                 wave = 0,
                 groupA = {},
                 groupB = {},
+                groupAStandByOrder = {},
                 doing = {},
                 standBy = {},
                 GuideData = {},
