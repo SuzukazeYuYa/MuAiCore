@@ -1120,7 +1120,8 @@ local drawCommon = function(M)
     GUI:SameLine(200)
     GUI:Button('点击查看', 145, 20)
     if GUI:IsItemClicked(0) then
-        io.popen('start https://github.com/SuzukazeYuYa/MuAiCore/commits/main/')
+        --io.popen('start https://github.com/SuzukazeYuYa/MuAiCore/commits/main/')
+        io.popen('start https://docs.qq.com/doc/DWnhXRXBxSXJpU0tS?rtkey=07822459d679f67ae55c279c801Xw1&nlc=1')
     end
     GUI:Dummy(10, 2)
     GUI:Separator()

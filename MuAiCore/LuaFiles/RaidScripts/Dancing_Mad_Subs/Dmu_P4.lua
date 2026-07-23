@@ -286,7 +286,7 @@ local ThunderWater = function(wave)
                     end
                 end
             end
-        end 
+        end
 
         for job, member in pairs(MG.Party) do
             local buffMap = Data().Buff[job] or {}
@@ -917,33 +917,51 @@ Dmu_P4.Update = function()
                 end
             end
             if table.size(Data().Eye1.Owner) >= 2 then
-                if AnyoneCore ~= nil and Cfg().draw and not Data().Eye1.wasDraw then
-                    local text
-                    if Data().Eye1.type then
-                        text = 'Real'
-                    else
-                        text = 'Fake'
-                    end
-                    for i, id in pairs(Data().Eye1.Owner) do
-                        local buff = TensorCore.getBuff(id, 5543)
-                        if buff ~= nil then
-                            AnyoneCore.addTimedWorldTextOnEnt(
-                                    buff.duration * 1000 + 1000,
-                                    text,
-                                    id,
-                                    GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
-                                    true, 2, 1
-                            )
-                        end
-                    end
-                    Data().Eye1.wasDraw = true
-                end
                 MG.LogOnce('P4Eye', 'owner_1', '第一次石化眼目标缓存', {
                     owner = MG.LogEntityList(Data().Eye1.Owner),
                     real = Data().Eye1.type,
                 })
             end
         else
+            if Cfg().draw and not Data().Eye1.wasDraw then
+                if Cfg().eyeEffect == 1 then
+                    if AnyoneCore ~= nil then
+                        local text
+                        if Data().Eye1.type then
+                            text = 'Real'
+                        else
+                            text = 'Fake'
+                        end
+                        for i, id in pairs(Data().Eye1.Owner) do
+                            local buff = TensorCore.getBuff(id, 5543)
+                            if buff ~= nil then
+                                AnyoneCore.addTimedWorldTextOnEnt(
+                                        buff.duration * 1000 + 1000,
+                                        text,
+                                        id,
+                                        GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
+                                        true, 2, 1
+                                )
+                            end
+                        end
+                    end
+                    Data().Eye1.wasDraw = true
+                else
+                    local buff = TensorCore.getBuff(Data().Eye1.Owner[1], 5543)
+                    if buff ~= nil and buff.duration <= 8 then
+                        local markId
+                        if Data().Eye1.type then
+                            markId = 680
+                        else
+                            markId = 681
+                        end
+                        for i, id in pairs(Data().Eye1.Owner) do
+                            Argus.addMarkerToEntity(id, markId)
+                        end
+                        Data().Eye1.wasDraw = true
+                    end
+                end
+            end
             local buff1 = TensorCore.getBuff(Data().Eye1.Owner[1], 5543)
             if buff1 == nil then
                 DM.ChangeState('P4WaterFire1')
@@ -1156,7 +1174,7 @@ Dmu_P4.Update = function()
         if not hasBuff then
             DM.ChangeState('P4WaterFire2')
         end
-        if Data().Eye2.Owner == nil then
+        if Data().Eye2.Owner == nil or table.size(Data().Eye2.Owner) < 2 then
             Data().Eye2.Owner = {}
             for job, member in pairs(MG.Party) do
                 local buff = TensorCore.getBuff(member.id, 5543)
@@ -1169,33 +1187,51 @@ Dmu_P4.Update = function()
                 end
             end
             if table.size(Data().Eye2.Owner) >= 2 then
-                if AnyoneCore ~= nil and Cfg().draw and not Data().Eye2.wasDraw then
-                    local text
-                    if Data().Eye2.type then
-                        text = 'Real'
-                    else
-                        text = 'Fake'
-                    end
-                    for _, id in pairs(Data().Eye2.Owner) do
-                        local buff = TensorCore.getBuff(id, 5543)
-                        if buff ~= nil then
-                            AnyoneCore.addTimedWorldTextOnEnt(
-                                    buff.duration * 1000 + 1000,
-                                    text,
-                                    id,
-                                    GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
-                                    true, 2, 1
-                            )
-                        end
-                    end
-                    Data().Eye2.wasDraw = true
-                end
                 MG.LogOnce('P4Eye', 'owner_2', '第二次石化眼目标缓存', {
                     owner = MG.LogEntityList(Data().Eye2.Owner),
                     real = Data().Eye2.type,
                 })
             end
         else
+            if Cfg().draw and not Data().Eye2.wasDraw then
+                if Cfg().eyeEffect == 1 then
+                    if AnyoneCore ~= nil then
+                        local text
+                        if Data().Eye2.type then
+                            text = 'Real'
+                        else
+                            text = 'Fake'
+                        end
+                        for _, id in pairs(Data().Eye2.Owner) do
+                            local buff = TensorCore.getBuff(id, 5543)
+                            if buff ~= nil then
+                                AnyoneCore.addTimedWorldTextOnEnt(
+                                        buff.duration * 1000 + 1000,
+                                        text,
+                                        id,
+                                        GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
+                                        true, 2, 1
+                                )
+                            end
+                        end
+                        Data().Eye2.wasDraw = true
+                    end
+                else
+                    local buff = TensorCore.getBuff(Data().Eye2.Owner[1], 5543)
+                    if buff ~= nil and buff.duration <= 8 then
+                        local markId
+                        if Data().Eye2.type then
+                            markId = 680
+                        else
+                            markId = 681
+                        end
+                        for _, id in pairs(Data().Eye2.Owner) do
+                            Argus.addMarkerToEntity(id, markId)
+                        end
+                        Data().Eye2.wasDraw = true
+                    end
+                end
+            end
             if Data().Eye2.GuidePos == nil then
                 Data().Eye2.GuidePos = {}
                 for job, member in pairs(MG.Party) do

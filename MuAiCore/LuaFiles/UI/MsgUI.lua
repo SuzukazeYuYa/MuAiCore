@@ -55,16 +55,17 @@ MsgUI.draw = function()
                 end
             end
         elseif M.MsgUI.Type == 2 then
-            GUI:Dummy(30, 0)
-            GUI:SameLine()
+            GUI:Button('详细日志', 100, 25)
+            if GUI:IsItemClicked(0) then
+                io.popen('start https://docs.qq.com/doc/DWnhXRXBxSXJpU0tS?rtkey=07822459d679f67ae55c279c801Xw1&nlc=1')
+            end
+            GUI:SameLine(0, 15)
             GUI:Button('更新', 100, 25)
             if GUI:IsItemClicked(0) then
                 M.CloseAllUI()
                 M.ForceUpdate()
             end
-            GUI:SameLine(0, 22)
-            GUI:Dummy(35, 25)
-            GUI:SameLine()
+            GUI:SameLine(0, 15)
             GUI:Button(cancelText, 100, 25)
             if GUI:IsItemClicked(0) then
                 M.MsgUI.open = false

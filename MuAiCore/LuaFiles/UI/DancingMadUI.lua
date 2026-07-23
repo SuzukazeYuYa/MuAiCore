@@ -680,7 +680,7 @@ DancingMadUI.draw = function()
             GUI:PushItemWidth(120)
             M.Config.DmuCfg.P4.moveEffect = GUI:Combo('##P4moveEffect', M.Config.DmuCfg.P4.moveEffect, { 'Anyone文字', '游戏特效' }, 2)
             GUI:PopItemWidth()
-    --[[       
+      
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:AlignFirstTextHeightToWidgets()
@@ -689,7 +689,7 @@ DancingMadUI.draw = function()
             GUI:PushItemWidth(120)
             M.Config.DmuCfg.P4.eyeEffect = GUI:Combo('##P4eyeEffect', M.Config.DmuCfg.P4.eyeEffect, { 'Anyone文字', '游戏特效' }, 2)
             GUI:PopItemWidth()
-        ]]    
+            
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:AlignFirstTextHeightToWidgets()
