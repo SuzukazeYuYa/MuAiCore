@@ -472,7 +472,8 @@ local dataInit = function()
                 Locked = false,
                 wasDraw = false,
             },
-            MoveOrStopHit = nil,
+            HitWave = nil,
+            MoveOrStopHasHit = false,
             StateVfx = {},
             Buff = {},
             CheckFinish = {}
@@ -990,13 +991,13 @@ DM.CommonDraw = function()
         for id, aoeInfo in pairs(MG.DancingMad.Casting) do
             if aoeInfo.aoeCastType == 13 then
                 if MG.Config.DmuCfg.BindEffect then
-                    DM.purpleDrawer:addCone(aoeInfo.x, 0, aoeInfo.z, 30, math.pi / 2, aoeInfo.heading)
+                    DM.purpleDrawer:addCone(aoeInfo.x, MG.drawerY, aoeInfo.z, 30, math.pi / 2, aoeInfo.heading)
                 else
                     DM.yellowDrawer:addCone(aoeInfo.x, 0, aoeInfo.z, 30, math.pi / 2, aoeInfo.heading, true)
                 end
             elseif aoeInfo.aoeCastType == 12 then
                 if MG.Config.DmuCfg.BindEffect then
-                    DM.purpleDrawer:addRect(aoeInfo.x, 0, aoeInfo.z, 40, 10, aoeInfo.heading)
+                    DM.purpleDrawer:addRect(aoeInfo.x, MG.drawerY, aoeInfo.z, 40, 10, aoeInfo.heading)
                 else
                     DM.yellowDrawer:addRect(aoeInfo.x, 0, aoeInfo.z, 40, 10, aoeInfo.heading, true)
                 end

@@ -528,7 +528,11 @@ local drawBlackHole = function()
     local endState = 'P3BlackHole' .. tostring(curWave) .. '_' .. tostring(endCnt)
     if DM.OverState(startState, true) and DM.BeLowState(endState, true) then
         for _, obj in pairs(Data().BlackHolds.Object[curWave]) do
-            MG.CreateDrawer(1, 0, 0, 0.4, 1):addCircle(obj.pos.x, MG.drawerY, obj.pos.z, 2)
+            local curObj = TensorCore.mGetEntity(obj.id)
+            if curObj ~= nil then
+                MG.CreateDrawer(1, 0, 0, 0.4, 1):addCircle(curObj.pos.x, MG.drawerY, curObj.pos.z, 2)
+            end
+
         end
         local tethers = getEntTethers(8343, 84)
         if tethers == nil or table.size(tethers) == 0 then
@@ -925,14 +929,20 @@ Dmu_P3.OnEntityChannel = function(entityID, spellID, _)
         Data().DamningEdict.OnDraw = true
         Data().DamningEdict.Timer = Now()
     elseif spellID == 47889 then
-        if DM.OverState('P3TowerEnd', true) and AnyoneCore ~= nil then
-            AnyoneCore.addTimedWorldTextOnEnt(
-                    6000,
-                    'Move',
-                    TensorCore.mGetPlayer().id,
-                    GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
-                    true, 1.5, 2.5
-            )
+        if DM.OverState('P3TowerEnd', true) then
+            if Cfg().moveEffect == 1 then
+                if AnyoneCore ~= nil then
+                    AnyoneCore.addTimedWorldTextOnEnt(
+                            6000,
+                            'Move',
+                            TensorCore.mGetPlayer().id,
+                            GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
+                            true, 1.5, 2.5
+                    )
+                end
+            else
+                Argus.addPlayerMarker(225)
+            end
         end
     end
 end

@@ -1197,17 +1197,19 @@ Dmu_P5.Update = function()
                 local curBoss = Data().Celestriad.BossOnDraw
                 if Data().Celestriad.CatastrophicChoiceId == 49742 then
                     if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
-                        local drawer = MG.CreateDrawer(0, 0, 0, 1, 2)
+                        local drawer = MG.CreateDrawer(0, 0, 0, 1, 2, -1)
                         drawer:setGradient(0, 0.15, 0)
+                        drawer:setRenderFlags(256)
                         drawer:addCircle(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10)
                     else
                         MG.CreateDrawer(1, 0, 0, 0.3, 2):addCircle(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10)
                     end
                 elseif Data().Celestriad.CatastrophicChoiceId == 49743 then
                     if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
-                        local drawer = MG.CreateDrawer(0, 0, 0, 1, 2)
+                        local drawer = MG.CreateDrawer(0, 0, 0, 1, 2, -1)
                         drawer:setGradient(0, 0.15, 0)
-                        drawer:addDonut(curBoss.pos.x, 0, curBoss.pos.z, 10, 25)
+                        drawer:setRenderFlags(256)
+                        drawer:addDonut(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10, 25)
                     else
                         MG.CreateDrawer(1, 0, 0, 0.4, 2):addDonut(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10, 25)
                     end

@@ -391,6 +391,8 @@ Config.init = function(M)
                 towerHeading = 1,
                 --- 踩塔分组是面基是场基
                 towerGround = 1,
+                --- 使用哪种方式提示动 1:anyone 2:特效
+                moveEffect = 1,
             },
             P4 = {
                 enable = true, draw = true, guide = true,
@@ -401,6 +403,11 @@ Config.init = function(M)
                 autoLook = true,
                 harkLock = false,
                 sendMacro = false,
+                useEcho = false,
+                --- 使用哪种方式提示动静 1:anyone 2:特效
+                moveEffect = 1,
+                --- 使用哪种方式提示真假眼 1:anyone 2:特效
+                eyeEffect = 1,
             },
             P5 = { enable = true, draw = true, guide = true,
                    groundFireGuide = true,

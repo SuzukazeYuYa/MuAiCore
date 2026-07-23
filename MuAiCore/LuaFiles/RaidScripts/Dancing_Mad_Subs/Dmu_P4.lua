@@ -241,47 +241,53 @@ local lockFaceCheck = function(eyeTable)
 end
 
 local ThunderWater = function(wave)
-    local canHit = true
-    if wave == 1 then
-        canHit = Data().MoveOrStopHit == nil
-    else
-        canHit = Data().MoveOrStopHit == false
-    end
-    MG.LogOnce('P4ThunderWater', 'start_wave_' .. wave, '雷水处理开始', {
-        wave = wave,
-        canHit = canHit,
-        moveOrStopHit = Data().MoveOrStopHit,
-    })
-    if Cfg().draw and canHit then
-        local player = MG.GetPlayer()
-        local buff = TensorCore.getBuff(player.id, 5546)
-        if buff ~= nil then
-            if buff.duration < 15 then
-                Data().MoveOrStopHit = true
-            else
-                Data().MoveOrStopHit = false
-            end
-        end
-        if Data().MoveOrStopHit then
-            local text
-            local buffMap = Data().Buff[MG.SelfPos]
-            if buffMap[5546] then
-                text = 'Stop'
-            else
-                text = 'Move'
-            end
-            if AnyoneCore ~= nil then
-                AnyoneCore.addTimedWorldTextOnEnt(
-                        buff.duration * 1000 + 1000,
-                        text,
-                        player.id,
-                        GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
-                        true, 1.5, 2.5
-                )
-            end
-        end
-    end
+    MG.LogOnce('P4ThunderWater', 'start_wave_' .. wave, '雷水处理开始', { wave = wave })
     if Cfg().draw then
+        if not Data().MoveOrStopHasHit then
+            if Data().HitWave == nil then
+                local player = MG.GetPlayer()
+                local buff = TensorCore.getBuff(player.id, 5546)
+                if buff ~= nil then
+                    if buff.duration < 15 then
+                        Data().HitWave = 1
+                    else
+                        Data().HitWave = 2
+                    end
+                end
+            elseif Data().HitWave == wave then
+                local player = MG.GetPlayer()
+                local buff = TensorCore.getBuff(player.id, 5546)
+                local buffMap = Data().Buff[MG.SelfPos]
+                if Cfg().moveEffect == 1 then
+                    local text
+                    if buffMap[5546] then
+                        text = 'Stop'
+                    else
+                        text = 'Move'
+                    end
+                    if AnyoneCore ~= nil then
+                        AnyoneCore.addTimedWorldTextOnEnt(
+                                buff.duration * 1000 + 1000,
+                                text,
+                                player.id,
+                                GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),
+                                true, 1.5, 2.5
+                        )
+                    end
+                    Data().MoveOrStopHasHit = true
+                else
+                    if buff ~= nil and buff.duration < 5.1 then
+                        if buffMap[5546] then
+                            Argus.addPlayerMarker(227)
+                        else
+                            Argus.addPlayerMarker(225)
+                        end
+                        Data().MoveOrStopHasHit = true
+                    end
+                end
+            end
+        end 
+
         for job, member in pairs(MG.Party) do
             local buffMap = Data().Buff[job] or {}
             local bf5544 = TensorCore.getBuff(member.id, 5544)
@@ -378,10 +384,7 @@ local ThunderWater = function(wave)
             else
                 Data().ThunderWater.Guide2 = guideData
             end
-            debugGuideData('P4ThunderWater', 'guide_wave_' .. wave, '雷水指路数据生成', guideData, {
-                wave = wave,
-                moveOrStopHit = Data().MoveOrStopHit,
-            })
+            debugGuideData('P4ThunderWater', 'guide_wave_' .. wave, '雷水指路数据生成', guideData, { wave = wave })
         end
     end
 end
@@ -506,7 +509,7 @@ local doSendMacro = function()
         --endregion 放置钢铁/月环
     end
     local sendMark
-    if MG.IsVideo() then
+    if MG.IsVideo() or Cfg().useEcho then
         sendMark = '/e '
     else
         sendMark = '/p '
