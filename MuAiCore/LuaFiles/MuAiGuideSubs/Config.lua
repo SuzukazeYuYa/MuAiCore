@@ -354,6 +354,8 @@ Config.init = function(M)
                 enable = true, draw = true, guide = true,
                 -- 1职能固定，2扇左钢右 3职固Uptime
                 fixType = 1,
+                -- 使用 BBY（宝宝椅）站位
+                useBbyPos = false,
                 -- 踩塔开启指挥模式
                 --towerGuide = false,
                 -- 踩塔结束之后去哪 1 -> A, 2 -> 两塔中间

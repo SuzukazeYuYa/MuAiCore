@@ -59,9 +59,9 @@ local towerPointByA1 = {
     [8] = { label = "左上", x = 94.343, y = 0.000, z = 94.343 },
 }
 
--- 踩塔站位模版
-local standTemplate = {
-    odd = {-- 奇数
+-- MuAiCore 原站位。
+local legacyStandTemplate = {
+    odd = {
         doing = {
             [1] = { isLeft = true, dis = 3.6, dir = -math.pi / 6 },
             [2] = { isLeft = true, dis = 3.6, dir = math.pi / 4 },
@@ -75,7 +75,7 @@ local standTemplate = {
             [4] = { isLeft = false, dis = 4.4, dir = math.pi / 4 },
         }
     },
-    even = { --偶数
+    even = {
         doing = {
             [1] = { isLeft = true, dis = 3.6, dir = -math.pi / 5 },
             [2] = { isLeft = true, dis = 3.6, dir = 0 },
@@ -90,18 +90,66 @@ local standTemplate = {
         }
     },
     odd_uptime = {
-        -- 奇数,uptime站位，数据由群友提供
-        doing = {  --分摊半径5  钢铁半径5  塔半径4 正逆时针旋转，负顺时针旋转
-            [1] = { isLeft = true, dis = 1, dir = math.pi }, --左分摊 站目标圈上
-            [2] = { isLeft = true, dis = 3, dir = 0 }, --左扇形
-            [3] = { isLeft = false, dis = 3.6, dir = 0 }, --右钢铁
-            [4] = { isLeft = false, dis = 3.6, dir = math.pi }, --右分摊
+        doing = {
+            [1] = { isLeft = true, dis = 1, dir = math.pi },
+            [2] = { isLeft = true, dis = 3, dir = 0 },
+            [3] = { isLeft = false, dis = 3.6, dir = 0 },
+            [4] = { isLeft = false, dis = 3.6, dir = math.pi },
         },
         standBy = {
-            [1] = { isLeft = true, dis = 4.4, dir = math.pi }, --左闲人分摊
-            [2] = { isLeft = true, dis = 4.4, dir = 0 }, --左闲人引导扇形
-            [3] = { isLeft = false, dis = 4.4, dir = math.pi }, --右闲人分摊
-            [4] = { isLeft = false, dis = 4.4, dir = math.pi }, --右闲人分摊
+            [1] = { isLeft = true, dis = 4.4, dir = math.pi },
+            [2] = { isLeft = true, dis = 4.4, dir = 0 },
+            [3] = { isLeft = false, dis = 4.4, dir = math.pi },
+            [4] = { isLeft = false, dis = 4.4, dir = math.pi },
+        }
+    },
+}
+
+-- BBY U7b v1.0.1 的 PictoACT 局部坐标。
+-- x 为面向场外时的左右轴（负左正右），y 为塔轴的场外方向。
+-- doing 顺序沿用 MuAiCore 的分组顺序，不等同于 BBY 的踩塔 type 顺序。
+local bbyStandTemplate = {
+    odd = {-- 奇数
+        doing = {
+            [1] = { x = -6.30, y = 4.70 }, -- 左塔分摊
+            [2] = { x = -5.66, y = 9.16 }, -- 左塔扇形
+            [3] = { x = 2.20, y = 6.50 }, -- 右塔钢铁
+            [4] = { x = 8.19, y = 3.66 }, -- 右塔分摊
+        },
+        standBy = {
+            [1] = { x = -8.80, y = 2.50 }, -- 左侧分摊
+            [2] = { x = -5.66, y = 11.66 }, -- 扇形引导
+            [3] = { x = 8.70, y = 2.34 }, -- 右侧分摊
+            [4] = { x = 9.59, y = 3.45 }, -- 右侧分摊
+        }
+    },
+    even = { --偶数
+        doing = {
+            [1] = { x = -9.51, y = 6.27 }, -- 左塔靠前扇形
+            [2] = { x = -8.30, y = 8.52 }, -- 左塔靠后扇形
+            [3] = { x = 4.71, y = 7.72 }, -- 右塔靠后钢铁
+            [4] = { x = 8.69, y = 3.22 }, -- 右塔右侧钢铁
+        },
+        standBy = {
+            [1] = { x = -1.90, y = -3.50 }, -- 左前引导分身
+            [2] = { x = -3.20, y = 2.40 }, -- 左塔边引导分身
+            [3] = { x = 3.97, y = -3.55 }, -- 右前引导分身
+            [4] = { x = 3.20, y = 2.40 }, -- 右塔边引导分身
+        }
+    },
+    odd_uptime = {
+        -- 奇数近战优化
+        doing = {
+            [1] = { x = -4.95, y = 4.95 }, -- 左塔分摊
+            [2] = { x = -8.00, y = 8.00 }, -- 左塔扇形
+            [3] = { x = 8.13, y = 8.13 }, -- 右塔钢铁
+            [4] = { x = 5.66, y = 2.16 }, -- 右塔分摊
+        },
+        standBy = {
+            [1] = { x = -2.45, y = 2.45 }, -- 左前分摊
+            [2] = { x = -9.00, y = 9.00 }, -- 扇形引导
+            [3] = { x = 2.25, y = 2.65 }, -- 右前分摊
+            [4] = { x = 2.65, y = 2.25 }, -- 右前分摊
         }
     },
 }
@@ -111,57 +159,6 @@ local trineOffsets = {
     left = { { x = -5.773, z = 0 }, { x = 2.887, z = -5 }, { x = 2.887, z = 5 } },
     right = { { x = 5.773, z = 0 }, { x = -2.887, z = -5 }, { x = -2.887, z = 5 } },
 }
-
---- 根据过全局中心点DM.Center的射线与圆求距离中心点更远的交点
---- @param h number 射线朝向弧度（三角函数标准弧度）
---- @param centerPt table 圆形圆心坐标表 {x=number, z=number}
---- @param r number 圆形半径
---- @return table|nil 较远交点 {x=number, z=number}；无交点返回nil
-function GetFarIntersection(h, centerPt, r)
-    -- 全局基准中心点
-    local ox = DM.Center.x
-    local oz = DM.Center.z
-    local ch = math.cos(h)
-    local sh = math.sin(h)
-
-    -- 读取圆中心坐标
-    local x1 = centerPt.x
-    local z1 = centerPt.z
-
-    local dx0 = ox - x1
-    local dz0 = oz - z1
-
-    -- 一元二次方程 t² + Bt + C = 0
-    local B = 2 * (dx0 * ch + dz0 * sh)
-    local C = dx0 ^ 2 + dz0 ^ 2 - r ^ 2
-    local delta = B * B - 4 * C
-
-    -- 判别式小于0：直线与圆无交点
-    if delta < 0 then
-        return nil
-    end
-    local sqrtD = math.sqrt(delta)
-    -- 两个t参数，t绝对值越大离中心越远
-    local t1 = (-B - sqrtD) / 2
-    local t2 = (-B + sqrtD) / 2
-
-    -- 比较绝对值，选择距离更远的t
-    local tFar
-    if math.abs(t1) > math.abs(t2) then
-        tFar = t1
-    else
-        tFar = t2
-    end
-
-    -- 计算交点坐标
-    local intersectX = ox + tFar * ch
-    local intersectZ = oz + tFar * sh
-
-    return {
-        x = intersectX,
-        z = intersectZ
-    }
-end
 
 -- 绘制毁灭之脚
 local drawAllThingEnding = function()
@@ -294,11 +291,34 @@ local calcConeLeft = function(tbl)
     return result
 end
 
+local bbyLocalToWorld = function(axisOutward, localPos)
+    local axisX = axisOutward.x - DM.Center.x
+    local axisZ = axisOutward.z - DM.Center.z
+    local axisLength = math.sqrt(axisX * axisX + axisZ * axisZ)
+    assert(axisLength > 0.001, '遗弃末世塔轴异常：两塔中点与场中重合')
+
+    axisX = axisX / axisLength
+    axisZ = axisZ / axisLength
+    local rightX = -axisZ
+    local rightZ = axisX
+
+    return {
+        x = DM.Center.x + localPos.x * rightX + localPos.y * axisX,
+        y = DM.Center.y or 0,
+        z = DM.Center.z + localPos.x * rightZ + localPos.y * axisZ,
+    }
+end
+
 local calcGuidePos = function(wave, isFix)
-    local dirL = TensorCore.getHeadingToTarget(DM.Center, Data().Towers.spawn[wave].left)
-    local dirR = TensorCore.getHeadingToTarget(DM.Center, Data().Towers.spawn[wave].right)
     local curDoingPos = {}
     local curTemplate
+    local useBbyPos = Cfg().useBbyPos == true
+    local standTemplate
+    if useBbyPos then
+        standTemplate = bbyStandTemplate
+    else
+        standTemplate = legacyStandTemplate
+    end
     if wave % 2 ~= 0 then
         if MG.Config.DmuCfg.P2.fixType == 3 then
             curTemplate = standTemplate.odd_uptime
@@ -308,26 +328,29 @@ local calcGuidePos = function(wave, isFix)
     else
         curTemplate = standTemplate.even
     end
-    for i = 1, #curTemplate.doing do
-        local t = curTemplate.doing[i]
-        if t.isLeft then
-            local curDir = dirL + t.dir
-            curDoingPos[i] = TensorCore.getPosInDirection(Data().Towers.spawn[wave].left, curDir, t.dis)
-        else
-            local curDir = dirR + t.dir
-            curDoingPos[i] = TensorCore.getPosInDirection(Data().Towers.spawn[wave].right, curDir, t.dis)
+    local spawn = Data().Towers.spawn[wave]
+    local toWorld
+    if useBbyPos then
+        local axisOutward = MG.GetMidPos(spawn.left, spawn.right)
+        toWorld = function(localPos)
+            return bbyLocalToWorld(axisOutward, localPos)
         end
+    else
+        local dirL = TensorCore.getHeadingToTarget(DM.Center, spawn.left)
+        local dirR = TensorCore.getHeadingToTarget(DM.Center, spawn.right)
+        toWorld = function(templatePos)
+            if templatePos.isLeft then
+                return TensorCore.getPosInDirection(spawn.left, dirL + templatePos.dir, templatePos.dis)
+            end
+            return TensorCore.getPosInDirection(spawn.right, dirR + templatePos.dir, templatePos.dis)
+        end
+    end
+    for i = 1, #curTemplate.doing do
+        curDoingPos[i] = toWorld(curTemplate.doing[i])
     end
     local curStbPos = {}
     for i = 1, #curTemplate.standBy do
-        local t = curTemplate.standBy[i]
-        if t.isLeft then
-            local curDir = dirL + t.dir
-            curStbPos[i] = TensorCore.getPosInDirection(Data().Towers.spawn[wave].left, curDir, t.dis)
-        else
-            local curDir = dirR + t.dir
-            curStbPos[i] = TensorCore.getPosInDirection(Data().Towers.spawn[wave].right, curDir, t.dis)
-        end
+        curStbPos[i] = toWorld(curTemplate.standBy[i])
     end
     local guideData = {}
     if Cfg().fixType == 2 and wave >= 4 and wave < 8 and not isFix then
@@ -546,8 +569,38 @@ local guideGatherPoint = function(idx, wave, finishPoints)
     end
 end
 
--- 近U情况， 点名为扇形时候，对自身站位进行动态处理
-local type3FixPos = function(wave)
+local getFarIntersection = function(h, centerPt, r)
+    local ox = DM.Center.x
+    local oz = DM.Center.z
+    local ch = math.cos(h)
+    local sh = math.sin(h)
+    local dx0 = ox - centerPt.x
+    local dz0 = oz - centerPt.z
+    local b = 2 * (dx0 * ch + dz0 * sh)
+    local c = dx0 ^ 2 + dz0 ^ 2 - r ^ 2
+    local delta = b * b - 4 * c
+    if delta < 0 then
+        return nil
+    end
+
+    local sqrtDelta = math.sqrt(delta)
+    local t1 = (-b - sqrtDelta) / 2
+    local t2 = (-b + sqrtDelta) / 2
+    local tFar
+    if math.abs(t1) > math.abs(t2) then
+        tFar = t1
+    else
+        tFar = t2
+    end
+
+    return {
+        x = ox + tFar * ch,
+        z = oz + tFar * sh,
+    }
+end
+
+-- 原近 U 站位会根据分摊玩家的实时位置修正扇形点；BBY 使用固定坐标时不执行。
+local legacyType3FixPos = function(wave)
     if (wave % 2) == 0
             or not table.contains(Data().Towers.doing, MG.SelfPos)
             or Data().Towers.curMarks[MG.SelfPos] ~= 717
@@ -555,33 +608,25 @@ local type3FixPos = function(wave)
         return Data().Towers.GuideData[wave]
     end
     local leftTower = Data().Towers.spawn[wave].left
-    local curGather, curJob, curGuidePos
+    local curGather
     for _, job in pairs(Data().Towers.doing) do
         local player = TensorCore.mGetEntity(MG.Party[job].id)
         if TensorCore.getDistance2d(player.pos, leftTower) < 4 and Data().Towers.curMarks[job] == 715 then
             curGather = player
-            curJob = job
             break
         end
     end
 
     if curGather ~= nil then
         local leftHeading = TensorCore.getHeadingToTarget(DM.Center, leftTower)
-        local guidePos = GetFarIntersection(leftHeading, curGather.pos, 4.6)
-        if guidePos == nil then
-            return Data().Towers.GuideData[wave]
-        elseif TensorCore.getDistance2d(guidePos, leftTower) < 3.8 then
-            -- 如果当前计算位置超过塔范围，那么使用原始位置
-            curGuidePos = guidePos
+        local guidePos = getFarIntersection(leftHeading, curGather.pos, 4.6)
+        if guidePos ~= nil and TensorCore.getDistance2d(guidePos, leftTower) < 3.8 then
+            local guideData = table.deepcopy(Data().Towers.GuideData[wave])
+            guideData[MG.SelfPos] = guidePos
+            return guideData
         end
     end
-    if curGuidePos ~= nil then
-        local guideData = table.deepcopy(Data().Towers.GuideData[wave])
-        guideData[MG.SelfPos] = curGuidePos
-        return guideData
-    else
-        return Data().Towers.GuideData[wave]
-    end
+    return Data().Towers.GuideData[wave]
 end
 
 ---引导过去未来
@@ -589,9 +634,8 @@ local guideFuturePastOrTakeTower = function()
     local waves = { 3, 5, 7 }
     local wave = Data().Towers.wave
     local guideData
-    if Cfg().fixType == 3 then
-
-        guideData = type3FixPos(wave)
+    if Cfg().fixType == 3 and Cfg().useBbyPos ~= true then
+        guideData = legacyType3FixPos(wave)
     else
         guideData = Data().Towers.GuideData[wave]
     end

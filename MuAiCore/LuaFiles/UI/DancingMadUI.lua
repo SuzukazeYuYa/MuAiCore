@@ -477,6 +477,12 @@ DancingMadUI.draw = function()
             GUI:PushItemWidth(120)
             M.Config.DmuCfg.P2.fixType = GUI:Combo('##T8fixType', M.Config.DmuCfg.P2.fixType, { '职能固定', '扇左钢右', '职能固定[近U]' }, 3)
             GUI:PopItemWidth()
+            GUI:SameLine(20, 0)
+            M.Config.DmuCfg.P2.useBbyPos = GUI:Checkbox('BBY站位##P2UseBbyPos',
+                    M.Config.DmuCfg.P2.useBbyPos)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('勾选后使用宝宝椅站位')
+            end
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:AlignFirstTextHeightToWidgets()
