@@ -387,13 +387,13 @@ local drawSlapHappy = function()
             local dirH1 = TensorCore.getHeadingToTarget(DM.Center, curH1.pos)
             local dirD1 = TensorCore.getHeadingToTarget(DM.Center, curD1.pos)
             if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
-                MG.CreateDrawer(0, 0, 0.2, 0.4):addCone(100, MG.drawerY, 100, 20, math.pi / 3, dirMt)
-                MG.CreateDrawer(0, 0.2, 0, 0.4):addCone(100, MG.drawerY, 100, 20, math.pi / 3, dirH1)
-                MG.CreateDrawer(0.2, 0, 0, 0.4):addCone(100, MG.drawerY, 100, 20, math.pi / 3, dirD1)
+                MG.CreateDrawer(0, 0, 0.2, 0.4):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirMt)
+                MG.CreateDrawer(0, 0.2, 0, 0.4):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirH1)
+                MG.CreateDrawer(0.2, 0, 0, 0.4):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirD1)
             else
-                MG.CreateDrawer(0, 0, 1, 0.1, 1):addCone(100, MG.drawerY, 100, 20, math.pi / 3, dirMt)
-                MG.CreateDrawer(0, 1, 0, 0.1, 1):addCone(100, MG.drawerY, 100, 20, math.pi / 3, dirH1)
-                MG.CreateDrawer(1, 0, 0, 0.1, 1):addCone(100, MG.drawerY, 100, 20, math.pi / 3, dirD1)
+                MG.CreateDrawer(0, 0, 1, 0.1, 1):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirMt)
+                MG.CreateDrawer(0, 1, 0, 0.1, 1):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirH1)
+                MG.CreateDrawer(1, 0, 0, 0.1, 1):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirD1)
             end
         end
     end
@@ -714,16 +714,9 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                             if bigKfk == nil then
                                 return
                             end
-                            local front = MG.SetHeading2Pi(bigKfk.pos.h)
-                            local back = MG.SetHeading2Pi(bigKfk.pos.h + math.pi)
-                            local guidePos
-                            if MG.IsSame(dir, front) or MG.IsSame(dir, back) then
-                                guidePos = TensorCore.getPosInDirection(DM.Center, fromDir - math.pi / 4, 19)
-                            else
-                                guidePos = TensorCore.getPosInDirection(curSourceObj.pos, front, 4)
-                            end
-                            guideData[curJob] = guidePos
-                        else
+                            local finalDir = dir - math.pi / 2
+                            guideData[curJob] = TensorCore.getPosInDirection(curSourceObj.pos, finalDir, 9.5)
+                        else 
                             if isDouble then
                                 table.insert(doubleLinePos, curSourceObj.pos)
                                 doubleJob = curJob
@@ -731,7 +724,7 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                                 --已经接到了线，那么指路去引导位置
                                 --if data.guideData[curState][i] == nil then
                                 local curHeading = fromDir - math.pi * 3 / 4
-                                local finalGuidePos = TensorCore.getPosInDirection(curSourceObj.pos, curHeading, 15.5)
+                                local finalGuidePos = TensorCore.getPosInDirection(curSourceObj.pos, curHeading, 14.5)
                                 data.guideData[curState][i] = finalGuidePos
                                 -- end
                                 guideData[curJob] = data.guideData[curState][i]
@@ -767,7 +760,6 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                         if focusPlayer == nil or focusPlayer.pos == nil then
                             return
                         end
-                        -- takeLineData[curJob] = { posObj = curSourceObj.pos, posPlayer = focusPlayer.pos, disObj = 4.5, disPlayer = 3, }
                         if takeLineData[curJob] == nil then
                             takeLineData[curJob] = {}
                         end
@@ -806,7 +798,6 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                 else
                     doubleData[doubleJob] = mid
                 end
-
                 MG.FrameMultiD(doubleData)
             end
         elseif table.size(guideData) > 0 then
@@ -967,13 +958,35 @@ Dmu_P3.OnEntityCast = function(entityID, spellID, castPos)
         end
         table.insert(Data().UltimaBlaster.Lines, obj)
     elseif spellID == 47868 then
-        local timer = Data().BlackHolds.JumpTimer
-        if timer == 0 or TimeSince(timer) > 2000 then
-            -- 只要触发激光射击，且距离前次被射击超过2秒
-            -- 进入到下一个阶段
-            Data().BlackHolds.JumpTimer = Now()
-            DM.GoNextSate()
+        Data().BlackHolds.CastCnt = Data().BlackHolds.CastCnt + 1
+        if Data().BlackHolds.CastCnt == 1 then
+            DM.ChangeState('P3BlackHole1_1')
+        elseif Data().BlackHolds.CastCnt == 3 then
+            DM.ChangeState('P3BlackHole1_2')
+        elseif Data().BlackHolds.CastCnt == 6 then
+            DM.ChangeState('P3BlackHole2_1')
+        elseif Data().BlackHolds.CastCnt == 9 then
+            DM.ChangeState('P3BlackHole2_2')
+        elseif Data().BlackHolds.CastCnt == 12 then
+            DM.ChangeState('P3BlackHole2_3')
+        elseif Data().BlackHolds.CastCnt == 15 then
+            DM.ChangeState('P3BlackHole3_1')
+        elseif Data().BlackHolds.CastCnt == 18 then
+            DM.ChangeState('P3BlackHole3_2')
+        elseif Data().BlackHolds.CastCnt == 21 then
+            DM.ChangeState('P3BlackHole3_3')
+        elseif Data().BlackHolds.CastCnt == 23 then
+            DM.ChangeState('P3BlackHole4_1')
+        elseif Data().BlackHolds.CastCnt == 24 then
+            DM.ChangeState('P3BlackHole4_2')
         end
+        --local timer = Data().BlackHolds.JumpTimer
+        --if timer == 0 or TimeSince(timer) > 2000 then
+        --    -- 只要触发激光射击，且距离前次被射击超过2秒
+        --    -- 进入到下一个阶段
+        --    Data().BlackHolds.JumpTimer = Now()
+        --    DM.GoNextSate()
+        --end
     elseif spellID == 47875 then
         -- 踩塔+分摊 中分摊判定
         local boomIndex = (Data().TakeTower.boomCount or 0) + 1
