@@ -499,9 +499,9 @@ local doSendMacro = function()
             local buff5548 = TensorCore.getBuff(member.id, 5548)
             if buff5548 ~= nil then
                 if Data().Buff[jobPos][5548] then
-                    msgList[8] = msgList[8] .. '全体钢铁'
-                else
                     msgList[8] = msgList[8] .. '全体月环'
+                else
+                    msgList[8] = msgList[8] .. '全体钢铁'
                 end
             end
             added5548 = true
