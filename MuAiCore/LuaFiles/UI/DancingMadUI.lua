@@ -479,6 +479,13 @@ DancingMadUI.draw = function()
             GUI:PopItemWidth()
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
+            M.Config.DmuCfg.P2.useBbyPos = GUI:Checkbox('BBY站位##P2UseBbyPos',
+                    M.Config.DmuCfg.P2.useBbyPos)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('勾选后使用宝宝椅站位')
+            end
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
             GUI:AlignFirstTextHeightToWidgets()
             GUI:Text(' 最后一脚: ')
             GUI:SameLine(0, 0)
