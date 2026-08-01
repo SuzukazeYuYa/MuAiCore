@@ -24,6 +24,7 @@ local LITTLE_MAGE_TETHER_WINDOW_MS = 500
 local LITTLE_MAGE_MATCH_DISTANCE_SQ = 1.44
 local LITTLE_MAGE_ROUND_TIMEOUT_MS = 22000
 local LITTLE_MAGE_SEEN_TTL_MS = 30000
+local LITTLE_MAGE_BOSS_MISSING_CLEAR_MS = 2000
 
 local LITTLE_MAGE_AID = {
     Gather = 48306,
@@ -448,7 +449,7 @@ local function updateLittleMageBossLifetime(state, now)
         return
     end
     state.bossMissingSince = state.bossMissingSince or now
-    if now - state.bossMissingSince >= BOSS_MISSING_CLEAR_MS then
+    if now - state.bossMissingSince >= LITTLE_MAGE_BOSS_MISSING_CLEAR_MS then
         clearLittleMageState(state)
     end
 end
@@ -678,6 +679,7 @@ Feature.Test = {
     FirstTelegraphMs = LITTLE_MAGE_FIRST_TELEGRAPH_MS,
     FirstResolveMs = LITTLE_MAGE_FIRST_RESOLVE_MS,
     FusionIntervalMs = LITTLE_MAGE_FUSION_INTERVAL_MS,
+    BossMissingClearMs = LITTLE_MAGE_BOSS_MISSING_CLEAR_MS,
     FireRadius = 18,
     AID = LITTLE_MAGE_AID,
     Result = LITTLE_MAGE_RESULT,
