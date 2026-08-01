@@ -361,6 +361,7 @@ local dataInit = function()
                 tempCnt = 0,
                 Object = {},
                 JumpTimer = 0,
+                CastCnt = 0,
                 MarkedPlayers = {},
                 MarkCheckTimer = 0,
                 MarkCheckCnt = 0,
