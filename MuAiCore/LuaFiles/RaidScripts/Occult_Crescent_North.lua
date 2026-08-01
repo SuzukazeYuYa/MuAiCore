@@ -1,0 +1,255 @@
+local G = {}
+G.MapId = 1346
+G.NameCN = '新月岛·北岛'
+
+local function currentFolder()
+    local source = type(debug) == 'table'
+            and type(debug.getinfo) == 'function'
+            and debug.getinfo(1, 'S').source or nil
+    local path = type(source) == 'string' and source:match('^@(.*)$') or nil
+    return type(path) == 'string' and path:match('^(.*[/\\])') or nil
+end
+
+local function loadOccultCommon()
+    if type(FileLoad) == 'function' and type(MuAiGuideRoot) == 'string' then
+        rawset(_G, 'MuAiOccultCrescentCommon', nil)
+        FileLoad(MuAiGuideRoot
+                .. 'RaidScripts\\Occult_Crescent_Subs\\Common.lua')
+        local module = rawget(_G, 'MuAiOccultCrescentCommon')
+        if type(module) == 'table' then
+            return module
+        end
+    end
+    local folder = currentFolder()
+    if folder == nil or type(loadfile) ~= 'function' then
+        return nil
+    end
+    local separator = folder:find('\\', 1, true) and '\\' or '/'
+    local loader = loadfile(folder .. 'Occult_Crescent_Subs'
+            .. separator .. 'Common.lua')
+    return type(loader) == 'function' and loader() or nil
+end
+
+local Common = assert(loadOccultCommon(),
+        'failed to load Occult Crescent common module')
+local MAP_ID = G.MapId
+
+local Context = {
+    Common = Common,
+    MapID = MAP_ID,
+}
+
+Context.nowMs = function()
+    return type(Now) == 'function' and Now() or 0
+end
+
+Context.finite = Common.finite
+
+Context.currentMapIsNorth = function()
+    return type(Player) == 'table' and Player.localmapid == MAP_ID
+end
+
+Context.reliablePosition = function(pos, requireHeading)
+    local copy = Common.copyPosition(pos, true)
+    if copy == nil or (requireHeading and not Common.finite(pos.h)) then
+        return nil
+    end
+    if requireHeading then
+        copy.h = pos.h
+    end
+    return copy
+end
+
+Context.resolveEntity = function(entityID)
+    if type(entityID) ~= 'number'
+            or type(TensorCore) ~= 'table'
+            or type(TensorCore.mGetEntity) ~= 'function'
+    then
+        return nil
+    end
+    local entity = TensorCore.mGetEntity(entityID)
+    return type(entity) == 'table' and entity or nil
+end
+
+Context.getPlayer = function(guide)
+    local player = type(guide) == 'table'
+            and type(guide.GetPlayer) == 'function'
+            and guide.GetPlayer() or Player
+    if type(player) ~= 'table'
+            or Context.reliablePosition(player.pos, false) == nil
+    then
+        return nil
+    end
+    return player
+end
+
+local function loadNorthModule(name)
+    local globalName = 'MuAiOccultCrescentNorth' .. name
+    local module = nil
+    if type(FileLoad) == 'function' and type(MuAiGuideRoot) == 'string' then
+        rawset(_G, globalName, nil)
+        FileLoad(MuAiGuideRoot
+                .. 'RaidScripts\\Occult_Crescent_North_Subs\\'
+                .. name .. '.lua')
+        module = rawget(_G, globalName)
+    else
+        local folder = currentFolder()
+        if folder ~= nil and type(loadfile) == 'function' then
+            local separator = folder:find('\\', 1, true) and '\\' or '/'
+            local loader = loadfile(folder .. 'Occult_Crescent_North_Subs'
+                    .. separator .. name .. '.lua')
+            module = type(loader) == 'function' and loader() or nil
+        end
+    end
+    assert(type(module) == 'table' and type(module.Create) == 'function',
+            'failed to load North Island module: ' .. tostring(name))
+    local feature = module.Create(Context)
+    assert(type(feature) == 'table',
+            'failed to create North Island module: ' .. tostring(name))
+    return feature
+end
+
+local Pallmagia = loadNorthModule('Pallmagia')
+local LittleMage = loadNorthModule('LittleMage')
+local EvilSeer = loadNorthModule('EvilSeer')
+local Arachne = loadNorthModule('Arachne')
+local WarlikeMinotaur = loadNorthModule('WarlikeMinotaur')
+local FEATURES = {
+    Pallmagia,
+    LittleMage,
+    EvilSeer,
+    Arachne,
+    WarlikeMinotaur,
+}
+
+local function clearAll()
+    for _, feature in ipairs(FEATURES) do
+        if type(feature.Clear) == 'function' then
+            feature.Clear()
+        end
+    end
+end
+
+G.Init = function(M)
+    G.MuAiGuide = M
+    rawset(_G, 'MuAiGuide', M)
+    if type(M) ~= 'table' then
+        return
+    end
+    for _, feature in ipairs(FEATURES) do
+        feature.Init(M)
+    end
+end
+
+G.OnEnter = clearAll
+G.OnLeave = clearAll
+G.OnWipe = clearAll
+
+G.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
+    if not Context.currentMapIsNorth() then
+        return
+    end
+    local now = Context.nowMs()
+    Pallmagia.OnEntityChannel(
+            entityID, spellID, targetID, channelTimeMax, now)
+    LittleMage.OnEntityChannel(entityID, spellID, now)
+    EvilSeer.OnEntityChannel(entityID, spellID, channelTimeMax, now)
+    Arachne.OnEntityChannel(
+            entityID, spellID, targetID, channelTimeMax, now)
+    WarlikeMinotaur.OnEntityChannel(
+            entityID, spellID, channelTimeMax, now)
+end
+
+G.OnTetherChange = function(
+        sourceEntityID,
+        oldTetherID,
+        oldTetherFlags,
+        oldTargetID,
+        newTetherID,
+        newTetherFlags,
+        newTargetID)
+    if not Context.currentMapIsNorth() then
+        return
+    end
+    local now = Context.nowMs()
+    LittleMage.OnTetherChange(
+            sourceEntityID, newTetherID, newTargetID, now)
+    Pallmagia.OnTetherChange(
+            sourceEntityID, newTetherID, newTargetID, now)
+end
+
+G.OnEntityCast = function(entityID, spellID, castPos)
+    if not Context.currentMapIsNorth() then
+        return
+    end
+    local now = Context.nowMs()
+    Pallmagia.OnEntityCast(entityID, spellID, castPos, now)
+    LittleMage.OnEntityCast(entityID, spellID, now)
+    EvilSeer.OnEntityCast(entityID, spellID, now)
+    Arachne.OnEntityCast(entityID, spellID, castPos, now)
+    WarlikeMinotaur.OnEntityCast(entityID, spellID, now)
+end
+
+G.OnAuraChange = function(
+        entityID,
+        oldActiveAura1,
+        oldActiveAura2,
+        oldPersistentAura,
+        newActiveAura1,
+        newActiveAura2,
+        newPersistentAura)
+    if not Context.currentMapIsNorth() then
+        return
+    end
+    Arachne.OnAuraChange(
+            entityID, oldActiveAura1, newActiveAura1, Context.nowMs())
+end
+
+G.OnAddGroundEffect = function(...)
+    if Context.currentMapIsNorth() then
+        Pallmagia.OnAddGroundEffect(...)
+    end
+end
+
+G.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
+    if Context.currentMapIsNorth() then
+        Pallmagia.OnEventObjectScriptFunc(
+                entityID, a1, a2, a3, Context.nowMs())
+    end
+end
+
+G.OnAOECreate = function(aoeInfo)
+    if not Context.currentMapIsNorth() then
+        return
+    end
+    local now = Context.nowMs()
+    Pallmagia.OnAOECreate(aoeInfo, now)
+    WarlikeMinotaur.OnAOECreate(aoeInfo, now)
+end
+
+G.Update = function()
+    local guide = rawget(_G, 'MuAiGuide')
+    if type(guide) ~= 'table' then
+        return
+    end
+    if not Context.currentMapIsNorth() then
+        clearAll()
+        return
+    end
+    local now = Context.nowMs()
+    local guided = Pallmagia.Update(guide, now)
+    LittleMage.Update(guide, now, not guided)
+    EvilSeer.Update(guide, now)
+    Arachne.Update(guide, now)
+    WarlikeMinotaur.Update(guide, now)
+end
+
+G.Test = {
+    Pallmagia = Pallmagia.Test,
+    LittleMage = LittleMage.Test,
+    EvilSeer = EvilSeer.Test,
+    Arachne = Arachne.Test,
+    WarlikeMinotaur = WarlikeMinotaur.Test,
+}
+
+return G

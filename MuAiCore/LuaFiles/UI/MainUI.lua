@@ -1,6 +1,6 @@
 local MainUI = {}
 local WIN_WIDE = 355
-local OCCULT_CRESCENT_ENCOUNTERS = {
+local OCCULT_CRESCENT_SOUTH_ENCOUNTERS = {
     { '新月狂战士', 'CrescentBerserker',
         'SetCrescentBerserkerMoogleDonutsEnabled', {
             { 'DrawPreparationRing', '绿色准备站位窄环' },
@@ -62,14 +62,53 @@ local OCCULT_CRESCENT_ENCOUNTERS = {
             'SetHigherBirdAutoFaceEnabled' },
     } },
     { '纳木', 'Nammu', 'SetNammuEnabled' },
-    { '南征通用范围', 'OccultReferenceDrawings',
+    { '南岛通用范围', 'OccultReferenceDrawings',
         'SetOccultReferenceDrawingsEnabled' },
 }
 
-local OCCULT_CRESCENT_ENCOUNTER_NAMES = {}
-for index, encounter in ipairs(OCCULT_CRESCENT_ENCOUNTERS) do
-    OCCULT_CRESCENT_ENCOUNTER_NAMES[index] = encounter[1]
+local OCCULT_CRESCENT_NORTH_ENCOUNTERS = {
+    { '惨白魔人', 'Pallmagia', 'SetPallmagiaEnabled', {
+        { 'DrawInstructionPrediction', '学习指令范围预测',
+            'SetPallmagiaPredictionEnabled' },
+        { 'DynamicGuide', '动态安全指路' },
+        { 'RouletteGuide', '死亡轮盘动态指路',
+            'SetPallmagiaRouletteGuideEnabled' },
+    } },
+    { '小小法师', 'LittleMage', 'SetLittleMageEnabled', {
+        { 'DynamicGuide', '双球合并预测与动态指路',
+            'SetLittleMageDynamicGuideEnabled' },
+    } },
+    { '邪瞳', 'EvilSeer', 'SetEvilSeerEnabled', {
+        { 'AutoFacePetrifyingGaze', '诅咒之瞳/诅咒目光自动背对',
+            'SetEvilSeerAutoFaceEnabled' },
+    } },
+    { '新月阿剌克涅', 'Arachne', 'SetArachneEnabled', {
+        { 'DrawChargePrediction', '蜘蛛突进矩形预测',
+            'SetArachneChargePredictionEnabled' },
+        { 'DrawConformityPrediction', '追随扇形提前预测',
+            'SetArachneConformityPredictionEnabled' },
+        { 'DynamicGuide', '动态安全指路',
+            'SetArachneDynamicGuideEnabled' },
+    } },
+    { '好战弥诺陶洛斯', 'WarlikeMinotaur',
+            'SetWarlikeMinotaurEnabled', {
+        { 'DrawEightfoldSweepPrediction', '八重横扫下一次真实判定',
+            'SetWarlikeMinotaurPredictionEnabled' },
+    } },
+}
+local OCCULT_CRESCENT_REGIONS = { '南岛', '北岛' }
+
+local buildEncounterNames = function(encounters)
+    local names = {}
+    for index, encounter in ipairs(encounters) do
+        names[index] = encounter[1]
+    end
+    return names
 end
+local OCCULT_CRESCENT_SOUTH_ENCOUNTER_NAMES =
+        buildEncounterNames(OCCULT_CRESCENT_SOUTH_ENCOUNTERS)
+local OCCULT_CRESCENT_NORTH_ENCOUNTER_NAMES =
+        buildEncounterNames(OCCULT_CRESCENT_NORTH_ENCOUNTERS)
 
 local drawOccultCheckbox = function(label, id, value)
     GUI:Dummy(6, 5)
@@ -77,25 +116,39 @@ local drawOccultCheckbox = function(label, id, value)
     return GUI:Checkbox(label .. '##' .. id, value)
 end
 
-local drawOccultCrescentSettings = function(M)
+local drawOccultCrescentEncounterSettings = function(
+        M,
+        encounters,
+        encounterNames,
+        selectedField,
+        comboId)
+    if #encounters == 0 then
+        GUI:Dummy(6, 5)
+        GUI:SameLine()
+        GUI:Text('暂无专项绘图')
+        return
+    end
     GUI:Dummy(6, 5)
     GUI:SameLine()
     GUI:AlignFirstTextHeightToWidgets()
     GUI:Text('遭遇设置：')
     GUI:SameLine()
     GUI:PushItemWidth(205)
-    local selected = M.MainUI.occultCrescentEncounter or 1
-    if selected < 1 or selected > #OCCULT_CRESCENT_ENCOUNTERS then
+    local selected = M.MainUI[selectedField]
+            or (selectedField == 'occultCrescentSouthEncounter'
+                    and M.MainUI.occultCrescentEncounter)
+            or 1
+    if selected < 1 or selected > #encounters then
         selected = 1
     end
-    selected = GUI:Combo('##OccultCrescentEncounter', selected,
-            OCCULT_CRESCENT_ENCOUNTER_NAMES,
-            #OCCULT_CRESCENT_ENCOUNTER_NAMES)
-    M.MainUI.occultCrescentEncounter = selected
+    selected = GUI:Combo(comboId, selected,
+            encounterNames,
+            #encounterNames)
+    M.MainUI[selectedField] = selected
     GUI:PopItemWidth()
     GUI:Separator()
 
-    local encounter = OCCULT_CRESCENT_ENCOUNTERS[selected]
+    local encounter = encounters[selected]
     local key = encounter[2]
     local cfg = M.Config.Main[key]
     if type(cfg) ~= 'table' then
@@ -124,6 +177,40 @@ local drawOccultCrescentSettings = function(M)
                 M[option[3]](cfg[field])
             end
         end
+    end
+end
+
+local drawOccultCrescentSettings = function(M)
+    GUI:Dummy(6, 5)
+    GUI:SameLine()
+    GUI:AlignFirstTextHeightToWidgets()
+    GUI:Text('区域设置：')
+    GUI:SameLine()
+    GUI:PushItemWidth(205)
+    local region = M.MainUI.occultCrescentRegion or 1
+    if region < 1 or region > #OCCULT_CRESCENT_REGIONS then
+        region = 1
+    end
+    region = GUI:Combo('##OccultCrescentRegion', region,
+            OCCULT_CRESCENT_REGIONS,
+            #OCCULT_CRESCENT_REGIONS)
+    M.MainUI.occultCrescentRegion = region
+    GUI:PopItemWidth()
+
+    if region == 1 then
+        drawOccultCrescentEncounterSettings(
+                M,
+                OCCULT_CRESCENT_SOUTH_ENCOUNTERS,
+                OCCULT_CRESCENT_SOUTH_ENCOUNTER_NAMES,
+                'occultCrescentSouthEncounter',
+                '##OccultCrescentSouthEncounter')
+    else
+        drawOccultCrescentEncounterSettings(
+                M,
+                OCCULT_CRESCENT_NORTH_ENCOUNTERS,
+                OCCULT_CRESCENT_NORTH_ENCOUNTER_NAMES,
+                'occultCrescentNorthEncounter',
+                '##OccultCrescentNorthEncounter')
     end
 end
 --[[
@@ -880,7 +967,7 @@ local drawRaidSettingTab = function(M)
             end
         end
     end
-    if GUI:CollapsingHeader('新月岛·南征之章') then
+    if GUI:CollapsingHeader('新月岛') then
         drawOccultCrescentSettings(M)
     end
 end

@@ -60,6 +60,179 @@ function Common.insideCircle(pos, center, radius)
     return distance ~= nil and distance <= radius * radius
 end
 
+function Common.pointInDanger(point, danger, margin)
+    if not Common.validXZ(point)
+            or type(danger) ~= 'table'
+            or not Common.validXZ(danger.source)
+            or not Common.finite(danger.radius)
+    then
+        return true
+    end
+    margin = Common.finite(margin) and margin or 0
+    local dx = point.x - danger.source.x
+    local dz = point.z - danger.source.z
+    local distanceSq = dx * dx + dz * dz
+    local outer = math.max(0, danger.radius + margin)
+    if danger.kind == 'circle' then
+        return distanceSq <= outer * outer
+    end
+    if danger.kind == 'donut' then
+        if not Common.finite(danger.innerRadius) then
+            return true
+        end
+        local inner = math.max(0, danger.innerRadius - margin)
+        return distanceSq >= inner * inner and distanceSq <= outer * outer
+    end
+    if danger.kind == 'rect' then
+        if not Common.finite(danger.heading)
+                or not Common.finite(danger.length)
+                or danger.length < 0
+        then
+            return true
+        end
+        local forward = dx * math.sin(danger.heading)
+                + dz * math.cos(danger.heading)
+        local side = dx * math.cos(danger.heading)
+                - dz * math.sin(danger.heading)
+        return forward >= -margin
+                and forward <= danger.length + margin
+                and math.abs(side) <= danger.radius + margin
+    end
+    if danger.kind ~= 'cone'
+            or not Common.finite(danger.heading)
+            or not Common.finite(danger.angle)
+            or distanceSq > outer * outer
+    then
+        return danger.kind ~= 'cone'
+    end
+    if Common.finite(danger.innerRadius) then
+        local inner = math.max(0, danger.innerRadius - margin)
+        if distanceSq < inner * inner then
+            return false
+        end
+    end
+    local length = math.sqrt(distanceSq)
+    if length < 0.001 then
+        return true
+    end
+    local dot = (dx * math.sin(danger.heading)
+            + dz * math.cos(danger.heading)) / length
+    dot = math.max(-1, math.min(1, dot))
+    return math.acos(dot) <= danger.angle / 2 + math.rad(1)
+end
+
+function Common.safeForGroup(point, group, center, radius, margin)
+    if type(group) ~= 'table'
+            or not Common.insideCircle(point, center, radius)
+    then
+        return false
+    end
+    for _, danger in ipairs(group) do
+        if Common.pointInDanger(point, danger, margin) then
+            return false
+        end
+    end
+    return true
+end
+
+local sampleDirectionCache = {}
+
+local function sampleDirections(count)
+    local cached = sampleDirectionCache[count]
+    if cached ~= nil then
+        return cached
+    end
+    cached = {}
+    for index = 0, count - 1 do
+        local angle = 2 * math.pi * index / count
+        cached[index + 1] = { x = math.sin(angle), z = math.cos(angle) }
+    end
+    sampleDirectionCache[count] = cached
+    return cached
+end
+
+function Common.nearestValidPoint(playerPos, center, radius, options, validator)
+    if not Common.validXZ(playerPos)
+            or not Common.validXZ(center)
+            or not Common.finite(radius)
+            or radius <= 0
+            or type(validator) ~= 'function'
+    then
+        return nil
+    end
+    options = type(options) == 'table' and options or {}
+    local step = Common.finite(options.step) and options.step or 1
+    local directionCount = Common.finite(options.directionCount)
+            and math.floor(options.directionCount) or 72
+    if step <= 0 or directionCount < 8 then
+        return nil
+    end
+    local y = playerPos.y
+    local best = nil
+    local bestDistanceSq = math.huge
+    local function consider(candidate)
+        if not validator(candidate) then
+            return
+        end
+        local distanceSq = Common.distanceSquared(playerPos, candidate)
+        if distanceSq < bestDistanceSq then
+            best = candidate
+            bestDistanceSq = distanceSq
+        end
+    end
+    consider({ x = playerPos.x, y = y, z = playerPos.z })
+    consider({ x = center.x, y = y, z = center.z })
+    local directions = sampleDirections(directionCount)
+    for sampleRadius = step, radius, step do
+        for _, direction in ipairs(directions) do
+            consider({
+                x = center.x + direction.x * sampleRadius,
+                y = y,
+                z = center.z + direction.z * sampleRadius,
+            })
+        end
+    end
+    return best
+end
+
+function Common.nearestSafePoint(playerPos, group, center, radius, options)
+    if not Common.validXZ(playerPos)
+            or type(group) ~= 'table'
+            or not Common.validXZ(center)
+            or not Common.finite(radius)
+            or radius <= 0
+    then
+        return nil
+    end
+    options = type(options) == 'table' and options or {}
+    local margin = Common.finite(options.margin) and options.margin or 0.5
+    return Common.nearestValidPoint(
+            playerPos, center, radius, options, function(candidate)
+                return Common.safeForGroup(
+                        candidate, group, center, radius, margin)
+            end)
+end
+
+function Common.projectKnockback(point, source, distance)
+    if not Common.validXZ(point)
+            or not Common.validXZ(source)
+            or not Common.finite(distance)
+            or distance < 0
+    then
+        return nil
+    end
+    local dx, dz = Common.normalized(
+            point.x - source.x, point.z - source.z)
+    if dx == nil then
+        return nil
+    end
+    return {
+        x = point.x + dx * distance,
+        y = point.y,
+        z = point.z + dz * distance,
+    }
+end
+
 function Common.consumeEvent(bucket, key, now, windowMs)
     if type(bucket) ~= 'table'
             or key == nil

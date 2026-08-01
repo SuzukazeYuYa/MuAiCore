@@ -222,6 +222,11 @@ ArgusEvents.init = function(M)
         end
     end
 
+    --- 注册场地效果生成事件；保持 Argus 原始 19 参数顺序。
+    handlers.OnAddGroundEffect = function(...)
+        return callRaidScript(M, 'OnAddGroundEffect', ...)
+    end
+
     --- 注册连线变化事件
     handlers.OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID,
             newTetherID, newTetherFlags, newTargetID)
@@ -259,6 +264,7 @@ ArgusEvents.init = function(M)
             { 'OnEventObjectScriptFunc', Argus.registerOnEventObjectScriptFunc },
             { 'OnMapEffect', Argus.registerOnMapEffect },
             { 'OnAddEntityVFX', Argus.registerOnAddEntityVFXFunc },
+            { 'OnAddGroundEffect', Argus.registerOnAddGroundEffectFunc },
             { 'OnTetherChange', Argus.registerOnTetherChange },
             { 'OnEntityAdd', Argus.registerOnEntityAddFunc },
             { 'OnVisibilityChange', Argus.registerOnVisibilityChangeFunc },
