@@ -106,6 +106,19 @@ Config.init = function(M)
         M.Config.Main.MerchantGuide = oldConfig.MerchantGuide
         M.Config.Main.MerchantLockFace = oldConfig.MerchantLockFace
         M.Config.Main.MerchantAimTool = oldConfig.MerchantAimTool
+        local occultConfigKeys = {
+            'CrescentBerserker', 'OccultKnight', 'Hinkypunk',
+            'NymianPetalodus', 'TradeTortoise',
+            'MysteriousMindflayer', 'BlackChocobo', 'CloisterDemon',
+            'GildedHeadstone', 'LionRampant', 'CrystalDragon',
+            'DeathClaw', 'IslandWatcher', 'HigherBird', 'Nammu',
+            'OccultReferenceDrawings',
+        }
+        for _, key in ipairs(occultConfigKeys) do
+            if type(oldConfig[key]) == 'table' then
+                M.Config.Main[key] = oldConfig[key]
+            end
+        end
         M.InfoNoLog('已恢复默认设置.')
     end
     M.CreateDefMainCfg = function()
@@ -192,7 +205,99 @@ Config.init = function(M)
             MerchantDraw = true,
             MerchantGuide = true,
             MerchantLockFace = true,
-            MerchantAimTool = true
+            MerchantAimTool = true,
+            --------- 南征新月岛：新月狂战士 ---------
+            CrescentBerserker = {
+                Enable = true,
+                DrawPreparationRing = true,
+                DrawGuideArrow = true,
+                DrawSafeZone = true,
+            },
+            --------- 南征新月岛：Occult Knight ---------
+            OccultKnight = {
+                Enable = true,
+                DrawSpinningPrediction = true,
+                DrawSpinningGuide = true,
+                DrawKnockbackGuide = true,
+                DrawFlurryPrediction = true,
+            },
+            --------- 南征新月岛：Hinkypunk ---------
+            Hinkypunk = {
+                Enable = true,
+                DrawNextBird = true,
+                DrawDonutCrossGuide = true,
+                DrawKnockbackGuide = true,
+            },
+            --------- 南征新月岛：Nymian Petalodus ---------
+            NymianPetalodus = {
+                Enable = true,
+                DrawOpenWaterPrediction = true,
+                DrawTidalGuillotineMarkers = true,
+            },
+            --------- 南征新月岛：Trade Tortoise ---------
+            TradeTortoise = {
+                Enable = true,
+                DrawCoinRoute = true,
+                DrawGreenKnockback = true,
+                DrawCostOfLivingGuide = true,
+            },
+            --------- 南征新月岛：Mysterious Mindflayer ---------
+            MysteriousMindflayer = {
+                Enable = true,
+                DrawMatchingImpDanger = true,
+                DrawSeductionGuide = true,
+            },
+            --------- 南征新月岛：Black Chocobo ---------
+            BlackChocobo = {
+                Enable = true,
+                DrawSlaughterPredictions = true,
+                DrawSlaughterDirection = true,
+            },
+            --------- 南征新月岛：Cloister Demon ---------
+            CloisterDemon = {
+                Enable = true,
+                DrawSealTowers = true,
+                DrawNearestSealGuide = false,
+            },
+            --------- 南征新月岛：Gilded Headstone ---------
+            GildedHeadstone = {
+                Enable = true,
+                DrawFacingArrow = true,
+                AutoFace = true,
+            },
+            --------- 南征新月岛：跃立狮 ---------
+            LionRampant = {
+                Enable = true,
+                DrawBrightPulsePrediction = true,
+            },
+            --------- 新月岛·南征之章：水晶龙 ---------
+            CrystalDragon = {
+                Enable = true,
+            },
+            --------- 新月岛·南征之章：死亡爪 ---------
+            DeathClaw = {
+                Enable = true,
+                DrawCrosshatchPrediction = true,
+                DrawSkulkingPrediction = true,
+            },
+            --------- 新月岛·南征之章：岛屿监视者 ---------
+            IslandWatcher = {
+                Enable = true,
+                AutoFacePetrifyingGaze = true,
+            },
+            --------- 新月岛·南征之章：高等魔鸟 ---------
+            HigherBird = {
+                Enable = true,
+                AutoFacePetrifyingGaze = true,
+            },
+            --------- 新月岛·南征之章：纳木 ---------
+            Nammu = {
+                Enable = true,
+            },
+            --------- 新月岛·南征之章：通用参考范围 ---------
+            OccultReferenceDrawings = {
+                Enable = true,
+            },
         }
         return mainCfg
     end

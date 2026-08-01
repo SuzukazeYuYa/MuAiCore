@@ -1,5 +1,131 @@
 local MainUI = {}
 local WIN_WIDE = 355
+local OCCULT_CRESCENT_ENCOUNTERS = {
+    { '新月狂战士', 'CrescentBerserker',
+        'SetCrescentBerserkerMoogleDonutsEnabled', {
+            { 'DrawPreparationRing', '绿色准备站位窄环' },
+            { 'DrawGuideArrow', '指路箭头' },
+            { 'DrawSafeZone', '爆炸后安全区' },
+        } },
+    { '新月骑士群', 'OccultKnight', 'SetOccultKnightEnabled', {
+        { 'DrawSpinningPrediction', '旋转十字预测' },
+        { 'DrawSpinningGuide', '旋转安全指路' },
+        { 'DrawKnockbackGuide', '击退落点与指路' },
+        { 'DrawFlurryPrediction', '连环爆炸预测' },
+    } },
+    { '鬼火苗', 'Hinkypunk', 'SetHinkypunkEnabled', {
+        { 'DrawNextBird', '下一只鸟预测' },
+        { 'DrawDonutCrossGuide', '甜甜圈/十字安全指路' },
+        { 'DrawKnockbackGuide', '击退起落点指路' },
+    } },
+    { '尼姆瓣齿鲨', 'NymianPetalodus', 'SetNymianPetalodusEnabled', {
+        { 'DrawOpenWaterPrediction', '双螺旋未来落点' },
+        { 'DrawTidalGuillotineMarkers', '标记落点预警圈' },
+    } },
+    { '金钱龟', 'TradeTortoise', 'SetTradeTortoiseEnabled', {
+        { 'DrawCoinRoute', '硬币路线与交货点' },
+        { 'DrawGreenKnockback', '绿龟击退准备与落点' },
+        { 'DrawCostOfLivingGuide', '30米击退指路' },
+    } },
+    { '夺心魔', 'MysteriousMindflayer',
+        'SetMysteriousMindflayerEnabled', {
+            { 'DrawMatchingImpDanger', '同元素小恶魔未来危险圈' },
+            { 'DrawSeductionGuide', '魅惑强制行进起落点指路' },
+        } },
+    { '黑色天星', 'BlackChocobo', 'SetBlackChocoboEnabled', {
+        { 'DrawSlaughterPredictions', '陆行鸟杀戮定时地火圈' },
+        { 'DrawSlaughterDirection', '连爆推进方向线' },
+    } },
+    { '回廊恶魔', 'CloisterDemon', 'SetCloisterDemonEnabled', {
+        { 'DrawSealTowers', '未处理封印塔圈' },
+        { 'DrawNearestSealGuide', '最近封印指路（非分工）' },
+    } },
+    { '金色石面', 'GildedHeadstone', 'SetGildedHeadstoneEnabled', {
+        { 'AutoFace', '侵蚀魔眼自动面对/背对',
+            'SetGildedHeadstoneAutoFaceEnabled' },
+        { 'DrawFacingArrow', '侵蚀魔眼面向箭头' },
+    } },
+    { '跃立狮', 'LionRampant', 'SetLionRampantEnabled', {
+        { 'DrawBrightPulsePrediction', '闪光球落点预测' },
+    } },
+    { '水晶龙', 'CrystalDragon', 'SetCrystalDragonEnabled' },
+    { '死亡爪', 'DeathClaw', 'SetDeathClawEnabled', {
+        { 'DrawCrosshatchPrediction', '交叉抓痕预测' },
+        { 'DrawSkulkingPrediction', '潜行命令预测' },
+    } },
+    { '岛屿监视者', 'IslandWatcher', 'SetIslandWatcherEnabled', {
+        { 'AutoFacePetrifyingGaze', '石化视线自动背对',
+            'SetIslandWatcherAutoFaceEnabled' },
+    } },
+    { '高等魔鸟', 'HigherBird', 'SetHigherBirdEnabled', {
+        { 'AutoFacePetrifyingGaze', '石化射线自动背对',
+            'SetHigherBirdAutoFaceEnabled' },
+    } },
+    { '纳木', 'Nammu', 'SetNammuEnabled' },
+    { '南征通用范围', 'OccultReferenceDrawings',
+        'SetOccultReferenceDrawingsEnabled' },
+}
+
+local OCCULT_CRESCENT_ENCOUNTER_NAMES = {}
+for index, encounter in ipairs(OCCULT_CRESCENT_ENCOUNTERS) do
+    OCCULT_CRESCENT_ENCOUNTER_NAMES[index] = encounter[1]
+end
+
+local drawOccultCheckbox = function(label, id, value)
+    GUI:Dummy(6, 5)
+    GUI:SameLine()
+    return GUI:Checkbox(label .. '##' .. id, value)
+end
+
+local drawOccultCrescentSettings = function(M)
+    GUI:Dummy(6, 5)
+    GUI:SameLine()
+    GUI:AlignFirstTextHeightToWidgets()
+    GUI:Text('遭遇设置：')
+    GUI:SameLine()
+    GUI:PushItemWidth(205)
+    local selected = M.MainUI.occultCrescentEncounter or 1
+    if selected < 1 or selected > #OCCULT_CRESCENT_ENCOUNTERS then
+        selected = 1
+    end
+    selected = GUI:Combo('##OccultCrescentEncounter', selected,
+            OCCULT_CRESCENT_ENCOUNTER_NAMES,
+            #OCCULT_CRESCENT_ENCOUNTER_NAMES)
+    M.MainUI.occultCrescentEncounter = selected
+    GUI:PopItemWidth()
+    GUI:Separator()
+
+    local encounter = OCCULT_CRESCENT_ENCOUNTERS[selected]
+    local key = encounter[2]
+    local cfg = M.Config.Main[key]
+    if type(cfg) ~= 'table' then
+        cfg = { Enable = true }
+        M.Config.Main[key] = cfg
+    elseif cfg.Enable == nil then
+        cfg.Enable = true
+    end
+    local oldEnable = cfg.Enable
+    cfg.Enable = drawOccultCheckbox('总开关', key, cfg.Enable)
+    if oldEnable ~= cfg.Enable and type(M[encounter[3]]) == 'function' then
+        M[encounter[3]](cfg.Enable)
+    end
+
+    local options = encounter[4]
+    if cfg.Enable and type(options) == 'table' and #options > 0 then
+        GUI:Separator()
+        for _, option in ipairs(options) do
+            local field = option[1]
+            if cfg[field] == nil then
+                cfg[field] = true
+            end
+            local oldValue = cfg[field]
+            cfg[field] = drawOccultCheckbox(option[2], key .. field, cfg[field])
+            if oldValue ~= cfg[field] and type(M[option[3]]) == 'function' then
+                M[option[3]](cfg[field])
+            end
+        end
+    end
+end
 --[[
 ===========================
     主UI VIEW
@@ -753,6 +879,9 @@ local drawRaidSettingTab = function(M)
                 end
             end
         end
+    end
+    if GUI:CollapsingHeader('新月岛·南征之章') then
+        drawOccultCrescentSettings(M)
     end
 end
 ---@param M MuAiGuide
