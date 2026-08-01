@@ -67,6 +67,35 @@ local OCCULT_CRESCENT_SOUTH_ENCOUNTERS = {
 }
 
 local OCCULT_CRESCENT_NORTH_ENCOUNTERS = {
+    { '北岛通用范围（含极魔之塔）', 'NorthReferenceDrawings',
+        'SetNorthReferenceDrawingsEnabled' },
+    { '雪石膏之剑', 'AlabasterBlade',
+        'SetAlabasterBladeEnabled' },
+    { '魔亡灵法师', 'MagiNecromancer',
+            'SetMagiNecromancerEnabled', {
+        { 'DrawRevealPrediction', '亡灵显形范围提前预测',
+            'SetMagiNecromancerPredictionEnabled' },
+    } },
+    { '统领奇美拉', 'LeaderChimera',
+            'SetLeaderChimeraEnabled', {
+        { 'DrawBreathSequencePrediction', '三连吐息与咆哮提前预测',
+            'SetLeaderChimeraBreathPredictionEnabled' },
+        { 'DrawOrbPrediction', '冰球/雷球范围提前预测',
+            'SetLeaderChimeraOrbPredictionEnabled' },
+    } },
+    { '魔许德拉', 'MagiHydra', 'SetMagiHydraEnabled', {
+        { 'AutoFaceStunningFlash', '眩晕闪光自动背对',
+            'SetMagiHydraAutoFaceEnabled' },
+        { 'DrawMultipleBreathPrediction', '多重吐息下一次判定提前预测',
+            'SetMagiHydraBreathPredictionEnabled' },
+    } },
+    { '变形法师', 'ShapeshiftingMage',
+            'SetShapeshiftingMageEnabled', {
+        { 'CorrectSupercellDonut', '超级细胞月环内径修正',
+            'SetShapeshiftingMageDonutCorrectionEnabled' },
+        { 'DrawHellishBreathPrediction', '炼狱吐息三连提前预测',
+            'SetShapeshiftingMageBreathPredictionEnabled' },
+    } },
     { '惨白魔人', 'Pallmagia', 'SetPallmagiaEnabled', {
         { 'DrawInstructionPrediction', '学习指令范围预测',
             'SetPallmagiaPredictionEnabled' },

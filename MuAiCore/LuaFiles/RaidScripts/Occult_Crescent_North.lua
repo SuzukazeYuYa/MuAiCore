@@ -109,12 +109,24 @@ local function loadNorthModule(name)
     return feature
 end
 
+local NorthReferenceDrawings = loadNorthModule('NorthReferenceDrawings')
+local AlabasterBlade = loadNorthModule('AlabasterBlade')
+local MagiNecromancer = loadNorthModule('MagiNecromancer')
+local LeaderChimera = loadNorthModule('LeaderChimera')
+local MagiHydra = loadNorthModule('MagiHydra')
+local ShapeshiftingMage = loadNorthModule('ShapeshiftingMage')
 local Pallmagia = loadNorthModule('Pallmagia')
 local LittleMage = loadNorthModule('LittleMage')
 local EvilSeer = loadNorthModule('EvilSeer')
 local Arachne = loadNorthModule('Arachne')
 local WarlikeMinotaur = loadNorthModule('WarlikeMinotaur')
 local FEATURES = {
+    NorthReferenceDrawings,
+    AlabasterBlade,
+    MagiNecromancer,
+    LeaderChimera,
+    MagiHydra,
+    ShapeshiftingMage,
     Pallmagia,
     LittleMage,
     EvilSeer,
@@ -122,10 +134,10 @@ local FEATURES = {
     WarlikeMinotaur,
 }
 
-local function clearAll()
+local function clearAll(releaseOwnership)
     for _, feature in ipairs(FEATURES) do
         if type(feature.Clear) == 'function' then
-            feature.Clear()
+            feature.Clear(releaseOwnership)
         end
     end
 end
@@ -141,15 +153,30 @@ G.Init = function(M)
     end
 end
 
-G.OnEnter = clearAll
-G.OnLeave = clearAll
-G.OnWipe = clearAll
+G.OnEnter = function()
+    clearAll(false)
+end
+G.OnLeave = function()
+    clearAll(true)
+end
+G.OnWipe = function()
+    clearAll(false)
+end
 
 G.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
     if not Context.currentMapIsNorth() then
         return
     end
     local now = Context.nowMs()
+    NorthReferenceDrawings.OnEntityChannel(
+            entityID, spellID, targetID, channelTimeMax, now)
+    AlabasterBlade.OnEntityChannel(
+            entityID, spellID, channelTimeMax, now)
+    MagiNecromancer.OnEntityChannel(entityID, spellID, now)
+    LeaderChimera.OnEntityChannel(
+            entityID, spellID, channelTimeMax, now)
+    MagiHydra.OnEntityChannel(
+            entityID, spellID, channelTimeMax, now)
     Pallmagia.OnEntityChannel(
             entityID, spellID, targetID, channelTimeMax, now)
     LittleMage.OnEntityChannel(entityID, spellID, now)
@@ -183,6 +210,12 @@ G.OnEntityCast = function(entityID, spellID, castPos)
         return
     end
     local now = Context.nowMs()
+    NorthReferenceDrawings.OnEntityCast(entityID, spellID, castPos, now)
+    AlabasterBlade.OnEntityCast(entityID, spellID, now)
+    MagiNecromancer.OnEntityCast(entityID, spellID, now)
+    LeaderChimera.OnEntityCast(entityID, spellID, now)
+    MagiHydra.OnEntityCast(entityID, spellID, now)
+    ShapeshiftingMage.OnEntityCast(entityID, spellID, now)
     Pallmagia.OnEntityCast(entityID, spellID, castPos, now)
     LittleMage.OnEntityCast(entityID, spellID, now)
     EvilSeer.OnEntityCast(entityID, spellID, now)
@@ -201,8 +234,30 @@ G.OnAuraChange = function(
     if not Context.currentMapIsNorth() then
         return
     end
+    local now = Context.nowMs()
+    AlabasterBlade.OnAuraChange(
+            entityID, oldActiveAura1, newActiveAura1, now)
     Arachne.OnAuraChange(
-            entityID, oldActiveAura1, newActiveAura1, Context.nowMs())
+            entityID, oldActiveAura1, newActiveAura1, now)
+end
+
+G.OnVisibilityChange = function(entityID, wasVisible, isVisible)
+    if not Context.currentMapIsNorth() then
+        return false
+    end
+    local now = Context.nowMs()
+    local revealed = MagiNecromancer.OnVisibilityChange(
+            entityID, wasVisible, isVisible, now)
+    local flash = MagiHydra.OnVisibilityChange(
+            entityID, wasVisible, isVisible, now)
+    return revealed or flash
+end
+
+G.OnEntityAdd = function(entityID, entityName)
+    if not Context.currentMapIsNorth() then
+        return false
+    end
+    return LeaderChimera.OnEntityAdd(entityID, Context.nowMs())
 end
 
 G.OnAddGroundEffect = function(...)
@@ -223,6 +278,10 @@ G.OnAOECreate = function(aoeInfo)
         return
     end
     local now = Context.nowMs()
+    NorthReferenceDrawings.OnAOECreate(aoeInfo, now)
+    LeaderChimera.OnAOECreate(aoeInfo, now)
+    MagiHydra.OnAOECreate(aoeInfo, now)
+    ShapeshiftingMage.OnAOECreate(aoeInfo, now)
     Pallmagia.OnAOECreate(aoeInfo, now)
     WarlikeMinotaur.OnAOECreate(aoeInfo, now)
 end
@@ -233,10 +292,16 @@ G.Update = function()
         return
     end
     if not Context.currentMapIsNorth() then
-        clearAll()
+        clearAll(true)
         return
     end
     local now = Context.nowMs()
+    NorthReferenceDrawings.Update(guide, now)
+    AlabasterBlade.Update(guide, now)
+    MagiNecromancer.Update(guide, now)
+    LeaderChimera.Update(guide, now)
+    MagiHydra.Update(guide, now)
+    ShapeshiftingMage.Update(guide, now)
     local guided = Pallmagia.Update(guide, now)
     LittleMage.Update(guide, now, not guided)
     EvilSeer.Update(guide, now)
@@ -245,6 +310,12 @@ G.Update = function()
 end
 
 G.Test = {
+    NorthReferenceDrawings = NorthReferenceDrawings.Test,
+    AlabasterBlade = AlabasterBlade.Test,
+    MagiNecromancer = MagiNecromancer.Test,
+    LeaderChimera = LeaderChimera.Test,
+    MagiHydra = MagiHydra.Test,
+    ShapeshiftingMage = ShapeshiftingMage.Test,
     Pallmagia = Pallmagia.Test,
     LittleMage = LittleMage.Test,
     EvilSeer = EvilSeer.Test,

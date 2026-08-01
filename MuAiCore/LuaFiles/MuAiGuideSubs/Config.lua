@@ -112,7 +112,11 @@ Config.init = function(M)
             'MysteriousMindflayer', 'BlackChocobo', 'CloisterDemon',
             'GildedHeadstone', 'LionRampant', 'CrystalDragon',
             'DeathClaw', 'IslandWatcher', 'HigherBird', 'Nammu',
-            'OccultReferenceDrawings', 'Pallmagia', 'LittleMage', 'EvilSeer',
+            'OccultReferenceDrawings', 'NorthReferenceDrawings',
+            'AlabasterBlade',
+            'MagiNecromancer', 'LeaderChimera', 'MagiHydra',
+            'ShapeshiftingMage',
+            'Pallmagia', 'LittleMage', 'EvilSeer',
             'Arachne', 'WarlikeMinotaur',
         }
         for _, key in ipairs(occultConfigKeys) do
@@ -298,6 +302,37 @@ Config.init = function(M)
             --------- 新月岛·南岛：通用参考范围 ---------
             OccultReferenceDrawings = {
                 Enable = true,
+            },
+            --------- 新月岛·北岛：通用参考范围 ---------
+            NorthReferenceDrawings = {
+                Enable = true,
+            },
+            --------- 新月岛·北岛：雪石膏之剑 ---------
+            AlabasterBlade = {
+                Enable = true,
+            },
+            --------- 新月岛·北岛：魔亡灵法师 ---------
+            MagiNecromancer = {
+                Enable = true,
+                DrawRevealPrediction = true,
+            },
+            --------- 新月岛·北岛：统领奇美拉 ---------
+            LeaderChimera = {
+                Enable = true,
+                DrawBreathSequencePrediction = true,
+                DrawOrbPrediction = true,
+            },
+            --------- 新月岛·北岛：魔许德拉 ---------
+            MagiHydra = {
+                Enable = true,
+                AutoFaceStunningFlash = true,
+                DrawMultipleBreathPrediction = true,
+            },
+            --------- 新月岛·北岛：变形法师 ---------
+            ShapeshiftingMage = {
+                Enable = true,
+                CorrectSupercellDonut = true,
+                DrawHellishBreathPrediction = true,
             },
             --------- 新月岛·北岛：惨白魔人 ---------
             Pallmagia = {
