@@ -44,13 +44,16 @@ local REVERSE_DELAYS = { 12750, 17250, 21750, 26250 }
 local ROUND_TIMEOUT_MS = 32000
 local LIVE_AOE_GRACE_MS = 1500
 local GUIDE_GROUP_WINDOW_MS = 300
+local GUIDE_LOOKAHEAD_GROUPS = 2
 local BOSS_MISSING_CLEAR_MS = 2000
 local MATCH_DISTANCE_SQ = 2.25
 local SEEN_TTL_MS = 45000
 local ROULETTE_CENTER_RADIUS = 5
 local ROULETTE_INNER_RADIUS = 12
 local ROULETTE_OUTER_RADIUS = 20
-local ROULETTE_SECTOR_ANGLE = math.pi / 2
+local ROULETTE_SECTOR_ANGLE = 2 * math.pi / 3
+local ROULETTE_SAFE_RADIUS =
+        (ROULETTE_CENTER_RADIUS + ROULETTE_INNER_RADIUS) / 2
 local ROULETTE_ACTIVATION_DELAY_MS = 18400
 local ROULETTE_TIMEOUT_MS = 21500
 local ROULETTE_CENTER_TOLERANCE_SQ = 0.25
@@ -555,6 +558,22 @@ local function eventPosition(entityID, castPos)
     return entity ~= nil and reliablePosition(entity.pos, false) or nil
 end
 
+local function removeLiveAOE(state, key)
+    if type(key) ~= 'string' then
+        return false
+    end
+    for index = #state.liveAOEs, 1, -1 do
+        local aoe = state.liveAOEs[index]
+        if aoe.key == key then
+            state.seenAOEs[key] = nil
+            table.remove(state.liveAOEs, index)
+            return true
+        end
+    end
+    state.seenAOEs[key] = nil
+    return false
+end
+
 local function resolvePrediction(state, entityID, spellID, castPos, now, guide)
     local round = state.round
     if type(round) ~= 'table' or not round.finalized or round.ambiguity then
@@ -579,6 +598,8 @@ local function resolvePrediction(state, entityID, spellID, castPos, now, guide)
         return false
     end
     clearToken(entry)
+    removeLiveAOE(state, entry.liveAOEKey)
+    entry.liveAOEKey = nil
     entry.resolved = true
     local remaining = false
     for _, candidate in ipairs(round.predictions) do
@@ -612,8 +633,18 @@ local function handoffPrediction(state, aoe)
     end
     local entry = predictionForEvent(round, aoe.entityID, aoe.kind, aoe.source)
     if entry ~= nil then
+        if entry.liveAOEKey ~= nil and entry.liveAOEKey ~= aoe.key then
+            setRoundAmbiguity(state, 'prediction_handoff_conflict', {
+                previous = entry.liveAOEKey,
+                incoming = aoe.key,
+            })
+            return
+        end
         clearToken(entry)
         entry.handedOff = true
+        entry.liveAOEKey = aoe.key
+        aoe.activationAt = entry.activationAt
+        aoe.expiresAt = entry.activationAt + LIVE_AOE_GRACE_MS
     end
 end
 
@@ -948,14 +979,38 @@ local function nextDangerGroup(state, now)
     if #candidates == 0 then
         return nil
     end
-    local firstAt = candidates[1].activationAt
-    local group = {}
-    group.guideKey = 'danger:' .. tostring(firstAt)
+
+    local activationGroups = {}
     for _, candidate in ipairs(candidates) do
-        if math.abs(candidate.activationAt - firstAt) <= GUIDE_GROUP_WINDOW_MS then
-            group[#group + 1] = candidate
+        local activationGroup = activationGroups[#activationGroups]
+        if activationGroup == nil
+                or math.abs(candidate.activationAt - activationGroup.activationAt)
+                        > GUIDE_GROUP_WINDOW_MS
+        then
+            if #activationGroups >= GUIDE_LOOKAHEAD_GROUPS then
+                break
+            end
+            activationGroup = {
+                activationAt = candidate.activationAt,
+                dangers = {},
+            }
+            activationGroups[#activationGroups + 1] = activationGroup
+        end
+        activationGroup.dangers[#activationGroup.dangers + 1] = candidate
+    end
+
+    local group = {
+        activationGroupCount = #activationGroups,
+        primaryCount = #activationGroups[1].dangers,
+    }
+    local guideKey = { 'danger' }
+    for _, activationGroup in ipairs(activationGroups) do
+        guideKey[#guideKey + 1] = tostring(activationGroup.activationAt)
+        for _, danger in ipairs(activationGroup.dangers) do
+            group[#group + 1] = danger
         end
     end
+    group.guideKey = table.concat(guideKey, ':')
     return group
 end
 
@@ -995,6 +1050,57 @@ local function nearestSafePoint(playerPos, group)
             { margin = 0.5, step = 1, directionCount = 72 })
 end
 
+local function primaryDangerGroup(group)
+    local primaryCount = type(group) == 'table'
+            and tonumber(group.primaryCount) or nil
+    if not finite(primaryCount)
+            or primaryCount < 1
+            or primaryCount >= #group
+    then
+        return nil
+    end
+    local primary = {
+        guideKey = tostring(group.guideKey) .. ':primary',
+    }
+    for index = 1, primaryCount do
+        primary[index] = group[index]
+    end
+    return primary
+end
+
+local function rouletteSafePoint(state, playerPos, group)
+    local roulette = state.roulette
+    local inner = type(roulette) == 'table'
+            and roulette.effects[ROULETTE_GROUND_INNER_ID] or nil
+    if reliablePosition(playerPos, false) == nil
+            or type(group) ~= 'table'
+            or type(inner) ~= 'table'
+            or not finite(inner.dangerHeading)
+    then
+        return nil
+    end
+    local best = nil
+    local bestDistanceSq = math.huge
+    for _, heading in ipairs({
+            inner.dangerHeading + math.pi / 2,
+            inner.dangerHeading - math.pi / 2,
+    }) do
+        local candidate = {
+            x = ARENA_CENTER.x + math.sin(heading) * ROULETTE_SAFE_RADIUS,
+            y = playerPos.y,
+            z = ARENA_CENTER.z + math.cos(heading) * ROULETTE_SAFE_RADIUS,
+        }
+        if safeForGroup(candidate, group) then
+            local distanceSq = Common.distanceSquared(playerPos, candidate)
+            if distanceSq < bestDistanceSq then
+                best = candidate
+                bestDistanceSq = distanceSq
+            end
+        end
+    end
+    return best
+end
+
 local function getPlayer(guide)
     local player = type(guide) == 'table'
             and type(guide.GetPlayer) == 'function'
@@ -1005,7 +1111,8 @@ local function getPlayer(guide)
     return player
 end
 
-local function directSafeGuide(state, guide, group, missingCode)
+local function directSafeGuide(
+        state, guide, group, missingCode, targetResolver)
     local player = getPlayer(guide)
     if group == nil then
         state.guideTarget = nil
@@ -1014,16 +1121,45 @@ local function directSafeGuide(state, guide, group, missingCode)
     if player == nil then
         return false
     end
-    local guideKey = group.guideKey or tostring(group[1])
+    local planKey = group.guideKey or tostring(group[1])
+    local activeGroup = group
     local target = state.guideTarget
-    if type(target) ~= 'table'
-            or target.key ~= guideKey
-            or not safeForGroup(target, group)
+    if type(target) == 'table'
+            and target.planKey == planKey
+            and target.primaryOnly
     then
-        target = nearestSafePoint(player.pos, group)
+        activeGroup = primaryDangerGroup(group) or group
+    end
+    if type(target) ~= 'table'
+            or target.planKey ~= planKey
+            or not safeForGroup(target, activeGroup)
+    then
+        activeGroup = group
+        if type(targetResolver) == 'function' then
+            target = targetResolver(player.pos, activeGroup)
+        else
+            target = nearestSafePoint(player.pos, activeGroup)
+        end
+        local primaryOnly = false
+        if target == nil and type(targetResolver) ~= 'function' then
+            local primary = primaryDangerGroup(group)
+            if primary ~= nil then
+                target = nearestSafePoint(player.pos, primary)
+                if target ~= nil then
+                    activeGroup = primary
+                    primaryOnly = true
+                    diagnostic(state, 'guide_no_shared_lookahead_safe_point',
+                            planKey)
+                end
+            end
+        end
         if target ~= nil then
-            target = visibleSafeAnchor(player.pos, group, target)
-            target.key = guideKey
+            if type(targetResolver) ~= 'function' then
+                target = visibleSafeAnchor(
+                        player.pos, activeGroup, target)
+            end
+            target.planKey = planKey
+            target.primaryOnly = primaryOnly
             state.guideTarget = target
         end
     end
@@ -1064,9 +1200,12 @@ local function drawRouletteGuide(state, guide)
     then
         return false
     end
+    local group = rouletteDangerGroup(state)
     return directSafeGuide(
-            state, guide, rouletteDangerGroup(state),
-            'roulette_no_safe_point')
+            state, guide, group, 'roulette_no_safe_point',
+            function(playerPos, dangerGroup)
+                return rouletteSafePoint(state, playerPos, dangerGroup)
+            end)
 end
 
 local function pruneState(state, now)
@@ -1281,11 +1420,13 @@ Feature.Test = {
     RouletteInnerRadius = ROULETTE_INNER_RADIUS,
     RouletteOuterRadius = ROULETTE_OUTER_RADIUS,
     RouletteSectorAngle = ROULETTE_SECTOR_ANGLE,
+    RouletteSafeRadius = ROULETTE_SAFE_RADIUS,
     RouletteActivationDelay = ROULETTE_ACTIVATION_DELAY_MS,
     RouletteGroundInnerID = ROULETTE_GROUND_INNER_ID,
     RouletteGroundOuterID = ROULETTE_GROUND_OUTER_ID,
     DirectDelays = DIRECT_DELAYS,
     ReverseDelays = REVERSE_DELAYS,
+    GuideLookaheadGroups = GUIDE_LOOKAHEAD_GROUPS,
     Defaults = DEFAULTS,
     NewState = newState,
     ClearState = clearState,
@@ -1307,6 +1448,7 @@ Feature.Test = {
     ResolveRouletteEvent = resolveRouletteEvent,
     UpdateRoulette = updateRoulette,
     RouletteDangerGroup = rouletteDangerGroup,
+    RouletteSafePoint = rouletteSafePoint,
     DrawRouletteGuide = drawRouletteGuide,
     PruneState = pruneState,
 }
