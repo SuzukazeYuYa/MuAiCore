@@ -715,7 +715,7 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                                 return
                             end
                             local finalDir = dir - math.pi / 2
-                            guideData[curJob] = TensorCore.getPosInDirection(curSourceObj.pos, finalDir, 9.5)
+                            guideData[curJob] = TensorCore.getPosInDirection(curSourceObj.pos, finalDir, 3.5)
                         else 
                             if isDouble then
                                 table.insert(doubleLinePos, curSourceObj.pos)

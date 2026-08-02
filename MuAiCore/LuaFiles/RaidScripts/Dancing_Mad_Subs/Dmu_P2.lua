@@ -939,14 +939,46 @@ Dmu_P2.Update = function()
                     then
                         local curMark = Data().Towers.curMarks[job]
                         if curMark == 715 then
+                            local cirCleDrawer, inRange
                             -- 分摊
-                            DM.greenDrawer:addCircle(curMember.pos.x, MG.drawerY, curMember.pos.z, 5)
+                            if job == MG.SelfPos then
+                                local cnt = 0
+                                for job2, member2 in pairs(MG.Party) do
+                                    if job2 ~= job then
+                                        local otherMember = TensorCore.mGetEntity(member2.id)
+                                        if otherMember and TensorCore.getDistance2d(member.pos, otherMember.pos) < 5.1 then
+                                            cnt = cnt + 1
+                                        end
+                                    end
+                                end
+                                if cnt == 2 then
+                                    cirCleDrawer = DM.greenDrawer
+                                else
+                                    cirCleDrawer = DM.yellowDrawer
+                                    if cnt == 3 and TensorCore.getDistance2d(curMember.pos, left) < 4 then
+                                        inRange = true
+                                    end
+                                end
+                            else
+                                cirCleDrawer = DM.greenDrawer
+                            end
+                            cirCleDrawer:addCircle(curMember.pos.x, MG.drawerY, curMember.pos.z, 5)
+                            if inRange then
+                                --如果4个人，那么一定是引导扇形人也在分摊范围
+                                local leadJob = Data().Towers.standBy[2]
+                                if leadJob ~= nil then
+                                    local leader = TensorCore.mGetEntity(MG.Party[leadJob].id)
+                                    local ldDraw = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
+                                    ldDraw:setRenderFlags(256)
+                                    ldDraw:addCircle(leader.pos.x, MG.drawerY, leader.pos.z, 0.5)
+                                end
+                            end
                         elseif curMark == 716 then
                             -- 钢铁
                             DM.redDrawer:addCircle(curMember.pos.x, MG.drawerY, curMember.pos.z, 5)
                         elseif curMark == 717 then
                             -- 扇形
-                            local nearest = nil
+                            local nearest
                             local dis = 1000
                             for _, mmb in pairs(MG.Party) do
                                 if mmb.id ~= curMember.id then
@@ -960,13 +992,11 @@ Dmu_P2.Update = function()
                                     end
                                 end
                             end
-
                             if nearest ~= nil then
                                 local dir = TensorCore.getHeadingToTarget(curMember.pos, nearest.pos)
                                 MG.CreateDrawer(0, 0.6, 1, 0.3, 2, 13)
                                   :addCone(curMember.pos.x, MG.drawerY, curMember.pos.z, 40, math.pi / 2, dir)
                             end
-
                         end
                     end
                 end
