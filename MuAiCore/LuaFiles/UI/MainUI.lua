@@ -93,6 +93,12 @@ local OCCULT_CRESCENT_NORTH_ENCOUNTERS = {
         { 'DrawSeedExplosionPrediction', '种子爆炸范围提前预测',
             'SetIambePredictionEnabled' },
     } },
+    { '呼风狮鹫', 'GaleGriffin', 'SetGaleGriffinEnabled', {
+        { 'DrawWindOrbPrediction', '风球钢铁提前预测',
+            'SetGaleGriffinWindPredictionEnabled' },
+        { 'DynamicGuide', '三角跳扩散最短路径指路',
+            'SetGaleGriffinDynamicGuideEnabled' },
+    } },
     { '诱拐魔', 'KidnapDemon', 'SetKidnapDemonEnabled', {
         { 'DrawTearingWindPrediction', '撕裂之风冰花提前预测',
             'SetKidnapDemonPredictionEnabled' },

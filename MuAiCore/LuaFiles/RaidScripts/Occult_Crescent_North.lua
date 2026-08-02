@@ -115,6 +115,7 @@ local MagiNecromancer = loadNorthModule('MagiNecromancer')
 local LeaderChimera = loadNorthModule('LeaderChimera')
 local MagiHydra = loadNorthModule('MagiHydra')
 local Iambe = loadNorthModule('Iambe')
+local GaleGriffin = loadNorthModule('GaleGriffin')
 local KidnapDemon = loadNorthModule('KidnapDemon')
 local ShapeshiftingMage = loadNorthModule('ShapeshiftingMage')
 local KelpieCaptain = loadNorthModule('KelpieCaptain')
@@ -131,6 +132,7 @@ local FEATURES = {
     LeaderChimera,
     MagiHydra,
     Iambe,
+    GaleGriffin,
     KidnapDemon,
     ShapeshiftingMage,
     KelpieCaptain,
@@ -187,6 +189,8 @@ G.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
             entityID, spellID, channelTimeMax, now)
     Iambe.OnEntityChannel(
             entityID, spellID, targetID, channelTimeMax, now)
+    GaleGriffin.OnEntityChannel(
+            entityID, spellID, channelTimeMax, now)
     ShapeshiftingMage.OnEntityChannel(
             entityID, spellID, channelTimeMax, now)
     GemstoneBeast.OnEntityChannel(entityID, spellID, now)
@@ -229,6 +233,7 @@ G.OnEntityCast = function(entityID, spellID, castPos)
     LeaderChimera.OnEntityCast(entityID, spellID, now)
     MagiHydra.OnEntityCast(entityID, spellID, now)
     Iambe.OnEntityCast(entityID, spellID, castPos, now)
+    GaleGriffin.OnEntityCast(entityID, spellID, now)
     ShapeshiftingMage.OnEntityCast(entityID, spellID, now)
     KelpieCaptain.OnEntityCast(entityID, spellID, castPos, now)
     GemstoneBeast.OnEntityCast(entityID, spellID, now)
@@ -268,9 +273,11 @@ G.OnVisibilityChange = function(entityID, wasVisible, isVisible)
             entityID, wasVisible, isVisible, now)
     local flash = MagiHydra.OnVisibilityChange(
             entityID, wasVisible, isVisible, now)
+    local gale = GaleGriffin.OnVisibilityChange(
+            entityID, isVisible, now)
     local gemstone = GemstoneBeast.OnVisibilityChange(
             entityID, wasVisible, isVisible, now)
-    return chimera or revealed or flash or gemstone
+    return chimera or revealed or flash or gale or gemstone
 end
 
 G.OnEntityAdd = function(entityID, entityName, contentID)
@@ -281,7 +288,8 @@ G.OnEntityAdd = function(entityID, entityName, contentID)
     local chimera = LeaderChimera.OnEntityAdd(entityID, contentID, now)
     local littleMage = LittleMage.OnEntityAdd(entityID, now)
     local iambe = Iambe.OnEntityAdd(entityID, contentID, now)
-    return chimera or littleMage or iambe
+    local gale = GaleGriffin.OnEntityAdd(entityID, contentID, now)
+    return chimera or littleMage or iambe or gale
 end
 
 G.OnMarkerAdd = function(entityID, markerID)
@@ -318,6 +326,7 @@ G.OnAOECreate = function(aoeInfo)
     NorthReferenceDrawings.OnAOECreate(aoeInfo, now)
     LeaderChimera.OnAOECreate(aoeInfo, now)
     MagiHydra.OnAOECreate(aoeInfo, now)
+    GaleGriffin.OnAOECreate(aoeInfo, now)
     KidnapDemon.OnAOECreate(aoeInfo, now)
     ShapeshiftingMage.OnAOECreate(aoeInfo, now)
     KelpieCaptain.OnAOECreate(aoeInfo, now)
@@ -341,6 +350,7 @@ G.Update = function()
     LeaderChimera.Update(guide, now)
     MagiHydra.Update(guide, now)
     Iambe.Update(guide, now)
+    GaleGriffin.Update(guide, now)
     KidnapDemon.Update(guide, now)
     ShapeshiftingMage.Update(guide, now)
     KelpieCaptain.Update(guide, now)
@@ -359,6 +369,7 @@ G.Test = {
     LeaderChimera = LeaderChimera.Test,
     MagiHydra = MagiHydra.Test,
     Iambe = Iambe.Test,
+    GaleGriffin = GaleGriffin.Test,
     KidnapDemon = KidnapDemon.Test,
     ShapeshiftingMage = ShapeshiftingMage.Test,
     KelpieCaptain = KelpieCaptain.Test,

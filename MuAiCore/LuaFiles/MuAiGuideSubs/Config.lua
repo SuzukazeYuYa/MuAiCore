@@ -334,6 +334,12 @@ Config.init = function(M)
                 Enable = true,
                 DrawSeedExplosionPrediction = true,
             },
+            --------- 新月岛·北岛：呼风狮鹫 ---------
+            GaleGriffin = {
+                Enable = true,
+                DrawWindOrbPrediction = true,
+                DynamicGuide = true,
+            },
             --------- 新月岛·北岛：诱拐魔 ---------
             KidnapDemon = {
                 Enable = true,
