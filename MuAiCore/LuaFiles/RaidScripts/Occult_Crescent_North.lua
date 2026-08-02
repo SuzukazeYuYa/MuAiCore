@@ -262,13 +262,15 @@ G.OnVisibilityChange = function(entityID, wasVisible, isVisible)
         return false
     end
     local now = Context.nowMs()
+    local chimera = LeaderChimera.OnVisibilityChange(
+            entityID, wasVisible, isVisible, now)
     local revealed = MagiNecromancer.OnVisibilityChange(
             entityID, wasVisible, isVisible, now)
     local flash = MagiHydra.OnVisibilityChange(
             entityID, wasVisible, isVisible, now)
     local gemstone = GemstoneBeast.OnVisibilityChange(
             entityID, wasVisible, isVisible, now)
-    return revealed or flash or gemstone
+    return chimera or revealed or flash or gemstone
 end
 
 G.OnEntityAdd = function(entityID, entityName, contentID)
