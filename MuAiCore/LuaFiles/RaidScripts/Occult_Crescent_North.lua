@@ -114,7 +114,11 @@ local AlabasterBlade = loadNorthModule('AlabasterBlade')
 local MagiNecromancer = loadNorthModule('MagiNecromancer')
 local LeaderChimera = loadNorthModule('LeaderChimera')
 local MagiHydra = loadNorthModule('MagiHydra')
+local Iambe = loadNorthModule('Iambe')
+local KidnapDemon = loadNorthModule('KidnapDemon')
 local ShapeshiftingMage = loadNorthModule('ShapeshiftingMage')
+local KelpieCaptain = loadNorthModule('KelpieCaptain')
+local GemstoneBeast = loadNorthModule('GemstoneBeast')
 local Pallmagia = loadNorthModule('Pallmagia')
 local LittleMage = loadNorthModule('LittleMage')
 local EvilSeer = loadNorthModule('EvilSeer')
@@ -126,7 +130,11 @@ local FEATURES = {
     MagiNecromancer,
     LeaderChimera,
     MagiHydra,
+    Iambe,
+    KidnapDemon,
     ShapeshiftingMage,
+    KelpieCaptain,
+    GemstoneBeast,
     Pallmagia,
     LittleMage,
     EvilSeer,
@@ -177,6 +185,11 @@ G.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
             entityID, spellID, channelTimeMax, now)
     MagiHydra.OnEntityChannel(
             entityID, spellID, channelTimeMax, now)
+    Iambe.OnEntityChannel(
+            entityID, spellID, channelTimeMax, now)
+    ShapeshiftingMage.OnEntityChannel(
+            entityID, spellID, channelTimeMax, now)
+    GemstoneBeast.OnEntityChannel(entityID, spellID, now)
     Pallmagia.OnEntityChannel(
             entityID, spellID, targetID, channelTimeMax, now)
     LittleMage.OnEntityChannel(entityID, spellID, now)
@@ -215,7 +228,10 @@ G.OnEntityCast = function(entityID, spellID, castPos)
     MagiNecromancer.OnEntityCast(entityID, spellID, now)
     LeaderChimera.OnEntityCast(entityID, spellID, now)
     MagiHydra.OnEntityCast(entityID, spellID, now)
+    Iambe.OnEntityCast(entityID, spellID, castPos, now)
     ShapeshiftingMage.OnEntityCast(entityID, spellID, now)
+    KelpieCaptain.OnEntityCast(entityID, spellID, now)
+    GemstoneBeast.OnEntityCast(entityID, spellID, now)
     Pallmagia.OnEntityCast(entityID, spellID, castPos, now)
     LittleMage.OnEntityCast(entityID, spellID, now)
     EvilSeer.OnEntityCast(entityID, spellID, now)
@@ -250,26 +266,45 @@ G.OnVisibilityChange = function(entityID, wasVisible, isVisible)
             entityID, wasVisible, isVisible, now)
     local flash = MagiHydra.OnVisibilityChange(
             entityID, wasVisible, isVisible, now)
-    return revealed or flash
+    local gemstone = GemstoneBeast.OnVisibilityChange(
+            entityID, wasVisible, isVisible, now)
+    return revealed or flash or gemstone
 end
 
-G.OnEntityAdd = function(entityID, entityName)
+G.OnEntityAdd = function(entityID, entityName, contentID)
     if not Context.currentMapIsNorth() then
         return false
     end
-    return LeaderChimera.OnEntityAdd(entityID, Context.nowMs())
+    local now = Context.nowMs()
+    local chimera = LeaderChimera.OnEntityAdd(entityID, contentID, now)
+    local littleMage = LittleMage.OnEntityAdd(entityID, now)
+    local iambe = Iambe.OnEntityAdd(entityID, contentID, now)
+    return chimera or littleMage or iambe
+end
+
+G.OnMarkerAdd = function(entityID, markerID)
+    if not Context.currentMapIsNorth() then
+        return false
+    end
+    return KidnapDemon.OnMarkerAdd(
+            entityID, markerID, Context.nowMs())
 end
 
 G.OnAddGroundEffect = function(...)
     if Context.currentMapIsNorth() then
+        local now = Context.nowMs()
+        ShapeshiftingMage.OnAddGroundEffect({ ... }, now)
         Pallmagia.OnAddGroundEffect(...)
     end
 end
 
 G.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
     if Context.currentMapIsNorth() then
+        local now = Context.nowMs()
         Pallmagia.OnEventObjectScriptFunc(
-                entityID, a1, a2, a3, Context.nowMs())
+                entityID, a1, a2, a3, now)
+        GemstoneBeast.OnEventObjectScriptFunc(
+                entityID, a1, a2, a3, now)
     end
 end
 
@@ -281,7 +316,9 @@ G.OnAOECreate = function(aoeInfo)
     NorthReferenceDrawings.OnAOECreate(aoeInfo, now)
     LeaderChimera.OnAOECreate(aoeInfo, now)
     MagiHydra.OnAOECreate(aoeInfo, now)
+    KidnapDemon.OnAOECreate(aoeInfo, now)
     ShapeshiftingMage.OnAOECreate(aoeInfo, now)
+    KelpieCaptain.OnAOECreate(aoeInfo, now)
     Pallmagia.OnAOECreate(aoeInfo, now)
     WarlikeMinotaur.OnAOECreate(aoeInfo, now)
 end
@@ -301,7 +338,11 @@ G.Update = function()
     MagiNecromancer.Update(guide, now)
     LeaderChimera.Update(guide, now)
     MagiHydra.Update(guide, now)
+    Iambe.Update(guide, now)
+    KidnapDemon.Update(guide, now)
     ShapeshiftingMage.Update(guide, now)
+    KelpieCaptain.Update(guide, now)
+    GemstoneBeast.Update(guide, now)
     local guided = Pallmagia.Update(guide, now)
     LittleMage.Update(guide, now, not guided)
     EvilSeer.Update(guide, now)
@@ -315,7 +356,11 @@ G.Test = {
     MagiNecromancer = MagiNecromancer.Test,
     LeaderChimera = LeaderChimera.Test,
     MagiHydra = MagiHydra.Test,
+    Iambe = Iambe.Test,
+    KidnapDemon = KidnapDemon.Test,
     ShapeshiftingMage = ShapeshiftingMage.Test,
+    KelpieCaptain = KelpieCaptain.Test,
+    GemstoneBeast = GemstoneBeast.Test,
     Pallmagia = Pallmagia.Test,
     LittleMage = LittleMage.Test,
     EvilSeer = EvilSeer.Test,

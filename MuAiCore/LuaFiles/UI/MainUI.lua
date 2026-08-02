@@ -89,12 +89,34 @@ local OCCULT_CRESCENT_NORTH_ENCOUNTERS = {
         { 'DrawMultipleBreathPrediction', '多重吐息下一次判定提前预测',
             'SetMagiHydraBreathPredictionEnabled' },
     } },
+    { '伊阿姆柏', 'Iambe', 'SetIambeEnabled', {
+        { 'DrawSeedExplosionPrediction', '种子爆炸范围提前预测',
+            'SetIambePredictionEnabled' },
+    } },
+    { '诱拐魔', 'KidnapDemon', 'SetKidnapDemonEnabled', {
+        { 'DrawTearingWindPrediction', '撕裂之风冰花提前预测',
+            'SetKidnapDemonPredictionEnabled' },
+    } },
     { '变形法师', 'ShapeshiftingMage',
             'SetShapeshiftingMageEnabled', {
         { 'CorrectSupercellDonut', '超级细胞月环内径修正',
             'SetShapeshiftingMageDonutCorrectionEnabled' },
         { 'DrawHellishBreathPrediction', '炼狱吐息三连提前预测',
             'SetShapeshiftingMageBreathPredictionEnabled' },
+        { 'DrawHellfireRushPrediction', '烈火地狱冲四连矩形提前预测',
+            'SetShapeshiftingMageRushPredictionEnabled' },
+    } },
+    { '凯尔派总领', 'KelpieCaptain',
+            'SetKelpieCaptainEnabled', {
+        { 'DrawWaveburstPrediction', '浪暴扩散地火提前预测',
+            'SetKelpieCaptainPredictionEnabled' },
+    } },
+    { '负隅宝石兽', 'GemstoneBeast',
+            'SetGemstoneBeastEnabled', {
+        { 'DrawSafeZone', '绿色正方形/L形安全区',
+            'SetGemstoneBeastSafeZoneEnabled' },
+        { 'DynamicGuide', '最近安全内点指路',
+            'SetGemstoneBeastDynamicGuideEnabled' },
     } },
     { '惨白魔人', 'Pallmagia', 'SetPallmagiaEnabled', {
         { 'DrawInstructionPrediction', '学习指令范围预测',
@@ -104,7 +126,7 @@ local OCCULT_CRESCENT_NORTH_ENCOUNTERS = {
             'SetPallmagiaRouletteGuideEnabled' },
     } },
     { '小小法师', 'LittleMage', 'SetLittleMageEnabled', {
-        { 'DynamicGuide', '双球合并预测与动态指路',
+        { 'DynamicGuide', '传球/双球合并预测与动态指路',
             'SetLittleMageDynamicGuideEnabled' },
     } },
     { '邪瞳', 'EvilSeer', 'SetEvilSeerEnabled', {

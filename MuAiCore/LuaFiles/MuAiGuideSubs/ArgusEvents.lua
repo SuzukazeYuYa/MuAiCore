@@ -235,8 +235,9 @@ ArgusEvents.init = function(M)
     end
 
     --- 注册实体生成事件
-    handlers.OnEntityAdd = function(entityID, entityName)
-        return callRaidScript(M, 'OnEntityAdd', entityID, entityName)
+    handlers.OnEntityAdd = function(entityID, entityName, contentID)
+        return callRaidScript(
+                M, 'OnEntityAdd', entityID, entityName, contentID)
     end
 
     --- 注册实体可见性变化事件

@@ -115,7 +115,8 @@ Config.init = function(M)
             'OccultReferenceDrawings', 'NorthReferenceDrawings',
             'AlabasterBlade',
             'MagiNecromancer', 'LeaderChimera', 'MagiHydra',
-            'ShapeshiftingMage',
+            'Iambe', 'KidnapDemon', 'ShapeshiftingMage',
+            'KelpieCaptain', 'GemstoneBeast',
             'Pallmagia', 'LittleMage', 'EvilSeer',
             'Arachne', 'WarlikeMinotaur',
         }
@@ -328,11 +329,33 @@ Config.init = function(M)
                 AutoFaceStunningFlash = true,
                 DrawMultipleBreathPrediction = true,
             },
+            --------- 新月岛·北岛：伊阿姆柏 ---------
+            Iambe = {
+                Enable = true,
+                DrawSeedExplosionPrediction = true,
+            },
+            --------- 新月岛·北岛：诱拐魔 ---------
+            KidnapDemon = {
+                Enable = true,
+                DrawTearingWindPrediction = true,
+            },
             --------- 新月岛·北岛：变形法师 ---------
             ShapeshiftingMage = {
                 Enable = true,
                 CorrectSupercellDonut = true,
                 DrawHellishBreathPrediction = true,
+                DrawHellfireRushPrediction = true,
+            },
+            --------- 新月岛·北岛：凯尔派总领 ---------
+            KelpieCaptain = {
+                Enable = true,
+                DrawWaveburstPrediction = true,
+            },
+            --------- 新月岛·北岛：负隅宝石兽 ---------
+            GemstoneBeast = {
+                Enable = true,
+                DrawSafeZone = true,
+                DynamicGuide = true,
             },
             --------- 新月岛·北岛：惨白魔人 ---------
             Pallmagia = {
