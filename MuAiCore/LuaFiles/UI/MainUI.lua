@@ -1,5 +1,273 @@
 local MainUI = {}
 local WIN_WIDE = 355
+local OCCULT_CRESCENT_SOUTH_ENCOUNTERS = {
+    { '新月狂战士', 'CrescentBerserker',
+        'SetCrescentBerserkerMoogleDonutsEnabled', {
+            { 'DrawPreparationRing', '绿色准备站位窄环' },
+            { 'DrawGuideArrow', '指路箭头' },
+            { 'DrawSafeZone', '爆炸后安全区' },
+        } },
+    { '新月骑士群', 'OccultKnight', 'SetOccultKnightEnabled', {
+        { 'DrawSpinningPrediction', '旋转十字预测' },
+        { 'DrawSpinningGuide', '旋转安全指路' },
+        { 'DrawKnockbackGuide', '击退落点与指路' },
+        { 'DrawFlurryPrediction', '连环爆炸预测' },
+    } },
+    { '鬼火苗', 'Hinkypunk', 'SetHinkypunkEnabled', {
+        { 'DrawNextBird', '下一只鸟预测' },
+        { 'DrawDonutCrossGuide', '甜甜圈/十字安全指路' },
+        { 'DrawKnockbackGuide', '击退起落点指路' },
+    } },
+    { '尼姆瓣齿鲨', 'NymianPetalodus', 'SetNymianPetalodusEnabled', {
+        { 'DrawOpenWaterPrediction', '双螺旋未来落点' },
+        { 'DrawTidalGuillotineMarkers', '标记落点预警圈' },
+    } },
+    { '金钱龟', 'TradeTortoise', 'SetTradeTortoiseEnabled', {
+        { 'DrawCoinRoute', '硬币路线与交货点' },
+        { 'DrawGreenKnockback', '绿龟击退准备与落点' },
+        { 'DrawCostOfLivingGuide', '30米击退指路' },
+    } },
+    { '夺心魔', 'MysteriousMindflayer',
+        'SetMysteriousMindflayerEnabled', {
+            { 'DrawMatchingImpDanger', '同元素小恶魔未来危险圈' },
+            { 'DrawSeductionGuide', '魅惑强制行进起落点指路' },
+        } },
+    { '黑色天星', 'BlackChocobo', 'SetBlackChocoboEnabled', {
+        { 'DrawSlaughterPredictions', '陆行鸟杀戮定时地火圈' },
+        { 'DrawSlaughterDirection', '连爆推进方向线' },
+    } },
+    { '回廊恶魔', 'CloisterDemon', 'SetCloisterDemonEnabled', {
+        { 'DrawSealTowers', '未处理封印塔圈' },
+        { 'DrawNearestSealGuide', '最近封印指路（非分工）' },
+    } },
+    { '金色石面', 'GildedHeadstone', 'SetGildedHeadstoneEnabled', {
+        { 'AutoFace', '侵蚀魔眼自动面对/背对',
+            'SetGildedHeadstoneAutoFaceEnabled' },
+        { 'DrawFacingArrow', '侵蚀魔眼面向箭头' },
+    } },
+    { '跃立狮', 'LionRampant', 'SetLionRampantEnabled', {
+        { 'DrawBrightPulsePrediction', '闪光球落点预测' },
+    } },
+    { '水晶龙', 'CrystalDragon', 'SetCrystalDragonEnabled' },
+    { '死亡爪', 'DeathClaw', 'SetDeathClawEnabled', {
+        { 'DrawCrosshatchPrediction', '交叉抓痕预测' },
+        { 'DrawSkulkingPrediction', '潜行命令预测' },
+    } },
+    { '岛屿监视者', 'IslandWatcher', 'SetIslandWatcherEnabled', {
+        { 'AutoFacePetrifyingGaze', '石化视线自动背对',
+            'SetIslandWatcherAutoFaceEnabled' },
+    } },
+    { '高等魔鸟', 'HigherBird', 'SetHigherBirdEnabled', {
+        { 'AutoFacePetrifyingGaze', '石化射线自动背对',
+            'SetHigherBirdAutoFaceEnabled' },
+    } },
+    { '纳木', 'Nammu', 'SetNammuEnabled' },
+    { '南岛通用范围', 'OccultReferenceDrawings',
+        'SetOccultReferenceDrawingsEnabled' },
+}
+
+local OCCULT_CRESCENT_NORTH_ENCOUNTERS = {
+    { '北岛通用范围（含极魔之塔）', 'NorthReferenceDrawings',
+        'SetNorthReferenceDrawingsEnabled' },
+    { '雪石膏之剑', 'AlabasterBlade',
+        'SetAlabasterBladeEnabled' },
+    { '魔亡灵法师', 'MagiNecromancer',
+            'SetMagiNecromancerEnabled', {
+        { 'DrawRevealPrediction', '亡灵显形范围提前预测',
+            'SetMagiNecromancerPredictionEnabled' },
+    } },
+    { '统领奇美拉', 'LeaderChimera',
+            'SetLeaderChimeraEnabled', {
+        { 'DrawBreathSequencePrediction', '三连吐息与咆哮提前预测',
+            'SetLeaderChimeraBreathPredictionEnabled' },
+    } },
+    { '魔许德拉', 'MagiHydra', 'SetMagiHydraEnabled', {
+        { 'AutoFaceStunningFlash', '眩晕闪光自动背对',
+            'SetMagiHydraAutoFaceEnabled' },
+        { 'DrawMultipleBreathPrediction', '多重吐息下一次判定提前预测',
+            'SetMagiHydraBreathPredictionEnabled' },
+    } },
+    { '伊阿姆柏', 'Iambe', 'SetIambeEnabled', {
+        { 'DrawSeedExplosionPrediction', '种子爆炸范围提前预测',
+            'SetIambePredictionEnabled' },
+    } },
+    { '呼风狮鹫', 'GaleGriffin', 'SetGaleGriffinEnabled', {
+        { 'DrawWindOrbPrediction', '风球钢铁提前预测',
+            'SetGaleGriffinWindPredictionEnabled' },
+        { 'DynamicGuide', '三角跳扩散最短路径指路',
+            'SetGaleGriffinDynamicGuideEnabled' },
+    } },
+    { '诱拐魔', 'KidnapDemon', 'SetKidnapDemonEnabled', {
+        { 'DrawTearingWindPrediction', '撕裂之风冰花提前预测',
+            'SetKidnapDemonPredictionEnabled' },
+    } },
+    { '变形法师', 'ShapeshiftingMage',
+            'SetShapeshiftingMageEnabled', {
+        { 'CorrectSupercellDonut', '超级细胞月环内径修正',
+            'SetShapeshiftingMageDonutCorrectionEnabled' },
+        { 'DrawHellishBreathPrediction', '炼狱吐息三连提前预测',
+            'SetShapeshiftingMageBreathPredictionEnabled' },
+        { 'DrawHellfireRushPrediction', '烈火地狱冲四连矩形提前预测',
+            'SetShapeshiftingMageRushPredictionEnabled' },
+    } },
+    { '凯尔派总领', 'KelpieCaptain',
+            'SetKelpieCaptainEnabled', {
+        { 'DrawWaveburstPrediction', '浪暴扩散地火提前预测',
+            'SetKelpieCaptainPredictionEnabled' },
+    } },
+    { '负隅宝石兽', 'GemstoneBeast',
+            'SetGemstoneBeastEnabled', {
+        { 'DrawSafeZone', '绿色正方形/L形安全区',
+            'SetGemstoneBeastSafeZoneEnabled' },
+        { 'DynamicGuide', '最近安全内点指路',
+            'SetGemstoneBeastDynamicGuideEnabled' },
+    } },
+    { '惨白魔人', 'Pallmagia', 'SetPallmagiaEnabled', {
+        { 'DrawInstructionPrediction', '学习指令范围预测',
+            'SetPallmagiaPredictionEnabled' },
+        { 'DynamicGuide', '动态安全指路' },
+        { 'RouletteGuide', '死亡轮盘动态指路',
+            'SetPallmagiaRouletteGuideEnabled' },
+    } },
+    { '小小法师', 'LittleMage', 'SetLittleMageEnabled', {
+        { 'DynamicGuide', '传球/双球合并预测与动态指路',
+            'SetLittleMageDynamicGuideEnabled' },
+    } },
+    { '邪瞳', 'EvilSeer', 'SetEvilSeerEnabled', {
+        { 'AutoFacePetrifyingGaze', '诅咒之瞳/诅咒目光自动背对',
+            'SetEvilSeerAutoFaceEnabled' },
+    } },
+    { '新月阿剌克涅', 'Arachne', 'SetArachneEnabled', {
+        { 'DrawChargePrediction', '蜘蛛突进矩形预测',
+            'SetArachneChargePredictionEnabled' },
+        { 'DrawConformityPrediction', '追随扇形提前预测',
+            'SetArachneConformityPredictionEnabled' },
+        { 'DynamicGuide', '动态安全指路',
+            'SetArachneDynamicGuideEnabled' },
+    } },
+    { '好战弥诺陶洛斯', 'WarlikeMinotaur',
+            'SetWarlikeMinotaurEnabled', {
+        { 'DrawEightfoldSweepPrediction', '八重横扫下一次真实判定',
+            'SetWarlikeMinotaurPredictionEnabled' },
+    } },
+}
+local OCCULT_CRESCENT_REGIONS = { '南岛', '北岛' }
+
+local buildEncounterNames = function(encounters)
+    local names = {}
+    for index, encounter in ipairs(encounters) do
+        names[index] = encounter[1]
+    end
+    return names
+end
+local OCCULT_CRESCENT_SOUTH_ENCOUNTER_NAMES =
+        buildEncounterNames(OCCULT_CRESCENT_SOUTH_ENCOUNTERS)
+local OCCULT_CRESCENT_NORTH_ENCOUNTER_NAMES =
+        buildEncounterNames(OCCULT_CRESCENT_NORTH_ENCOUNTERS)
+
+local drawOccultCheckbox = function(label, id, value)
+    GUI:Dummy(6, 5)
+    GUI:SameLine()
+    return GUI:Checkbox(label .. '##' .. id, value)
+end
+
+local drawOccultCrescentEncounterSettings = function(
+        M,
+        encounters,
+        encounterNames,
+        selectedField,
+        comboId)
+    if #encounters == 0 then
+        GUI:Dummy(6, 5)
+        GUI:SameLine()
+        GUI:Text('暂无专项绘图')
+        return
+    end
+    GUI:Dummy(6, 5)
+    GUI:SameLine()
+    GUI:AlignFirstTextHeightToWidgets()
+    GUI:Text('遭遇设置：')
+    GUI:SameLine()
+    GUI:PushItemWidth(205)
+    local selected = M.MainUI[selectedField]
+            or (selectedField == 'occultCrescentSouthEncounter'
+                    and M.MainUI.occultCrescentEncounter)
+            or 1
+    if selected < 1 or selected > #encounters then
+        selected = 1
+    end
+    selected = GUI:Combo(comboId, selected,
+            encounterNames,
+            #encounterNames)
+    M.MainUI[selectedField] = selected
+    GUI:PopItemWidth()
+    GUI:Separator()
+
+    local encounter = encounters[selected]
+    local key = encounter[2]
+    local cfg = M.Config.Main[key]
+    if type(cfg) ~= 'table' then
+        cfg = { Enable = true }
+        M.Config.Main[key] = cfg
+    elseif cfg.Enable == nil then
+        cfg.Enable = true
+    end
+    local oldEnable = cfg.Enable
+    cfg.Enable = drawOccultCheckbox('总开关', key, cfg.Enable)
+    if oldEnable ~= cfg.Enable and type(M[encounter[3]]) == 'function' then
+        M[encounter[3]](cfg.Enable)
+    end
+
+    local options = encounter[4]
+    if cfg.Enable and type(options) == 'table' and #options > 0 then
+        GUI:Separator()
+        for _, option in ipairs(options) do
+            local field = option[1]
+            if cfg[field] == nil then
+                cfg[field] = true
+            end
+            local oldValue = cfg[field]
+            cfg[field] = drawOccultCheckbox(option[2], key .. field, cfg[field])
+            if oldValue ~= cfg[field] and type(M[option[3]]) == 'function' then
+                M[option[3]](cfg[field])
+            end
+        end
+    end
+end
+
+local drawOccultCrescentSettings = function(M)
+    GUI:Dummy(6, 5)
+    GUI:SameLine()
+    GUI:AlignFirstTextHeightToWidgets()
+    GUI:Text('区域设置：')
+    GUI:SameLine()
+    GUI:PushItemWidth(205)
+    local region = M.MainUI.occultCrescentRegion or 1
+    if region < 1 or region > #OCCULT_CRESCENT_REGIONS then
+        region = 1
+    end
+    region = GUI:Combo('##OccultCrescentRegion', region,
+            OCCULT_CRESCENT_REGIONS,
+            #OCCULT_CRESCENT_REGIONS)
+    M.MainUI.occultCrescentRegion = region
+    GUI:PopItemWidth()
+
+    if region == 1 then
+        drawOccultCrescentEncounterSettings(
+                M,
+                OCCULT_CRESCENT_SOUTH_ENCOUNTERS,
+                OCCULT_CRESCENT_SOUTH_ENCOUNTER_NAMES,
+                'occultCrescentSouthEncounter',
+                '##OccultCrescentSouthEncounter')
+    else
+        drawOccultCrescentEncounterSettings(
+                M,
+                OCCULT_CRESCENT_NORTH_ENCOUNTERS,
+                OCCULT_CRESCENT_NORTH_ENCOUNTER_NAMES,
+                'occultCrescentNorthEncounter',
+                '##OccultCrescentNorthEncounter')
+    end
+end
 --[[
 ===========================
     主UI VIEW
@@ -453,7 +721,7 @@ local drawBaseSettingTab = function(M)
     GUI:SameLine(0, 0)
     M.Config.Main.LogEnable = GUI:Checkbox('输出调试日志##LogEnable', M.Config.Main.LogEnable)
     if GUI:IsItemHovered() then
-        GUI:SetTooltip('日志会写入MuAiCore\\Log，并脱敏队员名称')
+        GUI:SetTooltip('战斗日志写入MuAiCore\\Log；关键诊断始终写入Log\\Diagnostics，并脱敏队员名称')
     end
     GUI:Separator()
     GUI:Dummy(0, 0)
@@ -754,6 +1022,10 @@ local drawRaidSettingTab = function(M)
             end
         end
     end
+    if GUI:CollapsingHeader('新月岛') then
+        GUI:TextColored(1, 0, 1, 1, '  本功能由String开发.')
+        drawOccultCrescentSettings(M)
+    end
 end
 ---@param M MuAiGuide
 local drawToolsTab = function(M)
@@ -942,13 +1214,24 @@ local drawDeveloperTab = function(M)
     GUI:SameLine(205, 0)
     GUI:Button('重载MuAiGuide', 120, 20)
     if GUI:IsItemClicked(0) then
-        local candidate = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
-        local valid = type(candidate) == 'table'
+        local reloadPath = MuAiGuideRoot .. 'MuAiGuide.lua'
+        M.Diagnostic('INFO', 'Lifecycle', '开始手动热重载MuAiGuide', {
+            path = reloadPath,
+            version = M.VERSION,
+        }, 'manual_reload_start')
+        local loadOk, candidate = M.DiagnosticCall('Lifecycle', '手动热重载MuAiGuide', function()
+            return FileLoad(reloadPath)
+        end, { path = reloadPath, version = M.VERSION })
+        local valid = loadOk and type(candidate) == 'table'
                 and candidate.IsInit == true
                 and type(candidate.Update) == 'function'
                 and type(candidate.DrawUIs) == 'function'
                 and type(candidate.LogSystemLeave) == 'function'
         if valid then
+            M.Diagnostic('INFO', 'Lifecycle', '手动热重载MuAiGuide成功', {
+                fromVersion = M.VERSION,
+                toVersion = candidate.VERSION,
+            }, 'manual_reload_complete')
             M.CloseAllUI()
             if M.CurRaidScript ~= nil then
                 M.Log('Lifecycle', '重新初始化插件')
@@ -956,6 +1239,11 @@ local drawDeveloperTab = function(M)
             M.LogSystemLeave()
             MuAiGuide = candidate
         else
+            M.Diagnostic('ERROR', 'Lifecycle', '手动热重载MuAiGuide失败，保留当前实例', {
+                path = reloadPath,
+                result = candidate,
+                resultType = type(candidate),
+            }, 'manual_reload_failed')
             M.ShowMsgUI(3, { '重载MuAiGuide失败，当前实例已保留。', tostring(candidate) })
         end
     end

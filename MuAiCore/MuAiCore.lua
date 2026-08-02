@@ -2,6 +2,21 @@ local MuAiCore = {}
 local AddonName = "MuAiCore"
 local core = MuAiCore
 
+local function tracebackError(err)
+    if debug ~= nil and type(debug.traceback) == 'function' then
+        return debug.traceback(tostring(err), 2)
+    end
+    return tostring(err)
+end
+
+local function diagnose(guide, level, message, data, key)
+    if type(guide) == 'table' and type(guide.Diagnostic) == 'function' then
+        guide.Diagnostic(level, 'Bootstrap', message, data, key)
+        return
+    end
+    d('[MuAiCore][' .. tostring(level) .. '][Bootstrap] ' .. tostring(message))
+end
+
 local function isValidGuide(guide)
     return type(guide) == 'table'
             and guide.IsInit == true
@@ -12,13 +27,31 @@ end
 
 core.InitMuAiGuide = function()
     MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
-    local candidate = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
+    local guidePath = MuAiGuideRoot .. 'MuAiGuide.lua'
+    local previous = MuAiGuide
+    diagnose(previous, 'INFO', '开始加载MuAiGuide', { path = guidePath }, 'guide_load_start')
+    local candidate
+    local loaded, loadError = xpcall(function()
+        candidate = FileLoad(guidePath)
+    end, tracebackError)
+    if not loaded then
+        diagnose(previous, 'ERROR', '加载MuAiGuide时发生Lua异常，保留当前可用实例', {
+            path = guidePath,
+            traceback = loadError,
+        }, 'guide_load_exception')
+        return false
+    end
     if not isValidGuide(candidate) then
+        diagnose(type(candidate) == 'table' and candidate or previous,
+                'ERROR', 'MuAiGuide初始化结果无效，保留当前可用实例', {
+                    path = guidePath,
+                    result = candidate,
+                    resultType = type(candidate),
+                }, 'guide_load_invalid')
         d('[MuAiCore]初始化失败，保留当前可用实例：' .. tostring(candidate))
         return false
     end
 
-    local previous = MuAiGuide
     if type(previous) == 'table' and type(previous.LogSystemLeave) == 'function' then
         if previous.CurRaidScript ~= nil and type(previous.Log) == 'function' then
             previous.Log('Lifecycle', '重新初始化插件')
@@ -26,6 +59,10 @@ core.InitMuAiGuide = function()
         previous.LogSystemLeave()
     end
     MuAiGuide = candidate
+    diagnose(candidate, 'INFO', 'MuAiGuide实例已激活', {
+        path = guidePath,
+        version = candidate.VERSION,
+    }, 'guide_activated')
 
     local downloadPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
     if FolderExists(downloadPath) then

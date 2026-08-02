@@ -4315,6 +4315,11 @@ local tbl =
 							},
 							
 							{
+								"ec1025d4-377f-4586-a168-7e87c73e24de",
+								true,
+							},
+
+							{
 								"7ec312d0-ad27-3bf4-ac11-2b30bf0b5fe3",
 								true,
 							},
@@ -4346,6 +4351,11 @@ local tbl =
 							},
 							
 							{
+								"ec1025d4-377f-4586-a168-7e87c73e24de",
+								true,
+							},
+
+							{
 								"04e4bb3c-98d6-addf-bcfb-4d30d420d13e",
 								true,
 							},
@@ -4371,6 +4381,11 @@ local tbl =
 								true,
 							},
 							
+							{
+								"ec1025d4-377f-4586-a168-7e87c73e24de",
+								true,
+							},
+
 							{
 								"39f3cd87-37cb-3eae-9e6e-415d95e85520",
 								true,
@@ -4403,6 +4418,11 @@ local tbl =
 							},
 							
 							{
+								"ec1025d4-377f-4586-a168-7e87c73e24de",
+								true,
+							},
+
+							{
 								"35996a0e-8662-0fbd-81aa-d030e1b9acc5",
 								true,
 							},
@@ -4433,6 +4453,11 @@ local tbl =
 								true,
 							},
 							
+							{
+								"ec1025d4-377f-4586-a168-7e87c73e24de",
+								true,
+							},
+
 							{
 								"34e5f095-9ef2-afd4-9210-f9ab4dc43479",
 								true,
@@ -4465,6 +4490,11 @@ local tbl =
 							},
 							
 							{
+								"ec1025d4-377f-4586-a168-7e87c73e24de",
+								true,
+							},
+
+							{
 								"f5583e56-8a63-9e1d-aa39-3ca87b4d69ad",
 								true,
 							},
@@ -4495,6 +4525,11 @@ local tbl =
 								true,
 							},
 							
+							{
+								"ec1025d4-377f-4586-a168-7e87c73e24de",
+								true,
+							},
+
 							{
 								"7071da13-f101-8fdc-95a5-0b1d2be31986",
 								true,
@@ -4527,6 +4562,11 @@ local tbl =
 							},
 							
 							{
+								"ec1025d4-377f-4586-a168-7e87c73e24de",
+								true,
+							},
+
+							{
 								"330e3571-b675-71c2-a8f6-882826ce2a73",
 								true,
 							},
@@ -4558,6 +4598,11 @@ local tbl =
 							},
 							
 							{
+								"ec1025d4-377f-4586-a168-7e87c73e24de",
+								true,
+							},
+
+							{
 								"f8f3a749-3db0-a083-a884-8f131db08476",
 								true,
 							},
@@ -4582,6 +4627,11 @@ local tbl =
 								true,
 							},
 							
+							{
+								"ec1025d4-377f-4586-a168-7e87c73e24de",
+								true,
+							},
+
 							{
 								"7ef8e5dd-d3a3-a937-aff8-95948160bccd",
 								true,
@@ -4614,6 +4664,11 @@ local tbl =
 							},
 							
 							{
+								"ec1025d4-377f-4586-a168-7e87c73e24de",
+								true,
+							},
+
+							{
 								"2ea47182-803f-86ea-87a5-c23959e8ee83",
 								true,
 							},
@@ -4645,6 +4700,11 @@ local tbl =
 							},
 							
 							{
+								"ec1025d4-377f-4586-a168-7e87c73e24de",
+								true,
+							},
+
+							{
 								"97117f4f-6e97-da27-8352-29d3abda1724",
 								true,
 							},
@@ -4673,6 +4733,18 @@ local tbl =
 						localmapid = 1327,
 						name = "M12S",
 						uuid = "a760f3a5-f5c3-243b-b15e-34d8b4d3b36c",
+						version = 3,
+					},
+				},
+
+				{
+					data =
+					{
+						category = "Lua",
+						conditionLua = "if Player == nil or Player.localmapid ~= 1327 or eventArgs == nil then\n    return false\nend\nlocal spellID = eventArgs.spellID\nreturn spellID == 46296 or spellID == 46298 or spellID == 46299 or spellID == 46301 or spellID == 46303 or spellID == 46305 or spellID == 46316 or spellID == 46336 or spellID == 46341 or spellID == 46345 or spellID == 46351 or spellID == 46352 or spellID == 46375 or spellID == 46379 or spellID == 46380",
+						dequeueIfLuaFalse = true,
+						name = "M12S本体开始读条快速出队",
+						uuid = "ec1025d4-377f-4586-a168-7e87c73e24de",
 						version = 3,
 					},
 				},

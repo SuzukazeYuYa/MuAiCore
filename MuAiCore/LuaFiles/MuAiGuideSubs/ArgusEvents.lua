@@ -33,6 +33,33 @@ local function createDispatcher(eventName)
     end
 end
 
+-- Argus.registerOnEntityCast 当前同时存在三值 table 与八值 payload。
+-- 统一为 MuAiCore 既有的 entityID, spellID, castPos，不改变副本脚本签名。
+local function normalizeEntityCast(entityID, spellID, castPosOrX, ...)
+    if type(castPosOrX) == 'table' then
+        return entityID, spellID, castPosOrX
+    end
+
+    local castPosY, castPosZ, heading, mainTargetID, targets = ...
+    if castPosOrX == nil
+            and castPosY == nil
+            and castPosZ == nil
+            and heading == nil
+            and mainTargetID == nil
+            and targets == nil
+    then
+        return entityID, spellID, nil
+    end
+    return entityID, spellID, {
+        x = castPosOrX,
+        y = castPosY,
+        z = castPosZ,
+        heading = heading,
+        mainTargetID = mainTargetID,
+        targets = targets,
+    }
+end
+
 ---@param M MuAiGuide
 ArgusEvents.init = function(M)
     local handlers = {}
@@ -65,7 +92,8 @@ ArgusEvents.init = function(M)
     end
 
     --- 读条结束事件
-    handlers.OnEntityCast = function(entityID, spellID, castPos)
+    handlers.OnEntityCast = function(...)
+        local entityID, spellID, castPos = normalizeEntityCast(...)
         callRaidScript(M, 'OnEntityCast', entityID, spellID, castPos)
         if M.Develop.PrintCastInfo then
             local entity = TensorCore.mGetEntity(entityID)
@@ -127,6 +155,27 @@ ArgusEvents.init = function(M)
         end
     end
 
+    --- 实体光环变化事件
+    handlers.OnAuraChange = function(
+            entityID,
+            oldActiveAura1,
+            oldActiveAura2,
+            oldPersistentAura,
+            newActiveAura1,
+            newActiveAura2,
+            newPersistentAura)
+        return callRaidScript(
+                M,
+                'OnAuraChange',
+                entityID,
+                oldActiveAura1,
+                oldActiveAura2,
+                oldPersistentAura,
+                newActiveAura1,
+                newActiveAura2,
+                newPersistentAura)
+    end
+
     --- 注册场景物件脚本事件
     handlers.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
         callRaidScript(M, 'OnEventObjectScriptFunc', entityID, a1, a2, a3)
@@ -173,6 +222,11 @@ ArgusEvents.init = function(M)
         end
     end
 
+    --- 注册场地效果生成事件；保持 Argus 原始 19 参数顺序。
+    handlers.OnAddGroundEffect = function(...)
+        return callRaidScript(M, 'OnAddGroundEffect', ...)
+    end
+
     --- 注册连线变化事件
     handlers.OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID,
             newTetherID, newTetherFlags, newTargetID)
@@ -181,8 +235,19 @@ ArgusEvents.init = function(M)
     end
 
     --- 注册实体生成事件
-    handlers.OnEntityAdd = function(entityID, entityName)
-        return callRaidScript(M, 'OnEntityAdd', entityID, entityName)
+    handlers.OnEntityAdd = function(entityID, entityName, contentID)
+        return callRaidScript(
+                M, 'OnEntityAdd', entityID, entityName, contentID)
+    end
+
+    --- 注册实体可见性变化事件
+    handlers.OnVisibilityChange = function(entityID, wasVisible, isVisible)
+        return callRaidScript(
+                M,
+                'OnVisibilityChange',
+                entityID,
+                wasVisible,
+                isVisible)
     end
 
     local registerComplete = false
@@ -196,11 +261,14 @@ ArgusEvents.init = function(M)
             { 'OnEntityCast', Argus.registerOnEntityCast },
             { 'OnMarkerAdd', Argus.registerOnMarkerAdd },
             { 'OnAOECreate', Argus.registerOnAOECreateFunc },
+            { 'OnAuraChange', Argus.registerOnAuraChangeFunc },
             { 'OnEventObjectScriptFunc', Argus.registerOnEventObjectScriptFunc },
             { 'OnMapEffect', Argus.registerOnMapEffect },
             { 'OnAddEntityVFX', Argus.registerOnAddEntityVFXFunc },
+            { 'OnAddGroundEffect', Argus.registerOnAddGroundEffectFunc },
             { 'OnTetherChange', Argus.registerOnTetherChange },
             { 'OnEntityAdd', Argus.registerOnEntityAddFunc },
+            { 'OnVisibilityChange', Argus.registerOnVisibilityChangeFunc },
         }
 
         local allRegistered = true
@@ -235,5 +303,7 @@ ArgusEvents.init = function(M)
         end
     end
 end
+
+ArgusEvents.normalizeEntityCast = normalizeEntityCast
 
 return ArgusEvents

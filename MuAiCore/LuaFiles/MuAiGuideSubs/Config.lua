@@ -106,6 +106,25 @@ Config.init = function(M)
         M.Config.Main.MerchantGuide = oldConfig.MerchantGuide
         M.Config.Main.MerchantLockFace = oldConfig.MerchantLockFace
         M.Config.Main.MerchantAimTool = oldConfig.MerchantAimTool
+        local occultConfigKeys = {
+            'CrescentBerserker', 'OccultKnight', 'Hinkypunk',
+            'NymianPetalodus', 'TradeTortoise',
+            'MysteriousMindflayer', 'BlackChocobo', 'CloisterDemon',
+            'GildedHeadstone', 'LionRampant', 'CrystalDragon',
+            'DeathClaw', 'IslandWatcher', 'HigherBird', 'Nammu',
+            'OccultReferenceDrawings', 'NorthReferenceDrawings',
+            'AlabasterBlade',
+            'MagiNecromancer', 'LeaderChimera', 'MagiHydra',
+            'Iambe', 'KidnapDemon', 'ShapeshiftingMage',
+            'KelpieCaptain', 'GemstoneBeast',
+            'Pallmagia', 'LittleMage', 'EvilSeer',
+            'Arachne', 'WarlikeMinotaur',
+        }
+        for _, key in ipairs(occultConfigKeys) do
+            if type(oldConfig[key]) == 'table' then
+                M.Config.Main[key] = oldConfig[key]
+            end
+        end
         M.InfoNoLog('已恢复默认设置.')
     end
     M.CreateDefMainCfg = function()
@@ -192,7 +211,186 @@ Config.init = function(M)
             MerchantDraw = true,
             MerchantGuide = true,
             MerchantLockFace = true,
-            MerchantAimTool = true
+            MerchantAimTool = true,
+            --------- 新月岛·南岛：新月狂战士 ---------
+            CrescentBerserker = {
+                Enable = true,
+                DrawPreparationRing = true,
+                DrawGuideArrow = true,
+                DrawSafeZone = true,
+            },
+            --------- 新月岛·南岛：Occult Knight ---------
+            OccultKnight = {
+                Enable = true,
+                DrawSpinningPrediction = true,
+                DrawSpinningGuide = true,
+                DrawKnockbackGuide = true,
+                DrawFlurryPrediction = true,
+            },
+            --------- 新月岛·南岛：Hinkypunk ---------
+            Hinkypunk = {
+                Enable = true,
+                DrawNextBird = true,
+                DrawDonutCrossGuide = true,
+                DrawKnockbackGuide = true,
+            },
+            --------- 新月岛·南岛：Nymian Petalodus ---------
+            NymianPetalodus = {
+                Enable = true,
+                DrawOpenWaterPrediction = true,
+                DrawTidalGuillotineMarkers = true,
+            },
+            --------- 新月岛·南岛：Trade Tortoise ---------
+            TradeTortoise = {
+                Enable = true,
+                DrawCoinRoute = true,
+                DrawGreenKnockback = true,
+                DrawCostOfLivingGuide = true,
+            },
+            --------- 新月岛·南岛：Mysterious Mindflayer ---------
+            MysteriousMindflayer = {
+                Enable = true,
+                DrawMatchingImpDanger = true,
+                DrawSeductionGuide = true,
+            },
+            --------- 新月岛·南岛：Black Chocobo ---------
+            BlackChocobo = {
+                Enable = true,
+                DrawSlaughterPredictions = true,
+                DrawSlaughterDirection = true,
+            },
+            --------- 新月岛·南岛：Cloister Demon ---------
+            CloisterDemon = {
+                Enable = true,
+                DrawSealTowers = true,
+                DrawNearestSealGuide = false,
+            },
+            --------- 新月岛·南岛：Gilded Headstone ---------
+            GildedHeadstone = {
+                Enable = true,
+                DrawFacingArrow = true,
+                AutoFace = true,
+            },
+            --------- 新月岛·南岛：跃立狮 ---------
+            LionRampant = {
+                Enable = true,
+                DrawBrightPulsePrediction = true,
+            },
+            --------- 新月岛·南岛：水晶龙 ---------
+            CrystalDragon = {
+                Enable = true,
+            },
+            --------- 新月岛·南岛：死亡爪 ---------
+            DeathClaw = {
+                Enable = true,
+                DrawCrosshatchPrediction = true,
+                DrawSkulkingPrediction = true,
+            },
+            --------- 新月岛·南岛：岛屿监视者 ---------
+            IslandWatcher = {
+                Enable = true,
+                AutoFacePetrifyingGaze = true,
+            },
+            --------- 新月岛·南岛：高等魔鸟 ---------
+            HigherBird = {
+                Enable = true,
+                AutoFacePetrifyingGaze = true,
+            },
+            --------- 新月岛·南岛：纳木 ---------
+            Nammu = {
+                Enable = true,
+            },
+            --------- 新月岛·南岛：通用参考范围 ---------
+            OccultReferenceDrawings = {
+                Enable = true,
+            },
+            --------- 新月岛·北岛：通用参考范围 ---------
+            NorthReferenceDrawings = {
+                Enable = true,
+            },
+            --------- 新月岛·北岛：雪石膏之剑 ---------
+            AlabasterBlade = {
+                Enable = true,
+            },
+            --------- 新月岛·北岛：魔亡灵法师 ---------
+            MagiNecromancer = {
+                Enable = true,
+                DrawRevealPrediction = true,
+            },
+            --------- 新月岛·北岛：统领奇美拉 ---------
+            LeaderChimera = {
+                Enable = true,
+                DrawBreathSequencePrediction = true,
+            },
+            --------- 新月岛·北岛：魔许德拉 ---------
+            MagiHydra = {
+                Enable = true,
+                AutoFaceStunningFlash = true,
+                DrawMultipleBreathPrediction = true,
+            },
+            --------- 新月岛·北岛：伊阿姆柏 ---------
+            Iambe = {
+                Enable = true,
+                DrawSeedExplosionPrediction = true,
+            },
+            --------- 新月岛·北岛：呼风狮鹫 ---------
+            GaleGriffin = {
+                Enable = true,
+                DrawWindOrbPrediction = true,
+                DynamicGuide = true,
+            },
+            --------- 新月岛·北岛：诱拐魔 ---------
+            KidnapDemon = {
+                Enable = true,
+                DrawTearingWindPrediction = true,
+            },
+            --------- 新月岛·北岛：变形法师 ---------
+            ShapeshiftingMage = {
+                Enable = true,
+                CorrectSupercellDonut = true,
+                DrawHellishBreathPrediction = true,
+                DrawHellfireRushPrediction = true,
+            },
+            --------- 新月岛·北岛：凯尔派总领 ---------
+            KelpieCaptain = {
+                Enable = true,
+                DrawWaveburstPrediction = true,
+            },
+            --------- 新月岛·北岛：负隅宝石兽 ---------
+            GemstoneBeast = {
+                Enable = true,
+                DrawSafeZone = true,
+                DynamicGuide = true,
+            },
+            --------- 新月岛·北岛：惨白魔人 ---------
+            Pallmagia = {
+                Enable = true,
+                DrawInstructionPrediction = true,
+                DynamicGuide = true,
+                RouletteGuide = true,
+            },
+            --------- 新月岛·北岛：小小法师 ---------
+            LittleMage = {
+                Enable = true,
+                DynamicGuide = true,
+            },
+            --------- 新月岛·北岛：邪瞳 ---------
+            EvilSeer = {
+                Enable = true,
+                AutoFacePetrifyingGaze = true,
+            },
+            --------- 新月岛·北岛：新月阿剌克涅 ---------
+            Arachne = {
+                Enable = true,
+                DrawChargePrediction = true,
+                DrawConformityPrediction = true,
+                DynamicGuide = true,
+            },
+            --------- 新月岛·北岛：好战弥诺陶洛斯 ---------
+            WarlikeMinotaur = {
+                Enable = true,
+                DrawEightfoldSweepPrediction = true,
+            },
         }
         return mainCfg
     end
@@ -354,6 +552,8 @@ Config.init = function(M)
                 enable = true, draw = true, guide = true,
                 -- 1职能固定，2扇左钢右 3职固Uptime
                 fixType = 1,
+                -- 使用 BBY（宝宝椅）站位
+                useBbyPos = false,
                 -- 踩塔开启指挥模式
                 --towerGuide = false,
                 -- 踩塔结束之后去哪 1 -> A, 2 -> 两塔中间
