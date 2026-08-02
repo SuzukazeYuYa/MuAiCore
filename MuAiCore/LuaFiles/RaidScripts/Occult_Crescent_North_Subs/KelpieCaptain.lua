@@ -50,7 +50,8 @@ local KelpieCaptain = {
 -- 10.00-10.041, 15.00-15.133, and 20.00-20.082; the first wave lands
 -- 6.97-7.05 seconds after the omen and later waves repeat about every two
 -- seconds. 47388 has no Argus AOE-create geometry, so the module predicts it
--- only after the complete 47387 geometry and hidden-helper identity agree.
+-- from the complete native 47387 geometry. The hidden helper is not a valid
+-- gate because mGetEntity can expose an incomplete object during this event.
 
 local function newState()
     return {
@@ -81,7 +82,6 @@ local feature = Common.newFeature({
     diagnosticText = {
         initial_event_invalid = '凯尔派总领浪暴预兆字段不完整',
         initial_event_stale = '凯尔派总领浪暴预兆不是当前事件',
-        initial_entity_mismatch = '凯尔派总领浪暴预兆实体不匹配',
         initial_geometry_mismatch = '凯尔派总领浪暴预兆几何与实战样本不符',
         danger_drawer_unavailable = '凯尔派总领扩散地火绘图器不可用',
         danger_drawer_rejected_shape = '凯尔派总领扩散地火绘制失败',
@@ -167,20 +167,21 @@ end
 
 local function resolveHelper(entityID)
     if not finite(entityID) or entityID <= 0 then
-        return nil
+        return nil, nil
     end
     local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
+    if type(entity) ~= 'table' then
+        return nil, nil
+    end
+    if tonumber(entity.id) ~= entityID
             or tonumber(entity.contentid) ~= KelpieCaptain.ContentID
             or tonumber(entity.modelid) ~= KelpieCaptain.HelperModelID
-            or entity.alive == false
     then
-        return nil
+        return entity, nil
     end
     local position = reliablePosition(entity.pos, true)
     if position == nil then
-        return nil
+        return entity, nil
     end
     return entity, position
 end
@@ -234,28 +235,15 @@ local function readInitialAOE(aoeInfo, now)
             width = width,
         }
     end
-    local _, seed = resolveHelper(entityID)
-    if seed == nil then
-        return nil, 'initial_entity_mismatch', { entityID = entityID }
-    end
-    local headingError = Common.headingDifference(seed.h, heading)
-    local dx = x - seed.x
-    local dz = z - seed.z
-    local forward = dx * math.sin(heading) + dz * math.cos(heading)
-    local lateral = dx * math.cos(heading) - dz * math.sin(heading)
-    if headingError == nil
-            or headingError > KelpieCaptain.HeadingTolerance
-            or math.abs(math.abs(forward)
-                    - KelpieCaptain.InitialLength / 2) > 0.75
-            or math.abs(lateral) > 0.75
-    then
-        return nil, 'initial_geometry_mismatch', {
-            entityID = entityID,
-            headingError = headingError,
-            forward = forward,
-            lateral = lateral,
-        }
-    end
+    -- The 47387 AOE center is one half-length behind its hidden helper. The
+    -- native event already supplies every value required for the prediction;
+    -- an incomplete helper object must not override this authoritative data.
+    local seed = {
+        x = x + math.sin(heading) * length / 2,
+        y = y,
+        z = z + math.cos(heading) * length / 2,
+        h = normalizeHeading(heading),
+    }
     return {
         entityID = entityID,
         startTime = startTime,
@@ -300,7 +288,7 @@ end
 
 local function scheduleSegment(drawer, segment, now)
     if type(drawer) ~= 'table'
-            or type(drawer.addTimedRect) ~= 'function'
+            or type(drawer.addTimedCenteredRect) ~= 'function'
             or type(segment) ~= 'table'
             or segment.resolved == true
             or segment.token ~= nil
@@ -319,7 +307,10 @@ local function scheduleSegment(drawer, segment, now)
     local visible = segment.step == 1 and remaining
             or math.min(KelpieCaptain.LaterStepPreviewMs, remaining)
     local delay = math.max(0, remaining - visible)
-    local token = drawer:addTimedRect(
+    -- segment.source is the observed center of the future 47388 strip.  The
+    -- edge-origin rectangle API would incorrectly extend the strip another
+    -- half length beyond that center.
+    local token = drawer:addTimedCenteredRect(
             math.floor(visible + 0.5),
             segment.source.x, segment.source.y, segment.source.z,
             KelpieCaptain.PropagationLength,
@@ -335,7 +326,7 @@ end
 
 local function scheduleRound(round, now)
     local drawer = getDangerDrawer()
-    if drawer == nil or type(drawer.addTimedRect) ~= 'function' then
+    if drawer == nil or type(drawer.addTimedCenteredRect) ~= 'function' then
         return false, 'danger_drawer_unavailable'
     end
     local scheduled = {}
@@ -478,7 +469,8 @@ local function suppressKeys(state, keys, code, now, context)
     return false
 end
 
-local function handlePropagationCast(state, entityID, now)
+local function handlePropagationCast(
+        state, entityID, castPosition, now)
     local castKey = tostring(entityID)
             .. ':' .. tostring(KelpieCaptain.AID.WaveburstDamage)
     local seenAt = state.seenCasts[castKey]
@@ -489,11 +481,13 @@ local function handlePropagationCast(state, entityID, now)
     if next(timedKeys) == nil then
         return false
     end
-    local _, actual = resolveHelper(entityID)
+    local _, liveActual = resolveHelper(entityID)
+    local actual = reliablePosition(castPosition, false) or liveActual
     if actual == nil then
         return suppressKeys(
                 state, timedKeys, 'propagation_entity_mismatch', now, {
                     entityID = entityID,
+                    castPositionMissing = true,
                 })
     end
     local matches = {}
@@ -506,13 +500,17 @@ local function handlePropagationCast(state, entityID, now)
             then
                 local distance = Common.distanceSquared(
                         actual, segment.source)
-                local headingError = Common.headingDifference(
-                        actual.h, segment.heading)
+                local headingError = liveActual ~= nil
+                        and Common.headingDifference(
+                                liveActual.h, segment.heading)
+                        or nil
                 if distance ~= nil
                         and distance <= KelpieCaptain.PositionTolerance
                                 * KelpieCaptain.PositionTolerance
-                        and headingError ~= nil
-                        and headingError <= KelpieCaptain.HeadingTolerance
+                        and (liveActual == nil
+                                or (headingError ~= nil
+                                        and headingError
+                                                <= KelpieCaptain.HeadingTolerance))
                 then
                     matches[#matches + 1] = {
                         key = key,
@@ -553,7 +551,8 @@ local function handlePropagationCast(state, entityID, now)
     return true
 end
 
-local function handleEntityCast(state, entityID, actionID, now)
+local function handleEntityCast(
+        state, entityID, actionID, castPosition, now)
     state = ensureState(state)
     if not finite(entityID)
             or not finite(actionID)
@@ -565,7 +564,8 @@ local function handleEntityCast(state, entityID, actionID, now)
         return handleInitialCast(state, entityID, now)
     end
     if actionID == KelpieCaptain.AID.WaveburstDamage then
-        return handlePropagationCast(state, entityID, now)
+        return handlePropagationCast(
+                state, entityID, castPosition, now)
     end
     return false
 end
@@ -638,7 +638,7 @@ Feature.OnAOECreate = function(aoeInfo, now)
     return false
 end
 
-Feature.OnEntityCast = function(entityID, actionID, now)
+Feature.OnEntityCast = function(entityID, actionID, castPosition, now)
     local guide = rawget(_G, 'MuAiGuide')
     local cfg = getConfig(guide)
     local state = getState()
@@ -647,7 +647,8 @@ Feature.OnEntityCast = function(entityID, actionID, now)
             and cfg.Enable == true
             and cfg.DrawWaveburstPrediction == true
     then
-        return handleEntityCast(state, entityID, actionID, now)
+        return handleEntityCast(
+                state, entityID, actionID, castPosition, now)
     end
     return false
 end
