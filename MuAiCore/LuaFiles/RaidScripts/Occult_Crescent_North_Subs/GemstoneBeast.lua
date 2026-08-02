@@ -19,6 +19,7 @@ local ARENA_CENTER = { x = 238, y = 15, z = 352 }
 local ARENA_HALF_SIZE = 20
 local DRAW_Y = 15.05
 local POSITION_TOLERANCE = 0.3
+local L_POSITION_TOLERANCE = 0.6
 local HEADING_TOLERANCE = math.rad(5)
 local EVENT_OBJECT_CENTER_TOLERANCE_SQ = 1
 local CHANNEL_BATCH_WINDOW_MS = 750
@@ -49,13 +50,6 @@ local QUADRANTS = {
     SW = { x = -10, z = 10 },
     SE = { x = 10, z = 10 },
 }
-local OPPOSITE_QUADRANT = {
-    NW = 'SE',
-    NE = 'SW',
-    SW = 'NE',
-    SE = 'NW',
-}
-
 -- The 2015302 wall mesh divides the 4x4 floor into four L tetrominoes.
 -- Rows run north to south and columns run west to east.
 local ROOM_BY_CELL = {
@@ -187,6 +181,15 @@ local function closeToEither(value, first, second)
     return closeTo(value, first) or closeTo(value, second)
 end
 
+local function closeToL(value, expected)
+    return finite(value)
+            and math.abs(value - expected) <= L_POSITION_TOLERANCE
+end
+
+local function closeToEitherL(value, first, second)
+    return closeToL(value, first) or closeToL(value, second)
+end
+
 local function insideArena(position)
     return Common.validXZ(position)
             and math.abs(position.x - ARENA_CENTER.x)
@@ -310,15 +313,15 @@ local function isEarlyLReflection(position, effectiveHeading)
     if localPosition == nil or not finite(localPosition.h) then
         return false
     end
-    if closeTo(math.abs(localPosition.x), 1)
-            and closeToEither(math.abs(localPosition.z), 5, 15)
+    if closeToL(math.abs(localPosition.x), 1)
+            and closeToEitherL(math.abs(localPosition.z), 5, 15)
     then
         return headingMatches(
                 localPosition.h,
                 localPosition.x > 0 and math.pi / 2 or -math.pi / 2)
     end
-    if closeTo(math.abs(localPosition.x), 15)
-            and closeTo(math.abs(localPosition.z), 9)
+    if closeToL(math.abs(localPosition.x), 15)
+            and closeToL(math.abs(localPosition.z), 9)
     then
         return headingMatches(
                 localPosition.h,
@@ -407,11 +410,6 @@ local function resolveSquare(entries, useActions)
         end
     end
     if dangerousCount ~= 2 then
-        return nil
-    end
-    local first = quadrantFor(selected[1].position)
-    local second = quadrantFor(selected[2].position)
-    if OPPOSITE_QUADRANT[first] ~= second then
         return nil
     end
     local safeNames = {}
@@ -783,27 +781,29 @@ local function recordEventObject(state, entityID, a1, a2, a3, now)
         return false
     end
     local previousLayout = phase.layout
-    if type(previousLayout) == 'table'
-            and (previousLayout.stoneBatchSequence == nil
-                    or previousLayout.stoneBatchSequence
-                            == state.stoneBatchSequence)
-    then
+    if type(previousLayout) == 'table' then
         if previousLayout.entityID == entityID
                 and previousLayout.headingIndex == headingIndex
                 and previousLayout.state == layoutState
         then
             return false
         end
-        diagnostic(state, 'event_object_layout_conflict', now, {
-            previousEntityID = previousLayout.entityID,
-            incomingEntityID = entityID,
-            previousState = previousLayout.state,
-            incomingState = layoutState,
-            stoneBatchSequence = state.stoneBatchSequence,
-        })
-        clearPrediction(state)
-        previousLayout.consumed = true
-        return false
+        if previousLayout.consumed ~= true
+                and (previousLayout.stoneBatchSequence == nil
+                        or previousLayout.stoneBatchSequence
+                                == state.stoneBatchSequence)
+        then
+            diagnostic(state, 'event_object_layout_conflict', now, {
+                previousEntityID = previousLayout.entityID,
+                incomingEntityID = entityID,
+                previousState = previousLayout.state,
+                incomingState = layoutState,
+                stoneBatchSequence = state.stoneBatchSequence,
+            })
+            clearPrediction(state)
+            previousLayout.consumed = true
+            return false
+        end
     end
     phase.layout = {
         entityID = entityID,
