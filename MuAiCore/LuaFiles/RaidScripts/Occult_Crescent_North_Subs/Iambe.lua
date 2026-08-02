@@ -263,26 +263,22 @@ local function matchSeedAtPosition(state, position, helperID, now)
     return drawSeedPrediction(state, candidate, helperID, now)
 end
 
-local function beginRound(state, entityID, channelTimeMax, now)
+local function beginRound(
+        state, entityID, targetID, channelTimeMax, now)
     state = ensureState(state)
-    if not finite(now)
+    if not finite(entityID)
+            or entityID <= 0
+            or not finite(targetID)
+            or targetID ~= entityID
+            or not finite(now)
             or not finite(channelTimeMax)
             or channelTimeMax < DIRECT_SOWING_CHANNEL_MIN
             or channelTimeMax > DIRECT_SOWING_CHANNEL_MAX
     then
         diagnostic(state, 'round_signal_invalid', nowMs(), {
             entityID = entityID,
+            targetID = targetID,
             channelTimeMax = channelTimeMax,
-        })
-        return false
-    end
-    local position, entity = resolveExpectedEntity(
-            entityID, IAMBE_CONTENT_ID, IAMBE_BOSS_MODEL_ID)
-    if position == nil then
-        diagnostic(state, 'entity_mismatch', now, {
-            entityID = entityID,
-            contentID = type(entity) == 'table' and entity.contentid or nil,
-            modelID = type(entity) == 'table' and entity.modelid or nil,
         })
         return false
     end
@@ -297,7 +293,6 @@ local function beginRound(state, entityID, channelTimeMax, now)
     state.round = {
         bossID = entityID,
         startedAt = now,
-        origin = position,
     }
     state.lastDiagnostic = nil
     return true
@@ -500,7 +495,7 @@ Feature.OnEntityAdd = function(entityID, contentID, now)
 end
 
 Feature.OnEntityChannel = function(
-        entityID, actionID, channelTimeMax, now)
+        entityID, actionID, targetID, channelTimeMax, now)
     local guide = rawget(_G, 'MuAiGuide')
     local cfg = getConfig(guide)
     local state = getState()
@@ -511,7 +506,8 @@ Feature.OnEntityChannel = function(
         return false
     end
     if actionID == DIRECT_SOWING_AID then
-        return beginRound(state, entityID, channelTimeMax, now)
+        return beginRound(
+                state, entityID, targetID, channelTimeMax, now)
     end
     if actionID == SEED_EXPLOSION_AID then
         return resolveSeedExplosion(state, entityID)

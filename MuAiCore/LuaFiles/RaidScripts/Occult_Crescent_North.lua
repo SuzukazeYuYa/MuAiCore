@@ -186,7 +186,7 @@ G.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
     MagiHydra.OnEntityChannel(
             entityID, spellID, channelTimeMax, now)
     Iambe.OnEntityChannel(
-            entityID, spellID, channelTimeMax, now)
+            entityID, spellID, targetID, channelTimeMax, now)
     ShapeshiftingMage.OnEntityChannel(
             entityID, spellID, channelTimeMax, now)
     GemstoneBeast.OnEntityChannel(entityID, spellID, now)
