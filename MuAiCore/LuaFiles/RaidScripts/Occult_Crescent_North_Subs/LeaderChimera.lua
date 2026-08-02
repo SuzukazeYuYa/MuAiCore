@@ -35,6 +35,12 @@ local ORB_PREDICTION_TIMEOUT_MS = 12000
 local ROUND_TIMEOUT_MS = 30000
 local TOKEN_GRACE_MS = 1000
 local BREATH_HEADING_TOLERANCE = math.rad(5)
+local BLACKLIST_SOURCE = 'MuAiCore - 统领奇美拉首段吐息校正'
+
+local BREATH_OMEN_AIDS = {
+    [48631] = true,
+    [48629] = true,
+}
 
 local DEFAULTS = {
     Enable = true,
@@ -42,9 +48,9 @@ local DEFAULTS = {
     DrawOrbPrediction = true,
 }
 
--- Two complete 2026-08-01 map-1346 captures have the same arena-locked
--- sequence. Argus publishes the first 120-degree omen at +/-135 degrees;
--- the three actual hits resolve at 180 degrees, then turn by +/-120 degrees.
+-- Two 2026-08-01 captures and the 2026-08-02 live capture have the same
+-- arena-locked sequence. Argus publishes the first 120-degree omen at +/-135
+-- degrees; the three actual hits resolve at 180, then turn by +/-120 degrees.
 local BREATH_SPECS = {
     [48631] = {
         kind = 'ice',
@@ -88,6 +94,7 @@ local function newState()
         round = nil,
         orbs = { ice = {}, lightning = {} },
         active = {},
+        blacklist = { owned = {}, registered = false },
         lastDiagnostic = nil,
     }
 end
@@ -100,6 +107,11 @@ local function ensureState(state)
     state.orbs.lightning = type(state.orbs.lightning) == 'table'
             and state.orbs.lightning or {}
     state.active = type(state.active) == 'table' and state.active or {}
+    state.blacklist = type(state.blacklist) == 'table'
+            and state.blacklist or {}
+    state.blacklist.owned = type(state.blacklist.owned) == 'table'
+            and state.blacklist.owned or {}
+    state.blacklist.registered = state.blacklist.registered == true
     return state
 end
 
@@ -130,6 +142,70 @@ end
 local function diagnostic(state, code, now, context)
     feature.Diagnostic(
             state, rawget(_G, 'MuAiGuide'), code, now, context)
+end
+
+local function getBlacklist(create)
+    return Common.getMoogleTable('aoeIDUserBlacklist', create)
+end
+
+local function ownsBlacklist(state, actionID, current)
+    return current ~= nil
+            and (current == state.blacklist.owned[actionID]
+            or (type(current) == 'table'
+                    and current.source == BLACKLIST_SOURCE))
+end
+
+local function registerBlacklist(state)
+    state = ensureState(state)
+    local blacklist = getBlacklist(true)
+    if blacklist == nil then
+        state.blacklist.registered = false
+        return false
+    end
+    for actionID in pairs(BREATH_OMEN_AIDS) do
+        local current = blacklist[actionID]
+        if current == nil then
+            local owned = {
+                label = '统领奇美拉首段吐息校正',
+                source = BLACKLIST_SOURCE,
+            }
+            blacklist[actionID] = owned
+            state.blacklist.owned[actionID] = owned
+        elseif type(current) == 'table'
+                and current.source == BLACKLIST_SOURCE
+        then
+            state.blacklist.owned[actionID] = current
+        else
+            state.blacklist.owned[actionID] = nil
+        end
+    end
+    state.blacklist.registered = true
+    return true
+end
+
+local function unregisterBlacklist(state)
+    state = ensureState(state)
+    local blacklist = getBlacklist(false)
+    if blacklist == nil then
+        state.blacklist.registered = false
+        return false
+    end
+    for actionID in pairs(BREATH_OMEN_AIDS) do
+        local current = blacklist[actionID]
+        if ownsBlacklist(state, actionID, current) then
+            blacklist[actionID] = nil
+        end
+    end
+    state.blacklist.owned = {}
+    state.blacklist.registered = false
+    return true
+end
+
+local function applyBlacklist(state, enabled)
+    if enabled == true then
+        return registerBlacklist(state)
+    end
+    return unregisterBlacklist(state)
 end
 
 local function getDangerDrawer()
@@ -376,10 +452,10 @@ local function handleEntityAdd(state, entityID, contentID, now)
         end
     else
         local entity = resolveEntity(entityID)
-        if type(entity) ~= 'table'
-                or tonumber(entity.id) ~= entityID
+        if type(entity) == 'table'
+                and (tonumber(entity.id) ~= entityID
                 or tonumber(entity.contentid) ~= spec.contentID
-                or tonumber(entity.modelid) ~= spec.modelID
+                or tonumber(entity.modelid) ~= spec.modelID)
         then
             return false
         end
@@ -392,32 +468,49 @@ local function handleEntityAdd(state, entityID, contentID, now)
     return true
 end
 
-local function collectLiveOrbs(state, kind)
+local function collectOrbSnapshots(state, kind)
     local spec = ORB_SPECS[kind]
     local bucket = type(state.orbs) == 'table' and state.orbs[kind] or nil
     if spec == nil or type(bucket) ~= 'table' then
-        return nil
+        return nil, nil
     end
     local orbs = {}
-    for entityID in pairs(bucket) do
-        local entity = resolveEntity(entityID)
-        local position = type(entity) == 'table'
-                and reliablePosition(entity.pos, false) or nil
-        if type(entity) ~= 'table'
-                or tonumber(entity.id) ~= entityID
-                or tonumber(entity.contentid) ~= spec.contentID
-                or tonumber(entity.modelid) ~= spec.modelID
-                or entity.alive == false
-                or position == nil
-        then
-            return nil
-        end
-        orbs[#orbs + 1] = {
+    local pending = 0
+    local rejected = {}
+    for entityID, candidate in pairs(bucket) do
+        candidate = type(candidate) == 'table' and candidate or {
             entityID = entityID,
-            position = position,
         }
+        bucket[entityID] = candidate
+        -- OnEntityAdd can precede mGetEntity by a frame. Keep only the stable
+        -- ID at that boundary, then cache geometry after content/model proof.
+        if candidate.position == nil then
+            local entity = resolveEntity(entityID)
+            if type(entity) == 'table' then
+                if tonumber(entity.id) ~= entityID
+                        or tonumber(entity.contentid) ~= spec.contentID
+                        or tonumber(entity.modelid) ~= spec.modelID
+                then
+                    rejected[#rejected + 1] = entityID
+                elseif entity.alive ~= false then
+                    candidate.position = reliablePosition(entity.pos, false)
+                end
+            end
+        end
+        if candidate.position ~= nil then
+            orbs[#orbs + 1] = {
+                entityID = entityID,
+                position = candidate.position,
+            }
+        else
+            pending = pending + 1
+        end
     end
-    return orbs
+    for _, entityID in ipairs(rejected) do
+        bucket[entityID] = nil
+        pending = pending - 1
+    end
+    return orbs, pending
 end
 
 local function connectedIceOrbs(orbs, bossPosition)
@@ -522,6 +615,56 @@ local function drawOrbSet(state, kind, orbs, now)
     return #created > 0
 end
 
+local function drawOrbPredictionIfReady(state, now, diagnoseIncomplete)
+    state = ensureState(state)
+    local round = state.round
+    if type(round) ~= 'table' or round.orbsPredicted == true then
+        return round ~= nil and round.orbsPredicted == true
+    end
+    local bossPosition = reliablePosition(round.source, false)
+    local orbs, pending = collectOrbSnapshots(state, round.kind)
+    local expected = round.kind == 'ice'
+            and ICE_ORB_EXPECTED_COUNT or LIGHTNING_ORB_EXPECTED_COUNT
+    if bossPosition == nil
+            or type(orbs) ~= 'table'
+            or #orbs ~= expected
+    then
+        if diagnoseIncomplete == true then
+            diagnostic(
+                    state,
+                    round.kind == 'ice'
+                            and 'ice_orb_set_incomplete'
+                            or 'lightning_orb_set_incomplete',
+                    now,
+                    {
+                        observed = type(orbs) == 'table' and #orbs or nil,
+                        pending = pending,
+                        expected = expected,
+                    })
+        end
+        return false
+    end
+    local selected = orbs
+    if round.kind == 'ice' then
+        selected = connectedIceOrbs(orbs, bossPosition)
+        if selected == nil then
+            if diagnoseIncomplete == true then
+                diagnostic(state, 'ice_orb_chain_unresolved', now, {
+                    observed = #orbs,
+                    expectedActive = ICE_ORB_ACTIVE_COUNT,
+                })
+            end
+            return false
+        end
+    end
+    local drawn = drawOrbSet(state, round.kind, selected, now)
+    if drawn then
+        round.orbsPredicted = true
+        round.orbsPredictedAt = now
+    end
+    return drawn
+end
+
 local function handleRoarChannel(
         state, entityID, actionID, channelTimeMax, now, drawOrbs)
     state = ensureState(state)
@@ -552,41 +695,7 @@ local function handleRoarChannel(
     if drawOrbs ~= true then
         return true
     end
-    local bossPosition = reliablePosition(round.source, false)
-    local orbs = collectLiveOrbs(state, round.kind)
-    if bossPosition == nil or orbs == nil then
-        diagnostic(
-                state,
-                round.kind == 'ice'
-                        and 'ice_orb_set_incomplete'
-                        or 'lightning_orb_set_incomplete',
-                now,
-                { count = type(orbs) == 'table' and #orbs or nil })
-        return false
-    end
-    if round.kind == 'ice' then
-        if #orbs ~= ICE_ORB_EXPECTED_COUNT then
-            diagnostic(state, 'ice_orb_set_incomplete', now, {
-                count = #orbs,
-            })
-            return false
-        end
-        local active = connectedIceOrbs(orbs, bossPosition)
-        if active == nil then
-            diagnostic(state, 'ice_orb_chain_unresolved', now, {
-                count = #orbs,
-            })
-            return false
-        end
-        return drawOrbSet(state, 'ice', active, now)
-    end
-    if #orbs ~= LIGHTNING_ORB_EXPECTED_COUNT then
-        diagnostic(state, 'lightning_orb_set_incomplete', now, {
-            count = #orbs,
-        })
-        return false
-    end
-    return drawOrbSet(state, 'lightning', orbs, now)
+    return drawOrbPredictionIfReady(state, now, true)
 end
 
 local function handleEntityCast(state, entityID, actionID)
@@ -630,16 +739,23 @@ local Feature = {}
 Feature.Init = function(M)
     if type(M.LeaderChimera) == 'table' then
         clearState(M.LeaderChimera)
+        applyBlacklist(M.LeaderChimera, false)
     end
     M.LeaderChimera = newState()
-    getConfig(M)
+    local initialConfig = getConfig(M)
     M.SetLeaderChimeraEnabled = function(enabled)
         local cfg = getConfig(M)
         if cfg ~= nil then
             cfg.Enable = enabled == true
         end
-        if enabled ~= true then
+        if enabled == true then
+            applyBlacklist(
+                    M.LeaderChimera,
+                    cfg ~= nil
+                            and cfg.DrawBreathSequencePrediction == true)
+        else
             clearState(M.LeaderChimera)
+            applyBlacklist(M.LeaderChimera, false)
         end
     end
     M.SetLeaderChimeraBreathPredictionEnabled = function(enabled)
@@ -647,6 +763,9 @@ Feature.Init = function(M)
         if cfg ~= nil then
             cfg.DrawBreathSequencePrediction = enabled == true
         end
+        applyBlacklist(
+                M.LeaderChimera,
+                enabled == true and cfg ~= nil and cfg.Enable == true)
         if enabled ~= true then
             local state = ensureState(M.LeaderChimera)
             local keys = {}
@@ -679,14 +798,26 @@ Feature.Init = function(M)
                 deleteActive(state, key)
             end
             state.orbs = { ice = {}, lightning = {} }
+            if type(state.round) == 'table' then
+                state.round.orbsPredicted = false
+                state.round.orbsPredictedAt = nil
+            end
         end
+    end
+    if initialConfig ~= nil and initialConfig.Enable == true
+            and initialConfig.DrawBreathSequencePrediction == true
+    then
+        applyBlacklist(M.LeaderChimera, true)
     end
 end
 
-Feature.Clear = function()
+Feature.Clear = function(releaseOwnership)
     local state = getState()
     if state ~= nil then
         clearState(state)
+        if releaseOwnership == true then
+            applyBlacklist(state, false)
+        end
     end
 end
 
@@ -753,9 +884,15 @@ Feature.Update = function(guide, now)
     end
     local cfg = getConfig(guide)
     if cfg ~= nil and cfg.Enable == true then
-        return pruneState(state, now)
+        applyBlacklist(
+                state, cfg.DrawBreathSequencePrediction == true)
+        local pruned = pruneState(state, now)
+        local drawn = cfg.DrawOrbPrediction == true
+                and drawOrbPredictionIfReady(state, now, false) or false
+        return pruned or drawn
     end
     clearState(state)
+    applyBlacklist(state, false)
     return false
 end
 
@@ -781,13 +918,17 @@ Feature.Test = {
     IceOrbActiveCount = ICE_ORB_ACTIVE_COUNT,
     LightningOrbExpectedCount = LIGHTNING_ORB_EXPECTED_COUNT,
     OrbPredictionTimeoutMs = ORB_PREDICTION_TIMEOUT_MS,
+    BlacklistSource = BLACKLIST_SOURCE,
     NormalizeHeading = normalizeHeading,
     NewState = newState,
     EnsureState = ensureState,
     GetConfig = getConfig,
     StartBreathRound = startBreathRound,
     HandleEntityAdd = handleEntityAdd,
+    CollectOrbSnapshots = collectOrbSnapshots,
     ConnectedIceOrbs = connectedIceOrbs,
+    DrawOrbPredictionIfReady = drawOrbPredictionIfReady,
+    ApplyBlacklist = applyBlacklist,
     HandleRoarChannel = handleRoarChannel,
     HandleEntityCast = handleEntityCast,
     PruneState = pruneState,
