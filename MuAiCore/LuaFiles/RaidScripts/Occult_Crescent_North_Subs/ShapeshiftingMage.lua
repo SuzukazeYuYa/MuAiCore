@@ -10,6 +10,8 @@ function Module.Create(Context)
 
 local CONTENT_ID = 14801
 local HELPER_MODEL_ID = 9020
+local BOSS_MODEL_ID = 19575
+local RUSH_ROUTE_CONTENT_ID = 2015387
 local OMEN_EFFECT = 'o6b2_fan60_o0r1'
 local BREATH_RADIUS = 60
 local BREATH_ANGLE = math.rad(60)
@@ -20,12 +22,42 @@ local OMEN_ROUND_TIMEOUT_MS = 20000
 local SEEN_TTL_MS = 30000
 local HEADING_TOLERANCE = math.rad(5)
 local POSITION_TOLERANCE_SQUARED = 0.5 * 0.5
+local RUSH_ACTION_ID = 48343
+local RUSH_FOLLOWUP_ACTION_ID = 48344
+local RUSH_CHANNEL_TIME = 5.7
+local RUSH_DRAW_LEAD_MS = 5000
+local RUSH_SEGMENT_INTERVAL_MS = 2250
+local RUSH_TIMEOUT_GRACE_MS = 1000
+local RUSH_PHASE_TIMEOUT_MS = 16000
+local RUSH_ROUTE_WINDOW_GRACE_MS = 500
+local RUSH_WIDTH = 10
+local RUSH_CENTER_ARROW_MIN_DISTANCE = 2.5
+local RUSH_CENTER_ARROW_MAX_DISTANCE = 5.5
+local RUSH_BOUNDARY_MIN_DISTANCE = 23.5
+local RUSH_BOUNDARY_MAX_DISTANCE = 26.5
+local RUSH_CROSS_TRACK_TOLERANCE = 0.75
+local RUSH_SEGMENT_LENGTHS = {
+    25,
+    math.sqrt(1250),
+    50,
+    math.sqrt(1250),
+}
+local RUSH_SEGMENT_LENGTH_TOLERANCE = 1
 local DONUT_SOURCE = 'MuAiCore - 变形法师'
+local DONUT_BLACKLIST_SOURCE = DONUT_SOURCE .. '月环直绘'
+local SUPERCELL_DONUT_ACTION_ID = 48362
+local SUPERCELL_DONUT_EFFECT = 'gl_donut3016_o0r1'
+local SUPERCELL_DONUT_INNER = 16
+local SUPERCELL_DONUT_OUTER = 30
+local SUPERCELL_DONUT_DURATION = 5.7
+local SUPERCELL_DONUT_DELAY = 4.5
+local SUPERCELL_DONUT_TOLERANCE = 0.15
 
 local DEFAULTS = {
     Enable = true,
     CorrectSupercellDonut = true,
     DrawHellishBreathPrediction = true,
+    DrawHellfireRushPrediction = true,
 }
 
 -- The three helper omens are delivered together. Their headings are the
@@ -61,9 +93,9 @@ local REAL_BREATH_ACTIONS = {
 -- gl_donut3016_o0r1 encodes an outer radius of 30 and inner radius of 16.
 -- Moogle otherwise falls back to its generic 10-yalm donut inner radius.
 local SUPERCELL_DONUTS = {
-    [48362] = {
+    [SUPERCELL_DONUT_ACTION_ID] = {
         name = '超级细胞变形外环',
-        radius = 16,
+        radius = SUPERCELL_DONUT_INNER,
     },
 }
 
@@ -80,8 +112,13 @@ local function newState()
     return {
         seen = {},
         omenRound = nil,
+        rush = nil,
         active = {},
         moogle = newMoogleState(),
+        blacklist = {
+            registered = false,
+            owned = {},
+        },
         lastDiagnostic = nil,
     }
 end
@@ -99,6 +136,11 @@ local function ensureState(state)
             and state.moogle.previous or {}
     state.moogle.previousKnown = type(state.moogle.previousKnown) == 'table'
             and state.moogle.previousKnown or {}
+    state.blacklist = type(state.blacklist) == 'table'
+            and state.blacklist or { registered = false, owned = {} }
+    state.blacklist.registered = state.blacklist.registered == true
+    state.blacklist.owned = type(state.blacklist.owned) == 'table'
+            and state.blacklist.owned or {}
     return state
 end
 
@@ -114,6 +156,14 @@ local feature = Common.newFeature({
         omen_heading_pattern_invalid = '变形法师炼狱吐息预兆方向不完整',
         danger_drawer_unavailable = '变形法师危险范围绘图器不可用',
         danger_drawer_rejected_shape = '变形法师炼狱吐息预测绘制失败',
+        rush_channel_invalid = '变形法师烈火地狱冲读条信息不可靠',
+        rush_route_object_invalid = '变形法师烈火地狱冲箭头对象不可靠',
+        rush_route_conflict = '变形法师烈火地狱冲箭头集合冲突',
+        rush_route_geometry_invalid = '变形法师烈火地狱冲路线不完整',
+        rush_drawer_rejected_shape = '变形法师烈火地狱冲矩形绘制失败',
+        supercell_geometry_invalid = '变形法师超级细胞月环事件几何不可靠',
+        supercell_drawer_unavailable = '变形法师超级细胞月环绘图器不可用',
+        supercell_drawer_rejected_shape = '变形法师超级细胞月环绘制失败',
     },
 })
 local getConfig = feature.GetConfig
@@ -136,6 +186,94 @@ local donutRegistry = Common.newMoogleDonutRegistry({
         return ensureState(state).moogle
     end,
 })
+
+local function applyDonutFallback(state, enabled)
+    state = ensureState(state)
+    local donuts = Common.getMoogleTable(
+            'aoeIDUserSetDonuts', enabled == true)
+    if enabled == true
+            and donuts ~= nil
+            and state.moogle.tableRef ~= nil
+            and state.moogle.tableRef ~= donuts
+    then
+        state.moogle = newMoogleState()
+    end
+    local applied = donutRegistry.Apply(state, enabled == true)
+    if enabled == true and donuts ~= nil then
+        state.moogle.tableRef = donuts
+    elseif enabled ~= true then
+        state.moogle.tableRef = nil
+    end
+    return applied
+end
+
+local function getDonutBlacklist(create)
+    return Common.getMoogleTable('aoeIDUserBlacklist', create)
+end
+
+local function ownsDonutBlacklist(state, current)
+    return current ~= nil
+            and (current == state.blacklist.owned[SUPERCELL_DONUT_ACTION_ID]
+            or (type(current) == 'table'
+                    and current.source == DONUT_BLACKLIST_SOURCE))
+end
+
+local function registerDonutBlacklist(state)
+    state = ensureState(state)
+    local blacklist = getDonutBlacklist(true)
+    if blacklist == nil then
+        state.blacklist.registered = false
+        return false
+    end
+    local current = blacklist[SUPERCELL_DONUT_ACTION_ID]
+    if current == nil then
+        local owned = {
+            label = '变形法师超级细胞月环直绘',
+            source = DONUT_BLACKLIST_SOURCE,
+        }
+        blacklist[SUPERCELL_DONUT_ACTION_ID] = owned
+        state.blacklist.owned[SUPERCELL_DONUT_ACTION_ID] = owned
+    elseif type(current) == 'table'
+            and current.source == DONUT_BLACKLIST_SOURCE
+    then
+        state.blacklist.owned[SUPERCELL_DONUT_ACTION_ID] = current
+    else
+        state.blacklist.owned[SUPERCELL_DONUT_ACTION_ID] = nil
+    end
+    state.blacklist.registered = true
+    return true
+end
+
+local function unregisterDonutBlacklist(state)
+    state = ensureState(state)
+    local blacklist = getDonutBlacklist(false)
+    if blacklist == nil then
+        state.blacklist.registered = false
+        return false
+    end
+    local current = blacklist[SUPERCELL_DONUT_ACTION_ID]
+    if ownsDonutBlacklist(state, current) then
+        blacklist[SUPERCELL_DONUT_ACTION_ID] = nil
+    end
+    state.blacklist.owned = {}
+    state.blacklist.registered = false
+    return true
+end
+
+local function applyDonutBlacklist(state, enabled)
+    if enabled == true then
+        return registerDonutBlacklist(state)
+    end
+    return unregisterDonutBlacklist(state)
+end
+
+local function hasExternalDonutBlacklist(state)
+    state = ensureState(state)
+    local blacklist = getDonutBlacklist(false)
+    local current = blacklist ~= nil
+            and blacklist[SUPERCELL_DONUT_ACTION_ID] or nil
+    return current ~= nil and not ownsDonutBlacklist(state, current)
+end
 
 local function getDangerDrawer()
     if type(TensorCore) ~= 'table'
@@ -170,11 +308,33 @@ local function clearPredictions(state)
     end
 end
 
+local function clearPredictionsWithPrefix(state, prefix)
+    state = ensureState(state)
+    local keys = {}
+    for key in pairs(state.active) do
+        if key:sub(1, #prefix) == prefix then
+            keys[#keys + 1] = key
+        end
+    end
+    for _, key in ipairs(keys) do
+        deleteActive(state, key)
+    end
+end
+
+local function clearBreathPredictions(state)
+    clearPredictionsWithPrefix(state, 'breath:')
+end
+
+local function clearRushPredictions(state)
+    clearPredictionsWithPrefix(state, 'rush:')
+end
+
 local function clearState(state)
     state = ensureState(state)
     clearPredictions(state)
     state.seen = {}
     state.omenRound = nil
+    state.rush = nil
     state.lastDiagnostic = nil
 end
 
@@ -187,6 +347,20 @@ local function reliableAOEPosition(aoeInfo)
         y = aoeInfo.y,
         z = aoeInfo.z,
     }, false)
+end
+
+local function supercellDrawerAvailable()
+    local drawer = getDangerDrawer()
+    return drawer ~= nil and type(drawer.addTimedDonut) == 'function'
+end
+
+local function applySupercellRendering(state, enabled)
+    if enabled == true and supercellDrawerAvailable() then
+        applyDonutFallback(state, false)
+        return applyDonutBlacklist(state, true)
+    end
+    applyDonutBlacklist(state, false)
+    return applyDonutFallback(state, enabled == true)
 end
 
 local function validateHelper(entityID, source)
@@ -212,6 +386,91 @@ local function eventKey(aoeInfo)
     return tostring(aoeInfo.entityID)
             .. ':' .. tostring(aoeInfo.aoeID)
             .. ':' .. string.format('%.3f', aoeInfo.startTime)
+end
+
+local function validateSupercellDonut(state, aoeInfo, now)
+    local source = reliableAOEPosition(aoeInfo)
+    local effectInfo = type(aoeInfo) == 'table'
+            and type(aoeInfo.aoeEffectInfo) == 'table'
+            and aoeInfo.aoeEffectInfo or nil
+    local entityID = type(aoeInfo) == 'table'
+            and tonumber(aoeInfo.entityID) or nil
+    if not finite(now)
+            or type(aoeInfo) ~= 'table'
+            or tonumber(aoeInfo.aoeID) ~= SUPERCELL_DONUT_ACTION_ID
+            or tonumber(aoeInfo.contentID) ~= CONTENT_ID
+            or tonumber(aoeInfo.aoeCastType) ~= 10
+            or not finite(aoeInfo.aoeLength)
+            or math.abs(aoeInfo.aoeLength - SUPERCELL_DONUT_OUTER) > 0.5
+            or not finite(aoeInfo.duration)
+            or math.abs(aoeInfo.duration - SUPERCELL_DONUT_DURATION)
+                    > SUPERCELL_DONUT_TOLERANCE
+            or not finite(aoeInfo.delay)
+            or math.abs(aoeInfo.delay - SUPERCELL_DONUT_DELAY)
+                    > SUPERCELL_DONUT_TOLERANCE
+            or not finite(aoeInfo.startTime)
+            or not finite(entityID)
+            or effectInfo == nil
+            or effectInfo.aoeEffectName ~= SUPERCELL_DONUT_EFFECT
+            or source == nil
+            or validateHelper(entityID, source) == nil
+    then
+        diagnostic(state, 'supercell_geometry_invalid',
+                finite(now) and now or nowMs(), {
+                    actionID = type(aoeInfo) == 'table'
+                            and aoeInfo.aoeID or nil,
+                    entityID = entityID,
+                })
+        return nil
+    end
+    return {
+        entityID = entityID,
+        source = source,
+        durationMs = math.floor(aoeInfo.duration * 1000 + 0.5),
+        eventKey = eventKey(aoeInfo),
+    }
+end
+
+local function handleSupercellDonut(state, aoeInfo, now)
+    state = ensureState(state)
+    local entry = validateSupercellDonut(state, aoeInfo, now)
+    if entry == nil
+            or state.seen[entry.eventKey] ~= nil
+            or hasExternalDonutBlacklist(state)
+    then
+        return false
+    end
+    local drawer = getDangerDrawer()
+    if drawer == nil or type(drawer.addTimedDonut) ~= 'function' then
+        applySupercellRendering(state, true)
+        diagnostic(state, 'supercell_drawer_unavailable', now)
+        return false
+    end
+    local key = 'donut:' .. tostring(entry.entityID)
+    deleteActive(state, key)
+    local token = drawer:addTimedDonut(
+            entry.durationMs,
+            entry.source.x, entry.source.y, entry.source.z,
+            SUPERCELL_DONUT_INNER, SUPERCELL_DONUT_OUTER,
+            0, nil, true)
+    if type(token) ~= 'string' then
+        applyDonutBlacklist(state, false)
+        applyDonutFallback(state, true)
+        diagnostic(state, 'supercell_drawer_rejected_shape', now, {
+            entityID = entry.entityID,
+        })
+        return false
+    end
+    state.seen[entry.eventKey] = now
+    state.active[key] = {
+        key = key,
+        token = token,
+        entityID = entry.entityID,
+        actionID = SUPERCELL_DONUT_ACTION_ID,
+        expiresAt = now + entry.durationMs + TOKEN_GRACE_MS,
+    }
+    state.lastDiagnostic = nil
+    return true
 end
 
 local function validateOmen(state, aoeInfo, now)
@@ -333,7 +592,7 @@ local function drawCompletedRound(state, round, now)
 end
 
 local function startRound(state, entry, now)
-    clearPredictions(state)
+    clearBreathPredictions(state)
     state.omenRound = {
         startedAt = now,
         source = entry.source,
@@ -342,6 +601,364 @@ local function startRound(state, entry, now)
         expiresAt = now + OMEN_ROUND_TIMEOUT_MS,
     }
     return state.omenRound
+end
+
+local function distance2d(left, right)
+    if type(left) ~= 'table' or type(right) ~= 'table'
+            or not finite(left.x) or not finite(left.z)
+            or not finite(right.x) or not finite(right.z)
+    then
+        return nil
+    end
+    local dx = right.x - left.x
+    local dz = right.z - left.z
+    return math.sqrt(dx * dx + dz * dz)
+end
+
+local function rayMetrics(source, target, heading)
+    local length = distance2d(source, target)
+    if length == nil or length <= 0 or not finite(heading) then
+        return nil
+    end
+    local dx = target.x - source.x
+    local dz = target.z - source.z
+    local directionX = math.sin(heading)
+    local directionZ = math.cos(heading)
+    return {
+        length = length,
+        forward = dx * directionX + dz * directionZ,
+        crossTrack = math.abs(directionX * dz - directionZ * dx),
+    }
+end
+
+local function removeEntry(entries, selected)
+    local remaining = {}
+    for _, entry in ipairs(entries) do
+        if entry ~= selected then
+            remaining[#remaining + 1] = entry
+        end
+    end
+    return remaining
+end
+
+local function findNextRouteEntry(source, heading, entries)
+    local selected = nil
+    for _, entry in ipairs(entries) do
+        local metrics = rayMetrics(source, entry.position, heading)
+        if metrics ~= nil
+                and metrics.forward > 0
+                and metrics.crossTrack <= RUSH_CROSS_TRACK_TOLERANCE
+        then
+            if selected ~= nil then
+                return nil
+            end
+            selected = entry
+        end
+    end
+    return selected
+end
+
+local function segmentLengthValid(segment, index)
+    return type(segment) == 'table'
+            and finite(segment.length)
+            and math.abs(segment.length - RUSH_SEGMENT_LENGTHS[index])
+                    <= RUSH_SEGMENT_LENGTH_TOLERANCE
+end
+
+local function buildRushSegments(phase)
+    if type(phase) ~= 'table'
+            or type(phase.origin) ~= 'table'
+            or type(phase.routeObjects) ~= 'table'
+    then
+        return nil
+    end
+    local entries = {}
+    for _, entry in pairs(phase.routeObjects) do
+        entries[#entries + 1] = entry
+    end
+    if #entries ~= 4 then
+        return nil
+    end
+
+    local centerArrow = nil
+    local boundary = {}
+    local radiusTotal = 0
+    for _, entry in ipairs(entries) do
+        local radius = distance2d(phase.origin, entry.position)
+        if radius ~= nil
+                and radius >= RUSH_CENTER_ARROW_MIN_DISTANCE
+                and radius <= RUSH_CENTER_ARROW_MAX_DISTANCE
+        then
+            if centerArrow ~= nil then
+                return nil
+            end
+            centerArrow = entry
+        elseif radius ~= nil
+                and radius >= RUSH_BOUNDARY_MIN_DISTANCE
+                and radius <= RUSH_BOUNDARY_MAX_DISTANCE
+        then
+            boundary[#boundary + 1] = entry
+            radiusTotal = radiusTotal + radius
+        else
+            return nil
+        end
+    end
+    if centerArrow == nil or #boundary ~= 3 then
+        return nil
+    end
+
+    local segments = {}
+    local source = phase.origin
+    local arrow = centerArrow
+    local remaining = boundary
+    for index = 1, 3 do
+        local nextEntry = findNextRouteEntry(
+                source, arrow.heading, remaining)
+        if nextEntry == nil then
+            return nil
+        end
+        local metrics = rayMetrics(
+                source, nextEntry.position, arrow.heading)
+        segments[index] = {
+            source = source,
+            heading = arrow.heading,
+            length = metrics.length,
+        }
+        if not segmentLengthValid(segments[index], index) then
+            return nil
+        end
+        source = nextEntry.position
+        arrow = nextEntry
+        remaining = removeEntry(remaining, nextEntry)
+    end
+    if #remaining ~= 0 then
+        return nil
+    end
+
+    local radius = radiusTotal / 3
+    local offsetX = source.x - phase.origin.x
+    local offsetZ = source.z - phase.origin.z
+    local directionX = math.sin(arrow.heading)
+    local directionZ = math.cos(arrow.heading)
+    local projection = offsetX * directionX + offsetZ * directionZ
+    local discriminant = projection * projection
+            + radius * radius
+            - offsetX * offsetX
+            - offsetZ * offsetZ
+    if projection >= 0 or discriminant < -0.25 then
+        return nil
+    end
+    if discriminant < 0 then
+        discriminant = 0
+    end
+    local finalLength = -projection + math.sqrt(discriminant)
+    segments[4] = {
+        source = source,
+        heading = arrow.heading,
+        length = finalLength,
+    }
+    if not segmentLengthValid(segments[4], 4) then
+        return nil
+    end
+    return segments
+end
+
+local function validateRushObject(args)
+    if type(args) ~= 'table' then
+        return nil
+    end
+    local entityID = tonumber(args[1])
+    local heading = tonumber(args[12])
+    local position = reliablePosition({
+        x = args[17],
+        y = args[18],
+        z = args[19],
+    }, false)
+    local entity = finite(entityID) and resolveEntity(entityID) or nil
+    local entityPosition = type(entity) == 'table'
+            and reliablePosition(entity.pos, false) or nil
+    local positionDifference = position ~= nil and entityPosition ~= nil
+            and Common.distanceSquared(position, entityPosition) or nil
+    if not finite(entityID)
+            or tonumber(args[2]) ~= 7
+            or tonumber(args[3]) ~= 5
+            or tonumber(args[4]) ~= 0
+            or tonumber(args[5]) ~= RUSH_ROUTE_CONTENT_ID
+            or math.abs((tonumber(args[11]) or -1) - 1) > 0.05
+            or not finite(heading)
+            or tonumber(args[13]) ~= 0
+            or tonumber(args[14]) ~= 0
+            or tonumber(args[15]) ~= 1
+            or position == nil
+            or type(entity) ~= 'table'
+            or tonumber(entity.id) ~= entityID
+            or tonumber(entity.contentid) ~= RUSH_ROUTE_CONTENT_ID
+            or tonumber(entity.modelid) ~= RUSH_ROUTE_CONTENT_ID
+            or positionDifference == nil
+            or positionDifference > POSITION_TOLERANCE_SQUARED
+    then
+        return nil
+    end
+    return {
+        entityID = entityID,
+        heading = heading,
+        position = position,
+    }
+end
+
+local function drawRushSegments(state, phase, segments, now)
+    local drawer = getDangerDrawer()
+    if drawer == nil or type(drawer.addTimedRect) ~= 'function' then
+        diagnostic(state, 'danger_drawer_unavailable', now)
+        return false
+    end
+    local delay = math.max(0, phase.drawAt - now)
+    local created = {}
+    for index, segment in ipairs(segments) do
+        local resolvesAt = phase.firstResolveAt
+                + (index - 1) * RUSH_SEGMENT_INTERVAL_MS
+        local timeout = math.max(delay + 1,
+                resolvesAt - now + RUSH_TIMEOUT_GRACE_MS)
+        local token = drawer:addTimedRect(
+                timeout,
+                segment.source.x,
+                segment.source.y,
+                segment.source.z,
+                segment.length,
+                RUSH_WIDTH,
+                segment.heading,
+                delay,
+                nil,
+                true)
+        if type(token) ~= 'string' then
+            for _, item in ipairs(created) do
+                Common.deleteTimedShape(item.token)
+            end
+            diagnostic(state, 'rush_drawer_rejected_shape', now, {
+                index = index,
+            })
+            return false
+        end
+        created[#created + 1] = {
+            key = 'rush:' .. tostring(index),
+            token = token,
+            expiresAt = now + timeout + TOKEN_GRACE_MS,
+        }
+    end
+    for _, item in ipairs(created) do
+        state.active[item.key] = item
+    end
+    phase.drawn = true
+    phase.segments = segments
+    state.lastDiagnostic = nil
+    return true
+end
+
+local function handleRushChannel(
+        state, entityID, actionID, channelTimeMax, now)
+    if actionID ~= RUSH_ACTION_ID then
+        return false
+    end
+    local boss = finite(entityID) and resolveEntity(entityID) or nil
+    local origin = type(boss) == 'table'
+            and reliablePosition(boss.pos, false) or nil
+    if type(boss) ~= 'table'
+            or tonumber(boss.id) ~= entityID
+            or tonumber(boss.contentid) ~= CONTENT_ID
+            or tonumber(boss.modelid) ~= BOSS_MODEL_ID
+            or boss.alive == false
+            or not finite(channelTimeMax)
+            or math.abs(channelTimeMax - RUSH_CHANNEL_TIME) > 0.2
+            or not finite(now)
+            or origin == nil
+    then
+        diagnostic(state, 'rush_channel_invalid',
+                finite(now) and now or nowMs(), {
+                    entityID = entityID,
+                    channelTimeMax = channelTimeMax,
+                })
+        return false
+    end
+    clearRushPredictions(state)
+    state.rush = nil
+    local firstResolveAt = now + channelTimeMax * 1000
+    state.rush = {
+        bossEntityID = entityID,
+        origin = origin,
+        startedAt = now,
+        firstResolveAt = firstResolveAt,
+        drawAt = firstResolveAt - RUSH_DRAW_LEAD_MS,
+        expiresAt = now + RUSH_PHASE_TIMEOUT_MS,
+        routeObjects = {},
+        drawn = false,
+        resolvedCount = 0,
+    }
+    return true
+end
+
+local function handleRushGroundEffect(state, args, now)
+    local phase = type(state) == 'table' and state.rush or nil
+    if type(phase) ~= 'table'
+            or phase.drawn == true
+            or not finite(now)
+            or now < phase.startedAt
+            or now > phase.firstResolveAt + RUSH_ROUTE_WINDOW_GRACE_MS
+    then
+        return false
+    end
+    local entry = validateRushObject(args)
+    if entry == nil then
+        if tonumber(type(args) == 'table' and args[5] or nil)
+                == RUSH_ROUTE_CONTENT_ID
+        then
+            phase.invalid = true
+            diagnostic(state, 'rush_route_object_invalid', now)
+        end
+        return false
+    end
+    if phase.invalid == true then
+        return false
+    end
+    local existing = phase.routeObjects[entry.entityID]
+    if existing ~= nil then
+        local difference = Common.distanceSquared(
+                existing.position, entry.position)
+        if difference ~= nil
+                and difference <= POSITION_TOLERANCE_SQUARED
+                and Common.headingDifference(
+                        existing.heading, entry.heading)
+                        <= HEADING_TOLERANCE
+        then
+            return false
+        end
+        phase.invalid = true
+        diagnostic(state, 'rush_route_conflict', now, {
+            entityID = entry.entityID,
+        })
+        return false
+    end
+    phase.routeObjects[entry.entityID] = entry
+    local count = 0
+    for _ in pairs(phase.routeObjects) do
+        count = count + 1
+    end
+    if count < 4 then
+        return true
+    end
+    if count > 4 then
+        phase.invalid = true
+        diagnostic(state, 'rush_route_conflict', now, {
+            count = count,
+        })
+        return false
+    end
+    local segments = buildRushSegments(phase)
+    if segments == nil then
+        phase.invalid = true
+        diagnostic(state, 'rush_route_geometry_invalid', now)
+        return false
+    end
+    return drawRushSegments(state, phase, segments, now)
 end
 
 local function handleOmenAOE(state, aoeInfo, now)
@@ -414,10 +1031,34 @@ local function handleOmenAOE(state, aoeInfo, now)
 end
 
 local function handleEntityCast(state, entityID, actionID)
-    if REAL_BREATH_ACTIONS[actionID] ~= true or not finite(entityID) then
+    if actionID == SUPERCELL_DONUT_ACTION_ID and finite(entityID) then
+        return deleteActive(state, 'donut:' .. tostring(entityID))
+    end
+    if REAL_BREATH_ACTIONS[actionID] == true and finite(entityID) then
+        return deleteActive(state, 'breath:' .. tostring(entityID))
+    end
+    local phase = type(state) == 'table' and state.rush or nil
+    if type(phase) ~= 'table'
+            or tonumber(entityID) ~= phase.bossEntityID
+            or (actionID ~= RUSH_ACTION_ID
+                    and actionID ~= RUSH_FOLLOWUP_ACTION_ID)
+    then
         return false
     end
-    return deleteActive(state, 'breath:' .. tostring(entityID))
+    local expectedActionID = phase.resolvedCount == 0
+            and RUSH_ACTION_ID or RUSH_FOLLOWUP_ACTION_ID
+    if actionID ~= expectedActionID then
+        clearRushPredictions(state)
+        state.rush = nil
+        return false
+    end
+    phase.resolvedCount = phase.resolvedCount + 1
+    local removed = deleteActive(
+            state, 'rush:' .. tostring(phase.resolvedCount))
+    if phase.resolvedCount >= 4 then
+        state.rush = nil
+    end
+    return removed
 end
 
 local function pruneState(state, now)
@@ -441,6 +1082,13 @@ local function pruneState(state, now)
     then
         state.omenRound = nil
     end
+    if type(state.rush) == 'table'
+            and (not finite(state.rush.expiresAt)
+                    or now > state.rush.expiresAt)
+    then
+        clearRushPredictions(state)
+        state.rush = nil
+    end
     Common.pruneSeen(state.seen, now, SEEN_TTL_MS)
     return removed
 end
@@ -450,7 +1098,7 @@ local Feature = {}
 Feature.Init = function(M)
     if type(M.ShapeshiftingMage) == 'table' then
         clearState(M.ShapeshiftingMage)
-        donutRegistry.Apply(M.ShapeshiftingMage, false)
+        applySupercellRendering(M.ShapeshiftingMage, false)
     end
     M.ShapeshiftingMage = newState()
     local cfg = getConfig(M)
@@ -461,11 +1109,11 @@ Feature.Init = function(M)
         end
         if enabled == true then
             if current ~= nil and current.CorrectSupercellDonut == true then
-                donutRegistry.Apply(M.ShapeshiftingMage, true)
+                applySupercellRendering(M.ShapeshiftingMage, true)
             end
         else
             clearState(M.ShapeshiftingMage)
-            donutRegistry.Apply(M.ShapeshiftingMage, false)
+            applySupercellRendering(M.ShapeshiftingMage, false)
         end
     end
     M.SetShapeshiftingMageDonutCorrectionEnabled = function(enabled)
@@ -473,7 +1121,10 @@ Feature.Init = function(M)
         if current ~= nil then
             current.CorrectSupercellDonut = enabled == true
         end
-        donutRegistry.Apply(
+        if enabled ~= true then
+            clearPredictionsWithPrefix(M.ShapeshiftingMage, 'donut:')
+        end
+        applySupercellRendering(
                 M.ShapeshiftingMage,
                 enabled == true and current ~= nil
                         and current.Enable == true)
@@ -484,15 +1135,25 @@ Feature.Init = function(M)
             current.DrawHellishBreathPrediction = enabled == true
         end
         if enabled ~= true then
-            clearPredictions(M.ShapeshiftingMage)
+            clearBreathPredictions(M.ShapeshiftingMage)
             M.ShapeshiftingMage.omenRound = nil
+        end
+    end
+    M.SetShapeshiftingMageRushPredictionEnabled = function(enabled)
+        local current = getConfig(M)
+        if current ~= nil then
+            current.DrawHellfireRushPrediction = enabled == true
+        end
+        if enabled ~= true then
+            clearRushPredictions(M.ShapeshiftingMage)
+            M.ShapeshiftingMage.rush = nil
         end
     end
     if cfg ~= nil
             and cfg.Enable == true
             and cfg.CorrectSupercellDonut == true
     then
-        donutRegistry.Apply(M.ShapeshiftingMage, true)
+        applySupercellRendering(M.ShapeshiftingMage, true)
     end
 end
 
@@ -501,7 +1162,7 @@ Feature.Clear = function(releaseOwnership)
     if state ~= nil then
         clearState(state)
         if releaseOwnership == true then
-            donutRegistry.Apply(state, false)
+            applySupercellRendering(state, false)
         end
     end
 end
@@ -509,18 +1170,58 @@ end
 Feature.OnAOECreate = function(aoeInfo, now)
     local actionID = type(aoeInfo) == 'table'
             and tonumber(aoeInfo.aoeID) or nil
-    if OMEN_SPECS[actionID] == nil then
-        return false
-    end
     local guide = rawget(_G, 'MuAiGuide')
     local cfg = getConfig(guide)
     local state = getState()
+    if actionID == SUPERCELL_DONUT_ACTION_ID then
+        if state ~= nil
+                and cfg ~= nil
+                and cfg.Enable == true
+                and cfg.CorrectSupercellDonut == true
+        then
+            return handleSupercellDonut(state, aoeInfo, now)
+        end
+        return false
+    end
+    if OMEN_SPECS[actionID] == nil then
+        return false
+    end
     if state ~= nil
             and cfg ~= nil
             and cfg.Enable == true
             and cfg.DrawHellishBreathPrediction == true
     then
         return handleOmenAOE(state, aoeInfo, now)
+    end
+    return false
+end
+
+Feature.OnEntityChannel = function(
+        entityID, actionID, channelTimeMax, now)
+    local guide = rawget(_G, 'MuAiGuide')
+    local cfg = getConfig(guide)
+    local state = getState()
+    if state ~= nil
+            and cfg ~= nil
+            and cfg.Enable == true
+            and cfg.DrawHellfireRushPrediction == true
+    then
+        return handleRushChannel(
+                state, entityID, actionID, channelTimeMax, now)
+    end
+    return false
+end
+
+Feature.OnAddGroundEffect = function(args, now)
+    local guide = rawget(_G, 'MuAiGuide')
+    local cfg = getConfig(guide)
+    local state = getState()
+    if state ~= nil
+            and cfg ~= nil
+            and cfg.Enable == true
+            and cfg.DrawHellfireRushPrediction == true
+    then
+        return handleRushGroundEffect(state, args, now)
     end
     return false
 end
@@ -538,12 +1239,12 @@ Feature.Update = function(guide, now)
     end
     local cfg = getConfig(guide)
     if cfg ~= nil and cfg.Enable == true then
-        donutRegistry.Apply(
+        applySupercellRendering(
                 state, cfg.CorrectSupercellDonut == true)
         return pruneState(state, now)
     end
     clearState(state)
-    donutRegistry.Apply(state, false)
+    applySupercellRendering(state, false)
     return false
 end
 
@@ -554,15 +1255,34 @@ Feature.Test = {
     RealBreathActions = REAL_BREATH_ACTIONS,
     SupercellDonuts = SUPERCELL_DONUTS,
     DonutSource = DONUT_SOURCE,
+    DonutBlacklistSource = DONUT_BLACKLIST_SOURCE,
+    SupercellDonutActionID = SUPERCELL_DONUT_ACTION_ID,
+    SupercellDonutEffect = SUPERCELL_DONUT_EFFECT,
+    SupercellDonutInner = SUPERCELL_DONUT_INNER,
+    SupercellDonutOuter = SUPERCELL_DONUT_OUTER,
     BreathRadius = BREATH_RADIUS,
     BreathAngle = BREATH_ANGLE,
     BreathTimeoutGraceMs = BREATH_TIMEOUT_GRACE_MS,
+    RushActionID = RUSH_ACTION_ID,
+    RushFollowupActionID = RUSH_FOLLOWUP_ACTION_ID,
+    RushRouteContentID = RUSH_ROUTE_CONTENT_ID,
+    RushDrawLeadMs = RUSH_DRAW_LEAD_MS,
+    RushSegmentIntervalMs = RUSH_SEGMENT_INTERVAL_MS,
+    RushWidth = RUSH_WIDTH,
+    RushSegmentLengths = RUSH_SEGMENT_LENGTHS,
     NewState = newState,
     EnsureState = ensureState,
     GetConfig = getConfig,
     DonutRegistry = donutRegistry,
+    ApplyDonutFallback = applyDonutFallback,
+    ApplyDonutBlacklist = applyDonutBlacklist,
+    ApplySupercellRendering = applySupercellRendering,
+    HandleSupercellDonut = handleSupercellDonut,
     HeadingPatternValid = headingPatternValid,
     HandleOmenAOE = handleOmenAOE,
+    BuildRushSegments = buildRushSegments,
+    HandleRushChannel = handleRushChannel,
+    HandleRushGroundEffect = handleRushGroundEffect,
     HandleEntityCast = handleEntityCast,
     PruneState = pruneState,
     ClearState = clearState,
