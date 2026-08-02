@@ -10,7 +10,7 @@ function Module.Create(Context)
     local getPlayer = Context.getPlayer
 
 local REFERENCE_SOURCE = 'MuAiCore - 北岛参考范围'
-local REFERENCE_COMMIT = 'f980243ed7fc501c899c4cb591fb1dba1178635f'
+local REFERENCE_COMMIT = 'fda083a9e2b0b183937727ab7010f3bc0ddfa5bc'
 local REFERENCE_SEEN_TTL_MS = 30000
 local REFERENCE_TOKEN_GRACE_MS = 1000
 
@@ -145,9 +145,12 @@ local REFERENCE_SHAPES = {
         contentIDs = { [14490] = true, [14491] = true },
         shapes = { { kind = 'cross', length = 100, width = 10 } },
     },
-    [47697] = one(14490, {
-        kind = 'rect', length = 40.5, width = 11, back = 0.5,
-    }),
+    [47697] = {
+        contentIDs = { [14490] = true, [14491] = true },
+        shapes = {
+            { kind = 'rect', length = 40.5, width = 11, back = 0.5 },
+        },
+    },
     [47702] = {
         contentIDs = { [14490] = true, [14491] = true },
         shapes = {
@@ -160,6 +163,14 @@ local REFERENCE_SHAPES = {
     }),
     [47629] = one(14490, {
         kind = 'donut', inner = 18, outer = 48,
+        minElapsedMs = 6500, maxElapsedMs = 15000,
+    }),
+    [50725] = one(14489, {
+        kind = 'donut', inner = 17, outer = 47,
+        minElapsedMs = 6500, maxElapsedMs = 15000,
+    }),
+    [47620] = one(14491, {
+        kind = 'circle', radius = 20, right = 4.5,
         minElapsedMs = 6500, maxElapsedMs = 15000,
     }),
     [49628] = one(14821, {
@@ -185,6 +196,11 @@ local REFERENCE_SHAPES = {
     [49630] = one(14821, {
         kind = 'donutCone', inner = 14, outer = 19,
         angle = math.rad(74), headingOffset = math.rad(37),
+        forward = -16.5,
+    }),
+    [49627] = one(14821, {
+        kind = 'donutCone', inner = 14, outer = 19,
+        angle = math.rad(90), headingOffset = math.rad(-45),
         forward = -16.5,
     }),
     [49622] = one(14821, {
@@ -249,16 +265,34 @@ local REFERENCE_SHAPES = {
     [47502] = one(14503, {
         kind = 'cone', radius = 50, angle = math.pi,
     }),
+    [47522] = one(14503, {
+        kind = 'cross', length = 100, width = 15,
+    }),
+    [47493] = one(14503, {
+        kind = 'cone', radius = 50, angle = math.rad(45),
+        headingOffset = math.rad(0.5),
+    }),
+    [47521] = one(14503, { kind = 'circle', radius = 18 }),
 }
 
 -- 50377 remains owned by the dedicated Arachne predictor. 47191 and
 -- 50706/50707/50708 depend on conditional warning/status chains that are not
 -- available as reliable MuAi event geometry, so they intentionally fail closed.
--- Localized-name/model-only helpers without a stable action signal are likewise
--- not mirrored here.
+-- MTE4's four summoned-weapon layouts depend on VFX-to-entity association that
+-- has not appeared in the available MuAi diagnostics, so those layouts also
+-- remain fail closed. Localized-name/model-only helpers without a stable action
+-- signal are likewise not mirrored here.
 local CHANNEL_GUIDES = {
-    [47638] = { contentID = 14490, distance = 15 },
-    [49660] = { contentID = 14821, distance = 25 },
+    [47638] = { contentIDs = { [14490] = true }, distance = 15 },
+    [49660] = {
+        contentIDs = { [14821] = true, [14822] = true },
+        distance = 25,
+    },
+    [48405] = {
+        contentIDs = { [14721] = true },
+        distance = 10,
+        maxDistance = 12,
+    },
 }
 
 local function newState()
@@ -649,11 +683,19 @@ local function handleChannelGuide(state, guide, entityID, spellID,
             and reliablePosition(player.pos, false) or nil
     if entity == nil
             or entity.id ~= entityID
-            or entity.contentid ~= spec.contentID
+            or not contentMatches(spec, entity.contentid)
             or entityPos == nil
             or playerPos == nil
     then
         diagnostic(state, 'channel_geometry_missing', now, spellID)
+        return false
+    end
+    local distanceSq = Common.distanceSquared(playerPos, entityPos)
+    if finite(spec.maxDistance)
+            and (not finite(distanceSq)
+                    or distanceSq > spec.maxDistance * spec.maxDistance)
+    then
+        diagnostic(state, 'channel_out_of_reference_range', now, spellID)
         return false
     end
     local dx, dz = Common.normalized(
