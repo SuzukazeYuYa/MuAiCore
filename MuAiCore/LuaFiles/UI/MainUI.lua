@@ -717,7 +717,7 @@ local drawBaseSettingTab = function(M)
     GUI:SameLine(0, 0)
     M.Config.Main.LogEnable = GUI:Checkbox('输出调试日志##LogEnable', M.Config.Main.LogEnable)
     if GUI:IsItemHovered() then
-        GUI:SetTooltip('日志会写入MuAiCore\\Log，并脱敏队员名称')
+        GUI:SetTooltip('战斗日志写入MuAiCore\\Log；关键诊断始终写入Log\\Diagnostics，并脱敏队员名称')
     end
     GUI:Separator()
     GUI:Dummy(0, 0)
@@ -1209,13 +1209,24 @@ local drawDeveloperTab = function(M)
     GUI:SameLine(205, 0)
     GUI:Button('重载MuAiGuide', 120, 20)
     if GUI:IsItemClicked(0) then
-        local candidate = FileLoad(MuAiGuideRoot .. "MuAiGuide.lua")
-        local valid = type(candidate) == 'table'
+        local reloadPath = MuAiGuideRoot .. 'MuAiGuide.lua'
+        M.Diagnostic('INFO', 'Lifecycle', '开始手动热重载MuAiGuide', {
+            path = reloadPath,
+            version = M.VERSION,
+        }, 'manual_reload_start')
+        local loadOk, candidate = M.DiagnosticCall('Lifecycle', '手动热重载MuAiGuide', function()
+            return FileLoad(reloadPath)
+        end, { path = reloadPath, version = M.VERSION })
+        local valid = loadOk and type(candidate) == 'table'
                 and candidate.IsInit == true
                 and type(candidate.Update) == 'function'
                 and type(candidate.DrawUIs) == 'function'
                 and type(candidate.LogSystemLeave) == 'function'
         if valid then
+            M.Diagnostic('INFO', 'Lifecycle', '手动热重载MuAiGuide成功', {
+                fromVersion = M.VERSION,
+                toVersion = candidate.VERSION,
+            }, 'manual_reload_complete')
             M.CloseAllUI()
             if M.CurRaidScript ~= nil then
                 M.Log('Lifecycle', '重新初始化插件')
@@ -1223,6 +1234,11 @@ local drawDeveloperTab = function(M)
             M.LogSystemLeave()
             MuAiGuide = candidate
         else
+            M.Diagnostic('ERROR', 'Lifecycle', '手动热重载MuAiGuide失败，保留当前实例', {
+                path = reloadPath,
+                result = candidate,
+                resultType = type(candidate),
+            }, 'manual_reload_failed')
             M.ShowMsgUI(3, { '重载MuAiGuide失败，当前实例已保留。', tostring(candidate) })
         end
     end

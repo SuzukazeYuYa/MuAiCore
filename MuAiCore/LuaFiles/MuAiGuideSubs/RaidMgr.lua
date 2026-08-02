@@ -38,7 +38,7 @@ RaidMgr.init = function(M)
     --- 读取副本脚本
     M.LoadRaidScripts = function(isReload)
         local previousCurrent = M.CurRaidScript
-        local currentMapId = Player.localmapid
+        local currentMapId = Player ~= nil and Player.localmapid or nil
         local preserveCurrentState = isReload
                 and previousCurrent ~= nil
                 and previousCurrent.MapId == currentMapId
@@ -46,24 +46,58 @@ RaidMgr.init = function(M)
         local loadedScripts = {}
         local folderPath = MuAiGuideRoot .. "RaidScripts"
         local list = FolderList(folderPath)
+        if type(list) ~= 'table' then
+            M.Diagnostic('ERROR', 'RaidLoader', '读取副本脚本目录失败', {
+                path = folderPath,
+                result = list,
+                resultType = type(list),
+            }, 'folder_list')
+            return false
+        end
+        M.Diagnostic('INFO', 'RaidLoader', isReload and '开始热重载副本脚本' or '开始加载副本脚本', {
+            currentMapID = currentMapId,
+            files = table.size(list),
+        }, isReload and 'reload_start' or 'initial_start')
         local cnter = 0
         for _, fileName in pairs(list) do
             M.Debug('   加载副本脚本：' .. fileName)
             local filePath = folderPath .. "\\" .. fileName
-            local script = FileLoad(filePath)
-            if type(script) ~= "table" then
+            local loadOk, script = M.DiagnosticCall('RaidLoader', '加载副本脚本', function()
+                return FileLoad(filePath)
+            end, { file = fileName, path = filePath })
+            if not loadOk or type(script) ~= 'table' or script.MapId == nil then
                 M.Debug('   加载副本脚本：' .. fileName .. '加载失败，获取到内容如下：')
                 M.Debug('-----------------------')
                 d(script)
                 M.Debug('-----------------------')
+                M.Diagnostic('ERROR', 'RaidLoader', '副本脚本加载结果无效', {
+                    file = fileName,
+                    path = filePath,
+                    result = script,
+                    resultType = type(script),
+                }, 'invalid_' .. tostring(fileName))
             else
-                loadedScripts[script.MapId] = script
+                local initOk = true
                 if script.Init ~= nil then
                     -- 此处为脚本定义初始化，和进入副本之后逻辑不同
-                    script.Init(M)
+                    if type(script.Init) ~= 'function' then
+                        initOk = false
+                        M.Diagnostic('ERROR', 'RaidLoader', '副本脚本Init不是函数', {
+                            file = fileName,
+                            mapID = script.MapId,
+                            resultType = type(script.Init),
+                        }, 'invalid_init_' .. tostring(fileName))
+                    else
+                        initOk = M.DiagnosticCall('RaidLoader', '初始化副本脚本', function()
+                            script.Init(M)
+                        end, { file = fileName, mapID = script.MapId })
+                    end
                 end
-                M.Debug('   加载副本脚本：' .. fileName .. '成功')
-                cnter = cnter  + 1
+                if initOk then
+                    loadedScripts[script.MapId] = script
+                    M.Debug('   加载副本脚本：' .. fileName .. '成功')
+                    cnter = cnter + 1
+                end
             end
         end
         if preserveCurrentState then
@@ -78,13 +112,21 @@ RaidMgr.init = function(M)
             end
         end
         raidScript = loadedScripts
+        local allLoaded = cnter == table.size(list)
+        M.Diagnostic(allLoaded and 'INFO' or 'ERROR', 'RaidLoader',
+                isReload and '副本脚本热重载完成' or '副本脚本加载完成', {
+                    failed = table.size(list) - cnter,
+                    loaded = cnter,
+                    total = table.size(list),
+                }, isReload and 'reload_complete' or 'initial_complete')
         if isReload then
-            if cnter == table.size(list) then
+            if allLoaded then
                 M.InfoNoLog('重载副本脚本成功。')
             else
                 M.InfoNoLog('重载副本脚本失败，部分脚本未能正确加载。')
             end
         end
+        return allLoaded
     end
     M.RaidMapCheck = function()
         local nextScript = raidScript and raidScript[Player.localmapid] or nil
