@@ -25,6 +25,14 @@ local POSITION_TOLERANCE_SQUARED = 0.5 * 0.5
 local RUSH_ACTION_ID = 48343
 local RUSH_FOLLOWUP_ACTION_ID = 48344
 local RUSH_CHANNEL_TIME = 5.7
+local RUSH_AOE_CAST_TYPE = 8
+local RUSH_AOE_TYPE = 2
+local RUSH_AOE_EFFECT = 'general02f'
+local RUSH_AOE_LENGTH = 25
+local RUSH_AOE_WIDTH = 10
+local RUSH_AOE_TOLERANCE = 0.25
+local RUSH_EVENT_FRESH_PAST_MS = 1000
+local RUSH_EVENT_FRESH_FUTURE_MS = 250
 local RUSH_DRAW_LEAD_MS = 5000
 local RUSH_SEGMENT_INTERVAL_MS = 2250
 local RUSH_TIMEOUT_GRACE_MS = 1000
@@ -45,13 +53,47 @@ local RUSH_SEGMENT_LENGTHS = {
 local RUSH_SEGMENT_LENGTH_TOLERANCE = 1
 local DONUT_SOURCE = 'MuAiCore - 变形法师'
 local DONUT_BLACKLIST_SOURCE = DONUT_SOURCE .. '月环直绘'
+local SUPERCELL_INITIAL_STEEL_ACTION_ID = 50767
+local SUPERCELL_STEEL_ACTION_ID = 48360
+local SUPERCELL_INNER_RING_ACTION_ID = 48361
 local SUPERCELL_DONUT_ACTION_ID = 48362
+local SUPERCELL_STEEL_EFFECT = 'general_1bf'
+local SUPERCELL_INNER_RING_EFFECT = 'gl_sircle_2010bf'
 local SUPERCELL_DONUT_EFFECT = 'gl_donut3016_o0r1'
-local SUPERCELL_DONUT_INNER = 16
+local SUPERCELL_STEEL_RADIUS = 8
+local SUPERCELL_INNER_RING_OUTER = 16
+local SUPERCELL_DONUT_INNER = SUPERCELL_INNER_RING_OUTER
 local SUPERCELL_DONUT_OUTER = 30
 local SUPERCELL_DONUT_DURATION = 5.7
 local SUPERCELL_DONUT_DELAY = 4.5
 local SUPERCELL_DONUT_TOLERANCE = 0.15
+local SUPERCELL_PAIR_MIN_MS = 2200
+local SUPERCELL_PAIR_MAX_MS = 2800
+
+local SUPERCELL_STEEL_SPECS = {
+    [SUPERCELL_INITIAL_STEEL_ACTION_ID] = { delay = 0 },
+    [SUPERCELL_STEEL_ACTION_ID] = { delay = SUPERCELL_DONUT_DELAY },
+}
+
+local SUPERCELL_RING_SPECS = {
+    [SUPERCELL_INNER_RING_ACTION_ID] = {
+        aoeType = 111,
+        effect = SUPERCELL_INNER_RING_EFFECT,
+        outer = SUPERCELL_INNER_RING_OUTER,
+        predecessors = {
+            [SUPERCELL_INITIAL_STEEL_ACTION_ID] = true,
+            [SUPERCELL_STEEL_ACTION_ID] = true,
+        },
+    },
+    [SUPERCELL_DONUT_ACTION_ID] = {
+        aoeType = 764,
+        effect = SUPERCELL_DONUT_EFFECT,
+        outer = SUPERCELL_DONUT_OUTER,
+        predecessors = {
+            [SUPERCELL_INNER_RING_ACTION_ID] = true,
+        },
+    },
+}
 
 local DEFAULTS = {
     Enable = true,
@@ -90,9 +132,14 @@ local REAL_BREATH_ACTIONS = {
     [50677] = true,
 }
 
--- gl_donut3016_o0r1 encodes an outer radius of 30 and inner radius of 16.
--- Moogle otherwise falls back to its generic 10-yalm donut inner radius.
+-- Each ring begins exactly where the preceding observed AOE ends: the
+-- 8-yalm steel predicts 48361's inner edge, then 48361's 16-yalm outer edge
+-- predicts 48362's inner edge. Moogle needs both custom inner radii.
 local SUPERCELL_DONUTS = {
+    [SUPERCELL_INNER_RING_ACTION_ID] = {
+        name = '超级细胞变形内环',
+        radius = SUPERCELL_STEEL_RADIUS,
+    },
     [SUPERCELL_DONUT_ACTION_ID] = {
         name = '超级细胞变形外环',
         radius = SUPERCELL_DONUT_INNER,
@@ -113,6 +160,7 @@ local function newState()
         seen = {},
         omenRound = nil,
         rush = nil,
+        supercellPrevious = nil,
         active = {},
         moogle = newMoogleState(),
         blacklist = {
@@ -157,6 +205,7 @@ local feature = Common.newFeature({
         danger_drawer_unavailable = '变形法师危险范围绘图器不可用',
         danger_drawer_rejected_shape = '变形法师炼狱吐息预测绘制失败',
         rush_channel_invalid = '变形法师烈火地狱冲读条信息不可靠',
+        rush_aoe_invalid = '变形法师烈火地狱冲初始AOE几何不可靠',
         rush_route_object_invalid = '变形法师烈火地狱冲箭头对象不可靠',
         rush_route_conflict = '变形法师烈火地狱冲箭头集合冲突',
         rush_route_geometry_invalid = '变形法师烈火地狱冲路线不完整',
@@ -211,9 +260,9 @@ local function getDonutBlacklist(create)
     return Common.getMoogleTable('aoeIDUserBlacklist', create)
 end
 
-local function ownsDonutBlacklist(state, current)
+local function ownsDonutBlacklist(state, actionID, current)
     return current ~= nil
-            and (current == state.blacklist.owned[SUPERCELL_DONUT_ACTION_ID]
+            and (current == state.blacklist.owned[actionID]
             or (type(current) == 'table'
                     and current.source == DONUT_BLACKLIST_SOURCE))
 end
@@ -225,20 +274,22 @@ local function registerDonutBlacklist(state)
         state.blacklist.registered = false
         return false
     end
-    local current = blacklist[SUPERCELL_DONUT_ACTION_ID]
-    if current == nil then
-        local owned = {
-            label = '变形法师超级细胞月环直绘',
-            source = DONUT_BLACKLIST_SOURCE,
-        }
-        blacklist[SUPERCELL_DONUT_ACTION_ID] = owned
-        state.blacklist.owned[SUPERCELL_DONUT_ACTION_ID] = owned
-    elseif type(current) == 'table'
-            and current.source == DONUT_BLACKLIST_SOURCE
-    then
-        state.blacklist.owned[SUPERCELL_DONUT_ACTION_ID] = current
-    else
-        state.blacklist.owned[SUPERCELL_DONUT_ACTION_ID] = nil
+    for actionID, entry in pairs(SUPERCELL_DONUTS) do
+        local current = blacklist[actionID]
+        if current == nil then
+            local owned = {
+                label = entry.name .. '直绘',
+                source = DONUT_BLACKLIST_SOURCE,
+            }
+            blacklist[actionID] = owned
+            state.blacklist.owned[actionID] = owned
+        elseif type(current) == 'table'
+                and current.source == DONUT_BLACKLIST_SOURCE
+        then
+            state.blacklist.owned[actionID] = current
+        else
+            state.blacklist.owned[actionID] = nil
+        end
     end
     state.blacklist.registered = true
     return true
@@ -251,9 +302,11 @@ local function unregisterDonutBlacklist(state)
         state.blacklist.registered = false
         return false
     end
-    local current = blacklist[SUPERCELL_DONUT_ACTION_ID]
-    if ownsDonutBlacklist(state, current) then
-        blacklist[SUPERCELL_DONUT_ACTION_ID] = nil
+    for actionID in pairs(SUPERCELL_DONUTS) do
+        local current = blacklist[actionID]
+        if ownsDonutBlacklist(state, actionID, current) then
+            blacklist[actionID] = nil
+        end
     end
     state.blacklist.owned = {}
     state.blacklist.registered = false
@@ -267,12 +320,13 @@ local function applyDonutBlacklist(state, enabled)
     return unregisterDonutBlacklist(state)
 end
 
-local function hasExternalDonutBlacklist(state)
+local function hasExternalDonutBlacklist(state, actionID)
     state = ensureState(state)
     local blacklist = getDonutBlacklist(false)
     local current = blacklist ~= nil
-            and blacklist[SUPERCELL_DONUT_ACTION_ID] or nil
-    return current ~= nil and not ownsDonutBlacklist(state, current)
+            and blacklist[actionID] or nil
+    return current ~= nil
+            and not ownsDonutBlacklist(state, actionID, current)
 end
 
 local function getDangerDrawer()
@@ -335,6 +389,7 @@ local function clearState(state)
     state.seen = {}
     state.omenRound = nil
     state.rush = nil
+    state.supercellPrevious = nil
     state.lastDiagnostic = nil
 end
 
@@ -388,56 +443,111 @@ local function eventKey(aoeInfo)
             .. ':' .. string.format('%.3f', aoeInfo.startTime)
 end
 
-local function validateSupercellDonut(state, aoeInfo, now)
+local function validateSupercellAOE(state, aoeInfo, now)
+    local actionID = type(aoeInfo) == 'table'
+            and tonumber(aoeInfo.aoeID) or nil
+    local steelSpec = SUPERCELL_STEEL_SPECS[actionID]
+    local ringSpec = SUPERCELL_RING_SPECS[actionID]
     local source = reliableAOEPosition(aoeInfo)
     local effectInfo = type(aoeInfo) == 'table'
             and type(aoeInfo.aoeEffectInfo) == 'table'
             and aoeInfo.aoeEffectInfo or nil
     local entityID = type(aoeInfo) == 'table'
             and tonumber(aoeInfo.entityID) or nil
+    local expectedCastType = steelSpec ~= nil and 2 or 10
+    local expectedAOEType = steelSpec ~= nil and 1
+            or (ringSpec ~= nil and ringSpec.aoeType or nil)
+    local expectedLength = steelSpec ~= nil and SUPERCELL_STEEL_RADIUS
+            or (ringSpec ~= nil and ringSpec.outer or nil)
+    local expectedDelay = steelSpec ~= nil and steelSpec.delay
+            or SUPERCELL_DONUT_DELAY
+    local expectedEffect = steelSpec ~= nil and SUPERCELL_STEEL_EFFECT
+            or (ringSpec ~= nil and ringSpec.effect or nil)
     if not finite(now)
             or type(aoeInfo) ~= 'table'
-            or tonumber(aoeInfo.aoeID) ~= SUPERCELL_DONUT_ACTION_ID
+            or (steelSpec == nil and ringSpec == nil)
             or tonumber(aoeInfo.contentID) ~= CONTENT_ID
-            or tonumber(aoeInfo.aoeCastType) ~= 10
+            or tonumber(aoeInfo.aoeCastType) ~= expectedCastType
+            or tonumber(aoeInfo.aoeType) ~= expectedAOEType
             or not finite(aoeInfo.aoeLength)
-            or math.abs(aoeInfo.aoeLength - SUPERCELL_DONUT_OUTER) > 0.5
+            or math.abs(aoeInfo.aoeLength - expectedLength) > 0.5
             or not finite(aoeInfo.duration)
             or math.abs(aoeInfo.duration - SUPERCELL_DONUT_DURATION)
                     > SUPERCELL_DONUT_TOLERANCE
             or not finite(aoeInfo.delay)
-            or math.abs(aoeInfo.delay - SUPERCELL_DONUT_DELAY)
+            or math.abs(aoeInfo.delay - expectedDelay)
                     > SUPERCELL_DONUT_TOLERANCE
             or not finite(aoeInfo.startTime)
             or not finite(entityID)
             or effectInfo == nil
-            or effectInfo.aoeEffectName ~= SUPERCELL_DONUT_EFFECT
+            or effectInfo.aoeEffectName ~= expectedEffect
             or source == nil
-            or validateHelper(entityID, source) == nil
     then
         diagnostic(state, 'supercell_geometry_invalid',
                 finite(now) and now or nowMs(), {
-                    actionID = type(aoeInfo) == 'table'
-                            and aoeInfo.aoeID or nil,
+                    actionID = actionID,
                     entityID = entityID,
                 })
         return nil
     end
     return {
+        actionID = actionID,
         entityID = entityID,
         source = source,
+        outer = expectedLength,
+        predecessors = ringSpec ~= nil and ringSpec.predecessors or nil,
         durationMs = math.floor(aoeInfo.duration * 1000 + 0.5),
         eventKey = eventKey(aoeInfo),
     }
 end
 
-local function handleSupercellDonut(state, aoeInfo, now)
+local function handleSupercellAOE(state, aoeInfo, now)
     state = ensureState(state)
-    local entry = validateSupercellDonut(state, aoeInfo, now)
-    if entry == nil
-            or state.seen[entry.eventKey] ~= nil
-            or hasExternalDonutBlacklist(state)
-    then
+    local entry = validateSupercellAOE(state, aoeInfo, now)
+    if entry == nil or state.seen[entry.eventKey] ~= nil then
+        return false
+    end
+    local inner
+    if entry.predecessors ~= nil then
+        local previous = state.supercellPrevious
+        local elapsed = type(previous) == 'table'
+                and now - (tonumber(previous.receivedAt) or math.huge)
+                or nil
+        local centerDistance = type(previous) == 'table'
+                and Common.distanceSquared(previous.source, entry.source)
+                or nil
+        if type(previous) ~= 'table'
+                or entry.predecessors[previous.actionID] ~= true
+                or not finite(elapsed)
+                or elapsed < SUPERCELL_PAIR_MIN_MS
+                or elapsed > SUPERCELL_PAIR_MAX_MS
+                or centerDistance == nil
+                or centerDistance > POSITION_TOLERANCE_SQUARED
+                or not finite(previous.outer)
+                or previous.outer >= entry.outer
+        then
+            diagnostic(state, 'supercell_geometry_invalid', now, {
+                actionID = entry.actionID,
+                previousActionID = type(previous) == 'table'
+                        and previous.actionID or nil,
+                pairElapsed = elapsed,
+            })
+            return false
+        end
+        inner = previous.outer
+    end
+    state.seen[entry.eventKey] = now
+    state.supercellPrevious = {
+        actionID = entry.actionID,
+        outer = entry.outer,
+        source = entry.source,
+        receivedAt = now,
+    }
+    if inner == nil then
+        state.lastDiagnostic = nil
+        return true
+    end
+    if hasExternalDonutBlacklist(state, entry.actionID) then
         return false
     end
     local drawer = getDangerDrawer()
@@ -446,12 +556,13 @@ local function handleSupercellDonut(state, aoeInfo, now)
         diagnostic(state, 'supercell_drawer_unavailable', now)
         return false
     end
-    local key = 'donut:' .. tostring(entry.entityID)
+    local key = 'donut:' .. tostring(entry.actionID)
+            .. ':' .. tostring(entry.entityID)
     deleteActive(state, key)
     local token = drawer:addTimedDonut(
             entry.durationMs,
             entry.source.x, entry.source.y, entry.source.z,
-            SUPERCELL_DONUT_INNER, SUPERCELL_DONUT_OUTER,
+            inner, entry.outer,
             0, nil, true)
     if type(token) ~= 'string' then
         applyDonutBlacklist(state, false)
@@ -461,12 +572,11 @@ local function handleSupercellDonut(state, aoeInfo, now)
         })
         return false
     end
-    state.seen[entry.eventKey] = now
     state.active[key] = {
         key = key,
         token = token,
         entityID = entry.entityID,
-        actionID = SUPERCELL_DONUT_ACTION_ID,
+        actionID = entry.actionID,
         expiresAt = now + entry.durationMs + TOKEN_GRACE_MS,
     }
     state.lastDiagnostic = nil
@@ -774,28 +884,19 @@ local function validateRushObject(args)
         y = args[18],
         z = args[19],
     }, false)
-    local entity = finite(entityID) and resolveEntity(entityID) or nil
-    local entityPosition = type(entity) == 'table'
-            and reliablePosition(entity.pos, false) or nil
-    local positionDifference = position ~= nil and entityPosition ~= nil
-            and Common.distanceSquared(position, entityPosition) or nil
     if not finite(entityID)
             or tonumber(args[2]) ~= 7
             or tonumber(args[3]) ~= 5
             or tonumber(args[4]) ~= 0
             or tonumber(args[5]) ~= RUSH_ROUTE_CONTENT_ID
+            or tonumber(args[6]) ~= entityID
+            or tonumber(args[10]) ~= 0
             or math.abs((tonumber(args[11]) or -1) - 1) > 0.05
             or not finite(heading)
             or tonumber(args[13]) ~= 0
             or tonumber(args[14]) ~= 0
             or tonumber(args[15]) ~= 1
             or position == nil
-            or type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= RUSH_ROUTE_CONTENT_ID
-            or tonumber(entity.modelid) ~= RUSH_ROUTE_CONTENT_ID
-            or positionDifference == nil
-            or positionDifference > POSITION_TOLERANCE_SQUARED
     then
         return nil
     end
@@ -859,18 +960,11 @@ local function handleRushChannel(
     if actionID ~= RUSH_ACTION_ID then
         return false
     end
-    local boss = finite(entityID) and resolveEntity(entityID) or nil
-    local origin = type(boss) == 'table'
-            and reliablePosition(boss.pos, false) or nil
-    if type(boss) ~= 'table'
-            or tonumber(boss.id) ~= entityID
-            or tonumber(boss.contentid) ~= CONTENT_ID
-            or tonumber(boss.modelid) ~= BOSS_MODEL_ID
-            or boss.alive == false
+    if not finite(entityID)
+            or entityID <= 0
             or not finite(channelTimeMax)
             or math.abs(channelTimeMax - RUSH_CHANNEL_TIME) > 0.2
             or not finite(now)
-            or origin == nil
     then
         diagnostic(state, 'rush_channel_invalid',
                 finite(now) and now or nowMs(), {
@@ -879,20 +973,113 @@ local function handleRushChannel(
                 })
         return false
     end
+    -- OnEntityChannel can precede the live entity snapshot. The same-frame
+    -- native AOE owns the first segment geometry and opens the route phase.
+    return true
+end
+
+local function readRushAOE(aoeInfo, now)
+    if type(aoeInfo) ~= 'table'
+            or tonumber(aoeInfo.aoeID) ~= RUSH_ACTION_ID
+    then
+        return nil, nil
+    end
+    local entityID = tonumber(aoeInfo.entityID)
+    local startTime = tonumber(aoeInfo.startTime)
+    local duration = tonumber(aoeInfo.duration)
+    local heading = tonumber(aoeInfo.heading)
+    local length = tonumber(aoeInfo.aoeLength)
+    local width = tonumber(aoeInfo.aoeWidth)
+    local x = tonumber(aoeInfo.x)
+    local y = tonumber(aoeInfo.y)
+    local z = tonumber(aoeInfo.z)
+    local effect = type(aoeInfo.aoeEffectInfo) == 'table'
+            and aoeInfo.aoeEffectInfo.aoeEffectName or nil
+    if not finite(now)
+            or not finite(entityID)
+            or entityID <= 0
+            or tonumber(aoeInfo.contentID) ~= CONTENT_ID
+            or tonumber(aoeInfo.aoeCastType) ~= RUSH_AOE_CAST_TYPE
+            or tonumber(aoeInfo.aoeType) ~= RUSH_AOE_TYPE
+            or aoeInfo.isAreaTarget ~= true
+            or effect ~= RUSH_AOE_EFFECT
+            or not finite(startTime)
+            or not finite(duration)
+            or math.abs(duration - RUSH_CHANNEL_TIME) > 0.2
+            or not finite(length)
+            or math.abs(length - RUSH_AOE_LENGTH)
+                    > RUSH_AOE_TOLERANCE
+            or not finite(width)
+            or math.abs(width - RUSH_AOE_WIDTH)
+                    > RUSH_AOE_TOLERANCE
+            or not finite(heading)
+            or not finite(x)
+            or not finite(y)
+            or not finite(z)
+    then
+        return nil, 'rush_aoe_invalid', {
+            entityID = entityID,
+            castType = aoeInfo.aoeCastType,
+            aoeType = aoeInfo.aoeType,
+            effect = effect,
+            duration = duration,
+            length = length,
+            width = width,
+        }
+    end
+    local age = now - startTime
+    if age > RUSH_EVENT_FRESH_PAST_MS
+            or age < -RUSH_EVENT_FRESH_FUTURE_MS
+    then
+        return nil, 'rush_aoe_invalid', {
+            entityID = entityID,
+            age = age,
+        }
+    end
+    return {
+        key = tostring(entityID) .. ':'
+                .. tostring(math.floor(startTime + 0.5)),
+        entityID = entityID,
+        startTime = startTime,
+        duration = duration,
+        origin = {
+            x = x - math.sin(heading) * length,
+            y = y,
+            z = z - math.cos(heading) * length,
+        },
+    }
+end
+
+local function handleRushAOE(state, aoeInfo, now)
+    state = ensureState(state)
+    local entry, code, context = readRushAOE(aoeInfo, now)
+    if entry == nil then
+        if code ~= nil then
+            diagnostic(state, code, now, context)
+        end
+        return false
+    end
+    if type(state.rush) == 'table'
+            and state.rush.key == entry.key
+    then
+        return false
+    end
     clearRushPredictions(state)
     state.rush = nil
-    local firstResolveAt = now + channelTimeMax * 1000
+    local firstResolveAt = entry.startTime + entry.duration * 1000
     state.rush = {
-        bossEntityID = entityID,
-        origin = origin,
-        startedAt = now,
+        key = entry.key,
+        bossEntityID = entry.entityID,
+        origin = entry.origin,
+        startedAt = entry.startTime,
         firstResolveAt = firstResolveAt,
         drawAt = firstResolveAt - RUSH_DRAW_LEAD_MS,
-        expiresAt = now + RUSH_PHASE_TIMEOUT_MS,
+        expiresAt = entry.startTime + RUSH_PHASE_TIMEOUT_MS,
         routeObjects = {},
         drawn = false,
         resolvedCount = 0,
     }
+    state.lastDiagnostic = nil
     return true
 end
 
@@ -1031,8 +1218,9 @@ local function handleOmenAOE(state, aoeInfo, now)
 end
 
 local function handleEntityCast(state, entityID, actionID)
-    if actionID == SUPERCELL_DONUT_ACTION_ID and finite(entityID) then
-        return deleteActive(state, 'donut:' .. tostring(entityID))
+    if SUPERCELL_RING_SPECS[actionID] ~= nil and finite(entityID) then
+        return deleteActive(state, 'donut:' .. tostring(actionID)
+                .. ':' .. tostring(entityID))
     end
     if REAL_BREATH_ACTIONS[actionID] == true and finite(entityID) then
         return deleteActive(state, 'breath:' .. tostring(entityID))
@@ -1089,6 +1277,13 @@ local function pruneState(state, now)
         clearRushPredictions(state)
         state.rush = nil
     end
+    if type(state.supercellPrevious) == 'table'
+            and (not finite(state.supercellPrevious.receivedAt)
+                    or now - state.supercellPrevious.receivedAt
+                            > SUPERCELL_PAIR_MAX_MS)
+    then
+        state.supercellPrevious = nil
+    end
     Common.pruneSeen(state.seen, now, SEEN_TTL_MS)
     return removed
 end
@@ -1123,6 +1318,7 @@ Feature.Init = function(M)
         end
         if enabled ~= true then
             clearPredictionsWithPrefix(M.ShapeshiftingMage, 'donut:')
+            M.ShapeshiftingMage.supercellPrevious = nil
         end
         applySupercellRendering(
                 M.ShapeshiftingMage,
@@ -1173,13 +1369,25 @@ Feature.OnAOECreate = function(aoeInfo, now)
     local guide = rawget(_G, 'MuAiGuide')
     local cfg = getConfig(guide)
     local state = getState()
-    if actionID == SUPERCELL_DONUT_ACTION_ID then
+    if actionID == RUSH_ACTION_ID then
+        if state ~= nil
+                and cfg ~= nil
+                and cfg.Enable == true
+                and cfg.DrawHellfireRushPrediction == true
+        then
+            return handleRushAOE(state, aoeInfo, now)
+        end
+        return false
+    end
+    if SUPERCELL_STEEL_SPECS[actionID] ~= nil
+            or SUPERCELL_RING_SPECS[actionID] ~= nil
+    then
         if state ~= nil
                 and cfg ~= nil
                 and cfg.Enable == true
                 and cfg.CorrectSupercellDonut == true
         then
-            return handleSupercellDonut(state, aoeInfo, now)
+            return handleSupercellAOE(state, aoeInfo, now)
         end
         return false
     end
@@ -1256,6 +1464,13 @@ Feature.Test = {
     SupercellDonuts = SUPERCELL_DONUTS,
     DonutSource = DONUT_SOURCE,
     DonutBlacklistSource = DONUT_BLACKLIST_SOURCE,
+    SupercellInitialSteelActionID = SUPERCELL_INITIAL_STEEL_ACTION_ID,
+    SupercellSteelActionID = SUPERCELL_STEEL_ACTION_ID,
+    SupercellInnerRingActionID = SUPERCELL_INNER_RING_ACTION_ID,
+    SupercellSteelEffect = SUPERCELL_STEEL_EFFECT,
+    SupercellInnerRingEffect = SUPERCELL_INNER_RING_EFFECT,
+    SupercellSteelRadius = SUPERCELL_STEEL_RADIUS,
+    SupercellInnerRingOuter = SUPERCELL_INNER_RING_OUTER,
     SupercellDonutActionID = SUPERCELL_DONUT_ACTION_ID,
     SupercellDonutEffect = SUPERCELL_DONUT_EFFECT,
     SupercellDonutInner = SUPERCELL_DONUT_INNER,
@@ -1277,11 +1492,12 @@ Feature.Test = {
     ApplyDonutFallback = applyDonutFallback,
     ApplyDonutBlacklist = applyDonutBlacklist,
     ApplySupercellRendering = applySupercellRendering,
-    HandleSupercellDonut = handleSupercellDonut,
+    HandleSupercellAOE = handleSupercellAOE,
     HeadingPatternValid = headingPatternValid,
     HandleOmenAOE = handleOmenAOE,
     BuildRushSegments = buildRushSegments,
     HandleRushChannel = handleRushChannel,
+    HandleRushAOE = handleRushAOE,
     HandleRushGroundEffect = handleRushGroundEffect,
     HandleEntityCast = handleEntityCast,
     PruneState = pruneState,
