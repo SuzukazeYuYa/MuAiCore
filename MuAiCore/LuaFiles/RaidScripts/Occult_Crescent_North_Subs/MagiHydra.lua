@@ -12,16 +12,23 @@ local HYDRA_CONTENT_ID = 14523
 local HELPER_MODEL_ID = 9020
 local FLASH_CONTENT_ID = 14524
 local FLASH_MODEL_ID = 19398
+local FLASH_OMEN_AID = 47189
+local FLASH_OMEN_EFFECT = 'general_1bf'
 local STUNNING_FLASH_AID = 47191
 
-local FLASH_VISIBILITY_TO_HIT_MS = 6050
-local FLASH_CHANNEL_HIT_OFFSET_MS = 300
+local FLASH_OMEN_TO_HIT_MS = 9800
+local FLASH_VISIBILITY_TO_HIT_MS = 6000
+local FLASH_CHANNEL_HIT_OFFSET_MS = 200
 local FLASH_CHANNEL_MIN = 4.5
 local FLASH_CHANNEL_MAX = 4.9
-local FLASH_AUTO_FACE_LEAD_MS = 200
-local FLASH_AUTO_FACE_RELEASE_MS = 650
+local FLASH_AUTO_FACE_LEAD_MS = 500
+local FLASH_AUTO_FACE_RELEASE_MS = 800
 local FLASH_STATE_GRACE_MS = 1200
 local FLASH_OVERLAP_SQUARED = 0.25
+local FLASH_OMEN_TO_VISIBILITY_MIN_MS = 3200
+local FLASH_OMEN_TO_VISIBILITY_MAX_MS = 4500
+local FLASH_OMEN_TO_CHANNEL_MIN_MS = 4200
+local FLASH_OMEN_TO_CHANNEL_MAX_MS = 5500
 
 local OMEN_AID = 47212
 local OMEN_EFFECT = 'gl_fan120_red0h'
@@ -40,10 +47,13 @@ local OMEN_GAP_MAX_MS = 1700
 local OMEN_SEQUENCE_WINDOW_MS = 8000
 local FIRST_ACTUAL_MIN_MS = 7000
 local FIRST_ACTUAL_MAX_MS = 9500
+local FIRST_ACTUAL_PREDICTED_MS = 8218
+local ACTUAL_PREDICTED_GAP_MS = 2050
 local ACTUAL_GAP_MIN_MS = 1500
 local ACTUAL_GAP_MAX_MS = 2700
 local BREATH_ROUND_TIMEOUT_MS = 24000
-local PREDICTION_TIMEOUT_MS = 15000
+local PREDICTION_LEAD_MS = 3200
+local PREDICTION_POST_HIT_MS = 750
 local PREDICTION_TOKEN_GRACE_MS = 1000
 local SEEN_TTL_MS = 30000
 
@@ -58,7 +68,7 @@ local function newState()
         flash = nil,
         faceLock = Common.newFaceLock(),
         breathRound = nil,
-        activePrediction = nil,
+        predictions = {},
         seenVisibility = {},
         seenChannels = {},
         seenCasts = {},
@@ -82,8 +92,8 @@ local function ensureState(state)
     state.flash = type(state.flash) == 'table' and state.flash or nil
     state.breathRound = type(state.breathRound) == 'table'
             and state.breathRound or nil
-    state.activePrediction = type(state.activePrediction) == 'table'
-            and state.activePrediction or nil
+    state.predictions = type(state.predictions) == 'table'
+            and state.predictions or {}
     return state
 end
 
@@ -118,14 +128,26 @@ local function diagnostic(state, code, now, context)
             state, rawget(_G, 'MuAiGuide'), code, now, context)
 end
 
-local function deletePrediction(state)
+local function deletePrediction(state, index)
     state = ensureState(state)
-    if type(state.activePrediction) ~= 'table' then
-        return false
+    if finite(index) then
+        local prediction = state.predictions[index]
+        if type(prediction) ~= 'table' then
+            return false
+        end
+        Common.deleteTimedShape(prediction.token)
+        state.predictions[index] = nil
+        return true
     end
-    Common.deleteTimedShape(state.activePrediction.token)
-    state.activePrediction = nil
-    return true
+    local changed = false
+    for predictionIndex, prediction in pairs(state.predictions) do
+        if type(prediction) == 'table' then
+            Common.deleteTimedShape(prediction.token)
+            changed = true
+        end
+        state.predictions[predictionIndex] = nil
+    end
+    return changed
 end
 
 local function clearFlash(state)
@@ -185,6 +207,65 @@ local function flashFacingHeading(playerPosition, source)
     return math.atan2(dx, dz)
 end
 
+local function recordFlashOmenAOE(state, aoeInfo, now)
+    state = ensureState(state)
+    local effectInfo = type(aoeInfo) == 'table'
+            and type(aoeInfo.aoeEffectInfo) == 'table'
+            and aoeInfo.aoeEffectInfo or nil
+    local entityID = type(aoeInfo) == 'table'
+            and tonumber(aoeInfo.entityID) or nil
+    local source = type(aoeInfo) == 'table' and reliablePosition({
+        x = aoeInfo.x,
+        y = aoeInfo.y,
+        z = aoeInfo.z,
+    }, false) or nil
+    if type(aoeInfo) ~= 'table'
+            or tonumber(aoeInfo.aoeID) ~= FLASH_OMEN_AID
+            or tonumber(aoeInfo.contentID) ~= HYDRA_CONTENT_ID
+            or tonumber(aoeInfo.aoeCastType) ~= 2
+            or tonumber(aoeInfo.aoeType) ~= 1
+            or not finite(aoeInfo.aoeLength)
+            or math.abs(aoeInfo.aoeLength - 6) > 0.25
+            or not finite(aoeInfo.duration)
+            or math.abs(aoeInfo.duration - 2.7) > 0.15
+            or not finite(aoeInfo.delay)
+            or math.abs(aoeInfo.delay) > 0.15
+            or not finite(aoeInfo.startTime)
+            or aoeInfo.isAreaTarget ~= true
+            or effectInfo == nil
+            or effectInfo.aoeEffectName ~= FLASH_OMEN_EFFECT
+            or not finite(entityID)
+            or entityID <= 0
+            or source == nil
+            or not finite(now)
+    then
+        clearFlash(state)
+        diagnostic(state, 'flash_geometry_invalid', nowMs(), {
+            actionID = type(aoeInfo) == 'table' and aoeInfo.aoeID or nil,
+            entityID = entityID,
+        })
+        return false
+    end
+    local eventKey = tostring(entityID)
+            .. ':' .. tostring(FLASH_OMEN_AID)
+            .. ':' .. string.format('%.3f', aoeInfo.startTime)
+    if not Common.consumeEvent(state.seenAOEs, eventKey, now, 1000) then
+        return false
+    end
+    clearFlash(state)
+    local activationAt = now + FLASH_OMEN_TO_HIT_MS
+    state.flash = {
+        key = eventKey,
+        source = source,
+        omenEntityID = entityID,
+        omenAt = now,
+        activationAt = activationAt,
+        expiresAt = activationAt + FLASH_STATE_GRACE_MS,
+    }
+    state.lastDiagnostic = nil
+    return true
+end
+
 local function recordFlashVisibility(
         state, entityID, wasVisible, isVisible, now)
     state = ensureState(state)
@@ -200,13 +281,25 @@ local function recordFlashVisibility(
     if wasVisible ~= false or isVisible ~= true then
         return false
     end
-    if not finite(entityID) or entityID <= 0 or not finite(now) then
+    local flash = state.flash
+    if type(flash) ~= 'table'
+            or not finite(flash.omenAt)
+            or type(flash.source) ~= 'table'
+            or not finite(now)
+    then
+        return false
+    end
+    local elapsed = now - flash.omenAt
+    if elapsed < FLASH_OMEN_TO_VISIBILITY_MIN_MS
+            or elapsed > FLASH_OMEN_TO_VISIBILITY_MAX_MS
+    then
+        return false
+    end
+    if not finite(entityID) or entityID <= 0 then
         diagnostic(state, 'flash_entity_invalid', nowMs(), entityID)
         return false
     end
-    local rawEntity = resolveEntity(entityID)
-    if type(rawEntity) ~= 'table'
-            or tonumber(rawEntity.contentid) ~= FLASH_CONTENT_ID
+    if finite(flash.entityID) and flash.entityID ~= entityID
     then
         return false
     end
@@ -214,22 +307,11 @@ local function recordFlashVisibility(
     if not Common.consumeEvent(state.seenVisibility, eventKey, now, 1000) then
         return false
     end
-    local _, source = resolveExpectedEntity(
-            entityID, FLASH_CONTENT_ID, FLASH_MODEL_ID)
-    if source == nil then
-        diagnostic(state, 'flash_entity_invalid', now, entityID)
-        return false
-    end
-    clearFlash(state)
     local activationAt = now + FLASH_VISIBILITY_TO_HIT_MS
-    state.flash = {
-        key = eventKey .. ':' .. tostring(math.floor(now / 100)),
-        entityID = entityID,
-        source = source,
-        visibleAt = now,
-        activationAt = activationAt,
-        expiresAt = activationAt + FLASH_STATE_GRACE_MS,
-    }
+    flash.entityID = entityID
+    flash.visibleAt = now
+    flash.activationAt = activationAt
+    flash.expiresAt = activationAt + FLASH_STATE_GRACE_MS
     state.lastDiagnostic = nil
     return true
 end
@@ -254,40 +336,36 @@ local function recordFlashChannel(
         })
         return false
     end
+    local flash = state.flash
+    if type(flash) ~= 'table'
+            or not finite(flash.omenAt)
+            or type(flash.source) ~= 'table'
+    then
+        return false
+    end
+    local elapsed = now - flash.omenAt
+    if elapsed < FLASH_OMEN_TO_CHANNEL_MIN_MS
+            or elapsed > FLASH_OMEN_TO_CHANNEL_MAX_MS
+            or (finite(flash.entityID) and flash.entityID ~= entityID)
+    then
+        clearFlash(state)
+        diagnostic(state, 'flash_timing_invalid', now, {
+            entityID = entityID,
+            elapsed = elapsed,
+        })
+        return false
+    end
     local eventKey = tostring(entityID) .. ':' .. tostring(actionID)
     if not Common.consumeEvent(state.seenChannels, eventKey, now, 500) then
         return false
     end
-    local _, source = resolveExpectedEntity(
-            entityID, FLASH_CONTENT_ID, FLASH_MODEL_ID)
-    if source == nil then
-        clearFlash(state)
-        diagnostic(state, 'flash_entity_invalid', now, entityID)
-        return false
-    end
-    if type(state.flash) == 'table'
-            and state.flash.entityID == entityID
-    then
-        local distance = Common.distanceSquared(state.flash.source, source)
-        if distance == nil or distance > BREATH_SOURCE_TOLERANCE_SQUARED then
-            clearFlash(state)
-            diagnostic(state, 'flash_geometry_invalid', now, entityID)
-            return false
-        end
-    else
-        clearFlash(state)
-        state.flash = {
-            key = eventKey .. ':' .. tostring(math.floor(now / 100)),
-            entityID = entityID,
-            source = source,
-        }
-    end
     local activationAt = now + channelTimeMax * 1000
             + FLASH_CHANNEL_HIT_OFFSET_MS
-    state.flash.source = source
-    state.flash.channelStartedAt = now
-    state.flash.activationAt = activationAt
-    state.flash.expiresAt = activationAt + FLASH_STATE_GRACE_MS
+    flash.key = eventKey .. ':' .. tostring(math.floor(now / 100))
+    flash.entityID = entityID
+    flash.channelStartedAt = now
+    flash.activationAt = activationAt
+    flash.expiresAt = activationAt + FLASH_STATE_GRACE_MS
     state.lastDiagnostic = nil
     return true
 end
@@ -324,6 +402,13 @@ local function updateFlashAutoFace(state, guide, now)
         clearFlash(state)
         return false
     end
+    if not finite(flash.entityID)
+            or not finite(flash.channelStartedAt)
+            or type(flash.source) ~= 'table'
+    then
+        Common.releaseAutoFace(state)
+        return false
+    end
     if now < flash.activationAt - FLASH_AUTO_FACE_LEAD_MS
             or now > flash.activationAt + FLASH_AUTO_FACE_RELEASE_MS
     then
@@ -332,12 +417,18 @@ local function updateFlashAutoFace(state, guide, now)
     end
     local _, source = resolveExpectedEntity(
             flash.entityID, FLASH_CONTENT_ID, FLASH_MODEL_ID)
+    local sourceDistance = source ~= nil
+            and Common.distanceSquared(flash.source, source) or nil
     local player = type(guide) == 'table'
             and type(guide.GetPlayer) == 'function'
             and guide.GetPlayer() or rawget(_G, 'Player')
     local heading = flashFacingHeading(
             type(player) == 'table' and player.pos or nil, source)
-    if source == nil or heading == nil then
+    if source == nil
+            or sourceDistance == nil
+            or sourceDistance > BREATH_SOURCE_TOLERANCE_SQUARED
+            or heading == nil
+    then
         Common.releaseAutoFace(state)
         diagnostic(state, 'flash_geometry_invalid', now, flash.entityID)
         return false
@@ -378,17 +469,6 @@ local function reliableAOEPosition(aoeInfo)
     }, false)
 end
 
-local function validateHelper(entityID, source)
-    local _, position = resolveExpectedEntity(
-            entityID, HYDRA_CONTENT_ID, HELPER_MODEL_ID)
-    local distance = position ~= nil
-            and Common.distanceSquared(position, source) or nil
-    if distance == nil or distance > BREATH_SOURCE_TOLERANCE_SQUARED then
-        return nil
-    end
-    return position
-end
-
 local function aoeEventKey(aoeInfo)
     return tostring(aoeInfo.entityID)
             .. ':' .. tostring(aoeInfo.aoeID)
@@ -419,7 +499,6 @@ local function validateOmenAOE(state, aoeInfo, now)
             or effectInfo.aoeEffectName ~= OMEN_EFFECT
             or not finite(entityID)
             or source == nil
-            or validateHelper(entityID, source) == nil
     then
         diagnostic(state, 'breath_omen_invalid', now, {
             actionID = type(aoeInfo) == 'table' and aoeInfo.aoeID or nil,
@@ -462,7 +541,6 @@ local function validateActualAOE(state, aoeInfo, now)
             or effectInfo.aoeEffectName ~= ''
             or not finite(entityID)
             or source == nil
-            or validateHelper(entityID, source) == nil
     then
         diagnostic(state, 'breath_actual_invalid', now, {
             actionID = actionID,
@@ -522,8 +600,23 @@ local function omenHeadingPatternValid(entries)
     return true
 end
 
+local function predictedBreathHitAt(round, index)
+    if type(round) ~= 'table'
+            or not finite(round.startedAt)
+            or not finite(index)
+            or index < 1
+            or index > BREATH_COUNT
+    then
+        return nil
+    end
+    return round.startedAt + FIRST_ACTUAL_PREDICTED_MS
+            + (index - 1) * ACTUAL_PREDICTED_GAP_MS
+end
+
 local function drawBreathPrediction(state, round, index, now)
-    deletePrediction(state)
+    if type(state.predictions[index]) == 'table' then
+        return false
+    end
     local entry = type(round) == 'table'
             and type(round.omens) == 'table'
             and round.omens[index] or nil
@@ -535,18 +628,32 @@ local function drawBreathPrediction(state, round, index, now)
         diagnostic(state, 'danger_drawer_unavailable', now, index)
         return false
     end
+    local hitAt = predictedBreathHitAt(round, index)
+    if not finite(hitAt) then
+        return false
+    end
+    local visibleAt = index == 1 and now
+            or math.max(entry.observedAt, hitAt - PREDICTION_LEAD_MS)
+    local delay = math.max(0, visibleAt - now)
+    local timeout = hitAt + PREDICTION_POST_HIT_MS - visibleAt
+    if timeout <= 0 then
+        return false
+    end
     local token = drawer:addTimedCone(
-            PREDICTION_TIMEOUT_MS,
+            timeout,
             round.source.x, round.source.y, round.source.z,
-            BREATH_RADIUS, BREATH_ANGLE, entry.heading)
+            BREATH_RADIUS, BREATH_ANGLE, entry.heading,
+            delay, nil, true)
     if type(token) ~= 'string' then
         diagnostic(state, 'danger_drawer_rejected_shape', now, index)
         return false
     end
-    state.activePrediction = {
+    state.predictions[index] = {
         token = token,
         index = index,
-        expiresAt = now + PREDICTION_TIMEOUT_MS
+        visibleAt = visibleAt,
+        hitAt = hitAt,
+        expiresAt = visibleAt + timeout
                 + PREDICTION_TOKEN_GRACE_MS,
     }
     state.lastDiagnostic = nil
@@ -620,9 +727,7 @@ local function handleOmenAOE(state, aoeInfo, now)
     end
     round.omens[#round.omens + 1] = entry
     round.lastOmenAt = now
-    if #round.omens == 1 then
-        drawBreathPrediction(state, round, 1, now)
-    end
+    drawBreathPrediction(state, round, #round.omens, now)
     if #round.omens == BREATH_COUNT then
         if not omenHeadingPatternValid(round.omens) then
             return failBreathRound(state, 'breath_pattern_invalid', now, {
@@ -699,7 +804,7 @@ local function handleActualAOE(state, aoeInfo, now)
             actionID = entry.actionID,
         })
     end
-    deletePrediction(state)
+    deletePrediction(state, expectedIndex)
     round.resolved = expectedIndex
     round.lastActualAt = now
     if round.resolved >= BREATH_COUNT then
@@ -707,7 +812,6 @@ local function handleActualAOE(state, aoeInfo, now)
         state.lastDiagnostic = nil
         return true
     end
-    drawBreathPrediction(state, round, round.resolved + 1, now)
     return true
 end
 
@@ -721,12 +825,14 @@ local function pruneState(state, now)
         clearFlash(state)
         changed = true
     end
-    if type(state.activePrediction) == 'table'
-            and (not finite(state.activePrediction.expiresAt)
-                    or now > state.activePrediction.expiresAt)
-    then
-        deletePrediction(state)
-        changed = true
+    for index, prediction in pairs(state.predictions) do
+        if type(prediction) ~= 'table'
+                or not finite(prediction.expiresAt)
+                or now > prediction.expiresAt
+        then
+            deletePrediction(state, index)
+            changed = true
+        end
     end
     if type(state.breathRound) == 'table'
             and (not finite(state.breathRound.expiresAt)
@@ -827,7 +933,8 @@ end
 Feature.OnAOECreate = function(aoeInfo, now)
     local actionID = type(aoeInfo) == 'table'
             and tonumber(aoeInfo.aoeID) or nil
-    if actionID ~= OMEN_AID
+    if actionID ~= FLASH_OMEN_AID
+            and actionID ~= OMEN_AID
             and REAL_BREATH_ACTIONS[actionID] ~= true
     then
         return false
@@ -838,8 +945,14 @@ Feature.OnAOECreate = function(aoeInfo, now)
     if state == nil
             or cfg == nil
             or cfg.Enable ~= true
-            or cfg.DrawMultipleBreathPrediction ~= true
     then
+        return false
+    end
+    if actionID == FLASH_OMEN_AID then
+        return cfg.AutoFaceStunningFlash == true
+                and recordFlashOmenAOE(state, aoeInfo, now) or false
+    end
+    if cfg.DrawMultipleBreathPrediction ~= true then
         return false
     end
     if actionID == OMEN_AID then
@@ -876,7 +989,10 @@ Feature.Test = {
     HelperModelID = HELPER_MODEL_ID,
     FlashContentID = FLASH_CONTENT_ID,
     FlashModelID = FLASH_MODEL_ID,
+    FlashOmenAID = FLASH_OMEN_AID,
+    FlashOmenEffect = FLASH_OMEN_EFFECT,
     StunningFlashAID = STUNNING_FLASH_AID,
+    FlashOmenToHitMs = FLASH_OMEN_TO_HIT_MS,
     FlashVisibilityToHitMs = FLASH_VISIBILITY_TO_HIT_MS,
     FlashChannelHitOffsetMs = FLASH_CHANNEL_HIT_OFFSET_MS,
     FlashAutoFaceLeadMs = FLASH_AUTO_FACE_LEAD_MS,
@@ -887,8 +1003,13 @@ Feature.Test = {
     BreathRadius = BREATH_RADIUS,
     BreathAngle = BREATH_ANGLE,
     BreathCount = BREATH_COUNT,
+    FirstActualPredictedMs = FIRST_ACTUAL_PREDICTED_MS,
+    ActualPredictedGapMs = ACTUAL_PREDICTED_GAP_MS,
+    PredictionLeadMs = PREDICTION_LEAD_MS,
+    PredictionPostHitMs = PREDICTION_POST_HIT_MS,
     NewState = newState,
     EnsureState = ensureState,
+    RecordFlashOmenAOE = recordFlashOmenAOE,
     RecordFlashVisibility = recordFlashVisibility,
     RecordFlashChannel = recordFlashChannel,
     ResolveFlashCast = resolveFlashCast,
