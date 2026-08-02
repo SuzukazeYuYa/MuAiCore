@@ -453,6 +453,22 @@ function Common.getMoogleTable(name, create)
     return type(target) == 'table' and target or nil
 end
 
+function Common.getMoogleDrawer(allowUserdata)
+    if type(TensorCore) ~= 'table'
+            or type(TensorCore.getMoogleDrawer) ~= 'function'
+    then
+        return nil
+    end
+    local drawer = TensorCore.getMoogleDrawer()
+    local drawerType = type(drawer)
+    if drawerType == 'table'
+            or (allowUserdata == true and drawerType == 'userdata')
+    then
+        return drawer
+    end
+    return nil
+end
+
 local function resetOwnership(bucket)
     bucket.registered = false
     bucket.owned = {}

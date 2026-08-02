@@ -478,10 +478,8 @@ local function arachneConeDangers(state)
 end
 
 local function drawArachneDangers(state, guide, cfg)
-    local drawer = type(TensorCore) == 'table'
-            and type(TensorCore.getMoogleDrawer) == 'function'
-            and TensorCore.getMoogleDrawer() or nil
-    if type(drawer) ~= 'table' then
+    local drawer = Common.getMoogleDrawer()
+    if drawer == nil then
         return false
     end
     local charge = cfg.DrawChargePrediction == true

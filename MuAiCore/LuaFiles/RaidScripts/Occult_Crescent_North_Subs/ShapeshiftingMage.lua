@@ -51,8 +51,7 @@ local RUSH_SEGMENT_LENGTHS = {
     math.sqrt(1250),
 }
 local RUSH_SEGMENT_LENGTH_TOLERANCE = 1
-local DONUT_SOURCE = 'MuAiCore - 变形法师'
-local DONUT_BLACKLIST_SOURCE = DONUT_SOURCE .. '月环直绘'
+local DONUT_BLACKLIST_SOURCE = 'MuAiCore - 变形法师月环直绘'
 local SUPERCELL_INITIAL_STEEL_ACTION_ID = 50767
 local SUPERCELL_STEEL_ACTION_ID = 48360
 local SUPERCELL_INNER_RING_ACTION_ID = 48361
@@ -135,25 +134,10 @@ local REAL_BREATH_ACTIONS = {
 -- Each ring begins exactly where the preceding observed AOE ends: the
 -- 8-yalm steel predicts 48361's inner edge, then 48361's 16-yalm outer edge
 -- predicts 48362's inner edge. Moogle needs both custom inner radii.
-local SUPERCELL_DONUTS = {
-    [SUPERCELL_INNER_RING_ACTION_ID] = {
-        name = '超级细胞变形内环',
-        radius = SUPERCELL_STEEL_RADIUS,
-    },
-    [SUPERCELL_DONUT_ACTION_ID] = {
-        name = '超级细胞变形外环',
-        radius = SUPERCELL_DONUT_INNER,
-    },
+local SUPERCELL_BLACKLIST_LABELS = {
+    [SUPERCELL_INNER_RING_ACTION_ID] = '超级细胞变形内环',
+    [SUPERCELL_DONUT_ACTION_ID] = '超级细胞变形外环',
 }
-
-local function newMoogleState()
-    return {
-        registered = false,
-        owned = {},
-        previous = {},
-        previousKnown = {},
-    }
-end
 
 local function newState()
     return {
@@ -162,7 +146,6 @@ local function newState()
         rush = nil,
         supercellPrevious = nil,
         active = {},
-        moogle = newMoogleState(),
         blacklist = {
             registered = false,
             owned = {},
@@ -175,15 +158,6 @@ local function ensureState(state)
     state = type(state) == 'table' and state or newState()
     state.seen = type(state.seen) == 'table' and state.seen or {}
     state.active = type(state.active) == 'table' and state.active or {}
-    state.moogle = type(state.moogle) == 'table'
-            and state.moogle or newMoogleState()
-    state.moogle.registered = state.moogle.registered == true
-    state.moogle.owned = type(state.moogle.owned) == 'table'
-            and state.moogle.owned or {}
-    state.moogle.previous = type(state.moogle.previous) == 'table'
-            and state.moogle.previous or {}
-    state.moogle.previousKnown = type(state.moogle.previousKnown) == 'table'
-            and state.moogle.previousKnown or {}
     state.blacklist = type(state.blacklist) == 'table'
             and state.blacklist or { registered = false, owned = {} }
     state.blacklist.registered = state.blacklist.registered == true
@@ -227,35 +201,6 @@ local function diagnostic(state, code, now, context)
             state, rawget(_G, 'MuAiGuide'), code, now, context)
 end
 
-local donutRegistry = Common.newMoogleDonutRegistry({
-    entries = SUPERCELL_DONUTS,
-    source = DONUT_SOURCE,
-    ensureState = ensureState,
-    getBucket = function(state)
-        return ensureState(state).moogle
-    end,
-})
-
-local function applyDonutFallback(state, enabled)
-    state = ensureState(state)
-    local donuts = Common.getMoogleTable(
-            'aoeIDUserSetDonuts', enabled == true)
-    if enabled == true
-            and donuts ~= nil
-            and state.moogle.tableRef ~= nil
-            and state.moogle.tableRef ~= donuts
-    then
-        state.moogle = newMoogleState()
-    end
-    local applied = donutRegistry.Apply(state, enabled == true)
-    if enabled == true and donuts ~= nil then
-        state.moogle.tableRef = donuts
-    elseif enabled ~= true then
-        state.moogle.tableRef = nil
-    end
-    return applied
-end
-
 local function getDonutBlacklist(create)
     return Common.getMoogleTable('aoeIDUserBlacklist', create)
 end
@@ -274,11 +219,11 @@ local function registerDonutBlacklist(state)
         state.blacklist.registered = false
         return false
     end
-    for actionID, entry in pairs(SUPERCELL_DONUTS) do
+    for actionID, label in pairs(SUPERCELL_BLACKLIST_LABELS) do
         local current = blacklist[actionID]
         if current == nil then
             local owned = {
-                label = entry.name .. '直绘',
+                label = label .. '直绘',
                 source = DONUT_BLACKLIST_SOURCE,
             }
             blacklist[actionID] = owned
@@ -302,7 +247,7 @@ local function unregisterDonutBlacklist(state)
         state.blacklist.registered = false
         return false
     end
-    for actionID in pairs(SUPERCELL_DONUTS) do
+    for actionID in pairs(SUPERCELL_BLACKLIST_LABELS) do
         local current = blacklist[actionID]
         if ownsDonutBlacklist(state, actionID, current) then
             blacklist[actionID] = nil
@@ -327,16 +272,6 @@ local function hasExternalDonutBlacklist(state, actionID)
             and blacklist[actionID] or nil
     return current ~= nil
             and not ownsDonutBlacklist(state, actionID, current)
-end
-
-local function getDangerDrawer()
-    if type(TensorCore) ~= 'table'
-            or type(TensorCore.getMoogleDrawer) ~= 'function'
-    then
-        return nil
-    end
-    local drawer = TensorCore.getMoogleDrawer()
-    return type(drawer) == 'table' and drawer or nil
 end
 
 local function deleteActive(state, key)
@@ -402,20 +337,6 @@ local function reliableAOEPosition(aoeInfo)
         y = aoeInfo.y,
         z = aoeInfo.z,
     }, false)
-end
-
-local function supercellDrawerAvailable()
-    local drawer = getDangerDrawer()
-    return drawer ~= nil and type(drawer.addTimedDonut) == 'function'
-end
-
-local function applySupercellRendering(state, enabled)
-    if enabled == true and supercellDrawerAvailable() then
-        applyDonutFallback(state, false)
-        return applyDonutBlacklist(state, true)
-    end
-    applyDonutBlacklist(state, false)
-    return applyDonutFallback(state, enabled == true)
 end
 
 local function validateHelper(entityID, source)
@@ -550,9 +471,8 @@ local function handleSupercellAOE(state, aoeInfo, now)
     if hasExternalDonutBlacklist(state, entry.actionID) then
         return false
     end
-    local drawer = getDangerDrawer()
+    local drawer = Common.getMoogleDrawer()
     if drawer == nil or type(drawer.addTimedDonut) ~= 'function' then
-        applySupercellRendering(state, true)
         diagnostic(state, 'supercell_drawer_unavailable', now)
         return false
     end
@@ -565,8 +485,6 @@ local function handleSupercellAOE(state, aoeInfo, now)
             inner, entry.outer,
             0, nil, true)
     if type(token) ~= 'string' then
-        applyDonutBlacklist(state, false)
-        applyDonutFallback(state, true)
         diagnostic(state, 'supercell_drawer_rejected_shape', now, {
             entityID = entry.entityID,
         })
@@ -660,7 +578,7 @@ local function drawCompletedRound(state, round, now)
         })
         return false
     end
-    local drawer = getDangerDrawer()
+    local drawer = Common.getMoogleDrawer()
     if drawer == nil or type(drawer.addTimedCone) ~= 'function' then
         diagnostic(state, 'danger_drawer_unavailable', now)
         return false
@@ -908,7 +826,7 @@ local function validateRushObject(args)
 end
 
 local function drawRushSegments(state, phase, segments, now)
-    local drawer = getDangerDrawer()
+    local drawer = Common.getMoogleDrawer()
     if drawer == nil or type(drawer.addTimedRect) ~= 'function' then
         diagnostic(state, 'danger_drawer_unavailable', now)
         return false
@@ -1293,7 +1211,7 @@ local Feature = {}
 Feature.Init = function(M)
     if type(M.ShapeshiftingMage) == 'table' then
         clearState(M.ShapeshiftingMage)
-        applySupercellRendering(M.ShapeshiftingMage, false)
+        applyDonutBlacklist(M.ShapeshiftingMage, false)
     end
     M.ShapeshiftingMage = newState()
     local cfg = getConfig(M)
@@ -1304,11 +1222,11 @@ Feature.Init = function(M)
         end
         if enabled == true then
             if current ~= nil and current.CorrectSupercellDonut == true then
-                applySupercellRendering(M.ShapeshiftingMage, true)
+                applyDonutBlacklist(M.ShapeshiftingMage, true)
             end
         else
             clearState(M.ShapeshiftingMage)
-            applySupercellRendering(M.ShapeshiftingMage, false)
+            applyDonutBlacklist(M.ShapeshiftingMage, false)
         end
     end
     M.SetShapeshiftingMageDonutCorrectionEnabled = function(enabled)
@@ -1320,7 +1238,7 @@ Feature.Init = function(M)
             clearPredictionsWithPrefix(M.ShapeshiftingMage, 'donut:')
             M.ShapeshiftingMage.supercellPrevious = nil
         end
-        applySupercellRendering(
+        applyDonutBlacklist(
                 M.ShapeshiftingMage,
                 enabled == true and current ~= nil
                         and current.Enable == true)
@@ -1349,7 +1267,7 @@ Feature.Init = function(M)
             and cfg.Enable == true
             and cfg.CorrectSupercellDonut == true
     then
-        applySupercellRendering(M.ShapeshiftingMage, true)
+        applyDonutBlacklist(M.ShapeshiftingMage, true)
     end
 end
 
@@ -1358,7 +1276,7 @@ Feature.Clear = function(releaseOwnership)
     if state ~= nil then
         clearState(state)
         if releaseOwnership == true then
-            applySupercellRendering(state, false)
+            applyDonutBlacklist(state, false)
         end
     end
 end
@@ -1447,12 +1365,12 @@ Feature.Update = function(guide, now)
     end
     local cfg = getConfig(guide)
     if cfg ~= nil and cfg.Enable == true then
-        applySupercellRendering(
+        applyDonutBlacklist(
                 state, cfg.CorrectSupercellDonut == true)
         return pruneState(state, now)
     end
     clearState(state)
-    applySupercellRendering(state, false)
+    applyDonutBlacklist(state, false)
     return false
 end
 
@@ -1461,8 +1379,6 @@ Feature.Test = {
     OmenSpecs = OMEN_SPECS,
     OmenOrder = OMEN_ORDER,
     RealBreathActions = REAL_BREATH_ACTIONS,
-    SupercellDonuts = SUPERCELL_DONUTS,
-    DonutSource = DONUT_SOURCE,
     DonutBlacklistSource = DONUT_BLACKLIST_SOURCE,
     SupercellInitialSteelActionID = SUPERCELL_INITIAL_STEEL_ACTION_ID,
     SupercellSteelActionID = SUPERCELL_STEEL_ACTION_ID,
@@ -1488,10 +1404,7 @@ Feature.Test = {
     NewState = newState,
     EnsureState = ensureState,
     GetConfig = getConfig,
-    DonutRegistry = donutRegistry,
-    ApplyDonutFallback = applyDonutFallback,
     ApplyDonutBlacklist = applyDonutBlacklist,
-    ApplySupercellRendering = applySupercellRendering,
     HandleSupercellAOE = handleSupercellAOE,
     HeadingPatternValid = headingPatternValid,
     HandleOmenAOE = handleOmenAOE,

@@ -342,23 +342,11 @@ local function beginOpportunisticWindGeneration(state, now)
     return state.windGeneration
 end
 
-local function getDangerDrawer()
-    if type(TensorCore) ~= 'table'
-            or type(TensorCore.getMoogleDrawer) ~= 'function'
-    then
-        return nil
-    end
-    local drawer = TensorCore.getMoogleDrawer()
-    local drawerType = type(drawer)
-    return (drawerType == 'table' or drawerType == 'userdata')
-            and drawer or nil
-end
-
 local function drawWindPrediction(state, entry, now)
     if type(state.windPredictions[entry.entityID]) == 'table' then
         return false
     end
-    local drawer = getDangerDrawer()
+    local drawer = Common.getMoogleDrawer(true)
     if drawer == nil or type(drawer.addTimedCircleOnEnt) ~= 'function' then
         diagnostic(state, 'wind_drawer_unavailable', now, entry.entityID)
         return false
@@ -500,7 +488,7 @@ local function handleWindCast(state, entityID, now, cfg)
     then
         return false
     end
-    -- The entity cast is a fallback handoff when an AOECreate callback was
+    -- The entity cast is a late handoff when an AOECreate callback was
     -- missed. Captured generations then repeat at fixed intervals; exposing
     -- only the next three known pulses avoids inventing a fifth pulse.
     deleteWindPrediction(state, entityID)

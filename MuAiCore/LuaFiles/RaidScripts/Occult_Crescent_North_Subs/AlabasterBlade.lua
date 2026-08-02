@@ -181,16 +181,6 @@ local function applyBlacklist(state, enabled)
     return unregisterBlacklist(state)
 end
 
-local function getDangerDrawer()
-    if type(TensorCore) ~= 'table'
-            or type(TensorCore.getMoogleDrawer) ~= 'function'
-    then
-        return nil
-    end
-    local drawer = TensorCore.getMoogleDrawer()
-    return type(drawer) == 'table' and drawer or nil
-end
-
 local function resolveAdd(entityID, requireHeading)
     local entity = resolveEntity(entityID)
     if type(entity) ~= 'table'
@@ -268,7 +258,7 @@ local function drawCone(state, entry, heading, timeout, now)
         diagnostic(state, entityError, now, entry.entityID)
         return false
     end
-    local drawer = getDangerDrawer()
+    local drawer = Common.getMoogleDrawer()
     if drawer == nil or type(drawer.addTimedCone) ~= 'function' then
         diagnostic(state, 'danger_drawer_unavailable', now, entry.entityID)
         return false
@@ -331,7 +321,6 @@ local function startInitial(state, entityID, channelTimeMax, now)
         signalID = nil,
         helperID = nil,
         lastResolutionAt = nil,
-        fallback = false,
     }
     state.adds[entityID] = entry
     local timeout = math.floor(channelTimeMax * 1000 + 0.5)
@@ -343,49 +332,18 @@ local function startInitial(state, entityID, channelTimeMax, now)
     return true
 end
 
-local function startFallback(state, entityID, channelTimeMax, now, context)
-    local _, position, entityError = resolveAdd(entityID, true)
-    if position == nil then
-        diagnostic(state, entityError, now, context or entityID)
-        return false
-    end
-    deleteEntry(state, entityID)
-    local entry = {
-        entityID = entityID,
-        startedAt = now,
-        sequenceExpiresAt = now + NEXT_HIT_TIMEOUT_MS + TOKEN_GRACE_MS,
-        fallback = true,
-        expectedHeading = normalizeHeading(position.h),
-    }
-    state.adds[entityID] = entry
-    local timeout = math.floor(channelTimeMax * 1000 + 0.5)
-            + INITIAL_TOKEN_GRACE_MS
-    if not drawCone(state, entry, position.h, timeout, now) then
-        state.adds[entityID] = nil
-        return false
-    end
-    return true
-end
-
 local function handleRepeatChannel(
         state, entityID, channelTimeMax, now)
     local entry = state.adds[entityID]
-    if type(entry) == 'table'
-            and entry.fallback == true
-            and finite(entry.startedAt)
-            and now - entry.startedAt <= CAST_DEDUPE_MS
-    then
-        return false
-    end
     if type(entry) ~= 'table'
-            or entry.fallback == true
             or not finite(entry.hitIndex)
             or entry.hitIndex < 2
             or entry.hitIndex > TOTAL_HITS
             or not finite(entry.turns)
     then
-        return startFallback(
-                state, entityID, channelTimeMax, now, 'missing_prediction')
+        diagnostic(state, 'turn_signal_missing', now, entityID)
+        deleteEntry(state, entityID)
+        return false
     end
     local _, position, entityError = resolveAdd(entityID, true)
     if position == nil then
@@ -402,12 +360,8 @@ local function handleRepeatChannel(
             actual = position.h,
         }
         diagnostic(state, 'prediction_heading_mismatch', now, mismatch)
-        local drawn = startFallback(
-                state, entityID, channelTimeMax, now, 'heading_mismatch')
-        if drawn then
-            diagnostic(state, 'prediction_heading_mismatch', now, mismatch)
-        end
-        return drawn
+        deleteEntry(state, entityID)
+        return false
     end
     if type(entry.token) ~= 'string' then
         return drawCone(
@@ -481,8 +435,7 @@ local function handleAura(
         local elapsed = now - (entry.startedAt or now)
         local distance = type(entry.origin) == 'table'
                 and Common.distanceSquared(position, entry.origin) or nil
-        if entry.fallback ~= true
-                and entry.hitIndex == 1
+        if entry.hitIndex == 1
                 and entry.turns == nil
                 and elapsed >= 0
                 and elapsed <= HELPER_SIGNAL_WINDOW_MS
@@ -545,12 +498,6 @@ local function handleCast(state, entityID, actionID, now)
             or (actionID ~= INITIAL_ACCLAIM_AID
                     and actionID ~= REPEATED_ACCLAIM_AID)
     then
-        return false
-    end
-    if entry.fallback == true then
-        if actionID == REPEATED_ACCLAIM_AID then
-            return deleteEntry(state, entityID)
-        end
         return false
     end
     local expectedAction = entry.hitIndex == 1

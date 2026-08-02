@@ -71,15 +71,6 @@ local REFERENCE_SHAPES = {
     [47203] = elementBlasters,
     [48354] = one(14801, { kind = 'donut', inner = 10, outer = 30 }),
     [48341] = one(14801, { kind = 'circle', radius = 15 }),
-    [48662] = one(14801, {
-        kind = 'cone', radius = 60, angle = math.rad(60),
-    }),
-    [48663] = one(14801, {
-        kind = 'cone', radius = 60, angle = math.rad(60),
-    }),
-    [50677] = one(14801, {
-        kind = 'cone', radius = 60, angle = math.rad(60),
-    }),
     [47306] = one(14520, {
         kind = 'rect', length = 100, width = 6, back = 50,
     }),
@@ -89,10 +80,6 @@ local REFERENCE_SHAPES = {
     [48112] = one(14790, {
         kind = 'cone', radius = 30, angle = math.rad(30),
         headingOffset = math.rad(60),
-    }),
-    [47175] = one(14515, { kind = 'circle', radius = 8 }),
-    [47176] = one(14514, {
-        kind = 'cross', length = 75, width = 7,
     }),
     [47180] = one(14512, {
         kind = 'rect', length = 100, width = 12, back = 50,
@@ -275,6 +262,19 @@ local REFERENCE_SHAPES = {
     [47521] = one(14503, { kind = 'circle', radius = 18 }),
 }
 
+-- Dedicated modules own the only prediction path for these actions. Keep the
+-- native late telegraphs suppressed without retaining a second reference draw.
+local BLACKLIST_AIDS = {
+    [47175] = true,
+    [47176] = true,
+    [48662] = true,
+    [48663] = true,
+    [50677] = true,
+}
+for aoeID in pairs(REFERENCE_SHAPES) do
+    BLACKLIST_AIDS[aoeID] = true
+end
+
 -- 50377 remains owned by the dedicated Arachne predictor. 47191 and
 -- 50706/50707/50708 depend on conditional warning/status chains that are not
 -- available as reliable MuAi event geometry, so they intentionally fail closed.
@@ -369,7 +369,7 @@ local function registerBlacklist(state)
         state.blacklist.registered = false
         return false
     end
-    for aoeID in pairs(REFERENCE_SHAPES) do
+    for aoeID in pairs(BLACKLIST_AIDS) do
         local current = blacklist[aoeID]
         if current == nil then
             local owned = {
@@ -397,7 +397,7 @@ local function unregisterBlacklist(state)
         state.blacklist.registered = false
         return false
     end
-    for aoeID in pairs(REFERENCE_SHAPES) do
+    for aoeID in pairs(BLACKLIST_AIDS) do
         local current = blacklist[aoeID]
         if ownsBlacklist(state, aoeID, current) then
             blacklist[aoeID] = nil
@@ -492,16 +492,6 @@ local function timing(shape, aoeInfo)
         timeout = endAt - startAt,
         keepAfterCast = shape.keepAfterCast == true,
     }
-end
-
-local function getDangerDrawer()
-    if type(TensorCore) ~= 'table'
-            or type(TensorCore.getMoogleDrawer) ~= 'function'
-    then
-        return nil
-    end
-    local drawer = TensorCore.getMoogleDrawer()
-    return type(drawer) == 'table' and drawer or nil
 end
 
 local guideDrawer
@@ -609,7 +599,7 @@ local function handleAOECreate(state, aoeInfo, now)
     if state.seen[key] ~= nil then
         return false
     end
-    local drawer = getDangerDrawer()
+    local drawer = Common.getMoogleDrawer()
     if drawer == nil then
         diagnostic(state, 'danger_drawer_unavailable', now, aoeInfo.aoeID)
         return false
@@ -865,6 +855,7 @@ Feature.Test = {
     ReferenceCommit = REFERENCE_COMMIT,
     Defaults = DEFAULTS,
     Shapes = REFERENCE_SHAPES,
+    BlacklistAIDs = BLACKLIST_AIDS,
     ChannelGuides = CHANNEL_GUIDES,
     NewState = newState,
     EnsureState = ensureState,

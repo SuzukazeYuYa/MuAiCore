@@ -389,14 +389,9 @@ local function recordInstructionKind(state, entityID, a1, a2, a3)
 end
 
 local function drawPrediction(entry, now)
-    if type(TensorCore) ~= 'table'
-            or type(TensorCore.getMoogleDrawer) ~= 'function'
-    then
-        return false
-    end
-    local drawer = TensorCore.getMoogleDrawer()
+    local drawer = Common.getMoogleDrawer()
     local timeout = entry.activationAt - now
-    if type(drawer) ~= 'table' or timeout <= 0 then
+    if drawer == nil or timeout <= 0 then
         return false
     end
     local token = nil

@@ -107,16 +107,6 @@ local function normalizeHeading(heading)
     return (heading + math.pi) % (2 * math.pi) - math.pi
 end
 
-local function getDangerDrawer()
-    if type(TensorCore) ~= 'table'
-            or type(TensorCore.getMoogleDrawer) ~= 'function'
-    then
-        return nil
-    end
-    local drawer = TensorCore.getMoogleDrawer()
-    return type(drawer) == 'table' and drawer or nil
-end
-
 local function deleteSegment(segment)
     if type(segment) ~= 'table' then
         return false
@@ -325,7 +315,7 @@ local function scheduleSegment(drawer, segment, now)
 end
 
 local function scheduleRound(round, now)
-    local drawer = getDangerDrawer()
+    local drawer = Common.getMoogleDrawer()
     if drawer == nil or type(drawer.addTimedCenteredRect) ~= 'function' then
         return false, 'danger_drawer_unavailable'
     end

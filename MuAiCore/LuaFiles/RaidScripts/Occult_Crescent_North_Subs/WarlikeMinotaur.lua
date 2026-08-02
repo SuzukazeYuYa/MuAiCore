@@ -182,8 +182,6 @@ function WarlikeMinotaur.SchedulePrediction(entry, now)
             or not finite(now)
             or entry.resolved
             or entry.token ~= nil
-            or type(TensorCore) ~= 'table'
-            or type(TensorCore.getMoogleDrawer) ~= 'function'
     then
         return false
     end
@@ -191,8 +189,8 @@ function WarlikeMinotaur.SchedulePrediction(entry, now)
     if remaining <= 0 then
         return false
     end
-    local drawer = TensorCore.getMoogleDrawer()
-    if type(drawer) ~= 'table'
+    local drawer = Common.getMoogleDrawer()
+    if drawer == nil
             or type(drawer.addTimedCone) ~= 'function'
     then
         return false

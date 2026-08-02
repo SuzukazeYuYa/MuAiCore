@@ -321,7 +321,6 @@ Config.init = function(M)
             LeaderChimera = {
                 Enable = true,
                 DrawBreathSequencePrediction = true,
-                DrawOrbPrediction = true,
             },
             --------- 新月岛·北岛：魔许德拉 ---------
             MagiHydra = {

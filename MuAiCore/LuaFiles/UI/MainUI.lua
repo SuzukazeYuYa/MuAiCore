@@ -80,8 +80,6 @@ local OCCULT_CRESCENT_NORTH_ENCOUNTERS = {
             'SetLeaderChimeraEnabled', {
         { 'DrawBreathSequencePrediction', '三连吐息与咆哮提前预测',
             'SetLeaderChimeraBreathPredictionEnabled' },
-        { 'DrawOrbPrediction', '冰球/雷球范围提前预测',
-            'SetLeaderChimeraOrbPredictionEnabled' },
     } },
     { '魔许德拉', 'MagiHydra', 'SetMagiHydraEnabled', {
         { 'AutoFaceStunningFlash', '眩晕闪光自动背对',

@@ -448,16 +448,6 @@ local function updateFlashAutoFace(state, guide, now)
     return true
 end
 
-local function getDangerDrawer()
-    if type(TensorCore) ~= 'table'
-            or type(TensorCore.getMoogleDrawer) ~= 'function'
-    then
-        return nil
-    end
-    local drawer = TensorCore.getMoogleDrawer()
-    return type(drawer) == 'table' and drawer or nil
-end
-
 local function reliableAOEPosition(aoeInfo)
     if type(aoeInfo) ~= 'table' then
         return nil
@@ -623,7 +613,7 @@ local function drawBreathPrediction(state, round, index, now)
     if type(entry) ~= 'table' then
         return false
     end
-    local drawer = getDangerDrawer()
+    local drawer = Common.getMoogleDrawer()
     if drawer == nil or type(drawer.addTimedCone) ~= 'function' then
         diagnostic(state, 'danger_drawer_unavailable', now, index)
         return false

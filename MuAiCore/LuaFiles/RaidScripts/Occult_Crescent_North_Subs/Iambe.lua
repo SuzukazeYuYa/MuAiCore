@@ -43,7 +43,7 @@ local DEFAULTS = {
 -- co-located with their selected seeds when the helpers spawn. The other
 -- four helpers have no seed within 0.5m. This is earlier than 48032 cast
 -- completion and is therefore the primary signal; completion is only a
--- fallback when entity-add resolution was unavailable.
+-- late handoff when entity-add resolution was unavailable.
 local function newState()
     return {
         round = nil,
@@ -148,16 +148,6 @@ local function roundAge(state, at)
     return at - startedAt
 end
 
-local function getDangerDrawer()
-    if type(TensorCore) ~= 'table'
-            or type(TensorCore.getMoogleDrawer) ~= 'function'
-    then
-        return nil
-    end
-    local drawer = TensorCore.getMoogleDrawer()
-    return type(drawer) == 'table' and drawer or nil
-end
-
 local function drawSeedPrediction(state, seed, helperID, now)
     if type(seed) ~= 'table'
             or type(seed.position) ~= 'table'
@@ -171,7 +161,7 @@ local function drawSeedPrediction(state, seed, helperID, now)
     if timeout <= 0 then
         return false
     end
-    local drawer = getDangerDrawer()
+    local drawer = Common.getMoogleDrawer()
     if drawer == nil or type(drawer.addTimedCircle) ~= 'function' then
         diagnostic(state, 'danger_drawer_unavailable', now, seed.entityID)
         return false

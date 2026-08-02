@@ -130,16 +130,6 @@ local function clearState(state)
     state.lastDiagnostic = nil
 end
 
-local function getDangerDrawer()
-    if type(TensorCore) ~= 'table'
-            or type(TensorCore.getMoogleDrawer) ~= 'function'
-    then
-        return nil
-    end
-    local drawer = TensorCore.getMoogleDrawer()
-    return type(drawer) == 'table' and drawer or nil
-end
-
 local function resolveExpectedEntity(entityID, modelID, requireHeading)
     if not finite(entityID) or entityID <= 0 then
         return nil, nil
@@ -226,7 +216,7 @@ local function predictCenter(position)
 end
 
 local function drawPrediction(state, entityID, prediction, now)
-    local drawer = getDangerDrawer()
+    local drawer = Common.getMoogleDrawer()
     if drawer == nil or type(drawer.addTimedRect) ~= 'function' then
         diagnostic(state, 'danger_drawer_unavailable', now, entityID)
         return false

@@ -267,8 +267,6 @@ G.OnVisibilityChange = function(entityID, wasVisible, isVisible)
         return false
     end
     local now = Context.nowMs()
-    local chimera = LeaderChimera.OnVisibilityChange(
-            entityID, wasVisible, isVisible, now)
     local revealed = MagiNecromancer.OnVisibilityChange(
             entityID, wasVisible, isVisible, now)
     local flash = MagiHydra.OnVisibilityChange(
@@ -277,7 +275,7 @@ G.OnVisibilityChange = function(entityID, wasVisible, isVisible)
             entityID, isVisible, now)
     local gemstone = GemstoneBeast.OnVisibilityChange(
             entityID, wasVisible, isVisible, now)
-    return chimera or revealed or flash or gale or gemstone
+    return revealed or flash or gale or gemstone
 end
 
 G.OnEntityAdd = function(entityID, entityName, contentID)
@@ -285,11 +283,10 @@ G.OnEntityAdd = function(entityID, entityName, contentID)
         return false
     end
     local now = Context.nowMs()
-    local chimera = LeaderChimera.OnEntityAdd(entityID, contentID, now)
     local littleMage = LittleMage.OnEntityAdd(entityID, now)
     local iambe = Iambe.OnEntityAdd(entityID, contentID, now)
     local gale = GaleGriffin.OnEntityAdd(entityID, contentID, now)
-    return chimera or littleMage or iambe or gale
+    return littleMage or iambe or gale
 end
 
 G.OnMarkerAdd = function(entityID, markerID)

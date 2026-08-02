@@ -202,13 +202,11 @@ local function drawLittleMagePrediction(entry, now)
             or type(entry.token) == 'string'
             or not finite(entry.activationAt)
             or entry.activationAt <= now
-            or type(TensorCore) ~= 'table'
-            or type(TensorCore.getMoogleDrawer) ~= 'function'
     then
         return false
     end
-    local drawer = TensorCore.getMoogleDrawer()
-    if type(drawer) ~= 'table'
+    local drawer = Common.getMoogleDrawer()
+    if drawer == nil
             or type(drawer.addTimedCircle) ~= 'function'
     then
         return false
