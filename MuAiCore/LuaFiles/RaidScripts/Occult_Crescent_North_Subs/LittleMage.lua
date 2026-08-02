@@ -10,6 +10,8 @@ function Module.Create(Context)
     local getPlayer = Context.getPlayer
 
 local LITTLE_MAGE_CONTENT_ID = 14795
+local LITTLE_MAGE_APPRENTICE_CONTENT_ID = 14796
+local LITTLE_MAGE_APPRENTICE_MODEL_ID = 19566
 local LITTLE_MAGE_FIRE_ORB_CONTENT_ID = 14797
 local LITTLE_MAGE_WATER_ORB_CONTENT_ID = 14798
 local LITTLE_MAGE_ARENA_CENTER = { x = 151.995, z = 715.999 }
@@ -20,17 +22,42 @@ local LITTLE_MAGE_FUSION_TETHER = 415
 local LITTLE_MAGE_FIRST_TELEGRAPH_MS = 7300
 local LITTLE_MAGE_FIRST_RESOLVE_MS = 9300
 local LITTLE_MAGE_FUSION_INTERVAL_MS = 3000
+local LITTLE_MAGE_NEXT_DRAW_LEAD_MS = 1500
 local LITTLE_MAGE_TETHER_WINDOW_MS = 500
 local LITTLE_MAGE_MATCH_DISTANCE_SQ = 1.44
 local LITTLE_MAGE_ROUND_TIMEOUT_MS = 22000
+local LITTLE_MAGE_RELAY_GATHER_WINDOW_MS = 8000
+local LITTLE_MAGE_RELAY_TELEGRAPH_MS = 14500
+local LITTLE_MAGE_RELAY_RESOLVE_MS = 16450
+local LITTLE_MAGE_RELAY_ROUND_TIMEOUT_MS = 18000
+local LITTLE_MAGE_RELAY_RADIUS = 10
+local LITTLE_MAGE_RELAY_RADIUS_TOLERANCE = 0.75
+local LITTLE_MAGE_RELAY_REFLECTION_TOLERANCE_SQ = 0.75 * 0.75
+local LITTLE_MAGE_RELAY_HEADING_TOLERANCE = math.rad(7.5)
+local LITTLE_MAGE_RELAY_SUPPLY_TOLERANCE_MS = 1000
+local LITTLE_MAGE_RELAY_SUPPLY_OFFSETS_MS = { 6750, 11700 }
 local LITTLE_MAGE_SEEN_TTL_MS = 30000
 local LITTLE_MAGE_BOSS_MISSING_CLEAR_MS = 2000
 
 local LITTLE_MAGE_AID = {
     Gather = 48306,
+    GenerateFireOrb = 48307,
+    GenerateWaterOrb = 48308,
+    SupplyFireOrb = 48309,
+    SupplyWaterOrb = 48310,
     TinyFlare = 48311,
     TinyHoly = 48312,
     DiminutiveDualcast = 48317,
+}
+
+local LITTLE_MAGE_RELAY_GENERATION = {
+    [LITTLE_MAGE_AID.GenerateFireOrb] = 'fire',
+    [LITTLE_MAGE_AID.GenerateWaterOrb] = 'knockback',
+}
+
+local LITTLE_MAGE_RELAY_SUPPLY = {
+    [LITTLE_MAGE_AID.SupplyFireOrb] = 'fire',
+    [LITTLE_MAGE_AID.SupplyWaterOrb] = 'knockback',
 }
 
 local LITTLE_MAGE_RESULT = {
@@ -53,6 +80,10 @@ local function newLittleMageState()
         seenTethers = {},
         seenChannels = {},
         seenCasts = {},
+        seenRelayChannels = {},
+        seenRelaySupplies = {},
+        apprentices = {},
+        gatherAt = nil,
         bossEntityID = nil,
         bossMissingSince = nil,
         lastDiagnostic = nil,
@@ -67,6 +98,12 @@ local function ensureLittleMageState(state)
             and state.seenChannels or {}
     state.seenCasts = type(state.seenCasts) == 'table'
             and state.seenCasts or {}
+    state.seenRelayChannels = type(state.seenRelayChannels) == 'table'
+            and state.seenRelayChannels or {}
+    state.seenRelaySupplies = type(state.seenRelaySupplies) == 'table'
+            and state.seenRelaySupplies or {}
+    state.apprentices = type(state.apprentices) == 'table'
+            and state.apprentices or {}
     return state
 end
 
@@ -79,19 +116,29 @@ local function getLittleMageState()
     return guide.LittleMage
 end
 
-local function clearLittleMageState(state)
-    if type(state) ~= 'table' then
-        return
-    end
+local function clearLittleMageRound(state)
+    if type(state) ~= 'table' then return false end
     if type(state.round) == 'table' then
         for _, entry in ipairs(state.round.predictions or {}) do
             Common.deleteTimedShape(entry.token)
         end
     end
     state.round = nil
+    return true
+end
+
+local function clearLittleMageState(state)
+    if type(state) ~= 'table' then
+        return
+    end
+    clearLittleMageRound(state)
     state.seenTethers = {}
     state.seenChannels = {}
     state.seenCasts = {}
+    state.seenRelayChannels = {}
+    state.seenRelaySupplies = {}
+    state.apprentices = {}
+    state.gatherAt = nil
     state.bossEntityID = nil
     state.bossMissingSince = nil
     state.lastDiagnostic = nil
@@ -166,16 +213,305 @@ local function drawLittleMagePrediction(entry, now)
     then
         return false
     end
+    local visibleAt = finite(entry.visibleAt) and entry.visibleAt or now
+    local drawStartsAt = math.max(now, visibleAt)
+    local timeout = entry.activationAt - drawStartsAt
+    local delay = math.max(0, visibleAt - now)
+    if timeout <= 0 then
+        return false
+    end
     local token = drawer:addTimedCircle(
-            entry.activationAt - now,
+            math.floor(timeout + 0.5),
             entry.source.x,
             entry.source.y,
             entry.source.z,
-            18)
+            18,
+            math.floor(delay + 0.5))
     if type(token) ~= 'string' then
         return false
     end
     entry.token = token
+    return true
+end
+
+local function beginLittleMageGather(state, now)
+    if type(state) ~= 'table' or not finite(now) then
+        return false
+    end
+    clearLittleMageRound(state)
+    state.apprentices = {}
+    state.gatherAt = now
+    return true
+end
+
+local function recordLittleMageApprentice(state, entityID, now)
+    if type(state) ~= 'table'
+            or not finite(entityID)
+            or not finite(now)
+            or not finite(state.gatherAt)
+            or now < state.gatherAt
+            or now - state.gatherAt > LITTLE_MAGE_RELAY_GATHER_WINDOW_MS
+    then
+        return false
+    end
+    local entity = resolveEntity(entityID)
+    if type(entity) ~= 'table'
+            or tonumber(entity.id) ~= entityID
+            or tonumber(entity.contentid)
+                    ~= LITTLE_MAGE_APPRENTICE_CONTENT_ID
+            or tonumber(entity.modelid) ~= LITTLE_MAGE_APPRENTICE_MODEL_ID
+            or entity.alive == false
+            or reliablePosition(entity.pos, false) == nil
+    then
+        return false
+    end
+    state.apprentices[entityID] = { addedAt = now }
+    return true
+end
+
+local function findRelayReflection(group, point, excluded)
+    local expectedX = 2 * LITTLE_MAGE_ARENA_CENTER.x - point.pos.x
+    local expectedZ = 2 * LITTLE_MAGE_ARENA_CENTER.z - point.pos.z
+    local matches = {}
+    for _, candidate in ipairs(group) do
+        if candidate.id ~= excluded then
+            local dx = candidate.pos.x - expectedX
+            local dz = candidate.pos.z - expectedZ
+            if dx * dx + dz * dz
+                    <= LITTLE_MAGE_RELAY_REFLECTION_TOLERANCE_SQ
+            then
+                matches[#matches + 1] = candidate
+            end
+        end
+    end
+    return #matches == 1 and matches[1] or nil
+end
+
+local function resolveLittleMageRelayGeometry(state, casterID, now)
+    if type(state) ~= 'table'
+            or not finite(casterID)
+            or not finite(now)
+            or not finite(state.gatherAt)
+            or now - state.gatherAt < 0
+            or now - state.gatherAt > LITTLE_MAGE_RELAY_GATHER_WINDOW_MS
+    then
+        return nil, 'relay_gather_window_invalid'
+    end
+    local group = {}
+    for entityID in pairs(state.apprentices or {}) do
+        local entity = resolveEntity(entityID)
+        local position = type(entity) == 'table'
+                and reliablePosition(entity.pos, entityID == casterID) or nil
+        if type(entity) ~= 'table'
+                or tonumber(entity.id) ~= entityID
+                or tonumber(entity.contentid)
+                        ~= LITTLE_MAGE_APPRENTICE_CONTENT_ID
+                or tonumber(entity.modelid)
+                        ~= LITTLE_MAGE_APPRENTICE_MODEL_ID
+                or entity.alive == false
+                or position == nil
+        then
+            return nil, 'relay_apprentice_invalid', { entityID = entityID }
+        end
+        group[#group + 1] = { id = entityID, pos = position }
+    end
+    if #group ~= 4 then
+        return nil, 'relay_apprentice_count_mismatch', { count = #group }
+    end
+    local caster = nil
+    for _, apprentice in ipairs(group) do
+        local dx = apprentice.pos.x - LITTLE_MAGE_ARENA_CENTER.x
+        local dz = apprentice.pos.z - LITTLE_MAGE_ARENA_CENTER.z
+        local radius = math.sqrt(dx * dx + dz * dz)
+        if math.abs(radius - LITTLE_MAGE_RELAY_RADIUS)
+                > LITTLE_MAGE_RELAY_RADIUS_TOLERANCE
+        then
+            return nil, 'relay_apprentice_radius_mismatch', {
+                entityID = apprentice.id,
+                radius = radius,
+            }
+        end
+        if apprentice.id == casterID then
+            caster = apprentice
+        end
+    end
+    if caster == nil or not finite(caster.pos.h) then
+        return nil, 'relay_caster_missing', { entityID = casterID }
+    end
+    local forwardX = math.sin(caster.pos.h)
+    local forwardZ = math.cos(caster.pos.h)
+    local nextApprentice = nil
+    local nextError = math.huge
+    local headingMatches = 0
+    for _, candidate in ipairs(group) do
+        if candidate.id ~= caster.id then
+            local dx = candidate.pos.x - caster.pos.x
+            local dz = candidate.pos.z - caster.pos.z
+            local distance = math.sqrt(dx * dx + dz * dz)
+            if distance > 0 then
+                local alignment = (dx * forwardX + dz * forwardZ) / distance
+                alignment = math.max(-1, math.min(1, alignment))
+                local error = math.acos(alignment)
+                if error <= LITTLE_MAGE_RELAY_HEADING_TOLERANCE then
+                    headingMatches = headingMatches + 1
+                end
+                if error < nextError then
+                    nextError = error
+                    nextApprentice = candidate
+                end
+            end
+        end
+    end
+    if nextApprentice == nil
+            or headingMatches ~= 1
+            or nextError > LITTLE_MAGE_RELAY_HEADING_TOLERANCE
+    then
+        return nil, 'relay_heading_ambiguous', {
+            entityID = casterID,
+            headingError = nextError,
+            matches = headingMatches,
+        }
+    end
+    local casterX = caster.pos.x - LITTLE_MAGE_ARENA_CENTER.x
+    local casterZ = caster.pos.z - LITTLE_MAGE_ARENA_CENTER.z
+    local nextX = nextApprentice.pos.x - LITTLE_MAGE_ARENA_CENTER.x
+    local nextZ = nextApprentice.pos.z - LITTLE_MAGE_ARENA_CENTER.z
+    local orthogonality = math.abs(casterX * nextX + casterZ * nextZ)
+            / (LITTLE_MAGE_RELAY_RADIUS * LITTLE_MAGE_RELAY_RADIUS)
+    if orthogonality > 0.15 then
+        return nil, 'relay_square_geometry_mismatch', {
+            orthogonality = orthogonality,
+        }
+    end
+    local second = findRelayReflection(group, caster, caster.id)
+    local final = findRelayReflection(group, nextApprentice, nextApprentice.id)
+    if second == nil
+            or final == nil
+            or second.id == nextApprentice.id
+            or final.id == caster.id
+            or final.id == second.id
+    then
+        return nil, 'relay_square_geometry_mismatch'
+    end
+    return {
+        caster = caster,
+        next = nextApprentice,
+        second = second,
+        final = final,
+    }
+end
+
+local function recordLittleMageRelayGeneration(
+        state, entityID, spellID, now)
+    local kind = LITTLE_MAGE_RELAY_GENERATION[spellID]
+    if kind == nil or type(state) ~= 'table' or not finite(now) then
+        return false
+    end
+    local eventKey = tostring(entityID) .. ':' .. tostring(spellID)
+    local seenAt = state.seenRelayChannels[eventKey]
+    if finite(seenAt) and now - seenAt <= 1000 then
+        return false
+    end
+    if type(state.round) == 'table' then
+        suppressLittleMage(state, 'relay_round_overlap', {
+            entityID = entityID,
+            spellID = spellID,
+        })
+        return false
+    end
+    local geometry, code, context = resolveLittleMageRelayGeometry(
+            state, entityID, now)
+    if geometry == nil then
+        suppressLittleMage(state, code, context)
+        return false
+    end
+    local key = 'relay:' .. eventKey .. ':'
+            .. tostring(math.floor(now + 0.5))
+    local entry = {
+        key = key,
+        sourceEntityID = geometry.caster.id,
+        kind = kind,
+        source = geometry.final.pos,
+        order = 1,
+        visibleAt = now,
+        telegraphAt = now + LITTLE_MAGE_RELAY_TELEGRAPH_MS,
+        activationAt = now + LITTLE_MAGE_RELAY_RESOLVE_MS,
+        handedOff = false,
+    }
+    state.round = {
+        mode = 'relay',
+        startedAt = now,
+        expiresAt = now + LITTLE_MAGE_RELAY_ROUND_TIMEOUT_MS,
+        predictions = { entry },
+        byKey = { [key] = entry },
+        orbPartners = {},
+        suppressed = false,
+        relay = {
+            kind = kind,
+            suppliesSeen = 0,
+            supplies = {
+                { id = geometry.next.id, source = geometry.next.pos },
+                { id = geometry.second.id, source = geometry.second.pos },
+            },
+            finalEntityID = geometry.final.id,
+        },
+    }
+    state.seenRelayChannels[eventKey] = now
+    drawLittleMagePrediction(entry, now)
+    return true
+end
+
+local function recordLittleMageRelaySupply(state, entityID, spellID, now)
+    local kind = LITTLE_MAGE_RELAY_SUPPLY[spellID]
+    local round = type(state) == 'table' and state.round or nil
+    if kind == nil
+            or type(round) ~= 'table'
+            or round.mode ~= 'relay'
+            or round.suppressed == true
+            or type(round.relay) ~= 'table'
+    then
+        return false
+    end
+    local eventKey = tostring(entityID) .. ':' .. tostring(spellID)
+    local seenAt = state.seenRelaySupplies[eventKey]
+    if finite(seenAt) and now - seenAt <= 1000 then
+        return false
+    end
+    local index = (tonumber(round.relay.suppliesSeen) or 0) + 1
+    local expected = round.relay.supplies[index]
+    local expectedOffset = LITTLE_MAGE_RELAY_SUPPLY_OFFSETS_MS[index]
+    local entity = resolveEntity(entityID)
+    local position = type(entity) == 'table'
+            and reliablePosition(entity.pos, false) or nil
+    local supplyDistance = position ~= nil
+            and type(expected) == 'table'
+            and Common.distanceSquared(position, expected.source) or nil
+    if kind ~= round.relay.kind
+            or type(expected) ~= 'table'
+            or not finite(expectedOffset)
+            or type(entity) ~= 'table'
+            or tonumber(entity.id) ~= entityID
+            or tonumber(entity.contentid)
+                    ~= LITTLE_MAGE_APPRENTICE_CONTENT_ID
+            or tonumber(entity.modelid) ~= LITTLE_MAGE_APPRENTICE_MODEL_ID
+            or position == nil
+            or entityID ~= expected.id
+            or not finite(supplyDistance)
+            or supplyDistance > LITTLE_MAGE_RELAY_REFLECTION_TOLERANCE_SQ
+            or math.abs(now - (round.startedAt + expectedOffset))
+                    > LITTLE_MAGE_RELAY_SUPPLY_TOLERANCE_MS
+    then
+        suppressLittleMage(state, 'relay_supply_mismatch', {
+            entityID = entityID,
+            spellID = spellID,
+            expectedEntityID = type(expected) == 'table'
+                    and expected.id or nil,
+            index = index,
+        })
+        return false
+    end
+    round.relay.suppliesSeen = index
+    state.seenRelaySupplies[eventKey] = now
     return true
 end
 
@@ -230,6 +566,7 @@ local function recordLittleMageFusion(state, sourceID, targetID, now)
     local round = state.round
     if type(round) ~= 'table' then
         round = {
+            mode = 'fusion',
             startedAt = now,
             expiresAt = now + LITTLE_MAGE_ROUND_TIMEOUT_MS,
             predictions = {},
@@ -261,6 +598,13 @@ local function recordLittleMageFusion(state, sourceID, targetID, now)
         return false
     end
     local order = #round.predictions + 1
+    local telegraphAt = round.startedAt + LITTLE_MAGE_FIRST_TELEGRAPH_MS
+            + (order - 1) * LITTLE_MAGE_FUSION_INTERVAL_MS
+    local activationAt = round.startedAt + LITTLE_MAGE_FIRST_RESOLVE_MS
+            + (order - 1) * LITTLE_MAGE_FUSION_INTERVAL_MS
+    local visibleAt = order == 1 and round.startedAt
+            or activationAt - LITTLE_MAGE_FUSION_INTERVAL_MS
+                    - LITTLE_MAGE_NEXT_DRAW_LEAD_MS
     local entry = {
         key = key,
         sourceEntityID = sourceID,
@@ -268,10 +612,9 @@ local function recordLittleMageFusion(state, sourceID, targetID, now)
         kind = sourceKind,
         source = midpoint,
         order = order,
-        telegraphAt = round.startedAt + LITTLE_MAGE_FIRST_TELEGRAPH_MS
-                + (order - 1) * LITTLE_MAGE_FUSION_INTERVAL_MS,
-        activationAt = round.startedAt + LITTLE_MAGE_FIRST_RESOLVE_MS
-                + (order - 1) * LITTLE_MAGE_FUSION_INTERVAL_MS,
+        visibleAt = visibleAt,
+        telegraphAt = telegraphAt,
+        activationAt = activationAt,
         handedOff = false,
     }
     round.predictions[#round.predictions + 1] = entry
@@ -404,8 +747,6 @@ local function pruneLittleMageState(state, now)
                 then
                     Common.deleteTimedShape(entry.token)
                     table.remove(round.predictions, index)
-                elseif round.suppressed ~= true then
-                    drawLittleMagePrediction(entry, now)
                 end
             end
             if #round.predictions == 0 and round.suppressed ~= true then
@@ -416,6 +757,10 @@ local function pruneLittleMageState(state, now)
     Common.pruneSeen(state.seenTethers, now, LITTLE_MAGE_SEEN_TTL_MS)
     Common.pruneSeen(state.seenChannels, now, LITTLE_MAGE_SEEN_TTL_MS)
     Common.pruneSeen(state.seenCasts, now, LITTLE_MAGE_SEEN_TTL_MS)
+    Common.pruneSeen(
+            state.seenRelayChannels, now, LITTLE_MAGE_SEEN_TTL_MS)
+    Common.pruneSeen(
+            state.seenRelaySupplies, now, LITTLE_MAGE_SEEN_TTL_MS)
 end
 
 local function recordLittleMageBoss(state, entityID, spellID)
@@ -612,6 +957,18 @@ Feature.Clear = function()
     end
 end
 
+Feature.OnEntityAdd = function(entityID, now)
+    local guide = rawget(_G, 'MuAiGuide')
+    local cfg = getLittleMageConfig(guide)
+    local state = getLittleMageState()
+    if state ~= nil and cfg ~= nil and cfg.Enable == true
+            and cfg.DynamicGuide == true
+    then
+        return recordLittleMageApprentice(state, entityID, now)
+    end
+    return false
+end
+
 Feature.OnEntityChannel = function(entityID, spellID, now)
     local guide = rawget(_G, 'MuAiGuide')
     local cfg = getLittleMageConfig(guide)
@@ -620,8 +977,15 @@ Feature.OnEntityChannel = function(entityID, spellID, now)
             and cfg.DynamicGuide == true
     then
         recordLittleMageBoss(state, entityID, spellID)
-        markLittleMageTelegraph(state, entityID, spellID, now)
+        local generated = recordLittleMageRelayGeneration(
+                state, entityID, spellID, now)
+        local supplied = recordLittleMageRelaySupply(
+                state, entityID, spellID, now)
+        local handedOff = markLittleMageTelegraph(
+                state, entityID, spellID, now)
+        return generated or supplied or handedOff
     end
+    return false
 end
 
 Feature.OnTetherChange = function(sourceEntityID, newTetherID, newTargetID, now)
@@ -643,9 +1007,13 @@ Feature.OnEntityCast = function(entityID, spellID, now)
     if state ~= nil and cfg ~= nil and cfg.Enable == true
             and cfg.DynamicGuide == true
     then
-        recordLittleMageBoss(state, entityID, spellID)
-        resolveLittleMageResult(state, entityID, spellID, now)
+        local boss = recordLittleMageBoss(state, entityID, spellID)
+        if boss and spellID == LITTLE_MAGE_AID.Gather then
+            beginLittleMageGather(state, now)
+        end
+        return resolveLittleMageResult(state, entityID, spellID, now)
     end
+    return false
 end
 
 Feature.Update = function(guide, now, allowGuide)
@@ -669,6 +1037,8 @@ end
 Feature.Test = {
     MapID = Context.MapID,
     ContentID = LITTLE_MAGE_CONTENT_ID,
+    ApprenticeContentID = LITTLE_MAGE_APPRENTICE_CONTENT_ID,
+    ApprenticeModelID = LITTLE_MAGE_APPRENTICE_MODEL_ID,
     FireOrbContentID = LITTLE_MAGE_FIRE_ORB_CONTENT_ID,
     WaterOrbContentID = LITTLE_MAGE_WATER_ORB_CONTENT_ID,
     ArenaCenter = LITTLE_MAGE_ARENA_CENTER,
@@ -679,6 +1049,11 @@ Feature.Test = {
     FirstTelegraphMs = LITTLE_MAGE_FIRST_TELEGRAPH_MS,
     FirstResolveMs = LITTLE_MAGE_FIRST_RESOLVE_MS,
     FusionIntervalMs = LITTLE_MAGE_FUSION_INTERVAL_MS,
+    NextDrawLeadMs = LITTLE_MAGE_NEXT_DRAW_LEAD_MS,
+    RelayGatherWindowMs = LITTLE_MAGE_RELAY_GATHER_WINDOW_MS,
+    RelayTelegraphMs = LITTLE_MAGE_RELAY_TELEGRAPH_MS,
+    RelayResolveMs = LITTLE_MAGE_RELAY_RESOLVE_MS,
+    RelaySupplyOffsetsMs = LITTLE_MAGE_RELAY_SUPPLY_OFFSETS_MS,
     BossMissingClearMs = LITTLE_MAGE_BOSS_MISSING_CLEAR_MS,
     FireRadius = 18,
     AID = LITTLE_MAGE_AID,
@@ -686,6 +1061,11 @@ Feature.Test = {
     Defaults = LITTLE_MAGE_DEFAULTS,
     NewState = newLittleMageState,
     ClearState = clearLittleMageState,
+    BeginGather = beginLittleMageGather,
+    RecordApprentice = recordLittleMageApprentice,
+    ResolveRelayGeometry = resolveLittleMageRelayGeometry,
+    RecordRelayGeneration = recordLittleMageRelayGeneration,
+    RecordRelaySupply = recordLittleMageRelaySupply,
     RecordFusion = recordLittleMageFusion,
     MarkTelegraph = markLittleMageTelegraph,
     ResolveResult = resolveLittleMageResult,
