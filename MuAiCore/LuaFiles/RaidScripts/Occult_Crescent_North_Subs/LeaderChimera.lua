@@ -9,7 +9,6 @@ function Module.Create(Context)
     local resolveEntity = Context.resolveEntity
 
 local BOSS_CONTENT_ID = 14767
-local BOSS_MODEL_ID = 19581
 local ICE_ORB_CONTENT_ID = 14769
 local ICE_ORB_MODEL_ID = 19584
 local LIGHTNING_ORB_CONTENT_ID = 14768
@@ -17,10 +16,12 @@ local LIGHTNING_ORB_MODEL_ID = 19583
 
 local BREATH_RADIUS = 30
 local BREATH_ANGLE = math.rad(120)
-local BREATH_PREVIEW_MS = 4000
+local BREATH_PREVIEW_MS = 5000
+local BREATH_TIMEOUT_GRACE_MS = 500
 local BREATH_ACTIVATION_OFFSETS_MS = { 6000, 8700, 11400 }
 local ROAR_ACTIVATION_OFFSET_MS = 18000
 local ROAR_PREVIEW_MS = 6000
+local ROAR_TIMEOUT_GRACE_MS = 500
 local ICE_ROAR_RADIUS = 9
 local LIGHTNING_ROAR_INNER = 8
 local LIGHTNING_ROAR_OUTER = 30
@@ -196,52 +197,41 @@ local function reliableAOEPosition(aoeInfo)
     }, false)
 end
 
-local function validateBoss(entityID)
-    local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= BOSS_CONTENT_ID
-            or tonumber(entity.modelid) ~= BOSS_MODEL_ID
-            or entity.alive == false
-    then
-        return nil
-    end
-    return entity
-end
-
 local function drawTimedCone(
         state, drawer, key, source, heading, activationOffset, now, actionID)
     if type(drawer.addTimedCone) ~= 'function' then
         return false
     end
     local delay = math.max(0, activationOffset - BREATH_PREVIEW_MS)
+    local timeout = BREATH_PREVIEW_MS + BREATH_TIMEOUT_GRACE_MS
     local token = drawer:addTimedCone(
-            BREATH_PREVIEW_MS,
+            timeout,
             source.x, source.y, source.z,
             BREATH_RADIUS, BREATH_ANGLE, heading, delay)
     return rememberActive(
             state,
             key,
             token,
-            now + delay + BREATH_PREVIEW_MS + TOKEN_GRACE_MS,
+            now + delay + timeout + TOKEN_GRACE_MS,
             { kind = 'breath', actionID = actionID })
 end
 
 local function drawPredictedRoar(state, drawer, spec, source, now)
     local delay = ROAR_ACTIVATION_OFFSET_MS - ROAR_PREVIEW_MS
+    local timeout = ROAR_PREVIEW_MS + ROAR_TIMEOUT_GRACE_MS
     local token = nil
     if spec.roarKind == 'circle'
             and type(drawer.addTimedCircle) == 'function'
     then
         token = drawer:addTimedCircle(
-                ROAR_PREVIEW_MS,
+                timeout,
                 source.x, source.y, source.z,
                 ICE_ROAR_RADIUS, delay)
     elseif spec.roarKind == 'donut'
             and type(drawer.addTimedDonut) == 'function'
     then
         token = drawer:addTimedDonut(
-                ROAR_PREVIEW_MS,
+                timeout,
                 source.x, source.y, source.z,
                 LIGHTNING_ROAR_INNER, LIGHTNING_ROAR_OUTER, delay)
     end
@@ -249,7 +239,7 @@ local function drawPredictedRoar(state, drawer, spec, source, now)
             state,
             'roar',
             token,
-            now + delay + ROAR_PREVIEW_MS + TOKEN_GRACE_MS,
+            now + delay + timeout + TOKEN_GRACE_MS,
             { kind = 'roar', actionID = spec.roarAction })
 end
 
@@ -263,18 +253,20 @@ local function startBreathRound(state, aoeInfo, now, drawSequence)
     end
     local entityID = tonumber(aoeInfo.entityID)
     local source = reliableAOEPosition(aoeInfo)
+    local effectName = type(aoeInfo.aoeEffectInfo) == 'table'
+            and aoeInfo.aoeEffectInfo.aoeEffectName or nil
     if not finite(now)
             or not finite(entityID)
             or tonumber(aoeInfo.contentID) ~= BOSS_CONTENT_ID
             or tonumber(aoeInfo.aoeCastType) ~= 13
             or not finite(aoeInfo.aoeLength)
             or math.abs(aoeInfo.aoeLength - BREATH_RADIUS) > 0.5
+            or effectName ~= 'gl_fan120_1bxf'
             or not finite(aoeInfo.duration)
             or aoeInfo.duration < 5.4
             or aoeInfo.duration > 6.0
             or not finite(aoeInfo.heading)
             or source == nil
-            or validateBoss(entityID) == nil
     then
         diagnostic(state, 'breath_geometry_invalid', nowMs(), {
             actionID = actionID,
@@ -367,7 +359,7 @@ local function startBreathRound(state, aoeInfo, now, drawSequence)
     return true
 end
 
-local function handleEntityAdd(state, entityID, now)
+local function handleEntityAdd(state, entityID, contentID, now)
     state = ensureState(state)
     if not finite(entityID) or not finite(now) then
         return false
@@ -377,15 +369,20 @@ local function handleEntityAdd(state, entityID, now)
     if spec == nil or now > round.expiresAt then
         return false
     end
-    local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= spec.contentID
-            or tonumber(entity.modelid) ~= spec.modelID
-            or entity.alive == false
-            or reliablePosition(entity.pos, false) == nil
-    then
-        return false
+    local callbackContentID = tonumber(contentID)
+    if callbackContentID ~= nil then
+        if callbackContentID ~= spec.contentID then
+            return false
+        end
+    else
+        local entity = resolveEntity(entityID)
+        if type(entity) ~= 'table'
+                or tonumber(entity.id) ~= entityID
+                or tonumber(entity.contentid) ~= spec.contentID
+                or tonumber(entity.modelid) ~= spec.modelID
+        then
+            return false
+        end
     end
     local bucket = state.orbs[round.kind]
     if bucket[entityID] ~= nil then
@@ -537,7 +534,6 @@ local function handleRoarChannel(
     if type(round) ~= 'table'
             or round.bossEntityID ~= entityID
             or round.roarAction ~= actionID
-            or validateBoss(entityID) == nil
             or not finite(channelTimeMax)
             or channelTimeMax < 3.4
             or channelTimeMax > 4.0
@@ -556,9 +552,7 @@ local function handleRoarChannel(
     if drawOrbs ~= true then
         return true
     end
-    local boss = validateBoss(entityID)
-    local bossPosition = type(boss) == 'table'
-            and reliablePosition(boss.pos, false) or nil
+    local bossPosition = reliablePosition(round.source, false)
     local orbs = collectLiveOrbs(state, round.kind)
     if bossPosition == nil or orbs == nil then
         diagnostic(
@@ -715,7 +709,7 @@ Feature.OnAOECreate = function(aoeInfo, now)
     return false
 end
 
-Feature.OnEntityAdd = function(entityID, now)
+Feature.OnEntityAdd = function(entityID, contentID, now)
     local guide = rawget(_G, 'MuAiGuide')
     local cfg = getConfig(guide)
     local state = getState()
@@ -724,7 +718,7 @@ Feature.OnEntityAdd = function(entityID, now)
             and cfg.Enable == true
             and cfg.DrawOrbPrediction == true
     then
-        return handleEntityAdd(state, entityID, now)
+        return handleEntityAdd(state, entityID, contentID, now)
     end
     return false
 end
@@ -772,9 +766,11 @@ Feature.Test = {
     BreathRadius = BREATH_RADIUS,
     BreathAngle = BREATH_ANGLE,
     BreathPreviewMs = BREATH_PREVIEW_MS,
+    BreathTimeoutGraceMs = BREATH_TIMEOUT_GRACE_MS,
     BreathActivationOffsetsMs = BREATH_ACTIVATION_OFFSETS_MS,
     RoarActivationOffsetMs = ROAR_ACTIVATION_OFFSET_MS,
     RoarPreviewMs = ROAR_PREVIEW_MS,
+    RoarTimeoutGraceMs = ROAR_TIMEOUT_GRACE_MS,
     IceRoarRadius = ICE_ROAR_RADIUS,
     LightningRoarInner = LIGHTNING_ROAR_INNER,
     LightningRoarOuter = LIGHTNING_ROAR_OUTER,
