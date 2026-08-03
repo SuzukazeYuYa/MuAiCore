@@ -715,6 +715,14 @@ DancingMadUI.draw = function()
             if GUI:IsItemHovered() then
                 GUI:SetTooltip('盗火固定式: 全员根据自己职能站位, 甚至不需要调整面向\n\n眼进人群出: 眼进圈, 其他人出去, 大家根据真假调整面向(只有眼睛有指路)\n\n眼动人前人后: 人群不动根据雷安全区站在AC方向目标圈上, 眼根据真假进圈或者人群背后(仅支持标准AC站位)')
             end
+            if M.Config.DmuCfg.P4.eyeType == 3 then
+                GUI:Dummy(10, 0)
+                GUI:SameLine()
+                M.Config.DmuCfg.P4.baseOnDanger = GUI:Checkbox('石化眼以危险直条为12点##p4baseOnDanger', M.Config.DmuCfg.P4.baseOnDanger)
+                if GUI:IsItemHovered() then
+                    GUI:SetTooltip('勾选: 以危险直条为12点\n\n不勾: 原版AC固定站位')
+                end
+            end
             GUI:PopItemWidth()
             GUI:Dummy(10, 0)
             GUI:SameLine()

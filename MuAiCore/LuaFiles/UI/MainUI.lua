@@ -1040,6 +1040,7 @@ local drawRaidSettingTab = function(M)
         end
     end
     if GUI:CollapsingHeader('新月岛') then
+        GUI:TextColored(1, 0, 1, 1, '  本功能由String开发.')
         drawOccultCrescentSettings(M)
     end
 end

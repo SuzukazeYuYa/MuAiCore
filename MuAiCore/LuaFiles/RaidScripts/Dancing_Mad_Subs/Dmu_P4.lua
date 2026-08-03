@@ -74,32 +74,32 @@ local eye1PosFix = {
         dps = { x = 105, y = 0, z = 105 },
         g = { x = 100, y = 0, z = 100 },
         real = { x = 105, y = 0, z = 95 },
-        fakeTh = { x = 98, y = 0, z = 98 },
-        fakeDps = { x = 102, y = 0, z = 102 },
+        fakeTh = { x = 98.5, y = 0, z = 98.5 },
+        fakeDps = { x = 101.5, y = 0, z = 101.5 },
     },
     [2] = { -- L24
         th = { x = 95, y = 0, z = 95 },
         dps = { x = 105, y = 0, z = 105 },
         g = { x = 100, y = 0, z = 100 },
         real = { x = 95, y = 0, z = 105 },
-        fakeTh = { x = 98, y = 0, z = 98 },
-        fakeDps = { x = 102, y = 0, z = 102 },
+        fakeTh = { x = 98.5, y = 0, z = 98.5 },
+        fakeDps = { x = 101.5, y = 0, z = 101.5 },
     },
     [3] = { -- R13
         th = { x = 105, y = 0, z = 95 },
         dps = { x = 95, y = 0, z = 105 },
         g = { x = 100, y = 0, z = 100 },
         real = { x = 95, y = 0, z = 95 },
-        fakeTh = { x = 102, y = 0, z = 98 },
-        fakeDps = { x = 98, y = 0, z = 102 },
+        fakeTh = { x = 101.5, y = 0, z = 98.5 },
+        fakeDps = { x = 98.5, y = 0, z = 101.5 },
     },
     [4] = { -- R24
         th = { x = 105, y = 0, z = 95 },
         dps = { x = 95, y = 0, z = 105 },
         g = { x = 100, y = 0, z = 100 },
         real = { x = 105, y = 0, z = 105 },
-        fakeTh = { x = 102, y = 0, z = 98 },
-        fakeDps = { x = 98, y = 0, z = 102 },
+        fakeTh = { x = 101.5, y = 0, z = 98.5 },
+        fakeDps = { x = 98.5, y = 0, z = 101.5 },
     },
 }
 
@@ -1004,23 +1004,48 @@ Dmu_P4.Update = function()
                                 end
                             end
                         elseif Cfg().eyeType == 3 then
-                            --MMW
-                            local template
-                            if tType == DM.ThunderType.Left24 or tType == DM.ThunderType.Right24 then
-                                template = eye1PosMMW[1]
-                            else
-                                template = eye1PosMMW[2]
-                            end
-
-                            for job, member in pairs(MG.Party) do
-                                if table.contains(Data().Eye1.Owner, member.id) then
-                                    if Data().Eye1.type then
-                                        Data().Eye1.GuidePos[job] = template.real
+                            if Cfg().baseOnDanger then
+                                local curMove = moveDir[tType]
+                                local template = eye1PosFix[tType]
+                                local dir = TensorCore.getHeadingToTarget(DM.Center, curMove)
+                                local gatherPos = TensorCore.getPosInDirection(DM.Center, dir, 6)
+                                for job, member in pairs(MG.Party) do
+                                    if table.contains(Data().Eye1.Owner, member.id) then
+                                        if Data().Eye1.type then
+                                            if MG.IndexOf(MG.JobPosName, job) <= 4 then
+                                                Data().Eye1.GuidePos[job] = TensorCore.getPosInDirection(template.fakeTh, dir, 8)
+                                            else
+                                                Data().Eye1.GuidePos[job] = TensorCore.getPosInDirection(template.fakeDps, dir, 8)
+                                            end
+                                        else
+                                            if MG.IndexOf(MG.JobPosName, job) <= 4 then
+                                                Data().Eye1.GuidePos[job] = MG.VectorXZAdd(template.fakeTh, curMove)
+                                            else
+                                                Data().Eye1.GuidePos[job] = MG.VectorXZAdd(template.fakeDps, curMove)
+                                            end
+                                        end
                                     else
-                                        Data().Eye1.GuidePos[job] = template.fake
+                                        Data().Eye1.GuidePos[job] = gatherPos
                                     end
+                                end
+                            else
+                                --MMW
+                                local template
+                                if tType == DM.ThunderType.Left24 or tType == DM.ThunderType.Right24 then
+                                    template = eye1PosMMW[1]
                                 else
-                                    Data().Eye1.GuidePos[job] = template.g
+                                    template = eye1PosMMW[2]
+                                end
+                                for job, member in pairs(MG.Party) do
+                                    if table.contains(Data().Eye1.Owner, member.id) then
+                                        if Data().Eye1.type then
+                                            Data().Eye1.GuidePos[job] = template.real
+                                        else
+                                            Data().Eye1.GuidePos[job] = template.fake
+                                        end
+                                    else
+                                        Data().Eye1.GuidePos[job] = template.g
+                                    end
                                 end
                             end
                         end
