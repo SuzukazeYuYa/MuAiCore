@@ -115,6 +115,7 @@ local SwordDancer = loadNorthModule('SwordDancer')
 local Necrophobia = loadNorthModule('Necrophobia')
 local Index = loadNorthModule('Index')
 local SacredTreeGiant = loadNorthModule('SacredTreeGiant')
+local OccultGrimoire = loadNorthModule('OccultGrimoire')
 local CalofisteriDoppelganger = loadNorthModule('CalofisteriDoppelganger')
 local AlabasterBlade = loadNorthModule('AlabasterBlade')
 local MagiNecromancer = loadNorthModule('MagiNecromancer')
@@ -138,6 +139,7 @@ local FEATURES = {
     Necrophobia,
     Index,
     SacredTreeGiant,
+    OccultGrimoire,
     CalofisteriDoppelganger,
     AlabasterBlade,
     MagiNecromancer,
@@ -194,6 +196,8 @@ G.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
             entityID, spellID, targetID, channelTimeMax, now)
     TwoHeadedAevis.OnEntityChannel(entityID, spellID, now)
     SwordDancer.OnEntityChannel(entityID, spellID, now)
+    OccultGrimoire.OnEntityChannel(
+            entityID, spellID, channelTimeMax, now)
     CalofisteriDoppelganger.OnEntityChannel(entityID, spellID, now)
     MagiNecromancer.OnEntityChannel(entityID, spellID, now)
     LeaderChimera.OnEntityChannel(
@@ -244,6 +248,7 @@ G.OnEntityCast = function(entityID, spellID, castPos)
     TwoHeadedAevis.OnEntityCast(entityID, spellID)
     SwordDancer.OnEntityCast(entityID, spellID, castPos, now)
     SacredTreeGiant.OnEntityCast(entityID, spellID, now)
+    OccultGrimoire.OnEntityCast(entityID, spellID, now)
     CalofisteriDoppelganger.OnEntityCast(entityID, spellID, now)
     AlabasterBlade.OnEntityCast(entityID, spellID, now)
     MagiNecromancer.OnEntityCast(entityID, spellID, now)
@@ -349,6 +354,7 @@ G.OnAOECreate = function(aoeInfo)
     local now = Context.nowMs()
     NorthReferenceDrawings.OnAOECreate(aoeInfo, now)
     Necrophobia.OnAOECreate(aoeInfo, now)
+    OccultGrimoire.OnAOECreate(aoeInfo, now)
     CalofisteriDoppelganger.OnAOECreate(aoeInfo, now)
     AlabasterBlade.OnAOECreate(aoeInfo, now)
     MagiNecromancer.OnAOECreate(aoeInfo, now)
@@ -379,6 +385,7 @@ G.Update = function()
     Necrophobia.Update(guide, now)
     Index.Update(guide, now)
     SacredTreeGiant.Update(guide, now)
+    OccultGrimoire.Update(guide, now)
     CalofisteriDoppelganger.Update(guide, now)
     AlabasterBlade.Update(guide, now)
     MagiNecromancer.Update(guide, now)
@@ -404,6 +411,7 @@ G.Test = {
     Necrophobia = Necrophobia.Test,
     Index = Index.Test,
     SacredTreeGiant = SacredTreeGiant.Test,
+    OccultGrimoire = OccultGrimoire.Test,
     CalofisteriDoppelganger = CalofisteriDoppelganger.Test,
     AlabasterBlade = AlabasterBlade.Test,
     MagiNecromancer = MagiNecromancer.Test,
