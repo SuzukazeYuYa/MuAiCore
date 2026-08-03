@@ -249,7 +249,7 @@ G.OnEntityCast = function(entityID, spellID, castPos)
     MagiNecromancer.OnEntityCast(entityID, spellID, now)
     LeaderChimera.OnEntityCast(entityID, spellID, now)
     MagiHydra.OnEntityCast(entityID, spellID, now)
-    Iambe.OnEntityCast(entityID, spellID, castPos, now)
+    Iambe.OnEntityCast(entityID, spellID)
     GaleGriffin.OnEntityCast(entityID, spellID, now)
     ShapeshiftingMage.OnEntityCast(entityID, spellID, now)
     KelpieCaptain.OnEntityCast(entityID, spellID, castPos, now)
@@ -289,11 +289,9 @@ G.OnVisibilityChange = function(entityID, wasVisible, isVisible)
             entityID, wasVisible, isVisible, now)
     local flash = MagiHydra.OnVisibilityChange(
             entityID, wasVisible, isVisible, now)
-    local iambe = Iambe.OnVisibilityChange(
-            entityID, wasVisible, isVisible, now)
     local gemstone = GemstoneBeast.OnVisibilityChange(
             entityID, wasVisible, isVisible, now)
-    return aevis or revealed or flash or iambe or gemstone
+    return aevis or revealed or flash or gemstone
 end
 
 G.OnEntityAdd = function(entityID, entityName, contentID)
@@ -356,6 +354,7 @@ G.OnAOECreate = function(aoeInfo)
     MagiNecromancer.OnAOECreate(aoeInfo, now)
     LeaderChimera.OnAOECreate(aoeInfo, now)
     MagiHydra.OnAOECreate(aoeInfo, now)
+    Iambe.OnAOECreate(aoeInfo, now)
     GaleGriffin.OnAOECreate(aoeInfo, now)
     KidnapDemon.OnAOECreate(aoeInfo, now)
     ShapeshiftingMage.OnAOECreate(aoeInfo, now)
