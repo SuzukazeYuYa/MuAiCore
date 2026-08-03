@@ -29,16 +29,23 @@ local ICE_ORB_LINK_RADIUS = 12.25
 local ICE_ORB_EXPECTED_COUNT = 12
 local ICE_ORB_ACTIVE_COUNT = 11
 local LIGHTNING_ORB_EXPECTED_COUNT = 3
-local ORB_PREDICTION_TIMEOUT_MS = 12000
+local ICE_ORB_FIRST_RESOLVE_OFFSET_MS = 2000
+local ICE_ORB_WAVE_INTERVAL_MS = 1000
+local ICE_ORB_PREVIEW_MS = 3000
+local ICE_ORB_TIMEOUT_GRACE_MS = 500
+local LIGHTNING_ORB_RESOLVE_OFFSET_MS = 5000
+local LIGHTNING_ORB_TIMEOUT_GRACE_MS = 500
 local ORB_RESOLVE_WARN_MS = 1500
 local ROUND_TIMEOUT_MS = 30000
 local TOKEN_GRACE_MS = 1000
 local BREATH_HEADING_TOLERANCE = math.rad(5)
-local BLACKLIST_SOURCE = 'MuAiCore - 统领奇美拉首段吐息校正'
+local BLACKLIST_SOURCE = 'MuAiCore - 统领奇美拉吐息与冰雷球预测'
 
-local BREATH_OMEN_AIDS = {
+local BLACKLIST_AIDS = {
     [48631] = true,
     [48629] = true,
+    [48635] = true,
+    [48636] = true,
 }
 
 local DEFAULTS = {
@@ -151,11 +158,11 @@ local function registerBlacklist(state)
         state.blacklist.registered = false
         return false
     end
-    for actionID in pairs(BREATH_OMEN_AIDS) do
+    for actionID in pairs(BLACKLIST_AIDS) do
         local current = blacklist[actionID]
         if current == nil then
             local owned = {
-                label = '统领奇美拉首段吐息校正',
+                label = '统领奇美拉吐息与冰雷球预测',
                 source = BLACKLIST_SOURCE,
             }
             blacklist[actionID] = owned
@@ -179,7 +186,7 @@ local function unregisterBlacklist(state)
         state.blacklist.registered = false
         return false
     end
-    for actionID in pairs(BREATH_OMEN_AIDS) do
+    for actionID in pairs(BLACKLIST_AIDS) do
         local current = blacklist[actionID]
         if ownsBlacklist(state, actionID, current) then
             blacklist[actionID] = nil
@@ -361,6 +368,7 @@ local function startBreathRound(state, aoeInfo, now)
         roarAction = spec.roarAction,
         source = source,
         startedAt = now,
+        roarActivationAt = now + ROAR_ACTIVATION_OFFSET_MS,
         expiresAt = now + ROUND_TIMEOUT_MS,
     }
 
@@ -480,52 +488,110 @@ local function collectOrbs(state)
     return orbs
 end
 
-local function connectedIceOrbs(orbs, bossPosition)
+local function iceOrbWaves(orbs, bossPosition)
     if type(orbs) ~= 'table'
             or #orbs ~= ICE_ORB_EXPECTED_COUNT
             or type(bossPosition) ~= 'table'
     then
         return nil
     end
-    local selected = {}
-    local seedCount = 0
+
+    local roots = {}
     for index, orb in ipairs(orbs) do
         local distance = Common.distanceSquared(orb.position, bossPosition)
         if distance ~= nil
                 and distance <= ICE_ORB_SEED_RADIUS * ICE_ORB_SEED_RADIUS
         then
-            selected[index] = true
-            seedCount = seedCount + 1
+            roots[#roots + 1] = index
         end
     end
-    if seedCount ~= 2 then
+    if #roots ~= 2 then
         return nil
     end
-    local changed = true
-    while changed do
-        changed = false
-        for index, orb in ipairs(orbs) do
-            if not selected[index] then
-                for sourceIndex, source in ipairs(orbs) do
-                    local distance = selected[sourceIndex]
-                            and Common.distanceSquared(
-                                    orb.position, source.position) or nil
-                    if distance ~= nil
-                            and distance <= ICE_ORB_LINK_RADIUS
-                                    * ICE_ORB_LINK_RADIUS
-                    then
-                        selected[index] = true
-                        changed = true
-                        break
-                    end
-                end
+
+    -- The balls form two branched chains. A plain reachability flood creates
+    -- shortcut edges across nearby branches and predicts some waves one second
+    -- early. The minimum spanning forest recovers the visible nearest-neighbour
+    -- chain, then the boss-hit roots give each ball's actual propagation wave.
+    local parent = {}
+    local adjacency = {}
+    for index = 1, #orbs do
+        parent[index] = index
+        adjacency[index] = {}
+    end
+    local function find(index)
+        local root = index
+        while parent[root] ~= root do
+            root = parent[root]
+        end
+        while parent[index] ~= index do
+            local nextIndex = parent[index]
+            parent[index] = root
+            index = nextIndex
+        end
+        return root
+    end
+    local edges = {}
+    local linkRadiusSq = ICE_ORB_LINK_RADIUS * ICE_ORB_LINK_RADIUS
+    for left = 1, #orbs - 1 do
+        for right = left + 1, #orbs do
+            local distanceSq = Common.distanceSquared(
+                    orbs[left].position, orbs[right].position)
+            if distanceSq ~= nil and distanceSq <= linkRadiusSq then
+                edges[#edges + 1] = {
+                    left = left,
+                    right = right,
+                    distanceSq = distanceSq,
+                }
             end
         end
     end
+    table.sort(edges, function(left, right)
+        if left.distanceSq ~= right.distanceSq then
+            return left.distanceSq < right.distanceSq
+        end
+        local leftA = orbs[left.left].entityID
+        local rightA = orbs[right.left].entityID
+        if leftA ~= rightA then
+            return leftA < rightA
+        end
+        return orbs[left.right].entityID < orbs[right.right].entityID
+    end)
+    for _, edge in ipairs(edges) do
+        local leftRoot = find(edge.left)
+        local rightRoot = find(edge.right)
+        if leftRoot ~= rightRoot then
+            parent[leftRoot] = rightRoot
+            adjacency[edge.left][#adjacency[edge.left] + 1] = edge.right
+            adjacency[edge.right][#adjacency[edge.right] + 1] = edge.left
+        end
+    end
+
+    local waveByIndex = {}
+    local queue = {}
+    for _, root in ipairs(roots) do
+        waveByIndex[root] = 1
+        queue[#queue + 1] = root
+    end
+    local cursor = 1
+    while cursor <= #queue do
+        local index = queue[cursor]
+        cursor = cursor + 1
+        for _, neighbour in ipairs(adjacency[index]) do
+            if waveByIndex[neighbour] == nil then
+                waveByIndex[neighbour] = waveByIndex[index] + 1
+                queue[#queue + 1] = neighbour
+            end
+        end
+    end
+
     local active = {}
     for index, orb in ipairs(orbs) do
-        if selected[index] then
-            active[#active + 1] = orb
+        if waveByIndex[index] ~= nil then
+            active[#active + 1] = {
+                orb = orb,
+                wave = waveByIndex[index],
+            }
         end
     end
     return #active == ICE_ORB_ACTIVE_COUNT and active or nil
@@ -552,65 +618,58 @@ local function lightningOrbs(orbs, bossPosition)
     return orbs
 end
 
-local function drawOrbPredictionIfReady(state, now)
-    state = ensureState(state)
+local function drawIceOrbPrediction(state, selected, now)
     local round = state.round
-    local spec = type(round) == 'table' and ORB_SPECS[round.kind] or nil
-    if spec == nil or round.orbsPredicted == true then
-        return false
-    end
-    local orbs = collectOrbs(state)
-    local expected = round.kind == 'ice'
-            and ICE_ORB_EXPECTED_COUNT or LIGHTNING_ORB_EXPECTED_COUNT
-    if type(orbs) ~= 'table' or #orbs ~= expected then
-        return false
-    end
-    local selected = nil
-    if round.kind == 'ice' then
-        selected = connectedIceOrbs(orbs, round.source)
-    else
-        selected = lightningOrbs(orbs, round.source)
-    end
-    if selected == nil then
-        diagnostic(state, 'orb_geometry_unresolved', now, {
-            kind = round.kind,
-            observed = #orbs,
-        })
+    if type(round) ~= 'table'
+            or round.kind ~= 'ice'
+            or not finite(round.roarActivationAt)
+    then
         return false
     end
     local drawer = Common.getMoogleDrawer()
-    if drawer == nil then
+    if drawer == nil or type(drawer.addTimedCircle) ~= 'function' then
         diagnostic(state, 'danger_drawer_unavailable', now, round.kind)
         return false
     end
     local created = {}
-    for _, orb in ipairs(selected) do
-        local token = nil
-        if round.kind == 'ice'
-                and type(drawer.addTimedCircle) == 'function'
-        then
-            token = drawer:addTimedCircle(
-                    ORB_PREDICTION_TIMEOUT_MS,
-                    orb.position.x, orb.position.y, orb.position.z,
-                    ICE_ORB_RADIUS)
-        elseif round.kind == 'lightning'
-                and type(drawer.addTimedDonut) == 'function'
-        then
-            token = drawer:addTimedDonut(
-                    ORB_PREDICTION_TIMEOUT_MS,
-                    orb.position.x, orb.position.y, orb.position.z,
-                    LIGHTNING_ROAR_INNER, LIGHTNING_ROAR_OUTER)
+    for _, entry in ipairs(selected) do
+        local orb = entry.orb
+        local activationAt = round.roarActivationAt
+                + ICE_ORB_FIRST_RESOLVE_OFFSET_MS
+                + (entry.wave - 1) * ICE_ORB_WAVE_INTERVAL_MS
+        local previewAt = activationAt - ICE_ORB_PREVIEW_MS
+        local delay = math.max(0, previewAt - now)
+        local timeout = activationAt + ICE_ORB_TIMEOUT_GRACE_MS
+                - (now + delay)
+        if timeout <= 0 then
+            for _, createdKey in ipairs(created) do
+                deleteActive(state, createdKey)
+            end
+            diagnostic(state, 'orb_geometry_unresolved', now, {
+                kind = round.kind,
+                reason = 'prediction_window_elapsed',
+                entityID = orb.entityID,
+            })
+            return false
         end
+        local token = drawer:addTimedCircle(
+                math.floor(timeout + 0.5),
+                orb.position.x, orb.position.y, orb.position.z,
+                ICE_ORB_RADIUS,
+                math.floor(delay + 0.5))
         local key = 'orb:' .. tostring(orb.entityID)
         if not rememberActive(
                 state,
                 key,
                 token,
-                now + ORB_PREDICTION_TIMEOUT_MS + TOKEN_GRACE_MS,
+                activationAt + ICE_ORB_TIMEOUT_GRACE_MS
+                        + TOKEN_GRACE_MS,
                 {
-                    kind = round.kind .. '_orb',
+                    kind = 'ice_orb',
                     entityID = orb.entityID,
-                    actionID = spec.actionID,
+                    actionID = ORB_SPECS.ice.actionID,
+                    wave = entry.wave,
+                    activationAt = activationAt,
                 })
         then
             for _, createdKey in ipairs(created) do
@@ -629,13 +688,96 @@ local function drawOrbPredictionIfReady(state, now)
     return true
 end
 
+local function drawLightningOrbPrediction(state, now)
+    local round = state.round
+    local selected = type(round) == 'table' and round.lightningOrbs or nil
+    if type(selected) ~= 'table'
+            or round.kind ~= 'lightning'
+            or round.orbsPredicted == true
+            or not finite(round.lightningReleasedAt)
+    then
+        return false
+    end
+    local drawer = Common.getMoogleDrawer()
+    if drawer == nil or type(drawer.addTimedDonut) ~= 'function' then
+        diagnostic(state, 'danger_drawer_unavailable', now, round.kind)
+        return false
+    end
+    local timeout = LIGHTNING_ORB_RESOLVE_OFFSET_MS
+            + LIGHTNING_ORB_TIMEOUT_GRACE_MS
+    local created = {}
+    for _, orb in ipairs(selected) do
+        local token = drawer:addTimedDonut(
+                timeout,
+                orb.position.x, orb.position.y, orb.position.z,
+                LIGHTNING_ROAR_INNER, LIGHTNING_ROAR_OUTER)
+        local key = 'orb:' .. tostring(orb.entityID)
+        if not rememberActive(
+                state,
+                key,
+                token,
+                now + timeout + TOKEN_GRACE_MS,
+                {
+                    kind = 'lightning_orb',
+                    entityID = orb.entityID,
+                    actionID = ORB_SPECS.lightning.actionID,
+                    activationAt = now + LIGHTNING_ORB_RESOLVE_OFFSET_MS,
+                })
+        then
+            for _, createdKey in ipairs(created) do
+                deleteActive(state, createdKey)
+            end
+            diagnostic(state, 'danger_drawer_rejected_shape', now, {
+                kind = round.kind,
+                entityID = orb.entityID,
+            })
+            return false
+        end
+        created[#created + 1] = key
+    end
+    round.orbsPredicted = true
+    state.lastDiagnostic = nil
+    return true
+end
+
+local function prepareOrbPredictionIfReady(state, now)
+    state = ensureState(state)
+    local round = state.round
+    local spec = type(round) == 'table' and ORB_SPECS[round.kind] or nil
+    if spec == nil or round.orbsPredicted == true then
+        return false
+    end
+    local orbs = collectOrbs(state)
+    local expected = round.kind == 'ice'
+            and ICE_ORB_EXPECTED_COUNT or LIGHTNING_ORB_EXPECTED_COUNT
+    if type(orbs) ~= 'table' or #orbs ~= expected then
+        return false
+    end
+    local selected = nil
+    if round.kind == 'ice' then
+        selected = iceOrbWaves(orbs, round.source)
+    else
+        selected = lightningOrbs(orbs, round.source)
+    end
+    if selected == nil then
+        diagnostic(state, 'orb_geometry_unresolved', now, {
+            kind = round.kind,
+            observed = #orbs,
+        })
+        return false
+    end
+    if round.kind == 'ice' then
+        return drawIceOrbPrediction(state, selected, now)
+    end
+    round.lightningOrbs = selected
+    state.lastDiagnostic = nil
+    return drawLightningOrbPrediction(state, now)
+end
+
 local function handleOrbChannel(state, entityID, actionID)
     local key = 'orb:' .. tostring(entityID)
     local entry = type(state.active) == 'table' and state.active[key] or nil
-    if type(entry) ~= 'table' or entry.actionID ~= actionID then
-        return false
-    end
-    return deleteActive(state, key)
+    return type(entry) == 'table' and entry.actionID == actionID
 end
 
 local function handleRoarChannel(
@@ -668,8 +810,23 @@ local function handleRoarChannel(
     return true
 end
 
-local function handleEntityCast(state, actionID)
+local function handleEntityCast(state, entityID, actionID, now)
     state = ensureState(state)
+    if actionID == ORB_SPECS.ice.actionID
+            or actionID == ORB_SPECS.lightning.actionID
+    then
+        return deleteActive(state, 'orb:' .. tostring(entityID))
+    end
+    local round = state.round
+    if actionID == 48634
+            and type(round) == 'table'
+            and round.kind == 'lightning'
+            and round.bossEntityID == entityID
+            and finite(now)
+    then
+        round.lightningReleasedAt = now
+        return drawLightningOrbPrediction(state, now) or true
+    end
     return deleteActive(state, 'breath:' .. tostring(actionID))
 end
 
@@ -784,7 +941,7 @@ Feature.OnEntityAdd = function(entityID, contentID, now)
             return false
         end
         local resolved = resolvePendingOrbs(state, now)
-        return drawOrbPredictionIfReady(state, now) or resolved or added
+        return prepareOrbPredictionIfReady(state, now) or resolved or added
     end
     return false
 end
@@ -812,10 +969,10 @@ Feature.OnEntityChannel = function(
     return false
 end
 
-Feature.OnEntityCast = function(entityID, actionID)
+Feature.OnEntityCast = function(entityID, actionID, now)
     local state = getState()
     return state ~= nil
-            and handleEntityCast(state, actionID) or false
+            and handleEntityCast(state, entityID, actionID, now) or false
 end
 
 Feature.Update = function(guide, now)
@@ -829,7 +986,7 @@ Feature.Update = function(guide, now)
                 state, cfg.DrawBreathSequencePrediction == true)
         if cfg.DrawBreathSequencePrediction == true then
             local resolved = resolvePendingOrbs(state, now)
-            local drawn = drawOrbPredictionIfReady(state, now)
+            local drawn = prepareOrbPredictionIfReady(state, now)
             return pruneState(state, now) or drawn or resolved
         end
         clearState(state)
@@ -860,7 +1017,12 @@ Feature.Test = {
     IceOrbExpectedCount = ICE_ORB_EXPECTED_COUNT,
     IceOrbActiveCount = ICE_ORB_ACTIVE_COUNT,
     LightningOrbExpectedCount = LIGHTNING_ORB_EXPECTED_COUNT,
-    OrbPredictionTimeoutMs = ORB_PREDICTION_TIMEOUT_MS,
+    IceOrbFirstResolveOffsetMs = ICE_ORB_FIRST_RESOLVE_OFFSET_MS,
+    IceOrbWaveIntervalMs = ICE_ORB_WAVE_INTERVAL_MS,
+    IceOrbPreviewMs = ICE_ORB_PREVIEW_MS,
+    IceOrbTimeoutGraceMs = ICE_ORB_TIMEOUT_GRACE_MS,
+    LightningOrbResolveOffsetMs = LIGHTNING_ORB_RESOLVE_OFFSET_MS,
+    LightningOrbTimeoutGraceMs = LIGHTNING_ORB_TIMEOUT_GRACE_MS,
     OrbResolveWarnMs = ORB_RESOLVE_WARN_MS,
     BlacklistSource = BLACKLIST_SOURCE,
     NormalizeHeading = normalizeHeading,
@@ -870,6 +1032,7 @@ Feature.Test = {
     StartBreathRound = startBreathRound,
     AddOrbCandidate = addOrbCandidate,
     ResolvePendingOrbs = resolvePendingOrbs,
+    IceOrbWaves = iceOrbWaves,
     ApplyBlacklist = applyBlacklist,
     HandleRoarChannel = handleRoarChannel,
     HandleEntityCast = handleEntityCast,
