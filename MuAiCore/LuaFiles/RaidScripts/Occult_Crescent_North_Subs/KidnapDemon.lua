@@ -8,8 +8,6 @@ function Module.Create(Context)
     local resolveEntity = Context.resolveEntity
 
 local TORNADO_CONTENT_ID = 14506
-local MOVING_TORNADO_MODEL_ID = 19426
-local AOE_HELPER_MODEL_ID = 9020
 local TORNADO_MARKER_ID = 506
 local TEARING_WIND_AID = 47439
 
@@ -30,6 +28,7 @@ local RECT_HEADINGS = { -math.pi, -3 * math.pi / 4 }
 local PREDICTION_TIMEOUT_MS = 5200
 local PREDICTION_MATCH_DISTANCE_SQUARED = 1.5 * 1.5
 local MARKER_DEDUPE_MS = 1000
+local MARKER_RESOLVE_TIMEOUT_MS = 1000
 local SEEN_TTL_MS = 15000
 
 local DEFAULTS = {
@@ -45,6 +44,7 @@ local function newState()
     return {
         predictions = {},
         seenMarkers = {},
+        pendingMarkers = {},
         nextSequence = 0,
         lastDiagnostic = nil,
     }
@@ -56,6 +56,8 @@ local function ensureState(state)
             and state.predictions or {}
     state.seenMarkers = type(state.seenMarkers) == 'table'
             and state.seenMarkers or {}
+    state.pendingMarkers = type(state.pendingMarkers) == 'table'
+            and state.pendingMarkers or {}
     state.nextSequence = finite(state.nextSequence)
             and state.nextSequence or 0
     return state
@@ -126,11 +128,12 @@ local function clearState(state)
     end
     state.predictions = {}
     state.seenMarkers = {}
+    state.pendingMarkers = {}
     state.nextSequence = 0
     state.lastDiagnostic = nil
 end
 
-local function resolveExpectedEntity(entityID, modelID, requireHeading)
+local function resolveTornadoEntity(entityID, requireHeading)
     if not finite(entityID) or entityID <= 0 then
         return nil, nil
     end
@@ -138,7 +141,6 @@ local function resolveExpectedEntity(entityID, modelID, requireHeading)
     if type(entity) ~= 'table'
             or tonumber(entity.id) ~= entityID
             or tonumber(entity.contentid) ~= TORNADO_CONTENT_ID
-            or tonumber(entity.modelid) ~= modelID
             or entity.alive == false
     then
         return nil, entity
@@ -265,21 +267,16 @@ local function hasActivePrediction(state, entityID, now)
     return false
 end
 
-local function handleMarkerAdd(state, entityID, markerID, now)
-    state = ensureState(state)
-    entityID = tonumber(entityID)
-    if tonumber(markerID) ~= TORNADO_MARKER_ID then
-        return false
-    end
-    if not finite(now) then
-        return false
-    end
-    local position = resolveExpectedEntity(
-            entityID, MOVING_TORNADO_MODEL_ID, true)
+local function resolveMarker(state, entityID, markerID, now, firstSeenAt)
+    local position = resolveTornadoEntity(entityID, true)
     if position == nil then
-        diagnostic(state, 'marker_entity_mismatch', now, entityID)
+        if now - firstSeenAt >= MARKER_RESOLVE_TIMEOUT_MS then
+            state.pendingMarkers[entityID] = nil
+            diagnostic(state, 'marker_entity_mismatch', now, entityID)
+        end
         return false
     end
+    state.pendingMarkers[entityID] = nil
     local seenKey = tostring(entityID) .. ':' .. tostring(markerID)
     local seenAt = state.seenMarkers[seenKey]
     if finite(seenAt) and now - seenAt <= MARKER_DEDUPE_MS then
@@ -295,9 +292,31 @@ local function handleMarkerAdd(state, entityID, markerID, now)
     end
     local drawn = drawPrediction(state, entityID, prediction, now)
     if drawn then
+        state.pendingMarkers[entityID] = nil
         state.seenMarkers[seenKey] = now
     end
     return drawn
+end
+
+local function handleMarkerAdd(state, entityID, markerID, now)
+    state = ensureState(state)
+    entityID = tonumber(entityID)
+    if tonumber(markerID) ~= TORNADO_MARKER_ID
+            or not finite(entityID)
+            or entityID <= 0
+            or not finite(now)
+    then
+        return false
+    end
+    local pending = state.pendingMarkers[entityID]
+    local firstSeenAt = type(pending) == 'table'
+            and pending.firstSeenAt or now
+    state.pendingMarkers[entityID] = {
+        markerID = TORNADO_MARKER_ID,
+        firstSeenAt = firstSeenAt,
+    }
+    return resolveMarker(
+            state, entityID, TORNADO_MARKER_ID, now, firstSeenAt)
 end
 
 local function validTearingWindAOE(aoeInfo)
@@ -307,8 +326,6 @@ local function validTearingWindAOE(aoeInfo)
         return false, nil
     end
     local entityID = tonumber(aoeInfo.entityID)
-    local entityPosition = resolveExpectedEntity(
-            entityID, AOE_HELPER_MODEL_ID, false)
     local position = reliablePosition({
         x = aoeInfo.x,
         y = aoeInfo.y,
@@ -325,7 +342,8 @@ local function validTearingWindAOE(aoeInfo)
             end
         end
     end
-    if entityPosition == nil
+    if not finite(entityID)
+            or entityID <= 0
             or position == nil
             or tonumber(aoeInfo.contentID) ~= TORNADO_CONTENT_ID
             or tonumber(aoeInfo.aoeCastType) ~= 11
@@ -390,6 +408,22 @@ local function pruneState(state, now)
         return false
     end
     local changed = false
+    local pendingIDs = {}
+    for entityID in pairs(state.pendingMarkers) do
+        pendingIDs[#pendingIDs + 1] = entityID
+    end
+    for _, entityID in ipairs(pendingIDs) do
+        local pending = state.pendingMarkers[entityID]
+        local firstSeenAt = type(pending) == 'table'
+                and pending.firstSeenAt or nil
+        if finite(firstSeenAt) then
+            changed = resolveMarker(
+                    state, entityID, TORNADO_MARKER_ID,
+                    now, firstSeenAt) or changed
+        else
+            state.pendingMarkers[entityID] = nil
+        end
+    end
     local expired = {}
     for key, entry in pairs(state.predictions) do
         if type(entry) ~= 'table'
@@ -491,8 +525,6 @@ end
 Feature.Test = {
     Defaults = DEFAULTS,
     TornadoContentID = TORNADO_CONTENT_ID,
-    MovingTornadoModelID = MOVING_TORNADO_MODEL_ID,
-    AOEHelperModelID = AOE_HELPER_MODEL_ID,
     TornadoMarkerID = TORNADO_MARKER_ID,
     TearingWindActionID = TEARING_WIND_AID,
     ArenaCenter = ARENA_CENTER,
@@ -506,6 +538,7 @@ Feature.Test = {
     RectWidth = RECT_WIDTH,
     RectHeadings = RECT_HEADINGS,
     PredictionTimeoutMs = PREDICTION_TIMEOUT_MS,
+    MarkerResolveTimeoutMs = MARKER_RESOLVE_TIMEOUT_MS,
     NewState = newState,
     EnsureState = ensureState,
     GetConfig = getConfig,

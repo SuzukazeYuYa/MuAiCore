@@ -8,10 +8,8 @@ function Module.Create(Context)
     local resolveEntity = Context.resolveEntity
 
 local BOSS_CONTENT_ID = 14776
-local BOSS_MODEL_ID = 19436
 local HELPER_MODEL_ID = 19437
 local WIND_CONTENT_ID = 14777
-local WIND_MODEL_ID = 19493
 
 local AID = {
     CallStorm = 47580,
@@ -280,18 +278,8 @@ local function clearState(state)
     state.lastDiagnostic = nil
 end
 
-local function validateBoss(entityID)
-    if not finite(entityID) or entityID <= 0 then
-        return false
-    end
-    local entity = resolveEntity(entityID)
-    if entity == nil then
-        return true
-    end
-    return tonumber(entity.id) == entityID
-            and tonumber(entity.contentid) == BOSS_CONTENT_ID
-            and tonumber(entity.modelid) == BOSS_MODEL_ID
-            and entity.alive ~= false
+local function validSignalEntityID(entityID)
+    return finite(entityID) and entityID > 0
 end
 
 local function beginWindGeneration(
@@ -300,7 +288,7 @@ local function beginWindGeneration(
     if not finite(now)
             or not finite(channelTimeMax)
             or math.abs(channelTimeMax - 2.7) > 0.2
-            or not validateBoss(entityID)
+            or not validSignalEntityID(entityID)
     then
         diagnostic(state, 'boss_signal_invalid', now, {
             actionID = AID.CallStorm,
@@ -327,19 +315,6 @@ local function beginWindGeneration(
     }
     state.lastDiagnostic = nil
     return true
-end
-
-local function beginOpportunisticWindGeneration(state, now)
-    if type(state.windGeneration) == 'table' then
-        return state.windGeneration
-    end
-    state.nextWindGeneration = state.nextWindGeneration + 1
-    state.windGeneration = {
-        id = state.nextWindGeneration,
-        startedAt = now,
-        opportunistic = true,
-    }
-    return state.windGeneration
 end
 
 local function drawWindPrediction(state, entry, now)
@@ -375,27 +350,30 @@ local function resolveWindEntity(state, entityID, contentID, addedAt, now, cfg)
     then
         return false, true
     end
-    local entity = resolveEntity(entityID)
-    if entity == nil and now - addedAt <= PENDING_ENTITY_RESOLVE_MS then
-        return false, false
+    local generation = state.windGeneration
+    if type(generation) ~= 'table' then
+        diagnostic(state, 'wind_generation_missing', now, entityID)
+        return false, true
     end
+    local entity = resolveEntity(entityID)
     local position = type(entity) == 'table'
             and reliablePosition(entity.pos, false) or nil
+    if (type(entity) ~= 'table' or position == nil)
+            and now - addedAt <= PENDING_ENTITY_RESOLVE_MS
+    then
+        return false, false
+    end
     if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= WIND_CONTENT_ID
-            or tonumber(entity.modelid) ~= WIND_MODEL_ID
             or entity.alive == false
             or position == nil
     then
         diagnostic(state, 'wind_entity_invalid', now, {
             entityID = entityID,
-            contentID = type(entity) == 'table' and entity.contentid or contentID,
-            modelID = type(entity) == 'table' and entity.modelid or nil,
+            contentID = contentID,
+            positionAvailable = position ~= nil,
         })
         return false, true
     end
-    local generation = beginOpportunisticWindGeneration(state, addedAt)
     local existing = state.windEntities[entityID]
     if type(existing) == 'table'
             and existing.generationID == generation.id
@@ -431,20 +409,6 @@ local function handleWindEntityAdd(state, entityID, contentID, now, cfg)
         }
     end
     return changed
-end
-
-local function handleWindVisibility(state, entityID, isVisible, now, cfg)
-    if isVisible ~= true or not finite(entityID) then
-        return false
-    end
-    local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table'
-            or tonumber(entity.contentid) ~= WIND_CONTENT_ID
-    then
-        return false
-    end
-    return handleWindEntityAdd(
-            state, entityID, WIND_CONTENT_ID, now, cfg)
 end
 
 local function validateWindAOE(aoeInfo)
@@ -507,7 +471,7 @@ local function beginRouteRound(state, entityID, channelTimeMax, now)
     if not finite(now)
             or not finite(channelTimeMax)
             or math.abs(channelTimeMax - 3.7) > 0.2
-            or not validateBoss(entityID)
+            or not validSignalEntityID(entityID)
     then
         diagnostic(state, 'boss_signal_invalid', now, {
             actionID = AID.FreeFall,
@@ -1252,20 +1216,6 @@ Feature.OnEntityAdd = function(entityID, contentID, now)
     return false
 end
 
-Feature.OnVisibilityChange = function(entityID, isVisible, now)
-    local guide = rawget(_G, 'MuAiGuide')
-    local cfg = getConfig(guide)
-    local state = getState()
-    if state ~= nil and cfg ~= nil and cfg.Enable == true
-            and (cfg.DrawWindOrbPrediction == true
-                or cfg.DynamicGuide == true)
-    then
-        return handleWindVisibility(
-                state, entityID, isVisible, now, cfg)
-    end
-    return false
-end
-
 Feature.OnAOECreate = function(aoeInfo, now)
     local guide = rawget(_G, 'MuAiGuide')
     local cfg = getConfig(guide)
@@ -1322,10 +1272,8 @@ end
 Feature.Test = {
     Defaults = DEFAULTS,
     BossContentID = BOSS_CONTENT_ID,
-    BossModelID = BOSS_MODEL_ID,
     HelperModelID = HELPER_MODEL_ID,
     WindContentID = WIND_CONTENT_ID,
-    WindModelID = WIND_MODEL_ID,
     WindRadius = WIND_RADIUS,
     WindCount = WIND_COUNT,
     WindPredictionTimeoutMs = WIND_PREDICTION_TIMEOUT_MS,

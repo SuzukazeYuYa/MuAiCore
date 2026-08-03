@@ -113,6 +113,8 @@ Config.init = function(M)
             'GildedHeadstone', 'LionRampant', 'CrystalDragon',
             'DeathClaw', 'IslandWatcher', 'HigherBird', 'Nammu',
             'OccultReferenceDrawings', 'NorthReferenceDrawings',
+            'TwoHeadedAevis', 'SwordDancer', 'Necrophobia', 'Index',
+            'SacredTreeGiant', 'CalofisteriDoppelganger',
             'AlabasterBlade',
             'MagiNecromancer', 'LeaderChimera', 'MagiHydra',
             'Iambe', 'KidnapDemon', 'ShapeshiftingMage',
@@ -306,6 +308,32 @@ Config.init = function(M)
             },
             --------- 新月岛·北岛：通用参考范围 ---------
             NorthReferenceDrawings = {
+                Enable = true,
+            },
+            --------- 新月岛·北岛：两歧塔·双头怪鸟 ---------
+            TwoHeadedAevis = {
+                Enable = true,
+            },
+            --------- 新月岛·北岛：两歧塔·剑舞者 ---------
+            SwordDancer = {
+                Enable = true,
+                DynamicGuide = true,
+            },
+            --------- 新月岛·北岛：两歧塔·惧死者 ---------
+            Necrophobia = {
+                Enable = true,
+            },
+            --------- 新月岛·北岛：两歧塔·目录 ---------
+            Index = {
+                Enable = true,
+                DynamicGuide = true,
+            },
+            --------- 新月岛·北岛：神木巨人 ---------
+            SacredTreeGiant = {
+                Enable = true,
+            },
+            --------- 新月岛·北岛：卡洛菲斯提莉二重身 ---------
+            CalofisteriDoppelganger = {
                 Enable = true,
             },
             --------- 新月岛·北岛：雪石膏之剑 ---------

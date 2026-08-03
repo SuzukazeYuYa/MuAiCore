@@ -10,13 +10,19 @@ function Module.Create(Context)
 
 local MAP_ID = 1346
 local ADD_CONTENT_ID = 14510
-local ADD_MODEL_ID = 19391
+local BOSS_CONTENT_ID = 14509
 local HELPER_CONTENT_ID = 108
 local HELPER_MODEL_ID = 20157
 local INITIAL_ACCLAIM_AID = 47157
 local REPEATED_ACCLAIM_AID = 47158
-local CONE_RADIUS = 50
+local RIGHT_LEFT_SLASH_AID = 47166
+local LEFT_RIGHT_SLASH_AID = 47167
+local LEFT_RIGHT_FOLLOWUP_AID = 47168
+local RIGHT_LEFT_FOLLOWUP_AID = 47169
+local CONE_RADIUS = 40
 local CONE_ANGLE = math.rad(90)
+local SLASH_RADIUS = 40
+local SLASH_ANGLE = math.pi
 local TOTAL_HITS = 4
 local LEFT_QUARTER_TURN = -math.pi / 2
 local HEADING_TOLERANCE = math.rad(5)
@@ -27,12 +33,20 @@ local NEXT_HIT_TIMEOUT_MS = 10000
 local TOKEN_GRACE_MS = 1000
 local SEQUENCE_TIMEOUT_MS = 45000
 local CAST_DEDUPE_MS = 1000
+local SLASH_FOLLOWUP_TIMEOUT_MS = 3500
 
-local BLACKLIST_SOURCE = 'MuAiCore - 雪石膏之剑称誉预测'
+local BLACKLIST_SOURCE = 'MuAiCore - 雪石膏之剑预测'
 local LEGACY_REFERENCE_SOURCE = 'MuAiCore - 北岛参考范围'
 local OWNED_AIDS = {
     [INITIAL_ACCLAIM_AID] = true,
     [REPEATED_ACCLAIM_AID] = true,
+    [RIGHT_LEFT_SLASH_AID] = true,
+    [LEFT_RIGHT_SLASH_AID] = true,
+}
+
+local SLASH_FOLLOWUPS = {
+    [RIGHT_LEFT_SLASH_AID] = RIGHT_LEFT_FOLLOWUP_AID,
+    [LEFT_RIGHT_SLASH_AID] = LEFT_RIGHT_FOLLOWUP_AID,
 }
 
 local DEFAULTS = {
@@ -63,6 +77,7 @@ end
 local function newState()
     return {
         adds = {},
+        slash = nil,
         helperSeen = {},
         blacklist = { owned = {}, registered = false },
         lastDiagnostic = nil,
@@ -72,6 +87,7 @@ end
 local function ensureState(state)
     state = type(state) == 'table' and state or newState()
     state.adds = type(state.adds) == 'table' and state.adds or {}
+    state.slash = type(state.slash) == 'table' and state.slash or nil
     state.helperSeen = type(state.helperSeen) == 'table'
             and state.helperSeen or {}
     state.blacklist = type(state.blacklist) == 'table'
@@ -89,9 +105,11 @@ local feature = Common.newFeature({
     ensureState = ensureState,
     diagnosticThrottleMs = 1000,
     diagnosticText = {
-        channel_identity_missing = '雪石膏之剑称誉事件缺少实体标识',
-        add_entity_mismatch = '雪石膏之剑称誉小怪实体不匹配',
+        acclaim_event_mismatch = '雪石膏之剑称誉事件实体不匹配',
+        acclaim_geometry_mismatch = '雪石膏之剑称誉事件几何不匹配',
         add_geometry_missing = '雪石膏之剑称誉缺少可靠几何',
+        slash_event_mismatch = '雪石膏之剑连续斩事件实体不匹配',
+        slash_geometry_mismatch = '雪石膏之剑连续斩事件几何不匹配',
         helper_entity_mismatch = '雪石膏之剑转向特效实体不匹配',
         helper_pair_missing = '雪石膏之剑转向特效无法匹配小怪',
         helper_pair_ambiguous = '雪石膏之剑转向特效匹配不唯一',
@@ -134,12 +152,11 @@ local function registerBlacklist(state)
     end
     for actionID in pairs(OWNED_AIDS) do
         local current = blacklist[actionID]
-        local reclaimLegacy = actionID == REPEATED_ACCLAIM_AID
-                and type(current) == 'table'
+        local reclaimLegacy = type(current) == 'table'
                 and current.source == LEGACY_REFERENCE_SOURCE
         if current == nil or reclaimLegacy then
             local owned = {
-                label = '雪石膏之剑称誉预测',
+                label = '雪石膏之剑预测',
                 source = BLACKLIST_SOURCE,
             }
             blacklist[actionID] = owned
@@ -181,23 +198,6 @@ local function applyBlacklist(state, enabled)
     return unregisterBlacklist(state)
 end
 
-local function resolveAdd(entityID, requireHeading)
-    local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= ADD_CONTENT_ID
-            or tonumber(entity.modelid) ~= ADD_MODEL_ID
-            or entity.alive == false
-    then
-        return nil, nil, 'add_entity_mismatch'
-    end
-    local position = reliablePosition(entity.pos, requireHeading == true)
-    if position == nil then
-        return nil, nil, 'add_geometry_missing'
-    end
-    return entity, position, nil
-end
-
 local function deleteToken(entry)
     if type(entry) ~= 'table' or type(entry.token) ~= 'string' then
         return false
@@ -225,6 +225,8 @@ local function clearState(state)
         deleteEntry(state, entityID)
     end
     state.adds = {}
+    deleteToken(state.slash)
+    state.slash = nil
     state.helperSeen = {}
     state.lastDiagnostic = nil
 end
@@ -243,7 +245,8 @@ local function expectedHeading(entry, hitIndex)
             entry.initialHeading + completedTurns * entry.turnStep)
 end
 
-local function drawCone(state, entry, heading, timeout, now)
+local function drawCone(
+        state, entry, heading, timeout, now, radius, angle)
     if type(entry) ~= 'table'
             or not finite(heading)
             or not finite(timeout)
@@ -253,9 +256,9 @@ local function drawCone(state, entry, heading, timeout, now)
         diagnostic(state, 'add_geometry_missing', nowMs(), entry)
         return false
     end
-    local _, position, entityError = resolveAdd(entry.entityID, false)
+    local position = reliablePosition(entry.origin, false)
     if position == nil then
-        diagnostic(state, entityError, now, entry.entityID)
+        diagnostic(state, 'add_geometry_missing', now, entry.entityID)
         return false
     end
     local drawer = Common.getMoogleDrawer()
@@ -266,7 +269,7 @@ local function drawCone(state, entry, heading, timeout, now)
     local token = drawer:addTimedCone(
             timeout,
             position.x, position.y, position.z,
-            CONE_RADIUS, CONE_ANGLE, normalizeHeading(heading))
+            radius, angle, normalizeHeading(heading))
     if type(token) ~= 'string' then
         diagnostic(state, 'danger_drawer_rejected_shape', now, entry.entityID)
         return false
@@ -280,31 +283,50 @@ local function drawCone(state, entry, heading, timeout, now)
     return true
 end
 
-local function startInitial(state, entityID, channelTimeMax, now)
+local function validAOEPosition(aoeInfo)
+    if type(aoeInfo) ~= 'table' then
+        return nil
+    end
+    return reliablePosition({
+        x = aoeInfo.x,
+        y = aoeInfo.y,
+        z = aoeInfo.z,
+        h = aoeInfo.heading,
+    }, true)
+end
+
+local function hasEffect(aoeInfo, name)
+    return type(aoeInfo.aoeEffectInfo) == 'table'
+            and aoeInfo.aoeEffectInfo.aoeEffectName == name
+end
+
+local function startInitial(state, aoeInfo, now)
     state = ensureState(state)
-    if not finite(entityID)
-            or entityID <= 0
-            or not finite(channelTimeMax)
-            or channelTimeMax <= 0
-            or channelTimeMax > 30
+    local entityID = type(aoeInfo) == 'table' and aoeInfo.entityID or nil
+    if not finite(entityID) or entityID <= 0
+            or aoeInfo.contentID ~= ADD_CONTENT_ID
+            or not finite(aoeInfo.startTime)
             or not finite(now)
     then
-        diagnostic(state, 'channel_identity_missing', nowMs(), {
-            entityID = entityID,
-            channelTimeMax = channelTimeMax,
-        })
+        diagnostic(state, 'acclaim_event_mismatch', nowMs(), entityID)
         return false
     end
-    local _, position, entityError = resolveAdd(entityID, true)
-    if position == nil then
-        diagnostic(state, entityError, now, entityID)
+    local position = validAOEPosition(aoeInfo)
+    if position == nil
+            or aoeInfo.aoeCastType ~= 13
+            or aoeInfo.aoeLength ~= CONE_RADIUS
+            or not finite(aoeInfo.duration)
+            or aoeInfo.duration <= 0
+            or aoeInfo.duration > 30
+            or not hasEffect(aoeInfo, 'gl_fan090_1bf')
+    then
+        diagnostic(state, 'acclaim_geometry_mismatch', now, entityID)
         return false
     end
     local existing = state.adds[entityID]
     if type(existing) == 'table'
             and existing.hitIndex == 1
-            and finite(existing.startedAt)
-            and now - existing.startedAt <= CAST_DEDUPE_MS
+            and existing.startTime == aoeInfo.startTime
     then
         return false
     end
@@ -312,6 +334,7 @@ local function startInitial(state, entityID, channelTimeMax, now)
     local entry = {
         entityID = entityID,
         startedAt = now,
+        startTime = aoeInfo.startTime,
         sequenceExpiresAt = now + SEQUENCE_TIMEOUT_MS,
         hitIndex = 1,
         initialHeading = normalizeHeading(position.h),
@@ -323,17 +346,19 @@ local function startInitial(state, entityID, channelTimeMax, now)
         lastResolutionAt = nil,
     }
     state.adds[entityID] = entry
-    local timeout = math.floor(channelTimeMax * 1000 + 0.5)
+    local timeout = math.floor(aoeInfo.duration * 1000 + 0.5)
             + INITIAL_TOKEN_GRACE_MS
-    if not drawCone(state, entry, entry.initialHeading, timeout, now) then
+    if not drawCone(state, entry, entry.initialHeading, timeout, now,
+            CONE_RADIUS, CONE_ANGLE)
+    then
         state.adds[entityID] = nil
         return false
     end
     return true
 end
 
-local function handleRepeatChannel(
-        state, entityID, channelTimeMax, now)
+local function handleRepeatAOE(state, aoeInfo, now)
+    local entityID = type(aoeInfo) == 'table' and aoeInfo.entityID or nil
     local entry = state.adds[entityID]
     if type(entry) ~= 'table'
             or not finite(entry.hitIndex)
@@ -345,45 +370,98 @@ local function handleRepeatChannel(
         deleteEntry(state, entityID)
         return false
     end
-    local _, position, entityError = resolveAdd(entityID, true)
-    if position == nil then
-        diagnostic(state, entityError, now, entityID)
+    local position = validAOEPosition(aoeInfo)
+    if position == nil
+            or aoeInfo.contentID ~= ADD_CONTENT_ID
+            or aoeInfo.aoeCastType ~= 13
+            or aoeInfo.aoeLength ~= CONE_RADIUS
+            or not hasEffect(aoeInfo, 'gl_fan090_1bf')
+    then
+        diagnostic(state, 'acclaim_geometry_mismatch', now, entityID)
         deleteEntry(state, entityID)
         return false
     end
     local predicted = expectedHeading(entry, entry.hitIndex)
     if not headingsMatch(position.h, predicted) then
-        local mismatch = {
+        diagnostic(state, 'prediction_heading_mismatch', now, {
             entityID = entityID,
             hitIndex = entry.hitIndex,
             predicted = predicted,
             actual = position.h,
-        }
-        diagnostic(state, 'prediction_heading_mismatch', now, mismatch)
+        })
         deleteEntry(state, entityID)
         return false
     end
-    if type(entry.token) ~= 'string' then
-        return drawCone(
-                state, entry, predicted,
-                math.floor(channelTimeMax * 1000 + 0.5)
-                        + INITIAL_TOKEN_GRACE_MS,
-                now)
-    end
+    entry.origin = position
     return false
 end
 
-local function handleChannel(
-        state, entityID, actionID, channelTimeMax, now)
+local function startSlash(state, aoeInfo, now)
     state = ensureState(state)
+    local actionID = type(aoeInfo) == 'table' and aoeInfo.aoeID or nil
+    local followupAID = SLASH_FOLLOWUPS[actionID]
+    if followupAID == nil then
+        return false
+    end
+    local entityID = aoeInfo.entityID
+    if not finite(entityID) or entityID <= 0
+            or aoeInfo.contentID ~= BOSS_CONTENT_ID
+            or not finite(aoeInfo.startTime)
+    then
+        diagnostic(state, 'slash_event_mismatch', nowMs(), entityID)
+        return false
+    end
+    local position = validAOEPosition(aoeInfo)
+    if position == nil
+            or aoeInfo.aoeCastType ~= 13
+            or aoeInfo.aoeLength ~= SLASH_RADIUS
+            or not finite(aoeInfo.duration)
+            or aoeInfo.duration <= 0
+            or aoeInfo.duration > 30
+            or not hasEffect(aoeInfo, 'gl_fan180_1bf')
+    then
+        diagnostic(state, 'slash_geometry_mismatch', now, entityID)
+        return false
+    end
+    if type(state.slash) == 'table'
+            and state.slash.entityID == entityID
+            and state.slash.actionID == actionID
+            and state.slash.startTime == aoeInfo.startTime
+    then
+        return false
+    end
+    deleteToken(state.slash)
+    local entry = {
+        entityID = entityID,
+        actionID = actionID,
+        followupAID = followupAID,
+        startTime = aoeInfo.startTime,
+        origin = position,
+        firstHeading = normalizeHeading(position.h),
+        phase = 1,
+        sequenceExpiresAt = now + 12000,
+    }
+    state.slash = entry
+    local timeout = math.floor(aoeInfo.duration * 1000 + 0.5)
+            + INITIAL_TOKEN_GRACE_MS
+    if not drawCone(state, entry, entry.firstHeading, timeout, now,
+            SLASH_RADIUS, SLASH_ANGLE)
+    then
+        state.slash = nil
+        return false
+    end
+    return true
+end
+
+local function handleAOECreate(state, aoeInfo, now)
+    local actionID = type(aoeInfo) == 'table' and aoeInfo.aoeID or nil
     if actionID == INITIAL_ACCLAIM_AID then
-        return startInitial(state, entityID, channelTimeMax, now)
+        return startInitial(state, aoeInfo, now)
     end
     if actionID == REPEATED_ACCLAIM_AID then
-        return handleRepeatChannel(
-                state, entityID, channelTimeMax, now)
+        return handleRepeatAOE(state, aoeInfo, now)
     end
-    return false
+    return startSlash(state, aoeInfo, now)
 end
 
 local function helperPosition(entityID)
@@ -483,7 +561,8 @@ local function advancePrediction(state, entry, now)
         return false
     end
     if not drawCone(
-            state, entry, heading, NEXT_HIT_TIMEOUT_MS, now)
+            state, entry, heading, NEXT_HIT_TIMEOUT_MS, now,
+            CONE_RADIUS, CONE_ANGLE)
     then
         deleteEntry(state, entry.entityID)
         return false
@@ -491,8 +570,38 @@ local function advancePrediction(state, entry, now)
     return true
 end
 
+local function handleSlashCast(state, entityID, actionID, now)
+    local entry = state.slash
+    if type(entry) ~= 'table' or entry.entityID ~= entityID then
+        return false
+    end
+    if entry.phase == 1 and actionID == entry.actionID then
+        deleteToken(entry)
+        entry.phase = 2
+        entry.lastResolutionAt = now
+        if not drawCone(state, entry,
+                normalizeHeading(entry.firstHeading + math.pi),
+                SLASH_FOLLOWUP_TIMEOUT_MS, now,
+                SLASH_RADIUS, SLASH_ANGLE)
+        then
+            state.slash = nil
+            return false
+        end
+        return true
+    end
+    if entry.phase == 2 and actionID == entry.followupAID then
+        deleteToken(entry)
+        state.slash = nil
+        return true
+    end
+    return false
+end
+
 local function handleCast(state, entityID, actionID, now)
     state = ensureState(state)
+    if handleSlashCast(state, entityID, actionID, now) then
+        return true
+    end
     local entry = state.adds[entityID]
     if type(entry) ~= 'table'
             or (actionID ~= INITIAL_ACCLAIM_AID
@@ -508,25 +617,6 @@ local function handleCast(state, entityID, actionID, now)
     if finite(entry.lastResolutionAt)
             and now - entry.lastResolutionAt <= CAST_DEDUPE_MS
     then
-        return false
-    end
-    local _, position, entityError = resolveAdd(entityID, true)
-    if position == nil then
-        diagnostic(state, entityError, now, entityID)
-        deleteEntry(state, entityID)
-        return false
-    end
-    local predicted = entry.hitIndex == 1
-            and entry.initialHeading
-            or expectedHeading(entry, entry.hitIndex)
-    if not headingsMatch(position.h, predicted) then
-        diagnostic(state, 'prediction_heading_mismatch', now, {
-            entityID = entityID,
-            hitIndex = entry.hitIndex,
-            predicted = predicted,
-            actual = position.h,
-        })
-        deleteEntry(state, entityID)
         return false
     end
     entry.lastResolutionAt = now
@@ -546,13 +636,10 @@ local function pruneState(state, now)
     end
     local removed = false
     for entityID, entry in pairs(state.adds) do
-        local entity = resolveEntity(entityID)
         if not finite(entry.sequenceExpiresAt)
                 or now > entry.sequenceExpiresAt
                 or not finite(entry.tokenExpiresAt)
                 or now > entry.tokenExpiresAt
-                or type(entity) ~= 'table'
-                or entity.alive == false
         then
             deleteEntry(state, entityID)
             removed = true
@@ -565,6 +652,16 @@ local function pruneState(state, now)
         then
             state.helperSeen[helperID] = nil
         end
+    end
+    if type(state.slash) == 'table'
+            and (not finite(state.slash.sequenceExpiresAt)
+                    or now > state.slash.sequenceExpiresAt
+                    or not finite(state.slash.tokenExpiresAt)
+                    or now > state.slash.tokenExpiresAt)
+    then
+        deleteToken(state.slash)
+        state.slash = nil
+        removed = true
     end
     return removed
 end
@@ -605,14 +702,12 @@ Feature.Clear = function(releaseOwnership)
     end
 end
 
-Feature.OnEntityChannel = function(
-        entityID, actionID, channelTimeMax, now)
+Feature.OnAOECreate = function(aoeInfo, now)
     local guide = rawget(_G, 'MuAiGuide')
     local cfg = getConfig(guide)
     local state = getState()
     if state ~= nil and cfg ~= nil and cfg.Enable == true then
-        return handleChannel(
-                state, entityID, actionID, channelTimeMax, now)
+        return handleAOECreate(state, aoeInfo, now)
     end
     return false
 end
@@ -658,16 +753,23 @@ end
 Feature.Test = {
     MapID = MAP_ID,
     AddContentID = ADD_CONTENT_ID,
-    AddModelID = ADD_MODEL_ID,
+    BossContentID = BOSS_CONTENT_ID,
     HelperContentID = HELPER_CONTENT_ID,
     HelperModelID = HELPER_MODEL_ID,
     InitialAID = INITIAL_ACCLAIM_AID,
     RepeatedAID = REPEATED_ACCLAIM_AID,
+    RightLeftSlashAID = RIGHT_LEFT_SLASH_AID,
+    LeftRightSlashAID = LEFT_RIGHT_SLASH_AID,
+    LeftRightFollowupAID = LEFT_RIGHT_FOLLOWUP_AID,
+    RightLeftFollowupAID = RIGHT_LEFT_FOLLOWUP_AID,
     ConeRadius = CONE_RADIUS,
     ConeAngle = CONE_ANGLE,
+    SlashRadius = SLASH_RADIUS,
+    SlashAngle = SLASH_ANGLE,
     TotalHits = TOTAL_HITS,
     TurnSignals = TURN_SIGNALS,
     NextHitTimeoutMs = NEXT_HIT_TIMEOUT_MS,
+    SlashFollowupTimeoutMs = SLASH_FOLLOWUP_TIMEOUT_MS,
     Defaults = DEFAULTS,
     BlacklistSource = BLACKLIST_SOURCE,
     NewState = newState,
@@ -677,7 +779,7 @@ Feature.Test = {
     HeadingsMatch = headingsMatch,
     ExpectedHeading = expectedHeading,
     ApplyBlacklist = applyBlacklist,
-    HandleChannel = handleChannel,
+    HandleAOECreate = handleAOECreate,
     HandleAura = handleAura,
     HandleCast = handleCast,
     PruneState = pruneState,
