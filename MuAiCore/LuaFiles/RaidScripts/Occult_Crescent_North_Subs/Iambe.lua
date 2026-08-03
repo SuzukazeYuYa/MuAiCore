@@ -40,10 +40,10 @@ local DEFAULTS = {
 }
 
 -- Map-1346 captures show that the four dangerous helpers are already
--- co-located with their selected seeds when the helpers spawn. The other
--- four helpers have no seed within 0.5m. This is earlier than 48032 cast
--- completion and is therefore the primary signal; completion is only a
--- late handoff when entity-add resolution was unavailable.
+-- co-located with their selected seeds when the helpers become visible. The
+-- other four helpers have no seed within 0.5m. Visibility is the first signal
+-- where these new entities can be resolved reliably; 48032 completion is only
+-- a late handoff when that transition was unavailable.
 local function newState()
     return {
         round = nil,
@@ -307,6 +307,16 @@ local function processAddedEntity(
     else
         return false, true
     end
+    if contentID == SEED_CONTENT_ID
+            and state.seeds[entityID] ~= nil
+    then
+        return false, true
+    end
+    if contentID == IAMBE_CONTENT_ID
+            and state.handledHelpers[entityID] ~= nil
+    then
+        return false, true
+    end
     local position, entity = resolveExpectedEntity(
             entityID, contentID, expectedModelID)
     if position == nil then
@@ -351,6 +361,47 @@ local function handleEntityAdd(state, entityID, contentID, now)
             contentID = contentID,
             addedAt = now,
         }
+    end
+    return changed
+end
+
+local function handleVisibilityChange(
+        state, entityID, wasVisible, isVisible, now)
+    if wasVisible == true
+            or isVisible ~= true
+            or not finite(entityID)
+            or not finite(now)
+    then
+        return false
+    end
+    state = ensureState(state)
+    if type(state.round) ~= 'table' then
+        return false
+    end
+    local entity = resolveEntity(entityID)
+    if type(entity) ~= 'table'
+            or tonumber(entity.id) ~= entityID
+            or entity.alive == false
+    then
+        return false
+    end
+    local contentID = tonumber(entity.contentid)
+    local modelID = tonumber(entity.modelid)
+    if not ((contentID == SEED_CONTENT_ID and modelID == SEED_MODEL_ID)
+            or (contentID == IAMBE_CONTENT_ID
+                and modelID == IAMBE_HELPER_MODEL_ID))
+    then
+        return false
+    end
+    local pending = state.pendingAdds[entityID]
+    local addedAt = type(pending) == 'table'
+            and finite(pending.addedAt)
+            and pending.addedAt
+            or now
+    local changed, complete = processAddedEntity(
+            state, entityID, contentID, addedAt, now)
+    if complete == true then
+        state.pendingAdds[entityID] = nil
     end
     return changed
 end
@@ -484,6 +535,21 @@ Feature.OnEntityAdd = function(entityID, contentID, now)
     return false
 end
 
+Feature.OnVisibilityChange = function(
+        entityID, wasVisible, isVisible, now)
+    local guide = rawget(_G, 'MuAiGuide')
+    local cfg = getConfig(guide)
+    local state = getState()
+    if state ~= nil and cfg ~= nil
+            and cfg.Enable == true
+            and cfg.DrawSeedExplosionPrediction == true
+    then
+        return handleVisibilityChange(
+                state, entityID, wasVisible, isVisible, now)
+    end
+    return false
+end
+
 Feature.OnEntityChannel = function(
         entityID, actionID, targetID, channelTimeMax, now)
     local guide = rawget(_G, 'MuAiGuide')
@@ -559,6 +625,7 @@ Feature.Test = {
     GetConfig = getConfig,
     BeginRound = beginRound,
     HandleEntityAdd = handleEntityAdd,
+    HandleVisibilityChange = handleVisibilityChange,
     HandleHelperCast = handleHelperCast,
     ResolveSeedExplosion = resolveSeedExplosion,
     PruneState = pruneState,

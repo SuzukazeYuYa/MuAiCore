@@ -62,7 +62,6 @@ local REFERENCE_SHAPES = {
     }),
     [47543] = one(14508, {
         kind = 'circle', radius = 25,
-        minElapsedMs = 7000, maxElapsedMs = 10000,
     }),
     [47199] = elementBlasters,
     [47200] = elementBlasters,
@@ -80,30 +79,6 @@ local REFERENCE_SHAPES = {
     [48112] = one(14790, {
         kind = 'cone', radius = 30, angle = math.rad(30),
         headingOffset = math.rad(60),
-    }),
-    [47180] = one(14512, {
-        kind = 'rect', length = 100, width = 12, back = 50,
-    }),
-    -- Argus already rotates these AOE headings onto the first left/right hit.
-    -- Reapplying the Splatoon actor-relative +/-90-degree offset would turn the
-    -- sequence into front/back; only the delayed follow-up needs reversing.
-    [47166] = oneWithShapes(14509, {
-        { kind = 'cone', radius = 40, angle = math.pi },
-        {
-            kind = 'cone', radius = 40, angle = math.pi,
-            headingOffset = math.pi,
-            minElapsedMs = 5000, maxElapsedMs = 8000,
-            keepAfterCast = true,
-        },
-    }),
-    [47167] = oneWithShapes(14509, {
-        { kind = 'cone', radius = 40, angle = math.pi },
-        {
-            kind = 'cone', radius = 40, angle = math.pi,
-            headingOffset = math.pi,
-            minElapsedMs = 5000, maxElapsedMs = 8000,
-            keepAfterCast = true,
-        },
     }),
     [47170] = one(14509, {
         kind = 'rect', length = 50, width = 10, back = 25,
@@ -267,6 +242,7 @@ local REFERENCE_SHAPES = {
 local BLACKLIST_AIDS = {
     [47175] = true,
     [47176] = true,
+    [47180] = true,
     [48662] = true,
     [48663] = true,
     [50677] = true,

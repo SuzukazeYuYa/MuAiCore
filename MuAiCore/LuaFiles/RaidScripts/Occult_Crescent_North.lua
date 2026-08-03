@@ -110,6 +110,12 @@ local function loadNorthModule(name)
 end
 
 local NorthReferenceDrawings = loadNorthModule('NorthReferenceDrawings')
+local TwoHeadedAevis = loadNorthModule('TwoHeadedAevis')
+local SwordDancer = loadNorthModule('SwordDancer')
+local Necrophobia = loadNorthModule('Necrophobia')
+local Index = loadNorthModule('Index')
+local SacredTreeGiant = loadNorthModule('SacredTreeGiant')
+local CalofisteriDoppelganger = loadNorthModule('CalofisteriDoppelganger')
 local AlabasterBlade = loadNorthModule('AlabasterBlade')
 local MagiNecromancer = loadNorthModule('MagiNecromancer')
 local LeaderChimera = loadNorthModule('LeaderChimera')
@@ -127,6 +133,12 @@ local Arachne = loadNorthModule('Arachne')
 local WarlikeMinotaur = loadNorthModule('WarlikeMinotaur')
 local FEATURES = {
     NorthReferenceDrawings,
+    TwoHeadedAevis,
+    SwordDancer,
+    Necrophobia,
+    Index,
+    SacredTreeGiant,
+    CalofisteriDoppelganger,
     AlabasterBlade,
     MagiNecromancer,
     LeaderChimera,
@@ -180,8 +192,9 @@ G.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
     local now = Context.nowMs()
     NorthReferenceDrawings.OnEntityChannel(
             entityID, spellID, targetID, channelTimeMax, now)
-    AlabasterBlade.OnEntityChannel(
-            entityID, spellID, channelTimeMax, now)
+    TwoHeadedAevis.OnEntityChannel(entityID, spellID, now)
+    SwordDancer.OnEntityChannel(entityID, spellID, now)
+    CalofisteriDoppelganger.OnEntityChannel(entityID, spellID, now)
     MagiNecromancer.OnEntityChannel(entityID, spellID, now)
     LeaderChimera.OnEntityChannel(
             entityID, spellID, channelTimeMax, now)
@@ -228,6 +241,10 @@ G.OnEntityCast = function(entityID, spellID, castPos)
     end
     local now = Context.nowMs()
     NorthReferenceDrawings.OnEntityCast(entityID, spellID, castPos, now)
+    TwoHeadedAevis.OnEntityCast(entityID, spellID)
+    SwordDancer.OnEntityCast(entityID, spellID, castPos, now)
+    SacredTreeGiant.OnEntityCast(entityID, spellID, now)
+    CalofisteriDoppelganger.OnEntityCast(entityID, spellID, now)
     AlabasterBlade.OnEntityCast(entityID, spellID, now)
     MagiNecromancer.OnEntityCast(entityID, spellID, now)
     LeaderChimera.OnEntityCast(entityID, spellID, now)
@@ -267,15 +284,16 @@ G.OnVisibilityChange = function(entityID, wasVisible, isVisible)
         return false
     end
     local now = Context.nowMs()
+    local aevis = TwoHeadedAevis.OnVisibilityChange(entityID, isVisible)
     local revealed = MagiNecromancer.OnVisibilityChange(
             entityID, wasVisible, isVisible, now)
     local flash = MagiHydra.OnVisibilityChange(
             entityID, wasVisible, isVisible, now)
-    local gale = GaleGriffin.OnVisibilityChange(
-            entityID, isVisible, now)
+    local iambe = Iambe.OnVisibilityChange(
+            entityID, wasVisible, isVisible, now)
     local gemstone = GemstoneBeast.OnVisibilityChange(
             entityID, wasVisible, isVisible, now)
-    return revealed or flash or gale or gemstone
+    return aevis or revealed or flash or iambe or gemstone
 end
 
 G.OnEntityAdd = function(entityID, entityName, contentID)
@@ -283,10 +301,17 @@ G.OnEntityAdd = function(entityID, entityName, contentID)
         return false
     end
     local now = Context.nowMs()
+    local aevis = TwoHeadedAevis.OnEntityAdd(entityID, contentID, now)
+    local index = Index.OnEntityAdd(entityID, contentID, now)
+    local necromancer = MagiNecromancer.OnEntityAdd(
+            entityID, contentID, now)
+    local chimera = LeaderChimera.OnEntityAdd(
+            entityID, contentID, now)
     local littleMage = LittleMage.OnEntityAdd(entityID, now)
     local iambe = Iambe.OnEntityAdd(entityID, contentID, now)
     local gale = GaleGriffin.OnEntityAdd(entityID, contentID, now)
-    return littleMage or iambe or gale
+    return aevis or index or necromancer or chimera
+            or littleMage or iambe or gale
 end
 
 G.OnMarkerAdd = function(entityID, markerID)
@@ -301,6 +326,8 @@ G.OnAddGroundEffect = function(...)
     if Context.currentMapIsNorth() then
         local now = Context.nowMs()
         ShapeshiftingMage.OnAddGroundEffect({ ... }, now)
+        SwordDancer.OnAddGroundEffect({ ... }, now)
+        Index.OnAddGroundEffect({ ... }, now)
         Pallmagia.OnAddGroundEffect(...)
     end
 end
@@ -308,6 +335,8 @@ end
 G.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
     if Context.currentMapIsNorth() then
         local now = Context.nowMs()
+        SwordDancer.OnEventObjectScriptFunc(
+                entityID, a1, a2, a3, now)
         Pallmagia.OnEventObjectScriptFunc(
                 entityID, a1, a2, a3, now)
         GemstoneBeast.OnEventObjectScriptFunc(
@@ -321,6 +350,10 @@ G.OnAOECreate = function(aoeInfo)
     end
     local now = Context.nowMs()
     NorthReferenceDrawings.OnAOECreate(aoeInfo, now)
+    Necrophobia.OnAOECreate(aoeInfo, now)
+    CalofisteriDoppelganger.OnAOECreate(aoeInfo, now)
+    AlabasterBlade.OnAOECreate(aoeInfo, now)
+    MagiNecromancer.OnAOECreate(aoeInfo, now)
     LeaderChimera.OnAOECreate(aoeInfo, now)
     MagiHydra.OnAOECreate(aoeInfo, now)
     GaleGriffin.OnAOECreate(aoeInfo, now)
@@ -342,6 +375,12 @@ G.Update = function()
     end
     local now = Context.nowMs()
     NorthReferenceDrawings.Update(guide, now)
+    TwoHeadedAevis.Update(guide, now)
+    SwordDancer.Update(guide, now)
+    Necrophobia.Update(guide, now)
+    Index.Update(guide, now)
+    SacredTreeGiant.Update(guide, now)
+    CalofisteriDoppelganger.Update(guide, now)
     AlabasterBlade.Update(guide, now)
     MagiNecromancer.Update(guide, now)
     LeaderChimera.Update(guide, now)
@@ -361,6 +400,12 @@ end
 
 G.Test = {
     NorthReferenceDrawings = NorthReferenceDrawings.Test,
+    TwoHeadedAevis = TwoHeadedAevis.Test,
+    SwordDancer = SwordDancer.Test,
+    Necrophobia = Necrophobia.Test,
+    Index = Index.Test,
+    SacredTreeGiant = SacredTreeGiant.Test,
+    CalofisteriDoppelganger = CalofisteriDoppelganger.Test,
     AlabasterBlade = AlabasterBlade.Test,
     MagiNecromancer = MagiNecromancer.Test,
     LeaderChimera = LeaderChimera.Test,

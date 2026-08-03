@@ -4,15 +4,11 @@ function Module.Create(Context)
     assert(type(Context) == 'table' and type(Context.Common) == 'table')
     local Common = Context.Common
     local finite = Context.finite
-    local nowMs = Context.nowMs
     local reliablePosition = Context.reliablePosition
     local resolveEntity = Context.resolveEntity
     local getPlayer = Context.getPlayer
 
-local BOSS_CONTENT_ID = 14791
-local BOSS_MODEL_ID = 19535
 local TOPAZ_CONTENT_ID = 14792
-local TOPAZ_MODEL_ID = 19536
 local SQUARE_EVENT_OBJECT_ID = 2015301
 local L_EVENT_OBJECT_ID = 2015302
 local ARENA_CENTER = { x = 238, y = 15, z = 352 }
@@ -26,6 +22,7 @@ local CHANNEL_BATCH_WINDOW_MS = 750
 local PHASE_TIMEOUT_MS = 60000
 local EARLY_PREDICTION_TIMEOUT_MS = 30000
 local CHANNEL_PREDICTION_TIMEOUT_MS = 5000
+local STONE_RESOLVE_TIMEOUT_MS = 1000
 local SAFE_TARGET_MARGIN = 1.5
 
 local AID = {
@@ -199,11 +196,12 @@ local function insideArena(position)
 end
 
 local function validStonePosition(entityID)
+    if not finite(entityID) or entityID <= 0 then
+        return nil
+    end
     local entity = resolveEntity(entityID)
     if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= TOPAZ_CONTENT_ID
-            or tonumber(entity.modelid) ~= TOPAZ_MODEL_ID
+            or entity.alive == false
     then
         return nil
     end
@@ -211,22 +209,9 @@ local function validStonePosition(entityID)
     return position ~= nil and insideArena(position) and position or nil
 end
 
-local function validBoss(entityID)
-    local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= BOSS_CONTENT_ID
-            or tonumber(entity.modelid) ~= BOSS_MODEL_ID
-    then
-        return false
-    end
-    local position = reliablePosition(entity.pos, false)
-    return position ~= nil and insideArena(position)
-end
-
 local function validEventObject(entityID)
     local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table' or tonumber(entity.id) ~= entityID then
+    if type(entity) ~= 'table' then
         return nil, nil
     end
     local contentID = tonumber(entity.contentid)
@@ -572,13 +557,18 @@ local function setPhaseKind(state, phase, kind, now, context)
     return true
 end
 
-local function collectVisibleEntries(state)
+local function collectVisibleEntries(state, now)
     local entries = {}
     local stale = {}
-    for entityID in pairs(state.visibleStones) do
+    for entityID, observedAt in pairs(state.visibleStones) do
         local position = validStonePosition(entityID)
         if position == nil then
-            stale[#stale + 1] = entityID
+            if not finite(observedAt)
+                    or not finite(now)
+                    or now - observedAt > STONE_RESOLVE_TIMEOUT_MS
+            then
+                stale[#stale + 1] = entityID
+            end
         else
             entries[#entries + 1] = {
                 entityID = entityID,
@@ -661,7 +651,7 @@ local function tryEarlyPrediction(state, now)
     then
         return false
     end
-    local entries = collectVisibleEntries(state)
+    local entries = collectVisibleEntries(state, now)
     if #entries ~= 10 then
         return false
     end
@@ -703,8 +693,8 @@ local function beginRubyGlow(state, entityID, now)
     then
         return false
     end
-    if not validBoss(entityID) then
-        diagnostic(state, 'ruby_glow_boss_mismatch', nowMs(), entityID)
+    if not finite(entityID) or entityID <= 0 then
+        diagnostic(state, 'ruby_glow_boss_mismatch', now, entityID)
         return false
     end
     state.lastRubyGlowAt = now
@@ -826,14 +816,10 @@ local function recordVisibility(
         return false
     end
     if wasVisible == false and isVisible == true then
-        local position = validStonePosition(entityID)
-        if position == nil then
-            local entity = resolveEntity(entityID)
-            if type(entity) == 'table'
-                    and tonumber(entity.contentid) == TOPAZ_CONTENT_ID
-            then
-                diagnostic(state, 'stone_geometry_missing', now, entityID)
-            end
+        local entity = resolveEntity(entityID)
+        if type(entity) ~= 'table'
+                or tonumber(entity.contentid) ~= TOPAZ_CONTENT_ID
+        then
             return false
         end
         if next(state.visibleStones) == nil then
@@ -841,6 +827,10 @@ local function recordVisibility(
         end
         state.visibleStones[entityID] = now
         bindPendingPhaseSignal(state)
+        local position = reliablePosition(entity.pos, true)
+        if position == nil or not insideArena(position) then
+            diagnostic(state, 'stone_geometry_missing', now, entityID)
+        end
         tryEarlyPrediction(state, now)
         return true
     end
@@ -1106,6 +1096,9 @@ local function updateState(state, guide, cfg, now)
     then
         state.channelBatch = nil
     end
+    if state.prediction == nil then
+        tryEarlyPrediction(state, now)
+    end
     local prediction = state.prediction
     if type(prediction) ~= 'table' then
         return false
@@ -1245,10 +1238,7 @@ end
 Feature.Test = {
     Defaults = DEFAULTS,
     AID = AID,
-    BossContentID = BOSS_CONTENT_ID,
-    BossModelID = BOSS_MODEL_ID,
     TopazContentID = TOPAZ_CONTENT_ID,
-    TopazModelID = TOPAZ_MODEL_ID,
     SquareEventObjectID = SQUARE_EVENT_OBJECT_ID,
     LEventObjectID = L_EVENT_OBJECT_ID,
     ArenaCenter = ARENA_CENTER,
