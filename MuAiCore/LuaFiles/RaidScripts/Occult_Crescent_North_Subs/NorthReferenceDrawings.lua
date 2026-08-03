@@ -14,7 +14,7 @@ local REFERENCE_COMMIT = 'fda083a9e2b0b183937727ab7010f3bc0ddfa5bc'
 local REFERENCE_SEEN_TTL_MS = 30000
 local REFERENCE_TOKEN_GRACE_MS = 1000
 
-local DEFAULTS = {
+local OWNER_DEFAULTS = {
     Enable = true,
 }
 
@@ -237,18 +237,53 @@ local REFERENCE_SHAPES = {
     [47521] = one(14503, { kind = 'circle', radius = 18 }),
 }
 
--- Dedicated modules own the only prediction path for these actions. Keep the
--- native late telegraphs suppressed without retaining a second reference draw.
-local BLACKLIST_AIDS = {
-    [47175] = true,
-    [47176] = true,
-    [47180] = true,
-    [48662] = true,
-    [48663] = true,
-    [50677] = true,
+-- The renderer is shared, but every action is governed by its actual boss
+-- switch. This keeps one rendering path without exposing a second "generic"
+-- owner in the UI.
+local OWNER_AIDS = {
+    GemstoneBeast = { 48294, 48295 },
+    SacredTreeGiant = { 47543 },
+    MagiHydra = { 47199, 47200, 47201, 47202, 47203 },
+    ShapeshiftingMage = {
+        48354, 48341,
+        -- Dedicated prediction owns these three shapes; only their native
+        -- late telegraphs remain suppressed here.
+        48662, 48663, 50677,
+    },
+    OccultGrimoire = { 47306 },
+    Argol = { 48111, 48112 },
+    AlabasterBlade = { 47170 },
+    Arachne = { 50379, 50380, 50381 },
+    TwoHeadedAevis = {
+        47640, 47639, 47641, 47686, 47685, 47697, 47702,
+        50726, 47629, 50725, 47620,
+    },
+    SwordDancer = {
+        49628, 49634, 49623, 49624, 49630, 49627, 49622,
+        49674, 49641, 49642, 49643, 49644, 49672, 48848,
+    },
+    Necrophobia = {
+        50358, 47497, 47490, 47494, 47491, 47495, 47504,
+        47499, 47500, 47501, 47502, 47522, 47493, 47521,
+    },
+    MagiNecromancer = {
+        -- Dedicated prediction owns these shapes; only their native late
+        -- telegraphs remain suppressed here.
+        47175, 47176, 47180,
+    },
 }
-for aoeID in pairs(REFERENCE_SHAPES) do
-    BLACKLIST_AIDS[aoeID] = true
+
+local ACTION_OWNER = {}
+for owner, actionIDs in pairs(OWNER_AIDS) do
+    for _, actionID in ipairs(actionIDs) do
+        assert(ACTION_OWNER[actionID] == nil,
+                'duplicate North reference owner: ' .. tostring(actionID))
+        ACTION_OWNER[actionID] = owner
+    end
+end
+for actionID in pairs(REFERENCE_SHAPES) do
+    assert(type(ACTION_OWNER[actionID]) == 'string',
+            'missing North reference owner: ' .. tostring(actionID))
 end
 
 -- 50377 remains owned by the dedicated Arachne predictor. 47191 and
@@ -259,12 +294,17 @@ end
 -- remain fail closed. Localized-name/model-only helpers without a stable action
 -- signal are likewise not mirrored here.
 local CHANNEL_GUIDES = {
-    [47638] = { contentIDs = { [14490] = true }, distance = 15 },
+    [47638] = {
+        owner = 'TwoHeadedAevis',
+        contentIDs = { [14490] = true }, distance = 15,
+    },
     [49660] = {
+        owner = 'SwordDancer',
         contentIDs = { [14821] = true, [14822] = true },
         distance = 25,
     },
     [48405] = {
+        owner = 'Index',
         contentIDs = { [14721] = true },
         distance = 10,
         maxDistance = 12,
@@ -294,12 +334,20 @@ end
 
 local referenceFeature = Common.newFeature({
     key = 'NorthReferenceDrawings',
-    defaults = DEFAULTS,
     newState = newState,
     ensureState = ensureState,
     diagnosticThrottleMs = 1000,
 })
-local getConfig = referenceFeature.GetConfig
+
+local function getOwnerConfig(guide, owner)
+    return type(owner) == 'string'
+            and Common.getConfig(guide, owner, OWNER_DEFAULTS) or nil
+end
+
+local function ownerEnabled(guide, owner)
+    local cfg = getOwnerConfig(guide, owner)
+    return cfg ~= nil and cfg.Enable == true
+end
 
 local function diagnostic(state, code, now, context)
     referenceFeature.Diagnostic(
@@ -327,6 +375,21 @@ local function clearDraws(state)
     state.lastDiagnostic = nil
 end
 
+local function clearOwnerDraws(state, owner)
+    state = ensureState(state)
+    local removed = false
+    for key, entry in pairs(state.active) do
+        if entry.owner == owner then
+            for _, activeShape in ipairs(entry.shapes or {}) do
+                deleteActiveToken(activeShape.token)
+            end
+            state.active[key] = nil
+            removed = true
+        end
+    end
+    return removed
+end
+
 local function getBlacklist(create)
     return Common.getMoogleTable('aoeIDUserBlacklist', create)
 end
@@ -338,57 +401,59 @@ local function ownsBlacklist(state, aoeID, current)
                     and current.source == REFERENCE_SOURCE))
 end
 
-local function registerBlacklist(state)
+local function syncBlacklist(state, guide)
     state = ensureState(state)
     local blacklist = getBlacklist(true)
     if blacklist == nil then
         state.blacklist.registered = false
         return false
     end
-    for aoeID in pairs(BLACKLIST_AIDS) do
-        local current = blacklist[aoeID]
-        if current == nil then
-            local owned = {
-                label = '北岛参考范围',
-                source = REFERENCE_SOURCE,
-            }
-            blacklist[aoeID] = owned
-            state.blacklist.owned[aoeID] = owned
-        elseif type(current) == 'table'
-                and current.source == REFERENCE_SOURCE
-        then
-            state.blacklist.owned[aoeID] = current
+    for actionID, owner in pairs(ACTION_OWNER) do
+        local current = blacklist[actionID]
+        if ownerEnabled(guide, owner) then
+            if current == nil then
+                local owned = {
+                    label = '北岛 Boss 归属范围',
+                    source = REFERENCE_SOURCE,
+                    owner = owner,
+                }
+                blacklist[actionID] = owned
+                state.blacklist.owned[actionID] = owned
+            elseif type(current) == 'table'
+                    and current.source == REFERENCE_SOURCE
+            then
+                current.owner = owner
+                state.blacklist.owned[actionID] = current
+            else
+                state.blacklist.owned[actionID] = nil
+            end
         else
-            state.blacklist.owned[aoeID] = nil
+            if ownsBlacklist(state, actionID, current) then
+                blacklist[actionID] = nil
+            end
+            state.blacklist.owned[actionID] = nil
         end
     end
     state.blacklist.registered = true
     return true
 end
 
-local function unregisterBlacklist(state)
+local function releaseBlacklist(state)
     state = ensureState(state)
     local blacklist = getBlacklist(false)
     if blacklist == nil then
         state.blacklist.registered = false
         return false
     end
-    for aoeID in pairs(BLACKLIST_AIDS) do
-        local current = blacklist[aoeID]
-        if ownsBlacklist(state, aoeID, current) then
-            blacklist[aoeID] = nil
+    for actionID in pairs(ACTION_OWNER) do
+        local current = blacklist[actionID]
+        if ownsBlacklist(state, actionID, current) then
+            blacklist[actionID] = nil
         end
     end
     state.blacklist.owned = {}
     state.blacklist.registered = false
     return true
-end
-
-local function applyBlacklist(state, enabled)
-    if enabled == true then
-        return registerBlacklist(state)
-    end
-    return unregisterBlacklist(state)
 end
 
 local function eventKey(aoeInfo)
@@ -546,11 +611,15 @@ local function rollbackShapes(activeShapes)
     end
 end
 
-local function handleAOECreate(state, aoeInfo, now)
+local function handleAOECreate(state, guide, aoeInfo, now)
     state = ensureState(state)
     local entry = type(aoeInfo) == 'table'
             and REFERENCE_SHAPES[aoeInfo.aoeID] or nil
     if entry == nil then
+        return false
+    end
+    local owner = ACTION_OWNER[aoeInfo.aoeID]
+    if not ownerEnabled(guide, owner) then
         return false
     end
     if not finite(now)
@@ -614,6 +683,7 @@ local function handleAOECreate(state, aoeInfo, now)
     state.active[key] = {
         entityID = aoeInfo.entityID,
         aoeID = aoeInfo.aoeID,
+        owner = owner,
         shapes = activeShapes,
     }
     state.lastDiagnostic = nil
@@ -625,6 +695,9 @@ local function handleChannelGuide(state, guide, entityID, spellID,
     state = ensureState(state)
     local spec = CHANNEL_GUIDES[spellID]
     if spec == nil then
+        return false
+    end
+    if not ownerEnabled(guide, spec.owner) then
         return false
     end
     if not finite(now)
@@ -690,6 +763,7 @@ local function handleChannelGuide(state, guide, entityID, spellID,
     state.active[key] = {
         entityID = entityID,
         aoeID = spellID,
+        owner = spec.owner,
         shapes = {
             {
                 token = token,
@@ -725,13 +799,18 @@ local function handleEntityCast(state, entityID, spellID)
     return removed
 end
 
-local function pruneState(state, now)
+local function pruneState(state, guide, now)
     state = ensureState(state)
     for key, entry in pairs(state.active) do
         local retained = {}
         for _, activeShape in ipairs(entry.shapes or {}) do
-            if finite(activeShape.expiresAt) and now <= activeShape.expiresAt then
+            if ownerEnabled(guide, entry.owner)
+                    and finite(activeShape.expiresAt)
+                    and now <= activeShape.expiresAt
+            then
                 retained[#retained + 1] = activeShape
+            else
+                deleteActiveToken(activeShape.token)
             end
         end
         entry.shapes = retained
@@ -747,25 +826,20 @@ local Feature = {}
 Feature.Init = function(M)
     if type(M.NorthReferenceDrawings) == 'table' then
         clearDraws(M.NorthReferenceDrawings)
-        applyBlacklist(M.NorthReferenceDrawings, false)
+        releaseBlacklist(M.NorthReferenceDrawings)
     end
     M.NorthReferenceDrawings = newState()
-    local cfg = getConfig(M)
-    M.SetNorthReferenceDrawingsEnabled = function(enabled)
-        local current = getConfig(M)
+    M.SetArgolEnabled = function(enabled)
+        local current = getOwnerConfig(M, 'Argol')
         if current ~= nil then
             current.Enable = enabled == true
         end
-        if enabled == true then
-            applyBlacklist(M.NorthReferenceDrawings, true)
-        else
-            clearDraws(M.NorthReferenceDrawings)
-            applyBlacklist(M.NorthReferenceDrawings, false)
+        if enabled ~= true then
+            clearOwnerDraws(M.NorthReferenceDrawings, 'Argol')
         end
+        syncBlacklist(M.NorthReferenceDrawings, M)
     end
-    if cfg ~= nil and cfg.Enable == true then
-        applyBlacklist(M.NorthReferenceDrawings, true)
-    end
+    syncBlacklist(M.NorthReferenceDrawings, M)
 end
 
 Feature.Clear = function(releaseOwnership)
@@ -773,7 +847,7 @@ Feature.Clear = function(releaseOwnership)
     if state ~= nil then
         clearDraws(state)
         if releaseOwnership == true then
-            applyBlacklist(state, false)
+            releaseBlacklist(state)
         end
     end
 end
@@ -781,9 +855,8 @@ end
 Feature.OnEntityChannel = function(
         entityID, spellID, targetID, channelTimeMax, now)
     local guide = rawget(_G, 'MuAiGuide')
-    local cfg = getConfig(guide)
     local state = getState()
-    if state ~= nil and cfg ~= nil and cfg.Enable == true then
+    if state ~= nil then
         return handleChannelGuide(
                 state, guide, entityID, spellID, channelTimeMax, now)
     end
@@ -792,19 +865,16 @@ end
 
 Feature.OnAOECreate = function(aoeInfo, now)
     local guide = rawget(_G, 'MuAiGuide')
-    local cfg = getConfig(guide)
     local state = getState()
-    if state ~= nil and cfg ~= nil and cfg.Enable == true then
-        return handleAOECreate(state, aoeInfo, now)
+    if state ~= nil then
+        return handleAOECreate(state, guide, aoeInfo, now)
     end
     return false
 end
 
 Feature.OnEntityCast = function(entityID, spellID)
-    local guide = rawget(_G, 'MuAiGuide')
-    local cfg = getConfig(guide)
     local state = getState()
-    if state ~= nil and cfg ~= nil and cfg.Enable == true then
+    if state ~= nil then
         return handleEntityCast(state, entityID, spellID)
     end
     return false
@@ -815,28 +885,25 @@ Feature.Update = function(guide, now)
     if state == nil then
         return false
     end
-    local cfg = getConfig(guide)
-    if cfg ~= nil and cfg.Enable == true then
-        applyBlacklist(state, true)
-        pruneState(state, now)
-    else
-        clearDraws(state)
-        applyBlacklist(state, false)
-    end
+    syncBlacklist(state, guide)
+    pruneState(state, guide, now)
     return false
 end
 
 Feature.Test = {
     Source = REFERENCE_SOURCE,
     ReferenceCommit = REFERENCE_COMMIT,
-    Defaults = DEFAULTS,
+    OwnerDefaults = OWNER_DEFAULTS,
+    ActionOwner = ACTION_OWNER,
+    OwnerAIDs = OWNER_AIDS,
     Shapes = REFERENCE_SHAPES,
-    BlacklistAIDs = BLACKLIST_AIDS,
     ChannelGuides = CHANNEL_GUIDES,
     NewState = newState,
     EnsureState = ensureState,
-    GetConfig = getConfig,
-    ApplyBlacklist = applyBlacklist,
+    GetOwnerConfig = getOwnerConfig,
+    OwnerEnabled = ownerEnabled,
+    SyncBlacklist = syncBlacklist,
+    ReleaseBlacklist = releaseBlacklist,
     Geometry = geometry,
     Timing = timing,
     HandleAOECreate = handleAOECreate,
@@ -844,6 +911,7 @@ Feature.Test = {
     HandleEntityCast = handleEntityCast,
     PruneState = pruneState,
     ClearDraws = clearDraws,
+    ClearOwnerDraws = clearOwnerDraws,
 }
 
 return Feature

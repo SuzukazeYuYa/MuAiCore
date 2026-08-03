@@ -67,8 +67,6 @@ local OCCULT_CRESCENT_SOUTH_ENCOUNTERS = {
 }
 
 local OCCULT_CRESCENT_NORTH_ENCOUNTERS = {
-    { '北岛通用范围（含极魔之塔）', 'NorthReferenceDrawings',
-        'SetNorthReferenceDrawingsEnabled' },
     { '两歧塔·双头怪鸟', 'TwoHeadedAevis',
         'SetTwoHeadedAevisEnabled' },
     { '两歧塔·剑舞者', 'SwordDancer',
@@ -84,6 +82,9 @@ local OCCULT_CRESCENT_NORTH_ENCOUNTERS = {
     } },
     { '神木巨人', 'SacredTreeGiant',
         'SetSacredTreeGiantEnabled' },
+    { '古术魔典', 'OccultGrimoire',
+        'SetOccultGrimoireEnabled' },
+    { '阿尔戈尔', 'Argol', 'SetArgolEnabled' },
     { '卡洛菲斯提莉二重身', 'CalofisteriDoppelganger',
         'SetCalofisteriDoppelgangerEnabled' },
     { '雪石膏之剑', 'AlabasterBlade',

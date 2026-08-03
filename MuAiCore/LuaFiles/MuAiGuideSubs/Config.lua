@@ -112,9 +112,10 @@ Config.init = function(M)
             'MysteriousMindflayer', 'BlackChocobo', 'CloisterDemon',
             'GildedHeadstone', 'LionRampant', 'CrystalDragon',
             'DeathClaw', 'IslandWatcher', 'HigherBird', 'Nammu',
-            'OccultReferenceDrawings', 'NorthReferenceDrawings',
+            'OccultReferenceDrawings',
             'TwoHeadedAevis', 'SwordDancer', 'Necrophobia', 'Index',
-            'SacredTreeGiant', 'CalofisteriDoppelganger',
+            'SacredTreeGiant', 'OccultGrimoire', 'Argol',
+            'CalofisteriDoppelganger',
             'AlabasterBlade',
             'MagiNecromancer', 'LeaderChimera', 'MagiHydra',
             'Iambe', 'KidnapDemon', 'ShapeshiftingMage',
@@ -306,10 +307,6 @@ Config.init = function(M)
             OccultReferenceDrawings = {
                 Enable = true,
             },
-            --------- 新月岛·北岛：通用参考范围 ---------
-            NorthReferenceDrawings = {
-                Enable = true,
-            },
             --------- 新月岛·北岛：两歧塔·双头怪鸟 ---------
             TwoHeadedAevis = {
                 Enable = true,
@@ -330,6 +327,14 @@ Config.init = function(M)
             },
             --------- 新月岛·北岛：神木巨人 ---------
             SacredTreeGiant = {
+                Enable = true,
+            },
+            --------- 新月岛·北岛：古术魔典 ---------
+            OccultGrimoire = {
+                Enable = true,
+            },
+            --------- 新月岛·北岛：阿尔戈尔 ---------
+            Argol = {
                 Enable = true,
             },
             --------- 新月岛·北岛：卡洛菲斯提莉二重身 ---------
