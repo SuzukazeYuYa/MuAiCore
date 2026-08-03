@@ -715,8 +715,14 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                                 return
                             end
                             local finalDir = dir - math.pi / 2
-                            guideData[curJob] = TensorCore.getPosInDirection(curSourceObj.pos, finalDir, 3.5)
-                        else 
+                            local bigKfkFront = MG.SetHeading2Pi(bigKfk.pos.h)
+                            local bigKfkBack = MG.SetHeading2Pi(bigKfk.pos.h + math.pi)
+                            local dis = 3.5
+                            if MG.IsSame(bigKfkBack, dir) or MG.IsSame(bigKfkFront, dir) then
+                                dis = 9
+                            end
+                            guideData[curJob] = TensorCore.getPosInDirection(curSourceObj.pos, finalDir, dis)
+                        else
                             if isDouble then
                                 table.insert(doubleLinePos, curSourceObj.pos)
                                 doubleJob = curJob
@@ -1149,8 +1155,8 @@ local prepareTakeTowerGuides = function()
     if takeTower.Left == nil or takeTower.Right == nil then
         takeTower.Left = TensorCore.getPosInDirection(DM.Center, curDir - math.pi / 2, 10)
         takeTower.Right = TensorCore.getPosInDirection(DM.Center, curDir + math.pi / 2, 10)
-        takeTower.LeftNear = TensorCore.getPosInDirection(DM.Center, curDir - math.pi / 2, 4.5)
-        takeTower.RightNear = TensorCore.getPosInDirection(DM.Center, curDir + math.pi / 2, 4.5)
+        takeTower.LeftNear = TensorCore.getPosInDirection(DM.Center, curDir - math.pi / 2, 10)
+        takeTower.RightNear = TensorCore.getPosInDirection(DM.Center, curDir + math.pi / 2, 10)
     end
     takeTower.isDps1st = MG.IndexOf(MG.JobPosName, markJob) > 4
 
@@ -1753,8 +1759,8 @@ Dmu_P3.Update = function()
                         heading = heading + math.pi
                     end
                     if Cfg().takeTowerType == 2 then
-                        local posHead = TensorCore.getPosInDirection(DM.Center, heading, 9)
-                        local posBack = TensorCore.getPosInDirection(DM.Center, heading + math.pi, 9)
+                        local posHead = TensorCore.getPosInDirection(DM.Center, heading, 8)
+                        local posBack = TensorCore.getPosInDirection(DM.Center, heading + math.pi, 8)
                         for job, _ in pairs(MG.Party) do
                             if MG.IndexOf(MG.JobPosName, job) <= 4 then
                                 Data().TakeTower.Put2Pos[job] = posHead
