@@ -520,7 +520,7 @@ local drawJobTab = function(M)
                 if ptMember.label == M.SelfPos then
                     curColor = M.Config.Main.GuideColor
                     cR, cG, cB, cA, colorChange = GUI:ColorEdit4('##guideToolColor_' .. ptMember.label, curColor.r, curColor.g, curColor.b, curColor.a,
-                            GUI.ColorEditMode_NoInputs | GUI.ColorEditMode_NoTooltip)
+                            GUI.ColorEditMode_NoInputs + GUI.ColorEditMode_NoTooltip)
                     if GUI:IsItemHovered() then
                         GUI:SetTooltip("你无法修改自己的指路颜色，请到基本设置修改！")
                     end
@@ -1040,7 +1040,6 @@ local drawRaidSettingTab = function(M)
         end
     end
     if GUI:CollapsingHeader('新月岛') then
-        GUI:TextColored(1, 0, 1, 1, '  本功能由String开发.')
         drawOccultCrescentSettings(M)
     end
 end
