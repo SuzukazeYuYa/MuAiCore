@@ -207,22 +207,19 @@ local function orbKind(contentID)
     return nil
 end
 
-local function resolveOrb(entityID, expectedKind)
-    local spec = ORB_SPEC[expectedKind]
-    if spec == nil or not finite(entityID) then
-        return nil
-    end
-    local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= spec.contentID
-            or tonumber(entity.modelid) ~= spec.modelID
-            or entity.alive == false
-            or entity.visible == false
+local function entitiesByContent(contentID)
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
     then
         return nil
     end
-    return reliablePosition(entity.pos, false)
+    local entities = tensorCore.entityList(
+            'contentid=' .. tostring(contentID))
+    if type(entities) ~= 'table' then
+        return nil
+    end
+    return entities
 end
 
 local function recordOrb(state, entityID, contentID, now)
@@ -241,9 +238,44 @@ end
 local function snapshotRound(state, now)
     local pending = {}
     local count = 0
+    local positions = {}
+    local neededKinds = {}
     for entityID, tracked in pairs(state.orbs) do
-        local position = type(tracked) == 'table'
-                and resolveOrb(entityID, tracked.kind) or nil
+        if type(tracked) ~= 'table'
+                or ORB_SPEC[tracked.kind] == nil
+        then
+            return nil, 'orb_geometry_invalid', entityID
+        end
+        neededKinds[tracked.kind] = true
+    end
+    for kind in pairs(neededKinds) do
+        local spec = ORB_SPEC[kind]
+        local entities = entitiesByContent(spec.contentID)
+        if entities == nil then
+            return nil, 'orb_geometry_invalid', spec.contentID
+        end
+        for _, entity in pairs(entities) do
+            local entityID = type(entity) == 'table'
+                    and tonumber(entity.id) or nil
+            local tracked = entityID ~= nil and state.orbs[entityID] or nil
+            if type(tracked) == 'table' and tracked.kind == kind then
+                if tonumber(entity.contentid) ~= spec.contentID
+                        or tonumber(entity.modelid) ~= spec.modelID
+                        or entity.alive == false
+                        or entity.visible == false
+                then
+                    return nil, 'orb_geometry_invalid', entityID
+                end
+                local position = reliablePosition(entity.pos, false)
+                if position == nil then
+                    return nil, 'orb_geometry_invalid', entityID
+                end
+                positions[entityID] = position
+            end
+        end
+    end
+    for entityID, tracked in pairs(state.orbs) do
+        local position = positions[entityID]
         if position == nil then
             return nil, 'orb_geometry_invalid', entityID
         end
@@ -307,17 +339,22 @@ local function clusterPosition(entityID, actionID)
     local kind = CLUSTER_KIND[actionID]
     local expectedContentID = kind == 'thunder'
             and GREEN_HEAD_CONTENT_ID or BLUE_HEAD_CONTENT_ID
-    local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= expectedContentID
-            or tonumber(entity.modelid) ~= CLUSTER_HELPER_MODEL_ID
-            or entity.alive == false
-            or entity.visible == false
-    then
+    local entities = entitiesByContent(expectedContentID)
+    if entities == nil then
         return nil
     end
-    return reliablePosition(entity.pos, false)
+    for _, entity in pairs(entities) do
+        if type(entity) == 'table'
+                and tonumber(entity.id) == entityID
+                and tonumber(entity.contentid) == expectedContentID
+                and tonumber(entity.modelid) == CLUSTER_HELPER_MODEL_ID
+                and entity.alive ~= false
+                and entity.visible ~= false
+        then
+            return reliablePosition(entity.pos, false)
+        end
+    end
+    return nil
 end
 
 local function handleCluster(state, entityID, actionID, now)
@@ -403,7 +440,8 @@ local function handleStorm(state, entityID, now)
     end
     local remaining = {}
     for orbID, orb in pairs(round.pending) do
-        local position = resolveOrb(orbID, orb.kind)
+        local position = type(orb) == 'table'
+                and reliablePosition(orb.pos, false) or nil
         if position == nil then
             clearMechanic(state)
             diagnostic(state, 'orb_geometry_invalid', now, orbID)

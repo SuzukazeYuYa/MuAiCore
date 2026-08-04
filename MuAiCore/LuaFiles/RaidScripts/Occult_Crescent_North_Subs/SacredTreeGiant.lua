@@ -5,7 +5,6 @@ function Module.Create(Context)
     local Common = Context.Common
     local finite = Context.finite
     local reliablePosition = Context.reliablePosition
-    local resolveEntity = Context.resolveEntity
 
 local GIANT_CONTENT_ID = 14508
 local BLADE_HELPER_MODEL_ID = 9020
@@ -43,6 +42,8 @@ local feature = Common.newFeature({
     diagnosticThrottleMs = 1000,
     diagnosticText = {
         blade_signal_invalid = '神木巨人斗气刃实体信号无效',
+        blade_entity_list_unavailable = '神木巨人斗气刃实体列表不可用',
+        blade_entity_unresolved = '神木巨人斗气刃实体未解析',
         danger_drawer_unavailable = '神木巨人危险范围绘图器不可用',
     },
 })
@@ -64,12 +65,10 @@ local function clearState(state)
     state.lastDiagnostic = nil
 end
 
-local function bladeGeometry(entityID)
-    if not finite(entityID) or entityID <= 0 then
-        return nil
-    end
-    local entity = resolveEntity(entityID)
+local function bladeGeometry(entity, entityID)
     if type(entity) ~= 'table'
+            or not finite(entityID)
+            or entityID <= 0
             or tonumber(entity.id) ~= entityID
             or tonumber(entity.contentid) ~= GIANT_CONTENT_ID
             or tonumber(entity.modelid) ~= BLADE_HELPER_MODEL_ID
@@ -87,18 +86,74 @@ end
 
 local function handleBladeSignal(state, entityID, now)
     state = ensureState(state)
-    if not finite(now) or bladeGeometry(entityID) == nil then
+    if not finite(now)
+            or not finite(entityID)
+            or entityID <= 0
+    then
         diagnostic(state, 'blade_signal_invalid', now, entityID)
         return false
     end
-    state.blades[entityID] = now
-    state.lastDiagnostic = nil
+    local blade = state.blades[entityID]
+    if type(blade) ~= 'table' then
+        blade = { resolved = false }
+        state.blades[entityID] = blade
+    end
+    blade.lastSeenAt = now
     return true
+end
+
+local function collectBladeGeometry(state)
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
+    then
+        return nil
+    end
+    local entities = tensorCore.entityList(
+            'contentid=' .. tostring(GIANT_CONTENT_ID))
+    if type(entities) ~= 'table' then
+        return nil
+    end
+    local geometry = {}
+    for _, entity in pairs(entities) do
+        local entityID = type(entity) == 'table'
+                and tonumber(entity.id) or nil
+        if finite(entityID) and state.blades[entityID] ~= nil then
+            local position = bladeGeometry(entity, entityID)
+            if position ~= nil then
+                geometry[entityID] = position
+            end
+        end
+    end
+    return geometry
 end
 
 local function drawBlades(state, now)
     state = ensureState(state)
     if not finite(now) then
+        return false
+    end
+    local active = false
+    for entityID, blade in pairs(state.blades) do
+        local lastSeenAt = type(blade) == 'table'
+                and blade.lastSeenAt or nil
+        if not finite(lastSeenAt)
+                or now - lastSeenAt > BLADE_SIGNAL_TTL_MS
+        then
+            if type(blade) == 'table' and blade.resolved ~= true then
+                diagnostic(state, 'blade_entity_unresolved', now, entityID)
+            end
+            state.blades[entityID] = nil
+        else
+            active = true
+        end
+    end
+    if not active then
+        return false
+    end
+    local geometry = collectBladeGeometry(state)
+    if geometry == nil then
+        diagnostic(state, 'blade_entity_list_unavailable', now)
         return false
     end
     local drawer = Common.getMoogleDrawer()
@@ -110,23 +165,21 @@ local function drawBlades(state, now)
         return false
     end
     local drawn = false
-    for entityID, lastSeenAt in pairs(state.blades) do
-        if not finite(lastSeenAt)
-                or now - lastSeenAt > BLADE_SIGNAL_TTL_MS
-        then
-            state.blades[entityID] = nil
-        else
-            local position = bladeGeometry(entityID)
-            if position ~= nil then
-                drawer:addCircle(
-                        position.x, position.y, position.z,
-                        BLADE_RADIUS)
-                drawer:addRect(
-                        position.x, position.y, position.z,
-                        BLADE_LENGTH, BLADE_WIDTH, position.h)
-                drawn = true
-            end
+    for entityID, blade in pairs(state.blades) do
+        local position = geometry[entityID]
+        if position ~= nil then
+            blade.resolved = true
+            drawer:addCircle(
+                    position.x, position.y, position.z,
+                    BLADE_RADIUS)
+            drawer:addRect(
+                    position.x, position.y, position.z,
+                    BLADE_LENGTH, BLADE_WIDTH, position.h)
+            drawn = true
         end
+    end
+    if drawn then
+        state.lastDiagnostic = nil
     end
     return drawn
 end

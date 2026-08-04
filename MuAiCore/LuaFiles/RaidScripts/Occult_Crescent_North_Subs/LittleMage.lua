@@ -245,21 +245,11 @@ end
 local function recordLittleMageApprentice(state, entityID, now)
     if type(state) ~= 'table'
             or not finite(entityID)
+            or entityID <= 0
             or not finite(now)
             or not finite(state.gatherAt)
             or now < state.gatherAt
             or now - state.gatherAt > LITTLE_MAGE_RELAY_GATHER_WINDOW_MS
-    then
-        return false
-    end
-    local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid)
-                    ~= LITTLE_MAGE_APPRENTICE_CONTENT_ID
-            or tonumber(entity.modelid) ~= LITTLE_MAGE_APPRENTICE_MODEL_ID
-            or entity.alive == false
-            or reliablePosition(entity.pos, false) == nil
     then
         return false
     end
@@ -295,26 +285,43 @@ local function resolveLittleMageRelayGeometry(state, casterID, now)
     then
         return nil, 'relay_gather_window_invalid'
     end
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
+    then
+        return nil, 'relay_apprentice_list_unavailable'
+    end
+    local entities = tensorCore.entityList(
+            'contentid=' .. tostring(LITTLE_MAGE_APPRENTICE_CONTENT_ID))
+    if type(entities) ~= 'table' then
+        return nil, 'relay_apprentice_list_unavailable'
+    end
     local group = {}
-    for entityID in pairs(state.apprentices or {}) do
-        local entity = resolveEntity(entityID)
-        local position = type(entity) == 'table'
-                and reliablePosition(entity.pos, entityID == casterID) or nil
-        if type(entity) ~= 'table'
-                or tonumber(entity.id) ~= entityID
-                or tonumber(entity.contentid)
+    for _, entity in pairs(entities) do
+        local entityID = type(entity) == 'table'
+                and tonumber(entity.id) or nil
+        if finite(entityID) and state.apprentices[entityID] ~= nil then
+            local position = reliablePosition(
+                    entity.pos, entityID == casterID)
+            if tonumber(entity.contentid)
                         ~= LITTLE_MAGE_APPRENTICE_CONTENT_ID
-                or tonumber(entity.modelid)
+                    or tonumber(entity.modelid)
                         ~= LITTLE_MAGE_APPRENTICE_MODEL_ID
-                or entity.alive == false
-                or position == nil
-        then
-            return nil, 'relay_apprentice_invalid', { entityID = entityID }
+                    or entity.alive == false
+                    or entity.visible == false
+                    or position == nil
+            then
+                return nil, 'relay_apprentice_invalid', {
+                    entityID = entityID,
+                }
+            end
+            group[#group + 1] = { id = entityID, pos = position }
         end
-        group[#group + 1] = { id = entityID, pos = position }
     end
     if #group ~= 4 then
-        return nil, 'relay_apprentice_count_mismatch', { count = #group }
+        return nil, 'relay_apprentice_count_mismatch', {
+            count = #group,
+        }
     end
     local caster = nil
     for _, apprentice in ipairs(group) do
@@ -478,24 +485,10 @@ local function recordLittleMageRelaySupply(state, entityID, spellID, now)
     local index = (tonumber(round.relay.suppliesSeen) or 0) + 1
     local expected = round.relay.supplies[index]
     local expectedOffset = LITTLE_MAGE_RELAY_SUPPLY_OFFSETS_MS[index]
-    local entity = resolveEntity(entityID)
-    local position = type(entity) == 'table'
-            and reliablePosition(entity.pos, false) or nil
-    local supplyDistance = position ~= nil
-            and type(expected) == 'table'
-            and Common.distanceSquared(position, expected.source) or nil
     if kind ~= round.relay.kind
             or type(expected) ~= 'table'
             or not finite(expectedOffset)
-            or type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid)
-                    ~= LITTLE_MAGE_APPRENTICE_CONTENT_ID
-            or tonumber(entity.modelid) ~= LITTLE_MAGE_APPRENTICE_MODEL_ID
-            or position == nil
             or entityID ~= expected.id
-            or not finite(supplyDistance)
-            or supplyDistance > LITTLE_MAGE_RELAY_REFLECTION_TOLERANCE_SQ
             or math.abs(now - (round.startedAt + expectedOffset))
                     > LITTLE_MAGE_RELAY_SUPPLY_TOLERANCE_MS
     then
