@@ -299,6 +299,19 @@ G.OnVisibilityChange = function(entityID, wasVisible, isVisible)
     return aevis or revealed or flash or gemstone
 end
 
+G.OnAnimationChange = function(
+        entityID, index, oldAnimationID, newAnimationID)
+    if not Context.currentMapIsNorth() then
+        return false
+    end
+    return SwordDancer.OnAnimationChange(
+            entityID,
+            index,
+            oldAnimationID,
+            newAnimationID,
+            Context.nowMs())
+end
+
 G.OnEntityAdd = function(entityID, entityName, contentID)
     if not Context.currentMapIsNorth() then
         return false

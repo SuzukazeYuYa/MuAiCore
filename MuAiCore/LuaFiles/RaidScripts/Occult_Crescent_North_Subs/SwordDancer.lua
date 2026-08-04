@@ -9,6 +9,8 @@ function Module.Create(Context)
 
 local BOSS_CONTENT_ID = 14820
 local BOSS_MODEL_ID = 19830
+local SWORD_CONTENT_ID = 14825
+local SWORD_MODEL_ID = 19833
 local ARENA_CENTER = { x = 600, z = 704 }
 
 local LEAP_FIRST_AID = 49596
@@ -18,6 +20,7 @@ local BLADE_DANCE_AID = 49614
 local BLADE_GROUND_EFFECT_ID = 2015283
 local SWORD_DONUT_SMALL_AID = 49589
 local SWORD_DONUT_LARGE_AID = 49590
+local SWORD_CIRCLE_AID = 49592
 
 local BLADE_RECT_LENGTH = 60
 local BLADE_RECT_WIDTH = 20
@@ -29,16 +32,32 @@ local LEAP_FIRST_GUIDE_MS = 5000
 local LEAP_GUIDE_INTERVAL_MS = 2500
 local ROUND_TTL_MS = 20000
 local BLACKLIST_SOURCE = 'MuAiCore - 剑舞者剑舞矩形预测'
-local DONUT_SOURCE = 'MuAiCore - 剑舞者月环内径修正'
-local SWORD_DONUTS = {
-    [SWORD_DONUT_SMALL_AID] = {
-        name = '舞动之剑月环（内径15）',
-        radius = 15,
+local LEGACY_DONUT_SOURCE = 'MuAiCore - 剑舞者月环内径修正'
+local SPIN_OUTER_RADIUS = 30
+local SPIN_CIRCLE_RADIUS = 15
+local SPIN_PREVIEW_MS = 14000
+local SPIN_BY_ANIMATION = {
+    [210] = {
+        actionID = SWORD_DONUT_SMALL_AID,
+        kind = 'donut',
+        inner = 15,
     },
-    [SWORD_DONUT_LARGE_AID] = {
-        name = '舞动之剑月环（内径20）',
-        radius = 20,
+    [211] = {
+        actionID = SWORD_DONUT_LARGE_AID,
+        kind = 'donut',
+        inner = 20,
     },
+    [5896] = {
+        actionID = SWORD_CIRCLE_AID,
+        kind = 'circle',
+        radius = SPIN_CIRCLE_RADIUS,
+    },
+}
+local BLACKLIST_LABELS = {
+    [BLADE_DANCE_AID] = '剑舞者剑舞矩形预测',
+    [SWORD_DONUT_SMALL_AID] = '剑舞者舞动之剑提前预测',
+    [SWORD_DONUT_LARGE_AID] = '剑舞者舞动之剑提前预测',
+    [SWORD_CIRCLE_AID] = '剑舞者舞动之剑提前预测',
 }
 
 local DEFAULTS = {
@@ -54,13 +73,8 @@ local function newState()
         leapPositions = {},
         guide = nil,
         active = {},
-        blacklist = { owned = nil, registered = false },
-        moogleDonuts = {
-            registered = false,
-            owned = {},
-            previous = {},
-            previousKnown = {},
-        },
+        spinPreviews = {},
+        blacklist = { owned = {}, registered = false },
         lastDiagnostic = nil,
     }
 end
@@ -76,19 +90,13 @@ local function ensureState(state)
     state.leapPositions = type(state.leapPositions) == 'table'
             and state.leapPositions or {}
     state.active = type(state.active) == 'table' and state.active or {}
+    state.spinPreviews = type(state.spinPreviews) == 'table'
+            and state.spinPreviews or {}
     state.blacklist = type(state.blacklist) == 'table'
             and state.blacklist or {}
+    state.blacklist.owned = type(state.blacklist.owned) == 'table'
+            and state.blacklist.owned or {}
     state.blacklist.registered = state.blacklist.registered == true
-    state.moogleDonuts = type(state.moogleDonuts) == 'table'
-            and state.moogleDonuts or {}
-    state.moogleDonuts.registered = state.moogleDonuts.registered == true
-    state.moogleDonuts.owned = type(state.moogleDonuts.owned) == 'table'
-            and state.moogleDonuts.owned or {}
-    state.moogleDonuts.previous = type(state.moogleDonuts.previous) == 'table'
-            and state.moogleDonuts.previous or {}
-    state.moogleDonuts.previousKnown =
-            type(state.moogleDonuts.previousKnown) == 'table'
-            and state.moogleDonuts.previousKnown or {}
     return state
 end
 
@@ -103,21 +111,12 @@ local feature = Common.newFeature({
         blade_activation_missing = '剑舞者剑舞激活信号缺少对应物件',
         danger_drawer_unavailable = '剑舞者危险范围绘图器不可用',
         danger_drawer_rejected_shape = '剑舞者危险范围绘制失败',
+        spin_geometry_invalid = '剑舞者舞动之剑预兆几何不可用',
         leap_geometry_invalid = '剑舞者跃进步法落点不可用',
         leap_count_invalid = '剑舞者跃进步法落点数量不完整',
     },
 })
 local getConfig = feature.GetConfig
-
-local donutRegistry = Common.newMoogleDonutRegistry({
-    entries = SWORD_DONUTS,
-    source = DONUT_SOURCE,
-    ensureState = ensureState,
-    getBucket = function(state)
-        return state.moogleDonuts
-    end,
-})
-local applyMoogleDonuts = donutRegistry.Apply
 
 local function getState()
     return Common.getRuntimeState('SwordDancer', newState, ensureState)
@@ -136,31 +135,71 @@ local function applyBlacklist(state, enabled)
         state.blacklist.registered = false
         return false
     end
-    local current = blacklist[BLADE_DANCE_AID]
-    local owned = current == state.blacklist.owned
-            or (type(current) == 'table'
-                    and current.source == BLACKLIST_SOURCE)
     if enabled == true then
-        if current == nil then
-            current = {
-                label = '剑舞者剑舞矩形预测',
-                source = BLACKLIST_SOURCE,
-            }
-            blacklist[BLADE_DANCE_AID] = current
-            state.blacklist.owned = current
-        elseif owned then
-            state.blacklist.owned = current
-        else
-            state.blacklist.owned = nil
+        for actionID, label in pairs(BLACKLIST_LABELS) do
+            local current = blacklist[actionID]
+            local owned = current == state.blacklist.owned[actionID]
+                    or (type(current) == 'table'
+                            and current.source == BLACKLIST_SOURCE)
+            if current == nil then
+                current = {
+                    label = label,
+                    source = BLACKLIST_SOURCE,
+                }
+                blacklist[actionID] = current
+                state.blacklist.owned[actionID] = current
+            elseif owned then
+                state.blacklist.owned[actionID] = current
+            else
+                state.blacklist.owned[actionID] = nil
+            end
         end
         state.blacklist.registered = true
         return true
     end
-    if owned then
-        blacklist[BLADE_DANCE_AID] = nil
+    for actionID in pairs(BLACKLIST_LABELS) do
+        local current = blacklist[actionID]
+        if current == state.blacklist.owned[actionID]
+                or (type(current) == 'table'
+                        and current.source == BLACKLIST_SOURCE)
+        then
+            blacklist[actionID] = nil
+        end
     end
-    state.blacklist.owned = nil
+    state.blacklist.owned = {}
     state.blacklist.registered = false
+    return true
+end
+
+local function releaseLegacyDonutSettings(state)
+    local bucket = type(state) == 'table' and state.moogleDonuts or nil
+    if type(bucket) ~= 'table' then
+        return false
+    end
+    local donuts = Common.getMoogleTable('aoeIDUserSetDonuts', false)
+    if type(donuts) ~= 'table' then
+        return false
+    end
+    local ownedEntries = type(bucket.owned) == 'table'
+            and bucket.owned or {}
+    local previous = type(bucket.previous) == 'table'
+            and bucket.previous or {}
+    local previousKnown = type(bucket.previousKnown) == 'table'
+            and bucket.previousKnown or {}
+    for _, actionID in ipairs({
+        SWORD_DONUT_SMALL_AID,
+        SWORD_DONUT_LARGE_AID,
+    }) do
+        local current = donuts[actionID]
+        if current == ownedEntries[actionID]
+                or (type(current) == 'table'
+                        and current.source == LEGACY_DONUT_SOURCE)
+        then
+            donuts[actionID] = previousKnown[actionID]
+                    and previous[actionID] or nil
+        end
+    end
+    state.moogleDonuts = nil
     return true
 end
 
@@ -169,13 +208,113 @@ local function clearMechanic(state)
     for _, active in ipairs(state.active) do
         Common.deleteTimedShape(active.token)
     end
+    for _, preview in pairs(state.spinPreviews) do
+        Common.deleteTimedShape(preview.token)
+    end
     state.groundEffects = {}
     state.bladeOrder = {}
     state.bladeSeen = {}
     state.leapPositions = {}
     state.guide = nil
     state.active = {}
+    state.spinPreviews = {}
     state.lastDiagnostic = nil
+end
+
+local function resolveSword(entityID)
+    if not finite(entityID) then
+        return nil
+    end
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
+    then
+        return nil
+    end
+    local entities = tensorCore.entityList(
+            'contentid=' .. tostring(SWORD_CONTENT_ID))
+    if type(entities) ~= 'table' then
+        return nil
+    end
+    for _, entity in pairs(entities) do
+        if type(entity) == 'table'
+                and tonumber(entity.id) == entityID
+                and tonumber(entity.contentid) == SWORD_CONTENT_ID
+                and tonumber(entity.modelid) == SWORD_MODEL_ID
+                and entity.alive ~= false
+        then
+            return reliablePosition(entity.pos, false)
+        end
+    end
+    return nil
+end
+
+local function deleteSpinPreview(state, entityID)
+    local preview = type(state) == 'table'
+            and type(state.spinPreviews) == 'table'
+            and state.spinPreviews[entityID] or nil
+    if type(preview) ~= 'table' then
+        return false
+    end
+    Common.deleteTimedShape(preview.token)
+    state.spinPreviews[entityID] = nil
+    return true
+end
+
+local function recordSpinAnimation(
+        state, entityID, index, newAnimationID, now)
+    local spec = tonumber(index) == 1
+            and SPIN_BY_ANIMATION[tonumber(newAnimationID)] or nil
+    if spec == nil or not finite(now) then
+        return false
+    end
+    local current = state.spinPreviews[entityID]
+    if type(current) == 'table'
+            and current.actionID == spec.actionID
+    then
+        return false
+    end
+    local position = resolveSword(entityID)
+    if position == nil then
+        diagnostic(state, 'spin_geometry_invalid', now, entityID)
+        return false
+    end
+    local drawer = Common.getMoogleDrawer()
+    local token
+    if spec.kind == 'circle'
+            and type(drawer) == 'table'
+            and type(drawer.addTimedCircle) == 'function'
+    then
+        token = drawer:addTimedCircle(
+                SPIN_PREVIEW_MS,
+                position.x, position.y, position.z,
+                spec.radius,
+                0)
+    elseif spec.kind == 'donut'
+            and type(drawer) == 'table'
+            and type(drawer.addTimedDonut) == 'function'
+    then
+        token = drawer:addTimedDonut(
+                SPIN_PREVIEW_MS,
+                position.x, position.y, position.z,
+                spec.inner, SPIN_OUTER_RADIUS,
+                0)
+    else
+        diagnostic(state, 'danger_drawer_unavailable', now, spec.actionID)
+        return false
+    end
+    if type(token) ~= 'string' then
+        diagnostic(state, 'danger_drawer_rejected_shape', now, spec.actionID)
+        return false
+    end
+    deleteSpinPreview(state, entityID)
+    state.spinPreviews[entityID] = {
+        token = token,
+        actionID = spec.actionID,
+        expiresAt = now + SPIN_PREVIEW_MS,
+    }
+    state.lastDiagnostic = nil
+    return true
 end
 
 local function bossValid(entityID)
@@ -407,20 +546,27 @@ local function prune(state, now)
             table.remove(state.active, index)
         end
     end
+    for entityID, preview in pairs(state.spinPreviews) do
+        if type(preview) ~= 'table'
+                or not finite(preview.expiresAt)
+                or now >= preview.expiresAt
+        then
+            state.spinPreviews[entityID] = nil
+        end
+    end
 end
 
 local Feature = {}
 
 Feature.Init = function(M)
     if type(M.SwordDancer) == 'table' then
+        releaseLegacyDonutSettings(M.SwordDancer)
         applyBlacklist(M.SwordDancer, false)
-        applyMoogleDonuts(M.SwordDancer, false)
         clearMechanic(M.SwordDancer)
     end
     M.SwordDancer = newState()
     local cfg = getConfig(M)
     applyBlacklist(M.SwordDancer, cfg ~= nil and cfg.Enable == true)
-    applyMoogleDonuts(M.SwordDancer, cfg ~= nil and cfg.Enable == true)
     M.SetSwordDancerEnabled = function(enabled)
         local current = getConfig(M)
         if current ~= nil then
@@ -432,7 +578,6 @@ Feature.Init = function(M)
                 clearMechanic(state)
             end
             applyBlacklist(state, enabled == true)
-            applyMoogleDonuts(state, enabled == true)
         end
     end
     M.SetSwordDancerDynamicGuideEnabled = function(enabled)
@@ -452,9 +597,20 @@ Feature.Clear = function(releaseOwnership)
         clearMechanic(state)
         if releaseOwnership == true then
             applyBlacklist(state, false)
-            applyMoogleDonuts(state, false)
         end
     end
+end
+
+Feature.OnAnimationChange = function(
+        entityID, index, oldAnimationID, newAnimationID, now)
+    local guide = rawget(_G, 'MuAiGuide')
+    local cfg = getConfig(guide)
+    local state = getState()
+    if state ~= nil and cfg ~= nil and cfg.Enable == true then
+        return recordSpinAnimation(
+                state, entityID, index, newAnimationID, now)
+    end
+    return false
 end
 
 Feature.OnAddGroundEffect = function(args, now)
@@ -485,6 +641,11 @@ Feature.OnEntityCast = function(entityID, actionID, castPos, now)
     local cfg = getConfig(guide)
     local state = getState()
     if state ~= nil and cfg ~= nil and cfg.Enable == true then
+        if BLACKLIST_LABELS[actionID] ~= nil
+                and actionID ~= BLADE_DANCE_AID
+        then
+            return deleteSpinPreview(state, entityID)
+        end
         return recordLeap(state, entityID, actionID, castPos, now)
     end
     return false
@@ -513,7 +674,6 @@ Feature.Update = function(guide, now)
     local cfg = getConfig(guide)
     if cfg ~= nil and cfg.Enable == true then
         applyBlacklist(state, true)
-        applyMoogleDonuts(state, true)
         prune(state, now)
         if cfg.DynamicGuide == true then
             return drawGuide(state, guide, now)
@@ -523,7 +683,6 @@ Feature.Update = function(guide, now)
     end
     clearMechanic(state)
     applyBlacklist(state, false)
-    applyMoogleDonuts(state, false)
     return false
 end
 
@@ -535,7 +694,11 @@ Feature.Test = {
     BladeGroundEffectID = BLADE_GROUND_EFFECT_ID,
     SwordDonutSmallActionID = SWORD_DONUT_SMALL_AID,
     SwordDonutLargeActionID = SWORD_DONUT_LARGE_AID,
-    SwordDonuts = SWORD_DONUTS,
+    SwordCircleActionID = SWORD_CIRCLE_AID,
+    SpinOuterRadius = SPIN_OUTER_RADIUS,
+    SpinCircleRadius = SPIN_CIRCLE_RADIUS,
+    SpinPreviewMs = SPIN_PREVIEW_MS,
+    SpinByAnimation = SPIN_BY_ANIMATION,
     LeapFirstActionID = LEAP_FIRST_AID,
     LeapNextActionID = LEAP_NEXT_AID,
     SwordBurstActionID = SWORD_BURST_AID,
@@ -550,7 +713,7 @@ Feature.Test = {
     EnsureState = ensureState,
     GetConfig = getConfig,
     ApplyBlacklist = applyBlacklist,
-    ApplyMoogleDonuts = applyMoogleDonuts,
+    RecordSpinAnimation = recordSpinAnimation,
     RecordGroundEffect = recordGroundEffect,
     RecordBladeActivation = recordBladeActivation,
     RecordLeap = recordLeap,

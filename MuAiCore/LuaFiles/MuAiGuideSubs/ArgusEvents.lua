@@ -250,6 +250,18 @@ ArgusEvents.init = function(M)
                 isVisible)
     end
 
+    --- 注册实体动画变化事件
+    handlers.OnAnimationChange = function(
+            entityID, index, oldAnimationID, newAnimationID)
+        return callRaidScript(
+                M,
+                'OnAnimationChange',
+                entityID,
+                index,
+                oldAnimationID,
+                newAnimationID)
+    end
+
     local registerComplete = false
     -- Argus 可能晚于本模块就绪；允许后续重试，bridge.registered 保证每类事件只注册一次。
     local function registerArgus()
@@ -269,6 +281,7 @@ ArgusEvents.init = function(M)
             { 'OnTetherChange', Argus.registerOnTetherChange },
             { 'OnEntityAdd', Argus.registerOnEntityAddFunc },
             { 'OnVisibilityChange', Argus.registerOnVisibilityChangeFunc },
+            { 'OnAnimationChange', Argus.registerOnAnimationChangeFunc },
         }
 
         local allRegistered = true
