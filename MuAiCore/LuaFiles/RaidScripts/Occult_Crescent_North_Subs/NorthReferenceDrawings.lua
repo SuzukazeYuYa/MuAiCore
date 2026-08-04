@@ -306,6 +306,7 @@ local CHANNEL_GUIDES = {
     [48405] = {
         owner = 'Index',
         contentIDs = { [14721] = true },
+        modelIDs = { [19298] = true },
         distance = 10,
         maxDistance = 12,
     },
@@ -315,6 +316,7 @@ local function newState()
     return {
         seen = {},
         active = {},
+        pendingChannels = {},
         blacklist = { owned = {}, registered = false },
         lastDiagnostic = nil,
     }
@@ -324,6 +326,8 @@ local function ensureState(state)
     state = type(state) == 'table' and state or newState()
     state.seen = type(state.seen) == 'table' and state.seen or {}
     state.active = type(state.active) == 'table' and state.active or {}
+    state.pendingChannels = type(state.pendingChannels) == 'table'
+            and state.pendingChannels or {}
     state.blacklist = type(state.blacklist) == 'table'
             and state.blacklist or {}
     state.blacklist.owned = type(state.blacklist.owned) == 'table'
@@ -372,6 +376,7 @@ local function clearDraws(state)
     end
     state.seen = {}
     state.active = {}
+    state.pendingChannels = {}
     state.lastDiagnostic = nil
 end
 
@@ -384,6 +389,12 @@ local function clearOwnerDraws(state, owner)
                 deleteActiveToken(activeShape.token)
             end
             state.active[key] = nil
+            removed = true
+        end
+    end
+    for key, pending in pairs(state.pendingChannels) do
+        if pending.owner == owner then
+            state.pendingChannels[key] = nil
             removed = true
         end
     end
@@ -690,42 +701,56 @@ local function handleAOECreate(state, guide, aoeInfo, now)
     return true
 end
 
-local function handleChannelGuide(state, guide, entityID, spellID,
-        channelTimeMax, now)
-    state = ensureState(state)
-    local spec = CHANNEL_GUIDES[spellID]
-    if spec == nil then
-        return false
+local function channelKey(entityID, spellID)
+    return 'channel:' .. tostring(entityID) .. ':' .. tostring(spellID)
+end
+
+local function resolveChannelEntity(entityID, spec)
+    if type(spec.modelIDs) ~= 'table' then
+        local entity = resolveEntity(entityID)
+        if type(entity) == 'table'
+                and entity.id == entityID
+                and contentMatches(spec, entity.contentid)
+                and entity.alive ~= false
+        then
+            return reliablePosition(entity.pos, false)
+        end
+        return nil
     end
-    if not ownerEnabled(guide, spec.owner) then
-        return false
-    end
-    if not finite(now)
-            or not finite(entityID)
-            or not finite(channelTimeMax)
-            or channelTimeMax <= 0
-            or channelTimeMax > 30
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
     then
-        diagnostic(state, 'channel_identity_missing', nowMs(), spellID)
-        return false
+        return nil
     end
-    local key = 'channel:' .. tostring(entityID)
-            .. ':' .. tostring(spellID)
-    if state.active[key] ~= nil then
-        return false
+    for contentID in pairs(spec.contentIDs) do
+        local entities = tensorCore.entityList(
+                'contentid=' .. tostring(contentID))
+        if type(entities) == 'table' then
+            for _, entity in pairs(entities) do
+                if type(entity) == 'table'
+                        and tonumber(entity.id) == entityID
+                        and tonumber(entity.contentid) == contentID
+                        and spec.modelIDs[tonumber(entity.modelid)] == true
+                        and entity.alive ~= false
+                then
+                    local position = reliablePosition(entity.pos, false)
+                    if position ~= nil then
+                        return position
+                    end
+                end
+            end
+        end
     end
-    local entity = resolveEntity(entityID)
-    local entityPos = type(entity) == 'table'
-            and reliablePosition(entity.pos, false) or nil
+    return nil
+end
+
+local function drawChannelGuide(
+        state, guide, key, entityID, spellID, spec, entityPos, timeout, now)
     local player = getPlayer(guide)
     local playerPos = type(player) == 'table'
             and reliablePosition(player.pos, false) or nil
-    if entity == nil
-            or entity.id ~= entityID
-            or not contentMatches(spec, entity.contentid)
-            or entityPos == nil
-            or playerPos == nil
-    then
+    if entityPos == nil or playerPos == nil then
         diagnostic(state, 'channel_geometry_missing', now, spellID)
         return false
     end
@@ -748,7 +773,7 @@ local function handleChannelGuide(state, guide, entityID, spellID,
         diagnostic(state, 'guide_drawer_unavailable', now, spellID)
         return false
     end
-    local timeout = math.max(1, math.floor(channelTimeMax * 1000 + 0.5))
+    timeout = math.max(1, math.floor(timeout + 0.5))
     local tipLength = 3
     local token = drawer:addTimedArrow(
             timeout,
@@ -776,9 +801,84 @@ local function handleChannelGuide(state, guide, entityID, spellID,
     return true
 end
 
+local function handleChannelGuide(state, guide, entityID, spellID,
+        channelTimeMax, now)
+    state = ensureState(state)
+    local spec = CHANNEL_GUIDES[spellID]
+    if spec == nil or not ownerEnabled(guide, spec.owner) then
+        return false
+    end
+    if not finite(now)
+            or not finite(entityID)
+            or not finite(channelTimeMax)
+            or channelTimeMax <= 0
+            or channelTimeMax > 30
+    then
+        diagnostic(state, 'channel_identity_missing', nowMs(), spellID)
+        return false
+    end
+    local key = channelKey(entityID, spellID)
+    if state.active[key] ~= nil or state.pendingChannels[key] ~= nil then
+        return false
+    end
+    local timeout = channelTimeMax * 1000
+    local entityPos = resolveChannelEntity(entityID, spec)
+    if entityPos ~= nil then
+        return drawChannelGuide(
+                state, guide, key, entityID, spellID,
+                spec, entityPos, timeout, now)
+    end
+    if type(spec.modelIDs) ~= 'table' then
+        diagnostic(state, 'channel_geometry_missing', now, spellID)
+        return false
+    end
+    state.pendingChannels[key] = {
+        entityID = entityID,
+        spellID = spellID,
+        owner = spec.owner,
+        expiresAt = now + timeout,
+    }
+    return true
+end
+
+local function processPendingChannels(state, guide, now)
+    local changed = false
+    for key, pending in pairs(state.pendingChannels) do
+        local spec = type(pending) == 'table'
+                and CHANNEL_GUIDES[pending.spellID] or nil
+        if spec == nil or not finite(pending.expiresAt)
+                or not ownerEnabled(guide, pending.owner)
+        then
+            state.pendingChannels[key] = nil
+            changed = true
+        elseif now >= pending.expiresAt then
+            state.pendingChannels[key] = nil
+            diagnostic(
+                    state, 'channel_geometry_missing', now, pending.spellID)
+            changed = true
+        else
+            local entityPos = resolveChannelEntity(pending.entityID, spec)
+            if entityPos ~= nil then
+                state.pendingChannels[key] = nil
+                drawChannelGuide(
+                        state, guide, key,
+                        pending.entityID, pending.spellID,
+                        spec, entityPos, pending.expiresAt - now, now)
+                changed = true
+            end
+        end
+    end
+    return changed
+end
+
 local function handleEntityCast(state, entityID, spellID)
     state = ensureState(state)
     local removed = false
+    local pendingKey = channelKey(entityID, spellID)
+    if state.pendingChannels[pendingKey] ~= nil then
+        state.pendingChannels[pendingKey] = nil
+        removed = true
+    end
     for key, entry in pairs(state.active) do
         if entry.entityID == entityID and entry.aoeID == spellID then
             local retained = {}
@@ -886,6 +986,7 @@ Feature.Update = function(guide, now)
         return false
     end
     syncBlacklist(state, guide)
+    processPendingChannels(state, guide, now)
     pruneState(state, guide, now)
     return false
 end
@@ -908,6 +1009,7 @@ Feature.Test = {
     Timing = timing,
     HandleAOECreate = handleAOECreate,
     HandleChannelGuide = handleChannelGuide,
+    ProcessPendingChannels = processPendingChannels,
     HandleEntityCast = handleEntityCast,
     PruneState = pruneState,
     ClearDraws = clearDraws,

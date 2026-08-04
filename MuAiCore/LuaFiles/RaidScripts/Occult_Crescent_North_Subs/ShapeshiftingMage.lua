@@ -339,25 +339,6 @@ local function reliableAOEPosition(aoeInfo)
     }, false)
 end
 
-local function validateHelper(entityID, source)
-    local entity = resolveEntity(entityID)
-    local entityPosition = type(entity) == 'table'
-            and reliablePosition(entity.pos, false) or nil
-    local distance = entityPosition ~= nil
-            and Common.distanceSquared(entityPosition, source) or nil
-    if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= CONTENT_ID
-            or tonumber(entity.modelid) ~= HELPER_MODEL_ID
-            or entity.alive == false
-            or distance == nil
-            or distance > POSITION_TOLERANCE_SQUARED
-    then
-        return nil
-    end
-    return entity
-end
-
 local function eventKey(aoeInfo)
     return tostring(aoeInfo.entityID)
             .. ':' .. tostring(aoeInfo.aoeID)
@@ -527,7 +508,6 @@ local function validateOmen(state, aoeInfo, now)
             or effectInfo == nil
             or effectInfo.aoeEffectName ~= OMEN_EFFECT
             or source == nil
-            or validateHelper(entityID, source) == nil
     then
         diagnostic(state, 'omen_geometry_invalid',
                 finite(now) and now or nowMs(), {

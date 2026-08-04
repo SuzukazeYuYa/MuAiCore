@@ -6,11 +6,12 @@ function Module.Create(Context)
     local finite = Context.finite
     local nowMs = Context.nowMs
     local reliablePosition = Context.reliablePosition
-    local resolveEntity = Context.resolveEntity
 
 local BOSS_CONTENT_ID = 14767
 local ICE_ORB_CONTENT_ID = 14769
 local LIGHTNING_ORB_CONTENT_ID = 14768
+local ICE_ORB_MODEL_ID = 19584
+local LIGHTNING_ORB_MODEL_ID = 19583
 
 local BREATH_RADIUS = 30
 local BREATH_ANGLE = math.rad(120)
@@ -78,10 +79,12 @@ local BREATH_SPECS = {
 local ORB_SPECS = {
     ice = {
         contentID = ICE_ORB_CONTENT_ID,
+        modelID = ICE_ORB_MODEL_ID,
         actionID = 48635,
     },
     lightning = {
         contentID = LIGHTNING_ORB_CONTENT_ID,
+        modelID = LIGHTNING_ORB_MODEL_ID,
         actionID = 48636,
     },
 }
@@ -448,14 +451,39 @@ local function resolvePendingOrbs(state, now)
         return false
     end
     local changed = false
+    local round = state.round
+    local spec = type(round) == 'table'
+            and ORB_SPECS[round.kind] or nil
+    local tensorCore = rawget(_G, 'TensorCore')
+    local entities = nil
+    if type(spec) == 'table'
+            and type(tensorCore) == 'table'
+            and type(tensorCore.entityList) == 'function'
+    then
+        entities = tensorCore.entityList(
+                'contentid=' .. tostring(spec.contentID))
+    end
     for entityID, orb in pairs(state.orbs) do
         if type(orb) == 'table' and orb.position == nil then
-            local entity = resolveEntity(entityID)
-            local position = type(entity) == 'table'
-                    and tonumber(entity.id) == entityID
-                    and tonumber(entity.contentid) == orb.contentID
-                    and entity.alive ~= false
-                    and reliablePosition(entity.pos, false) or nil
+            local position = nil
+            if type(spec) == 'table'
+                    and tonumber(orb.contentID) == spec.contentID
+                    and type(entities) == 'table'
+            then
+                for _, entity in pairs(entities) do
+                    if type(entity) == 'table'
+                            and tonumber(entity.id) == entityID
+                            and tonumber(entity.contentid) == spec.contentID
+                            and tonumber(entity.modelid) == spec.modelID
+                            and entity.alive ~= false
+                    then
+                        position = reliablePosition(entity.pos, false)
+                        if position ~= nil then
+                            break
+                        end
+                    end
+                end
+            end
             if position ~= nil then
                 orb.position = position
                 changed = true

@@ -5,11 +5,11 @@ function Module.Create(Context)
     local Common = Context.Common
     local finite = Context.finite
     local reliablePosition = Context.reliablePosition
-    local resolveEntity = Context.resolveEntity
 
 local BOSS_CONTENT_ID = 14776
 local HELPER_MODEL_ID = 19437
 local WIND_CONTENT_ID = 14777
+local WIND_MODEL_ID = 19493
 
 local AID = {
     CallStorm = 47580,
@@ -355,18 +355,35 @@ local function resolveWindEntity(state, entityID, contentID, addedAt, now, cfg)
         diagnostic(state, 'wind_generation_missing', now, entityID)
         return false, true
     end
-    local entity = resolveEntity(entityID)
-    local position = type(entity) == 'table'
-            and reliablePosition(entity.pos, false) or nil
-    if (type(entity) ~= 'table' or position == nil)
+    local position = nil
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) == 'table'
+            and type(tensorCore.entityList) == 'function'
+    then
+        local entities = tensorCore.entityList(
+                'contentid=' .. tostring(WIND_CONTENT_ID))
+        if type(entities) == 'table' then
+            for _, entity in pairs(entities) do
+                if type(entity) == 'table'
+                        and tonumber(entity.id) == entityID
+                        and tonumber(entity.contentid) == WIND_CONTENT_ID
+                        and tonumber(entity.modelid) == WIND_MODEL_ID
+                        and entity.alive ~= false
+                then
+                    position = reliablePosition(entity.pos, false)
+                    if position ~= nil then
+                        break
+                    end
+                end
+            end
+        end
+    end
+    if position == nil
             and now - addedAt <= PENDING_ENTITY_RESOLVE_MS
     then
         return false, false
     end
-    if type(entity) ~= 'table'
-            or entity.alive == false
-            or position == nil
-    then
+    if position == nil then
         diagnostic(state, 'wind_entity_invalid', now, {
             entityID = entityID,
             contentID = contentID,
@@ -1274,6 +1291,7 @@ Feature.Test = {
     BossContentID = BOSS_CONTENT_ID,
     HelperModelID = HELPER_MODEL_ID,
     WindContentID = WIND_CONTENT_ID,
+    WindModelID = WIND_MODEL_ID,
     WindRadius = WIND_RADIUS,
     WindCount = WIND_COUNT,
     WindPredictionTimeoutMs = WIND_PREDICTION_TIMEOUT_MS,

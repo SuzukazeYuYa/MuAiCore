@@ -262,7 +262,6 @@ local function snapshotRound(state, now)
                 if tonumber(entity.contentid) ~= spec.contentID
                         or tonumber(entity.modelid) ~= spec.modelID
                         or entity.alive == false
-                        or entity.visible == false
                 then
                     return nil, 'orb_geometry_invalid', entityID
                 end
@@ -349,7 +348,6 @@ local function clusterPosition(entityID, actionID)
                 and tonumber(entity.contentid) == expectedContentID
                 and tonumber(entity.modelid) == CLUSTER_HELPER_MODEL_ID
                 and entity.alive ~= false
-                and entity.visible ~= false
         then
             return reliablePosition(entity.pos, false)
         end

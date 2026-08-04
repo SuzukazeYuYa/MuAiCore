@@ -5,9 +5,9 @@ function Module.Create(Context)
     local Common = Context.Common
     local finite = Context.finite
     local reliablePosition = Context.reliablePosition
-    local resolveEntity = Context.resolveEntity
 
 local TORNADO_CONTENT_ID = 14506
+local TORNADO_MODEL_ID = 19426
 local TORNADO_MARKER_ID = 506
 local TEARING_WIND_AID = 47439
 
@@ -137,15 +137,29 @@ local function resolveTornadoEntity(entityID, requireHeading)
     if not finite(entityID) or entityID <= 0 then
         return nil, nil
     end
-    local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= TORNADO_CONTENT_ID
-            or entity.alive == false
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
     then
-        return nil, entity
+        return nil, nil
     end
-    return reliablePosition(entity.pos, requireHeading == true), entity
+    local entities = tensorCore.entityList(
+            'contentid=' .. tostring(TORNADO_CONTENT_ID))
+    if type(entities) ~= 'table' then
+        return nil, nil
+    end
+    for _, entity in pairs(entities) do
+        if type(entity) == 'table'
+                and tonumber(entity.id) == entityID
+                and tonumber(entity.contentid) == TORNADO_CONTENT_ID
+                and tonumber(entity.modelid) == TORNADO_MODEL_ID
+                and entity.alive ~= false
+        then
+            return reliablePosition(
+                    entity.pos, requireHeading == true), entity
+        end
+    end
+    return nil, nil
 end
 
 local function classifyTrack(radius)
@@ -525,6 +539,7 @@ end
 Feature.Test = {
     Defaults = DEFAULTS,
     TornadoContentID = TORNADO_CONTENT_ID,
+    TornadoModelID = TORNADO_MODEL_ID,
     TornadoMarkerID = TORNADO_MARKER_ID,
     TearingWindActionID = TEARING_WIND_AID,
     ArenaCenter = ARENA_CENTER,

@@ -173,22 +173,6 @@ local function clearState(state)
     state.lastDiagnostic = nil
 end
 
-local function resolveExpectedEntity(entityID, contentID, modelID)
-    local entity = resolveEntity(entityID)
-    local position = type(entity) == 'table'
-            and reliablePosition(entity.pos, false) or nil
-    if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= contentID
-            or tonumber(entity.modelid) ~= modelID
-            or entity.alive == false
-            or position == nil
-    then
-        return nil
-    end
-    return entity, position
-end
-
 local function flashFacingHeading(playerPosition, source)
     if type(playerPosition) ~= 'table'
             or type(source) ~= 'table'
@@ -415,25 +399,18 @@ local function updateFlashAutoFace(state, guide, now)
         Common.releaseAutoFace(state)
         return false
     end
-    local _, source = resolveExpectedEntity(
-            flash.entityID, FLASH_CONTENT_ID, FLASH_MODEL_ID)
-    local sourceDistance = source ~= nil
-            and Common.distanceSquared(flash.source, source) or nil
+    local source = reliablePosition(flash.source, false)
     local player = type(guide) == 'table'
             and type(guide.GetPlayer) == 'function'
             and guide.GetPlayer() or rawget(_G, 'Player')
     local heading = flashFacingHeading(
             type(player) == 'table' and player.pos or nil, source)
-    if source == nil
-            or sourceDistance == nil
-            or sourceDistance > BREATH_SOURCE_TOLERANCE_SQUARED
-            or heading == nil
+    if source == nil or heading == nil
     then
         Common.releaseAutoFace(state)
         diagnostic(state, 'flash_geometry_invalid', now, flash.entityID)
         return false
     end
-    flash.source = source
     local applied, reason = Common.applyAutoFace(
             state,
             flash.key,

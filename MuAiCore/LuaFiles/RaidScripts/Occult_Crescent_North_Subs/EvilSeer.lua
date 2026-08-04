@@ -6,9 +6,12 @@ function Module.Create(Context)
     local nowMs = Context.nowMs
     local finite = Context.finite
     local reliablePosition = Context.reliablePosition
-    local resolveEntity = Context.resolveEntity
 local EVIL_SEER_CONTENT_ID = 14726
 local EVIL_SEER_EYE_CONTENT_ID = 14727
+local EVIL_SEER_MODEL_IDS = {
+    [EVIL_SEER_CONTENT_ID] = { [19367] = true },
+    [EVIL_SEER_EYE_CONTENT_ID] = { [19368] = true },
+}
 local EVIL_SEER_PETRIFYING_GAZE_AID = 47148
 local EVIL_SEER_CURSED_GAZE_AID = 47152
 local EVIL_SEER_CHANNEL_MIN = 4.4
@@ -31,6 +34,7 @@ end
 local function newEvilSeerState()
     return {
         gazes = {},
+        pendingGazes = {},
         suppression = nil,
         faceLock = Common.newFaceLock(),
         seenChannels = {},
@@ -48,6 +52,8 @@ local function ensureEvilSeerState(state)
     state.seenCasts = type(state.seenCasts) == 'table'
             and state.seenCasts or {}
     state.gazes = type(state.gazes) == 'table' and state.gazes or {}
+    state.pendingGazes = type(state.pendingGazes) == 'table'
+            and state.pendingGazes or {}
     if type(state.gaze) == 'table' and #state.gazes == 0 then
         state.gaze.spellID = state.gaze.spellID
                 or EVIL_SEER_PETRIFYING_GAZE_AID
@@ -84,6 +90,7 @@ local function clearEvilSeerState(state)
     end
     Common.releaseAutoFace(state)
     state.gazes = {}
+    state.pendingGazes = {}
     state.gaze = nil
     state.suppression = nil
     state.faceLock = Common.newFaceLock()
@@ -102,20 +109,44 @@ local function evilSeerExpectedContentID(spellID)
     return nil
 end
 
-local function resolveEvilSeer(entityID, expectedContentID)
-    local entity = resolveEntity(entityID)
-    local pos = type(entity) == 'table' and entity.pos or nil
-    if type(entity) ~= 'table'
-            or entity.id ~= entityID
-            or entity.contentid ~= expectedContentID
-            or entity.alive == false
-            or type(pos) ~= 'table'
-            or not finite(pos.x)
-            or not finite(pos.z)
+local function resolveEvilSeer(entityID, expectedContentID, cache)
+    local modelIDs = EVIL_SEER_MODEL_IDS[expectedContentID]
+    local tensorCore = rawget(_G, 'TensorCore')
+    if not finite(entityID)
+            or entityID <= 0
+            or type(modelIDs) ~= 'table'
+            or type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
     then
         return nil
     end
-    return entity, { x = pos.x, z = pos.z }
+    cache = type(cache) == 'table' and cache or {}
+    if cache[expectedContentID] == nil then
+        cache[expectedContentID] = tensorCore.entityList(
+                'contentid=' .. tostring(expectedContentID)) or false
+    end
+    local entities = cache[expectedContentID]
+    if type(entities) ~= 'table' then
+        return nil
+    end
+    local matches = {}
+    for _, entity in pairs(entities) do
+        local pos = type(entity) == 'table'
+                and reliablePosition(entity.pos, false) or nil
+        if type(entity) == 'table'
+                and entity.id == entityID
+                and entity.contentid == expectedContentID
+                and modelIDs[entity.modelid] == true
+                and entity.alive ~= false
+                and pos ~= nil
+        then
+            matches[#matches + 1] = { entity = entity, source = pos }
+        end
+    end
+    if #matches ~= 1 then
+        return nil
+    end
+    return matches[1].entity, matches[1].source
 end
 
 local function sortEvilSeerGazes(gazes)
@@ -138,12 +169,20 @@ local function latestEvilSeerExpiry(state)
                     and gaze.expiresAt or math.max(expiresAt, gaze.expiresAt)
         end
     end
+    for _, pending in ipairs(state.pendingGazes or {}) do
+        if finite(pending.expiresAt) then
+            expiresAt = expiresAt == nil
+                    and pending.expiresAt or math.max(expiresAt, pending.expiresAt)
+        end
+    end
     return expiresAt
 end
 
 local function suppressEvilSeer(state, code, context, now, expiresAt)
     local batchExpiry = expiresAt or latestEvilSeerExpiry(state)
-    if #state.gazes == 0 or not finite(batchExpiry) then
+    if (#state.gazes == 0 and #state.pendingGazes == 0)
+            or not finite(batchExpiry)
+    then
         evilSeerDiagnostic(state, code, context, now)
         return false
     end
@@ -157,6 +196,41 @@ local function suppressEvilSeer(state, code, context, now, expiresAt)
             batchExpiry)
     evilSeerDiagnostic(state, code, context, now)
     return true
+end
+
+local function resolvePendingEvilSeerGazes(state, now, cache)
+    state = ensureEvilSeerState(state)
+    cache = type(cache) == 'table' and cache or {}
+    local resolved = false
+    for index = #state.pendingGazes, 1, -1 do
+        local pending = state.pendingGazes[index]
+        local _, source = resolveEvilSeer(
+                pending.entityID, pending.expectedContentID, cache)
+        if source ~= nil then
+            state.gazes[#state.gazes + 1] = {
+                key = pending.key,
+                entityID = pending.entityID,
+                spellID = pending.spellID,
+                expectedContentID = pending.expectedContentID,
+                source = source,
+                startedAt = pending.startedAt,
+                activationAt = pending.activationAt,
+                expiresAt = pending.expiresAt,
+                missingSince = nil,
+            }
+            table.remove(state.pendingGazes, index)
+            resolved = true
+        elseif now >= pending.resolveBy then
+            evilSeerDiagnostic(state, 'channel_invalid_entity', {
+                entityID = pending.entityID,
+                spellID = pending.spellID,
+                expectedContentID = pending.expectedContentID,
+            }, now)
+            table.remove(state.pendingGazes, index)
+        end
+    end
+    sortEvilSeerGazes(state.gazes)
+    return resolved
 end
 
 local function recordEvilSeerGaze(
@@ -183,27 +257,15 @@ local function recordEvilSeerGaze(
         }, now)
         return false
     end
-    local _, source = resolveEvilSeer(entityID, expectedContentID)
-    if source == nil then
-        suppressEvilSeer(state, 'channel_invalid_entity', {
-            entityID = entityID,
-            spellID = spellID,
-            expectedContentID = expectedContentID,
-        }, now)
-        return false
-    end
     local eventKey = tostring(entityID) .. ':' .. tostring(spellID)
     if not Common.consumeEvent(state.seenChannels, eventKey, now, 350) then
         return false
     end
     local activationAt = now + channelTimeMax * 1000
     for _, existing in ipairs(state.gazes) do
-        local dx = existing.source.x - source.x
-        local dz = existing.source.z - source.z
         if existing.entityID == entityID
                 and existing.spellID == spellID
                 and math.abs(existing.activationAt - activationAt) <= 350
-                and dx * dx + dz * dz <= 1
         then
             return false
         end
@@ -220,18 +282,35 @@ local function recordEvilSeerGaze(
             return false
         end
     end
-    state.gazes[#state.gazes + 1] = {
+    for _, pending in ipairs(state.pendingGazes) do
+        if pending.entityID == entityID and pending.spellID == spellID
+                and math.abs(pending.activationAt - activationAt) <= 350
+        then
+            return false
+        end
+        if pending.entityID == entityID and pending.spellID == spellID then
+            suppressEvilSeer(state, 'channel_identity_conflict', {
+                entityID = entityID,
+                spellID = spellID,
+                expectedActivationAt = pending.activationAt,
+                actualActivationAt = activationAt,
+            }, now, math.max(pending.expiresAt,
+                    activationAt + EVIL_SEER_STATE_GRACE_MS))
+            return false
+        end
+    end
+    state.pendingGazes[#state.pendingGazes + 1] = {
         key = eventKey .. ':' .. tostring(math.floor(activationAt / 100)),
         entityID = entityID,
         spellID = spellID,
         expectedContentID = expectedContentID,
-        source = source,
         startedAt = now,
         activationAt = activationAt,
         expiresAt = activationAt + EVIL_SEER_STATE_GRACE_MS,
-        missingSince = nil,
+        resolveBy = activationAt - EVIL_SEER_AUTO_FACE_LEAD_MS,
     }
-    sortEvilSeerGazes(state.gazes)
+    local cache = {}
+    resolvePendingEvilSeerGazes(state, now, cache)
     if state.suppression ~= nil then
         state.suppression.expiresAt = math.max(
                 state.suppression.expiresAt or 0,
@@ -263,15 +342,18 @@ local function pruneEvilSeerState(state, now)
     state = ensureEvilSeerState(state)
     Common.pruneSeen(state.seenChannels, now, 10000)
     Common.pruneSeen(state.seenCasts, now, 10000)
+    resolvePendingEvilSeerGazes(state, now)
     for index = #state.gazes, 1, -1 do
         local gaze = state.gazes[index]
         local remove = not finite(gaze.expiresAt) or now > gaze.expiresAt
         if not remove then
-            local entity = resolveEvilSeer(
-                    gaze.entityID, gaze.expectedContentID)
+            local entity, source = resolveEvilSeer(
+                    gaze.entityID, gaze.expectedContentID, cache)
             if entity ~= nil then
                 gaze.missingSince = nil
+                gaze.source = source
             else
+                gaze.source = nil
                 gaze.missingSince = gaze.missingSince or now
                 Common.releaseAutoFace(state, gaze.key)
                 remove = now - gaze.missingSince >= 2000
@@ -283,7 +365,7 @@ local function pruneEvilSeerState(state, now)
         end
     end
     sortEvilSeerGazes(state.gazes)
-    if #state.gazes == 0 then
+    if #state.gazes == 0 and #state.pendingGazes == 0 then
         Common.releaseAutoFace(state)
         state.suppression = nil
         return
@@ -304,6 +386,27 @@ local function resolveEvilSeerGaze(state, entityID, spellID, now)
     local eventKey = tostring(entityID) .. ':' .. tostring(spellID)
     if not Common.consumeEvent(state.seenCasts, eventKey, now, 350) then
         return false
+    end
+    local pendingIndex = nil
+    for index, pending in ipairs(state.pendingGazes) do
+        if pending.entityID == entityID and pending.spellID == spellID then
+            if pendingIndex ~= nil then
+                suppressEvilSeer(state, 'cast_identity_conflict', {
+                    actualEntityID = entityID,
+                    actualSpellID = spellID,
+                    matches = 2,
+                }, now)
+                return false
+            end
+            pendingIndex = index
+        end
+    end
+    if pendingIndex ~= nil then
+        table.remove(state.pendingGazes, pendingIndex)
+        if #state.gazes == 0 then
+            state.suppression = nil
+        end
+        return true
     end
     if #state.gazes == 0 then
         return false
@@ -377,14 +480,12 @@ local function updateEvilSeerAutoFace(state, guide, cfg, now)
         Common.releaseAutoFace(state)
         return false
     end
-    local _, source = resolveEvilSeer(
-            gaze.entityID, gaze.expectedContentID)
     local player = type(guide) == 'table'
             and type(guide.GetPlayer) == 'function'
             and guide.GetPlayer() or nil
     local heading = evilSeerFacingHeading(
             type(player) == 'table' and player.pos or nil,
-            source)
+            gaze.source)
     if heading == nil then
         Common.releaseAutoFace(state)
         return false
@@ -487,6 +588,7 @@ Feature.Test = {
     NextGaze = nextEvilSeerGaze,
     FacingHeading = evilSeerFacingHeading,
     UpdateAutoFace = updateEvilSeerAutoFace,
+    ResolvePendingGazes = resolvePendingEvilSeerGazes,
 }
 
     return Feature

@@ -10,6 +10,10 @@ function Module.Create(Context)
 local MAP_ID = 1346
 local BOSS_CONTENT_ID = 14714
 local CLONE_CONTENT_ID = 14715
+local BOSS_MODEL_ID = 19855
+local CLONE_MODEL_ID = 19856
+local INSTRUCTION_EVENT_OBJECT_ID = 2015274
+local INSTRUCTION_EVENT_OBJECT_MODEL_ID = 2015274
 local ARENA_CENTER = { x = 807, z = -562 }
 local ARENA_RADIUS = 20
 local GUIDE_ARENA_RADIUS = 19
@@ -34,7 +38,6 @@ local AID = {
 
 local INSTRUCTION_TETHER = 14
 local REVERSE_TETHER = 207
-local INSTRUCTION_EVENT_OBJECT_ID = 2015274
 local INSTRUCTION_OBJECT_MATCH_DISTANCE_SQ = 0.25
 local BAD_BREATH_RANGE = 50
 local BAD_BREATH_ANGLE = math.rad(100)
@@ -92,12 +95,39 @@ local DEFAULTS = {
     RouletteGuide = true,
 }
 
-local function validEntity(entityID, contentID, requireHeading)
-    local entity = resolveEntity(entityID)
-    if entity == nil
-            or entity.id ~= entityID
-            or entity.contentid ~= contentID
+local function strictEntity(
+        entityID, contentID, modelID, requireHeading, cache)
+    local tensorCore = rawget(_G, 'TensorCore')
+    if not finite(entityID)
+            or type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
     then
+        return nil
+    end
+    cache = type(cache) == 'table' and cache or {}
+    if cache[contentID] == nil then
+        cache[contentID] = tensorCore.entityList(
+                'contentid=' .. tostring(contentID)) or false
+    end
+    local entities = cache[contentID]
+    if type(entities) ~= 'table' then
+        return nil
+    end
+    local entity = nil
+    for _, candidate in pairs(entities) do
+        if type(candidate) == 'table'
+                and candidate.id == entityID
+                and candidate.contentid == contentID
+                and candidate.modelid == modelID
+                and candidate.alive ~= false
+        then
+            if entity ~= nil then
+                return nil
+            end
+            entity = candidate
+        end
+    end
+    if entity == nil then
         return nil
     end
     local pos = reliablePosition(entity.pos, requireHeading)
@@ -215,8 +245,7 @@ local function startInstructionRound(state, entityID, spellID, duration, now)
         diagnostic(state, 'instruction_invalid_duration', duration)
         return false
     end
-    local boss = validEntity(entityID, BOSS_CONTENT_ID, false)
-    if boss == nil then
+    if not finite(entityID) or entityID <= 0 then
         diagnostic(state, 'instruction_invalid_boss', entityID)
         return false
     end
@@ -233,6 +262,11 @@ local function startInstructionRound(state, entityID, spellID, duration, now)
         clones = {},
         clonesByID = {},
         eventObjects = {},
+        pendingCloneIDs = {},
+        pendingCloneOrder = {},
+        pendingCloneCount = 0,
+        pendingInstructionKinds = {},
+        pendingSwaps = {},
         swaps = {},
         predictions = {},
         ambiguity = false,
@@ -245,30 +279,35 @@ local function sameClone(left, right)
             and Common.headingDifference(left.h, right.h) <= 0.02
 end
 
+local resolveInstructionRound
+
 local function collectInstructionClone(state, sourceID, targetID)
     local round = state.round
-    if type(round) ~= 'table' or targetID ~= round.bossEntityID then
-        return false
-    end
-    local pos = validEntity(sourceID, CLONE_CONTENT_ID, true)
-    if pos == nil then
-        setRoundAmbiguity(state, 'instruction_invalid_clone', sourceID)
+    if type(round) ~= 'table' or targetID ~= round.bossEntityID
+            or not finite(sourceID) or sourceID <= 0
+    then
         return false
     end
     local previous = round.clonesByID[sourceID]
     if previous ~= nil then
-        if not sameClone(previous.pos, pos) then
+        local pos = strictEntity(
+                sourceID, CLONE_CONTENT_ID, CLONE_MODEL_ID, true)
+        if pos ~= nil and not sameClone(previous.pos, pos) then
             setRoundAmbiguity(state, 'instruction_clone_conflict', sourceID)
         end
         return false
     end
-    if #round.clones >= 4 then
+    if round.pendingCloneIDs[sourceID] ~= nil then
+        return false
+    end
+    if #round.clones + round.pendingCloneCount >= 4 then
         setRoundAmbiguity(state, 'instruction_too_many_clones', sourceID)
         return false
     end
-    local clone = { entityID = sourceID, pos = pos, order = #round.clones + 1 }
-    round.clones[#round.clones + 1] = clone
-    round.clonesByID[sourceID] = clone
+    round.pendingCloneIDs[sourceID] = true
+    round.pendingCloneOrder[#round.pendingCloneOrder + 1] = sourceID
+    round.pendingCloneCount = round.pendingCloneCount + 1
+    resolveInstructionRound(state)
     return true
 end
 
@@ -277,37 +316,24 @@ local function collectReversePair(state, sourceID, targetID)
     if type(round) ~= 'table' or not round.reverse then
         return false
     end
-    local source = round.clonesByID[sourceID]
-    local target = round.clonesByID[targetID]
-    if source == nil or target == nil or sourceID == targetID then
+    if not finite(sourceID) or not finite(targetID) or sourceID == targetID then
         setRoundAmbiguity(state, 'reverse_unknown_pair', {
             sourceID = sourceID, targetID = targetID,
         })
         return false
     end
-    local sourcePos = validEntity(sourceID, CLONE_CONTENT_ID, true)
-    local targetPos = validEntity(targetID, CLONE_CONTENT_ID, true)
-    if sourcePos == nil or targetPos == nil then
-        setRoundAmbiguity(state, 'reverse_invalid_pair_geometry', {
-            sourceID = sourceID, targetID = targetID,
-        })
-        return false
-    end
-    source.pos = sourcePos
-    target.pos = targetPos
-    local oldSource = round.swaps[sourceID]
-    local oldTarget = round.swaps[targetID]
-    if (oldSource ~= nil and oldSource ~= targetID)
-            or (oldTarget ~= nil and oldTarget ~= sourceID)
+    if round.pendingSwaps[sourceID] ~= nil
+            and round.pendingSwaps[sourceID] ~= targetID
     then
         setRoundAmbiguity(state, 'reverse_pair_conflict', {
             sourceID = sourceID, targetID = targetID,
         })
         return false
     end
-    round.swaps[sourceID] = targetID
-    round.swaps[targetID] = sourceID
-    return oldSource == nil
+    round.pendingSwaps[sourceID] = targetID
+    round.pendingSwaps[targetID] = sourceID
+    resolveInstructionRound(state)
+    return true
 end
 
 local function instructionKindFromScript(a1, a2, a3)
@@ -324,6 +350,19 @@ local function instructionKindFromScript(a1, a2, a3)
     return nil
 end
 
+local function instructionEventObjectPosition(entityID)
+    local entity = resolveEntity(entityID)
+    if type(entity) ~= 'table'
+            or entity.id ~= entityID
+            or entity.contentid ~= INSTRUCTION_EVENT_OBJECT_ID
+            or entity.modelid ~= INSTRUCTION_EVENT_OBJECT_MODEL_ID
+            or entity.alive == false
+    then
+        return nil
+    end
+    return reliablePosition(entity.pos, true)
+end
+
 local function recordInstructionKind(state, entityID, a1, a2, a3)
     local round = state.round
     local kind = instructionKindFromScript(a1, a2, a3)
@@ -332,16 +371,21 @@ local function recordInstructionKind(state, entityID, a1, a2, a3)
     end
     local clone = round.eventObjects[entityID]
     if clone == nil then
-        local eventObject = resolveEntity(entityID)
-        if eventObject == nil
-                or eventObject.id ~= entityID
-                or eventObject.contentid ~= INSTRUCTION_EVENT_OBJECT_ID
-        then
+        if #round.clones < 4 then
+            round.pendingInstructionKinds[entityID] = {
+                a1 = a1, a2 = a2, a3 = a3,
+            }
             return false
         end
-        local pos = reliablePosition(eventObject.pos, false)
-        if pos == nil or not Common.insideCircle(
-                pos, ARENA_CENTER, CLONE_MAX_RADIUS)
+        local eventObjectPos = instructionEventObjectPosition(entityID)
+        if eventObjectPos == nil then
+            round.pendingInstructionKinds[entityID] = {
+                a1 = a1, a2 = a2, a3 = a3,
+            }
+            return false
+        end
+        if not Common.insideCircle(
+                eventObjectPos, ARENA_CENTER, CLONE_MAX_RADIUS)
         then
             setRoundAmbiguity(
                     state, 'instruction_event_object_invalid', entityID)
@@ -349,7 +393,7 @@ local function recordInstructionKind(state, entityID, a1, a2, a3)
         end
         local matches = {}
         for _, candidate in ipairs(round.clones) do
-            if Common.distanceSquared(pos, candidate.pos)
+            if Common.distanceSquared(eventObjectPos, candidate.pos)
                     <= INSTRUCTION_OBJECT_MATCH_DISTANCE_SQ
             then
                 matches[#matches + 1] = candidate
@@ -385,6 +429,81 @@ local function recordInstructionKind(state, entityID, a1, a2, a3)
         return false
     end
     clone.kind = kind
+    return true
+end
+
+resolveInstructionRound = function(state, cache)
+    local round = state.round
+    if type(round) ~= 'table' or round.ambiguity then
+        return false
+    end
+    cache = type(cache) == 'table' and cache or {}
+    if strictEntity(
+            round.bossEntityID,
+            BOSS_CONTENT_ID,
+            BOSS_MODEL_ID,
+            false,
+            cache)
+            == nil
+    then
+        return false
+    end
+    for _, entityID in ipairs(round.pendingCloneOrder) do
+        if round.pendingCloneIDs[entityID] then
+            local pos = strictEntity(
+                    entityID,
+                    CLONE_CONTENT_ID,
+                    CLONE_MODEL_ID,
+                    true,
+                    cache)
+            if pos ~= nil then
+                if #round.clones >= 4 then
+                    setRoundAmbiguity(state, 'instruction_too_many_clones', entityID)
+                    return false
+                end
+                local clone = {
+                    entityID = entityID,
+                    pos = pos,
+                    order = #round.clones + 1,
+                }
+                round.clones[#round.clones + 1] = clone
+                round.clonesByID[entityID] = clone
+                round.pendingCloneIDs[entityID] = nil
+                round.pendingCloneCount = round.pendingCloneCount - 1
+            end
+        end
+    end
+    for sourceID, targetID in pairs(round.pendingSwaps) do
+        if round.clonesByID[sourceID] ~= nil
+                and round.clonesByID[targetID] ~= nil
+        then
+            local old = round.swaps[sourceID]
+            if old ~= nil and old ~= targetID then
+                setRoundAmbiguity(state, 'reverse_pair_conflict', {
+                    sourceID = sourceID, targetID = targetID,
+                })
+                return false
+            end
+            round.swaps[sourceID] = targetID
+        end
+    end
+    if #round.clones == 4 then
+        local pending = {}
+        for entityID, args in pairs(round.pendingInstructionKinds) do
+            pending[#pending + 1] = {
+                entityID = entityID, a1 = args.a1, a2 = args.a2, a3 = args.a3,
+            }
+        end
+        for _, args in ipairs(pending) do
+            if recordInstructionKind(
+                    state,
+                    args.entityID,
+                    args.a1, args.a2, args.a3)
+            then
+                round.pendingInstructionKinds[args.entityID] = nil
+            end
+        end
+    end
     return true
 end
 
@@ -522,6 +641,7 @@ local function finishInstruction(state, entityID, spellID, now, guide)
         return false
     end
     round.learnFinishedAt = now
+    resolveInstructionRound(state)
     return finalizeRound(state, now, guide)
 end
 
@@ -545,12 +665,7 @@ local function predictionForEvent(round, entityID, kind, pos)
 end
 
 local function eventPosition(entityID, castPos)
-    local pos = reliablePosition(castPos, false)
-    if pos ~= nil then
-        return pos
-    end
-    local entity = resolveEntity(entityID)
-    return entity ~= nil and reliablePosition(entity.pos, false) or nil
+    return reliablePosition(castPos, false)
 end
 
 local function removeLiveAOE(state, key)
@@ -702,7 +817,8 @@ local function startRoulette(state, entityID, channelTimeMax, now)
             or not finite(channelTimeMax)
             or channelTimeMax < 3
             or channelTimeMax > 5
-            or validEntity(entityID, BOSS_CONTENT_ID, false) == nil
+            or strictEntity(
+                    entityID, BOSS_CONTENT_ID, BOSS_MODEL_ID, false) == nil
     then
         diagnostic(state, 'roulette_invalid_start', {
             entityID = entityID, channelTimeMax = channelTimeMax,
@@ -1224,12 +1340,17 @@ local function pruneState(state, now)
     end
 end
 
-local function updateBossLifetime(state, now)
+local function updateBossLifetime(state, now, cache)
     if type(state.bossEntityID) ~= 'number' then
         return
     end
-    local boss = resolveEntity(state.bossEntityID)
-    if boss ~= nil and boss.id == state.bossEntityID then
+    local boss = strictEntity(
+            state.bossEntityID,
+            BOSS_CONTENT_ID,
+            BOSS_MODEL_ID,
+            false,
+            cache)
+    if boss ~= nil then
         state.bossMissingSince = nil
         return
     end
@@ -1363,7 +1484,9 @@ Feature.OnEventObjectScriptFunc = function(entityID, a1, a2, a3, now)
     if state == nil or cfg == nil or cfg.Enable ~= true then
         return
     end
+    local cache = {}
     local recorded = recordInstructionKind(state, entityID, a1, a2, a3)
+    resolveInstructionRound(state, cache)
     if recorded then
         finalizeRound(state, now, guide)
     end
@@ -1390,8 +1513,10 @@ Feature.Update = function(guide, now)
         return false
     end
     pruneState(state, now)
+    local cache = {}
+    resolveInstructionRound(state, cache)
     updateRoulette(state, now)
-    updateBossLifetime(state, now)
+    updateBossLifetime(state, now, cache)
     scheduleNextPrediction(state, now, guide)
     return drawRouletteGuide(state, guide)
             or drawDynamicGuide(state, guide, now)

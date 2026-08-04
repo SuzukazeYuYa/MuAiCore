@@ -14,6 +14,8 @@ local LITTLE_MAGE_APPRENTICE_CONTENT_ID = 14796
 local LITTLE_MAGE_APPRENTICE_MODEL_ID = 19566
 local LITTLE_MAGE_FIRE_ORB_CONTENT_ID = 14797
 local LITTLE_MAGE_WATER_ORB_CONTENT_ID = 14798
+local LITTLE_MAGE_FIRE_ORB_MODEL_IDS = { [19567] = true, [19568] = true }
+local LITTLE_MAGE_WATER_ORB_MODEL_IDS = { [19569] = true, [19570] = true }
 local LITTLE_MAGE_ARENA_CENTER = { x = 151.995, z = 715.999 }
 local LITTLE_MAGE_ARENA_RADIUS = 20
 local LITTLE_MAGE_GUIDE_RADIUS = 19
@@ -184,6 +186,56 @@ local function littleMageOrbKind(contentID)
         return 'knockback'
     end
     return nil
+end
+
+local function scanLittleMageFusionOrbs()
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
+    then
+        return nil, 'fusion_entity_list_unavailable'
+    end
+    local snapshots = {}
+    local function collect(contentID, modelIDs, kind)
+        local entities = tensorCore.entityList(
+                'contentid=' .. tostring(contentID))
+        if type(entities) ~= 'table' then
+            return false
+        end
+        for _, entity in pairs(entities) do
+            local pos = type(entity) == 'table'
+                    and reliablePosition(entity.pos, false) or nil
+            if type(entity) == 'table'
+                    and finite(entity.id)
+                    and tonumber(entity.contentid) == contentID
+                    and modelIDs[tonumber(entity.modelid)] == true
+                    and entity.alive ~= false
+                    and pos ~= nil
+                    and Common.insideCircle(
+                            pos, LITTLE_MAGE_ARENA_CENTER, 21)
+            then
+                local entityID = tonumber(entity.id)
+                if snapshots[entityID] ~= nil then
+                    snapshots[entityID] = false
+                else
+                    snapshots[entityID] = {
+                        entity = entity,
+                        kind = kind,
+                        pos = pos,
+                    }
+                end
+            end
+        end
+        return true
+    end
+    if not collect(LITTLE_MAGE_FIRE_ORB_CONTENT_ID,
+            LITTLE_MAGE_FIRE_ORB_MODEL_IDS, 'fire')
+            or not collect(LITTLE_MAGE_WATER_ORB_CONTENT_ID,
+                    LITTLE_MAGE_WATER_ORB_MODEL_IDS, 'knockback')
+    then
+        return nil, 'fusion_entity_list_unavailable'
+    end
+    return snapshots, nil
 end
 
 local function littleMagePairKey(sourceID, targetID)
@@ -506,85 +558,44 @@ local function recordLittleMageRelaySupply(state, entityID, spellID, now)
     return true
 end
 
-local function recordLittleMageFusion(state, sourceID, targetID, now)
-    if type(state) ~= 'table' then
+local function commitLittleMageFusion(state, pending, now, snapshots)
+    local round = state.round
+    local source = type(snapshots) == 'table'
+            and snapshots[pending.sourceID] or nil
+    local target = type(snapshots) == 'table'
+            and snapshots[pending.targetID] or nil
+    if type(source) ~= 'table' or type(target) ~= 'table' then
+        pending.lastError = 'fusion_entity_mismatch'
         return false
     end
-    local key = littleMagePairKey(sourceID, targetID)
-    if key ~= nil and state.seenTethers[key] ~= nil then
-        return false
-    end
-    local sourceEntity = resolveEntity(sourceID)
-    local targetEntity = resolveEntity(targetID)
-    local sourceKind = type(sourceEntity) == 'table'
-            and littleMageOrbKind(sourceEntity.contentid) or nil
-    local targetKind = type(targetEntity) == 'table'
-            and littleMageOrbKind(targetEntity.contentid) or nil
-    if sourceKind == nil and targetKind == nil then
-        return false
-    end
-    if sourceEntity == nil
-            or targetEntity == nil
-            or sourceEntity.id ~= sourceID
-            or targetEntity.id ~= targetID
-            or sourceKind == nil
-            or sourceKind ~= targetKind
-    then
+    if source.kind ~= target.kind then
         suppressLittleMage(state, 'fusion_entity_mismatch', {
-            sourceID = sourceID,
-            targetID = targetID,
+            sourceID = pending.sourceID,
+            targetID = pending.targetID,
         })
         return false
     end
-    local sourcePos = reliablePosition(sourceEntity.pos, false)
-    local targetPos = reliablePosition(targetEntity.pos, false)
-    if sourcePos == nil or targetPos == nil then
-        suppressLittleMage(state, 'fusion_missing_geometry', key)
-        return false
-    end
     local midpoint = reliablePosition({
-        x = (sourcePos.x + targetPos.x) / 2,
-        y = (sourcePos.y + targetPos.y) / 2,
-        z = (sourcePos.z + targetPos.z) / 2,
+        x = (source.pos.x + target.pos.x) / 2,
+        y = (source.pos.y + target.pos.y) / 2,
+        z = (source.pos.z + target.pos.z) / 2,
     }, false)
     if midpoint == nil
             or not Common.insideCircle(
                     midpoint, LITTLE_MAGE_ARENA_CENTER, 21)
     then
-        suppressLittleMage(state, 'fusion_midpoint_invalid', key)
+        suppressLittleMage(state, 'fusion_midpoint_invalid', pending.key)
         return false
     end
-    local round = state.round
-    if type(round) ~= 'table' then
-        round = {
-            mode = 'fusion',
-            startedAt = now,
-            expiresAt = now + LITTLE_MAGE_ROUND_TIMEOUT_MS,
-            predictions = {},
-            byKey = {},
-            orbPartners = {},
-            suppressed = false,
-        }
-        state.round = round
-    elseif now - round.startedAt > LITTLE_MAGE_TETHER_WINDOW_MS then
-        suppressLittleMage(state, 'fusion_late_tether', {
-            startedAt = round.startedAt,
-            actualAt = now,
-        })
-        return false
-    end
-    if round.suppressed == true then
-        return false
-    end
-    local oldSourcePartner = round.orbPartners[sourceID]
-    local oldTargetPartner = round.orbPartners[targetID]
-    if (oldSourcePartner ~= nil and oldSourcePartner ~= targetID)
-            or (oldTargetPartner ~= nil and oldTargetPartner ~= sourceID)
+    local oldSourcePartner = round.orbPartners[pending.sourceID]
+    local oldTargetPartner = round.orbPartners[pending.targetID]
+    if (oldSourcePartner ~= nil and oldSourcePartner ~= pending.targetID)
+            or (oldTargetPartner ~= nil and oldTargetPartner ~= pending.sourceID)
             or #round.predictions >= 4
     then
         suppressLittleMage(state, 'fusion_pair_conflict', {
-            sourceID = sourceID,
-            targetID = targetID,
+            sourceID = pending.sourceID,
+            targetID = pending.targetID,
         })
         return false
     end
@@ -597,10 +608,10 @@ local function recordLittleMageFusion(state, sourceID, targetID, now)
             or activationAt - LITTLE_MAGE_FUSION_INTERVAL_MS
                     - LITTLE_MAGE_NEXT_DRAW_LEAD_MS
     local entry = {
-        key = key,
-        sourceEntityID = sourceID,
-        targetEntityID = targetID,
-        kind = sourceKind,
+        key = pending.key,
+        sourceEntityID = pending.sourceID,
+        targetEntityID = pending.targetID,
+        kind = source.kind,
         source = midpoint,
         order = order,
         visibleAt = visibleAt,
@@ -609,12 +620,90 @@ local function recordLittleMageFusion(state, sourceID, targetID, now)
         handedOff = false,
     }
     round.predictions[#round.predictions + 1] = entry
-    round.byKey[key] = entry
-    round.orbPartners[sourceID] = targetID
-    round.orbPartners[targetID] = sourceID
-    state.seenTethers[key] = now
+    round.byKey[pending.key] = entry
+    round.orbPartners[pending.sourceID] = pending.targetID
+    round.orbPartners[pending.targetID] = pending.sourceID
+    round.pendingFusions[pending.key] = nil
+    state.seenTethers[pending.key] = pending.receivedAt
     drawLittleMagePrediction(entry, now)
     return true
+end
+
+local function resolveLittleMagePendingFusions(state, now)
+    local round = type(state) == 'table' and state.round or nil
+    if type(round) ~= 'table' or round.mode ~= 'fusion'
+            or round.suppressed == true
+            or type(round.pendingFusions) ~= 'table'
+    then
+        return false
+    end
+    if next(round.pendingFusions) == nil then
+        return false
+    end
+    local snapshots, scanError = scanLittleMageFusionOrbs()
+    local resolved = false
+    for key, pending in pairs(round.pendingFusions) do
+        if type(pending) ~= 'table' then
+            round.pendingFusions[key] = nil
+        elseif commitLittleMageFusion(state, pending, now, snapshots) then
+            resolved = true
+        elseif now > pending.expiresAt then
+            suppressLittleMage(state,
+                    scanError or (type(pending.lastError) == 'string'
+                            and pending.lastError or 'fusion_entity_mismatch'), {
+                        sourceID = pending.sourceID,
+                        targetID = pending.targetID,
+                    })
+            break
+        end
+    end
+    return resolved
+end
+
+local function recordLittleMageFusion(state, sourceID, targetID, now)
+    if type(state) ~= 'table' or not finite(now) then
+        return false
+    end
+    local key = littleMagePairKey(sourceID, targetID)
+    if key == nil or state.seenTethers[key] ~= nil then
+        return false
+    end
+    local round = state.round
+    if type(round) ~= 'table' then
+        round = {
+            mode = 'fusion',
+            startedAt = now,
+            expiresAt = now + LITTLE_MAGE_ROUND_TIMEOUT_MS,
+            predictions = {},
+            byKey = {},
+            orbPartners = {},
+            pendingFusions = {},
+            suppressed = false,
+        }
+        state.round = round
+    elseif round.mode ~= 'fusion'
+            or now - round.startedAt > LITTLE_MAGE_TETHER_WINDOW_MS
+    then
+        suppressLittleMage(state, 'fusion_late_tether', {
+            startedAt = round.startedAt,
+            actualAt = now,
+        })
+        return false
+    end
+    round.pendingFusions = type(round.pendingFusions) == 'table'
+            and round.pendingFusions or {}
+    if round.suppressed == true or round.pendingFusions[key] ~= nil then
+        return false
+    end
+    round.pendingFusions[key] = {
+        key = key,
+        sourceID = sourceID,
+        targetID = targetID,
+        receivedAt = now,
+        expiresAt = round.startedAt + LITTLE_MAGE_TETHER_WINDOW_MS,
+    }
+    resolveLittleMagePendingFusions(state, now)
+    return round.suppressed ~= true
 end
 
 local function littleMageNextPrediction(state)
@@ -740,7 +829,10 @@ local function pruneLittleMageState(state, now)
                     table.remove(round.predictions, index)
                 end
             end
-            if #round.predictions == 0 and round.suppressed ~= true then
+            if #round.predictions == 0
+                    and next(round.pendingFusions or {}) == nil
+                    and round.suppressed ~= true
+            then
                 state.round = nil
             end
         end
@@ -1018,6 +1110,7 @@ Feature.Update = function(guide, now, allowGuide)
         return false
     end
     pruneLittleMageState(state, now)
+    resolveLittleMagePendingFusions(state, now)
     updateLittleMageBossLifetime(state, now)
     if allowGuide == false then
         return false
@@ -1037,6 +1130,7 @@ Feature.Test = {
     GuideArenaRadius = LITTLE_MAGE_GUIDE_RADIUS,
     KnockbackDistance = LITTLE_MAGE_KNOCKBACK_DISTANCE,
     FusionTether = LITTLE_MAGE_FUSION_TETHER,
+    FusionTetherWindowMs = LITTLE_MAGE_TETHER_WINDOW_MS,
     FirstTelegraphMs = LITTLE_MAGE_FIRST_TELEGRAPH_MS,
     FirstResolveMs = LITTLE_MAGE_FIRST_RESOLVE_MS,
     FusionIntervalMs = LITTLE_MAGE_FUSION_INTERVAL_MS,
@@ -1058,6 +1152,7 @@ Feature.Test = {
     RecordRelayGeneration = recordLittleMageRelayGeneration,
     RecordRelaySupply = recordLittleMageRelaySupply,
     RecordFusion = recordLittleMageFusion,
+    ResolvePendingFusions = resolveLittleMagePendingFusions,
     MarkTelegraph = markLittleMageTelegraph,
     ResolveResult = resolveLittleMageResult,
     PruneState = pruneLittleMageState,

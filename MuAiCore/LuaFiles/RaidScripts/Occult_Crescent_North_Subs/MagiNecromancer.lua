@@ -6,7 +6,6 @@ function Module.Create(Context)
     local finite = Context.finite
     local nowMs = Context.nowMs
     local reliablePosition = Context.reliablePosition
-    local resolveEntity = Context.resolveEntity
 
 local PREDICTION_TIMEOUT_MS = 6500
 local PREDICTION_TOKEN_GRACE_MS = 1000
@@ -29,8 +28,9 @@ local DEFAULTS = {
 
 -- The 2026-08-01 and 2026-08-03 map-1346 captures show each selected
 -- explorer/pirate becoming visible about five seconds before its channel.
--- Their spawn positions remain unchanged, so OnEntityAdd caches geometry while
--- the entity is still resolvable; visibility remains the selection signal.
+-- Their spawn positions remain unchanged. OnEntityAdd keeps stable IDs and
+-- entityList resolves the hidden entities; visibility remains the selection
+-- signal.
 local REVEAL_SPECS = {
     [14515] = {
         modelID = 19394,
@@ -158,9 +158,38 @@ local function clearState(state)
     state.lastDiagnostic = nil
 end
 
+local function entitiesByContent(contentID)
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
+    then
+        return nil
+    end
+    local entities = tensorCore.entityList(
+            'contentid=' .. tostring(contentID))
+    return type(entities) == 'table' and entities or nil
+end
+
+local function resolveTrackedEntity(entityID, contentID)
+    local entities = entitiesByContent(contentID)
+    if entities == nil then
+        return nil
+    end
+    for _, entity in pairs(entities) do
+        if type(entity) == 'table'
+                and tonumber(entity.id) == entityID
+                and tonumber(entity.contentid) == contentID
+                and entity.alive ~= false
+        then
+            return entity
+        end
+    end
+    return nil
+end
+
 local function cacheAddedEntity(
         state, entityID, announcedContentID, addedAt, now)
-    local entity = resolveEntity(entityID)
+    local entity = resolveTrackedEntity(entityID, announcedContentID)
     if type(entity) ~= 'table' then
         return false, now - addedAt > PENDING_RESOLVE_MS
     end
@@ -375,10 +404,15 @@ end
 local function collectFormationGeometry(state)
     local usedAnchors = {}
     local geometry = {}
-    for entityID in pairs(state.helperIDs) do
-        local entity = resolveEntity(entityID)
-        if type(entity) == 'table'
-                and tonumber(entity.id) == entityID
+    local entities = entitiesByContent(14512)
+    if entities == nil then
+        return nil
+    end
+    for _, entity in pairs(entities) do
+        local entityID = type(entity) == 'table'
+                and tonumber(entity.id) or nil
+        if finite(entityID)
+                and state.helperIDs[entityID] == true
                 and tonumber(entity.contentid) == 14512
                 and tonumber(entity.modelid) == 9020
                 and entity.alive ~= false

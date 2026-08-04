@@ -6,7 +6,6 @@ function Module.Create(Context)
     local finite = Context.finite
     local nowMs = Context.nowMs
     local reliablePosition = Context.reliablePosition
-    local resolveEntity = Context.resolveEntity
 
 local MAP_ID = 1346
 local ADD_CONTENT_ID = 14510
@@ -79,6 +78,7 @@ local function newState()
         adds = {},
         slash = nil,
         helperSeen = {},
+        pendingHelperSignals = {},
         blacklist = { owned = {}, registered = false },
         lastDiagnostic = nil,
     }
@@ -90,6 +90,8 @@ local function ensureState(state)
     state.slash = type(state.slash) == 'table' and state.slash or nil
     state.helperSeen = type(state.helperSeen) == 'table'
             and state.helperSeen or {}
+    state.pendingHelperSignals = type(state.pendingHelperSignals) == 'table'
+            and state.pendingHelperSignals or {}
     state.blacklist = type(state.blacklist) == 'table'
             and state.blacklist or {}
     state.blacklist.owned = type(state.blacklist.owned) == 'table'
@@ -228,6 +230,7 @@ local function clearState(state)
     deleteToken(state.slash)
     state.slash = nil
     state.helperSeen = {}
+    state.pendingHelperSignals = {}
     state.lastDiagnostic = nil
 end
 
@@ -464,22 +467,6 @@ local function handleAOECreate(state, aoeInfo, now)
     return startSlash(state, aoeInfo, now)
 end
 
-local function helperPosition(entityID)
-    local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= HELPER_CONTENT_ID
-            or tonumber(entity.modelid) ~= HELPER_MODEL_ID
-    then
-        return nil, 'helper_entity_mismatch'
-    end
-    local position = reliablePosition(entity.pos, false)
-    if position == nil then
-        return nil, 'helper_entity_mismatch'
-    end
-    return position, nil
-end
-
 local function handleAura(
         state, helperID, oldActiveAura1, newActiveAura1, now)
     state = ensureState(state)
@@ -503,49 +490,136 @@ local function handleAura(
         })
         return false
     end
-    local position, helperError = helperPosition(helperID)
-    if position == nil then
-        diagnostic(state, helperError, now, helperID)
+    local pending = state.pendingHelperSignals[helperID]
+    if type(pending) == 'table' then
+        if pending.signalID == newActiveAura1 then
+            return false
+        end
+        diagnostic(state, 'turn_signal_conflict', now, {
+            helperID = helperID,
+            oldSignal = pending.signalID,
+            newSignal = newActiveAura1,
+        })
         return false
     end
-    local matches = {}
-    for entityID, entry in pairs(state.adds) do
-        local elapsed = now - (entry.startedAt or now)
-        local distance = type(entry.origin) == 'table'
-                and Common.distanceSquared(position, entry.origin) or nil
-        if entry.hitIndex == 1
-                and entry.turns == nil
-                and elapsed >= 0
-                and elapsed <= HELPER_SIGNAL_WINDOW_MS
-                and distance ~= nil
-                and distance <= HELPER_PAIR_DISTANCE_SQ
+    state.pendingHelperSignals[helperID] = {
+        helperID = helperID,
+        signalID = newActiveAura1,
+        turns = spec.turns,
+        turnStep = spec.step,
+        observedAt = now,
+        expiresAt = now + HELPER_SIGNAL_WINDOW_MS,
+    }
+    return true
+end
+
+local function helpersByContent()
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
+    then
+        return nil
+    end
+    local entities = tensorCore.entityList(
+            'contentid=' .. tostring(HELPER_CONTENT_ID))
+    return type(entities) == 'table' and entities or nil
+end
+
+local function helperPositionFromList(entities, helperID)
+    if type(entities) ~= 'table' then
+        return nil
+    end
+    local match = nil
+    for _, entity in pairs(entities) do
+        if type(entity) == 'table'
+                and tonumber(entity.id) == helperID
         then
-            matches[#matches + 1] = {
-                entityID = entityID,
-                entry = entry,
-            }
+            if match ~= nil
+                    or tonumber(entity.contentid) ~= HELPER_CONTENT_ID
+                    or tonumber(entity.modelid) ~= HELPER_MODEL_ID
+                    or entity.alive == false
+            then
+                return nil
+            end
+            local position = reliablePosition(entity.pos, false)
+            if position == nil then
+                return nil
+            end
+            match = position
         end
     end
-    if #matches ~= 1 then
-        diagnostic(state,
-                #matches == 0 and 'helper_pair_missing'
-                        or 'helper_pair_ambiguous',
-                now,
-                { helperID = helperID, matches = #matches })
+    return match
+end
+
+local function processPendingHelperSignals(state, now)
+    state = ensureState(state)
+    if not finite(now) then
         return false
     end
-    local matched = matches[1]
-    matched.entry.turns = spec.turns
-    matched.entry.turnStep = spec.step
-    matched.entry.signalID = newActiveAura1
-    matched.entry.helperID = helperID
-    state.helperSeen[helperID] = {
-        signalID = newActiveAura1,
-        seenAt = now,
-        entityID = matched.entityID,
-    }
-    state.lastDiagnostic = nil
-    return true
+    if next(state.pendingHelperSignals) == nil then
+        return false
+    end
+    local helpers = helpersByContent()
+    local changed = false
+    for helperID, pending in pairs(state.pendingHelperSignals) do
+        if type(pending) ~= 'table'
+                or not finite(pending.expiresAt)
+        then
+            state.pendingHelperSignals[helperID] = nil
+        elseif type(state.helperSeen[helperID]) == 'table' then
+            state.pendingHelperSignals[helperID] = nil
+        else
+            local position = helperPositionFromList(helpers, helperID)
+            if position ~= nil then
+                local matches = {}
+                for entityID, entry in pairs(state.adds) do
+                    local elapsed = now - (entry.startedAt or now)
+                    local distance = type(entry.origin) == 'table'
+                            and Common.distanceSquared(position, entry.origin) or nil
+                    if entry.hitIndex == 1
+                            and entry.turns == nil
+                            and elapsed >= 0
+                            and elapsed <= HELPER_SIGNAL_WINDOW_MS
+                            and distance ~= nil
+                            and distance <= HELPER_PAIR_DISTANCE_SQ
+                    then
+                        matches[#matches + 1] = {
+                            entityID = entityID,
+                            entry = entry,
+                        }
+                    end
+                end
+                if #matches == 1 then
+                    local matched = matches[1]
+                    matched.entry.turns = pending.turns
+                    matched.entry.turnStep = pending.turnStep
+                    matched.entry.signalID = pending.signalID
+                    matched.entry.helperID = helperID
+                    state.helperSeen[helperID] = {
+                        signalID = pending.signalID,
+                        seenAt = now,
+                        entityID = matched.entityID,
+                    }
+                    state.pendingHelperSignals[helperID] = nil
+                    state.lastDiagnostic = nil
+                    changed = true
+                elseif #matches > 1 then
+                    diagnostic(state, 'helper_pair_ambiguous', now, {
+                        helperID = helperID,
+                        matches = #matches,
+                    })
+                    state.pendingHelperSignals[helperID] = nil
+                elseif now > pending.expiresAt then
+                    diagnostic(state, 'helper_pair_missing', now, helperID)
+                    state.pendingHelperSignals[helperID] = nil
+                end
+            elseif now > pending.expiresAt then
+                diagnostic(state, 'helper_entity_mismatch', now, helperID)
+                state.pendingHelperSignals[helperID] = nil
+            end
+        end
+    end
+    return changed
 end
 
 local function advancePrediction(state, entry, now)
@@ -743,7 +817,8 @@ Feature.Update = function(guide, now)
     local cfg = getConfig(guide)
     if cfg ~= nil and cfg.Enable == true then
         applyBlacklist(state, true)
-        return pruneState(state, now)
+        local resolved = processPendingHelperSignals(state, now)
+        return pruneState(state, now) or resolved
     end
     clearState(state)
     applyBlacklist(state, false)
@@ -782,6 +857,7 @@ Feature.Test = {
     HandleAOECreate = handleAOECreate,
     HandleAura = handleAura,
     HandleCast = handleCast,
+    ProcessPendingHelperSignals = processPendingHelperSignals,
     PruneState = pruneState,
     ClearState = clearState,
 }

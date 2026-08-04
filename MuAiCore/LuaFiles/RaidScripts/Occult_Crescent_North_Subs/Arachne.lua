@@ -6,7 +6,6 @@ function Module.Create(Context)
     local nowMs = Context.nowMs
     local finite = Context.finite
     local reliablePosition = Context.reliablePosition
-    local resolveEntity = Context.resolveEntity
     local getPlayer = Context.getPlayer
 
 local ARACHNE_BOSS_CONTENT_ID = 14840
@@ -56,6 +55,7 @@ local function newArachneState()
         seenAuras = {},
         bossEntityID = nil,
         bossMissingSince = nil,
+        entityScan = { at = nil, byContentID = {} },
         lastDiagnostic = nil,
     }
 end
@@ -69,6 +69,10 @@ local function ensureArachneState(state)
             and state.seenCasts or {}
     state.seenAuras = type(state.seenAuras) == 'table'
             and state.seenAuras or {}
+    state.entityScan = type(state.entityScan) == 'table'
+            and state.entityScan or {}
+    state.entityScan.byContentID = type(state.entityScan.byContentID) == 'table'
+            and state.entityScan.byContentID or {}
     return state
 end
 
@@ -100,25 +104,86 @@ local function clearArachneState(state)
     state.seenAuras = {}
     state.bossEntityID = nil
     state.bossMissingSince = nil
+    state.entityScan = { at = nil, byContentID = {} }
     state.lastDiagnostic = nil
 end
 
-local function resolveArachneEntity(entityID, contentID, modelID, heading)
-    local entity = resolveEntity(entityID)
-    if entity == nil
-            or entity.id ~= entityID
-            or entity.contentid ~= contentID
-            or entity.modelid ~= modelID
-    then
-        return nil
+local function scanArachneContent(state, contentID, modelID, now)
+    state = ensureArachneState(state)
+    local scan = state.entityScan
+    if scan.at ~= now then
+        scan.at = now
+        scan.byContentID = {}
     end
-    local pos = reliablePosition(entity.pos, heading == true)
-    if pos == nil or not Common.insideCircle(
-            pos, ARACHNE_ARENA_CENTER, ARACHNE_ARENA_RADIUS + 3)
-    then
-        return nil
+    local cached = scan.byContentID[contentID]
+    if type(cached) == 'table' then
+        return cached
     end
-    return entity, pos
+    cached = { byID = {} }
+    scan.byContentID[contentID] = cached
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
+    then
+        return cached
+    end
+    local entities = tensorCore.entityList(
+            'contentid=' .. tostring(contentID))
+    if type(entities) ~= 'table' then
+        return cached
+    end
+    for _, entity in pairs(entities) do
+        if type(entity) == 'table' then
+            local entityID = tonumber(entity.id)
+            if finite(entityID) then
+                local entry = { status = 'invalid' }
+                local pos = reliablePosition(entity.pos, false)
+                if tonumber(entity.contentid) == contentID
+                        and tonumber(entity.modelid) == modelID
+                        and entity.alive ~= false
+                        and pos ~= nil
+                        and Common.insideCircle(
+                                pos,
+                                ARACHNE_ARENA_CENTER,
+                                ARACHNE_ARENA_RADIUS + 3)
+                then
+                    entry = {
+                        status = 'ready',
+                        entity = entity,
+                        pos = pos,
+                    }
+                end
+                if cached.byID[entityID] ~= nil then
+                    cached.byID[entityID] = { status = 'invalid' }
+                else
+                    cached.byID[entityID] = entry
+                end
+            end
+        end
+    end
+    return cached
+end
+
+local function resolveArachneEntity(
+        state, entityID, contentID, modelID, heading, now)
+    if not finite(entityID) or not finite(now) then
+        return nil, nil, 'invalid'
+    end
+    local snapshot = scanArachneContent(
+            state, contentID, modelID, now)
+    local entry = snapshot.byID[entityID]
+    if type(entry) ~= 'table' then
+        return nil, nil, 'missing'
+    end
+    if entry.status ~= 'ready' then
+        return nil, nil, 'invalid'
+    end
+    local pos = heading == true
+            and reliablePosition(entry.entity.pos, true) or entry.pos
+    if pos == nil then
+        return nil, nil, 'invalid'
+    end
+    return entry.entity, pos, 'ready'
 end
 
 local function arachneHeading(from, to)
@@ -135,10 +200,7 @@ local function beginArachneSummon(state, entityID, spellID)
     then
         return false
     end
-    if resolveArachneEntity(
-            entityID, ARACHNE_BOSS_CONTENT_ID,
-            ARACHNE_BOSS_MODEL_ID, false) == nil
-    then
+    if not finite(entityID) then
         return false
     end
     clearArachneMechanics(state)
@@ -153,12 +215,10 @@ local function startArachneWeb(
         arachneDiagnostic(state, 'web_invalid_duration', duration)
         return false
     end
-    if resolveArachneEntity(
-            entityID, ARACHNE_BOSS_CONTENT_ID,
-            ARACHNE_BOSS_MODEL_ID, false) == nil
-            or resolveArachneEntity(
-                    targetID, ARACHNE_DAUGHTER_CONTENT_ID,
-                    ARACHNE_DAUGHTER_MODEL_ID, false) == nil
+    if not finite(entityID)
+            or not finite(targetID)
+            or entityID == targetID
+            or not finite(now)
     then
         arachneDiagnostic(state, 'web_invalid_entities', {
             entityID = entityID, targetID = targetID,
@@ -175,6 +235,7 @@ local function startArachneWeb(
         startedAt = now,
         expiresAt = now + ARACHNE_STATE_TIMEOUT_MS,
         suppressed = false,
+        missingSince = {},
     }
     state.bossEntityID = entityID
     state.bossMissingSince = nil
@@ -186,6 +247,62 @@ local function suppressArachneCharge(state, code, context)
         state.charge.suppressed = true
     end
     arachneDiagnostic(state, code, context)
+end
+
+local function validateArachneChargeEntities(state, now)
+    local charge = state.charge
+    if type(charge) ~= 'table' or charge.suppressed then
+        return false
+    end
+    charge.missingSince = type(charge.missingSince) == 'table'
+            and charge.missingSince or {}
+    local _, _, bossStatus = resolveArachneEntity(
+            state,
+            charge.bossEntityID,
+            ARACHNE_BOSS_CONTENT_ID,
+            ARACHNE_BOSS_MODEL_ID,
+            false,
+            now)
+    if bossStatus == 'invalid' then
+        suppressArachneCharge(
+                state, 'charge_boss_invalid', charge.bossEntityID)
+        return false
+    elseif bossStatus == 'missing' then
+        local missingSince = charge.missingSince[charge.bossEntityID] or now
+        charge.missingSince[charge.bossEntityID] = missingSince
+        if now - missingSince >= ARACHNE_BOSS_MISSING_MS then
+            suppressArachneCharge(
+                    state, 'charge_boss_missing', charge.bossEntityID)
+            return false
+        end
+    else
+        charge.missingSince[charge.bossEntityID] = nil
+    end
+    for _, entityID in ipairs(charge.order) do
+        local _, _, status = resolveArachneEntity(
+                state,
+                entityID,
+                ARACHNE_DAUGHTER_CONTENT_ID,
+                ARACHNE_DAUGHTER_MODEL_ID,
+                false,
+                now)
+        if status == 'invalid' then
+            suppressArachneCharge(
+                    state, 'charge_daughter_invalid', entityID)
+            return false
+        elseif status == 'missing' then
+            local missingSince = charge.missingSince[entityID] or now
+            charge.missingSince[entityID] = missingSince
+            if now - missingSince >= ARACHNE_DAUGHTER_MISSING_MS then
+                suppressArachneCharge(
+                        state, 'charge_daughter_missing', entityID)
+                return false
+            end
+        else
+            charge.missingSince[entityID] = nil
+        end
+    end
+    return true
 end
 
 local function collectArachneWebLink(
@@ -210,12 +327,10 @@ local function collectArachneWebLink(
     end
     if charge.order[#charge.order] ~= sourceID
             or charge.byID[targetID]
-            or resolveArachneEntity(
-                    sourceID, ARACHNE_DAUGHTER_CONTENT_ID,
-                    ARACHNE_DAUGHTER_MODEL_ID, false) == nil
-            or resolveArachneEntity(
-                    targetID, ARACHNE_DAUGHTER_CONTENT_ID,
-                    ARACHNE_DAUGHTER_MODEL_ID, false) == nil
+            or not finite(sourceID)
+            or not finite(targetID)
+            or sourceID == targetID
+            or not finite(now)
     then
         suppressArachneCharge(state, 'web_link_invalid', {
             sourceID = sourceID, targetID = targetID,
@@ -241,9 +356,7 @@ local function startArachneCharge(
             or charge.bossEntityID ~= entityID
             or charge.order[1] ~= targetID
             or #charge.order < 2
-            or resolveArachneEntity(
-                    entityID, ARACHNE_BOSS_CONTENT_ID,
-                    ARACHNE_BOSS_MODEL_ID, false) == nil
+            or not finite(now)
     then
         suppressArachneCharge(state, 'charge_chain_invalid', {
             entityID = entityID, targetID = targetID,
@@ -290,10 +403,7 @@ local function markArachneCone(
     if oldAura == ARACHNE_CONE_AURA or newAura ~= ARACHNE_CONE_AURA then
         return false
     end
-    local _, pos = resolveArachneEntity(
-            entityID, ARACHNE_DAUGHTER_CONTENT_ID,
-            ARACHNE_DAUGHTER_MODEL_ID, false)
-    if pos == nil then
+    if not finite(entityID) or not finite(now) then
         arachneDiagnostic(state, 'cone_aura_invalid_entity', entityID)
         return false
     end
@@ -312,15 +422,38 @@ local function markArachneCone(
     return true
 end
 
-local function updateArachneMarker(marker, now)
-    local _, pos = resolveArachneEntity(
-            marker.entityID, ARACHNE_DAUGHTER_CONTENT_ID,
-            ARACHNE_DAUGHTER_MODEL_ID, false)
-    if pos == nil then
+local function updateArachneMarker(state, marker, now)
+    local _, pos, status = resolveArachneEntity(
+            state,
+            marker.entityID,
+            ARACHNE_DAUGHTER_CONTENT_ID,
+            ARACHNE_DAUGHTER_MODEL_ID,
+            marker.channelStarted == true,
+            now)
+    if status == 'invalid' then
+        arachneDiagnostic(
+                state, 'cone_invalid_entity', marker.entityID)
+        return false
+    end
+    if status ~= 'ready' then
         marker.missingSince = marker.missingSince or now
         return now - marker.missingSince < ARACHNE_DAUGHTER_MISSING_MS
     end
     marker.missingSince = nil
+    if marker.channelStarted == true then
+        local expected = arachneHeading(pos, ARACHNE_ARENA_CENTER)
+        if expected == nil
+                or Common.headingDifference(pos.h, expected) > math.rad(12)
+        then
+            arachneDiagnostic(
+                    state, 'cone_heading_conflict', marker.entityID)
+            return false
+        end
+        marker.source = pos
+        marker.heading = pos.h
+        marker.ready = true
+        return now <= marker.expiresAt
+    end
     local distanceSq = Common.distanceSquared(pos, ARACHNE_ARENA_CENTER)
     if distanceSq ~= nil
             and distanceSq >= ARACHNE_CONE_READY_RADIUS
@@ -342,16 +475,8 @@ local function startArachneCone(
         arachneDiagnostic(state, 'cone_invalid_duration', duration)
         return false
     end
-    local _, pos = resolveArachneEntity(
-            entityID, ARACHNE_DAUGHTER_CONTENT_ID,
-            ARACHNE_DAUGHTER_MODEL_ID, true)
-    if pos == nil then
+    if not finite(entityID) or not finite(now) then
         arachneDiagnostic(state, 'cone_invalid_entity', entityID)
-        return false
-    end
-    local expected = arachneHeading(pos, ARACHNE_ARENA_CENTER)
-    if expected == nil or Common.headingDifference(pos.h, expected) > math.rad(12) then
-        arachneDiagnostic(state, 'cone_heading_conflict', entityID)
         return false
     end
     local marker = state.marked[entityID]
@@ -360,9 +485,10 @@ local function startArachneCone(
         state.marked[entityID] = marker
         state.markedOrder[#state.markedOrder + 1] = entityID
     end
-    marker.source = pos
-    marker.heading = pos.h
-    marker.ready = true
+    marker.source = nil
+    marker.heading = nil
+    marker.ready = false
+    marker.channelStarted = true
     marker.activationAt = now + duration * 1000
     marker.expiresAt = marker.activationAt + 1000
     marker.missingSince = nil
@@ -386,23 +512,33 @@ local function pruneArachneState(state, now)
     local charge = state.charge
     if type(charge) == 'table' and now > charge.expiresAt then
         state.charge = nil
+    elseif type(charge) == 'table' then
+        validateArachneChargeEntities(state, now)
     end
     for index = #state.markedOrder, 1, -1 do
         local entityID = state.markedOrder[index]
         local marker = state.marked[entityID]
-        if marker == nil or not updateArachneMarker(marker, now) then
+        if marker == nil or not updateArachneMarker(state, marker, now) then
             state.marked[entityID] = nil
             table.remove(state.markedOrder, index)
         end
     end
     Common.pruneSeen(state.seenCasts, now, ARACHNE_STATE_TIMEOUT_MS)
     Common.pruneSeen(state.seenAuras, now, ARACHNE_STATE_TIMEOUT_MS)
-    if type(state.bossEntityID) == 'number' then
-        local boss = resolveArachneEntity(
-                state.bossEntityID, ARACHNE_BOSS_CONTENT_ID,
-                ARACHNE_BOSS_MODEL_ID, false)
-        if boss ~= nil then
+    if type(state.bossEntityID) == 'number'
+            and type(state.charge) == 'table'
+    then
+        local _, _, status = resolveArachneEntity(
+                state,
+                state.bossEntityID,
+                ARACHNE_BOSS_CONTENT_ID,
+                ARACHNE_BOSS_MODEL_ID,
+                false,
+                now)
+        if status == 'ready' then
             state.bossMissingSince = nil
+        elseif status == 'invalid' then
+            clearArachneState(state)
         else
             state.bossMissingSince = state.bossMissingSince or now
             if now - state.bossMissingSince >= ARACHNE_BOSS_MISSING_MS then
@@ -412,12 +548,16 @@ local function pruneArachneState(state, now)
     end
 end
 
-local function arachneChargeDangers(state)
+local function arachneChargeDangers(state, now)
+    now = finite(now) and now or nowMs()
     local charge = state.charge
     if type(charge) ~= 'table'
             or charge.phase ~= 'charging'
             or charge.suppressed
     then
+        return {}
+    end
+    if not validateArachneChargeEntities(state, now) then
         return {}
     end
     local result = {}
@@ -426,32 +566,44 @@ local function arachneChargeDangers(state)
         local source = nil
         if index == 1 then
             local _, pos = resolveArachneEntity(
-                    charge.bossEntityID, ARACHNE_BOSS_CONTENT_ID,
-                    ARACHNE_BOSS_MODEL_ID, false)
+                    state,
+                    charge.bossEntityID,
+                    ARACHNE_BOSS_CONTENT_ID,
+                    ARACHNE_BOSS_MODEL_ID,
+                    false,
+                    now)
             source = pos
         else
             local _, pos = resolveArachneEntity(
+                    state,
                     charge.order[index - 1],
                     ARACHNE_DAUGHTER_CONTENT_ID,
-                    ARACHNE_DAUGHTER_MODEL_ID, false)
+                    ARACHNE_DAUGHTER_MODEL_ID,
+                    false,
+                    now)
             source = pos
         end
         local _, target = resolveArachneEntity(
-                charge.order[index], ARACHNE_DAUGHTER_CONTENT_ID,
-                ARACHNE_DAUGHTER_MODEL_ID, false)
+                state,
+                charge.order[index],
+                ARACHNE_DAUGHTER_CONTENT_ID,
+                ARACHNE_DAUGHTER_MODEL_ID,
+                false,
+                now)
         local distanceSq = Common.distanceSquared(source, target)
         local heading = arachneHeading(source, target)
-        if distanceSq ~= nil and distanceSq >= 1 and distanceSq <= 3600
-                and heading ~= nil
+        if distanceSq == nil or distanceSq < 1 or distanceSq > 3600
+                or heading == nil
         then
-            result[#result + 1] = {
-                kind = 'rect',
-                source = source,
-                radius = ARACHNE_CHARGE_WIDTH / 2,
-                length = math.sqrt(distanceSq),
-                heading = heading,
-            }
+            return {}
         end
+        result[#result + 1] = {
+            kind = 'rect',
+            source = source,
+            radius = ARACHNE_CHARGE_WIDTH / 2,
+            length = math.sqrt(distanceSq),
+            heading = heading,
+        }
     end
     return result
 end
@@ -477,13 +629,14 @@ local function arachneConeDangers(state)
     return result
 end
 
-local function drawArachneDangers(state, guide, cfg)
+local function drawArachneDangers(state, guide, cfg, now)
+    now = finite(now) and now or nowMs()
     local drawer = Common.getMoogleDrawer()
     if drawer == nil then
         return false
     end
     local charge = cfg.DrawChargePrediction == true
-            and arachneChargeDangers(state) or {}
+            and arachneChargeDangers(state, now) or {}
     local cones = cfg.DrawConformityPrediction == true
             and arachneConeDangers(state) or {}
     for _, danger in ipairs(charge) do
@@ -640,7 +793,7 @@ Feature.Update = function(guide, now)
         return false
     end
     pruneArachneState(state, now)
-    return drawArachneDangers(state, guide, cfg)
+    return drawArachneDangers(state, guide, cfg, now)
 end
 
 Feature.Test = {
@@ -657,6 +810,8 @@ Feature.Test = {
     ConeAngle = ARACHNE_CONE_ANGLE,
     ConeAura = ARACHNE_CONE_AURA,
     ConeReadyRadius = ARACHNE_CONE_READY_RADIUS,
+    DaughterMissingMs = ARACHNE_DAUGHTER_MISSING_MS,
+    BossMissingMs = ARACHNE_BOSS_MISSING_MS,
     AID = ARACHNE_AID,
     Defaults = ARACHNE_DEFAULTS,
     NewState = newArachneState,
