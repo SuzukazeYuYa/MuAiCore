@@ -967,6 +967,7 @@ Dmu_P4.Update = function()
                 DM.ChangeState('P4WaterFire1')
             end
             if Cfg().guide then
+                --Data().Eye1.GuidePos = {}
                 if Data().Eye1.GuidePos == nil or table.size(Data().Eye1.GuidePos) < 8 then
                     Data().Eye1.GuidePos = {}
                     local tType = Data().Eye1.thunder
@@ -1007,7 +1008,7 @@ Dmu_P4.Update = function()
                             if Cfg().baseOnDanger then
                                 local curMove = moveDir[tType]
                                 local template = eye1PosFix[tType]
-                                local dir = TensorCore.getHeadingToTarget(DM.Center, curMove)
+                                local dir = TensorCore.getHeadingToTarget({ x = 0, y = 0, z = 0 }, curMove)
                                 local gatherPos = TensorCore.getPosInDirection(DM.Center, dir, 6)
                                 for job, member in pairs(MG.Party) do
                                     if table.contains(Data().Eye1.Owner, member.id) then
