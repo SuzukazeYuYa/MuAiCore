@@ -326,8 +326,10 @@ G.OnEntityAdd = function(entityID, entityName, contentID)
     local littleMage = LittleMage.OnEntityAdd(entityID, now)
     local iambe = Iambe.OnEntityAdd(entityID, contentID, now)
     local gale = GaleGriffin.OnEntityAdd(entityID, contentID, now)
+    local sword = SwordDancer.OnEntityAdd(
+            entityID, entityName, contentID, now)
     return aevis or index or necromancer or chimera
-            or littleMage or iambe or gale
+            or littleMage or iambe or gale or sword
 end
 
 G.OnMarkerAdd = function(entityID, markerID)

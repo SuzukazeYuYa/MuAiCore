@@ -5,7 +5,6 @@ function Module.Create(Context)
     local Common = Context.Common
     local finite = Context.finite
     local reliablePosition = Context.reliablePosition
-    local resolveEntity = Context.resolveEntity
 
 local BOSS_CONTENT_ID = 14820
 local BOSS_MODEL_ID = 19830
@@ -36,6 +35,7 @@ local LEGACY_DONUT_SOURCE = 'MuAiCore - 剑舞者月环内径修正'
 local SPIN_OUTER_RADIUS = 30
 local SPIN_CIRCLE_RADIUS = 15
 local SPIN_PREVIEW_MS = 14000
+local SPIN_RESOLVE_TIMEOUT_MS = 1500
 local SPIN_BY_ANIMATION = {
     [210] = {
         actionID = SWORD_DONUT_SMALL_AID,
@@ -71,9 +71,13 @@ local function newState()
         bladeOrder = {},
         bladeSeen = {},
         leapPositions = {},
+        leapSourceID = nil,
+        leapStartedAt = nil,
         guide = nil,
         active = {},
         spinPreviews = {},
+        swordIDs = {},
+        pendingSpins = {},
         blacklist = { owned = {}, registered = false },
         lastDiagnostic = nil,
     }
@@ -92,6 +96,10 @@ local function ensureState(state)
     state.active = type(state.active) == 'table' and state.active or {}
     state.spinPreviews = type(state.spinPreviews) == 'table'
             and state.spinPreviews or {}
+    state.swordIDs = type(state.swordIDs) == 'table'
+            and state.swordIDs or {}
+    state.pendingSpins = type(state.pendingSpins) == 'table'
+            and state.pendingSpins or {}
     state.blacklist = type(state.blacklist) == 'table'
             and state.blacklist or {}
     state.blacklist.owned = type(state.blacklist.owned) == 'table'
@@ -108,11 +116,11 @@ local feature = Common.newFeature({
     diagnosticThrottleMs = 1000,
     diagnosticText = {
         ground_effect_invalid = '剑舞者剑舞地面物件信号无效',
-        blade_activation_missing = '剑舞者剑舞激活信号缺少对应物件',
         danger_drawer_unavailable = '剑舞者危险范围绘图器不可用',
         danger_drawer_rejected_shape = '剑舞者危险范围绘制失败',
         spin_geometry_invalid = '剑舞者舞动之剑预兆几何不可用',
         leap_geometry_invalid = '剑舞者跃进步法落点不可用',
+        leap_source_mismatch = '剑舞者跃进步法施法者不一致',
         leap_count_invalid = '剑舞者跃进步法落点数量不完整',
     },
 })
@@ -215,9 +223,13 @@ local function clearMechanic(state)
     state.bladeOrder = {}
     state.bladeSeen = {}
     state.leapPositions = {}
+    state.leapSourceID = nil
+    state.leapStartedAt = nil
     state.guide = nil
     state.active = {}
     state.spinPreviews = {}
+    state.swordIDs = {}
+    state.pendingSpins = {}
     state.lastDiagnostic = nil
 end
 
@@ -261,22 +273,23 @@ local function deleteSpinPreview(state, entityID)
     return true
 end
 
-local function recordSpinAnimation(
-        state, entityID, index, newAnimationID, now)
-    local spec = tonumber(index) == 1
-            and SPIN_BY_ANIMATION[tonumber(newAnimationID)] or nil
-    if spec == nil or not finite(now) then
+local function recordSwordEntity(state, entityID, contentID, now)
+    state = ensureState(state)
+    if tonumber(contentID) ~= SWORD_CONTENT_ID
+            or not finite(entityID)
+            or not finite(now)
+    then
         return false
     end
+    state.swordIDs[entityID] = now
+    return true
+end
+
+local function drawSpinPreview(state, entityID, spec, position, now)
     local current = state.spinPreviews[entityID]
     if type(current) == 'table'
             and current.actionID == spec.actionID
     then
-        return false
-    end
-    local position = resolveSword(entityID)
-    if position == nil then
-        diagnostic(state, 'spin_geometry_invalid', now, entityID)
         return false
     end
     local drawer = Common.getMoogleDrawer()
@@ -317,14 +330,55 @@ local function recordSpinAnimation(
     return true
 end
 
-local function bossValid(entityID)
-    local entity = resolveEntity(entityID)
-    return type(entity) == 'table'
-            and tonumber(entity.id) == entityID
-            and tonumber(entity.contentid) == BOSS_CONTENT_ID
-            and tonumber(entity.modelid) == BOSS_MODEL_ID
-            and entity.alive ~= false
-            and entity.visible ~= false
+local function recordSpinAnimation(
+        state, entityID, index, newAnimationID, now)
+    state = ensureState(state)
+    local spec = tonumber(index) == 1
+            and SPIN_BY_ANIMATION[tonumber(newAnimationID)] or nil
+    if spec == nil or not finite(entityID) or not finite(now) then
+        return false
+    end
+    local position = resolveSword(entityID)
+    if state.swordIDs[entityID] == nil then
+        if position == nil then
+            return false
+        end
+        state.swordIDs[entityID] = now
+    end
+    if position ~= nil then
+        state.pendingSpins[entityID] = nil
+        return drawSpinPreview(state, entityID, spec, position, now)
+    end
+    state.pendingSpins[entityID] = {
+        spec = spec,
+        expiresAt = now + SPIN_RESOLVE_TIMEOUT_MS,
+    }
+    return true
+end
+
+local function resolvePendingSpins(state, now)
+    local changed = false
+    for entityID, pending in pairs(state.pendingSpins) do
+        if type(pending) ~= 'table'
+                or type(pending.spec) ~= 'table'
+                or not finite(pending.expiresAt)
+        then
+            state.pendingSpins[entityID] = nil
+            changed = true
+        else
+            local position = resolveSword(entityID)
+            if position ~= nil then
+                state.pendingSpins[entityID] = nil
+                drawSpinPreview(state, entityID, pending.spec, position, now)
+                changed = true
+            elseif now >= pending.expiresAt then
+                state.pendingSpins[entityID] = nil
+                diagnostic(state, 'spin_geometry_invalid', now, entityID)
+                changed = true
+            end
+        end
+    end
+    return changed
 end
 
 local function recordGroundEffect(state, args, now)
@@ -412,10 +466,6 @@ local function recordBladeActivation(
     end
     local effect = state.groundEffects[entityID]
     if type(effect) ~= 'table' then
-        diagnostic(state, 'blade_activation_missing', now, entityID)
-        state.groundEffects = {}
-        state.bladeOrder = {}
-        state.bladeSeen = {}
         return false
     end
     state.bladeSeen[entityID] = true
@@ -437,7 +487,7 @@ local function recordLeap(state, entityID, actionID, castPos, now)
     if actionID ~= LEAP_FIRST_AID and actionID ~= LEAP_NEXT_AID then
         return false
     end
-    if not bossValid(entityID) or not finite(now) then
+    if not finite(entityID) or entityID <= 0 or not finite(now) then
         diagnostic(state, 'leap_geometry_invalid', now, actionID)
         return false
     end
@@ -448,7 +498,18 @@ local function recordLeap(state, entityID, actionID, castPos, now)
     end
     if actionID == LEAP_FIRST_AID then
         state.leapPositions = {}
+        state.leapSourceID = entityID
+        state.leapStartedAt = now
         state.guide = nil
+    elseif state.leapSourceID ~= entityID then
+        diagnostic(state, 'leap_source_mismatch', now, {
+            expected = state.leapSourceID,
+            actual = entityID,
+        })
+        state.leapPositions = {}
+        state.leapSourceID = nil
+        state.leapStartedAt = nil
+        return false
     end
     for _, existing in ipairs(state.leapPositions) do
         local dx = existing.x - position.x
@@ -476,13 +537,24 @@ local function inwardPoint(position)
 end
 
 local function startGuide(state, entityID, now)
-    if not bossValid(entityID) or not finite(now) then
+    if not finite(entityID) or entityID <= 0 or not finite(now)
+            or state.leapSourceID ~= entityID
+    then
+        diagnostic(state, 'leap_source_mismatch', now, {
+            expected = state.leapSourceID,
+            actual = entityID,
+        })
+        state.leapPositions = {}
+        state.leapSourceID = nil
+        state.leapStartedAt = nil
         return false
     end
     if #state.leapPositions ~= LEAP_COUNT then
         diagnostic(
                 state, 'leap_count_invalid', now, #state.leapPositions)
         state.leapPositions = {}
+        state.leapSourceID = nil
+        state.leapStartedAt = nil
         return false
     end
     local points = {}
@@ -491,6 +563,8 @@ local function startGuide(state, entityID, now)
         if point == nil then
             diagnostic(state, 'leap_geometry_invalid', now)
             state.leapPositions = {}
+            state.leapSourceID = nil
+            state.leapStartedAt = nil
             return false
         end
         points[#points + 1] = point
@@ -502,6 +576,8 @@ local function startGuide(state, entityID, now)
         points = points,
     }
     state.leapPositions = {}
+    state.leapSourceID = nil
+    state.leapStartedAt = nil
     state.lastDiagnostic = nil
     return true
 end
@@ -553,6 +629,13 @@ local function prune(state, now)
         then
             state.spinPreviews[entityID] = nil
         end
+    end
+    if finite(state.leapStartedAt)
+            and now - state.leapStartedAt > ROUND_TTL_MS
+    then
+        state.leapPositions = {}
+        state.leapSourceID = nil
+        state.leapStartedAt = nil
     end
 end
 
@@ -613,6 +696,16 @@ Feature.OnAnimationChange = function(
     return false
 end
 
+Feature.OnEntityAdd = function(entityID, entityName, contentID, now)
+    local guide = rawget(_G, 'MuAiGuide')
+    local cfg = getConfig(guide)
+    local state = getState()
+    if state ~= nil and cfg ~= nil and cfg.Enable == true then
+        return recordSwordEntity(state, entityID, contentID, now)
+    end
+    return false
+end
+
 Feature.OnAddGroundEffect = function(args, now)
     local guide = rawget(_G, 'MuAiGuide')
     local cfg = getConfig(guide)
@@ -644,6 +737,7 @@ Feature.OnEntityCast = function(entityID, actionID, castPos, now)
         if BLACKLIST_LABELS[actionID] ~= nil
                 and actionID ~= BLADE_DANCE_AID
         then
+            state.pendingSpins[entityID] = nil
             return deleteSpinPreview(state, entityID)
         end
         return recordLeap(state, entityID, actionID, castPos, now)
@@ -674,6 +768,7 @@ Feature.Update = function(guide, now)
     local cfg = getConfig(guide)
     if cfg ~= nil and cfg.Enable == true then
         applyBlacklist(state, true)
+        resolvePendingSpins(state, now)
         prune(state, now)
         if cfg.DynamicGuide == true then
             return drawGuide(state, guide, now)
@@ -698,6 +793,7 @@ Feature.Test = {
     SpinOuterRadius = SPIN_OUTER_RADIUS,
     SpinCircleRadius = SPIN_CIRCLE_RADIUS,
     SpinPreviewMs = SPIN_PREVIEW_MS,
+    SpinResolveTimeoutMs = SPIN_RESOLVE_TIMEOUT_MS,
     SpinByAnimation = SPIN_BY_ANIMATION,
     LeapFirstActionID = LEAP_FIRST_AID,
     LeapNextActionID = LEAP_NEXT_AID,
@@ -713,7 +809,9 @@ Feature.Test = {
     EnsureState = ensureState,
     GetConfig = getConfig,
     ApplyBlacklist = applyBlacklist,
+    RecordSwordEntity = recordSwordEntity,
     RecordSpinAnimation = recordSpinAnimation,
+    ResolvePendingSpins = resolvePendingSpins,
     RecordGroundEffect = recordGroundEffect,
     RecordBladeActivation = recordBladeActivation,
     RecordLeap = recordLeap,
