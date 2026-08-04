@@ -192,7 +192,7 @@ local function drawPrediction(state, initial, now)
         local duration = step == 1
                 and FIRST_STEP_OFFSET_MS + RESOLVE_GRACE_MS
                 or STEP_INTERVAL_MS + RESOLVE_GRACE_MS
-        local centerDistance = (step - 0.5) * STEP_DISTANCE
+        local centerDistance = step * STEP_DISTANCE
         for _, side in ipairs({ -1, 1 }) do
             local center = offsetRight(
                     initial.seed, initial.heading,

@@ -5,7 +5,6 @@ function Module.Create(Context)
     local Common = Context.Common
     local finite = Context.finite
     local reliablePosition = Context.reliablePosition
-    local resolveEntity = Context.resolveEntity
     local getPlayer = Context.getPlayer
 
 local ARENA = { x = 0, y = -684, z = -628 }
@@ -21,6 +20,9 @@ local GUIDE_RADIUS = 9
 local GUIDE_INSET = math.rad(10)
 local BALL_RESOLVE_WAIT_MS = 500
 local STATE_TTL_MS = 30000
+local CLEANSING_DONUT_AID = 48414
+local CLEANSING_DONUT_INNER_RADIUS = 5
+local MOOGLE_DONUT_SOURCE = 'MuAiCore - 目录天崩地裂月环内径修正'
 
 local ZONE_KIND = {
     [2015240] = 'fire',
@@ -49,6 +51,7 @@ local function newState()
         pendingBalls = {},
         seen = {},
         hazards = {},
+        moogleDonuts = {},
         lastDiagnostic = nil,
     }
 end
@@ -61,6 +64,8 @@ local function ensureState(state)
     state.seen = type(state.seen) == 'table' and state.seen or {}
     state.hazards = type(state.hazards) == 'table'
             and state.hazards or {}
+    state.moogleDonuts = type(state.moogleDonuts) == 'table'
+            and state.moogleDonuts or {}
     return state
 end
 
@@ -80,6 +85,21 @@ local feature = Common.newFeature({
     },
 })
 local getConfig = feature.GetConfig
+
+local moogleDonutRegistry = Common.newMoogleDonutRegistry({
+    entries = {
+        [CLEANSING_DONUT_AID] = {
+            name = '目录天崩地裂',
+            radius = CLEANSING_DONUT_INNER_RADIUS,
+        },
+    },
+    source = MOOGLE_DONUT_SOURCE,
+    ensureState = ensureState,
+    getBucket = function(state)
+        return state.moogleDonuts
+    end,
+})
+local applyMoogleDonuts = moogleDonutRegistry.Apply
 
 local function getState()
     return Common.getRuntimeState('Index', newState, ensureState)
@@ -213,17 +233,28 @@ local function resolveBall(entityID, contentID)
     if spec == nil or not finite(entityID) then
         return nil, nil
     end
-    local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table'
-            or tonumber(entity.id) ~= entityID
-            or tonumber(entity.contentid) ~= contentID
-            or tonumber(entity.modelid) ~= spec.modelID
-            or entity.alive == false
-            or entity.visible == false
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
     then
         return spec.kind, nil
     end
-    return spec.kind, reliablePosition(entity.pos, false)
+    local entities = tensorCore.entityList(
+            'contentid=' .. tostring(contentID))
+    if type(entities) ~= 'table' then
+        return spec.kind, nil
+    end
+    for _, entity in pairs(entities) do
+        if type(entity) == 'table'
+                and tonumber(entity.id) == entityID
+                and tonumber(entity.contentid) == contentID
+                and tonumber(entity.modelid) == spec.modelID
+                and entity.alive ~= false
+        then
+            return spec.kind, reliablePosition(entity.pos, false)
+        end
+    end
+    return spec.kind, nil
 end
 
 local function ballActivationAt(position, zoneHeading, now)
@@ -327,9 +358,8 @@ end
 local function activeGuideHazard(state, now)
     local selected = nil
     for _, hazard in ipairs(state.hazards) do
-        if finite(hazard.previewAt)
+        if finite(hazard.activationAt)
                 and finite(hazard.expiresAt)
-                and now >= hazard.previewAt
                 and now < hazard.expiresAt
                 and (selected == nil
                         or hazard.activationAt < selected.activationAt)
@@ -372,38 +402,60 @@ end
 
 local function guideTarget(
         playerPosition, dangerHeading, nextDangerHeading)
+    if type(playerPosition) ~= 'table'
+            or not finite(playerPosition.x)
+            or not finite(playerPosition.z)
+            or not finite(dangerHeading)
+    then
+        return nil
+    end
     local dx = playerPosition.x - ARENA.x
     local dz = playerPosition.z - ARENA.z
     if dx * dx + dz * dz < 1 then
         return nil
     end
     local playerHeading = math.atan2(dx, dz)
-    local axisHeading = dangerHeading
-    local delta = wrapPi(playerHeading - axisHeading)
-    if delta > math.pi / 2 then
-        axisHeading = wrapPi(axisHeading + math.pi)
-        delta = wrapPi(playerHeading - axisHeading)
-    elseif delta < -math.pi / 2 then
-        axisHeading = wrapPi(axisHeading - math.pi)
-        delta = wrapPi(playerHeading - axisHeading)
-    end
-    if math.abs(delta) > ZONE_ANGLE / 2 then
-        return nil
-    end
-    local firstDirection = delta >= 0 and 1 or -1
-    local targetHeading = nil
-    for _, direction in ipairs({ firstDirection, -firstDirection }) do
-        local candidate = axisHeading + direction
-                * (ZONE_ANGLE / 2 + GUIDE_INSET)
-        if not finite(nextDangerHeading)
-                or not angleIsDangerous(candidate, nextDangerHeading)
-        then
-            targetHeading = candidate
-            break
+    local candidates = { playerHeading }
+    local function addBoundaryCandidates(heading)
+        if not finite(heading) then
+            return
+        end
+        local axisHeading = heading
+        local delta = wrapPi(playerHeading - axisHeading)
+        if delta > math.pi / 2 then
+            axisHeading = wrapPi(axisHeading + math.pi)
+            delta = wrapPi(playerHeading - axisHeading)
+        elseif delta < -math.pi / 2 then
+            axisHeading = wrapPi(axisHeading - math.pi)
+            delta = wrapPi(playerHeading - axisHeading)
+        end
+        local firstDirection = delta >= 0 and 1 or -1
+        for _, direction in ipairs({ firstDirection, -firstDirection }) do
+            candidates[#candidates + 1] = axisHeading + direction
+                    * (ZONE_ANGLE / 2 + GUIDE_INSET)
         end
     end
-    targetHeading = targetHeading or axisHeading + firstDirection
-            * (ZONE_ANGLE / 2 + GUIDE_INSET)
+    addBoundaryCandidates(dangerHeading)
+    addBoundaryCandidates(nextDangerHeading)
+
+    local targetHeading = nil
+    local shortest = nil
+    for _, candidate in ipairs(candidates) do
+        if not angleIsDangerous(candidate, dangerHeading)
+                and (not finite(nextDangerHeading)
+                        or not angleIsDangerous(
+                                candidate, nextDangerHeading))
+        then
+            local distance = math.abs(wrapPi(candidate - playerHeading))
+            if shortest == nil or distance < shortest then
+                targetHeading = candidate
+                shortest = distance
+            end
+        end
+    end
+    if targetHeading == nil then
+        return nil
+    end
     return {
         x = ARENA.x + math.sin(targetHeading) * GUIDE_RADIUS,
         z = ARENA.z + math.cos(targetHeading) * GUIDE_RADIUS,
@@ -467,16 +519,23 @@ local Feature = {}
 
 Feature.Init = function(M)
     if type(M.Index) == 'table' then
+        applyMoogleDonuts(M.Index, false)
         clearMechanic(M.Index)
     end
     M.Index = newState()
+    local cfg = getConfig(M)
+    applyMoogleDonuts(M.Index, cfg ~= nil and cfg.Enable == true)
     M.SetIndexEnabled = function(enabled)
-        local cfg = getConfig(M)
-        if cfg ~= nil then
-            cfg.Enable = enabled == true
+        local current = getConfig(M)
+        if current ~= nil then
+            current.Enable = enabled == true
         end
-        if enabled ~= true and type(M.Index) == 'table' then
-            clearMechanic(M.Index)
+        local state = getState()
+        if state ~= nil then
+            if enabled ~= true then
+                clearMechanic(state)
+            end
+            applyMoogleDonuts(state, enabled == true)
         end
     end
     M.SetIndexDynamicGuideEnabled = function(enabled)
@@ -487,10 +546,13 @@ Feature.Init = function(M)
     end
 end
 
-Feature.Clear = function()
+Feature.Clear = function(releaseOwnership)
     local state = getState()
     if state ~= nil then
         clearMechanic(state)
+        if releaseOwnership == true then
+            applyMoogleDonuts(state, false)
+        end
     end
 end
 
@@ -521,6 +583,7 @@ Feature.Update = function(guide, now)
     end
     local cfg = getConfig(guide)
     if cfg ~= nil and cfg.Enable == true then
+        applyMoogleDonuts(state, true)
         prune(state, now)
         if cfg.DynamicGuide == true then
             return drawGuide(state, guide, now)
@@ -528,6 +591,7 @@ Feature.Update = function(guide, now)
         return false
     end
     clearMechanic(state)
+    applyMoogleDonuts(state, false)
     return false
 end
 
@@ -544,6 +608,9 @@ Feature.Test = {
     BallBaseOffsetMs = BALL_BASE_OFFSET_MS,
     BallStepRadians = BALL_STEP_RADIANS,
     BallStepMs = BALL_STEP_MS,
+    CleansingDonutActionID = CLEANSING_DONUT_AID,
+    CleansingDonutInnerRadius = CLEANSING_DONUT_INNER_RADIUS,
+    MoogleDonutSource = MOOGLE_DONUT_SOURCE,
     NewState = newState,
     EnsureState = ensureState,
     GetConfig = getConfig,
@@ -554,6 +621,7 @@ Feature.Test = {
     CompleteBallPair = completeBallPair,
     GuideTarget = guideTarget,
     DrawGuide = drawGuide,
+    ApplyMoogleDonuts = applyMoogleDonuts,
     ClearMechanic = clearMechanic,
 }
 
