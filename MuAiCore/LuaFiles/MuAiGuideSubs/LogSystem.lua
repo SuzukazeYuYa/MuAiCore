@@ -15,6 +15,7 @@ local COMBAT_LOG_MAX_BYTES = 1024 * 1024
 local COMBAT_LOG_MAX_FILES = 1000
 
 local onceLogData = {}
+local diagnosticOnceData = {}
 local logCache = {}
 local logCacheBytes = 0
 local logCacheTruncated = false
@@ -329,9 +330,12 @@ local writeSuppressedSummary = function(cacheKey, state)
     if state == nil or state.suppressed == nil or state.suppressed <= 0 then
         return true
     end
-    local written = writeDiagnosticLine(formatDiagnosticLine('INFO', state.moduleName,
+    local summaryLevel = state.level or 'INFO'
+    local written = writeDiagnosticLine(formatDiagnosticLine(summaryLevel, state.moduleName,
             '重复诊断已节流', {
                 key = cacheKey,
+                originalLevel = summaryLevel,
+                originalMessage = state.message,
                 repeats = state.suppressed,
                 windowSeconds = DIAGNOSTIC_THROTTLE_SECONDS,
             }))
@@ -369,6 +373,8 @@ local writeDiagnostic = function(level, moduleName, msg, data, key)
     local written = writeDiagnosticLine(formatDiagnosticLine(level, moduleName, msg, data))
     diagnosticState.throttles[cacheKey] = {
         lastWrittenAt = now,
+        level = level,
+        message = msg,
         moduleName = moduleName,
         signature = signature,
         suppressed = 0,
@@ -413,6 +419,7 @@ end
 
 local clearLogData = function()
     onceLogData = {}
+    diagnosticOnceData = {}
     logCache = {}
     logCacheBytes = 0
     logCacheTruncated = false
@@ -599,6 +606,28 @@ LogSystem.init = function(M)
         if appendCombatLog(eventName, '[问题]' .. msg, data, force) then
             rawDebug('[' .. eventName .. '] [问题]' .. safeString(msg))
         end
+    end
+
+    local logLevelOnce = function(level, eventName, key, msg, data, force)
+        local cacheKey = eventName .. ':' .. tostring(key)
+        local written = false
+        if not diagnosticOnceData[cacheKey] then
+            diagnosticOnceData[cacheKey] = true
+            written = writeDiagnostic(level, eventName, msg, data, key)
+        end
+        if not logEnable(force) or onceLogData[cacheKey] then
+            return written
+        end
+        onceLogData[cacheKey] = true
+        return appendCombatLog(eventName, msg, data, force) or written
+    end
+
+    M.LogInfoOnce = function(eventName, key, msg, data, force)
+        return logLevelOnce('INFO', eventName, key, msg, data, force)
+    end
+
+    M.LogDebugOnce = function(eventName, key, msg, data, force)
+        return logLevelOnce('DEBUG', eventName, key, msg, data, force)
     end
 
     M.LogOnce = function(eventName, key, msg, data, force)

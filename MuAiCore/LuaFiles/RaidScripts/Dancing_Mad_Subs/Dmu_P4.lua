@@ -23,7 +23,7 @@ local debugGuideData = function(eventName, key, msg, guideData, data)
     data = data or {}
     data.count = MG.LogCount(guideData)
     data.guide = guideData
-    MG.LogOnce(eventName, key, msg, data)
+    MG.LogDebugOnce(eventName, key, msg, data)
 end
 
 local onUsingVfx = {
@@ -165,7 +165,7 @@ local onAddNewBuff = function(buffTable, timer, currentVfx)
                 vfx = currentVfx,
             })
         end
-        MG.LogOnce('P4Buff', 'state_' .. tostring(MG.DancingMad.CurrentState), 'Buff真假缓存完成', {
+        MG.LogInfoOnce('P4Buff', 'state_' .. tostring(MG.DancingMad.CurrentState), 'Buff真假缓存完成', {
             state = DM.StateNames[MG.DancingMad.CurrentState],
             vfx = currentVfx,
             count = buffCount,
@@ -241,7 +241,7 @@ local lockFaceCheck = function(eyeTable)
 end
 
 local ThunderWater = function(wave)
-    MG.LogOnce('P4ThunderWater', 'start_wave_' .. wave, '雷水处理开始', { wave = wave })
+    MG.LogInfoOnce('P4ThunderWater', 'start_wave_' .. wave, '雷水处理开始', { wave = wave })
     if Cfg().draw then
         if not Data().MoveOrStopHasHit then
             if Data().HitWave == nil then
@@ -541,7 +541,7 @@ end
 
 Dmu_P4.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
     if spellID == 49884 then
-        MG.LogOnce('P4Config', 'start', 'P4配置快照', {
+        MG.LogInfoOnce('P4Config', 'start', 'P4配置快照', {
             enable = MG.Config.DmuCfg.Enable,
             logEnable = MG.Config.Main.LogEnable,
             p4 = Cfg(),
@@ -645,14 +645,14 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
     if aoeInfo.aoeID == 47774 or aoeInfo.aoeID == 47768 then
         if DM.OverState('P4WaterFire1Put', true) and DM.BeLowState('P4Eye2') then
             Data().ThunderWater.IceType = DM.CalcIceType(aoeInfo)
-            MG.LogOnce('P4ThunderWater', 'ice_wave_2', '第二次雷水冰类型缓存', {
+            MG.LogDebugOnce('P4ThunderWater', 'ice_wave_2', '第二次雷水冰类型缓存', {
                 aoeID = aoeInfo.aoeID,
                 iceType = Data().ThunderWater.IceType,
             })
         end
         if DM.OverState('P4Eye2', true) and DM.BeLowState('P4WaterFire2Put', true) then
             Data().WaterFire2.IceType = DM.CalcIceType(aoeInfo)
-            MG.LogOnce('P4WaterFire', 'ice_wave_2', '第二次火水冰类型缓存', {
+            MG.LogDebugOnce('P4WaterFire', 'ice_wave_2', '第二次火水冰类型缓存', {
                 aoeID = aoeInfo.aoeID,
                 iceType = Data().WaterFire2.IceType,
             })
@@ -664,7 +664,7 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
                 local thunderType = DM.CalcThunderType(aoeInfo)
                 if thunderType ~= nil then
                     Data().Eye1.thunder = thunderType
-                    MG.LogOnce('P4Eye', 'eye1_thunder', '第一次石化眼雷类型缓存', {
+                    MG.LogDebugOnce('P4Eye', 'eye1_thunder', '第一次石化眼雷类型缓存', {
                         aoeID = aoeInfo.aoeID,
                         thunderType = thunderType,
                     })
@@ -676,7 +676,7 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
                 local thunderType = DM.CalcThunderType(aoeInfo)
                 if thunderType ~= nil then
                     Data().WaterFire2.ThunderType = thunderType
-                    MG.LogOnce('P4WaterFire', 'thunder_wave_2', '第二次火水雷类型缓存', {
+                    MG.LogDebugOnce('P4WaterFire', 'thunder_wave_2', '第二次火水雷类型缓存', {
                         aoeID = aoeInfo.aoeID,
                         thunderType = thunderType,
                     })
@@ -694,7 +694,7 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
         if DM.OverState('P4WaterFire1', true)
                 and DM.BeLowState('P4WaterFire1Put', true)
         then
-            MG.LogOnce('P4WaterFire', 'aoe_wave_1', '第一次火水AOE生成', {
+            MG.LogDebugOnce('P4WaterFire', 'aoe_wave_1', '第一次火水AOE生成', {
                 aoeID = aoeInfo.aoeID,
                 x = aoeInfo.x,
                 z = aoeInfo.z,
@@ -711,7 +711,7 @@ Dmu_P4.OnAOECreate = function(aoeInfo)
         elseif DM.OverState('P4WaterFire2', true)
                 and DM.BeLowState('P4WaterFire2Put', true)
         then
-            MG.LogOnce('P4WaterFire', 'aoe_wave_2', '第二次火水AOE生成', {
+            MG.LogDebugOnce('P4WaterFire', 'aoe_wave_2', '第二次火水AOE生成', {
                 aoeID = aoeInfo.aoeID,
                 x = aoeInfo.x,
                 z = aoeInfo.z,
@@ -875,7 +875,7 @@ Dmu_P4.Update = function()
                         debugGuideData('P4ExDeath', 'guide_buff_3', '执行Buff指路数据生成', Data().ExDeath.GuideData)
                     else
 
-                        MG.LogOnce('P4ExDeath', 'draw_buff_3', '执行Buff调用FrameMultiD', {
+                        MG.LogInfoOnce('P4ExDeath', 'draw_buff_3', '执行Buff指路已激活', {
                             count = MG.LogCount(Data().ExDeath.GuideData),
                         })
                     end
@@ -898,7 +898,7 @@ Dmu_P4.Update = function()
         ThunderWater(1)
         if Data().ThunderWater.Guide1 ~= nil and Cfg().guide then
             MG.FrameMultiD(Data().ThunderWater.Guide1)
-            MG.LogOnce('P4ThunderWater', 'draw_wave_1', '第一次雷水调用FrameMultiD', {
+            MG.LogInfoOnce('P4ThunderWater', 'draw_wave_1', '第一次雷水指路已激活', {
                 count = MG.LogCount(Data().ThunderWater.Guide1),
             })
         end
@@ -917,7 +917,7 @@ Dmu_P4.Update = function()
                 end
             end
             if table.size(Data().Eye1.Owner) >= 2 then
-                MG.LogOnce('P4Eye', 'owner_1', '第一次石化眼目标缓存', {
+                MG.LogDebugOnce('P4Eye', 'owner_1', '第一次石化眼目标缓存', {
                     owner = MG.LogEntityList(Data().Eye1.Owner),
                     real = Data().Eye1.type,
                 })
@@ -1055,13 +1055,13 @@ Dmu_P4.Update = function()
                             real = Data().Eye1.type,
                         })
                     else
-                        MG.LogOnce('P4Eye', 'waiting_eye1_thunder', '第一次石化眼等待雷类型赋值', {
+                        MG.LogDebugOnce('P4Eye', 'waiting_eye1_thunder', '第一次石化眼等待雷类型赋值', {
                             hasThunderType = tType ~= nil,
                             owner = MG.LogEntityList(Data().Eye1.Owner),
                         })
                     end
                 else
-                    MG.LogOnce('P4Eye', 'draw_1', '第一次石化眼调用FrameMultiD', {
+                    MG.LogInfoOnce('P4Eye', 'draw_1', '第一次石化眼指路已激活', {
                         count = MG.LogCount(Data().Eye1.GuidePos),
                     })
                 end
@@ -1099,7 +1099,7 @@ Dmu_P4.Update = function()
                 guide2Count = MG.LogCount(Data().WaterFire1.Guide2),
             })
         else
-            MG.LogOnce('P4WaterFire', 'draw_1', '第一次火水调用FrameMultiD', {
+            MG.LogInfoOnce('P4WaterFire', 'draw_1', '第一次火水指路已激活', {
                 count = MG.LogCount(Data().WaterFire1.Guide1),
             })
         end
@@ -1109,7 +1109,7 @@ Dmu_P4.Update = function()
     end
     if DM.InState('P4WaterFire1Put') then
         MG.FrameMultiD(Data().WaterFire1.Guide2)
-        MG.LogOnce('P4WaterFire', 'draw_1_put', '第一次火水放置后调用FrameMultiD', {
+        MG.LogInfoOnce('P4WaterFire', 'draw_1_put', '第一次火水放置后指路已激活', {
             count = MG.LogCount(Data().WaterFire1.Guide2),
             type = Data().WaterFire1.Type,
         })
@@ -1178,12 +1178,12 @@ Dmu_P4.Update = function()
         if Cfg().guide then
             if Data().ThunderWater.Guide2Offset ~= nil then
                 MG.FrameMultiD(Data().ThunderWater.Guide2Offset)
-                MG.LogOnce('P4ThunderWater', 'draw_wave_2_offset', '第二次雷水调用偏移FrameMultiD', {
+                MG.LogInfoOnce('P4ThunderWater', 'draw_wave_2_offset', '第二次雷水偏移指路已激活', {
                     count = MG.LogCount(Data().ThunderWater.Guide2Offset),
                 })
             else
                 MG.FrameMultiD(Data().ThunderWater.Guide2)
-                MG.LogOnce('P4ThunderWater', 'draw_wave_2', '第二次雷水调用FrameMultiD', {
+                MG.LogInfoOnce('P4ThunderWater', 'draw_wave_2', '第二次雷水指路已激活', {
                     count = MG.LogCount(Data().ThunderWater.Guide2),
                 })
             end
@@ -1213,7 +1213,7 @@ Dmu_P4.Update = function()
                 end
             end
             if table.size(Data().Eye2.Owner) >= 2 then
-                MG.LogOnce('P4Eye', 'owner_2', '第二次石化眼目标缓存', {
+                MG.LogDebugOnce('P4Eye', 'owner_2', '第二次石化眼目标缓存', {
                     owner = MG.LogEntityList(Data().Eye2.Owner),
                     real = Data().Eye2.type,
                 })
@@ -1299,7 +1299,7 @@ Dmu_P4.Update = function()
                     real = Data().Eye2.type,
                 })
             else
-                MG.LogOnce('P4Eye', 'draw_2', '第二次石化眼调用FrameMultiD', {
+                MG.LogInfoOnce('P4Eye', 'draw_2', '第二次石化眼指路已激活', {
                     count = MG.LogCount(Data().Eye2.GuidePos),
                 })
             end
@@ -1323,7 +1323,7 @@ Dmu_P4.Update = function()
                 type = Data().WaterFire2.Type,
             })
         else
-            MG.LogOnce('P4WaterFire', 'draw_2_before_put', '第二次火水集合调用FrameMultiD', {
+            MG.LogInfoOnce('P4WaterFire', 'draw_2_before_put', '第二次火水集合指路已激活', {
                 count = MG.LogCount(Data().WaterFire2.Guide1),
             })
         end
@@ -1368,7 +1368,7 @@ Dmu_P4.Update = function()
                     far = far,
                 })
             else
-                MG.LogOnce('P4WaterFire', 'draw_2_put', '第二次火水放置后调用FrameMultiD', {
+                MG.LogInfoOnce('P4WaterFire', 'draw_2_put', '第二次火水放置后指路已激活', {
                     count = MG.LogCount(Data().WaterFire2.Guide2),
                 })
             end
@@ -1376,7 +1376,7 @@ Dmu_P4.Update = function()
                 MG.FrameMultiD(Data().WaterFire2.Guide2)
             end
         else
-            MG.LogOnce('P4WaterFire', 'waiting_2_put', '第二次火水等待冰雷类型赋值', {
+            MG.LogDebugOnce('P4WaterFire', 'waiting_2_put', '第二次火水等待冰雷类型赋值', {
                 hasThunderType = Data().WaterFire2.ThunderType ~= nil,
                 hasIceType = Data().WaterFire2.IceType ~= nil,
             })
