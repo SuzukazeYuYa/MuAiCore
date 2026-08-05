@@ -119,7 +119,7 @@ Config.init = function(M)
             'AlabasterBlade',
             'MagiNecromancer', 'LeaderChimera', 'MagiHydra',
             'Iambe', 'KidnapDemon', 'ShapeshiftingMage',
-            'KelpieCaptain', 'GemstoneBeast',
+            'KelpieCaptain', 'PatientKuribu', 'GemstoneBeast',
             'Pallmagia', 'LittleMage', 'EvilSeer',
             'Arachne', 'WarlikeMinotaur',
         }
@@ -388,6 +388,10 @@ Config.init = function(M)
             KelpieCaptain = {
                 Enable = true,
                 DrawWaveburstPrediction = true,
+            },
+            --------- 新月岛·北岛：忍耐基路伯 ---------
+            PatientKuribu = {
+                Enable = true,
             },
             --------- 新月岛·北岛：负隅宝石兽 ---------
             GemstoneBeast = {

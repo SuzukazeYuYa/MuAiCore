@@ -13,6 +13,19 @@ local REFERENCE_SOURCE = 'MuAiCore - 北岛参考范围'
 local REFERENCE_COMMIT = 'fda083a9e2b0b183937727ab7010f3bc0ddfa5bc'
 local REFERENCE_SEEN_TTL_MS = 30000
 local REFERENCE_TOKEN_GRACE_MS = 1000
+local PATIENT_KURIBU_DONUT_SOURCE =
+        'MuAiCore - 忍耐基路伯环形魔法剑月环内径修正'
+local PATIENT_KURIBU_DONUT_INNER = 12.5
+local PATIENT_KURIBU_DONUTS = {
+    [50120] = {
+        name = '忍耐基路伯·环形魔法剑',
+        radius = PATIENT_KURIBU_DONUT_INNER,
+    },
+    [50121] = {
+        name = '忍耐基路伯·环形魔法剑',
+        radius = PATIENT_KURIBU_DONUT_INNER,
+    },
+}
 
 local OWNER_DEFAULTS = {
     Enable = true,
@@ -80,8 +93,10 @@ local REFERENCE_SHAPES = {
         kind = 'cone', radius = 30, angle = math.rad(30),
         headingOffset = math.rad(60),
     }),
+    -- The live AOE position is the west starting edge of each lane.
+    -- ShapeDrawer:addTimedRect is also start-anchored, so no center backshift.
     [47170] = one(14509, {
-        kind = 'rect', length = 50, width = 10, back = 25,
+        kind = 'rect', length = 50, width = 10,
     }),
     [50379] = one(14840, { kind = 'circle', radius = 10 }),
     [50380] = one(14840, {
@@ -291,8 +306,10 @@ end
 -- available as reliable MuAi event geometry, so they intentionally fail closed.
 -- MTE4's four summoned-weapon layouts depend on VFX-to-entity association that
 -- has not appeared in the available MuAi diagnostics, so those layouts also
--- remain fail closed. Localized-name/model-only helpers without a stable action
--- signal are likewise not mirrored here.
+-- remain fail closed. Index owns the complete 48404/48405 knockback prediction;
+-- this reference layer must not add a second, later arrow for the same mechanic.
+-- Localized-name/model-only helpers without a stable action signal are likewise
+-- not mirrored here.
 local CHANNEL_GUIDES = {
     [47638] = {
         owner = 'TwoHeadedAevis',
@@ -303,21 +320,14 @@ local CHANNEL_GUIDES = {
         contentIDs = { [14821] = true, [14822] = true },
         distance = 25,
     },
-    [48405] = {
-        owner = 'Index',
-        contentIDs = { [14721] = true },
-        modelIDs = { [19298] = true },
-        distance = 10,
-        maxDistance = 12,
-    },
 }
 
 local function newState()
     return {
         seen = {},
         active = {},
-        pendingChannels = {},
         blacklist = { owned = {}, registered = false },
+        patientKuribuDonuts = {},
         lastDiagnostic = nil,
     }
 end
@@ -326,13 +336,13 @@ local function ensureState(state)
     state = type(state) == 'table' and state or newState()
     state.seen = type(state.seen) == 'table' and state.seen or {}
     state.active = type(state.active) == 'table' and state.active or {}
-    state.pendingChannels = type(state.pendingChannels) == 'table'
-            and state.pendingChannels or {}
     state.blacklist = type(state.blacklist) == 'table'
             and state.blacklist or {}
     state.blacklist.owned = type(state.blacklist.owned) == 'table'
             and state.blacklist.owned or {}
     state.blacklist.registered = state.blacklist.registered == true
+    state.patientKuribuDonuts = type(state.patientKuribuDonuts) == 'table'
+            and state.patientKuribuDonuts or {}
     return state
 end
 
@@ -352,6 +362,16 @@ local function ownerEnabled(guide, owner)
     local cfg = getOwnerConfig(guide, owner)
     return cfg ~= nil and cfg.Enable == true
 end
+
+local patientKuribuDonutRegistry = Common.newMoogleDonutRegistry({
+    entries = PATIENT_KURIBU_DONUTS,
+    source = PATIENT_KURIBU_DONUT_SOURCE,
+    ensureState = ensureState,
+    getBucket = function(state)
+        return state.patientKuribuDonuts
+    end,
+})
+local applyPatientKuribuDonuts = patientKuribuDonutRegistry.Apply
 
 local function diagnostic(state, code, now, context)
     referenceFeature.Diagnostic(
@@ -376,7 +396,6 @@ local function clearDraws(state)
     end
     state.seen = {}
     state.active = {}
-    state.pendingChannels = {}
     state.lastDiagnostic = nil
 end
 
@@ -389,12 +408,6 @@ local function clearOwnerDraws(state, owner)
                 deleteActiveToken(activeShape.token)
             end
             state.active[key] = nil
-            removed = true
-        end
-    end
-    for key, pending in pairs(state.pendingChannels) do
-        if pending.owner == owner then
-            state.pendingChannels[key] = nil
             removed = true
         end
     end
@@ -706,41 +719,13 @@ local function channelKey(entityID, spellID)
 end
 
 local function resolveChannelEntity(entityID, spec)
-    if type(spec.modelIDs) ~= 'table' then
-        local entity = resolveEntity(entityID)
-        if type(entity) == 'table'
-                and entity.id == entityID
-                and contentMatches(spec, entity.contentid)
-                and entity.alive ~= false
-        then
-            return reliablePosition(entity.pos, false)
-        end
-        return nil
-    end
-    local tensorCore = rawget(_G, 'TensorCore')
-    if type(tensorCore) ~= 'table'
-            or type(tensorCore.entityList) ~= 'function'
+    local entity = resolveEntity(entityID)
+    if type(entity) == 'table'
+            and entity.id == entityID
+            and contentMatches(spec, entity.contentid)
+            and entity.alive ~= false
     then
-        return nil
-    end
-    for contentID in pairs(spec.contentIDs) do
-        local entities = tensorCore.entityList(
-                'contentid=' .. tostring(contentID))
-        if type(entities) == 'table' then
-            for _, entity in pairs(entities) do
-                if type(entity) == 'table'
-                        and tonumber(entity.id) == entityID
-                        and tonumber(entity.contentid) == contentID
-                        and spec.modelIDs[tonumber(entity.modelid)] == true
-                        and entity.alive ~= false
-                then
-                    local position = reliablePosition(entity.pos, false)
-                    if position ~= nil then
-                        return position
-                    end
-                end
-            end
-        end
+        return reliablePosition(entity.pos, false)
     end
     return nil
 end
@@ -818,67 +803,23 @@ local function handleChannelGuide(state, guide, entityID, spellID,
         return false
     end
     local key = channelKey(entityID, spellID)
-    if state.active[key] ~= nil or state.pendingChannels[key] ~= nil then
+    if state.active[key] ~= nil then
         return false
     end
     local timeout = channelTimeMax * 1000
     local entityPos = resolveChannelEntity(entityID, spec)
-    if entityPos ~= nil then
-        return drawChannelGuide(
-                state, guide, key, entityID, spellID,
-                spec, entityPos, timeout, now)
-    end
-    if type(spec.modelIDs) ~= 'table' then
+    if entityPos == nil then
         diagnostic(state, 'channel_geometry_missing', now, spellID)
         return false
     end
-    state.pendingChannels[key] = {
-        entityID = entityID,
-        spellID = spellID,
-        owner = spec.owner,
-        expiresAt = now + timeout,
-    }
-    return true
-end
-
-local function processPendingChannels(state, guide, now)
-    local changed = false
-    for key, pending in pairs(state.pendingChannels) do
-        local spec = type(pending) == 'table'
-                and CHANNEL_GUIDES[pending.spellID] or nil
-        if spec == nil or not finite(pending.expiresAt)
-                or not ownerEnabled(guide, pending.owner)
-        then
-            state.pendingChannels[key] = nil
-            changed = true
-        elseif now >= pending.expiresAt then
-            state.pendingChannels[key] = nil
-            diagnostic(
-                    state, 'channel_geometry_missing', now, pending.spellID)
-            changed = true
-        else
-            local entityPos = resolveChannelEntity(pending.entityID, spec)
-            if entityPos ~= nil then
-                state.pendingChannels[key] = nil
-                drawChannelGuide(
-                        state, guide, key,
-                        pending.entityID, pending.spellID,
-                        spec, entityPos, pending.expiresAt - now, now)
-                changed = true
-            end
-        end
-    end
-    return changed
+    return drawChannelGuide(
+            state, guide, key, entityID, spellID,
+            spec, entityPos, timeout, now)
 end
 
 local function handleEntityCast(state, entityID, spellID)
     state = ensureState(state)
     local removed = false
-    local pendingKey = channelKey(entityID, spellID)
-    if state.pendingChannels[pendingKey] ~= nil then
-        state.pendingChannels[pendingKey] = nil
-        removed = true
-    end
     for key, entry in pairs(state.active) do
         if entry.entityID == entityID and entry.aoeID == spellID then
             local retained = {}
@@ -927,6 +868,7 @@ Feature.Init = function(M)
     if type(M.NorthReferenceDrawings) == 'table' then
         clearDraws(M.NorthReferenceDrawings)
         releaseBlacklist(M.NorthReferenceDrawings)
+        applyPatientKuribuDonuts(M.NorthReferenceDrawings, false)
     end
     M.NorthReferenceDrawings = newState()
     M.SetArgolEnabled = function(enabled)
@@ -939,7 +881,18 @@ Feature.Init = function(M)
         end
         syncBlacklist(M.NorthReferenceDrawings, M)
     end
+    M.SetPatientKuribuEnabled = function(enabled)
+        local current = getOwnerConfig(M, 'PatientKuribu')
+        if current ~= nil then
+            current.Enable = enabled == true
+        end
+        applyPatientKuribuDonuts(
+                M.NorthReferenceDrawings, enabled == true)
+    end
     syncBlacklist(M.NorthReferenceDrawings, M)
+    applyPatientKuribuDonuts(
+            M.NorthReferenceDrawings,
+            ownerEnabled(M, 'PatientKuribu'))
 end
 
 Feature.Clear = function(releaseOwnership)
@@ -948,6 +901,7 @@ Feature.Clear = function(releaseOwnership)
         clearDraws(state)
         if releaseOwnership == true then
             releaseBlacklist(state)
+            applyPatientKuribuDonuts(state, false)
         end
     end
 end
@@ -986,7 +940,8 @@ Feature.Update = function(guide, now)
         return false
     end
     syncBlacklist(state, guide)
-    processPendingChannels(state, guide, now)
+    applyPatientKuribuDonuts(
+            state, ownerEnabled(guide, 'PatientKuribu'))
     pruneState(state, guide, now)
     return false
 end
@@ -994,6 +949,9 @@ end
 Feature.Test = {
     Source = REFERENCE_SOURCE,
     ReferenceCommit = REFERENCE_COMMIT,
+    PatientKuribuDonutSource = PATIENT_KURIBU_DONUT_SOURCE,
+    PatientKuribuDonutInner = PATIENT_KURIBU_DONUT_INNER,
+    PatientKuribuDonuts = PATIENT_KURIBU_DONUTS,
     OwnerDefaults = OWNER_DEFAULTS,
     ActionOwner = ACTION_OWNER,
     OwnerAIDs = OWNER_AIDS,
@@ -1005,11 +963,11 @@ Feature.Test = {
     OwnerEnabled = ownerEnabled,
     SyncBlacklist = syncBlacklist,
     ReleaseBlacklist = releaseBlacklist,
+    ApplyPatientKuribuDonuts = applyPatientKuribuDonuts,
     Geometry = geometry,
     Timing = timing,
     HandleAOECreate = handleAOECreate,
     HandleChannelGuide = handleChannelGuide,
-    ProcessPendingChannels = processPendingChannels,
     HandleEntityCast = handleEntityCast,
     PruneState = pruneState,
     ClearDraws = clearDraws,

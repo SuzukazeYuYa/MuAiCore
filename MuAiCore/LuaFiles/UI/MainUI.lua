@@ -133,6 +133,8 @@ local OCCULT_CRESCENT_NORTH_ENCOUNTERS = {
         { 'DrawWaveburstPrediction', '浪暴扩散地火提前预测',
             'SetKelpieCaptainPredictionEnabled' },
     } },
+    { '忍耐基路伯', 'PatientKuribu',
+        'SetPatientKuribuEnabled' },
     { '负隅宝石兽', 'GemstoneBeast',
             'SetGemstoneBeastEnabled', {
         { 'DrawSafeZone', '绿色正方形/L形安全区',
