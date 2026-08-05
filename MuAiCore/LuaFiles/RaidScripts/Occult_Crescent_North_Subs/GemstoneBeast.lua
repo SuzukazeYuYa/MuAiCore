@@ -5,7 +5,6 @@ function Module.Create(Context)
     local Common = Context.Common
     local finite = Context.finite
     local reliablePosition = Context.reliablePosition
-    local resolveEntity = Context.resolveEntity
     local getPlayer = Context.getPlayer
 
 local TOPAZ_CONTENT_ID = 14792
@@ -20,10 +19,10 @@ local L_POSITION_TOLERANCE = 0.6
 local HEADING_TOLERANCE = math.rad(5)
 local EVENT_OBJECT_CENTER_TOLERANCE_SQ = 1
 local CHANNEL_BATCH_WINDOW_MS = 750
+local CHANNEL_RESOLVE_DEADLINE_MS = 2700
 local PHASE_TIMEOUT_MS = 60000
 local EARLY_PREDICTION_TIMEOUT_MS = 30000
 local CHANNEL_PREDICTION_TIMEOUT_MS = 5000
-local STONE_RESOLVE_TIMEOUT_MS = 1000
 local SAFE_TARGET_MARGIN = 1.5
 
 local AID = {
@@ -80,6 +79,8 @@ local function newState()
     return {
         visibleStones = {},
         pendingVisibleStones = {},
+        eventObjects = {},
+        pendingEventObjects = {},
         stoneBatchSequence = 0,
         phase = nil,
         phaseSequence = 0,
@@ -97,6 +98,10 @@ local function ensureState(state)
             and state.visibleStones or {}
     state.pendingVisibleStones = type(state.pendingVisibleStones) == 'table'
             and state.pendingVisibleStones or {}
+    state.eventObjects = type(state.eventObjects) == 'table'
+            and state.eventObjects or {}
+    state.pendingEventObjects = type(state.pendingEventObjects) == 'table'
+            and state.pendingEventObjects or {}
     state.stoneBatchSequence = finite(state.stoneBatchSequence)
             and state.stoneBatchSequence or 0
     state.phaseSequence = finite(state.phaseSequence)
@@ -112,7 +117,7 @@ local feature = Common.newFeature({
     diagnosticThrottleMs = 1000,
     diagnosticText = {
         ruby_glow_boss_mismatch = '负隅宝石兽红宝石之光实体不匹配',
-        stone_geometry_missing = '负隅宝石兽黄宝石缺少可靠位置或朝向',
+        stone_geometry_missing = '负隅宝石兽黄宝石缺少可靠位置',
         event_object_mismatch = '负隅宝石兽墙体事件对象不匹配',
         event_object_heading_ambiguous = '负隅宝石兽墙体朝向无法可靠归一化',
         event_object_layout_conflict = '负隅宝石兽同批墙体事件状态冲突',
@@ -199,7 +204,18 @@ local function insideArena(position)
                     <= ARENA_HALF_SIZE + 0.75
 end
 
-local function scanTopazes()
+local function entityModelID(entityID, entity)
+    local argus = rawget(_G, 'Argus')
+    local modelID = type(argus) == 'table'
+            and type(argus.getEntityModel) == 'function'
+            and tonumber(argus.getEntityModel(entityID)) or nil
+    if not finite(modelID) and type(entity) == 'table' then
+        modelID = tonumber(entity.modelid)
+    end
+    return modelID
+end
+
+local function scanEntities(contentID)
     local tensorCore = rawget(_G, 'TensorCore')
     if type(tensorCore) ~= 'table'
             or type(tensorCore.entityList) ~= 'function'
@@ -207,7 +223,15 @@ local function scanTopazes()
         return nil
     end
     local entities = tensorCore.entityList(
-            'contentid=' .. tostring(TOPAZ_CONTENT_ID))
+            'contentid=' .. tostring(contentID))
+    if type(entities) ~= 'table' then
+        return nil
+    end
+    return entities
+end
+
+local function scanTopazes()
+    local entities = scanEntities(TOPAZ_CONTENT_ID)
     if type(entities) ~= 'table' then
         return nil
     end
@@ -216,42 +240,28 @@ local function scanTopazes()
         local entityID = type(entity) == 'table'
                 and tonumber(entity.id) or nil
         if finite(entityID) and entityID > 0 then
+            local contentID = tonumber(entity.contentid)
+            local modelID = entityModelID(entityID, entity)
             if snapshots[entityID] ~= nil
-                    or tonumber(entity.contentid) ~= TOPAZ_CONTENT_ID
-                    or tonumber(entity.modelid) ~= TOPAZ_MODEL_ID
+                    or finite(contentID) and contentID ~= TOPAZ_CONTENT_ID
+                    or finite(modelID) and modelID ~= TOPAZ_MODEL_ID
                     or entity.alive == false
             then
                 snapshots[entityID] = false
-            else
-                local position = reliablePosition(entity.pos, true)
-                snapshots[entityID] = position ~= nil and insideArena(position)
-                        and { entityID = entityID, position = position }
-                        or false
+            elseif contentID == TOPAZ_CONTENT_ID
+                    and modelID == TOPAZ_MODEL_ID
+            then
+                local position = reliablePosition(entity.pos, false)
+                if position ~= nil and insideArena(position) then
+                    snapshots[entityID] = {
+                        entityID = entityID,
+                        position = position,
+                    }
+                end
             end
         end
     end
     return snapshots
-end
-
-local function validEventObject(entityID)
-    local entity = resolveEntity(entityID)
-    if type(entity) ~= 'table' then
-        return nil, nil
-    end
-    local contentID = tonumber(entity.contentid)
-    if contentID ~= SQUARE_EVENT_OBJECT_ID
-            and contentID ~= L_EVENT_OBJECT_ID
-    then
-        return nil, nil
-    end
-    local position = reliablePosition(entity.pos, true)
-    if position == nil
-            or Common.distanceSquared(position, ARENA_CENTER)
-                    > EVENT_OBJECT_CENTER_TOLERANCE_SQ
-    then
-        return nil, nil
-    end
-    return contentID, position
 end
 
 local function worldToLocal(position, heading)
@@ -283,13 +293,8 @@ local function localToWorld(position, heading)
     }
 end
 
-local function headingMatches(actual, expected)
-    local difference = headingDifference(actual, expected)
-    return difference ~= nil and difference <= HEADING_TOLERANCE
-end
-
 local function isOutwardCenterWallStone(position)
-    if not Common.validXZ(position) or not finite(position.h) then
+    if not Common.validXZ(position) then
         return false
     end
     local absoluteX = math.abs(position.x)
@@ -297,16 +302,12 @@ local function isOutwardCenterWallStone(position)
     if closeTo(absoluteX, 1)
             and closeToEither(absoluteZ, 5, 15)
     then
-        return headingMatches(
-                position.h,
-                position.x > 0 and math.pi / 2 or -math.pi / 2)
+        return true
     end
     if closeTo(absoluteZ, 1)
             and closeToEither(absoluteX, 5, 15)
     then
-        return headingMatches(
-                position.h,
-                position.z > 0 and 0 or math.pi)
+        return true
     end
     return false
 end
@@ -319,22 +320,18 @@ end
 
 local function isEarlyLReflection(position, effectiveHeading)
     local localPosition = worldToLocal(position, effectiveHeading)
-    if localPosition == nil or not finite(localPosition.h) then
+    if localPosition == nil then
         return false
     end
     if closeToL(math.abs(localPosition.x), 1)
             and closeToEitherL(math.abs(localPosition.z), 5, 15)
     then
-        return headingMatches(
-                localPosition.h,
-                localPosition.x > 0 and math.pi / 2 or -math.pi / 2)
+        return true
     end
     if closeToL(math.abs(localPosition.x), 15)
             and closeToL(math.abs(localPosition.z), 9)
     then
-        return headingMatches(
-                localPosition.h,
-                localPosition.z > 0 and math.pi or 0)
+        return true
     end
     return false
 end
@@ -534,6 +531,8 @@ local function clearState(state)
     state = ensureState(state)
     state.visibleStones = {}
     state.pendingVisibleStones = {}
+    state.eventObjects = {}
+    state.pendingEventObjects = {}
     state.stoneBatchSequence = 0
     state.phase = nil
     state.channelBatch = nil
@@ -582,12 +581,9 @@ local function setPhaseKind(state, phase, kind, now, context)
     return true
 end
 
-local function collectVisibleEntries(state, now)
+local function collectVisibleEntries(state)
     local entries = {}
-    local stale = {}
     for entityID, stone in pairs(state.visibleStones) do
-        local observedAt = type(stone) == 'table'
-                and stone.observedAt or nil
         local position = type(stone) == 'table'
                 and stone.position or nil
         if position ~= nil then
@@ -595,15 +591,7 @@ local function collectVisibleEntries(state, now)
                 entityID = entityID,
                 position = position,
             }
-        elseif not finite(observedAt)
-                or not finite(now)
-                or now - observedAt > STONE_RESOLVE_TIMEOUT_MS
-        then
-            stale[#stale + 1] = entityID
         end
-    end
-    for _, entityID in ipairs(stale) do
-        state.visibleStones[entityID] = nil
     end
     return sortedEntityEntries(entries)
 end
@@ -687,8 +675,10 @@ local function resolvePendingTopazes(state, now)
     for entityID, pending in pairs(state.pendingVisibleStones) do
         local observedAt = type(pending) == 'table'
                 and pending.observedAt or nil
-        local snapshot = type(snapshots) == 'table'
-                and snapshots[entityID] or nil
+        local snapshot = nil
+        if type(snapshots) == 'table' then
+            snapshot = snapshots[entityID]
+        end
         if type(snapshot) == 'table' then
             if next(state.visibleStones) == nil then
                 state.stoneBatchSequence = state.stoneBatchSequence + 1
@@ -702,28 +692,19 @@ local function resolvePendingTopazes(state, now)
             changed = true
         else
             if snapshot == false then
-                pending.sawTopaz = true
-            end
-            if not finite(observedAt)
-                    or now - observedAt > STONE_RESOLVE_TIMEOUT_MS
-            then
                 state.pendingVisibleStones[entityID] = nil
-                if pending.sawTopaz == true then
-                    diagnostic(state, 'stone_geometry_missing', now, entityID)
-                end
+                diagnostic(state, 'stone_geometry_missing', now, entityID)
             end
         end
     end
     for entityID, stone in pairs(state.visibleStones) do
-        local observedAt = type(stone) == 'table'
-                and stone.observedAt or nil
-        local snapshot = type(snapshots) == 'table'
-                and snapshots[entityID] or nil
+        local snapshot = nil
+        if type(snapshots) == 'table' then
+            snapshot = snapshots[entityID]
+        end
         if type(snapshot) == 'table' then
             stone.position = snapshot.position
-        elseif not finite(observedAt)
-                or now - observedAt > STONE_RESOLVE_TIMEOUT_MS
-        then
+        elseif snapshot == false then
             state.visibleStones[entityID] = nil
             local prediction = state.prediction
             if type(prediction) == 'table'
@@ -736,8 +717,9 @@ local function resolvePendingTopazes(state, now)
     end
     batch = state.channelBatch
     if type(batch) == 'table' and batch.completed ~= true then
-        if not finite(batch.startedAt)
-                or now - batch.startedAt > CHANNEL_BATCH_WINDOW_MS
+        local elapsed = finite(batch.startedAt)
+                and now - batch.startedAt or math.huge
+        if batch.count < 10 and elapsed > CHANNEL_BATCH_WINDOW_MS
         then
             if batch.count > 0 then
                 diagnostic(state, 'stone_geometry_missing', now, batch.count)
@@ -745,14 +727,36 @@ local function resolvePendingTopazes(state, now)
             state.channelBatch = nil
         else
             for entityID, entry in pairs(batch.entriesByID) do
-                local snapshot = type(snapshots) == 'table'
-                        and snapshots[entityID] or nil
+                local snapshot = nil
+                if type(snapshots) == 'table' then
+                    snapshot = snapshots[entityID]
+                end
                 if type(snapshot) == 'table' then
                     entry.position = snapshot.position
                 end
             end
             if batch.count == 10 then
                 changed = finishChannelBatch(state, batch, now) or changed
+                if batch.completed ~= true
+                        and elapsed >= CHANNEL_RESOLVE_DEADLINE_MS
+                then
+                    local missingPosition = false
+                    for _, entry in pairs(batch.entriesByID) do
+                        if not Common.validXZ(entry.position) then
+                            missingPosition = true
+                            break
+                        end
+                    end
+                    diagnostic(state, missingPosition
+                            and 'stone_geometry_missing'
+                            or 'channel_geometry_ambiguous', now, {
+                        count = batch.count,
+                        phaseKind = type(state.phase) == 'table'
+                                and state.phase.kind or nil,
+                    })
+                    batch.completed = true
+                    clearPrediction(state)
+                end
             end
         end
     end
@@ -767,7 +771,7 @@ local function tryEarlyPrediction(state, now)
     then
         return false
     end
-    local entries = collectVisibleEntries(state, now)
+    local entries = collectVisibleEntries(state)
     if #entries ~= 10 then
         return false
     end
@@ -814,20 +818,14 @@ local function beginRubyGlow(state, entityID, now)
         return false
     end
     state.lastRubyGlowAt = now
+    state.pendingEventObjects = {}
     makePhase(state, now)
     state.lastDiagnostic = nil
     return true
 end
 
-local function recordEventObject(state, entityID, a1, a2, a3, now)
-    a1, a2, a3 = tonumber(a1), tonumber(a2), tonumber(a3)
-    if not finite(now) or a3 ~= 0 then
-        return false
-    end
-    local contentID, position = validEventObject(entityID)
-    if contentID == nil then
-        return false
-    end
+local function applyEventObject(
+        state, entityID, contentID, position, a1, a2, now)
     local phase = ensurePhase(state, now)
     if contentID == SQUARE_EVENT_OBJECT_ID then
         if not ((a1 == 1 and a2 == 2)
@@ -926,6 +924,109 @@ local function recordEventObject(state, entityID, a1, a2, a3, now)
     return true
 end
 
+local function resolvePendingEventObjects(state, now)
+    if not finite(now) or #state.pendingEventObjects == 0 then
+        return false
+    end
+    local remaining = {}
+    local resolved = false
+    for _, pending in ipairs(state.pendingEventObjects) do
+        local eventObject = state.eventObjects[pending.entityID]
+        if type(eventObject) ~= 'table' then
+            remaining[#remaining + 1] = pending
+        else
+            resolved = applyEventObject(
+                    state, pending.entityID,
+                    eventObject.contentID, eventObject.position,
+                    pending.a1, pending.a2, pending.observedAt) or resolved
+        end
+    end
+    state.pendingEventObjects = remaining
+    return resolved
+end
+
+local function recordEventObject(state, entityID, a1, a2, a3, now)
+    a1, a2, a3 = tonumber(a1), tonumber(a2), tonumber(a3)
+    if not finite(entityID) or entityID <= 0
+            or not finite(now) or a3 ~= 0
+    then
+        return false
+    end
+    if not ((a1 == 1 and a2 == 2)
+            or (a1 == 16 and a2 == 32)
+            or (a1 == 256 and a2 == 512))
+    then
+        return false
+    end
+    state.pendingEventObjects[#state.pendingEventObjects + 1] = {
+        entityID = entityID,
+        a1 = a1,
+        a2 = a2,
+        observedAt = now,
+    }
+    return resolvePendingEventObjects(state, now)
+            or #state.pendingEventObjects > 0
+end
+
+local function recordGroundEffect(state, args, now)
+    if type(args) ~= 'table' or not finite(now) then
+        return false
+    end
+    local entityID = tonumber(args[1])
+    local effectType = tonumber(args[2])
+    local flags = tonumber(args[3])
+    local contentID = tonumber(args[5])
+    local radius = tonumber(args[11])
+    local heading = tonumber(args[12])
+    local effectState = tonumber(args[15])
+    if contentID ~= SQUARE_EVENT_OBJECT_ID
+            and contentID ~= L_EVENT_OBJECT_ID
+    then
+        return false
+    end
+    local position = reliablePosition({
+        x = tonumber(args[17]),
+        y = tonumber(args[18]),
+        z = tonumber(args[19]),
+        h = heading,
+    }, true)
+    if not finite(entityID) or entityID <= 0
+            or effectType ~= 7
+            or flags ~= 5
+            or effectState ~= 4
+            or not finite(radius)
+            or radius < 0.5
+            or radius > 1.5
+            or position == nil
+            or Common.distanceSquared(position, ARENA_CENTER)
+                    > EVENT_OBJECT_CENTER_TOLERANCE_SQ
+    then
+        diagnostic(state, 'event_object_mismatch', now, {
+            entityID = entityID,
+            contentID = contentID,
+        })
+        return false
+    end
+    local existing = state.eventObjects[entityID]
+    if type(existing) == 'table' then
+        if existing.contentID ~= contentID
+                or Common.distanceSquared(existing.position, position) > 0.01
+                or headingDifference(existing.position.h, position.h)
+                        > HEADING_TOLERANCE
+        then
+            state.eventObjects[entityID] = nil
+            diagnostic(state, 'event_object_mismatch', now, entityID)
+            return false
+        end
+        return resolvePendingEventObjects(state, now)
+    end
+    state.eventObjects[entityID] = {
+        contentID = contentID,
+        position = position,
+    }
+    return resolvePendingEventObjects(state, now) or true
+end
+
 local function recordVisibility(
         state, entityID, wasVisible, isVisible, now)
     if not finite(entityID) or entityID <= 0 or not finite(now) then
@@ -989,44 +1090,41 @@ finishChannelBatch = function(state, batch, now)
     end
     sortedEntityEntries(entries)
     local phase = state.phase
-    local prediction = nil
-    if reflectionCount == 2
+    if reflectionCount == 0 and type(phase) ~= 'table' then
+        batch.completed = true
+        return false
+    end
+    local signal = reflectionCount == 2
             and type(phase) == 'table'
             and phase.kind == 'square'
             and phase.completed ~= true
-            and signalMatchesChannelBatch(
-                    phase.squareGate, state)
-    then
-        prediction = resolveSquare(entries, true)
-    elseif reflectionCount == 3
+            and phase.squareGate
+            or reflectionCount == 3
             and type(phase) == 'table'
             and phase.kind == 'l'
             and type(phase.layout) == 'table'
             and phase.layout.consumed ~= true
-            and signalMatchesChannelBatch(
-                    phase.layout, state)
             and finite(phase.layout.effectiveHeading)
-    then
-        prediction = resolveL(
-                entries, phase.layout.effectiveHeading, true)
-    elseif reflectionCount == 0 and type(phase) ~= 'table' then
+            and phase.layout
+            or nil
+    if signal == nil or not signalMatchesChannelBatch(signal, state) then
+        return false
+    end
+    local prediction = reflectionCount == 2
+            and resolveSquare(entries, true)
+            or resolveL(entries, phase.layout.effectiveHeading, true)
+    if prediction == nil then
+        diagnostic(state, 'channel_geometry_ambiguous', now, {
+            reflectionCount = reflectionCount,
+            phaseKind = phase.kind,
+            layoutState = type(phase.layout) == 'table'
+                    and phase.layout.state or nil,
+        })
         batch.completed = true
+        clearPrediction(state)
         return false
     end
     batch.completed = true
-    if prediction == nil then
-        if reflectionCount > 0 then
-            diagnostic(state, 'channel_geometry_ambiguous', now, {
-                reflectionCount = reflectionCount,
-                phaseKind = type(phase) == 'table' and phase.kind or nil,
-                layoutState = type(phase) == 'table'
-                        and type(phase.layout) == 'table'
-                        and phase.layout.state or nil,
-            })
-            clearPrediction(state)
-        end
-        return false
-    end
     state.lastDiagnostic = nil
     return applyPrediction(state, prediction, 'channel', now)
 end
@@ -1069,6 +1167,8 @@ local function recordTopazChannel(
         entityID = entityID,
         actionID = actionID,
         observedAt = now,
+        position = type(state.visibleStones[entityID]) == 'table'
+                and state.visibleStones[entityID].position or nil,
     }
     batch.count = batch.count + 1
     if batch.count > 10 then
@@ -1202,6 +1302,7 @@ local function updateState(state, guide, cfg, now)
     then
         state.phase = nil
         state.channelBatch = nil
+        state.pendingEventObjects = {}
         clearPrediction(state)
     end
     if type(state.channelBatch) == 'table'
@@ -1211,7 +1312,8 @@ local function updateState(state, guide, cfg, now)
     then
         state.channelBatch = nil
     end
-    local resolved = resolvePendingTopazes(state, now)
+    local resolved = resolvePendingEventObjects(state, now)
+    resolved = resolvePendingTopazes(state, now) or resolved
     if state.prediction == nil then
         tryEarlyPrediction(state, now)
     end
@@ -1296,7 +1398,7 @@ Feature.OnEntityChannel = function(entityID, actionID, now)
     return recordTopazChannel(state, entityID, actionID, now)
 end
 
-Feature.OnEntityCast = function(entityID, actionID)
+Feature.OnEntityCast = function(entityID, actionID, now)
     local state = getState()
     if state == nil then
         return false
@@ -1307,6 +1409,10 @@ Feature.OnEntityCast = function(entityID, actionID)
             or actionID == AID.LReflectionA
             or actionID == AID.LReflectionB
     then
+        -- Script callbacks do not expose ContentID. Unresolved IDs belong to
+        -- other map event objects unless a matching ground effect proves
+        -- otherwise, so they are not GemstoneBeast diagnostics.
+        state.pendingEventObjects = {}
         state.channelBatch = nil
         local phase = state.phase
         if type(phase) == 'table' then
@@ -1336,6 +1442,16 @@ Feature.OnEventObjectScriptFunc = function(
         return false
     end
     return recordEventObject(state, entityID, a1, a2, a3, now)
+end
+
+Feature.OnAddGroundEffect = function(args, now)
+    local guide = rawget(_G, 'MuAiGuide')
+    local cfg = getConfig(guide)
+    local state = getState()
+    if state == nil or cfg == nil or cfg.Enable ~= true then
+        return false
+    end
+    return recordGroundEffect(state, args, now)
 end
 
 Feature.Update = function(guide, now)
@@ -1371,11 +1487,15 @@ Feature.Test = {
     IsEarlyLReflection = isEarlyLReflection,
     QuadrantFor = quadrantFor,
     RoomForLocalPosition = roomForLocalPosition,
+    EntityModelID = entityModelID,
+    ScanTopazes = scanTopazes,
     ResolveSquare = resolveSquare,
     ResolveL = resolveL,
     RecordVisibility = recordVisibility,
     BeginRubyGlow = beginRubyGlow,
     RecordEventObject = recordEventObject,
+    RecordGroundEffect = recordGroundEffect,
+    ResolvePendingEventObjects = resolvePendingEventObjects,
     RecordTopazChannel = recordTopazChannel,
     ResolvePendingTopazes = resolvePendingTopazes,
     NearestSafeTarget = nearestSafeTarget,

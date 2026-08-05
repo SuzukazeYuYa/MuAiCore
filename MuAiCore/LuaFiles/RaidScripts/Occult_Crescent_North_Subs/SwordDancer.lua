@@ -20,7 +20,6 @@ local BLADE_GROUND_EFFECT_ID = 2015283
 local SWORD_DONUT_SMALL_AID = 49589
 local SWORD_DONUT_LARGE_AID = 49590
 local SWORD_CIRCLE_AID = 49592
-
 local BLADE_RECT_LENGTH = 60
 local BLADE_RECT_WIDTH = 20
 local BLADE_FIRST_PREVIEW_MS = 6400
@@ -35,7 +34,9 @@ local LEGACY_DONUT_SOURCE = 'MuAiCore - 剑舞者月环内径修正'
 local SPIN_OUTER_RADIUS = 30
 local SPIN_CIRCLE_RADIUS = 15
 local SPIN_PREVIEW_MS = 14000
-local SPIN_RESOLVE_TIMEOUT_MS = 1500
+-- Hidden swords become queryable about four to six seconds after their pose
+-- animation. Keep that verified pose until its own prediction window ends.
+local SPIN_RESOLVE_TIMEOUT_MS = SPIN_PREVIEW_MS
 local SPIN_BY_ANIMATION = {
     [210] = {
         actionID = SWORD_DONUT_SMALL_AID,
@@ -233,6 +234,17 @@ local function clearMechanic(state)
     state.lastDiagnostic = nil
 end
 
+local function entityModelID(entityID, entity)
+    local argus = rawget(_G, 'Argus')
+    local modelID = type(argus) == 'table'
+            and type(argus.getEntityModel) == 'function'
+            and tonumber(argus.getEntityModel(entityID)) or nil
+    if not finite(modelID) and type(entity) == 'table' then
+        modelID = tonumber(entity.modelid)
+    end
+    return modelID
+end
+
 local function resolveSword(entityID)
     if not finite(entityID) then
         return nil
@@ -252,7 +264,7 @@ local function resolveSword(entityID)
         if type(entity) == 'table'
                 and tonumber(entity.id) == entityID
                 and tonumber(entity.contentid) == SWORD_CONTENT_ID
-                and tonumber(entity.modelid) == SWORD_MODEL_ID
+                and entityModelID(entityID, entity) == SWORD_MODEL_ID
                 and entity.alive ~= false
         then
             return reliablePosition(entity.pos, false)
@@ -285,7 +297,8 @@ local function recordSwordEntity(state, entityID, contentID, now)
     return true
 end
 
-local function drawSpinPreview(state, entityID, spec, position, now)
+local function drawSpinPreview(
+        state, entityID, spec, position, timeout, now)
     local current = state.spinPreviews[entityID]
     if type(current) == 'table'
             and current.actionID == spec.actionID
@@ -299,7 +312,7 @@ local function drawSpinPreview(state, entityID, spec, position, now)
             and type(drawer.addTimedCircle) == 'function'
     then
         token = drawer:addTimedCircle(
-                SPIN_PREVIEW_MS,
+                timeout,
                 position.x, position.y, position.z,
                 spec.radius,
                 0)
@@ -308,7 +321,7 @@ local function drawSpinPreview(state, entityID, spec, position, now)
             and type(drawer.addTimedDonut) == 'function'
     then
         token = drawer:addTimedDonut(
-                SPIN_PREVIEW_MS,
+                timeout,
                 position.x, position.y, position.z,
                 spec.inner, SPIN_OUTER_RADIUS,
                 0)
@@ -324,7 +337,7 @@ local function drawSpinPreview(state, entityID, spec, position, now)
     state.spinPreviews[entityID] = {
         token = token,
         actionID = spec.actionID,
-        expiresAt = now + SPIN_PREVIEW_MS,
+        expiresAt = now + timeout,
     }
     state.lastDiagnostic = nil
     return true
@@ -347,7 +360,8 @@ local function recordSpinAnimation(
     end
     if position ~= nil then
         state.pendingSpins[entityID] = nil
-        return drawSpinPreview(state, entityID, spec, position, now)
+        return drawSpinPreview(
+                state, entityID, spec, position, SPIN_PREVIEW_MS, now)
     end
     state.pendingSpins[entityID] = {
         spec = spec,
@@ -366,10 +380,17 @@ local function resolvePendingSpins(state, now)
             state.pendingSpins[entityID] = nil
             changed = true
         else
-            local position = resolveSword(entityID)
+            local position = now < pending.expiresAt
+                    and resolveSword(entityID) or nil
             if position ~= nil then
                 state.pendingSpins[entityID] = nil
-                drawSpinPreview(state, entityID, pending.spec, position, now)
+                local remaining = math.floor(
+                        pending.expiresAt - now + 0.5)
+                if remaining > 0 then
+                    drawSpinPreview(
+                            state, entityID, pending.spec,
+                            position, remaining, now)
+                end
                 changed = true
             elseif now >= pending.expiresAt then
                 state.pendingSpins[entityID] = nil

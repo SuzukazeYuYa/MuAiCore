@@ -196,6 +196,8 @@ G.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
             entityID, spellID, targetID, channelTimeMax, now)
     TwoHeadedAevis.OnEntityChannel(entityID, spellID, now)
     SwordDancer.OnEntityChannel(entityID, spellID, now)
+    Necrophobia.OnEntityChannel(entityID, spellID, now)
+    Index.OnEntityChannel(entityID, spellID, channelTimeMax, now)
     OccultGrimoire.OnEntityChannel(
             entityID, spellID, channelTimeMax, now)
     CalofisteriDoppelganger.OnEntityChannel(entityID, spellID, now)
@@ -247,6 +249,7 @@ G.OnEntityCast = function(entityID, spellID, castPos)
     NorthReferenceDrawings.OnEntityCast(entityID, spellID, castPos, now)
     TwoHeadedAevis.OnEntityCast(entityID, spellID)
     SwordDancer.OnEntityCast(entityID, spellID, castPos, now)
+    Index.OnEntityCast(entityID, spellID, castPos, now)
     SacredTreeGiant.OnEntityCast(entityID, spellID, now)
     OccultGrimoire.OnEntityCast(entityID, spellID, now)
     CalofisteriDoppelganger.OnEntityCast(entityID, spellID, now)
@@ -279,6 +282,10 @@ G.OnAuraChange = function(
     end
     local now = Context.nowMs()
     AlabasterBlade.OnAuraChange(
+            entityID, oldActiveAura1, newActiveAura1, now)
+    Necrophobia.OnAuraChange(
+            entityID, oldActiveAura1, newActiveAura1, now)
+    Index.OnAuraChange(
             entityID, oldActiveAura1, newActiveAura1, now)
     Arachne.OnAuraChange(
             entityID, oldActiveAura1, newActiveAura1, now)
@@ -323,7 +330,7 @@ G.OnEntityAdd = function(entityID, entityName, contentID)
             entityID, contentID, now)
     local chimera = LeaderChimera.OnEntityAdd(
             entityID, contentID, now)
-    local littleMage = LittleMage.OnEntityAdd(entityID, now)
+    local littleMage = LittleMage.OnEntityAdd(entityID, contentID, now)
     local iambe = Iambe.OnEntityAdd(entityID, contentID, now)
     local gale = GaleGriffin.OnEntityAdd(entityID, contentID, now)
     local sword = SwordDancer.OnEntityAdd(
@@ -346,6 +353,7 @@ G.OnAddGroundEffect = function(...)
         ShapeshiftingMage.OnAddGroundEffect({ ... }, now)
         SwordDancer.OnAddGroundEffect({ ... }, now)
         Index.OnAddGroundEffect({ ... }, now)
+        GemstoneBeast.OnAddGroundEffect({ ... }, now)
         Pallmagia.OnAddGroundEffect(...)
     end
 end
@@ -368,6 +376,7 @@ G.OnAOECreate = function(aoeInfo)
     end
     local now = Context.nowMs()
     NorthReferenceDrawings.OnAOECreate(aoeInfo, now)
+    TwoHeadedAevis.OnAOECreate(aoeInfo, now)
     Necrophobia.OnAOECreate(aoeInfo, now)
     OccultGrimoire.OnAOECreate(aoeInfo, now)
     CalofisteriDoppelganger.OnAOECreate(aoeInfo, now)

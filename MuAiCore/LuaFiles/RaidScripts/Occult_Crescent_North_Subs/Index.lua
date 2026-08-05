@@ -18,8 +18,15 @@ local BALL_STEP_RADIANS = math.rad(30)
 local BALL_STEP_MS = 1000
 local GUIDE_RADIUS = 9
 local GUIDE_INSET = math.rad(10)
-local BALL_RESOLVE_WAIT_MS = 500
+local BALL_RESOLVE_DEADLINE_MS = BALL_BASE_OFFSET_MS
 local STATE_TTL_MS = 30000
+local EXTREME_PREDICTION_DURATION_MS = 10400
+local EXTREME_PREDICTION_ROTATION = -math.rad(60)
+local EXTREME_PREDICTION_LANDING_RADIUS = 15.55
+local EXTREME_KNOCKBACK_EARLY_OFFSET_MS = 6100
+local EXTREME_KNOCKBACK_WINDOW_MS = 8500
+local EXTREME_KNOCKBACK_REANCHOR_GRACE_MS = 250
+local EXTREME_KNOCKBACK_DISTANCE = 10
 local CLEANSING_DONUT_AID = 48414
 local CLEANSING_DONUT_INNER_RADIUS = 5
 local MOOGLE_DONUT_SOURCE = 'MuAiCore - 目录天崩地裂月环内径修正'
@@ -39,6 +46,14 @@ local BALL_SPEC = {
     [14724] = { kind = 'fire', modelID = 19301 },
     [14725] = { kind = 'thunder', modelID = 19302 },
 }
+local EXTREME_PREDICTION_SPEC = {
+    [2890] = { shape = 'donut', inner = 3, outer = 15 },
+    [2891] = { shape = 'circle', radius = 10 },
+}
+local EXTREME_PREDICTION_CONTENT_ID = 14722
+local EXTREME_PREDICTION_MODEL_ID = 19299
+local EXTREME_KNOCKBACK_CAST_AID = 48404
+local EXTREME_KNOCKBACK_CHANNEL_AID = 48405
 
 local DEFAULTS = {
     Enable = true,
@@ -51,6 +66,11 @@ local function newState()
         pendingBalls = {},
         seen = {},
         hazards = {},
+        extremeActive = false,
+        extremeSeen = {},
+        pendingExtremePredictions = {},
+        extremeHazards = {},
+        extremeKnockback = nil,
         moogleDonuts = {},
         lastDiagnostic = nil,
     }
@@ -64,6 +84,14 @@ local function ensureState(state)
     state.seen = type(state.seen) == 'table' and state.seen or {}
     state.hazards = type(state.hazards) == 'table'
             and state.hazards or {}
+    state.extremeActive = state.extremeActive == true
+    state.extremeSeen = type(state.extremeSeen) == 'table'
+            and state.extremeSeen or {}
+    state.pendingExtremePredictions =
+            type(state.pendingExtremePredictions) == 'table'
+            and state.pendingExtremePredictions or {}
+    state.extremeHazards = type(state.extremeHazards) == 'table'
+            and state.extremeHazards or {}
     state.moogleDonuts = type(state.moogleDonuts) == 'table'
             and state.moogleDonuts or {}
     return state
@@ -82,6 +110,10 @@ local feature = Common.newFeature({
         ball_pair_invalid = '目录元素球未形成中心对称的一组',
         danger_drawer_unavailable = '目录元素危险区绘图器不可用',
         danger_drawer_rejected_shape = '目录元素危险区绘制失败',
+        extreme_prediction_entity_invalid = '目录极限预言现象实体或位置不可用',
+        extreme_prediction_drawer_unavailable = '目录极限预言现象绘图器不可用',
+        extreme_prediction_drawer_rejected_shape = '目录极限预言现象绘制失败',
+        extreme_knockback_source_invalid = '目录极限推进冲击波来源不可用',
     },
 })
 local getConfig = feature.GetConfig
@@ -121,11 +153,301 @@ local function clearMechanic(state)
             Common.deleteTimedShape(token)
         end
     end
+    for _, hazard in ipairs(state.extremeHazards) do
+        Common.deleteTimedShape(hazard.token)
+    end
     state.zones = {}
     state.pendingBalls = {}
     state.seen = {}
     state.hazards = {}
+    state.extremeActive = false
+    state.extremeSeen = {}
+    state.pendingExtremePredictions = {}
+    state.extremeHazards = {}
+    state.extremeKnockback = nil
     state.lastDiagnostic = nil
+end
+
+local function activateExtreme(state)
+    if state.extremeActive == true then
+        return
+    end
+    for _, hazard in ipairs(state.hazards) do
+        for _, token in ipairs(hazard.tokens or {}) do
+            Common.deleteTimedShape(token)
+        end
+    end
+    state.zones = {}
+    state.pendingBalls = {}
+    state.seen = {}
+    state.hazards = {}
+    state.extremeActive = true
+end
+
+local function resolveStrictEntity(entityID, contentID, modelID)
+    if not finite(entityID) then
+        return nil, nil
+    end
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
+    then
+        return nil, nil
+    end
+    local entities = tensorCore.entityList(
+            'contentid=' .. tostring(contentID))
+    if type(entities) ~= 'table' then
+        return nil, nil
+    end
+    local argus = rawget(_G, 'Argus')
+    for _, entity in pairs(entities) do
+        if type(entity) == 'table' then
+            local liveModelID = type(argus) == 'table'
+                    and type(argus.getEntityModel) == 'function'
+                    and tonumber(argus.getEntityModel(entityID)) or nil
+            if not finite(liveModelID) then
+                liveModelID = tonumber(entity.modelid)
+            end
+            if tonumber(entity.id) == entityID
+                    and tonumber(entity.contentid) == contentID
+                    and liveModelID == modelID
+                    and entity.alive ~= false
+            then
+                return entity, reliablePosition(entity.pos, false)
+            end
+        end
+    end
+    return nil, nil
+end
+
+local function validExtremePosition(position, minRadius, maxRadius)
+    if position == nil or math.abs(position.y - ARENA.y) > 2 then
+        return false
+    end
+    local dx = position.x - ARENA.x
+    local dz = position.z - ARENA.z
+    local radius = math.sqrt(dx * dx + dz * dz)
+    return radius >= minRadius and radius <= maxRadius
+end
+
+local function predictionLanding(position)
+    if not validExtremePosition(position, 8, 10) then
+        return nil
+    end
+    local spawnHeading = math.atan2(
+            position.x - ARENA.x, position.z - ARENA.z)
+    local landingHeading = spawnHeading + EXTREME_PREDICTION_ROTATION
+    return {
+        x = ARENA.x + EXTREME_PREDICTION_LANDING_RADIUS
+                * math.sin(landingHeading),
+        y = ARENA.y,
+        z = ARENA.z + EXTREME_PREDICTION_LANDING_RADIUS
+                * math.cos(landingHeading),
+    }
+end
+
+local function completeExtremePrediction(state, entityID, now)
+    local pending = state.pendingExtremePredictions[entityID]
+    if type(pending) ~= 'table' then
+        return false
+    end
+    local _, position = resolveStrictEntity(
+            entityID,
+            EXTREME_PREDICTION_CONTENT_ID,
+            EXTREME_PREDICTION_MODEL_ID)
+    local landing = predictionLanding(position)
+    if landing == nil then
+        if now < pending.startedAt + EXTREME_PREDICTION_DURATION_MS then
+            return false
+        end
+        state.pendingExtremePredictions[entityID] = nil
+        diagnostic(state, 'extreme_prediction_entity_invalid', now, entityID)
+        return false
+    end
+    local spec = EXTREME_PREDICTION_SPEC[pending.aura]
+    local drawer = Common.getMoogleDrawer()
+    local method = spec ~= nil and spec.shape == 'circle'
+            and 'addTimedCircle' or 'addTimedDonut'
+    if spec == nil or drawer == nil or type(drawer[method]) ~= 'function' then
+        state.pendingExtremePredictions[entityID] = nil
+        diagnostic(state, 'extreme_prediction_drawer_unavailable', now,
+                pending.aura)
+        return false
+    end
+    local expiresAt = pending.startedAt + EXTREME_PREDICTION_DURATION_MS
+    local remaining = expiresAt - now
+    if remaining <= 0 then
+        state.pendingExtremePredictions[entityID] = nil
+        diagnostic(state, 'extreme_prediction_entity_invalid', now, entityID)
+        return false
+    end
+    local token
+    if spec.shape == 'circle' then
+        token = drawer:addTimedCircle(
+                math.floor(remaining + 0.5),
+                landing.x, landing.y, landing.z, spec.radius)
+    else
+        token = drawer:addTimedDonut(
+                math.floor(remaining + 0.5),
+                landing.x, landing.y, landing.z,
+                spec.inner, spec.outer)
+    end
+    state.pendingExtremePredictions[entityID] = nil
+    if type(token) ~= 'string' then
+        diagnostic(state, 'extreme_prediction_drawer_rejected_shape', now,
+                pending.aura)
+        return false
+    end
+    state.extremeHazards[#state.extremeHazards + 1] = {
+        token = token,
+        entityID = entityID,
+        aura = pending.aura,
+        landing = landing,
+        expiresAt = expiresAt,
+    }
+    activateExtreme(state)
+    state.lastDiagnostic = nil
+    return true
+end
+
+local function recordExtremeAura(state, entityID, aura, now)
+    if EXTREME_PREDICTION_SPEC[aura] == nil
+            or not finite(entityID)
+            or not finite(now)
+    then
+        return false
+    end
+    local eventKey = tostring(entityID) .. ':' .. tostring(aura)
+    if state.extremeSeen[eventKey] ~= nil then
+        return false
+    end
+    state.extremeSeen[eventKey] = now
+    state.pendingExtremePredictions[entityID] = {
+        aura = aura,
+        startedAt = now,
+    }
+    return completeExtremePrediction(state, entityID, now)
+end
+
+local function recordExtremeCast(
+        state, entityID, actionID, castPosition, now)
+    if actionID ~= EXTREME_KNOCKBACK_CAST_AID
+            or not finite(entityID)
+            or not finite(now)
+    then
+        return false
+    end
+    local position = reliablePosition(castPosition, false)
+    if not validExtremePosition(position, 14, 17) then
+        diagnostic(state, 'extreme_knockback_source_invalid', now, entityID)
+        return false
+    end
+    local knockback = state.extremeKnockback
+    if type(knockback) ~= 'table'
+            or now > knockback.expiresAt
+            or now - knockback.startedAt > 2500
+    then
+        knockback = {
+            startedAt = now,
+            hitAt = now + EXTREME_KNOCKBACK_EARLY_OFFSET_MS,
+            expiresAt = now + EXTREME_KNOCKBACK_WINDOW_MS,
+            sourceIDs = {},
+            sources = {},
+        }
+        state.extremeKnockback = knockback
+    end
+    if knockback.sourceIDs[entityID] then
+        return false
+    end
+    knockback.sourceIDs[entityID] = true
+    knockback.sources[#knockback.sources + 1] = {
+        entityID = entityID,
+        x = position.x,
+        y = position.y,
+        z = position.z,
+    }
+    activateExtreme(state)
+    state.lastDiagnostic = nil
+    return true
+end
+
+local function recordExtremeChannel(
+        state, entityID, actionID, channelTimeMax, now)
+    if actionID ~= EXTREME_KNOCKBACK_CHANNEL_AID
+            or not finite(entityID)
+            or not finite(channelTimeMax)
+            or channelTimeMax <= 0
+            or channelTimeMax > 10
+            or not finite(now)
+    then
+        return false
+    end
+    local knockback = state.extremeKnockback
+    if type(knockback) ~= 'table'
+            or now > knockback.expiresAt
+            or finite(knockback.reanchoredAt)
+    then
+        return false
+    end
+    knockback.hitAt = now + math.floor(channelTimeMax * 1000)
+            + EXTREME_KNOCKBACK_REANCHOR_GRACE_MS
+    knockback.expiresAt = knockback.hitAt + 1200
+    knockback.reanchoredAt = now
+    activateExtreme(state)
+    state.lastDiagnostic = nil
+    return true
+end
+
+local function drawExtremeKnockbackGuide(state, guide, now)
+    local knockback = state.extremeKnockback
+    if type(knockback) ~= 'table'
+            or not finite(knockback.hitAt)
+            or now > knockback.hitAt + 300
+            or type(knockback.sources) ~= 'table'
+            or #knockback.sources == 0
+            or type(guide) ~= 'table'
+            or type(guide.FrameDirect) ~= 'function'
+    then
+        return false
+    end
+    local player = getPlayer(guide)
+    local position = type(player) == 'table'
+            and reliablePosition(player.pos, false) or nil
+    if not validExtremePosition(position, 0, 30) then
+        return false
+    end
+    local nearest = nil
+    local nearestDistance = nil
+    for _, source in ipairs(knockback.sources) do
+        local dx = position.x - source.x
+        local dz = position.z - source.z
+        local distance = dx * dx + dz * dz
+        if nearestDistance == nil or distance < nearestDistance then
+            nearest = source
+            nearestDistance = distance
+        end
+    end
+    if nearest == nil or nearestDistance <= 0.04 then
+        return false
+    end
+    local length = math.sqrt(nearestDistance)
+    local target = {
+        x = position.x + (position.x - nearest.x) / length
+                * EXTREME_KNOCKBACK_DISTANCE,
+        z = position.z + (position.z - nearest.z) / length
+                * EXTREME_KNOCKBACK_DISTANCE,
+    }
+    local targetDx = target.x - ARENA.x
+    local targetDz = target.z - ARENA.z
+    if targetDx * targetDx + targetDz * targetDz > ZONE_RADIUS * ZONE_RADIUS then
+        return false
+    end
+    local color = type(guide.Config) == 'table'
+            and type(guide.Config.Main) == 'table'
+            and guide.Config.Main.GuideColor
+            or { r = 0, g = 1, b = 1, a = 0.5 }
+    guide.FrameDirect(target.x, target.z, 0.7, color)
+    return true
 end
 
 local function validArenaPosition(position)
@@ -186,6 +508,9 @@ local function drawHazard(state, kind, activationAt, now, source)
 end
 
 local function recordGroundEffect(state, args, now)
+    if state.extremeActive == true then
+        return false
+    end
     if type(args) ~= 'table' then
         return false
     end
@@ -244,14 +569,22 @@ local function resolveBall(entityID, contentID)
     if type(entities) ~= 'table' then
         return spec.kind, nil
     end
+    local argus = rawget(_G, 'Argus')
     for _, entity in pairs(entities) do
-        if type(entity) == 'table'
-                and tonumber(entity.id) == entityID
-                and tonumber(entity.contentid) == contentID
-                and tonumber(entity.modelid) == spec.modelID
-                and entity.alive ~= false
-        then
-            return spec.kind, reliablePosition(entity.pos, false)
+        if type(entity) == 'table' then
+            local liveModelID = type(argus) == 'table'
+                    and type(argus.getEntityModel) == 'function'
+                    and tonumber(argus.getEntityModel(entityID)) or nil
+            if not finite(liveModelID) then
+                liveModelID = tonumber(entity.modelid)
+            end
+            if tonumber(entity.id) == entityID
+                    and tonumber(entity.contentid) == contentID
+                    and liveModelID == spec.modelID
+                    and entity.alive ~= false
+            then
+                return spec.kind, reliablePosition(entity.pos, false)
+            end
         end
     end
     return spec.kind, nil
@@ -296,7 +629,7 @@ local function completeBallPair(state, kind, now)
         local resolvedKind, position = resolveBall(
                 tracked.entityID, tracked.contentID)
         if resolvedKind ~= kind or position == nil then
-            if now - pending.startedAt <= BALL_RESOLVE_WAIT_MS then
+            if now < pending.startedAt + BALL_RESOLVE_DEADLINE_MS then
                 return false
             end
             state.pendingBalls[kind] = nil
@@ -325,6 +658,9 @@ local function completeBallPair(state, kind, now)
 end
 
 local function recordBall(state, entityID, contentID, now)
+    if state.extremeActive == true then
+        return false
+    end
     local spec = BALL_SPEC[contentID]
     if spec == nil then
         return false
@@ -508,10 +844,22 @@ local function prune(state, now)
             completeBallPair(state, kind, now)
         elseif type(pending) ~= 'table'
                 or not finite(pending.startedAt)
-                or now - pending.startedAt > BALL_RESOLVE_WAIT_MS
+                or now >= pending.startedAt + BALL_RESOLVE_DEADLINE_MS
         then
             state.pendingBalls[kind] = nil
         end
+    end
+    for entityID in pairs(state.pendingExtremePredictions) do
+        completeExtremePrediction(state, entityID, now)
+    end
+    for index = #state.extremeHazards, 1, -1 do
+        if now >= state.extremeHazards[index].expiresAt then
+            table.remove(state.extremeHazards, index)
+        end
+    end
+    local knockback = state.extremeKnockback
+    if type(knockback) == 'table' and now > knockback.expiresAt then
+        state.extremeKnockback = nil
     end
 end
 
@@ -576,6 +924,39 @@ Feature.OnEntityAdd = function(entityID, contentID, now)
     return false
 end
 
+Feature.OnAuraChange = function(entityID, oldActiveAura1, newActiveAura1, now)
+    local guide = rawget(_G, 'MuAiGuide')
+    local cfg = getConfig(guide)
+    local state = getState()
+    if state ~= nil and cfg ~= nil and cfg.Enable == true then
+        return recordExtremeAura(state, entityID, newActiveAura1, now)
+    end
+    return false
+end
+
+Feature.OnEntityCast = function(entityID, actionID, castPosition, now)
+    local guide = rawget(_G, 'MuAiGuide')
+    local cfg = getConfig(guide)
+    local state = getState()
+    if state ~= nil and cfg ~= nil and cfg.Enable == true then
+        return recordExtremeCast(
+                state, entityID, actionID, castPosition, now)
+    end
+    return false
+end
+
+Feature.OnEntityChannel = function(
+        entityID, actionID, channelTimeMax, now)
+    local guide = rawget(_G, 'MuAiGuide')
+    local cfg = getConfig(guide)
+    local state = getState()
+    if state ~= nil and cfg ~= nil and cfg.Enable == true then
+        return recordExtremeChannel(
+                state, entityID, actionID, channelTimeMax, now)
+    end
+    return false
+end
+
 Feature.Update = function(guide, now)
     local state = getState()
     if state == nil or not finite(now) then
@@ -586,7 +967,8 @@ Feature.Update = function(guide, now)
         applyMoogleDonuts(state, true)
         prune(state, now)
         if cfg.DynamicGuide == true then
-            return drawGuide(state, guide, now)
+            return drawExtremeKnockbackGuide(state, guide, now)
+                    or drawGuide(state, guide, now)
         end
         return false
     end
@@ -606,8 +988,18 @@ Feature.Test = {
     PreviewMs = PREVIEW_MS,
     RingOffsetMs = RING_OFFSET_MS,
     BallBaseOffsetMs = BALL_BASE_OFFSET_MS,
+    BallResolveDeadlineMs = BALL_RESOLVE_DEADLINE_MS,
     BallStepRadians = BALL_STEP_RADIANS,
     BallStepMs = BALL_STEP_MS,
+    ExtremePredictionSpec = EXTREME_PREDICTION_SPEC,
+    ExtremePredictionContentID = EXTREME_PREDICTION_CONTENT_ID,
+    ExtremePredictionModelID = EXTREME_PREDICTION_MODEL_ID,
+    ExtremePredictionDurationMs = EXTREME_PREDICTION_DURATION_MS,
+    ExtremePredictionRotation = EXTREME_PREDICTION_ROTATION,
+    ExtremePredictionLandingRadius = EXTREME_PREDICTION_LANDING_RADIUS,
+    ExtremeKnockbackCastActionID = EXTREME_KNOCKBACK_CAST_AID,
+    ExtremeKnockbackChannelActionID = EXTREME_KNOCKBACK_CHANNEL_AID,
+    ExtremeKnockbackDistance = EXTREME_KNOCKBACK_DISTANCE,
     CleansingDonutActionID = CLEANSING_DONUT_AID,
     CleansingDonutInnerRadius = CLEANSING_DONUT_INNER_RADIUS,
     MoogleDonutSource = MOOGLE_DONUT_SOURCE,
@@ -619,6 +1011,12 @@ Feature.Test = {
     BallActivationAt = ballActivationAt,
     BallPairValid = ballPairValid,
     CompleteBallPair = completeBallPair,
+    PredictionLanding = predictionLanding,
+    RecordExtremeAura = recordExtremeAura,
+    CompleteExtremePrediction = completeExtremePrediction,
+    RecordExtremeCast = recordExtremeCast,
+    RecordExtremeChannel = recordExtremeChannel,
+    DrawExtremeKnockbackGuide = drawExtremeKnockbackGuide,
     GuideTarget = guideTarget,
     DrawGuide = drawGuide,
     ApplyMoogleDonuts = applyMoogleDonuts,

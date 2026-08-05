@@ -10,7 +10,6 @@ function Module.Create(Context)
 local PREDICTION_TIMEOUT_MS = 6500
 local PREDICTION_TOKEN_GRACE_MS = 1000
 local VISIBILITY_SEEN_TTL_MS = 60000
-local PENDING_RESOLVE_MS = 1000
 
 local FORMATION_ACTION_ID = 47179
 local FORMATION_AOE_ID = 47180
@@ -28,9 +27,8 @@ local DEFAULTS = {
 
 -- The 2026-08-01 and 2026-08-03 map-1346 captures show each selected
 -- explorer/pirate becoming visible about five seconds before its channel.
--- Their spawn positions remain unchanged. OnEntityAdd keeps stable IDs and
--- entityList resolves the hidden entities; visibility remains the selection
--- signal.
+-- OnEntityAdd keeps only stable identity; visibility is the selection signal
+-- and starts the bounded live-geometry resolution window.
 local REVEAL_SPECS = {
     [14515] = {
         modelID = 19394,
@@ -61,8 +59,7 @@ local function newState()
         active = {},
         seenVisibility = {},
         revealIDs = {},
-        entityCache = {},
-        pendingAdds = {},
+        pendingReveals = {},
         helperIDs = {},
         formation = nil,
         lastDiagnostic = nil,
@@ -76,10 +73,8 @@ local function ensureState(state)
             and state.seenVisibility or {}
     state.revealIDs = type(state.revealIDs) == 'table'
             and state.revealIDs or {}
-    state.entityCache = type(state.entityCache) == 'table'
-            and state.entityCache or {}
-    state.pendingAdds = type(state.pendingAdds) == 'table'
-            and state.pendingAdds or {}
+    state.pendingReveals = type(state.pendingReveals) == 'table'
+            and state.pendingReveals or {}
     state.helperIDs = type(state.helperIDs) == 'table'
             and state.helperIDs or {}
     state.formation = type(state.formation) == 'table'
@@ -151,8 +146,7 @@ local function clearState(state)
     state.active = {}
     state.seenVisibility = {}
     state.revealIDs = {}
-    state.entityCache = {}
-    state.pendingAdds = {}
+    state.pendingReveals = {}
     state.helperIDs = {}
     state.formation = nil
     state.lastDiagnostic = nil
@@ -187,45 +181,6 @@ local function resolveTrackedEntity(entityID, contentID)
     return nil
 end
 
-local function cacheAddedEntity(
-        state, entityID, announcedContentID, addedAt, now)
-    local entity = resolveTrackedEntity(entityID, announcedContentID)
-    if type(entity) ~= 'table' then
-        return false, now - addedAt > PENDING_RESOLVE_MS
-    end
-    local contentID = tonumber(entity.contentid)
-    local modelID = tonumber(entity.modelid)
-    if tonumber(entity.id) ~= entityID
-            or contentID ~= announcedContentID
-            or entity.alive == false
-    then
-        return false, true
-    end
-    local spec = REVEAL_SPECS[contentID]
-    if spec ~= nil then
-        if modelID ~= spec.modelID then
-            return false, true
-        end
-        local position = reliablePosition(
-                entity.pos, spec.kind == 'cross')
-        if position == nil then
-            return false, now - addedAt > PENDING_RESOLVE_MS
-        end
-        state.entityCache[entityID] = {
-            entityID = entityID,
-            contentID = contentID,
-            modelID = modelID,
-            position = position,
-        }
-        return true, true
-    end
-    if contentID == 14512 and modelID == 9020 then
-        state.helperIDs[entityID] = true
-        return true, true
-    end
-    return false, true
-end
-
 local function handleEntityAdd(state, entityID, contentID, now)
     state = ensureState(state)
     contentID = tonumber(contentID)
@@ -238,45 +193,29 @@ local function handleEntityAdd(state, entityID, contentID, now)
     end
     if REVEAL_SPECS[contentID] ~= nil then
         state.revealIDs[entityID] = contentID
+    else
+        state.helperIDs[entityID] = true
     end
-    local changed, complete = cacheAddedEntity(
-            state, entityID, contentID, now, now)
-    if complete ~= true then
-        state.pendingAdds[entityID] = {
-            contentID = contentID,
-            addedAt = now,
-        }
-    end
-    return changed
+    return true
 end
 
-local function processPendingAdds(state, now)
-    local changed = false
-    for entityID, pending in pairs(state.pendingAdds) do
-        local addedAt = type(pending) == 'table'
-                and pending.addedAt or nil
-        local contentID = type(pending) == 'table'
-                and pending.contentID or nil
-        if finite(addedAt) and finite(contentID) then
-            local cached, complete = cacheAddedEntity(
-                    state, entityID, contentID, addedAt, now)
-            changed = cached or changed
-            if complete == true then
-                state.pendingAdds[entityID] = nil
-            end
-        else
-            state.pendingAdds[entityID] = nil
-        end
+local function entityModelID(entityID, entity)
+    local argus = rawget(_G, 'Argus')
+    local modelID = type(argus) == 'table'
+            and type(argus.getEntityModel) == 'function'
+            and tonumber(argus.getEntityModel(entityID)) or nil
+    if not finite(modelID) and type(entity) == 'table' then
+        modelID = tonumber(entity.modelid)
     end
-    return changed
+    return modelID
 end
 
-local function drawPrediction(drawer, spec, position)
+local function drawPrediction(drawer, spec, position, timeout)
     if spec.kind == 'circle'
             and type(drawer.addTimedCircle) == 'function'
     then
         return drawer:addTimedCircle(
-                PREDICTION_TIMEOUT_MS,
+                timeout,
                 position.x, position.y, position.z,
                 spec.radius)
     end
@@ -284,11 +223,89 @@ local function drawPrediction(drawer, spec, position)
             and type(drawer.addTimedCross) == 'function'
     then
         return drawer:addTimedCross(
-                PREDICTION_TIMEOUT_MS,
+                timeout,
                 position.x, position.y, position.z,
                 spec.length, spec.width, position.h)
     end
     return nil
+end
+
+local function completeReveal(state, entityID, now)
+    local pending = state.pendingReveals[entityID]
+    if type(pending) ~= 'table' then
+        return false
+    end
+    local spec = REVEAL_SPECS[pending.contentID]
+    local entity = spec ~= nil
+            and resolveTrackedEntity(entityID, pending.contentID) or nil
+    local modelID = entityModelID(entityID, entity)
+    local position = type(entity) == 'table' and spec ~= nil
+            and reliablePosition(entity.pos, spec.kind == 'cross') or nil
+    if type(entity) ~= 'table'
+            or not finite(modelID)
+            or position == nil
+    then
+        if now < pending.expiresAt then
+            return false
+        end
+        state.pendingReveals[entityID] = nil
+        diagnostic(state, 'reveal_geometry_missing', now, {
+            entityID = entityID,
+            contentID = pending.contentID,
+        })
+        return false
+    end
+    if modelID ~= spec.modelID then
+        state.pendingReveals[entityID] = nil
+        diagnostic(state, 'reveal_entity_mismatch', now, {
+            entityID = entityID,
+            contentID = pending.contentID,
+            modelID = modelID,
+        })
+        return false
+    end
+    local remaining = math.floor(pending.expiresAt - now + 0.5)
+    if remaining <= 0 then
+        state.pendingReveals[entityID] = nil
+        diagnostic(state, 'reveal_geometry_missing', now, entityID)
+        return false
+    end
+    local drawer = Common.getMoogleDrawer()
+    if drawer == nil then
+        state.pendingReveals[entityID] = nil
+        diagnostic(state, 'danger_drawer_unavailable', now, pending.contentID)
+        return false
+    end
+    local token = drawPrediction(drawer, spec, position, remaining)
+    state.pendingReveals[entityID] = nil
+    if type(token) ~= 'string' then
+        diagnostic(state, 'danger_drawer_rejected_shape', now, {
+            entityID = entityID,
+            contentID = pending.contentID,
+            kind = spec.kind,
+        })
+        return false
+    end
+    local key = tostring(entityID) .. ':reveal'
+    state.seenVisibility[key] = pending.startedAt
+    state.active[key] = {
+        token = token,
+        kind = 'reveal',
+        entityID = entityID,
+        contentID = pending.contentID,
+        actionID = spec.actionID,
+        expiresAt = pending.expiresAt + PREDICTION_TOKEN_GRACE_MS,
+    }
+    state.lastDiagnostic = nil
+    return true
+end
+
+local function processPendingReveals(state, now)
+    local changed = false
+    for entityID in pairs(state.pendingReveals) do
+        changed = completeReveal(state, entityID, now) or changed
+    end
+    return changed
 end
 
 local function handleVisibilityChange(
@@ -314,57 +331,15 @@ local function handleVisibilityChange(
     if finite(seenAt) and now - seenAt <= VISIBILITY_SEEN_TTL_MS then
         return false
     end
-    local cached = state.entityCache[entityID]
-    local spec = type(cached) == 'table'
-            and REVEAL_SPECS[cached.contentID] or nil
-    if type(cached) ~= 'table'
-            or spec == nil
-            or cached.entityID ~= entityID
-            or cached.modelID ~= spec.modelID
-    then
-        diagnostic(state, 'reveal_entity_mismatch', now, {
-            entityID = entityID,
-            contentID = type(cached) == 'table'
-                    and cached.contentID or nil,
-            modelID = type(cached) == 'table' and cached.modelID or nil,
-        })
+    if state.pendingReveals[entityID] ~= nil then
         return false
     end
-    local position = reliablePosition(
-            cached.position, spec.kind == 'cross')
-    if position == nil then
-        diagnostic(state, 'reveal_geometry_missing', now, {
-            entityID = entityID,
-            contentID = cached.contentID,
-        })
-        return false
-    end
-    local drawer = Common.getMoogleDrawer()
-    if drawer == nil then
-        diagnostic(state, 'danger_drawer_unavailable', now, cached.contentID)
-        return false
-    end
-    local token = drawPrediction(drawer, spec, position)
-    if type(token) ~= 'string' then
-        diagnostic(state, 'danger_drawer_rejected_shape', now, {
-            entityID = entityID,
-            contentID = cached.contentID,
-            kind = spec.kind,
-        })
-        return false
-    end
-    state.seenVisibility[key] = now
-    state.active[key] = {
-        token = token,
-        kind = 'reveal',
-        entityID = entityID,
-        contentID = cached.contentID,
-        actionID = spec.actionID,
-        expiresAt = now + PREDICTION_TIMEOUT_MS
-                + PREDICTION_TOKEN_GRACE_MS,
+    state.pendingReveals[entityID] = {
+        contentID = announcedContentID,
+        startedAt = now,
+        expiresAt = now + PREDICTION_TIMEOUT_MS,
     }
-    state.lastDiagnostic = nil
-    return true
+    return completeReveal(state, entityID, now)
 end
 
 local function beginFormation(state, now)
@@ -414,7 +389,7 @@ local function collectFormationGeometry(state)
         if finite(entityID)
                 and state.helperIDs[entityID] == true
                 and tonumber(entity.contentid) == 14512
-                and tonumber(entity.modelid) == 9020
+                and entityModelID(entityID, entity) == 9020
                 and entity.alive ~= false
         then
             local position = reliablePosition(entity.pos, true)
@@ -512,9 +487,17 @@ local function handleRevealActionStart(state, entityID, actionID)
         return false
     end
     local key = tostring(entityID) .. ':reveal'
+    local pending = state.pendingReveals[entityID]
+    local pendingSpec = type(pending) == 'table'
+            and REVEAL_SPECS[pending.contentID] or nil
+    local removedPending = false
+    if pendingSpec ~= nil and pendingSpec.actionID == actionID then
+        state.pendingReveals[entityID] = nil
+        removedPending = true
+    end
     local entry = state.active[key]
     if type(entry) ~= 'table' or entry.actionID ~= actionID then
-        return false
+        return removedPending
     end
     return deleteEntry(state, key)
 end
@@ -584,7 +567,7 @@ local function pruneState(state, now)
     if not finite(now) then
         return false
     end
-    local changed = processPendingAdds(state, now)
+    local changed = processPendingReveals(state, now)
     changed = drawFormation(state, now, false) or changed
     if type(state.formation) == 'table'
             and now > state.formation.expiresAt
@@ -738,6 +721,7 @@ Feature.Test = {
     GetConfig = getConfig,
     HandleEntityAdd = handleEntityAdd,
     HandleVisibilityChange = handleVisibilityChange,
+    CompleteReveal = completeReveal,
     BeginFormation = beginFormation,
     CollectFormationGeometry = collectFormationGeometry,
     DrawFormation = drawFormation,

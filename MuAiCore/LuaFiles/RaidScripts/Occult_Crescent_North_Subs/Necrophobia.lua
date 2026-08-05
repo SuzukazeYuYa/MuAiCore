@@ -4,8 +4,12 @@ function Module.Create(Context)
     assert(type(Context) == 'table' and type(Context.Common) == 'table')
     local Common = Context.Common
     local finite = Context.finite
+    local reliablePosition = Context.reliablePosition
 
 local BOSS_CONTENT_ID = 14503
+local BOSS_MODEL_ID = 19429
+local HEAD_CONTENT_ID = 14504
+local HEAD_MODEL_ID = 19430
 local INITIAL_AID = 47477
 local FOLLOWUP_AID = 47478
 local INITIAL_CAST_TYPE = 12
@@ -17,6 +21,20 @@ local FIRST_STEP_OFFSET_MS = 6560
 local STEP_INTERVAL_MS = 2080
 local RESOLVE_GRACE_MS = 200
 local ROUND_TTL_MS = 12000
+local ENTITY_RESOLVE_MS = 1000
+local FERTILE_GROUND_AID = 47514
+local FERTILE_GROUND_HEAD_AURA_BLUE = 2911
+local FERTILE_GROUND_HEAD_AURA_PINK = 2912
+local FERTILE_GROUND_FIRST_FIRE_MS = 13200
+local FERTILE_GROUND_CADENCE_MS = 6000
+local FERTILE_GROUND_LEAD_MS = 4500
+local FERTILE_GROUND_LIFETIME_MS = 600
+local FERTILE_GROUND_HEAD_MIN_DISTANCE = 5
+local FERTILE_GROUND_HEAD_MAX_DISTANCE = 50
+local FERTILE_GROUND_HALF_ANGLE = math.pi
+local FERTILE_GROUND_RADIUS = 30
+local BLUE_BUFF_ID = 5136
+local PINK_BUFF_ID = 5137
 local BLACKLIST_SOURCE = 'MuAiCore - 惧死者黑暗奔流扩散预测'
 
 local DEFAULTS = {
@@ -27,6 +45,13 @@ local function newState()
     return {
         active = {},
         seen = {},
+        fertileGround = nil,
+        pendingFertileGround = nil,
+        pendingVolleys = {},
+        volleyHeads = {},
+        volleys = {},
+        nextVolleyIndex = 0,
+        fertileFirstAuraAt = nil,
         blacklist = { owned = nil, registered = false },
         lastDiagnostic = nil,
     }
@@ -36,6 +61,12 @@ local function ensureState(state)
     state = type(state) == 'table' and state or newState()
     state.active = type(state.active) == 'table' and state.active or {}
     state.seen = type(state.seen) == 'table' and state.seen or {}
+    state.pendingVolleys = type(state.pendingVolleys) == 'table'
+            and state.pendingVolleys or {}
+    state.volleyHeads = type(state.volleyHeads) == 'table'
+            and state.volleyHeads or {}
+    state.volleys = type(state.volleys) == 'table' and state.volleys or {}
+    state.nextVolleyIndex = tonumber(state.nextVolleyIndex) or 0
     state.blacklist = type(state.blacklist) == 'table'
             and state.blacklist or {}
     state.blacklist.registered = state.blacklist.registered == true
@@ -54,6 +85,9 @@ local feature = Common.newFeature({
         initial_geometry_mismatch = '惧死者黑暗奔流预兆几何与实战样本不符',
         danger_drawer_unavailable = '惧死者黑暗奔流扩散绘图器不可用',
         danger_drawer_rejected_shape = '惧死者黑暗奔流扩散绘制失败',
+        fertile_ground_entity_mismatch = '惧死者极塔沃土实体身份不匹配',
+        fertile_ground_geometry_missing = '惧死者极塔沃土缺少可靠几何',
+        fertile_ground_player_state_missing = '惧死者极塔沃土缺少唯一元素状态',
     },
 })
 local getConfig = feature.GetConfig
@@ -110,7 +144,250 @@ local function clearMechanic(state)
     end
     state.active = {}
     state.seen = {}
+    state.fertileGround = nil
+    state.pendingFertileGround = nil
+    state.pendingVolleys = {}
+    state.volleyHeads = {}
+    state.volleys = {}
+    state.nextVolleyIndex = 0
+    state.fertileFirstAuraAt = nil
     state.lastDiagnostic = nil
+end
+
+local function entitiesByContent(contentID)
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
+    then
+        return nil
+    end
+    local entities = tensorCore.entityList(
+            'contentid=' .. tostring(contentID))
+    return type(entities) == 'table' and entities or nil
+end
+
+local function resolveEntity(entityID, contentID, modelID, requireHeading)
+    local entities = entitiesByContent(contentID)
+    if entities == nil then
+        return nil
+    end
+    for _, entity in pairs(entities) do
+        if type(entity) == 'table'
+                and tonumber(entity.id) == entityID
+                and tonumber(entity.contentid) == contentID
+                and tonumber(entity.modelid) == modelID
+                and entity.alive ~= false
+        then
+            local position = reliablePosition(entity.pos, requireHeading)
+            if position ~= nil then
+                return { entityID = entityID, position = position }
+            end
+        end
+    end
+    return nil
+end
+
+local function squaredDistance(left, right)
+    local dx = left.x - right.x
+    local dz = left.z - right.z
+    return dx * dx + dz * dz
+end
+
+local function playerSafeHeading(center, head, variant)
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.mGetPlayer) ~= 'function'
+            or type(tensorCore.hasBuff) ~= 'function'
+    then
+        return nil
+    end
+    local player = tensorCore.mGetPlayer()
+    if type(player) ~= 'table' or not finite(tonumber(player.id)) then
+        return nil
+    end
+    local hasBlue = tensorCore.hasBuff(player.id, BLUE_BUFF_ID) == true
+    local hasPink = tensorCore.hasBuff(player.id, PINK_BUFF_ID) == true
+    if hasBlue == hasPink then
+        return nil
+    end
+    local towardCenter = math.atan2(center.x - head.x, center.z - head.z)
+    local blueHeading = towardCenter + math.pi / 2
+    local pinkHeading = towardCenter - math.pi / 2
+    if variant == FERTILE_GROUND_HEAD_AURA_PINK then
+        blueHeading, pinkHeading = pinkHeading, blueHeading
+    end
+    return hasPink and blueHeading or pinkHeading
+end
+
+local function drawFertileGroundVolley(state, volley, now)
+    local safeHeading = playerSafeHeading(
+            volley.center, volley.head, volley.variant)
+    if safeHeading == nil then
+        diagnostic(state, 'fertile_ground_player_state_missing', now)
+        return false
+    end
+    local drawer = Common.getMoogleDrawer()
+    if drawer == nil
+            or type(drawer.addTimedCone) ~= 'function'
+    then
+        diagnostic(state, 'danger_drawer_unavailable', now)
+        return false
+    end
+    local delay = math.max(0, volley.fireAt - now - FERTILE_GROUND_LEAD_MS)
+    local duration = volley.fireAt - now - delay + FERTILE_GROUND_LIFETIME_MS
+    if duration <= 0 then
+        return false
+    end
+    local dangerHeading = safeHeading + math.pi
+    local danger = drawer:addTimedCone(
+            duration,
+            volley.center.x, volley.center.y, volley.center.z,
+            FERTILE_GROUND_RADIUS, FERTILE_GROUND_HALF_ANGLE,
+            dangerHeading, delay)
+    if type(danger) ~= 'string' then
+        diagnostic(state, 'danger_drawer_rejected_shape', now)
+        return false
+    end
+    state.active[#state.active + 1] = {
+        token = danger, expiresAt = now + delay + duration,
+    }
+    return true
+end
+
+local function acceptFertileGround(state, entityID, startedAt, now)
+    local boss = resolveEntity(entityID, BOSS_CONTENT_ID, BOSS_MODEL_ID, false)
+    if boss == nil then
+        return false, now - startedAt >= ENTITY_RESOLVE_MS
+    end
+    state.fertileGround = { center = boss.position, startedAt = startedAt }
+    state.pendingFertileGround = nil
+    return true, true
+end
+
+local function acceptVolley(
+        state, entityID, variant, observedAt, volleyIndex, now)
+    local fertileGround = state.fertileGround
+    if type(fertileGround) ~= 'table'
+            or not finite(fertileGround.startedAt)
+            or now - fertileGround.startedAt > 30000
+    then
+        local pending = state.pendingFertileGround
+        return false, type(pending) ~= 'table'
+                or now - observedAt >= ENTITY_RESOLVE_MS
+    end
+    if not finite(state.fertileFirstAuraAt)
+            or not finite(volleyIndex)
+            or volleyIndex < 1
+    then
+        return false, true
+    end
+    local head = resolveEntity(entityID, HEAD_CONTENT_ID, HEAD_MODEL_ID, false)
+    if head == nil then
+        return false, now - observedAt >= ENTITY_RESOLVE_MS
+    end
+    local distanceSquared = squaredDistance(head.position, fertileGround.center)
+    if distanceSquared < FERTILE_GROUND_HEAD_MIN_DISTANCE
+            * FERTILE_GROUND_HEAD_MIN_DISTANCE
+            or distanceSquared > FERTILE_GROUND_HEAD_MAX_DISTANCE
+                    * FERTILE_GROUND_HEAD_MAX_DISTANCE
+    then
+        return false, true
+    end
+    if state.volleyHeads[entityID] == true then
+        return false, true
+    end
+    local volley = {
+        center = fertileGround.center,
+        head = head.position,
+        variant = variant,
+        fireAt = state.fertileFirstAuraAt + FERTILE_GROUND_FIRST_FIRE_MS
+                + (volleyIndex - 1) * FERTILE_GROUND_CADENCE_MS,
+    }
+    state.volleyHeads[entityID] = true
+    state.volleys[volleyIndex] = volley
+    return true, true
+end
+
+local function processExtremePending(state, now)
+    local pending = state.pendingFertileGround
+    if type(pending) == 'table' then
+        local _, complete = acceptFertileGround(
+                state, pending.entityID, pending.startedAt, now)
+        if complete == true then state.pendingFertileGround = nil end
+    end
+    for entityID, volley in pairs(state.pendingVolleys) do
+        local _, complete = acceptVolley(
+                state, entityID, volley.variant, volley.observedAt,
+                volley.index, now)
+        if complete == true then state.pendingVolleys[entityID] = nil end
+    end
+    for _, volley in pairs(state.volleys) do
+        if volley.drawn ~= true
+                and now <= volley.fireAt
+                and volley.fireAt - now <= FERTILE_GROUND_LEAD_MS
+                and drawFertileGroundVolley(state, volley, now)
+        then
+            volley.drawn = true
+        end
+    end
+end
+
+local function handleExtremeChannel(state, entityID, spellID, now)
+    if tonumber(spellID) ~= FERTILE_GROUND_AID
+            or not finite(entityID) or not finite(now)
+    then
+        return false
+    end
+    state.fertileGround = nil
+    state.pendingVolleys = {}
+    state.volleyHeads = {}
+    state.volleys = {}
+    state.nextVolleyIndex = 0
+    state.fertileFirstAuraAt = nil
+    local changed, complete = acceptFertileGround(state, entityID, now, now)
+    if complete ~= true then
+        state.pendingFertileGround = { entityID = entityID, startedAt = now }
+    elseif changed ~= true then
+        diagnostic(state, 'fertile_ground_entity_mismatch', now, entityID)
+    end
+    return changed
+end
+
+local function handleExtremeAura(state, entityID, newAura, now)
+    newAura = tonumber(newAura)
+    if (newAura ~= FERTILE_GROUND_HEAD_AURA_BLUE
+            and newAura ~= FERTILE_GROUND_HEAD_AURA_PINK)
+            or not finite(entityID) or not finite(now)
+    then
+        return false
+    end
+    if state.volleyHeads[entityID] == true
+            or state.pendingVolleys[entityID] ~= nil
+    then
+        return false
+    end
+    local fertileGround = state.fertileGround
+    if type(fertileGround) ~= 'table'
+            and type(state.pendingFertileGround) ~= 'table'
+    then
+        diagnostic(state, 'fertile_ground_geometry_missing', now, entityID)
+        return false
+    end
+    state.nextVolleyIndex = state.nextVolleyIndex + 1
+    local volleyIndex = state.nextVolleyIndex
+    if not finite(state.fertileFirstAuraAt) then
+        state.fertileFirstAuraAt = now
+    end
+    local changed, complete = acceptVolley(
+            state, entityID, newAura, now, volleyIndex, now)
+    if complete ~= true then
+        state.pendingVolleys[entityID] = {
+            variant = newAura, observedAt = now, index = volleyIndex,
+        }
+    elseif changed ~= true then
+        diagnostic(state, 'fertile_ground_entity_mismatch', now, entityID)
+    end
+    return changed
 end
 
 local function readInitial(aoeInfo, now)
@@ -298,6 +575,26 @@ Feature.OnAOECreate = function(aoeInfo, now)
     return false
 end
 
+Feature.OnEntityChannel = function(entityID, spellID, now)
+    local guide = rawget(_G, 'MuAiGuide')
+    local cfg = getConfig(guide)
+    local state = getState()
+    if state ~= nil and cfg ~= nil and cfg.Enable == true then
+        return handleExtremeChannel(state, entityID, spellID, now)
+    end
+    return false
+end
+
+Feature.OnAuraChange = function(entityID, _, newActiveAura1, now)
+    local guide = rawget(_G, 'MuAiGuide')
+    local cfg = getConfig(guide)
+    local state = getState()
+    if state ~= nil and cfg ~= nil and cfg.Enable == true then
+        return handleExtremeAura(state, entityID, newActiveAura1, now)
+    end
+    return false
+end
+
 Feature.Update = function(_, now)
     local state = getState()
     if state == nil or not finite(now) then
@@ -307,6 +604,7 @@ Feature.Update = function(_, now)
     if cfg ~= nil and cfg.Enable == true then
         applyBlacklist(state, true)
         prune(state, now)
+        processExtremePending(state, now)
         return false
     end
     clearMechanic(state)
@@ -324,12 +622,20 @@ Feature.Test = {
     StepDistance = STEP_DISTANCE,
     FirstStepOffsetMs = FIRST_STEP_OFFSET_MS,
     StepIntervalMs = STEP_INTERVAL_MS,
+    FertileGroundActionID = FERTILE_GROUND_AID,
+    FertileGroundBlueAuraID = FERTILE_GROUND_HEAD_AURA_BLUE,
+    FertileGroundPinkAuraID = FERTILE_GROUND_HEAD_AURA_PINK,
+    FertileGroundFirstFireMs = FERTILE_GROUND_FIRST_FIRE_MS,
+    FertileGroundCadenceMs = FERTILE_GROUND_CADENCE_MS,
     NewState = newState,
     EnsureState = ensureState,
     GetConfig = getConfig,
     ApplyBlacklist = applyBlacklist,
     ReadInitial = readInitial,
     HandleAOECreate = handleAOECreate,
+    HandleExtremeChannel = handleExtremeChannel,
+    HandleExtremeAura = handleExtremeAura,
+    ProcessExtremePending = processExtremePending,
     ClearMechanic = clearMechanic,
 }
 

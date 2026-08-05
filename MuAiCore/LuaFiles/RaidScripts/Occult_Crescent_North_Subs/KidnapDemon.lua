@@ -28,7 +28,7 @@ local RECT_HEADINGS = { -math.pi, -3 * math.pi / 4 }
 local PREDICTION_TIMEOUT_MS = 5200
 local PREDICTION_MATCH_DISTANCE_SQUARED = 1.5 * 1.5
 local MARKER_DEDUPE_MS = 1000
-local MARKER_RESOLVE_TIMEOUT_MS = 1000
+local MARKER_RESOLVE_TIMEOUT_MS = 3750
 local SEEN_TTL_MS = 15000
 
 local DEFAULTS = {
@@ -143,8 +143,10 @@ local function resolveTornadoEntity(entityID, requireHeading)
     then
         return nil, nil
     end
-    local entities = tensorCore.entityList(
-            'contentid=' .. tostring(TORNADO_CONTENT_ID))
+    -- The moving tornadoes are untargetable. The scoped ContentID query did
+    -- not expose them in the 2026-08-05 live capture, while the full entity
+    -- index is the documented path for untargetable actors.
+    local entities = tensorCore.entityList('')
     if type(entities) ~= 'table' then
         return nil, nil
     end

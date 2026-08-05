@@ -380,35 +380,55 @@ local function handlePageChannel(state, entityID, actionID, channelTime, now)
     return true
 end
 
+local function entityModelID(entityID, entity)
+    local argus = rawget(_G, 'Argus')
+    local modelID = type(argus) == 'table'
+            and type(argus.getEntityModel) == 'function'
+            and tonumber(argus.getEntityModel(entityID)) or nil
+    if not finite(modelID) and type(entity) == 'table' then
+        modelID = tonumber(entity.modelid)
+    end
+    return modelID
+end
+
 local function resolvePagePositions(batch)
     local tensorCore = rawget(_G, 'TensorCore')
     if type(tensorCore) ~= 'table'
             or type(tensorCore.entityList) ~= 'function'
     then
-        return false
+        return nil, 'pending'
     end
+    local positions = {}
     for entityID, entry in pairs(batch.entries) do
         local entities = tensorCore.entityList(
                 'contentid=' .. tostring(entry.spec.contentID))
         local position = nil
+        local invalid = false
         if type(entities) == 'table' then
             for _, entity in pairs(entities) do
                 if type(entity) == 'table'
                         and tonumber(entity.id) == entityID
-                        and tonumber(entity.contentid) == entry.spec.contentID
-                        and tonumber(entity.modelid) == entry.spec.modelID
                 then
-                    position = reliablePosition(entity.pos, false)
+                    local modelID = entityModelID(entityID, entity)
+                    if tonumber(entity.contentid) ~= entry.spec.contentID
+                            or entity.alive == false
+                            or (finite(modelID)
+                                    and modelID ~= entry.spec.modelID)
+                    then
+                        invalid = true
+                    elseif modelID == entry.spec.modelID then
+                        position = reliablePosition(entity.pos, false)
+                    end
                     break
                 end
             end
         end
         if position == nil then
-            return false
+            return nil, invalid and 'mismatch' or 'pending', entityID
         end
-        entry.position = position
+        positions[entityID] = position
     end
-    return true
+    return positions
 end
 
 local function knowledgeLevel()
@@ -437,22 +457,34 @@ local function resolvePageBatch(state, now)
     if type(batch) ~= 'table' or now < batch.resolveAt then
         return false
     end
-    state.pageBatch = nil
     if batch.count ~= 2 and batch.count ~= 3 then
+        state.pageBatch = nil
         diagnostic(state, 'page_batch_incomplete', now, batch.count)
         return false
     end
-    if not resolvePagePositions(batch) then
-        diagnostic(state, 'page_event_mismatch', now, batch.count)
+    local positions, status, entityID = resolvePagePositions(batch)
+    if positions == nil then
+        if status == 'mismatch' or now >= batch.endsAt then
+            state.pageBatch = nil
+            diagnostic(state, 'page_event_mismatch', now, {
+                count = batch.count,
+                entityID = entityID,
+                status = status,
+            })
+        end
         return false
     end
     local level = knowledgeLevel()
     if level == nil then
-        diagnostic(state, 'knowledge_level_unavailable', now)
+        if now >= batch.endsAt then
+            state.pageBatch = nil
+            diagnostic(state, 'knowledge_level_unavailable', now)
+        end
         return false
     end
     local duration = batch.endsAt - now + SHAPE_GRACE_MS
     if duration <= 0 then
+        state.pageBatch = nil
         diagnostic(state, 'page_batch_incomplete', now, batch.count)
         return false
     end
@@ -460,8 +492,9 @@ local function resolvePageBatch(state, now)
     local created = {}
     for entityID, entry in pairs(batch.entries) do
         if pageIsUnsafe(entry.spec, level) then
-            local dx = entry.position.x - ARENA_CENTER.x
-            local dz = entry.position.z - ARENA_CENTER.z
+            local position = positions[entityID]
+            local dx = position.x - ARENA_CENTER.x
+            local dz = position.z - ARENA_CENTER.z
             local heading = math.atan2(dx, dz)
             local token = drawCone(
                     state, duration,
@@ -470,6 +503,7 @@ local function resolvePageBatch(state, now)
                 for _, createdEntry in pairs(created) do
                     deleteToken(createdEntry.token)
                 end
+                state.pageBatch = nil
                 return false
             end
             created[entityID] = {
@@ -479,6 +513,7 @@ local function resolvePageBatch(state, now)
             }
         end
     end
+    state.pageBatch = nil
     for entityID, entry in pairs(created) do
         local previous = state.pageTokens[entityID]
         if type(previous) == 'table' then

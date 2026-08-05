@@ -43,8 +43,8 @@ local DEFAULTS = {
 }
 
 -- The eight 48032 circles are the first reliable statement of which seeds
--- will explode. OnEntityAdd supplies stable IDs only; the complete seed
--- geometry is resolved once through entityList when all eight circles exist.
+-- will explode. OnEntityAdd supplies stable IDs only; complete geometry may
+-- become queryable later and remains pending until the predicted hit.
 local function newState()
     return {
         round = nil,
@@ -236,31 +236,44 @@ local function handleEntityAdd(state, entityID, contentID, now)
     return true
 end
 
+local function entityModelID(entityID, entity)
+    local argus = rawget(_G, 'Argus')
+    local modelID = type(argus) == 'table'
+            and type(argus.getEntityModel) == 'function'
+            and tonumber(argus.getEntityModel(entityID)) or nil
+    if not finite(modelID) and type(entity) == 'table' then
+        modelID = tonumber(entity.modelid)
+    end
+    return modelID
+end
+
 local function collectSeedGeometry(state)
     if countEntries(state.seedIDs) ~= EXPECTED_SEED_COUNT then
-        return nil
+        return nil, 'pending'
     end
     local tensorCore = rawget(_G, 'TensorCore')
     if type(tensorCore) ~= 'table'
             or type(tensorCore.entityList) ~= 'function'
     then
-        return nil
+        return nil, 'pending'
     end
     local entities = tensorCore.entityList(
             'contentid=' .. tostring(SEED_CONTENT_ID))
     if type(entities) ~= 'table' then
-        return nil
+        return nil, 'pending'
     end
     local found = {}
     for _, entity in pairs(entities) do
         local entityID = type(entity) == 'table' and tonumber(entity.id) or nil
         if finite(entityID) and state.seedIDs[entityID] ~= nil then
             local position = reliablePosition(entity.pos, false)
-            if tonumber(entity.contentid) == SEED_CONTENT_ID
-                    and tonumber(entity.modelid) == SEED_MODEL_ID
-                    and entity.alive ~= false
-                    and position ~= nil
+            local modelID = entityModelID(entityID, entity)
+            if tonumber(entity.contentid) ~= SEED_CONTENT_ID
+                    or entity.alive == false
+                    or (finite(modelID) and modelID ~= SEED_MODEL_ID)
             then
+                return nil, 'mismatch', entityID
+            elseif modelID == SEED_MODEL_ID and position ~= nil then
                 found[entityID] = {
                     entityID = entityID,
                     position = position,
@@ -269,7 +282,7 @@ local function collectSeedGeometry(state)
         end
     end
     if countEntries(found) ~= EXPECTED_SEED_COUNT then
-        return nil
+        return nil, 'pending'
     end
     local seeds = {}
     for _, seed in pairs(found) do
@@ -400,6 +413,47 @@ local function drawDangerSeeds(state, seeds, now)
     return true
 end
 
+local function evaluateDangerSeeds(state, now)
+    local round = type(state) == 'table' and state.round or nil
+    if type(round) ~= 'table'
+            or round.evaluated == true
+            or countEntries(state.aoes) ~= EXPECTED_AOE_COUNT
+    then
+        return false
+    end
+    if now >= round.startedAt + PREDICTED_HIT_OFFSET_MS then
+        round.evaluated = true
+        diagnostic(state, 'seed_geometry_unavailable', now, {
+            observedSeedIDs = countEntries(state.seedIDs),
+            status = 'deadline',
+        })
+        return false
+    end
+    local seeds, status, entityID = collectSeedGeometry(state)
+    if seeds == nil then
+        if status == 'mismatch' then
+            round.evaluated = true
+            diagnostic(state, 'seed_geometry_unavailable', now, {
+                observedSeedIDs = countEntries(state.seedIDs),
+                entityID = entityID,
+                status = status,
+            })
+        end
+        return false
+    end
+    local dangerous = selectDangerSeeds(seeds, state.aoes)
+    if dangerous == nil then
+        round.evaluated = true
+        diagnostic(state, 'danger_set_mismatch', now, {
+            aoes = countEntries(state.aoes),
+            seeds = #seeds,
+        })
+        return false
+    end
+    round.evaluated = true
+    return drawDangerSeeds(state, dangerous, now)
+end
+
 local function handleAOECreate(state, aoeInfo, now)
     state = ensureState(state)
     if type(state.round) ~= 'table'
@@ -421,23 +475,7 @@ local function handleAOECreate(state, aoeInfo, now)
     if countEntries(state.aoes) < EXPECTED_AOE_COUNT then
         return true
     end
-    state.round.evaluated = true
-    local seeds = collectSeedGeometry(state)
-    if seeds == nil then
-        diagnostic(state, 'seed_geometry_unavailable', now, {
-            observedSeedIDs = countEntries(state.seedIDs),
-        })
-        return false
-    end
-    local dangerous = selectDangerSeeds(seeds, state.aoes)
-    if dangerous == nil then
-        diagnostic(state, 'danger_set_mismatch', now, {
-            aoes = countEntries(state.aoes),
-            seeds = #seeds,
-        })
-        return false
-    end
-    return drawDangerSeeds(state, dangerous, now)
+    return evaluateDangerSeeds(state, now)
 end
 
 local function resolveSeedExplosion(state, entityID)
@@ -597,7 +635,9 @@ Feature.Update = function(guide, now)
             and cfg.DrawSeedExplosionPrediction == true
     then
         applyBlacklist(state, true)
-        return pruneState(state, now)
+        local evaluated = evaluateDangerSeeds(state, now)
+        local pruned = pruneState(state, now)
+        return evaluated or pruned
     end
     clearState(state)
     applyBlacklist(state, false)
@@ -632,6 +672,7 @@ Feature.Test = {
     CollectSeedGeometry = collectSeedGeometry,
     ReadSproutingAOE = readSproutingAOE,
     SelectDangerSeeds = selectDangerSeeds,
+    EvaluateDangerSeeds = evaluateDangerSeeds,
     HandleAOECreate = handleAOECreate,
     ResolveSeedExplosion = resolveSeedExplosion,
     PruneState = pruneState,

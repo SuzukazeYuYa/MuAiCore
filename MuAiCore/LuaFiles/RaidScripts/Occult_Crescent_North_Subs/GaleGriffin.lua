@@ -41,7 +41,7 @@ local WIND_COUNT = 6
 local WIND_PREDICTION_TIMEOUT_MS = 11500
 local WIND_PREDICTED_FOLLOWUP_COUNT = 3
 local WIND_GENERATION_DUPLICATE_MS = 12000
-local PENDING_ENTITY_RESOLVE_MS = 1000
+local PENDING_ENTITY_RESOLVE_MS = 8500
 local ROUTE_GEOMETRY_MIN_MS = 1000
 local ROUTE_GEOMETRY_MAX_MS = 4000
 local ROUTE_FINALIZE_GRACE_MS = 5000
@@ -457,6 +457,7 @@ local function handoffWindPrediction(state, aoeInfo, now)
         })
         return false
     end
+    state.pendingWindEntities[entityID] = nil
     return deleteWindPrediction(state, entityID)
 end
 
@@ -1296,6 +1297,7 @@ Feature.Test = {
     WindCount = WIND_COUNT,
     WindPredictionTimeoutMs = WIND_PREDICTION_TIMEOUT_MS,
     WindPredictedFollowupCount = WIND_PREDICTED_FOLLOWUP_COUNT,
+    WindResolveDeadlineMs = PENDING_ENTITY_RESOLVE_MS,
     ArenaCenter = ARENA_CENTER,
     GuideRadius = GUIDE_RADIUS,
     GuideGridStep = GUIDE_GRID_STEP,

@@ -460,8 +460,10 @@ local function resolvePendingOrbs(state, now)
             and type(tensorCore) == 'table'
             and type(tensorCore.entityList) == 'function'
     then
-        entities = tensorCore.entityList(
-                'contentid=' .. tostring(spec.contentID))
+        -- Ice and lightning orbs are untargetable actors. The scoped
+        -- ContentID query omitted live orbs in the 2026-08-05 capture, so
+        -- resolve the announced runtime IDs from the full entity index.
+        entities = tensorCore.entityList('')
     end
     for entityID, orb in pairs(state.orbs) do
         if type(orb) == 'table' and orb.position == nil then

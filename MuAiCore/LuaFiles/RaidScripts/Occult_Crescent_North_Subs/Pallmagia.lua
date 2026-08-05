@@ -817,8 +817,6 @@ local function startRoulette(state, entityID, channelTimeMax, now)
             or not finite(channelTimeMax)
             or channelTimeMax < 3
             or channelTimeMax > 5
-            or strictEntity(
-                    entityID, BOSS_CONTENT_ID, BOSS_MODEL_ID, false) == nil
     then
         diagnostic(state, 'roulette_invalid_start', {
             entityID = entityID, channelTimeMax = channelTimeMax,
@@ -830,7 +828,7 @@ local function startRoulette(state, entityID, channelTimeMax, now)
     if not Common.consumeEvent(state.seenCasts, key, now, 1000) then
         return false
     end
-    state.bossEntityID = entityID
+    state.bossEntityID = nil
     state.bossMissingSince = nil
     state.roulette = {
         bossEntityID = entityID,

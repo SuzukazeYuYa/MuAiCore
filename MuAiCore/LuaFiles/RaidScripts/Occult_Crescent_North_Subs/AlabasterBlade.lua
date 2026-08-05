@@ -520,8 +520,10 @@ local function helpersByContent()
     then
         return nil
     end
-    local entities = tensorCore.entityList(
-            'contentid=' .. tostring(HELPER_CONTENT_ID))
+    -- Turn helpers are hidden actors. The scoped ContentID query omitted
+    -- helpers that were present in the 2026-08-05 AuraChange capture, so
+    -- pair their announced runtime IDs from the full entity index.
+    local entities = tensorCore.entityList('')
     return type(entities) == 'table' and entities or nil
 end
 
