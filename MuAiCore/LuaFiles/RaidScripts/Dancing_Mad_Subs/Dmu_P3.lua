@@ -72,6 +72,19 @@ local drawFireWater = function(buffId)
     if not Cfg().draw then
         return
     end
+    if buffId ~= 1600 and buffId ~= 1601 then
+        MG.LogOnce('P3Elements', 'unknown_buff_' .. tostring(buffId),
+                '元素绘制跳过：Buff类型尚未确定', {
+                    impact = 'draw_skipped',
+                    requestedBuffID = buffId,
+                    shortBuff = Data().Elements.ShortBuff,
+                    longBuff = Data().Elements.LongBuff,
+                    state = DM.StateNames[MG.DancingMad.CurrentState],
+                    fireEntityAvailable = Data().Elements.Fire ~= nil and Data().Elements.Fire.pos ~= nil,
+                    waterEntityAvailable = Data().Elements.Water ~= nil and Data().Elements.Water.pos ~= nil,
+                })
+        return
+    end
     ---@type ShapeDrawer
     local drawer
     local object
@@ -84,7 +97,13 @@ local drawFireWater = function(buffId)
     end
     if object == nil or object.pos == nil then
         MG.LogOnce('P3Elements', 'missing_element_' .. tostring(buffId),
-                '元素绘制跳过：场地实体不可用', { buffID = buffId })
+                '元素绘制跳过：场地实体不可用', {
+                    impact = 'draw_skipped',
+                    buffID = buffId,
+                    state = DM.StateNames[MG.DancingMad.CurrentState],
+                    fireEntityAvailable = Data().Elements.Fire ~= nil and Data().Elements.Fire.pos ~= nil,
+                    waterEntityAvailable = Data().Elements.Water ~= nil and Data().Elements.Water.pos ~= nil,
+                })
         return
     end
 
