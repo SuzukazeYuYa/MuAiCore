@@ -733,13 +733,20 @@ local drawBaseSettingTab = function(M)
         M.Config.Main.TargetPosSize, targetPointSize = GUI:SliderFloat('##TargetPointSize', M.Config.Main.TargetPosSize, 1, 30)
         GUI:PopItemWidth()
     end
-    GUI:Columns(1)
+
+    GUI:NextColumn()
     GUI:Dummy(15, 0)
     GUI:SameLine(0, 0)
     M.Config.Main.LogEnable = GUI:Checkbox('输出调试日志##LogEnable', M.Config.Main.LogEnable)
     if GUI:IsItemHovered() then
         GUI:SetTooltip('战斗日志写入MuAiCore\\Log；关键诊断始终写入Log\\Diagnostics，并脱敏队员名称')
     end
+    GUI:NextColumn()
+    M.Config.Main.ShowBotState = GUI:Checkbox('显示BOT状态##ShowBotState', M.Config.Main.ShowBotState)
+    if GUI:IsItemHovered() then
+        GUI:SetTooltip('BOT状态切换时, 在默语终显示当前状态')
+    end
+    GUI:Columns(1)
     GUI:Separator()
     GUI:Dummy(0, 0)
     GUI:Dummy(6, 0)

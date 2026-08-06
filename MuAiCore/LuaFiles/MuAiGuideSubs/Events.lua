@@ -9,6 +9,7 @@ local autoPopMap = { 1238, 1122, 1325, 1327, 1317, 1363 }
 ---@type MuAiGuide
 local MG
 local lastBattleTime = 0
+local curState = FFXIV_Common_BotRunning
 
 local doPop = function()
     MG.LoadParty()
@@ -247,6 +248,19 @@ local onJobChangeCheck = function()
     end
 end
 
+local onBotSateChange = function()
+    if not MG.Config.Main.ShowBotState then
+        return
+    end
+    if curState ~= FFXIV_Common_BotRunning then
+        if FFXIV_Common_BotRunning == true then
+            TensorCore.sendParsedChatMessage("/e {color:0,255,0}Minion Bot Start!{resetcolor}")
+        elseif FFXIV_Common_BotRunning == false then
+            TensorCore.sendParsedChatMessage("/e {color:255,0,0}Minion Bot End!{resetcolor}")
+        end
+        curState = FFXIV_Common_BotRunning
+    end
+end
 ---@param M MuAiGuide
 Events.init = function(M)
     M.Update = function()
@@ -267,6 +281,7 @@ Events.init = function(M)
         MG.DrawTargetPos()
         MG.DrawAllLink()
         MG.CheckNeedReload()
+        onBotSateChange()
     end
 end
 return Events
