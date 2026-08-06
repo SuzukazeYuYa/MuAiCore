@@ -7,7 +7,6 @@ function Module.Create(Context)
     local nowMs = Context.nowMs
     local reliablePosition = Context.reliablePosition
 
-local PREDICTION_TIMEOUT_MS = 6500
 local PREDICTION_TOKEN_GRACE_MS = 1000
 local VISIBILITY_SEEN_TTL_MS = 60000
 
@@ -34,20 +33,22 @@ local REVEAL_SPECS = {
         modelID = 19394,
         actionID = 47175,
         kind = 'circle',
+        lifetimeMs = 7200,
         radius = 8,
     },
     [14514] = {
         modelID = 19395,
         actionID = 47176,
         kind = 'cross',
+        lifetimeMs = 9250,
         length = 80,
         width = 7,
     },
 }
 
--- All captured formations use these three fixed emitter anchors. Headings vary,
--- so the module waits until the hidden helpers actually occupy all three
--- anchors, then derives each centered AOE from the live helper heading.
+-- All captured formations use these three fixed rectangle centers. Headings
+-- vary, so the module waits until the hidden helpers actually occupy all three
+-- centers, then derives the corresponding OnAOECreate edge for validation.
 local FORMATION_ANCHORS = {
     { x = 215.44, z = -855.00 },
     { x = 232.44, z = -855.00 },
@@ -200,14 +201,7 @@ local function handleEntityAdd(state, entityID, contentID, now)
 end
 
 local function entityModelID(entityID, entity)
-    local argus = rawget(_G, 'Argus')
-    local modelID = type(argus) == 'table'
-            and type(argus.getEntityModel) == 'function'
-            and tonumber(argus.getEntityModel(entityID)) or nil
-    if not finite(modelID) and type(entity) == 'table' then
-        modelID = tonumber(entity.modelid)
-    end
-    return modelID
+    return Common.entityModelID(entity or entityID)
 end
 
 local function drawPrediction(drawer, spec, position, timeout)
@@ -337,7 +331,7 @@ local function handleVisibilityChange(
     state.pendingReveals[entityID] = {
         contentID = announcedContentID,
         startedAt = now,
-        expiresAt = now + PREDICTION_TIMEOUT_MS,
+        expiresAt = now + REVEAL_SPECS[announcedContentID].lifetimeMs,
     }
     return completeReveal(state, entityID, now)
 end
@@ -397,16 +391,18 @@ local function collectFormationGeometry(state)
                     and matchFormationAnchor(position, usedAnchors) or nil
             if anchorIndex ~= nil then
                 usedAnchors[anchorIndex] = true
-                local centerX = position.x
+                local aoeX = position.x
                         - math.sin(position.h) * FORMATION_LENGTH / 2
-                local centerZ = position.z
+                local aoeZ = position.z
                         - math.cos(position.h) * FORMATION_LENGTH / 2
                 geometry[#geometry + 1] = {
                     entityID = entityID,
                     anchorIndex = anchorIndex,
-                    x = centerX,
+                    x = position.x,
                     y = position.y,
-                    z = centerZ,
+                    z = position.z,
+                    aoeX = aoeX,
+                    aoeZ = aoeZ,
                     heading = position.h,
                 }
             end
@@ -482,7 +478,7 @@ local function drawFormation(state, now, reportMissing)
     return true
 end
 
-local function handleRevealActionStart(state, entityID, actionID)
+local function handleRevealActionResolve(state, entityID, actionID)
     if not finite(entityID) or not finite(actionID) then
         return false
     end
@@ -537,11 +533,11 @@ local function handleFormationAOE(state, aoeInfo, now)
             and tonumber(aoeInfo.aoeWidth) == FORMATION_WIDTH
             and type(effectInfo) == 'table'
             and effectInfo.aoeEffectName == 'general02f'
-            and closeEnough(aoeInfo.x, predicted.x,
+            and closeEnough(aoeInfo.x, predicted.aoeX,
                     FORMATION_VALIDATION_TOLERANCE)
             and closeEnough(aoeInfo.y, predicted.y,
                     FORMATION_VALIDATION_TOLERANCE)
-            and closeEnough(aoeInfo.z, predicted.z,
+            and closeEnough(aoeInfo.z, predicted.aoeZ,
                     FORMATION_VALIDATION_TOLERANCE)
             and headingDistance(aoeInfo.heading, predicted.heading)
                     <= FORMATION_HEADING_TOLERANCE
@@ -670,7 +666,7 @@ Feature.OnEntityChannel = function(entityID, actionID, now)
     if actionID == FORMATION_AOE_ID and finite(now) then
         return drawFormation(state, now, true)
     end
-    return handleRevealActionStart(state, entityID, actionID)
+    return false
 end
 
 Feature.OnEntityCast = function(entityID, actionID)
@@ -681,7 +677,7 @@ Feature.OnEntityCast = function(entityID, actionID)
     if actionID == FORMATION_AOE_ID then
         return clearFormation(state)
     end
-    return handleRevealActionStart(state, entityID, actionID)
+    return handleRevealActionResolve(state, entityID, actionID)
 end
 
 Feature.OnAOECreate = function(aoeInfo, now)
@@ -715,7 +711,6 @@ Feature.Test = {
     FormationLength = FORMATION_LENGTH,
     FormationWidth = FORMATION_WIDTH,
     FormationLifetimeMs = FORMATION_LIFETIME_MS,
-    PredictionTimeoutMs = PREDICTION_TIMEOUT_MS,
     NewState = newState,
     EnsureState = ensureState,
     GetConfig = getConfig,
@@ -726,7 +721,7 @@ Feature.Test = {
     CollectFormationGeometry = collectFormationGeometry,
     DrawFormation = drawFormation,
     HandleFormationAOE = handleFormationAOE,
-    HandleRevealActionStart = handleRevealActionStart,
+    HandleRevealActionResolve = handleRevealActionResolve,
     PruneState = pruneState,
     ClearState = clearState,
 }
