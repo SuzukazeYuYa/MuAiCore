@@ -20,6 +20,7 @@ local HEADING_TOLERANCE = math.rad(5)
 local EVENT_OBJECT_CENTER_TOLERANCE_SQ = 1
 local CHANNEL_BATCH_WINDOW_MS = 750
 local CHANNEL_RESOLVE_DEADLINE_MS = 2700
+local PENDING_VISIBILITY_TIMEOUT_MS = 10000
 local PHASE_TIMEOUT_MS = 60000
 local EARLY_PREDICTION_TIMEOUT_MS = 30000
 local CHANNEL_PREDICTION_TIMEOUT_MS = 5000
@@ -48,14 +49,21 @@ local QUADRANTS = {
     SE = { x = 10, z = 10 },
 }
 -- The 2015302 wall mesh divides the 4x4 floor into four L tetrominoes.
--- Rows run north to south and columns run west to east.
-local ROOM_BY_CELL = {
+-- Rows run north to south and columns run west to east. State 256 is the
+-- x/z-transposed wall mesh; rotating state 16 alone cannot reproduce it.
+local STATE16_ROOM_BY_CELL = {
     { 'A', 'A', 'C', 'C' },
     { 'A', 'B', 'C', 'D' },
     { 'A', 'B', 'C', 'D' },
     { 'B', 'B', 'D', 'D' },
 }
-local ROOM_CELLS = {
+local STATE256_ROOM_BY_CELL = {
+    { 'A', 'A', 'A', 'B' },
+    { 'A', 'B', 'B', 'B' },
+    { 'C', 'C', 'C', 'D' },
+    { 'C', 'D', 'D', 'D' },
+}
+local STATE16_ROOM_CELLS = {
     A = {
         { x = -15, z = -15 }, { x = -5, z = -15 },
         { x = -15, z = -5 }, { x = -15, z = 5 },
@@ -72,6 +80,32 @@ local ROOM_CELLS = {
         { x = 15, z = -5 }, { x = 15, z = 5 },
         { x = 5, z = 15 }, { x = 15, z = 15 },
     },
+}
+local STATE256_ROOM_CELLS = {
+    A = {
+        { x = -15, z = -15 }, { x = -5, z = -15 },
+        { x = 5, z = -15 }, { x = -15, z = -5 },
+    },
+    B = {
+        { x = 15, z = -15 }, { x = -5, z = -5 },
+        { x = 5, z = -5 }, { x = 15, z = -5 },
+    },
+    C = {
+        { x = -15, z = 5 }, { x = -5, z = 5 },
+        { x = 5, z = 5 }, { x = -15, z = 15 },
+    },
+    D = {
+        { x = 15, z = 5 }, { x = -5, z = 15 },
+        { x = 5, z = 15 }, { x = 15, z = 15 },
+    },
+}
+local ROOM_BY_STATE = {
+    [16] = STATE16_ROOM_BY_CELL,
+    [256] = STATE256_ROOM_BY_CELL,
+}
+local ROOM_CELLS_BY_STATE = {
+    [16] = STATE16_ROOM_CELLS,
+    [256] = STATE256_ROOM_CELLS,
 }
 local ROOM_ORDER = { 'A', 'B', 'C', 'D' }
 
@@ -205,14 +239,7 @@ local function insideArena(position)
 end
 
 local function entityModelID(entityID, entity)
-    local argus = rawget(_G, 'Argus')
-    local modelID = type(argus) == 'table'
-            and type(argus.getEntityModel) == 'function'
-            and tonumber(argus.getEntityModel(entityID)) or nil
-    if not finite(modelID) and type(entity) == 'table' then
-        modelID = tonumber(entity.modelid)
-    end
-    return modelID
+    return Common.entityModelID(entity or entityID)
 end
 
 local function scanEntities(contentID)
@@ -318,20 +345,25 @@ local function isEarlySquareReflection(position)
             and isOutwardCenterWallStone(localPosition)
 end
 
-local function isEarlyLReflection(position, effectiveHeading)
+local function isEarlyLReflection(
+        position, effectiveHeading, layoutState)
     local localPosition = worldToLocal(position, effectiveHeading)
     if localPosition == nil then
         return false
     end
-    if closeToL(math.abs(localPosition.x), 1)
-            and closeToEitherL(math.abs(localPosition.z), 5, 15)
-    then
-        return true
+    local absoluteX = math.abs(localPosition.x)
+    local absoluteZ = math.abs(localPosition.z)
+    if layoutState == 16 then
+        return closeToL(absoluteX, 1)
+                        and closeToEitherL(absoluteZ, 5, 15)
+                or closeToL(absoluteX, 15)
+                        and closeToL(absoluteZ, 9)
     end
-    if closeToL(math.abs(localPosition.x), 15)
-            and closeToL(math.abs(localPosition.z), 9)
-    then
-        return true
+    if layoutState == 256 then
+        return closeToL(absoluteZ, 1)
+                        and closeToEitherL(absoluteX, 5, 15)
+                or closeToL(absoluteZ, 15)
+                        and closeToL(absoluteX, 9)
     end
     return false
 end
@@ -351,7 +383,7 @@ local function quadrantFor(position)
     return z < 0 and 'NE' or 'SE'
 end
 
-local function roomForLocalPosition(position)
+local function roomForLocalPosition(position, layoutState)
     if not Common.validXZ(position)
             or position.x <= -ARENA_HALF_SIZE
             or position.x >= ARENA_HALF_SIZE
@@ -362,8 +394,10 @@ local function roomForLocalPosition(position)
     end
     local column = math.floor((position.x + ARENA_HALF_SIZE) / 10) + 1
     local row = math.floor((position.z + ARENA_HALF_SIZE) / 10) + 1
-    return type(ROOM_BY_CELL[row]) == 'table'
-            and ROOM_BY_CELL[row][column] or nil
+    local rooms = ROOM_BY_STATE[layoutState]
+    return type(rooms) == 'table'
+            and type(rooms[row]) == 'table'
+            and rooms[row][column] or nil
 end
 
 local function sortedEntityEntries(entries)
@@ -446,7 +480,8 @@ local function resolveSquare(entries, useActions)
     }
 end
 
-local function resolveL(entries, effectiveHeading, useActions)
+local function resolveL(
+        entries, effectiveHeading, useActions, layoutState)
     if type(entries) ~= 'table'
             or #entries ~= 10
             or not finite(effectiveHeading)
@@ -454,7 +489,8 @@ local function resolveL(entries, effectiveHeading, useActions)
         return nil
     end
     local selected = magicEntries(entries, function(position)
-        return isEarlyLReflection(position, effectiveHeading)
+        return isEarlyLReflection(
+                position, effectiveHeading, layoutState)
     end, useActions)
     if #selected ~= 3 then
         return nil
@@ -464,7 +500,7 @@ local function resolveL(entries, effectiveHeading, useActions)
     for _, entry in ipairs(selected) do
         local localPosition = worldToLocal(entry.position, effectiveHeading)
         local room = localPosition ~= nil
-                and roomForLocalPosition(localPosition) or nil
+                and roomForLocalPosition(localPosition, layoutState) or nil
         if room == nil then
             return nil
         end
@@ -485,7 +521,9 @@ local function resolveL(entries, effectiveHeading, useActions)
             safeRoom = room
         end
     end
-    local cells = safeRoom ~= nil and ROOM_CELLS[safeRoom] or nil
+    local roomCells = ROOM_CELLS_BY_STATE[layoutState]
+    local cells = safeRoom ~= nil and type(roomCells) == 'table'
+            and roomCells[safeRoom] or nil
     if type(cells) ~= 'table' or #cells ~= 4 then
         return nil
     end
@@ -694,6 +732,13 @@ local function resolvePendingTopazes(state, now)
             if snapshot == false then
                 state.pendingVisibleStones[entityID] = nil
                 diagnostic(state, 'stone_geometry_missing', now, entityID)
+            elseif not finite(observedAt)
+                    or now - observedAt > PENDING_VISIBILITY_TIMEOUT_MS
+            then
+                -- Visibility callbacks do not expose ContentID. Discard an
+                -- unresolved candidate after the pre-phase window without
+                -- treating unrelated map entities as topaz failures.
+                state.pendingVisibleStones[entityID] = nil
             end
         end
     end
@@ -790,7 +835,8 @@ local function tryEarlyPrediction(state, now)
             and finite(phase.layout.effectiveHeading)
     then
         prediction = resolveL(
-                entries, phase.layout.effectiveHeading, false)
+                entries, phase.layout.effectiveHeading,
+                false, phase.layout.state)
     end
     if prediction == nil then
         diagnostic(state, 'early_geometry_ambiguous', now, {
@@ -866,7 +912,7 @@ local function applyEventObject(
         headingOffset = math.pi / 2
     elseif a1 == 256 and a2 == 512 then
         layoutState = 256
-        headingOffset = 0
+        headingOffset = math.pi / 2
     else
         return false
     end
@@ -1033,8 +1079,8 @@ local function recordVisibility(
         return false
     end
     if wasVisible == false and isVisible == true then
-        local phase = state.phase
-        if type(phase) ~= 'table' or phase.completed == true then
+        local modelID = entityModelID(entityID)
+        if finite(modelID) and modelID ~= TOPAZ_MODEL_ID then
             return false
         end
         if state.visibleStones[entityID] ~= nil
@@ -1112,7 +1158,9 @@ finishChannelBatch = function(state, batch, now)
     end
     local prediction = reflectionCount == 2
             and resolveSquare(entries, true)
-            or resolveL(entries, phase.layout.effectiveHeading, true)
+            or resolveL(
+                    entries, phase.layout.effectiveHeading,
+                    true, phase.layout.state)
     if prediction == nil then
         diagnostic(state, 'channel_geometry_ambiguous', now, {
             reflectionCount = reflectionCount,
@@ -1475,8 +1523,10 @@ Feature.Test = {
     SquareEventObjectID = SQUARE_EVENT_OBJECT_ID,
     LEventObjectID = L_EVENT_OBJECT_ID,
     ArenaCenter = ARENA_CENTER,
-    RoomByCell = ROOM_BY_CELL,
-    RoomCells = ROOM_CELLS,
+    RoomByCell = STATE16_ROOM_BY_CELL,
+    RoomCells = STATE16_ROOM_CELLS,
+    RoomByState = ROOM_BY_STATE,
+    RoomCellsByState = ROOM_CELLS_BY_STATE,
     NewState = newState,
     EnsureState = ensureState,
     NormalizeHeading = normalizeHeading,
