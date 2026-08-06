@@ -158,6 +158,7 @@ local IslandWatcher = loadSouthModule('IslandWatcher')
 local Nammu = loadSouthModule('Nammu')
 local OccultMoogleRanges = loadSouthModule('HigherBird')
 local OccultReferenceDrawings = loadSouthModule('OccultReferenceDrawings')
+local ForkedTowerBlood = loadSouthModule('ForkedTowerBlood')
 local STATE_MODULES = {
     { 'NymianPetalodus', 'SetNymianPetalodusEnabled', Nymian },
     { 'TradeTortoise', 'SetTradeTortoiseEnabled', TradeTortoise },
@@ -168,6 +169,7 @@ local STATE_MODULES = {
     { 'LionRampant', 'SetLionRampantEnabled', LionRampant },
     { 'DeathClaw', 'SetDeathClawEnabled', DeathClaw },
     { 'IslandWatcher', 'SetIslandWatcherEnabled', IslandWatcher },
+    { 'ForkedTowerBlood', 'SetForkedTowerBloodEnabled', ForkedTowerBlood },
 }
 
 local function initializeStateModules(guide)
@@ -221,6 +223,7 @@ G.Init = function(M)
     M.Hinkypunk = Hinkypunk.EnsureState(
             type(M.Hinkypunk) == 'table' and M.Hinkypunk or Hinkypunk.NewState())
     initializeStateModules(M)
+    ForkedTowerBlood.GetConfig(M)
     M.CrystalDragon = CrystalDragon.EnsureState(
             type(M.CrystalDragon) == 'table'
                     and M.CrystalDragon or CrystalDragon.NewState())
@@ -327,6 +330,10 @@ G.Init = function(M)
     OccultReferenceDrawings.ApplyBlacklist(
             M.OccultReferenceDrawings,
             type(referenceCfg) == 'table' and referenceCfg.Enable == true)
+    local ftbCfg = ForkedTowerBlood.GetConfig(M)
+    ForkedTowerBlood.ApplyBlacklist(
+            M.ForkedTowerBlood,
+            type(ftbCfg) == 'table' and ftbCfg.Enable == true)
 end
 
 G.OnEnter = function()
@@ -346,6 +353,13 @@ G.OnEnter = function()
         Hinkypunk.ClearState(hinkyState)
     end
     clearStateModules()
+    local ftbState = ForkedTowerBlood.GetRuntimeState()
+    if ftbState ~= nil then
+        local ftbCfg = ForkedTowerBlood.GetConfig()
+        ForkedTowerBlood.ApplyBlacklist(
+                ftbState,
+                type(ftbCfg) == 'table' and ftbCfg.Enable == true)
+    end
     local gildedState = GildedHeadstone.GetRuntimeState()
     if gildedState ~= nil then
         local gildedCfg = GildedHeadstone.GetConfig()
@@ -401,6 +415,10 @@ G.OnLeave = function()
         Hinkypunk.ClearState(hinkyState)
     end
     clearStateModules()
+    local ftbState = ForkedTowerBlood.GetRuntimeState()
+    if ftbState ~= nil then
+        ForkedTowerBlood.ApplyBlacklist(ftbState, false)
+    end
     local crystalDragonState = CrystalDragon.GetRuntimeState()
     if crystalDragonState ~= nil then
         CrystalDragon.ApplyMoogleDonuts(crystalDragonState, false)
@@ -523,6 +541,11 @@ G.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
                 now,
                 guide)
     end
+    local ftbState = enabledModuleState(ForkedTowerBlood, guide)
+    if ftbState ~= nil then
+        ForkedTowerBlood.HandleEntityChannel(
+                ftbState, guide, entityID, spellID, now)
+    end
 end
 
 G.OnAuraChange = function(
@@ -618,6 +641,10 @@ G.OnAOECreate = function(aoeInfo)
     local gildedState = enabledModuleState(GildedHeadstone, guide)
     if gildedState ~= nil then
         GildedHeadstone.HandleAOECreate(gildedState, aoeInfo, now, guide)
+    end
+    local ftbState = enabledModuleState(ForkedTowerBlood, guide)
+    if ftbState ~= nil then
+        ForkedTowerBlood.HandleAOECreate(ftbState, guide, aoeInfo, now)
     end
 end
 
@@ -742,6 +769,11 @@ G.OnEntityCast = function(entityID, spellID, castPos)
                 now,
                 guide)
     end
+    local ftbState = enabledModuleState(ForkedTowerBlood, guide)
+    if ftbState ~= nil then
+        ForkedTowerBlood.HandleEntityCast(
+                ftbState, guide, entityID, spellID, now)
+    end
 end
 
 G.OnTetherChange = function(
@@ -752,6 +784,8 @@ G.OnTetherChange = function(
         newTetherID,
         newTetherFlags,
         newTargetID)
+    local now = getNow()
+    local guide = rawget(_G, 'MuAiGuide')
     local cfg = TradeTortoise.GetConfig()
     local state = TradeTortoise.GetRuntimeState()
     if state ~= nil and type(cfg) == 'table' and cfg.Enable then
@@ -760,12 +794,24 @@ G.OnTetherChange = function(
                 sourceEntityID,
                 newTetherID,
                 newTargetID,
-                getNow(),
-                rawget(_G, 'MuAiGuide'))
+                now,
+                guide)
+    end
+    local ftbState = enabledModuleState(ForkedTowerBlood, guide)
+    if ftbState ~= nil then
+        ForkedTowerBlood.HandleTetherChange(
+                ftbState,
+                guide,
+                sourceEntityID,
+                newTargetID,
+                newTetherID,
+                now)
     end
 end
 
 G.OnMarkerAdd = function(entityID, markerID)
+    local now = getNow()
+    local guide = rawget(_G, 'MuAiGuide')
     local cfg = TradeTortoise.GetConfig()
     local state = TradeTortoise.GetRuntimeState()
     if state ~= nil and type(cfg) == 'table' and cfg.Enable then
@@ -773,8 +819,13 @@ G.OnMarkerAdd = function(entityID, markerID)
                 state,
                 entityID,
                 markerID,
-                getNow(),
-                rawget(_G, 'MuAiGuide'))
+                now,
+                guide)
+    end
+    local ftbState = enabledModuleState(ForkedTowerBlood, guide)
+    if ftbState ~= nil then
+        ForkedTowerBlood.HandleMarkerAdd(
+                ftbState, guide, entityID, markerID, now)
     end
 end
 
@@ -804,18 +855,27 @@ G.OnEntityAdd = function(entityID, entityName)
 end
 
 G.OnVisibilityChange = function(entityID, wasVisible, isVisible)
+    local consumed = false
+    local now = getNow()
+    local guide = rawget(_G, 'MuAiGuide')
     local cfg = DeathClaw.GetConfig()
     local state = DeathClaw.GetRuntimeState()
     if state ~= nil and type(cfg) == 'table' and cfg.Enable then
-        return DeathClaw.HandleVisibilityChange(
+        consumed = DeathClaw.HandleVisibilityChange(
                 state,
                 entityID,
                 wasVisible,
                 isVisible,
-                getNow(),
-                rawget(_G, 'MuAiGuide'))
+                now,
+                guide) or consumed
     end
-    return false
+    local ftbState = enabledModuleState(ForkedTowerBlood, guide)
+    if ftbState ~= nil then
+        consumed = ForkedTowerBlood.HandleVisibilityChange(
+                ftbState, guide, entityID,
+                wasVisible, isVisible, now) or consumed
+    end
+    return consumed
 end
 
 G.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
@@ -846,12 +906,29 @@ G.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
                 getNow(),
                 rawget(_G, 'MuAiGuide')) or consumed
     end
+    local guide = rawget(_G, 'MuAiGuide')
+    local ftbState = enabledModuleState(ForkedTowerBlood, guide)
+    if ftbState ~= nil then
+        consumed = ForkedTowerBlood.HandleScriptFunc(
+                ftbState, entityID, a1, a2, a3, getNow()) or consumed
+    end
     return consumed
 end
 
 G.Update = function()
     local guide = rawget(_G, 'MuAiGuide')
     local now = getNow()
+    local ftbState = ForkedTowerBlood.GetRuntimeState()
+    local ftbCfg = ForkedTowerBlood.GetConfig(guide)
+    if ftbState ~= nil and type(ftbCfg) == 'table' then
+        ForkedTowerBlood.ApplyBlacklist(
+                ftbState, ftbCfg.Enable == true)
+        if ftbCfg.Enable == true then
+            ForkedTowerBlood.Tick(ftbState, guide, now)
+        else
+            ForkedTowerBlood.ClearState(ftbState)
+        end
+    end
     local referenceState = OccultReferenceDrawings.GetRuntimeState()
     local referenceCfg = OccultReferenceDrawings.GetConfig(guide)
     if referenceState ~= nil and type(referenceCfg) == 'table' then
@@ -1017,6 +1094,7 @@ G.Test = {
     Nammu = Nammu,
     OccultMoogleRanges = OccultMoogleRanges,
     OccultReferenceDrawings = OccultReferenceDrawings,
+    ForkedTowerBlood = ForkedTowerBlood,
 }
 
 return G
