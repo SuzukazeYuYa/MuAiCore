@@ -136,7 +136,7 @@ local function resolveEvilSeer(entityID, expectedContentID, cache)
         if type(entity) == 'table'
                 and entity.id == entityID
                 and entity.contentid == expectedContentID
-                and modelIDs[entity.modelid] == true
+                and modelIDs[Common.entityModelID(entity)] == true
                 and entity.alive ~= false
                 and pos ~= nil
         then

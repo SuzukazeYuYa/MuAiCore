@@ -135,7 +135,7 @@ local function scanArachneContent(state, contentID, modelID, now)
                 local entry = { status = 'invalid' }
                 local pos = reliablePosition(entity.pos, false)
                 if tonumber(entity.contentid) == contentID
-                        and tonumber(entity.modelid) == modelID
+                        and Common.entityModelID(entity) == modelID
                         and entity.alive ~= false
                         and pos ~= nil
                         and Common.insideCircle(

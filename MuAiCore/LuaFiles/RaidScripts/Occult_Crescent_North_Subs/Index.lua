@@ -199,15 +199,9 @@ local function resolveStrictEntity(entityID, contentID, modelID)
     if type(entities) ~= 'table' then
         return nil, nil
     end
-    local argus = rawget(_G, 'Argus')
     for _, entity in pairs(entities) do
         if type(entity) == 'table' then
-            local liveModelID = type(argus) == 'table'
-                    and type(argus.getEntityModel) == 'function'
-                    and tonumber(argus.getEntityModel(entityID)) or nil
-            if not finite(liveModelID) then
-                liveModelID = tonumber(entity.modelid)
-            end
+            local liveModelID = Common.entityModelID(entity)
             if tonumber(entity.id) == entityID
                     and tonumber(entity.contentid) == contentID
                     and liveModelID == modelID
@@ -569,15 +563,9 @@ local function resolveBall(entityID, contentID)
     if type(entities) ~= 'table' then
         return spec.kind, nil
     end
-    local argus = rawget(_G, 'Argus')
     for _, entity in pairs(entities) do
         if type(entity) == 'table' then
-            local liveModelID = type(argus) == 'table'
-                    and type(argus.getEntityModel) == 'function'
-                    and tonumber(argus.getEntityModel(entityID)) or nil
-            if not finite(liveModelID) then
-                liveModelID = tonumber(entity.modelid)
-            end
+            local liveModelID = Common.entityModelID(entity)
             if tonumber(entity.id) == entityID
                     and tonumber(entity.contentid) == contentID
                     and liveModelID == spec.modelID

@@ -154,7 +154,7 @@ local function resolveTornadoEntity(entityID, requireHeading)
         if type(entity) == 'table'
                 and tonumber(entity.id) == entityID
                 and tonumber(entity.contentid) == TORNADO_CONTENT_ID
-                and tonumber(entity.modelid) == TORNADO_MODEL_ID
+                and Common.entityModelID(entity) == TORNADO_MODEL_ID
                 and entity.alive ~= false
         then
             return reliablePosition(

@@ -165,7 +165,7 @@ local function resolveHelper(entityID)
     end
     if tonumber(entity.id) ~= entityID
             or tonumber(entity.contentid) ~= KelpieCaptain.ContentID
-            or tonumber(entity.modelid) ~= KelpieCaptain.HelperModelID
+            or Common.entityModelID(entity) ~= KelpieCaptain.HelperModelID
     then
         return entity, nil
     end

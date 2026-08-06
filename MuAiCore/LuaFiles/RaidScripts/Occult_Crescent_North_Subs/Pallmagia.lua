@@ -118,7 +118,7 @@ local function strictEntity(
         if type(candidate) == 'table'
                 and candidate.id == entityID
                 and candidate.contentid == contentID
-                and candidate.modelid == modelID
+                and Common.entityModelID(candidate) == modelID
                 and candidate.alive ~= false
         then
             if entity ~= nil then
@@ -355,7 +355,8 @@ local function instructionEventObjectPosition(entityID)
     if type(entity) ~= 'table'
             or entity.id ~= entityID
             or entity.contentid ~= INSTRUCTION_EVENT_OBJECT_ID
-            or entity.modelid ~= INSTRUCTION_EVENT_OBJECT_MODEL_ID
+            or Common.entityModelID(entity)
+                    ~= INSTRUCTION_EVENT_OBJECT_MODEL_ID
             or entity.alive == false
     then
         return nil

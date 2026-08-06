@@ -7,6 +7,22 @@ function Common.finite(value)
             and value < math.huge
 end
 
+function Common.entityModelID(idOrEntity)
+    local entityID = type(idOrEntity) == 'table'
+            and tonumber(idOrEntity.id) or tonumber(idOrEntity)
+    if not Common.finite(entityID) or entityID <= 0 then
+        return nil
+    end
+    local argus = rawget(_G, 'Argus')
+    if type(argus) ~= 'table'
+            or type(argus.getEntityModel) ~= 'function'
+    then
+        return nil
+    end
+    local modelID = tonumber(argus.getEntityModel(entityID))
+    return Common.finite(modelID) and modelID or nil
+end
+
 function Common.validXZ(pos)
     return type(pos) == 'table'
             and Common.finite(pos.x)

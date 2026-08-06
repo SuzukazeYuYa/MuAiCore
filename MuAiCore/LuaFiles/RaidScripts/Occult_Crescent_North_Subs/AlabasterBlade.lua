@@ -538,7 +538,7 @@ local function helperPositionFromList(entities, helperID)
         then
             if match ~= nil
                     or tonumber(entity.contentid) ~= HELPER_CONTENT_ID
-                    or tonumber(entity.modelid) ~= HELPER_MODEL_ID
+                    or Common.entityModelID(entity) ~= HELPER_MODEL_ID
                     or entity.alive == false
             then
                 return nil

@@ -381,14 +381,7 @@ local function handlePageChannel(state, entityID, actionID, channelTime, now)
 end
 
 local function entityModelID(entityID, entity)
-    local argus = rawget(_G, 'Argus')
-    local modelID = type(argus) == 'table'
-            and type(argus.getEntityModel) == 'function'
-            and tonumber(argus.getEntityModel(entityID)) or nil
-    if not finite(modelID) and type(entity) == 'table' then
-        modelID = tonumber(entity.modelid)
-    end
-    return modelID
+    return Common.entityModelID(entity or entityID)
 end
 
 local function resolvePagePositions(batch)

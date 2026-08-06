@@ -367,7 +367,7 @@ local function resolveWindEntity(state, entityID, contentID, addedAt, now, cfg)
                 if type(entity) == 'table'
                         and tonumber(entity.id) == entityID
                         and tonumber(entity.contentid) == WIND_CONTENT_ID
-                        and tonumber(entity.modelid) == WIND_MODEL_ID
+                        and Common.entityModelID(entity) == WIND_MODEL_ID
                         and entity.alive ~= false
                 then
                     position = reliablePosition(entity.pos, false)

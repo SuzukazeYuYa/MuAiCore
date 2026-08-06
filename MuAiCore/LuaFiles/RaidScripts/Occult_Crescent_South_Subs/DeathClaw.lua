@@ -340,13 +340,11 @@ local function handleDeathClawVisibilityChange(
     end
     if type(TensorCore) ~= 'table'
             or type(TensorCore.mGetEntity) ~= 'function'
-            or type(Argus) ~= 'table'
-            or type(Argus.getEntityModel) ~= 'function'
     then
         return false
     end
     local entity = TensorCore.mGetEntity(entityID)
-    local model = Argus.getEntityModel(entityID)
+    local model = Common.entityModelID(entity or entityID)
     local source = entity ~= nil and deathClawPosition(entity.pos) or nil
     local heading = entity ~= nil
             and type(entity.pos) == 'table'

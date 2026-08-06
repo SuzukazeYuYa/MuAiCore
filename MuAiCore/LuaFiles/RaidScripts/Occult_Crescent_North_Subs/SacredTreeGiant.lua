@@ -71,7 +71,7 @@ local function bladeGeometry(entity, entityID)
             or entityID <= 0
             or tonumber(entity.id) ~= entityID
             or tonumber(entity.contentid) ~= GIANT_CONTENT_ID
-            or tonumber(entity.modelid) ~= BLADE_HELPER_MODEL_ID
+            or Common.entityModelID(entity) ~= BLADE_HELPER_MODEL_ID
             or entity.alive == false
             or entity.visible == false
     then

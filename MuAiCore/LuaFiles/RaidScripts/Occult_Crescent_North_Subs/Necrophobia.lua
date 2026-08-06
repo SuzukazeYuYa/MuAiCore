@@ -175,7 +175,7 @@ local function resolveEntity(entityID, contentID, modelID, requireHeading)
         if type(entity) == 'table'
                 and tonumber(entity.id) == entityID
                 and tonumber(entity.contentid) == contentID
-                and tonumber(entity.modelid) == modelID
+                and Common.entityModelID(entity) == modelID
                 and entity.alive ~= false
         then
             local position = reliablePosition(entity.pos, requireHeading)

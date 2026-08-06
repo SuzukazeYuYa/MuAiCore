@@ -476,7 +476,7 @@ local function resolvePendingOrbs(state, now)
                     if type(entity) == 'table'
                             and tonumber(entity.id) == entityID
                             and tonumber(entity.contentid) == spec.contentID
-                            and tonumber(entity.modelid) == spec.modelID
+                            and Common.entityModelID(entity) == spec.modelID
                             and entity.alive ~= false
                     then
                         position = reliablePosition(entity.pos, false)
