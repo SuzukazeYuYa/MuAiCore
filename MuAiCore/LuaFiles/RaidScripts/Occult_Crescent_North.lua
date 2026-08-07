@@ -287,6 +287,8 @@ G.OnAuraChange = function(
     local now = Context.nowMs()
     AlabasterBlade.OnAuraChange(
             entityID, oldActiveAura1, newActiveAura1, now)
+    SwordDancer.OnAuraChange(
+            entityID, oldActiveAura1, newActiveAura1, now)
     Necrophobia.OnAuraChange(
             entityID, oldActiveAura1, newActiveAura1, now)
     Index.OnAuraChange(
@@ -347,8 +349,17 @@ G.OnMarkerAdd = function(entityID, markerID)
     if not Context.currentMapIsNorth() then
         return false
     end
-    return KidnapDemon.OnMarkerAdd(
-            entityID, markerID, Context.nowMs())
+    local now = Context.nowMs()
+    local kidnap = KidnapDemon.OnMarkerAdd(entityID, markerID, now)
+    local index = Index.OnMarkerAdd(entityID, markerID, now)
+    return kidnap or index
+end
+
+G.OnMapEffect = function(a1, a2, a3)
+    if not Context.currentMapIsNorth() then
+        return false
+    end
+    return Index.OnMapEffect(a1, a2, a3, Context.nowMs())
 end
 
 G.OnAddGroundEffect = function(...)
@@ -367,6 +378,7 @@ G.OnEventObjectScriptFunc = function(entityID, a1, a2, a3)
         local now = Context.nowMs()
         SwordDancer.OnEventObjectScriptFunc(
                 entityID, a1, a2, a3, now)
+        Index.OnEventObjectScriptFunc(entityID, a1, a2, a3, now)
         Pallmagia.OnEventObjectScriptFunc(
                 entityID, a1, a2, a3, now)
         GemstoneBeast.OnEventObjectScriptFunc(
@@ -381,7 +393,9 @@ G.OnAOECreate = function(aoeInfo)
     local now = Context.nowMs()
     NorthReferenceDrawings.OnAOECreate(aoeInfo, now)
     TwoHeadedAevis.OnAOECreate(aoeInfo, now)
+    SwordDancer.OnAOECreate(aoeInfo, now)
     Necrophobia.OnAOECreate(aoeInfo, now)
+    Index.OnAOECreate(aoeInfo, now)
     OccultGrimoire.OnAOECreate(aoeInfo, now)
     CalofisteriDoppelganger.OnAOECreate(aoeInfo, now)
     AlabasterBlade.OnAOECreate(aoeInfo, now)

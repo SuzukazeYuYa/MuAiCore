@@ -114,14 +114,6 @@ local REFERENCE_SHAPES = {
         forward = 20, right = -0.3,
     }),
     [47641] = one(14491, { kind = 'circle', radius = 20 }),
-    [47686] = {
-        contentIDs = { [14490] = true, [14491] = true },
-        shapes = { { kind = 'donut', inner = 5, outer = 45 } },
-    },
-    [47685] = {
-        contentIDs = { [14490] = true, [14491] = true },
-        shapes = { { kind = 'cross', length = 100, width = 10 } },
-    },
     [47697] = {
         contentIDs = { [14490] = true, [14491] = true },
         shapes = {
@@ -270,7 +262,7 @@ local OWNER_AIDS = {
     AlabasterBlade = { 47170 },
     Arachne = { 50379, 50380, 50381 },
     TwoHeadedAevis = {
-        47640, 47639, 47641, 47686, 47685, 47697, 47702,
+        47640, 47639, 47641, 47697, 47702,
         50726, 47629, 50725, 47620,
     },
     SwordDancer = {
@@ -301,9 +293,10 @@ for actionID in pairs(REFERENCE_SHAPES) do
             'missing North reference owner: ' .. tostring(actionID))
 end
 
--- 50377 remains owned by the dedicated Arachne predictor. 47191 and
--- 50706/50707/50708 depend on conditional warning/status chains that are not
--- available as reliable MuAi event geometry, so they intentionally fail closed.
+-- 50377 remains owned by the dedicated Arachne predictor. 47191 intentionally
+-- fails closed. The dedicated TwoHeadedAevis owner now combines
+-- 47671-47678 order tells with 50706-50708 helper geometry, so the late
+-- 47685/47686 reference redraws are deliberately absent here.
 -- MTE4's four summoned-weapon layouts depend on VFX-to-entity association that
 -- has not appeared in the available MuAi diagnostics, so those layouts also
 -- remain fail closed. Index owns the complete 48404/48405 knockback prediction;

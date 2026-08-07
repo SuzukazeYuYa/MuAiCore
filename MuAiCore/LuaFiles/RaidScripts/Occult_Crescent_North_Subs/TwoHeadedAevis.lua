@@ -8,6 +8,8 @@ function Module.Create(Context)
 
 local GREEN_HEAD_CONTENT_ID = 14490
 local BLUE_HEAD_CONTENT_ID = 14491
+local GREEN_HEAD_MODEL_ID = 19481
+local BLUE_HEAD_MODEL_ID = 19482
 local THUNDER_ORB_CONTENT_ID = 14492
 local ICE_ORB_CONTENT_ID = 14493
 local THUNDER_ORB_MODEL_ID = 19478
@@ -24,6 +26,33 @@ local FREZELD_FUGUE_CIRCLE_AIDS = { [47630] = true, [50728] = true }
 local FUGUE_RADIUS = 20
 local FUGUE_DONUT_INNER_RADIUS = 18
 local FUGUE_DONUT_OUTER_RADIUS = 60
+local BLAZE_ANNOUNCE = {
+    [47671] = { 'cross', 'cross' },
+    [47672] = { 'donut', 'donut' },
+    [47673] = { 'cross', 'donut' },
+    [47674] = { 'donut', 'cross' },
+    [47675] = { 'cross', 'cross' },
+    [47676] = { 'donut', 'donut' },
+    [47677] = { 'cross', 'donut' },
+    [47678] = { 'donut', 'cross' },
+}
+local BLAZE_HELPER_STEP = { [50706] = 1, [50707] = 1, [50708] = 2 }
+local BLAZE_RESOLVE_AIDS = {
+    [47685] = true, [47686] = true, [47687] = true, [47688] = true,
+}
+local DUET_MARKER_AIDS = { [50699] = true, [50700] = true }
+local DUET_RESOLVE_AIDS = {
+    [47649] = true, [47650] = true,
+    [47651] = true, [47652] = true,
+    [50701] = true, [50702] = true,
+}
+local BLAZE_CROSS_LENGTH = 100
+local BLAZE_CROSS_WIDTH = 10
+local BLAZE_DONUT_INNER = 5
+local BLAZE_DONUT_OUTER = 45
+local DUET_CLUSTER_RADIUS = 15
+local EXTREME_SHAPE_TTL_MS = 30000
+local BLAZE_HEAD_RESOLVE_MS = 1000
 
 local ORB_COUNT = 4
 local ORB_RADIUS = 15
@@ -56,6 +85,12 @@ local EXPLOSION_AIDS = {
     [ICE_EXPLOSION_AID] = true,
 }
 
+local OWNED_AIDS = {}
+for actionID in pairs(EXPLOSION_AIDS) do OWNED_AIDS[actionID] = true end
+for actionID in pairs(BLAZE_RESOLVE_AIDS) do OWNED_AIDS[actionID] = true end
+for actionID in pairs(DUET_MARKER_AIDS) do OWNED_AIDS[actionID] = true end
+for actionID in pairs(DUET_RESOLVE_AIDS) do OWNED_AIDS[actionID] = true end
+
 local DEFAULTS = {
     Enable = true,
 }
@@ -66,6 +101,10 @@ local function newState()
         pendingClusters = {},
         round = nil,
         active = {},
+        blazeOrders = {},
+        pendingBlazeAnnouncements = {},
+        blazeSeen = {},
+        extremeShapes = {},
         blacklist = { owned = {}, registered = false },
         lastDiagnostic = nil,
     }
@@ -77,6 +116,15 @@ local function ensureState(state)
     state.pendingClusters = type(state.pendingClusters) == 'table'
             and state.pendingClusters or {}
     state.active = type(state.active) == 'table' and state.active or {}
+    state.blazeOrders = type(state.blazeOrders) == 'table'
+            and state.blazeOrders or {}
+    state.pendingBlazeAnnouncements =
+            type(state.pendingBlazeAnnouncements) == 'table'
+            and state.pendingBlazeAnnouncements or {}
+    state.blazeSeen = type(state.blazeSeen) == 'table'
+            and state.blazeSeen or {}
+    state.extremeShapes = type(state.extremeShapes) == 'table'
+            and state.extremeShapes or {}
     state.blacklist = type(state.blacklist) == 'table'
             and state.blacklist or {}
     state.blacklist.owned = type(state.blacklist.owned) == 'table'
@@ -96,6 +144,10 @@ local feature = Common.newFeature({
         orb_geometry_invalid = '双头怪鸟冰雷球实体几何不可用',
         cluster_geometry_invalid = '双头怪鸟冰雷簇缺少可靠几何',
         fugue_geometry_invalid = '双头怪鸟极乐章危险范围缺少可靠事件几何',
+        blaze_head_invalid = '双头怪鸟冰焰连招本体身份不可用',
+        blaze_order_missing = '双头怪鸟冰焰连招缺少对应预告顺序',
+        blaze_geometry_invalid = '双头怪鸟冰焰连招辅助事件几何无效',
+        duet_geometry_invalid = '双头怪鸟吐息二重奏冰雷簇几何无效',
         danger_drawer_unavailable = '双头怪鸟危险范围绘图器不可用',
         danger_drawer_rejected_shape = '双头怪鸟危险范围绘制失败',
     },
@@ -130,11 +182,11 @@ local function registerBlacklist(state)
         state.blacklist.registered = false
         return false
     end
-    for actionID in pairs(EXPLOSION_AIDS) do
+    for actionID in pairs(OWNED_AIDS) do
         local current = blacklist[actionID]
         if current == nil then
             local owned = {
-                label = '双头怪鸟冰雷球连锁预测',
+                label = '双头怪鸟机制提前预测',
                 source = BLACKLIST_SOURCE,
             }
             blacklist[actionID] = owned
@@ -158,7 +210,7 @@ local function unregisterBlacklist(state)
         state.blacklist.registered = false
         return false
     end
-    for actionID in pairs(EXPLOSION_AIDS) do
+    for actionID in pairs(OWNED_AIDS) do
         local current = blacklist[actionID]
         if ownsBlacklist(state, actionID, current) then
             blacklist[actionID] = nil
@@ -197,10 +249,230 @@ local function clearMechanic(state)
     for _, entityID in ipairs(ids) do
         deleteActive(state, entityID)
     end
+    for _, active in ipairs(state.extremeShapes) do
+        Common.deleteTimedShape(active.token)
+    end
     state.orbs = {}
     state.pendingClusters = {}
     state.round = nil
+    state.blazeOrders = {}
+    state.pendingBlazeAnnouncements = {}
+    state.blazeSeen = {}
+    state.extremeShapes = {}
     state.lastDiagnostic = nil
+end
+
+local function resolveHeadContent(entityID)
+    if not finite(entityID) then
+        return nil
+    end
+    local tensorCore = rawget(_G, 'TensorCore')
+    if type(tensorCore) ~= 'table'
+            or type(tensorCore.entityList) ~= 'function'
+    then
+        return nil
+    end
+    local modelByContent = {
+        [GREEN_HEAD_CONTENT_ID] = GREEN_HEAD_MODEL_ID,
+        [BLUE_HEAD_CONTENT_ID] = BLUE_HEAD_MODEL_ID,
+    }
+    for contentID, modelID in pairs(modelByContent) do
+        local entities = tensorCore.entityList(
+                'contentid=' .. tostring(contentID))
+        if type(entities) == 'table' then
+            for _, entity in pairs(entities) do
+                if type(entity) == 'table'
+                        and tonumber(entity.id) == entityID
+                        and tonumber(entity.contentid) == contentID
+                        and Common.entityModelID(entity) == modelID
+                        and entity.alive ~= false
+                then
+                    return contentID
+                end
+            end
+        end
+    end
+    return nil
+end
+
+local function acceptBlazeAnnouncement(state, entityID, actionID, now)
+    local sequence = BLAZE_ANNOUNCE[tonumber(actionID)]
+    if sequence == nil or not finite(now) then
+        return false
+    end
+    local contentID = resolveHeadContent(entityID)
+    if contentID == nil then
+        diagnostic(state, 'blaze_head_invalid', now, entityID)
+        return false
+    end
+    state.blazeOrders[contentID] = {
+        sequence = { sequence[1], sequence[2] },
+        recordedAt = now,
+    }
+    state.lastDiagnostic = nil
+    return true
+end
+
+local function recordBlazeAnnouncement(state, entityID, actionID, now)
+    state = ensureState(state)
+    entityID = tonumber(entityID)
+    actionID = tonumber(actionID)
+    if BLAZE_ANNOUNCE[actionID] == nil
+            or not finite(entityID) or entityID <= 0
+            or not finite(now)
+    then
+        return false
+    end
+    if resolveHeadContent(entityID) ~= nil then
+        state.pendingBlazeAnnouncements[entityID] = nil
+        return acceptBlazeAnnouncement(state, entityID, actionID, now)
+    end
+    local current = state.pendingBlazeAnnouncements[entityID]
+    if type(current) == 'table' and current.actionID == actionID then
+        return false
+    end
+    state.pendingBlazeAnnouncements[entityID] = {
+        actionID = actionID,
+        observedAt = now,
+    }
+    return true
+end
+
+local function resolvePendingBlazeAnnouncements(state, now)
+    state = ensureState(state)
+    if not finite(now) then
+        return false
+    end
+    local entityIDs = {}
+    for entityID in pairs(state.pendingBlazeAnnouncements) do
+        entityIDs[#entityIDs + 1] = entityID
+    end
+    table.sort(entityIDs)
+    local resolvedAny = false
+    for _, entityID in ipairs(entityIDs) do
+        local pending = state.pendingBlazeAnnouncements[entityID]
+        if type(pending) ~= 'table'
+                or BLAZE_ANNOUNCE[pending.actionID] == nil
+                or not finite(pending.observedAt)
+        then
+            state.pendingBlazeAnnouncements[entityID] = nil
+            diagnostic(state, 'blaze_head_invalid', now, entityID)
+        elseif resolveHeadContent(entityID) ~= nil then
+            state.pendingBlazeAnnouncements[entityID] = nil
+            if acceptBlazeAnnouncement(
+                    state, entityID, pending.actionID, pending.observedAt)
+            then
+                resolvedAny = true
+            end
+        elseif now - pending.observedAt >= BLAZE_HEAD_RESOLVE_MS then
+            state.pendingBlazeAnnouncements[entityID] = nil
+            diagnostic(state, 'blaze_head_invalid', now, entityID)
+        end
+    end
+    return resolvedAny
+end
+
+local function trackExtremeShape(state, token, expiresAt)
+    if type(token) ~= 'string' then
+        return false
+    end
+    state.extremeShapes[#state.extremeShapes + 1] = {
+        token = token,
+        expiresAt = expiresAt,
+    }
+    return true
+end
+
+local function extremeEventKey(aoeInfo)
+    return tostring(aoeInfo.entityID) .. ':'
+            .. tostring(aoeInfo.aoeID) .. ':'
+            .. tostring(math.floor((tonumber(aoeInfo.startTime) or 0) + 0.5))
+end
+
+local function drawExtremeAOE(state, aoeInfo, now)
+    local actionID = type(aoeInfo) == 'table'
+            and tonumber(aoeInfo.aoeID) or nil
+    local blazeStep = BLAZE_HELPER_STEP[actionID]
+    local duet = DUET_MARKER_AIDS[actionID] == true
+    if blazeStep == nil and not duet then
+        return false
+    end
+    local contentID = tonumber(aoeInfo.contentID)
+    local position = reliablePosition({
+        x = tonumber(aoeInfo.x),
+        y = tonumber(aoeInfo.y),
+        z = tonumber(aoeInfo.z),
+    }, false)
+    local duration = tonumber(aoeInfo.duration)
+    if position == nil or not finite(duration)
+            or duration <= 0 or duration > 30 or not finite(now)
+            or (contentID ~= GREEN_HEAD_CONTENT_ID
+                    and contentID ~= BLUE_HEAD_CONTENT_ID)
+    then
+        diagnostic(state, duet and 'duet_geometry_invalid'
+                or 'blaze_geometry_invalid', now, actionID)
+        return false
+    end
+    local key = extremeEventKey(aoeInfo)
+    if state.blazeSeen[key] ~= nil then
+        return false
+    end
+    local drawer = Common.getMoogleDrawer()
+    local timeout = math.floor(duration * 1000 + 0.5)
+    local token
+    if duet then
+        if type(drawer) == 'table'
+                and type(drawer.addTimedCircle) == 'function'
+                and math.abs((tonumber(aoeInfo.aoeLength) or 0)
+                        - DUET_CLUSTER_RADIUS) <= 0.25
+        then
+            token = drawer:addTimedCircle(
+                    timeout, position.x, position.y, position.z,
+                    DUET_CLUSTER_RADIUS, 0)
+        else
+            diagnostic(state, 'duet_geometry_invalid', now, actionID)
+            return false
+        end
+    else
+        local order = state.blazeOrders[contentID]
+        local kind = type(order) == 'table'
+                and type(order.sequence) == 'table'
+                and order.sequence[blazeStep] or nil
+        if kind == 'cross'
+                and type(drawer) == 'table'
+                and type(drawer.addTimedCross) == 'function'
+        then
+            token = drawer:addTimedCross(
+                    timeout, position.x, position.y, position.z,
+                    BLAZE_CROSS_LENGTH, BLAZE_CROSS_WIDTH,
+                    tonumber(aoeInfo.heading) or 0, 0)
+        elseif kind == 'donut'
+                and type(drawer) == 'table'
+                and type(drawer.addTimedDonut) == 'function'
+        then
+            token = drawer:addTimedDonut(
+                    timeout, position.x, position.y, position.z,
+                    BLAZE_DONUT_INNER, BLAZE_DONUT_OUTER, 0)
+        elseif kind == nil then
+            diagnostic(state, 'blaze_order_missing', now, {
+                actionID = actionID, contentID = contentID,
+            })
+            return false
+        else
+            diagnostic(state, 'danger_drawer_unavailable', now, actionID)
+            return false
+        end
+        if blazeStep == 2 then
+            state.blazeOrders[contentID] = nil
+        end
+    end
+    if not trackExtremeShape(state, token, now + timeout) then
+        diagnostic(state, 'danger_drawer_rejected_shape', now, actionID)
+        return false
+    end
+    state.blazeSeen[key] = now
+    state.lastDiagnostic = nil
+    return true
 end
 
 local function orbKind(contentID)
@@ -596,6 +868,30 @@ local function prune(state, now)
             state.active[entityID] = nil
         end
     end
+    for index = #state.extremeShapes, 1, -1 do
+        local active = state.extremeShapes[index]
+        if type(active) ~= 'table'
+                or not finite(active.expiresAt)
+                or now >= active.expiresAt
+        then
+            table.remove(state.extremeShapes, index)
+        end
+    end
+    for key, seenAt in pairs(state.blazeSeen) do
+        if not finite(seenAt)
+                or now - seenAt > EXTREME_SHAPE_TTL_MS
+        then
+            state.blazeSeen[key] = nil
+        end
+    end
+    for contentID, order in pairs(state.blazeOrders) do
+        if type(order) ~= 'table'
+                or not finite(order.recordedAt)
+                or now - order.recordedAt > EXTREME_SHAPE_TTL_MS
+        then
+            state.blazeOrders[contentID] = nil
+        end
+    end
     if type(state.round) == 'table'
             and finite(state.round.startedAt)
             and now - state.round.startedAt > ROUND_TIMEOUT_MS
@@ -676,6 +972,10 @@ Feature.OnEntityChannel = function(entityID, actionID, now)
     if state == nil or cfg == nil or cfg.Enable ~= true then
         return false
     end
+    if BLAZE_ANNOUNCE[actionID] ~= nil then
+        return recordBlazeAnnouncement(
+                state, entityID, actionID, now)
+    end
     if CLUSTER_KIND[actionID] ~= nil then
         local queued = queueCluster(state, entityID, actionID, now)
         return resolvePendingClusters(state, now) or queued
@@ -699,7 +999,8 @@ Feature.OnAOECreate = function(aoeInfo, now)
     local cfg = getConfig(guide)
     local state = getState()
     if state ~= nil and cfg ~= nil and cfg.Enable == true then
-        return handleFugueAOE(state, aoeInfo, now)
+        return drawExtremeAOE(state, aoeInfo, now)
+                or handleFugueAOE(state, aoeInfo, now)
     end
     return false
 end
@@ -712,6 +1013,7 @@ Feature.Update = function(guide, now)
     local cfg = getConfig(guide)
     if cfg ~= nil and cfg.Enable == true then
         applyBlacklist(state, true)
+        resolvePendingBlazeAnnouncements(state, now)
         resolvePendingClusters(state, now)
         prune(state, now)
         return true
@@ -734,11 +1036,20 @@ Feature.Test = {
     IceExplosionActionID = ICE_EXPLOSION_AID,
     FulgurousFugueDonutAID = 47629,
     FrezeldFugueCircleAID = 47630,
+    BlazeAnnounce = BLAZE_ANNOUNCE,
+    BlazeHelperStep = BLAZE_HELPER_STEP,
+    DuetMarkerAIDs = DUET_MARKER_AIDS,
+    BlazeCrossLength = BLAZE_CROSS_LENGTH,
+    BlazeCrossWidth = BLAZE_CROSS_WIDTH,
+    BlazeDonutInner = BLAZE_DONUT_INNER,
+    BlazeDonutOuter = BLAZE_DONUT_OUTER,
+    DuetClusterRadius = DUET_CLUSTER_RADIUS,
     OrbCount = ORB_COUNT,
     OrbRadius = ORB_RADIUS,
     FirstWaveTimeoutMs = FIRST_WAVE_TIMEOUT_MS,
     SecondWaveTimeoutMs = SECOND_WAVE_TIMEOUT_MS,
     ClusterResolveDeadlineMs = CLUSTER_RESOLVE_DEADLINE_MS,
+    BlazeHeadResolveMs = BLAZE_HEAD_RESOLVE_MS,
     NewState = newState,
     EnsureState = ensureState,
     GetConfig = getConfig,
@@ -749,6 +1060,9 @@ Feature.Test = {
     ResolvePendingClusters = resolvePendingClusters,
     HandleStorm = handleStorm,
     HandleFugueAOE = handleFugueAOE,
+    RecordBlazeAnnouncement = recordBlazeAnnouncement,
+    ResolvePendingBlazeAnnouncements = resolvePendingBlazeAnnouncements,
+    DrawExtremeAOE = drawExtremeAOE,
     ClearMechanic = clearMechanic,
 }
 

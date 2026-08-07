@@ -8,8 +8,10 @@ function Module.Create(Context)
 
 local BOSS_CONTENT_ID = 14503
 local BOSS_MODEL_ID = 19429
+local EXTREME_BOSS_MODEL_ID = 19431
 local HEAD_CONTENT_ID = 14504
 local HEAD_MODEL_ID = 19430
+local EXTREME_HEAD_MODEL_ID = 19432
 local INITIAL_AID = 47477
 local FOLLOWUP_AID = 47478
 local INITIAL_CAST_TYPE = 12
@@ -33,6 +35,12 @@ local FERTILE_GROUND_HEAD_MIN_DISTANCE = 5
 local FERTILE_GROUND_HEAD_MAX_DISTANCE = 50
 local FERTILE_GROUND_HALF_ANGLE = math.pi
 local FERTILE_GROUND_RADIUS = 30
+local FERTILE_ELEMENT_DURATION_MS = 5000
+local FERTILE_ELEMENT_AURAS = {
+    [2908] = 'fire',
+    [2909] = 'ice',
+    [2910] = 'thunder',
+}
 local BLUE_BUFF_ID = 5136
 local PINK_BUFF_ID = 5137
 local BLACKLIST_SOURCE = 'MuAiCore - 惧死者黑暗奔流扩散预测'
@@ -47,11 +55,13 @@ local function newState()
         seen = {},
         fertileGround = nil,
         pendingFertileGround = nil,
+        pendingFertileElements = {},
         pendingVolleys = {},
         volleyHeads = {},
         volleys = {},
         nextVolleyIndex = 0,
         fertileFirstAuraAt = nil,
+        fertileElementSeen = {},
         blacklist = { owned = nil, registered = false },
         lastDiagnostic = nil,
     }
@@ -63,10 +73,14 @@ local function ensureState(state)
     state.seen = type(state.seen) == 'table' and state.seen or {}
     state.pendingVolleys = type(state.pendingVolleys) == 'table'
             and state.pendingVolleys or {}
+    state.pendingFertileElements = type(state.pendingFertileElements) == 'table'
+            and state.pendingFertileElements or {}
     state.volleyHeads = type(state.volleyHeads) == 'table'
             and state.volleyHeads or {}
     state.volleys = type(state.volleys) == 'table' and state.volleys or {}
     state.nextVolleyIndex = tonumber(state.nextVolleyIndex) or 0
+    state.fertileElementSeen = type(state.fertileElementSeen) == 'table'
+            and state.fertileElementSeen or {}
     state.blacklist = type(state.blacklist) == 'table'
             and state.blacklist or {}
     state.blacklist.registered = state.blacklist.registered == true
@@ -88,6 +102,7 @@ local feature = Common.newFeature({
         fertile_ground_entity_mismatch = '惧死者极塔沃土实体身份不匹配',
         fertile_ground_geometry_missing = '惧死者极塔沃土缺少可靠几何',
         fertile_ground_player_state_missing = '惧死者极塔沃土缺少唯一元素状态',
+        fertile_ground_element_invalid = '惧死者极塔沃土元素范围身份或几何无效',
     },
 })
 local getConfig = feature.GetConfig
@@ -146,11 +161,13 @@ local function clearMechanic(state)
     state.seen = {}
     state.fertileGround = nil
     state.pendingFertileGround = nil
+    state.pendingFertileElements = {}
     state.pendingVolleys = {}
     state.volleyHeads = {}
     state.volleys = {}
     state.nextVolleyIndex = 0
     state.fertileFirstAuraAt = nil
+    state.fertileElementSeen = {}
     state.lastDiagnostic = nil
 end
 
@@ -255,7 +272,8 @@ local function drawFertileGroundVolley(state, volley, now)
 end
 
 local function acceptFertileGround(state, entityID, startedAt, now)
-    local boss = resolveEntity(entityID, BOSS_CONTENT_ID, BOSS_MODEL_ID, false)
+    local boss = resolveEntity(
+            entityID, BOSS_CONTENT_ID, EXTREME_BOSS_MODEL_ID, false)
     if boss == nil then
         return false, now - startedAt >= ENTITY_RESOLVE_MS
     end
@@ -281,7 +299,8 @@ local function acceptVolley(
     then
         return false, true
     end
-    local head = resolveEntity(entityID, HEAD_CONTENT_ID, HEAD_MODEL_ID, false)
+    local head = resolveEntity(
+            entityID, HEAD_CONTENT_ID, EXTREME_HEAD_MODEL_ID, false)
     if head == nil then
         return false, now - observedAt >= ENTITY_RESOLVE_MS
     end
@@ -308,12 +327,174 @@ local function acceptVolley(
     return true, true
 end
 
+local function handleExtremeChannel(state, entityID, spellID, now)
+    if tonumber(spellID) ~= FERTILE_GROUND_AID
+            or not finite(entityID) or not finite(now)
+    then
+        return false
+    end
+    state.fertileGround = nil
+    state.pendingFertileElements = {}
+    state.pendingVolleys = {}
+    state.volleyHeads = {}
+    state.volleys = {}
+    state.nextVolleyIndex = 0
+    state.fertileFirstAuraAt = nil
+    state.fertileElementSeen = {}
+    local changed, complete = acceptFertileGround(state, entityID, now, now)
+    if complete ~= true then
+        state.pendingFertileGround = { entityID = entityID, startedAt = now }
+    elseif changed ~= true then
+        diagnostic(state, 'fertile_ground_entity_mismatch', now, entityID)
+    end
+    return changed
+end
+
+local function drawFertileElement(state, entityID, aura, now, resolvedBoss)
+    local kind = FERTILE_ELEMENT_AURAS[tonumber(aura)]
+    if kind == nil or not finite(entityID) or not finite(now) then
+        return false
+    end
+    local fertileGround = state.fertileGround
+    if type(fertileGround) ~= 'table'
+            or not finite(fertileGround.startedAt)
+            or now - fertileGround.startedAt < 0
+            or now - fertileGround.startedAt > 30000
+    then
+        diagnostic(state, 'fertile_ground_geometry_missing', now, entityID)
+        return false
+    end
+    local boss = resolvedBoss or resolveEntity(
+            entityID, BOSS_CONTENT_ID, EXTREME_BOSS_MODEL_ID, false)
+    if boss == nil then
+        diagnostic(state, 'fertile_ground_element_invalid', now, entityID)
+        return false
+    end
+    local key = tostring(entityID) .. ':' .. tostring(aura)
+            .. ':' .. tostring(math.floor(fertileGround.startedAt + 0.5))
+    if state.fertileElementSeen[key] ~= nil then
+        return false
+    end
+    local drawer = Common.getMoogleDrawer()
+    local created = {}
+    local function add(token)
+        if type(token) ~= 'string' then
+            for _, active in ipairs(created) do
+                Common.deleteTimedShape(active.token)
+            end
+            diagnostic(state, 'danger_drawer_rejected_shape', now, aura)
+            return false
+        end
+        created[#created + 1] = {
+            token = token,
+            expiresAt = now + FERTILE_ELEMENT_DURATION_MS,
+        }
+        return true
+    end
+    local pos = boss.position
+    if kind == 'fire' then
+        if type(drawer) ~= 'table'
+                or type(drawer.addTimedCircle) ~= 'function'
+                or not add(drawer:addTimedCircle(
+                        FERTILE_ELEMENT_DURATION_MS,
+                        pos.x, pos.y, pos.z, 18, 0))
+        then
+            diagnostic(state, 'danger_drawer_unavailable', now, aura)
+            return false
+        end
+    elseif kind == 'ice' then
+        if type(drawer) ~= 'table'
+                or type(drawer.addTimedCenteredRect) ~= 'function'
+        then
+            diagnostic(state, 'danger_drawer_unavailable', now, aura)
+            return false
+        end
+        for _, heading in ipairs({ 0, math.pi / 2 }) do
+            if not add(drawer:addTimedCenteredRect(
+                    FERTILE_ELEMENT_DURATION_MS,
+                    pos.x, pos.y, pos.z, 90, 15, heading, 0))
+            then
+                return false
+            end
+        end
+    else
+        if type(drawer) ~= 'table'
+                or type(drawer.addTimedCone) ~= 'function'
+        then
+            diagnostic(state, 'danger_drawer_unavailable', now, aura)
+            return false
+        end
+        for _, heading in ipairs({
+            math.pi / 4, -math.pi / 4,
+            3 * math.pi / 4, -3 * math.pi / 4,
+        }) do
+            if not add(drawer:addTimedCone(
+                    FERTILE_ELEMENT_DURATION_MS,
+                    pos.x, pos.y, pos.z,
+                    60, math.rad(45), heading, 0))
+            then
+                return false
+            end
+        end
+    end
+    for _, active in ipairs(created) do
+        state.active[#state.active + 1] = active
+    end
+    state.fertileElementSeen[key] = now
+    state.lastDiagnostic = nil
+    return true
+end
+
+local function fertileElementKey(state, entityID, aura)
+    local fertileGround = state.fertileGround
+    local startedAt = type(fertileGround) == 'table'
+            and tonumber(fertileGround.startedAt) or nil
+    if not finite(startedAt) then
+        local pending = state.pendingFertileGround
+        startedAt = type(pending) == 'table'
+                and tonumber(pending.startedAt) or nil
+    end
+    if not finite(startedAt) then
+        return nil
+    end
+    return tostring(entityID) .. ':' .. tostring(aura)
+            .. ':' .. tostring(math.floor(startedAt + 0.5))
+end
+
+local function acceptFertileElement(
+        state, entityID, aura, observedAt, now)
+    if type(state.fertileGround) ~= 'table' then
+        return false, type(state.pendingFertileGround) ~= 'table'
+                or now - observedAt >= ENTITY_RESOLVE_MS
+    end
+    local boss = resolveEntity(
+            entityID, BOSS_CONTENT_ID, EXTREME_BOSS_MODEL_ID, false)
+    if boss == nil then
+        return false, now - observedAt >= ENTITY_RESOLVE_MS
+    end
+    return drawFertileElement(state, entityID, aura, now, boss), true
+end
+
 local function processExtremePending(state, now)
     local pending = state.pendingFertileGround
     if type(pending) == 'table' then
         local _, complete = acceptFertileGround(
                 state, pending.entityID, pending.startedAt, now)
         if complete == true then state.pendingFertileGround = nil end
+    end
+    for key, element in pairs(state.pendingFertileElements) do
+        local _, complete = acceptFertileElement(
+                state, element.entityID, element.aura,
+                element.observedAt, now)
+        if complete == true then
+            state.pendingFertileElements[key] = nil
+            if state.fertileElementSeen[key] == nil
+                    and state.lastDiagnostic == nil
+            then
+                diagnostic(state, 'fertile_ground_element_invalid',
+                        now, element.entityID)
+            end
+        end
     end
     for entityID, volley in pairs(state.pendingVolleys) do
         local _, complete = acceptVolley(
@@ -332,29 +513,37 @@ local function processExtremePending(state, now)
     end
 end
 
-local function handleExtremeChannel(state, entityID, spellID, now)
-    if tonumber(spellID) ~= FERTILE_GROUND_AID
-            or not finite(entityID) or not finite(now)
-    then
-        return false
-    end
-    state.fertileGround = nil
-    state.pendingVolleys = {}
-    state.volleyHeads = {}
-    state.volleys = {}
-    state.nextVolleyIndex = 0
-    state.fertileFirstAuraAt = nil
-    local changed, complete = acceptFertileGround(state, entityID, now, now)
-    if complete ~= true then
-        state.pendingFertileGround = { entityID = entityID, startedAt = now }
-    elseif changed ~= true then
-        diagnostic(state, 'fertile_ground_entity_mismatch', now, entityID)
-    end
-    return changed
-end
-
 local function handleExtremeAura(state, entityID, newAura, now)
     newAura = tonumber(newAura)
+    if FERTILE_ELEMENT_AURAS[newAura] ~= nil then
+        if not finite(entityID) or not finite(now) then
+            return false
+        end
+        local key = fertileElementKey(state, entityID, newAura)
+        if key == nil then
+            diagnostic(state, 'fertile_ground_geometry_missing', now, entityID)
+            return false
+        end
+        if state.fertileElementSeen[key] ~= nil
+                or state.pendingFertileElements[key] ~= nil
+        then
+            return false
+        end
+        local changed, complete = acceptFertileElement(
+                state, entityID, newAura, now, now)
+        if complete ~= true then
+            state.pendingFertileElements[key] = {
+                entityID = entityID,
+                aura = newAura,
+                observedAt = now,
+            }
+        elseif changed ~= true
+                and state.lastDiagnostic == nil
+        then
+            diagnostic(state, 'fertile_ground_element_invalid', now, entityID)
+        end
+        return changed
+    end
     if (newAura ~= FERTILE_GROUND_HEAD_AURA_BLUE
             and newAura ~= FERTILE_GROUND_HEAD_AURA_PINK)
             or not finite(entityID) or not finite(now)
@@ -528,6 +717,11 @@ local function prune(state, now)
             state.seen[key] = nil
         end
     end
+    for key, seenAt in pairs(state.fertileElementSeen) do
+        if not finite(seenAt) or now - seenAt > 30000 then
+            state.fertileElementSeen[key] = nil
+        end
+    end
 end
 
 local Feature = {}
@@ -615,6 +809,11 @@ end
 Feature.Test = {
     Defaults = DEFAULTS,
     BossContentID = BOSS_CONTENT_ID,
+    BossModelID = BOSS_MODEL_ID,
+    ExtremeBossModelID = EXTREME_BOSS_MODEL_ID,
+    HeadContentID = HEAD_CONTENT_ID,
+    HeadModelID = HEAD_MODEL_ID,
+    ExtremeHeadModelID = EXTREME_HEAD_MODEL_ID,
     InitialActionID = INITIAL_AID,
     FollowupActionID = FOLLOWUP_AID,
     InitialLength = INITIAL_LENGTH,
@@ -627,6 +826,8 @@ Feature.Test = {
     FertileGroundPinkAuraID = FERTILE_GROUND_HEAD_AURA_PINK,
     FertileGroundFirstFireMs = FERTILE_GROUND_FIRST_FIRE_MS,
     FertileGroundCadenceMs = FERTILE_GROUND_CADENCE_MS,
+    FertileElementAuras = FERTILE_ELEMENT_AURAS,
+    FertileElementDurationMs = FERTILE_ELEMENT_DURATION_MS,
     NewState = newState,
     EnsureState = ensureState,
     GetConfig = getConfig,
@@ -635,6 +836,7 @@ Feature.Test = {
     HandleAOECreate = handleAOECreate,
     HandleExtremeChannel = handleExtremeChannel,
     HandleExtremeAura = handleExtremeAura,
+    DrawFertileElement = drawFertileElement,
     ProcessExtremePending = processExtremePending,
     ClearMechanic = clearMechanic,
 }
