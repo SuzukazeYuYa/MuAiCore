@@ -190,6 +190,7 @@ Config.init = function(M)
             DownLoadSource = 1,
             -- 开启日志系统
             LogEnable = true,
+            ShowBotState = false,
             --------- M11S -----------
             M11SExDraw = false,
             M11SOrbitalOmenAllMelee = false,
