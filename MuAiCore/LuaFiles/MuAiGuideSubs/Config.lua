@@ -114,6 +114,7 @@ Config.init = function(M)
             'DeathClaw', 'IslandWatcher', 'HigherBird', 'Nammu',
             'OccultReferenceDrawings',
             'TwoHeadedAevis', 'SwordDancer', 'Necrophobia', 'Index',
+            'ClaretDragon',
             'SacredTreeGiant', 'OccultGrimoire', 'Argol',
             'CalofisteriDoppelganger',
             'AlabasterBlade',
@@ -325,6 +326,10 @@ Config.init = function(M)
             Index = {
                 Enable = true,
                 DynamicGuide = true,
+            },
+            --------- 新月岛·北岛：赤龙 ---------
+            ClaretDragon = {
+                Enable = true,
             },
             --------- 新月岛·北岛：神木巨人 ---------
             SacredTreeGiant = {

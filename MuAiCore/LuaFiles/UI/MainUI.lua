@@ -80,6 +80,7 @@ local OCCULT_CRESCENT_NORTH_ENCOUNTERS = {
         { 'DynamicGuide', '元素危险区动态指路',
             'SetIndexDynamicGuideEnabled' },
     } },
+    { '赤龙', 'ClaretDragon', 'SetClaretDragonEnabled' },
     { '神木巨人', 'SacredTreeGiant',
         'SetSacredTreeGiantEnabled' },
     { '古术魔典', 'OccultGrimoire',

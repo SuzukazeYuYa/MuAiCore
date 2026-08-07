@@ -114,6 +114,7 @@ local TwoHeadedAevis = loadNorthModule('TwoHeadedAevis')
 local SwordDancer = loadNorthModule('SwordDancer')
 local Necrophobia = loadNorthModule('Necrophobia')
 local Index = loadNorthModule('Index')
+local ClaretDragon = loadNorthModule('ClaretDragon')
 local SacredTreeGiant = loadNorthModule('SacredTreeGiant')
 local OccultGrimoire = loadNorthModule('OccultGrimoire')
 local CalofisteriDoppelganger = loadNorthModule('CalofisteriDoppelganger')
@@ -138,6 +139,7 @@ local FEATURES = {
     SwordDancer,
     Necrophobia,
     Index,
+    ClaretDragon,
     SacredTreeGiant,
     OccultGrimoire,
     CalofisteriDoppelganger,
@@ -198,6 +200,8 @@ G.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
     SwordDancer.OnEntityChannel(entityID, spellID, now)
     Necrophobia.OnEntityChannel(entityID, spellID, now)
     Index.OnEntityChannel(entityID, spellID, channelTimeMax, now)
+    ClaretDragon.OnEntityChannel(
+            entityID, spellID, channelTimeMax, now)
     OccultGrimoire.OnEntityChannel(
             entityID, spellID, channelTimeMax, now)
     CalofisteriDoppelganger.OnEntityChannel(entityID, spellID, now)
@@ -408,6 +412,7 @@ G.Update = function()
     SwordDancer.Update(guide, now)
     Necrophobia.Update(guide, now)
     Index.Update(guide, now)
+    ClaretDragon.Update(guide, now)
     SacredTreeGiant.Update(guide, now)
     OccultGrimoire.Update(guide, now)
     CalofisteriDoppelganger.Update(guide, now)
@@ -434,6 +439,7 @@ G.Test = {
     SwordDancer = SwordDancer.Test,
     Necrophobia = Necrophobia.Test,
     Index = Index.Test,
+    ClaretDragon = ClaretDragon.Test,
     SacredTreeGiant = SacredTreeGiant.Test,
     OccultGrimoire = OccultGrimoire.Test,
     CalofisteriDoppelganger = CalofisteriDoppelganger.Test,
