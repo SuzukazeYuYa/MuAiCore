@@ -1764,6 +1764,11 @@ Dmu_P3.Update = function()
                     MG.FrameMultiD(Data().TakeTower.Put1Pos)
                 end
             end
+            if Cfg().markType == 3 and not Data().Mark.Finish2
+                    and  Player.marker ~= nil and Player.marker > 0 then
+                DM.ClearMarks()
+                Data().Mark.Finish2 = true
+            end
         end
         if DM.InState('P3AoePut1') then
             if Cfg().takeTowerType ~= 1 then
