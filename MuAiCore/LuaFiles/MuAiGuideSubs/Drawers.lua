@@ -11,6 +11,7 @@ local b_03 = GUI:ColorConvertFloat4ToU32(0, 0, 1, 0.3)
 local yl_03 = GUI:ColorConvertFloat4ToU32(1, 1, 0, 0.3)
 local cy_03 = GUI:ColorConvertFloat4ToU32(0, 1, 1, 0.3)
 local pp_03 = GUI:ColorConvertFloat4ToU32(1, 0, 1, 0.3)
+local pp_1 = GUI:ColorConvertFloat4ToU32(1, 0, 1, 1)
 local w_1 = GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)
 
 ---@param M MuAiGuide
@@ -18,6 +19,7 @@ Drawers.init = function(M)
     local ZeroYMap = { 1238, 1122, 1325, 1327, 1363 }
     M.NotDelayGuides = {}
     M.NotDelayGuidesMulti = {}
+    local frameDirectCenterDrawer = TensorCore.getCachedDrawer(pp_1, pp_1, pp_1, nil, 1)
 
     local optionalNumber = function(value, defaultValue, caller, name)
         if value == nil then
@@ -317,15 +319,13 @@ Drawers.init = function(M)
         size = size or 0.5
         local drawer1Color = GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)
         local drawer2Color = GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 1)
-        local drawer3Color = GUI:ColorConvertFloat4ToU32(1, 0, 1, 1)
-        local newDraw = Argus2.ShapeDrawer:new(drawer1Color, drawer1Color, drawer1Color, w_1, 2)
-        local newDraw2 = Argus2.ShapeDrawer:new(drawer2Color, drawer2Color, drawer2Color, drawer2Color, 2)
-        local newDraw3 = Argus2.ShapeDrawer:new(drawer3Color, drawer3Color, drawer3Color, nil, 1)
+        local newDraw = TensorCore.getCachedDrawer(drawer1Color, drawer1Color, drawer1Color, w_1, 2)
+        local newDraw2 = TensorCore.getCachedDrawer(drawer2Color, drawer2Color, drawer2Color, drawer2Color, 2)
         local distance = TensorCore.getDistance2d(playerPos, { x = x, y = 0, z = z })
         local heading = TensorCore.getHeadingToTarget(playerPos, { x = x, y = 0, z = z })
         newDraw:addCircle(x, drawY, z, size, true)
         newDraw2:addRect(playerPos.x, drawY, playerPos.z, distance, 0.05, heading, true)
-        newDraw3:addCircle(x, drawY, z, 0.03, true)
+        frameDirectCenterDrawer:addCircle(x, drawY, z, 0.03, true)
     end
 
     local getLiveEntityPos = function(entityId, caller)
