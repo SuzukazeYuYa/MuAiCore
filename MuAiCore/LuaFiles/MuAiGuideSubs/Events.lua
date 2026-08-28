@@ -5,14 +5,70 @@ local Events = {}
 ===========================
 ]]
 local lastMap, lastJob
-local autoPopMap = { 1238, 1122, 1325, 1327, 1317, 1363 }
+local autoPopMap = { 968, 1238, 1122, 1325, 1327, 1317, 1363 }
+local partyLoadRetry
+local partyLoadRetryInterval = 500
+local partyLoadRetryTimeout = 15000
 ---@type MuAiGuide
 local MG
 local lastBattleTime = 0
 local curState = FFXIV_Common_BotRunning
 
-local doPop = function()
+local isPartyReady = function()
+    local count = MG.GetPartyCnt()
+    return (count == 4 or count == 8) and MG.SelfPos ~= nil
+end
+
+local loadParty = function()
     MG.LoadParty()
+    if isPartyReady() then
+        partyLoadRetry = nil
+        return
+    end
+    local now = Now()
+    partyLoadRetry = {
+        mapId = Player.localmapid,
+        startedAt = now,
+        lastAttemptAt = now,
+    }
+end
+
+local retryPartyLoad = function()
+    local retry = partyLoadRetry
+    if retry == nil then
+        return
+    end
+    if Player.localmapid ~= retry.mapId or not table.contains(autoPopMap, Player.localmapid) then
+        partyLoadRetry = nil
+        return
+    end
+    if isPartyReady() then
+        partyLoadRetry = nil
+        return
+    end
+    if TimeSince(retry.startedAt) >= partyLoadRetryTimeout then
+        partyLoadRetry = nil
+        MG.LogOnce('Events', 'party_load_retry_timeout_' .. tostring(retry.mapId),
+                '进入副本后小队职能初始化超时', { mapId = retry.mapId })
+        return
+    end
+    if TimeSince(retry.lastAttemptAt) < partyLoadRetryInterval then
+        return
+    end
+    retry.lastAttemptAt = Now()
+    local members = MG.GetPartyPlayers()
+    local memberCount = table.size(members or {})
+    if memberCount ~= 4 and memberCount < 8 then
+        return
+    end
+    MG.LoadParty()
+    if isPartyReady() then
+        partyLoadRetry = nil
+    end
+end
+
+local doPop = function()
+    loadParty()
     if MG.MainUI.tabs ~= nil then
         for i = 1, 6 do
             MG.MainUI.tabs.tabs[i].isselected = i == 1
@@ -187,6 +243,7 @@ end
 
 local onMapChange = function()
     if Player.localmapid ~= nil then
+        partyLoadRetry = nil
         lastBattleTime = 0
         if MG.RememberParty ~= nil then
             MG.RememberParty('map-change')
@@ -273,6 +330,7 @@ Events.init = function(M)
         MG.CheckArgusRegister()
         checkHotKeyPress()
         onMapChangeCheck()
+        retryPartyLoad()
         onJobChangeCheck()
         MG.OnRaidUpdate()
         attackRangeHackHelper()
