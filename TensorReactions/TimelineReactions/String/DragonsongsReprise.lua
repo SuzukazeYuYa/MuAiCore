@@ -827,9 +827,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "ac00488b-26c1-ed90-bc00-5fafc1cd623f",
 							version = 3,
 						},
@@ -869,7 +871,7 @@ local tbl =
 					},
 				},
 				mechanicTime = 51.9,
-				name = "[P1] 远敏团队减伤（机工）",
+				name = "[P1] 远敏团队减伤",
 				timeRandomRange = true,
 				timeRange = true,
 				timelineIndex = 11,
@@ -1395,9 +1397,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "ec30b706-0522-f3ea-ba62-d5f30e0769fc",
 							version = 3,
 						},
@@ -1438,7 +1442,7 @@ local tbl =
 				},
 				enabled = false,
 				mechanicTime = 59.8,
-				name = "[P1] 远敏团队减伤（机工）",
+				name = "[P1] 远敏团队减伤",
 				timeRandomRange = true,
 				timeRange = true,
 				timelineIndex = 12,
@@ -3140,9 +3144,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "7ac67a90-6045-f67f-b567-b349928dcce6",
 							version = 3,
 						},
@@ -3182,7 +3188,7 @@ local tbl =
 					},
 				},
 				mechanicTime = 235.9,
-				name = "[P2] 远敏团队减伤（机工）",
+				name = "[P2] 远敏团队减伤",
 				timeRange = true,
 				timelineIndex = 35,
 				timerEndOffset = -7,
@@ -4123,9 +4129,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "2603e111-81c0-42e2-90f9-05cc030fe2d5",
 							version = 3,
 						},
@@ -4166,7 +4174,7 @@ local tbl =
 				},
 				enabled = false,
 				mechanicTime = 335.3,
-				name = "[P2] 远敏团队减伤（机工）",
+				name = "[P2] 远敏团队减伤",
 				timelineIndex = 50,
 				timerOffset = 1,
 				uuid = "2b2bbfb2-dd92-7f3b-af45-fda18124f066",
@@ -4736,9 +4744,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "1579c847-048e-d691-9d27-a7b63003b668",
 							version = 3,
 						},
@@ -4776,7 +4786,7 @@ local tbl =
 					},
 				},
 				mechanicTime = 358,
-				name = "[P2] 远敏团队减伤（机工）",
+				name = "[P2] 远敏团队减伤",
 				timeRange = true,
 				timelineIndex = 58,
 				timerEndOffset = -1.5,
@@ -7196,9 +7206,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "92a308ca-869c-cfab-b481-e854e378f83a",
 							version = 3,
 						},
@@ -7222,7 +7234,7 @@ local tbl =
 					},
 				},
 				mechanicTime = 602.3,
-				name = "[P3] 远敏团队减伤（机工） 1",
+				name = "[P3] 远敏团队减伤 1",
 				timeRange = true,
 				timelineIndex = 97,
 				timerEndOffset = -1.5,
@@ -7275,9 +7287,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "b3bb6b47-6d5a-7432-b03c-d1630a470156",
 							version = 3,
 						},
@@ -7301,7 +7315,7 @@ local tbl =
 					},
 				},
 				mechanicTime = 602.3,
-				name = "[P3] 远敏团队减伤（机工） 2",
+				name = "[P3] 远敏团队减伤 2",
 				timelineIndex = 97,
 				uuid = "440ac5d8-9fcf-5ec4-990f-c3bfda719af3",
 				version = 2,
@@ -10532,9 +10546,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "cbac0eab-d232-afc2-8121-580da8495957",
 							version = 3,
 						},
@@ -10575,7 +10591,7 @@ local tbl =
 				},
 				enabled = false,
 				mechanicTime = 920.9,
-				name = "[P4] 远敏团队减伤（机工）",
+				name = "[P4] 远敏团队减伤",
 				timelineIndex = 140,
 				timerOffset = -3,
 				uuid = "0ba2c667-f88d-9228-abfa-dca3b972e941",
@@ -11017,9 +11033,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "229d0dff-f035-0f2e-802e-2fa7744de825",
 							version = 3,
 						},
@@ -11043,7 +11061,7 @@ local tbl =
 					},
 				},
 				mechanicTime = 935.9,
-				name = "[P4] 远敏团队减伤（机工）",
+				name = "[P4] 远敏团队减伤",
 				timeRange = true,
 				timelineIndex = 146,
 				timerEndOffset = -1.5,
@@ -12242,9 +12260,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "11270765-301b-a4de-993d-50790d746d5b",
 							version = 3,
 						},
@@ -12298,7 +12318,7 @@ local tbl =
 					},
 				},
 				mechanicTime = 1057.2,
-				name = "[P5] 远敏团队减伤（机工）",
+				name = "[P5] 远敏团队减伤",
 				timeRange = true,
 				timelineIndex = 174,
 				timerEndOffset = -1,
@@ -14331,9 +14351,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "8f8c398f-d715-8ea9-9615-3cd4d96010f9",
 							version = 3,
 						},
@@ -14386,7 +14408,7 @@ local tbl =
 				},
 				eventType = 3,
 				mechanicTime = 1142.2,
-				name = "[P5] 远敏团队减伤（机工）",
+				name = "[P5] 远敏团队减伤",
 				timeRange = true,
 				timelineIndex = 196,
 				timerEndOffset = 5,
@@ -15681,9 +15703,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "1992c688-0163-8649-a146-009d2594563f",
 							version = 3,
 						},
@@ -15721,7 +15745,7 @@ local tbl =
 					},
 				},
 				mechanicTime = 1293.5,
-				name = "[P6] 远敏团队减伤（机工）",
+				name = "[P6] 远敏团队减伤",
 				timeRange = true,
 				timelineIndex = 214,
 				timerStartOffset = -4,
@@ -17323,6 +17347,157 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"263d24de-c2fc-29bf-8629-751bd3220f2b",
+									true,
+								},
+							},
+							name = "热病前选中自己",
+							setTarget = true,
+							uuid = "4f8b2147-48c1-63cc-83a9-b37fda8d198e",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"4ba07b23-a06f-c3e2-b621-270f2211e093",
+									true,
+								},
+							},
+							name = "热病前停止所有行动",
+							stopAllActions = true,
+							uuid = "c3ca9fd4-2973-0ac3-b9ef-809d2f3007ed",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"17397fe1-92ee-c03f-959d-314497992d1d",
+									true,
+								},
+								
+								{
+									"5075d0b9-42b8-ab98-9d35-2d19b99ab0d4",
+									true,
+								},
+								
+								{
+									"d7a75739-66fd-1717-938e-a85b3ae10017",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "热病消失恢复所有行动",
+							resumeAllActions = true,
+							uuid = "af56d228-2528-5e0f-9d0f-ddf4318ef121",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							buffCheckType = 3,
+							buffDuration = 2,
+							buffID = 2898,
+							category = "Self",
+							comparator = 2,
+							name = "渐热 <=2s",
+							uuid = "263d24de-c2fc-29bf-8629-751bd3220f2b",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffCheckType = 3,
+							buffDuration = 1,
+							buffID = 2898,
+							category = "Self",
+							comparator = 2,
+							name = "渐热 <=1s",
+							uuid = "4ba07b23-a06f-c3e2-b621-270f2211e093",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionUUID = "c3ca9fd4-2973-0ac3-b9ef-809d2f3007ed",
+							category = "Action",
+							name = "已停止所有行动",
+							uuid = "17397fe1-92ee-c03f-959d-314497992d1d",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffCheckType = 2,
+							buffID = 2898,
+							category = "Self",
+							name = "渐热已消失",
+							uuid = "5075d0b9-42b8-ab98-9d35-2d19b99ab0d4",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							buffCheckType = 2,
+							buffID = 960,
+							category = "Self",
+							name = "热病已消失",
+							uuid = "d7a75739-66fd-1717-938e-a85b3ae10017",
+							version = 3,
+						},
+					},
+				},
+				mechanicTime = 1369,
+				name = "[P6] 双龙俯冲热病停手",
+				timeRange = true,
+				timelineIndex = 234,
+				timerEndOffset = 6,
+				timerStartOffset = -2.5,
+				uuid = "42d5cef0-3acf-969d-890b-25a153ffb49a",
+				version = 2,
+			},
+		},
 	},
 	[235] = 
 	{
@@ -17511,9 +17686,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "dd2fb71c-9cb1-fb7a-94fb-5c19fc14ac54",
 							version = 3,
 						},
@@ -17564,7 +17741,7 @@ local tbl =
 					},
 				},
 				mechanicTime = 1532.8,
-				name = "[P6] 远敏团队减伤（机工）",
+				name = "[P6] 远敏团队减伤",
 				timeRange = true,
 				timelineIndex = 242,
 				timerEndOffset = -1,
@@ -18805,9 +18982,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "3dbdd9b3-12d3-cb82-8a9f-a7aafe2b4fc1",
 							version = 3,
 						},
@@ -18847,7 +19026,7 @@ local tbl =
 					},
 				},
 				mechanicTime = 1644.3,
-				name = "[P7] 远敏团队减伤（机工）",
+				name = "[P7] 远敏团队减伤",
 				timelineIndex = 260,
 				timerOffset = 1,
 				uuid = "627d6d4d-6bce-7d11-8fce-e9d05971d5da",
@@ -20215,9 +20394,11 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							jobIDList = 
 							{
+								23,
 								31,
+								38,
 							},
-							name = "机工职业",
+							name = "远敏职业",
 							uuid = "e8d2247c-d54b-089e-bee8-be9f140b4f03",
 							version = 3,
 						},
@@ -20257,7 +20438,7 @@ local tbl =
 					},
 				},
 				mechanicTime = 1733,
-				name = "[P7] 远敏团队减伤（机工）",
+				name = "[P7] 远敏团队减伤",
 				timeRange = true,
 				timelineIndex = 275,
 				timerEndOffset = 15,
