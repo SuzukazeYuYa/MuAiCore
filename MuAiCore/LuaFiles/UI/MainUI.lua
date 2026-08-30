@@ -832,14 +832,19 @@ end
 ---@param M MuAiGuide
 local drawRaidSettingTab = function(M)
     GUI:TextColored(1, 1, 0, 1, ' 使用说明:')
-    GUI:TextColored(1, 1, 0, 1, '  1.光暗未来绝境战, 时间轴: MuAi\\MuaiGuideFru')
-    GUI:TextColored(1, 1, 0, 1, '  2.欧米茄绝境检定战, 时间轴: MuAi\\MuAiGuideTop')
-    GUI:TextColored(1, 1, 0, 1, '  3.M11S|M12S, [全局]: MuAi\\MuAiGeneral')
-    GUI:TextColored(1, 1, 0, 1, '  4.除上述外, 其他副本无继承, 启用即可!')
+    GUI:TextColored(1, 0, 0, 1, '  部分副本采用时间轴开发, 需要继承对应时间!')
+    GUI:TextColored(1, 1, 0, 1, '  1.绝龙诗, 时间轴: String\\DragonsongsReprise')
+    GUI:TextColored(1, 1, 0, 1, '  2.绝欧米茄, 时间轴: MuAi\\MuAiGuideTop')
+    GUI:TextColored(1, 1, 0, 1, '  3.绝伊甸, 时间轴: MuAi\\MuaiGuideFru')
+    GUI:TextColored(1, 1, 0, 1, '  4.M11S|M12S, [全局]: MuAi\\MuAiGeneral')
+    
     if GUI:CollapsingHeader('绝本') then
-        GUI:BulletText('欧米茄绝境检定战')
-        GUI:Text('   仅默认设置, 国服野队一套打法')
+        GUI:BulletText('幻想龙诗绝境战 by String,')
+        GUI:Text('   无设置, 仅支持国服野队一套打法')
         GUI:Dummy(0, 7)
+        GUI:BulletText('欧米茄绝境检定战')
+        GUI:Text('   无设置, 仅支持国服野队一套打法')
+        GUI:Dummy(0, 7) 
         GUI:BulletText('光暗未来绝境战')
         GUI:Dummy(15, 0)
         GUI:SameLine()
@@ -1007,6 +1012,10 @@ local drawRaidSettingTab = function(M)
             end
         end
     end
+   
+    if GUI:CollapsingHeader('新月岛 By String') then
+        drawOccultCrescentSettings(M)
+    end
     if GUI:CollapsingHeader('其他') then
         GUI:Dummy(6, 0)
         GUI:SameLine()
@@ -1049,9 +1058,6 @@ local drawRaidSettingTab = function(M)
                 end
             end
         end
-    end
-    if GUI:CollapsingHeader('新月岛') then
-        drawOccultCrescentSettings(M)
     end
 end
 ---@param M MuAiGuide

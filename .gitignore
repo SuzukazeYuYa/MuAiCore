@@ -9,3 +9,7 @@ MuAiCore/LuaFiles/RaidScripts/SelfUsed.lua
 MuAiCore/LuaFiles/RaidScripts/SelfUsed.lua
 MuAiCore/LuaFiles/RaidScripts/SelfUsed.lua
 MuAiCore/Log
+TensorReactions/TimelineReactions/MuAi/dmu_rdps_mitig.lua
+TensorReactions/TimelineReactions/MuAi/dmu_rdps_mitig_dis.lua
+TensorReactions/TimelineReactions/String/FRU_Mch.lua
+TensorReactions/TimelineReactions/String/FRU_Pct.lua
