@@ -4272,6 +4272,72 @@ local tbl =
 			},
 		},
 	},
+	[52] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(state) ~= \"table\" or state.ready ~= true or not playerID\n    or type(player.pos) ~= \"table\"\n    or type(MuAiGuide) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or type(Argus) ~= \"table\"\n    or type(Argus.getCurrentAOEs) ~= \"function\" then\n  return\nend\n\nif not state.role then\n  local party = MuAiGuide.Party\n  if type(party) ~= \"table\" then\n    return\n  end\n  if tonumber(party.MT and party.MT.id) == playerID then state.role = \"MT\"\n  elseif tonumber(party.ST and party.ST.id) == playerID then state.role = \"ST\"\n  elseif tonumber(party.H1 and party.H1.id) == playerID then state.role = \"H1\"\n  elseif tonumber(party.H2 and party.H2.id) == playerID then state.role = \"H2\"\n  elseif tonumber(party.D1 and party.D1.id) == playerID then state.role = \"D1\"\n  elseif tonumber(party.D2 and party.D2.id) == playerID then state.role = \"D2\"\n  elseif tonumber(party.D3 and party.D3.id) == playerID then state.role = \"D3\"\n  elseif tonumber(party.D4 and party.D4.id) == playerID then state.role = \"D4\"\n  end\nend\nif not state.role then\n  return\nend\n\nif state.role == \"MT\" or state.role == \"ST\" then\n  self.used = true\n  return\nend\n\nlocal thordan = TensorCore.mGetEntity(tonumber(state.thordanID))\nlocal thordanPos = thordan and thordan.pos or nil\nif type(thordanPos) ~= \"table\"\n    or type(thordanPos.x) ~= \"number\"\n    or type(thordanPos.z) ~= \"number\"\n    or type(state.rx) ~= \"number\"\n    or type(state.rz) ~= \"number\" then\n  return\nend\n\nlocal crowdSlot = nil\nif state.isBlue ~= true then\n  if state.crowdSlotsReady ~= true then\n    local party = MuAiGuide.Party\n    if type(party) ~= \"table\" then\n      return\n    end\n\n    if type(state.crowdRoleIDs) ~= \"table\" then\n      state.crowdRoleIDs = {}\n    end\n    local ids = state.crowdRoleIDs\n    ids[1] = tonumber(party.H1 and party.H1.id)\n    ids[2] = tonumber(party.H2 and party.H2.id)\n    ids[3] = tonumber(party.D1 and party.D1.id)\n    ids[4] = tonumber(party.D2 and party.D2.id)\n    ids[5] = tonumber(party.D3 and party.D3.id)\n    ids[6] = tonumber(party.D4 and party.D4.id)\n\n    if type(state.crowdCandidates) ~= \"table\" then\n      state.crowdCandidates = {{}, {}, {}, {}, {}, {}}\n    end\n    local candidates = state.crowdCandidates\n\n    for i = 1, 6 do\n      local id = ids[i]\n      if not id then\n        return\n      end\n      for j = 1, i - 1 do\n        if ids[j] == id then\n          return\n        end\n      end\n\n      local entity = TensorCore.mGetEntity(id)\n      local pos = entity and entity.pos or nil\n      if type(pos) ~= \"table\"\n          or type(pos.x) ~= \"number\"\n          or type(pos.z) ~= \"number\" then\n        return\n      end\n\n      local dx = pos.x - thordanPos.x\n      local dz = pos.z - thordanPos.z\n      local candidate = candidates[i]\n      candidate.id = id\n      candidate.d2 = dx * dx + dz * dz\n      candidate.lateral = dx * state.rx + dz * state.rz\n    end\n\n    for i = 1, 4 do\n      local best = i\n      for j = i + 1, 6 do\n        if candidates[j].d2 < candidates[best].d2 then\n          best = j\n        end\n      end\n      if best ~= i then\n        candidates[i], candidates[best] = candidates[best], candidates[i]\n      end\n    end\n\n    if candidates[3].d2 > 100 or candidates[4].d2 < 144 then\n      return\n    end\n\n    if candidates[1].lateral > candidates[2].lateral then\n      candidates[1], candidates[2] = candidates[2], candidates[1]\n    end\n    if candidates[2].lateral > candidates[3].lateral then\n      candidates[2], candidates[3] = candidates[3], candidates[2]\n    end\n    if candidates[1].lateral > candidates[2].lateral then\n      candidates[1], candidates[2] = candidates[2], candidates[1]\n    end\n\n    if candidates[2].lateral - candidates[1].lateral < 0.25\n        or candidates[3].lateral - candidates[2].lateral < 0.25 then\n      return\n    end\n\n    state.crowdLeftID = candidates[1].id\n    state.crowdMiddleID = candidates[2].id\n    state.crowdRightID = candidates[3].id\n    state.crowdSlotsReady = true\n    return\n  end\n\n  if state.crowdLeftID == playerID then\n    crowdSlot = 1\n  elseif state.crowdMiddleID == playerID then\n    crowdSlot = 2\n  elseif state.crowdRightID == playerID then\n    crowdSlot = 3\n  else\n    return\n  end\nend\n\nif not state.towerTargetX then\n  if type(state.towerCandidates) ~= \"table\" then\n    state.towerCandidates = {{}, {}, {}, {}, {}, {}}\n  end\n  local towers = state.towerCandidates\n  local towerCount = 0\n  local aoes = Argus.getCurrentAOEs()\n  if type(aoes) ~= \"table\" then\n    return\n  end\n\n  for i = 1, #aoes do\n    local aoe = aoes[i]\n    if aoe.aoeID == 25567\n        and type(aoe.x) == \"number\"\n        and type(aoe.z) == \"number\"\n        and tonumber(aoe.entityID) then\n      local entityID = tonumber(aoe.entityID)\n      local duplicate = false\n      for j = 1, towerCount do\n        if towers[j].id == entityID then\n          duplicate = true\n          break\n        end\n      end\n      if not duplicate then\n        towerCount = towerCount + 1\n        if towerCount > 6 then\n          return\n        end\n        local tower = towers[towerCount]\n        tower.id = entityID\n        tower.x = aoe.x\n        tower.z = aoe.z\n      end\n    end\n  end\n  if towerCount ~= 6 then\n    return\n  end\n\n  if state.isBlue == true then\n    local best, bestD2 = nil, nil\n    for i = 1, 6 do\n      local tower = towers[i]\n      local dx = player.pos.x - tower.x\n      local dz = player.pos.z - tower.z\n      local d2 = dx * dx + dz * dz\n      if bestD2 == nil or d2 < bestD2 then\n        best = tower\n        bestD2 = d2\n      end\n    end\n    state.towerTargetX = best.x\n    state.towerTargetZ = best.z\n  else\n    for i = 1, 6 do\n      local tower = towers[i]\n      local dx = tower.x - thordanPos.x\n      local dz = tower.z - thordanPos.z\n      tower.d2 = dx * dx + dz * dz\n      tower.lateral = dx * state.rx + dz * state.rz\n    end\n\n    for i = 1, 4 do\n      local best = i\n      for j = i + 1, 6 do\n        if towers[j].d2 < towers[best].d2 then\n          best = j\n        end\n      end\n      if best ~= i then\n        towers[i], towers[best] = towers[best], towers[i]\n      end\n    end\n\n    if towers[4].d2 <= towers[3].d2 then\n      return\n    end\n\n    if towers[1].lateral > towers[2].lateral then\n      towers[1], towers[2] = towers[2], towers[1]\n    end\n    if towers[2].lateral > towers[3].lateral then\n      towers[2], towers[3] = towers[3], towers[2]\n    end\n    if towers[1].lateral > towers[2].lateral then\n      towers[1], towers[2] = towers[2], towers[1]\n    end\n\n    if towers[2].lateral - towers[1].lateral < 0.25\n        or towers[3].lateral - towers[2].lateral < 0.25 then\n      return\n    end\n\n    state.towerTargetX = towers[crowdSlot].x\n    state.towerTargetZ = towers[crowdSlot].z\n  end\nend\n\nif MuAiGuide.FrameDirect(\n    state.towerTargetX, state.towerTargetZ, 0.5\n) then\n  self.used = true\nend",
+							name = "MuAi 指向本人分配塔",
+							uuid = "8dafbbfd-be39-dbe1-8ab0-f9a93ec72d4f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 12,
+				mechanicTime = 345.4,
+				name = "[P2] 1.5运蓝圈与人群三塔动态指路",
+				timeRange = true,
+				timelineIndex = 52,
+				timerEndOffset = 4.8,
+				uuid = "6c0a6a01-0a63-5294-b9ca-60d30cbc6e96",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(state) ~= \"table\" or state.ready ~= true or not playerID\n    or type(MuAiGuide) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\" then\n  return\nend\n\nif not state.role then\n  local party = MuAiGuide.Party\n  if type(party) ~= \"table\" then\n    return\n  end\n  if tonumber(party.MT and party.MT.id) == playerID then state.role = \"MT\"\n  elseif tonumber(party.ST and party.ST.id) == playerID then state.role = \"ST\"\n  elseif tonumber(party.H1 and party.H1.id) == playerID then state.role = \"H1\"\n  elseif tonumber(party.H2 and party.H2.id) == playerID then state.role = \"H2\"\n  elseif tonumber(party.D1 and party.D1.id) == playerID then state.role = \"D1\"\n  elseif tonumber(party.D2 and party.D2.id) == playerID then state.role = \"D2\"\n  elseif tonumber(party.D3 and party.D3.id) == playerID then state.role = \"D3\"\n  elseif tonumber(party.D4 and party.D4.id) == playerID then state.role = \"D4\"\n  end\nend\nif not state.role then\n  return\nend\n\nif state.isBlue == nil then\n  state.isBlue = false\n  for i = 1, tonumber(state.blueCount) or 0 do\n    if state.blueIDs[i] == playerID then\n      state.isBlue = true\n      break\n    end\n  end\nend\n\nif state.role == \"MT\" or state.role == \"ST\" then\n  self.used = true\n  return\nend\n\nlocal targetX = nil\nlocal targetZ = nil\nif state.isBlue == true then\n  local pos = player.pos\n  if type(pos) ~= \"table\"\n      or type(pos.x) ~= \"number\"\n      or type(pos.z) ~= \"number\"\n      or type(state.blueLeftX) ~= \"number\"\n      or type(state.blueLeftZ) ~= \"number\"\n      or type(state.blueRightX) ~= \"number\"\n      or type(state.blueRightZ) ~= \"number\"\n      or type(state.blueBackX) ~= \"number\"\n      or type(state.blueBackZ) ~= \"number\" then\n    return\n  end\n\n  if not state.blueTargetX then\n    local leftD2 =\n      (pos.x - state.blueLeftX) ^ 2 + (pos.z - state.blueLeftZ) ^ 2\n    local rightD2 =\n      (pos.x - state.blueRightX) ^ 2 + (pos.z - state.blueRightZ) ^ 2\n    local backD2 =\n      (pos.x - state.blueBackX) ^ 2 + (pos.z - state.blueBackZ) ^ 2\n\n    state.blueTargetX = state.blueLeftX\n    state.blueTargetZ = state.blueLeftZ\n    local bestD2 = leftD2\n    if rightD2 < bestD2 then\n      bestD2 = rightD2\n      state.blueTargetX = state.blueRightX\n      state.blueTargetZ = state.blueRightZ\n    end\n    if backD2 < bestD2 then\n      state.blueTargetX = state.blueBackX\n      state.blueTargetZ = state.blueBackZ\n    end\n  end\n\n  targetX = state.blueTargetX\n  targetZ = state.blueTargetZ\nelse\n  if type(state.groupX) ~= \"number\"\n      or type(state.groupZ) ~= \"number\" then\n    return\n  end\n  targetX = state.groupX\n  targetZ = state.groupZ\nend\n\nif MuAiGuide.FrameDirect(targetX, targetZ, 0.5) then\n  self.used = true\nend",
+							name = "MuAi 指向蓝圈安全点或人群分摊点",
+							uuid = "b4dd1a85-cd42-0474-b97d-8d3305a21b72",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 12,
+				mechanicTime = 345.4,
+				name = "[P2] 1.5运蓝圈安全点与人群分摊动态指路",
+				timeRange = true,
+				timelineIndex = 52,
+				timerEndOffset = -0.01,
+				timerStartOffset = -6.9,
+				uuid = "37f682d5-e088-ed9d-9c69-e6108a520d14",
+				version = 2,
+			},
+		},
+	},
 	[53] = 
 	{
 		
@@ -4300,37 +4366,6 @@ local tbl =
 				timelineIndex = 53,
 				timerOffset = -8,
 				uuid = "0bcc8cc5-3939-2112-a091-084fe00770fe",
-				version = 2,
-			},
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							aType = "Lua",
-							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(state) ~= \"table\" or state.ready ~= true or not playerID\n    or type(MuAiGuide) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\" then\n  return\nend\n\nif not state.role then\n  local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\n  if type(party) ~= \"table\" then\n    return\n  end\n  if tonumber(party.MT and party.MT.id) == playerID then state.role = \"MT\"\n  elseif tonumber(party.ST and party.ST.id) == playerID then state.role = \"ST\"\n  elseif tonumber(party.H1 and party.H1.id) == playerID then state.role = \"H1\"\n  elseif tonumber(party.H2 and party.H2.id) == playerID then state.role = \"H2\"\n  elseif tonumber(party.D1 and party.D1.id) == playerID then state.role = \"D1\"\n  elseif tonumber(party.D2 and party.D2.id) == playerID then state.role = \"D2\"\n  elseif tonumber(party.D3 and party.D3.id) == playerID then state.role = \"D3\"\n  elseif tonumber(party.D4 and party.D4.id) == playerID then state.role = \"D4\"\n  end\nend\nif not state.role then\n  return\nend\n\nif state.isBlue == nil then\n  state.isBlue = false\n  for i = 1, state.blueCount do\n    if state.blueIDs[i] == playerID then\n      state.isBlue = true\n      break\n    end\n  end\nend\n\nif state.role == \"MT\" or state.role == \"ST\" or state.isBlue ~= true then\n  self.used = true\n  return\nend\n\nif not state.blueTargetX then\n  local px = player.pos.x\n  local pz = player.pos.z\n  local leftD2 = (px - state.blueLeftX) ^ 2 + (pz - state.blueLeftZ) ^ 2\n  local rightD2 = (px - state.blueRightX) ^ 2 + (pz - state.blueRightZ) ^ 2\n  local backD2 = (px - state.blueBackX) ^ 2 + (pz - state.blueBackZ) ^ 2\n  state.blueTargetX = state.blueLeftX\n  state.blueTargetZ = state.blueLeftZ\n  local bestD2 = leftD2\n  if rightD2 < bestD2 then\n    bestD2 = rightD2\n    state.blueTargetX = state.blueRightX\n    state.blueTargetZ = state.blueRightZ\n  end\n  if backD2 < bestD2 then\n    state.blueTargetX = state.blueBackX\n    state.blueTargetZ = state.blueBackZ\n  end\nend\n\nif MuAiGuide.FrameDirect(\n    state.blueTargetX, state.blueTargetZ, 0.5\n) then\n  self.used = true\nend",
-							name = "MuAi 指向最近安全点",
-							uuid = "b4dd1a85-cd42-0474-b97d-8d3305a21b72",
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-				},
-				eventType = 12,
-				mechanicTime = 346.5,
-				name = "[P2] 1.5运蓝圈安全点动态指路",
-				timeRange = true,
-				timelineIndex = 53,
-				timerStartOffset = -8,
-				uuid = "37f682d5-e088-ed9d-9c69-e6108a520d14",
 				version = 2,
 			},
 		},
@@ -4462,37 +4497,6 @@ local tbl =
 				timelineIndex = 56,
 				timerOffset = -3,
 				uuid = "2dd99f96-cf9d-9bc1-afcf-3fd7b51bd8a3",
-				version = 2,
-			},
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							aType = "Lua",
-							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(state) ~= \"table\" or state.ready ~= true or not playerID\n    or type(MuAiGuide) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\" then\n  return\nend\n\nif not state.role then\n  local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\n  if type(party) ~= \"table\" then\n    return\n  end\n  if tonumber(party.MT and party.MT.id) == playerID then state.role = \"MT\"\n  elseif tonumber(party.ST and party.ST.id) == playerID then state.role = \"ST\"\n  elseif tonumber(party.H1 and party.H1.id) == playerID then state.role = \"H1\"\n  elseif tonumber(party.H2 and party.H2.id) == playerID then state.role = \"H2\"\n  elseif tonumber(party.D1 and party.D1.id) == playerID then state.role = \"D1\"\n  elseif tonumber(party.D2 and party.D2.id) == playerID then state.role = \"D2\"\n  elseif tonumber(party.D3 and party.D3.id) == playerID then state.role = \"D3\"\n  elseif tonumber(party.D4 and party.D4.id) == playerID then state.role = \"D4\"\n  end\nend\nif not state.role then\n  return\nend\n\nif state.isBlue == nil then\n  state.isBlue = false\n  for i = 1, state.blueCount do\n    if state.blueIDs[i] == playerID then\n      state.isBlue = true\n      break\n    end\n  end\nend\n\nif state.role == \"MT\" or state.role == \"ST\" or state.isBlue ~= true then\n  self.used = true\n  return\nend\n\nif not state.towerTargetX then\n  local aoes = Argus.getCurrentAOEs()\n  local bestD2 = nil\n  for i = 1, #aoes do\n    local aoe = aoes[i]\n    if aoe.aoeID == 25567 then\n      local d2 = (player.pos.x - aoe.x) ^ 2 + (player.pos.z - aoe.z) ^ 2\n      if not bestD2 or d2 < bestD2 then\n        bestD2 = d2\n        state.towerTargetX = aoe.x\n        state.towerTargetZ = aoe.z\n      end\n    end\n  end\n  if not state.towerTargetX then\n    return\n  end\nend\n\nif MuAiGuide.FrameDirect(\n    state.towerTargetX, state.towerTargetZ, 0.5\n) then\n  self.used = true\nend",
-							name = "MuAi 指向最近塔",
-							uuid = "8dafbbfd-be39-dbe1-8ab0-f9a93ec72d4f",
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-				},
-				eventType = 12,
-				mechanicTime = 350.2,
-				name = "[P2] 1.5运蓝圈最近塔动态指路",
-				timeRange = true,
-				timelineIndex = 56,
-				timerStartOffset = -3.6,
-				uuid = "6c0a6a01-0a63-5294-b9ca-60d30cbc6e96",
 				version = 2,
 			},
 		},
@@ -5220,7 +5224,20 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nlocal thordan = TensorCore.getEntityByGroup(\"ContentID\", { contentid = 3632, subgroup = \"Nearest\" })\nif state and state.eyePos and player and thordan then\n  local heading = TensorCore.Avoidance.getHeadingBetweenPos(player.pos, state.eyePos, thordan.pos) + math.pi\n  TensorCore.API.TensorACR.setLockFaceHeading(heading)\n  TensorCore.API.TensorACR.toggleLockFace(true)\n  TensorCore.getStaticDrawer(520093951):addTimedArrow(1800, player.pos.x, player.pos.y, player.pos.z, heading, 6, 1)\nend\nself.used = true",
+							actionLua = "local state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nlocal thordan = TensorCore.mGetEntity(eventArgs.entityID)\n\nif not state or not state.eyePos or not player or not player.pos\n    or not thordan or not thordan.pos then\n  self.used = true\n  return\nend\n\nlocal heading = TensorCore.Avoidance.getHeadingBetweenPos(\n  player.pos,\n  state.eyePos,\n  thordan.pos\n) + math.pi\n\nTensorCore.API.TensorACR.setLockFaceHeading(heading)\nTensorCore.API.TensorACR.toggleLockFace(true)\nTensorCore.getStaticDrawer(520093951):addTimedArrow(\n  1800,\n  player.pos.x,\n  player.pos.y,\n  player.pos.z,\n  heading,\n  6,\n  1\n)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"9a0fa899-65c9-95d9-9eba-088018eb1ca2",
+									true,
+								},
+								
+								{
+									"8b7c2cc3-2811-20a8-8a2e-4ded8a6a6095",
+									true,
+								},
+							},
 							endIfUsed = true,
 							name = "Lock away from gaze",
 							uuid = "a5b599ee-ba3b-2967-8f06-aa4c336c6254",
@@ -5230,13 +5247,40 @@ local tbl =
 				},
 				conditions = 
 				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 25552,
+							name = "Gaze cast 25552",
+							uuid = "9a0fa899-65c9-95d9-9eba-088018eb1ca2",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 3632,
+							name = "Thordan C3632",
+							uuid = "8b7c2cc3-2811-20a8-8a2e-4ded8a6a6095",
+							version = 3,
+						},
+					},
 				},
+				eventType = 2,
 				mechanicTime = 398.2,
 				name = "[P2] Dragon's Gaze 自动背对",
 				timeRange = true,
 				timelineIndex = 66,
-				timerEndOffset = 0.1,
-				timerStartOffset = -0.3,
+				timerEndOffset = 1,
+				timerStartOffset = -0.5,
 				uuid = "bb98c662-5bc7-cfa9-b745-815303970e5d",
 				version = 2,
 			},
@@ -5253,6 +5297,19 @@ local tbl =
 						{
 							aType = "Lua",
 							actionLua = "TensorCore.API.TensorACR.toggleLockFace(false)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"d08257ed-2333-d492-a111-dc37a2503407",
+									true,
+								},
+								
+								{
+									"14931158-1f33-f0fd-857c-50c4a71d3b97",
+									true,
+								},
+							},
 							endIfUsed = true,
 							name = "Unlock facing",
 							uuid = "c8a0e256-8ca4-d017-9f7d-4b9cc5c64852",
@@ -5262,13 +5319,40 @@ local tbl =
 				},
 				conditions = 
 				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 25553,
+							name = "Gaze resolve 25553",
+							uuid = "d08257ed-2333-d492-a111-dc37a2503407",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 3632,
+							name = "Thordan C3632",
+							uuid = "14931158-1f33-f0fd-857c-50c4a71d3b97",
+							version = 3,
+						},
+					},
 				},
+				eventType = 2,
 				mechanicTime = 398.2,
 				name = "[P2] Dragon's Gaze 精确解锁",
 				timeRange = true,
 				timelineIndex = 66,
-				timerEndOffset = 1.9,
-				timerStartOffset = 1.5,
+				timerEndOffset = 2.5,
+				timerStartOffset = 0.5,
 				uuid = "e6f2f630-e64b-5b82-8fca-d3ff73f55369",
 				version = 2,
 			},
@@ -6214,7 +6298,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Sanctity25 or nil\nlocal player = TensorCore.mGetPlayer()\n\nlocal function norm360(v)\n  v = v % 360\n  if v < 0 then v = v + 360 end\n  return v\nend\n\nlocal function bearing(pos)\n  return norm360(math.deg(math.atan2(pos.x - 100, 100 - pos.z)))\nend\n\nlocal function posAt(deg, radius)\n  local rad = math.rad(deg)\n  return {\n    x = 100 + math.sin(rad) * radius,\n    z = 100 - math.cos(rad) * radius,\n  }\nend\n\nif state and state.firstReady == true and player\n    and type(state.roleByID) == \"table\"\n    and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local role = state.roleByID[tonumber(player.id)]\n  local target\n\n  if role and state.isMeteorByRole[role] then\n    local otherRole\n    for _, meteorRole in ipairs(state.meteorRoles or {}) do\n      if meteorRole ~= role then otherRole = meteorRole end\n    end\n    local startBearing = state.firstTowerBearingByRole[role]\n    local endBearing = otherRole and state.firstTowerBearingByRole[otherRole] or nil\n    if type(startBearing) == \"number\" and type(endBearing) == \"number\" then\n      local total = norm360(endBearing - startBearing)\n      local progress = norm360(bearing(player.pos) - startBearing)\n      if progress > total then\n        if progress > total + 60 then\n          progress = 0\n        else\n          progress = total\n        end\n      end\n      local nextProgress = math.min(total, progress + 25)\n      target = posAt(startBearing + nextProgress, 20)\n    end\n  elseif role and type(state.preKnockbackByRole) == \"table\" then\n    target = state.preKnockbackByRole[role]\n  end\n\n  if target then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\nself.used = true",
+							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Sanctity25 or nil\nlocal player = TensorCore.mGetPlayer()\n\nlocal function norm360(v)\n  v = v % 360\n  if v < 0 then v = v + 360 end\n  return v\nend\n\nlocal function bearing(pos)\n  return norm360(math.deg(math.atan2(pos.x - 100, 100 - pos.z)))\nend\n\nlocal function posAt(deg, radius)\n  local rad = math.rad(deg)\n  return {\n    x = 100 + math.sin(rad) * radius,\n    z = 100 - math.cos(rad) * radius,\n  }\nend\n\nif state and state.firstReady == true and player\n    and type(state.roleByID) == \"table\"\n    and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local role = state.roleByID[tonumber(player.id)]\n  local target\n\n  if role and state.isMeteorByRole[role] then\n    local otherRole\n    for _, meteorRole in ipairs(state.meteorRoles or {}) do\n      if meteorRole ~= role then otherRole = meteorRole end\n    end\n    local startBearing = state.firstTowerBearingByRole[role]\n    local endBearing = otherRole and state.firstTowerBearingByRole[otherRole] or nil\n    if type(startBearing) == \"number\" and type(endBearing) == \"number\" then\n      local total = norm360(endBearing - startBearing)\n      local progress = norm360(bearing(player.pos) - startBearing)\n      if progress > total then\n        if progress > total + 60 then\n          progress = 0\n        else\n          progress = total\n        end\n      end\n      local nextProgress = math.min(total, progress + 25)\n      target = posAt(startBearing + nextProgress, 20)\n    end\n  elseif role and type(state.secondTowerByRole) == \"table\" then\n    target = state.secondTowerByRole[role]\n  end\n\n  if target then\n    local targetX = target.x\n    local targetZ = target.z\n    if role and not state.isMeteorByRole[role] then\n      local dx = targetX - 100\n      local dz = targetZ - 100\n      local length = math.sqrt(dx * dx + dz * dz)\n      if length > 0.001 then\n        local scale = 20 / length\n        targetX = 100 + dx * scale\n        targetZ = 100 + dz * scale\n      end\n    end\n    MuAiGuide.FrameDirect(targetX, targetZ, 0.5)\n  end\nend\nself.used = true",
 							endIfUsed = true,
 							name = "动态指路",
 							uuid = "4208868c-68cd-db1b-866f-c5002392f7d1",
@@ -6227,11 +6311,11 @@ local tbl =
 				},
 				eventType = 12,
 				mechanicTime = 431.4,
-				name = "[P2] 2.5运陨石跑圈与击退预站位",
+				name = "[P2] 2.5运陨石跑圈与闲人第二塔预站位",
 				timeRange = true,
 				timelineIndex = 79,
-				timerEndOffset = 0.4,
-				timerStartOffset = -9.8,
+				timerEndOffset = 0.3,
+				timerStartOffset = -9.7,
 				uuid = "d5585051-b543-daa5-be9d-6efaaf391254",
 				version = 2,
 			},
@@ -6418,7 +6502,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Sanctity25 or nil\nlocal player = TensorCore.mGetPlayer()\nif state and state.firstReady == true and player\n    and type(state.roleByID) == \"table\"\n    and type(state.secondTowerByRole) == \"table\"\n    and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local role = state.roleByID[tonumber(player.id)]\n  local target = role and state.secondTowerByRole[role] or nil\n  if target then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\nself.used = true",
+							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Sanctity25 or nil\nlocal player = TensorCore.mGetPlayer()\nif state and state.firstReady == true and player\n    and type(state.roleByID) == \"table\"\n    and type(state.secondTowerByRole) == \"table\"\n    and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local role = state.roleByID[tonumber(player.id)]\n  local target = role and state.secondTowerByRole[role] or nil\n  if target then\n    local dx = target.x - 100\n    local dz = target.z - 100\n    local length = math.sqrt(dx * dx + dz * dz)\n    if length > 0.001 then\n      local scale = 20 / length\n      MuAiGuide.FrameDirect(100 + dx * scale, 100 + dz * scale, 0.5)\n    end\n  end\nend\nself.used = true",
 							endIfUsed = true,
 							name = "动态指路",
 							uuid = "bb4f212f-e7ea-a849-8f06-dbe70f3ce985",
@@ -6952,8 +7036,8 @@ local tbl =
 				name = "[P2] 奋力一挥 1 - 三连 120°",
 				timeRange = true,
 				timelineIndex = 86,
-				timerEndOffset = -2.4,
-				timerStartOffset = -3.6,
+				timerEndOffset = -2.4000000953674,
+				timerStartOffset = -4,
 				uuid = "bb0b75b4-c74a-6313-83f3-ce38b9e29635",
 				version = 2,
 			},
@@ -7570,7 +7654,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not state.towerSnapshotReady or not player then\n  return\nend\n\nlocal towerType = nil\nif TensorCore.hasBuff(player.id, 2755) then\n  towerType = \"circle\"\nelseif TensorCore.hasBuff(player.id, 2756) then\n  towerType = \"forward\"\nelseif TensorCore.hasBuff(player.id, 2757) then\n  towerType = \"backward\"\nend\nif not towerType then\n  return\nend\n\nlocal groupHasFacing = false\nlocal directionCount = 0\nfor _, entityID in ipairs(state.towerGroupIDs or {}) do\n  local hasCircle = TensorCore.hasBuff(entityID, 2755)\n  local hasForward = TensorCore.hasBuff(entityID, 2756)\n  local hasBackward = TensorCore.hasBuff(entityID, 2757)\n  if hasCircle or hasForward or hasBackward then\n    directionCount = directionCount + 1\n  end\n  if hasForward or hasBackward then\n    groupHasFacing = true\n  end\nend\nif directionCount ~= #(state.towerGroupIDs or {}) then\n  return\nend\n\nlocal nidhogg = TensorCore.getEntityByGroup(\n  \"ContentID\", { contentid = 3458, subgroup = \"Nearest\" })\nif not nidhogg or not nidhogg.pos\n    or not nidhogg.hitradius or nidhogg.hitradius <= 0 then\n  return\nend\n\nlocal arenaX = 100\nlocal arenaZ = 100\nlocal outerLeftX = 90.666\nlocal outerRightX = 109.333\nlocal outerZ = 90.666\n\nlocal function targetRing(side)\n  if side == \"left\" then\n    return {\n      x = arenaX - nidhogg.hitradius,\n      y = nidhogg.pos.y,\n      z = arenaZ,\n    }\n  elseif side == \"right\" then\n    return {\n      x = arenaX + nidhogg.hitradius,\n      y = nidhogg.pos.y,\n      z = arenaZ,\n    }\n  elseif side == \"rear\" or side == \"middle\" then\n    return {\n      x = arenaX,\n      y = nidhogg.pos.y,\n      z = arenaZ + nidhogg.hitradius,\n    }\n  end\n  return nil\nend\n\nlocal function targetOuter(side)\n  if side == \"left\" then\n    return { x = outerLeftX, y = nidhogg.pos.y, z = outerZ }\n  elseif side == \"right\" then\n    return { x = outerRightX, y = nidhogg.pos.y, z = outerZ }\n  end\n  return nil\nend\n\nlocal target = nil\nlocal targetKind = nil\nif state.towerMarker == 1 or state.towerMarker == 3 then\n  target = targetRing(state.towerSlot)\n  targetKind = target and\n    (\"world-\" .. state.towerSlot .. \"-ring\") or nil\nelseif state.towerMarker == 2 then\n  if towerType == \"forward\" then\n    target = targetOuter(\"right\")\n    targetKind = \"world-right-outer\"\n  elseif towerType == \"backward\" then\n    target = targetOuter(\"left\")\n    targetKind = \"world-left-outer\"\n  elseif not groupHasFacing then\n    target = targetOuter(state.towerSlot)\n    targetKind = target and\n      (\"world-\" .. state.towerSlot .. \"-outer\") or nil\n  end\nend\nif not target then\n  return\nend\n\nstate.towerType = towerType\nstate.towerGroupHasFacing = groupHasFacing\nstate.towerTarget = target\nstate.towerTargetKind = targetKind\nstate.nidhoggID = nidhogg.id\nstate.otherTwo = nil\nif state.towerMarker == 2 then\n  local playerID = tonumber(player.id) or player.id\n  for _, entityID in ipairs(state.towerGroupIDs or {}) do\n    if (tonumber(entityID) or entityID) ~= playerID then\n      state.otherTwo = entityID\n      break\n    end\n  end\nend\nself.used = true",
+							actionLua = "local state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not state.towerSnapshotReady or not player then\n  return\nend\n\nlocal towerType = nil\nif TensorCore.hasBuff(player.id, 2755) then\n  towerType = \"circle\"\nelseif TensorCore.hasBuff(player.id, 2756) then\n  towerType = \"forward\"\nelseif TensorCore.hasBuff(player.id, 2757) then\n  towerType = \"backward\"\nend\nif not towerType then\n  return\nend\n\nlocal groupHasFacing = false\nlocal directionCount = 0\nfor _, entityID in ipairs(state.towerGroupIDs or {}) do\n  local hasCircle = TensorCore.hasBuff(entityID, 2755)\n  local hasForward = TensorCore.hasBuff(entityID, 2756)\n  local hasBackward = TensorCore.hasBuff(entityID, 2757)\n  if hasCircle or hasForward or hasBackward then\n    directionCount = directionCount + 1\n  end\n  if hasForward or hasBackward then\n    groupHasFacing = true\n  end\nend\nif directionCount ~= #(state.towerGroupIDs or {}) then\n  return\nend\n\nlocal nidhogg = TensorCore.getEntityByGroup(\n  \"ContentID\", { contentid = 3458, subgroup = \"Nearest\" })\nif not nidhogg or not nidhogg.pos then\n  return\nend\n\nlocal arenaX = 100\nlocal arenaZ = 100\nlocal towerRingRadius = 7.5\nlocal outerLeftX = 90.666\nlocal outerRightX = 109.333\nlocal outerZ = 90.666\n\nlocal function targetRing(side)\n  if side == \"left\" then\n    return {\n      x = arenaX - towerRingRadius,\n      y = nidhogg.pos.y,\n      z = arenaZ,\n    }\n  elseif side == \"right\" then\n    return {\n      x = arenaX + towerRingRadius,\n      y = nidhogg.pos.y,\n      z = arenaZ,\n    }\n  elseif side == \"rear\" or side == \"middle\" then\n    return {\n      x = arenaX,\n      y = nidhogg.pos.y,\n      z = arenaZ + towerRingRadius,\n    }\n  end\n  return nil\nend\n\nlocal function targetOuter(side)\n  if side == \"left\" then\n    return { x = outerLeftX, y = nidhogg.pos.y, z = outerZ }\n  elseif side == \"right\" then\n    return { x = outerRightX, y = nidhogg.pos.y, z = outerZ }\n  end\n  return nil\nend\n\nlocal target = nil\nlocal targetKind = nil\nif state.towerMarker == 1 or state.towerMarker == 3 then\n  local side = nil\n  if groupHasFacing then\n    if towerType == \"forward\" then\n      side = \"right\"\n    elseif towerType == \"backward\" then\n      side = \"left\"\n    elseif towerType == \"circle\" then\n      side = state.towerMarker == 1 and \"rear\" or \"middle\"\n    end\n  else\n    side = state.towerSlot\n  end\n  target = targetRing(side)\n  targetKind = target and (\"world-\" .. side .. \"-ring\") or nil\nelseif state.towerMarker == 2 then\n  if towerType == \"forward\" then\n    target = targetOuter(\"right\")\n    targetKind = \"world-right-outer\"\n  elseif towerType == \"backward\" then\n    target = targetOuter(\"left\")\n    targetKind = \"world-left-outer\"\n  elseif not groupHasFacing then\n    target = targetOuter(state.towerSlot)\n    targetKind = target and\n      (\"world-\" .. state.towerSlot .. \"-outer\") or nil\n  end\nend\nif not target then\n  return\nend\n\nstate.towerType = towerType\nstate.towerGroupHasFacing = groupHasFacing\nstate.towerTarget = target\nstate.towerTargetKind = targetKind\nstate.nidhoggID = nidhogg.id\nstate.otherTwo = nil\nif state.towerMarker == 2 then\n  local playerID = tonumber(player.id) or player.id\n  for _, entityID in ipairs(state.towerGroupIDs or {}) do\n    if (tonumber(entityID) or entityID) ~= playerID then\n      state.otherTwo = entityID\n      break\n    end\n  end\nend\nself.used = true",
 							conditions = 
 							{
 								
@@ -7691,7 +7775,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.string_dsr = data.string_dsr or {}\nlocal state = data.string_dsr\nlocal spellID = tonumber(eventArgs.spellID)\n\nif state.p3WheelFirstSpellID == nil then\n  state.p3WheelFirstSpellID = spellID\nelseif state.p3WheelSecondSpellID == nil then\n  state.p3WheelSecondSpellID = spellID\nelse\n  state.p3WheelSecondSpellID = spellID\nend\nstate.p3WheelEntityID = eventArgs.entityID\nself.used = true",
+							actionLua = "data.string_dsr = data.string_dsr or {}\nlocal state = data.string_dsr\nlocal spellID = tonumber(eventArgs.spellID)\nlocal currentTimer = tonumber(TensorReactions_CurrentTimer)\nif (spellID ~= 26386 and spellID ~= 26387) or currentTimer == nil then\n  self.used = true\n  return\nend\n\n-- 两轮连旋的 channel 实战为 622.591 / 643.900；取无事件区间中的 638\n-- 作为轮次边界，回放倒退时不再依赖旧 state 是否为 nil。\nif currentTimer < 638 then\n  state.p3WheelFirstSpellID = spellID\n  state.p3WheelFirstResolved = false\n  state.p3WheelFirstResolvedAt = nil\n  state.p3WheelSecondSpellID = nil\n  state.p3WheelSecondFirstResolved = false\n  state.p3WheelSecondFirstResolvedAt = nil\n  state.p3SecondStackResolvedAt = nil\nelse\n  state.p3WheelSecondSpellID = spellID\n  state.p3WheelSecondFirstResolved = false\n  state.p3WheelSecondFirstResolvedAt = nil\n  state.p3SecondStackResolvedAt = nil\nend\nstate.p3WheelEntityID = eventArgs.entityID\nself.used = true",
 							conditions = 
 							{
 								
@@ -7753,7 +7837,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal function validPoint(point)\n  return point\n    and type(point.x) == \"number\"\n    and type(point.z) == \"number\"\nend\n\nlocal function drawArrowTower()\n  local towerType = state.towerType\n  if towerType ~= \"forward\" and towerType ~= \"backward\" then\n    return\n  end\n  if type(player.pos.h) ~= \"number\" then\n    return\n  end\n  local heading = player.pos.h\n  if towerType == \"backward\" then\n    heading = heading + math.pi\n  end\n  local x, y, z = TensorCore.getPosInDirection(player.pos, heading, 14, true)\n  local drawer = TensorCore.getStaticDrawer(520093951)\n  if drawer and type(drawer.addCircle) == \"function\" then\n    drawer:addCircle(x, y, z, 5)\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal base = state.towerTarget\nlocal target = nil\nif marker == 1 then\n  if validPoint(base) then\n    target = base\n  end\n  drawArrowTower()\nelseif marker == 2 or marker == 3 then\n  target = { x = 100, y = player.pos.y, z = 93.2 }\nend\n\nif target and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(target.x, target.z, 0.5)\nend\nself.used = true",
+							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal function validPoint(point)\n  return point\n    and type(point.x) == \"number\"\n    and type(point.z) == \"number\"\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal function northSafePoint(spellID)\n  if spellID == 26386 then\n    return { x = 100, y = player.pos.y, z = 90 }\n  elseif spellID == 26387 then\n    return { x = 100, y = player.pos.y, z = 93.2 }\n  end\n  return nil\nend\n\nlocal function drawArrowTower()\n  local towerType = state.towerType\n  if towerType ~= \"forward\" and towerType ~= \"backward\" then\n    return\n  end\n  if type(player.pos.h) ~= \"number\" then\n    return\n  end\n  local heading = player.pos.h\n  if towerType == \"backward\" then\n    heading = heading + math.pi\n  end\n  local x, y, z = TensorCore.getPosInDirection(player.pos, heading, 14, true)\n  local drawer = TensorCore.getStaticDrawer(520093951)\n  if drawer and type(drawer.addCircle) == \"function\" then\n    drawer:addCircle(x, y, z, 5)\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal base = state.towerTarget\nlocal target = nil\nif marker == 1 then\n  if validPoint(base) then\n    target = base\n  end\n  drawArrowTower()\nelseif marker == 2 or marker == 3 then\n  target = northSafePoint(activeWheel(state.p3WheelFirstSpellID))\nend\n\nif target and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(target.x, target.z, 0.5)\nend\nself.used = true",
 							endIfUsed = true,
 							name = "MuAiCore 阶段指路+14m预估落塔范围",
 							uuid = "6ef3230d-6759-4c63-b75e-d2bc957bdea7",
@@ -8101,7 +8185,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\n\nlocal function sendGuide(target)\n  if target and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(state, stored)\n  local spellID = tonumber(stored)\n  local nidhogg = state.nidhoggID and TensorCore.mGetEntity(state.nidhoggID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal target = nil\nif marker == 3 then\n  local base = state.towerTarget\n  if base and type(base.x) == \"number\" and type(base.z) == \"number\" then\n    local spellID = activeWheel(state, state.p3WheelFirstSpellID)\n    if spellID == 26386 then\n      target = projectRadius(base, 10)\n    elseif spellID == 26387 then\n      target = projectRadius(base, 6)\n    end\n  end\nelseif marker == 1 or marker == 2 then\n  target = { x = 100, y = player.pos.y, z = 93.2 }\nend\n\nsendGuide(target)\nself.used = true",
+							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal towerRingRadius = 7.5\n\nlocal function sendGuide(target)\n  if target and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal firstSpellID = activeWheel(state.p3WheelFirstSpellID)\nlocal target = nil\nif marker == 3 then\n  local base = state.towerTarget\n  if base and type(base.x) == \"number\" and type(base.z) == \"number\" then\n    if firstSpellID == 26386 then\n      target = projectRadius(base, 10)\n    elseif firstSpellID == 26387 then\n      target = projectRadius(base, towerRingRadius)\n    end\n  end\nelseif marker == 1 or marker == 2 then\n  if firstSpellID == 26386 then\n    target = { x = 100, y = player.pos.y, z = 90 }\n  elseif firstSpellID == 26387 then\n    target = { x = 100, y = player.pos.y, z = 93.2 }\n  end\nend\n\nsendGuide(target)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAiCore 第1轮踩塔安全区",
 							uuid = "e3364617-2405-3787-8046-ee43cf3418be",
@@ -8136,7 +8220,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\n\nlocal function sendGuide(target)\n  if target and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(state, stored)\n  local spellID = tonumber(stored)\n  local nidhogg = state.nidhoggID and TensorCore.mGetEntity(state.nidhoggID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal target = nil\nif marker == 3 then\n  local base = state.towerTarget\n  if base and type(base.x) == \"number\" and type(base.z) == \"number\" then\n    local firstSpellID = activeWheel(state, state.p3WheelFirstSpellID)\n    if firstSpellID == 26386 then\n      target = projectRadius(base, 6)\n    elseif firstSpellID == 26387 then\n      target = projectRadius(base, 10)\n    end\n  end\nelseif marker == 1 or marker == 2 then\n  target = { x = 100, y = player.pos.y, z = 93.2 }\nend\n\nsendGuide(target)\nself.used = true",
+							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal towerRingRadius = 7.5\n\nlocal function sendGuide(target)\n  if target and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal currentTimer = tonumber(TensorReactions_CurrentTimer)\nlocal resolvedAt = tonumber(state.p3WheelFirstResolvedAt)\nlocal firstResolved = currentTimer ~= nil\n  and resolvedAt ~= nil\n  and currentTimer >= resolvedAt\nlocal marker = tonumber(state.towerMarker)\nlocal firstSpellID = activeWheel(state.p3WheelFirstSpellID)\nlocal target = nil\nif marker == 3 then\n  local base = state.towerTarget\n  if base and type(base.x) == \"number\" and type(base.z) == \"number\" then\n    if firstSpellID == 26386 then\n      target = projectRadius(base, firstResolved and towerRingRadius or 10)\n    elseif firstSpellID == 26387 then\n      target = projectRadius(base, firstResolved and 10 or towerRingRadius)\n    end\n  end\nelseif marker == 1 or marker == 2 then\n  if firstSpellID == 26386 then\n    target = {\n      x = 100,\n      y = player.pos.y,\n      z = firstResolved and 93.2 or 90,\n    }\n  elseif firstSpellID == 26387 then\n    target = {\n      x = 100,\n      y = player.pos.y,\n      z = firstResolved and 90 or 93.2,\n    }\n  end\nend\n\nsendGuide(target)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAiCore 第1轮踩塔安全区切换",
 							uuid = "3b3ef3e5-b92d-440c-bc41-60dc20f3e767",
@@ -8157,6 +8241,65 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.string_dsr = data.string_dsr or {}\nlocal state = data.string_dsr\nstate.p3WheelFirstResolved = true\nstate.p3WheelFirstResolvedAt = tonumber(TensorReactions_CurrentTimer)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"ba32144c-0f98-9f6b-b2d7-5225fab4b95e",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "记录首次钢铁月环已判定",
+							uuid = "04dd40d2-2f08-21e3-95d3-d346f0904568",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 3,
+							eventArgType = 2,
+							name = "首次钢铁或月环判定",
+							spellIDList = 
+							{
+								26389,
+								26390,
+							},
+							uuid = "ba32144c-0f98-9f6b-b2d7-5225fab4b95e",
+							version = 3,
+						},
+					},
+				},
+				eventType = 2,
+				mechanicTime = 633.8,
+				name = "[P3] 第一轮钢铁月环首次判定状态",
+				timeRange = true,
+				timelineIndex = 103,
+				timerEndOffset = 1.5,
+				timerStartOffset = -1,
+				uuid = "d0815d53-3576-8cb0-849a-f8d1a39d23f3",
+				version = 2,
+			},
+		},
 	},
 	[106] = 
 	{
@@ -8171,7 +8314,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal function validPoint(point)\n  return point\n    and type(point.x) == \"number\"\n    and type(point.z) == \"number\"\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(state, stored)\n  local spellID = tonumber(stored)\n  local nidhogg = state.nidhoggID and TensorCore.mGetEntity(state.nidhoggID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal function drawArrowTower()\n  local towerType = state.towerType\n  if towerType ~= \"forward\" and towerType ~= \"backward\" then\n    return\n  end\n  if type(player.pos.h) ~= \"number\" then\n    return\n  end\n  local heading = player.pos.h\n  if towerType == \"backward\" then\n    heading = heading + math.pi\n  end\n  local x, y, z = TensorCore.getPosInDirection(player.pos, heading, 14, true)\n  local drawer = TensorCore.getStaticDrawer(520093951)\n  if drawer and type(drawer.addCircle) == \"function\" then\n    drawer:addCircle(x, y, z, 5)\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal base = state.towerTarget\nlocal target = nil\nif marker == 1 then\n  target = { x = 100, y = player.pos.y, z = 93.2 }\nelseif marker == 2 then\n  if validPoint(base) then\n    target = base\n  end\n  drawArrowTower()\nelseif marker == 3 and validPoint(base) then\n  target = projectRadius(base, 10)\nend\n\nif target and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(target.x, target.z, 0.5)\nend\nself.used = true",
+							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal towerRingRadius = 7.5\n\nlocal function validPoint(point)\n  return point\n    and type(point.x) == \"number\"\n    and type(point.z) == \"number\"\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal function secondHalfNorthPoint(firstSpellID)\n  if firstSpellID == 26386 then\n    return { x = 100, y = player.pos.y, z = 93.2 }\n  elseif firstSpellID == 26387 then\n    return { x = 100, y = player.pos.y, z = 90 }\n  end\n  return nil\nend\n\nlocal function drawArrowTower()\n  local towerType = state.towerType\n  if towerType ~= \"forward\" and towerType ~= \"backward\" then\n    return\n  end\n  if type(player.pos.h) ~= \"number\" then\n    return\n  end\n  local heading = player.pos.h\n  if towerType == \"backward\" then\n    heading = heading + math.pi\n  end\n  local x, y, z = TensorCore.getPosInDirection(player.pos, heading, 14, true)\n  local drawer = TensorCore.getStaticDrawer(520093951)\n  if drawer and type(drawer.addCircle) == \"function\" then\n    drawer:addCircle(x, y, z, 5)\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal base = state.towerTarget\nlocal firstSpellID = activeWheel(state.p3WheelFirstSpellID)\nlocal target = nil\nif marker == 1 then\n  target = secondHalfNorthPoint(firstSpellID)\nelseif marker == 2 then\n  if validPoint(base) then\n    target = base\n  end\n  drawArrowTower()\nelseif marker == 3 and validPoint(base) then\n  if firstSpellID == 26386 then\n    target = projectRadius(base, towerRingRadius)\n  elseif firstSpellID == 26387 then\n    target = projectRadius(base, 10)\n  end\nend\n\nif target and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(target.x, target.z, 0.5)\nend\nself.used = true",
 							endIfUsed = true,
 							name = "MuAiCore 阶段指路+14m预估落塔范围",
 							uuid = "b7f6e75c-6f6c-75e5-b92d-865136834bf3",
@@ -8269,7 +8412,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\n\nlocal function sendGuide(target)\n  if target and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(state, stored)\n  local spellID = tonumber(stored)\n  local nidhogg = state.nidhoggID and TensorCore.mGetEntity(state.nidhoggID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal target = nil\nif marker == 1 then\n  local slot = state.towerSlot\n  if slot == \"left\" or slot == \"right\" then\n    local x = slot == \"left\" and 90.666 or 109.333\n    local base = { x = x, y = player.pos.y, z = 90.666 }\n    local spellID = activeWheel(state, state.p3WheelSecondSpellID)\n    if spellID == 26387 then\n      target = projectRadius(base, 7.5)\n    else\n      target = base\n    end\n  else\n    target = { x = 100, y = player.pos.y, z = 93.2 }\n  end\nelseif marker == 2 then\n  target = { x = 100, y = player.pos.y, z = 93.2 }\nend\n\nsendGuide(target)\nself.used = true",
+							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal function sendGuide(target)\n  if target and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(state, stored)\n  local spellID = tonumber(stored)\n  local nidhogg = state.nidhoggID and TensorCore.mGetEntity(state.nidhoggID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal function northSafePoint(spellID, y)\n  if spellID == 26386 then\n    return { x = 100, y = y, z = 90 }\n  elseif spellID == 26387 then\n    return { x = 100, y = y, z = 93.2 }\n  end\n  return nil\nend\n\nlocal towerType = state.towerType\nif towerType ~= \"circle\"\n    and towerType ~= \"forward\"\n    and towerType ~= \"backward\" then\n  if TensorCore.hasBuff(player.id, 2755) then\n    towerType = \"circle\"\n  elseif TensorCore.hasBuff(player.id, 2756) then\n    towerType = \"forward\"\n  elseif TensorCore.hasBuff(player.id, 2757) then\n    towerType = \"backward\"\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal spellID = activeWheel(state, state.p3WheelSecondSpellID)\nlocal target = nil\nif marker == 1 then\n  local side = nil\n  if state.towerGroupHasFacing == true then\n    if towerType == \"forward\" then\n      side = \"right\"\n    elseif towerType == \"backward\" then\n      side = \"left\"\n    end\n  elseif state.towerGroupHasFacing == false then\n    if state.towerSlot == \"left\" or state.towerSlot == \"right\" then\n      side = state.towerSlot\n    end\n  end\n\n  if side then\n    local x = side == \"left\" and 90.666 or 109.333\n    local base = { x = x, y = player.pos.y, z = 90.666 }\n    if spellID == 26387 then\n      target = projectRadius(base, 7.5)\n    else\n      target = base\n    end\n  elseif state.towerGroupHasFacing ~= nil then\n    target = northSafePoint(spellID, player.pos.y)\n  end\nelseif marker == 2 then\n  target = northSafePoint(spellID, player.pos.y)\nend\n\nsendGuide(target)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAiCore 第2轮左右踩塔安全区",
 							uuid = "914b7ae6-cb09-a1e0-820b-16b54f2866dc",
@@ -8401,6 +8544,41 @@ local tbl =
 			},
 		},
 	},
+	[108] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.string_dsr\nif not state then\n  self.used = true\n  return\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal waitsForThird = false\nif marker == 1 then\n  if state.towerGroupHasFacing == true then\n    waitsForThird = state.towerType == \"circle\"\n  elseif state.towerGroupHasFacing == false then\n    waitsForThird = state.towerSlot == \"rear\"\n  end\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nif waitsForThird\n    and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local currentTimer = tonumber(TensorReactions_CurrentTimer)\n  local stackResolvedAt = tonumber(state.p3SecondStackResolvedAt)\n  local firstResolvedAt = tonumber(state.p3WheelSecondFirstResolvedAt)\n  local stackResolved = currentTimer ~= nil\n    and stackResolvedAt ~= nil\n    and currentTimer >= stackResolvedAt\n  local firstResolved = currentTimer ~= nil\n    and firstResolvedAt ~= nil\n    and currentTimer >= firstResolvedAt\n  local spellID = activeWheel(state.p3WheelSecondSpellID)\n  local towerRingRadius = 7.5\n  local steelOuterRadius = 10\n  local targetZ = nil\n\n  if not stackResolved then\n    if spellID == 26386 then\n      targetZ = 100 - steelOuterRadius\n    elseif spellID == 26387 then\n      targetZ = 93.2\n    end\n  elseif spellID == 26386 then\n    if firstResolved then\n      targetZ = 100 + towerRingRadius\n    else\n      targetZ = 100 + steelOuterRadius\n    end\n  elseif spellID == 26387 then\n    targetZ = 100 + towerRingRadius\n  end\n\n  if targetZ ~= nil then\n    MuAiGuide.FrameDirect(100, targetZ, 0.5)\n  end\nend\nself.used = true",
+							endIfUsed = true,
+							name = "MuAiCore 1麻第二次分摊后去C塔",
+							uuid = "6acbb720-2d45-06ba-ac63-fad644369e16",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 12,
+				mechanicTime = 646.8,
+				name = "[P3] 1麻第二次分摊后去第三轮C塔",
+				timeRange = true,
+				timelineIndex = 108,
+				timerEndOffset = 11,
+				uuid = "ac2c935d-c101-4abc-ac4b-33bac4d859a2",
+				version = 2,
+			},
+		},
+	},
 	[109] = 
 	{
 		
@@ -8414,7 +8592,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal function validPoint(point)\n  return point\n    and type(point.x) == \"number\"\n    and type(point.z) == \"number\"\nend\n\nlocal function drawArrowTower()\n  local towerType = state.towerType\n  if towerType ~= \"forward\" and towerType ~= \"backward\" then\n    return\n  end\n  if type(player.pos.h) ~= \"number\" then\n    return\n  end\n  local heading = player.pos.h\n  if towerType == \"backward\" then\n    heading = heading + math.pi\n  end\n  local x, y, z = TensorCore.getPosInDirection(player.pos, heading, 14, true)\n  local drawer = TensorCore.getStaticDrawer(520093951)\n  if drawer and type(drawer.addCircle) == \"function\" then\n    drawer:addCircle(x, y, z, 5)\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal base = state.towerTarget\nlocal target = nil\nif marker == 2 then\n  target = { x = 100, y = player.pos.y, z = 93.2 }\nelseif marker == 3 then\n  if validPoint(base) then\n    target = base\n  end\n  drawArrowTower()\nend\n\nif target and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(target.x, target.z, 0.5)\nend\nself.used = true",
+							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal function validPoint(point)\n  return point\n    and type(point.x) == \"number\"\n    and type(point.z) == \"number\"\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal function northSafePoint(spellID)\n  if spellID == 26386 then\n    return { x = 100, y = player.pos.y, z = 90 }\n  elseif spellID == 26387 then\n    return { x = 100, y = player.pos.y, z = 93.2 }\n  end\n  return nil\nend\n\nlocal function drawArrowTower()\n  local towerType = state.towerType\n  if towerType ~= \"forward\" and towerType ~= \"backward\" then\n    return\n  end\n  if type(player.pos.h) ~= \"number\" then\n    return\n  end\n  local heading = player.pos.h\n  if towerType == \"backward\" then\n    heading = heading + math.pi\n  end\n  local x, y, z = TensorCore.getPosInDirection(player.pos, heading, 14, true)\n  local drawer = TensorCore.getStaticDrawer(520093951)\n  if drawer and type(drawer.addCircle) == \"function\" then\n    drawer:addCircle(x, y, z, 5)\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal base = state.towerTarget\nlocal target = nil\nif marker == 2 then\n  target = northSafePoint(activeWheel(state.p3WheelSecondSpellID))\nelseif marker == 3 then\n  if validPoint(base) then\n    target = base\n  end\n  drawArrowTower()\nend\n\nif target and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(target.x, target.z, 0.5)\nend\nself.used = true",
 							endIfUsed = true,
 							name = "MuAiCore 阶段指路+14m预估落塔范围",
 							uuid = "72dc7845-a61c-efa8-945a-3e8d13edf231",
@@ -9039,6 +9217,231 @@ local tbl =
 				timerEndOffset = -6,
 				timerStartOffset = -10,
 				uuid = "db86c2c8-eac7-7d5a-8957-4b78eaf57344",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.string_dsr = data.string_dsr or {}\ndata.string_dsr.p3SecondStackResolvedAt = tonumber(TensorReactions_CurrentTimer)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"3d0f45fb-8360-c832-bc4a-f58b9ab7d607",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "记录第二次分摊实际判定时间",
+							uuid = "3efaadfd-49a1-5086-9af9-b010cbaea641",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 3,
+							eventArgType = 2,
+							name = "第二次暴君之瞳判定",
+							spellIDList = 
+							{
+								26388,
+							},
+							uuid = "3d0f45fb-8360-c832-bc4a-f58b9ab7d607",
+							version = 3,
+						},
+					},
+				},
+				eventType = 2,
+				mechanicTime = 651.9,
+				name = "[P3] 第二次暴君之瞳判定状态",
+				timeRange = true,
+				timelineIndex = 111,
+				timerEndOffset = 1.5,
+				timerStartOffset = -1,
+				uuid = "239a98a9-1549-8b9d-bf5f-bcfdb8aab614",
+				version = 2,
+			},
+		},
+	},
+	[113] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.string_dsr = data.string_dsr or {}\nlocal state = data.string_dsr\nstate.p3WheelSecondFirstResolved = true\nstate.p3WheelSecondFirstResolvedAt = tonumber(TensorReactions_CurrentTimer)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"55cab82e-5fbd-538a-aeb8-f108adf63d13",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "记录第二轮首次钢铁月环已判定",
+							uuid = "f6c7dd35-c304-775f-9c5e-be88c852a99e",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 3,
+							eventArgType = 2,
+							name = "第二轮首次钢铁或月环判定",
+							spellIDList = 
+							{
+								26389,
+								26390,
+							},
+							uuid = "55cab82e-5fbd-538a-aeb8-f108adf63d13",
+							version = 3,
+						},
+					},
+				},
+				eventType = 2,
+				mechanicTime = 655.3,
+				name = "[P3] 第二轮钢铁月环首次判定状态",
+				timeRange = true,
+				timelineIndex = 113,
+				timerEndOffset = 1.5,
+				timerStartOffset = -1,
+				uuid = "194994da-660d-0552-bd71-123138de1c13",
+				version = 2,
+			},
+		},
+	},
+	[114] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.string_dsr\nif not state or tonumber(state.towerMarker) ~= 1 then\n  self.used = true\n  return\nend\n\nlocal base = state.towerTarget\nif not base or type(base.x) ~= \"number\" or type(base.z) ~= \"number\" then\n  self.used = true\n  return\nend\n\nlocal spellID = tonumber(state.p3WheelSecondSpellID)\nlocal safeRadius = nil\nif spellID == 26386 then\n  safeRadius = 7.5\nelseif spellID == 26387 then\n  safeRadius = 10\nend\n\nlocal radius = safeRadius\nif type(radius) ~= \"number\" then\n  self.used = true\n  return\nend\n\nlocal dx = base.x - 100\nlocal dz = base.z - 100\nlocal length = math.sqrt(dx * dx + dz * dz)\nif length <= 0.001 then\n  self.used = true\n  return\nend\n\nif type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local targetX = 100 + dx / length * radius\n  local targetZ = 100 + dz / length * radius\n  MuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nend\nself.used = true",
+							endIfUsed = true,
+							name = "1麻第三塔后按轮盘留内或去外",
+							uuid = "b6c284ae-0a60-2dc6-87a2-f9729563d191",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 12,
+				mechanicTime = 657.8,
+				name = "[P3] 1麻第三塔后轮盘交接",
+				timeRange = true,
+				timelineIndex = 114,
+				timerEndOffset = 0.59,
+				uuid = "6ad92856-a30f-e416-b714-51e76cace109",
+				version = 2,
+			},
+		},
+	},
+	[115] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.string_dsr\nif not state or tonumber(state.towerMarker) ~= 1 then\n  self.used = true\n  return\nend\n\nlocal base = state.towerTarget\nif not base or type(base.x) ~= \"number\" or type(base.z) ~= \"number\" then\n  self.used = true\n  return\nend\n\nlocal radius = 10\nif type(radius) ~= \"number\" then\n  self.used = true\n  return\nend\n\nlocal dx = base.x - 100\nlocal dz = base.z - 100\nlocal length = math.sqrt(dx * dx + dz * dz)\nif length <= 0.001 then\n  self.used = true\n  return\nend\n\nif type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local targetX = 100 + dx / length * radius\n  local targetZ = 100 + dz / length * radius\n  MuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nend\nself.used = true",
+							endIfUsed = true,
+							name = "1麻沿本人塔方向外出引导",
+							uuid = "5df869c0-c75d-6dab-8c40-aeb763ed61bc",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 12,
+				mechanicTime = 658.4,
+				name = "[P3] 1麻第三塔后外侧引导",
+				timeRange = true,
+				timelineIndex = 115,
+				timerEndOffset = 1.89,
+				uuid = "4286aa8c-c4bd-e902-88f8-ea82472c186b",
+				version = 2,
+			},
+		},
+	},
+	[116] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.string_dsr\nif not state or tonumber(state.towerMarker) ~= 1 then\n  self.used = true\n  return\nend\n\nlocal base = state.towerTarget\nif not base or type(base.x) ~= \"number\" or type(base.z) ~= \"number\" then\n  self.used = true\n  return\nend\n\nlocal radius = 6\nif type(radius) ~= \"number\" then\n  self.used = true\n  return\nend\n\nlocal dx = base.x - 100\nlocal dz = base.z - 100\nlocal length = math.sqrt(dx * dx + dz * dz)\nif length <= 0.001 then\n  self.used = true\n  return\nend\n\nif type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local targetX = 100 + dx / length * radius\n  local targetZ = 100 + dz / length * radius\n  MuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nend\nself.used = true",
+							endIfUsed = true,
+							name = "1麻离开分身正面",
+							uuid = "ab85d6ac-1b54-ae1e-ad88-86f2fbc7a3fc",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 12,
+				mechanicTime = 664.9,
+				name = "[P3] 1麻第三塔后躲武神枪",
+				timeRange = true,
+				timelineIndex = 116,
+				timerStartOffset = -4.6,
+				uuid = "5b19efa4-0169-6f9e-9646-f41b922f0244",
 				version = 2,
 			},
 		},
@@ -12995,6 +13398,118 @@ local tbl =
 			},
 		},
 	},
+	[182] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.string_dsr = data.string_dsr or {}\nlocal center = { x = 100, y = 0, z = 100 }\nlocal heading = math.rad(180 - eventArgs.a1 * 45)\nlocal x, y, z = TensorCore.getPosInDirection(center, heading, 23, true)\ndata.string_dsr.eyePos = { x = x, y = y, z = z }\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"82dd5e5b-7f5f-38c5-adf8-ce99ad811d13",
+									true,
+								},
+								
+								{
+									"2f7b4ad0-c860-26b8-83c7-af3f2d9c831d",
+									true,
+								},
+								
+								{
+									"389cb7c4-4719-449c-acd1-35a7963d7b8f",
+									true,
+								},
+								
+								{
+									"83946229-477c-0b08-8d35-33df6edd2ed8",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "Store eye position",
+							uuid = "1c1a168e-a280-6831-80b9-123ec12f8a3f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							conditionLua = "return eventArgs.a1 >= 0 and eventArgs.a1 <= 7 and eventArgs.a2 == 1 and eventArgs.a3 == 2",
+							dequeueIfLuaFalse = true,
+							name = "龙眼 a1 >= 0",
+							uuid = "82dd5e5b-7f5f-38c5-adf8-ce99ad811d13",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 2,
+							dequeueIfLuaFalse = true,
+							eventIntValue = 7,
+							name = "龙眼 a1 <= 7",
+							uuid = "2f7b4ad0-c860-26b8-83c7-af3f2d9c831d",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventIntValue = 1,
+							name = "龙眼 a2 == 1",
+							uuid = "389cb7c4-4719-449c-acd1-35a7963d7b8f",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							comparator = 3,
+							dequeueIfLuaFalse = true,
+							eventArgType = 3,
+							eventIntValue = 2,
+							name = "龙眼 a3 == 2",
+							uuid = "83946229-477c-0b08-8d35-33df6edd2ed8",
+							version = 3,
+						},
+					},
+				},
+				eventType = 14,
+				mechanicTime = 1092,
+				name = "[P5] 龙眼位置状态（二）",
+				timeRange = true,
+				timelineIndex = 182,
+				timerEndOffset = 0.5,
+				timerStartOffset = -0.5,
+				uuid = "b6028037-9f3b-631a-8013-9105a3830b2b",
+				version = 2,
+			},
+		},
+	},
 	[187] = 
 	{
 		
@@ -13257,7 +13772,7 @@ local tbl =
 			},
 		},
 	},
-	[190] = 
+	[189] = 
 	{
 		
 		{
@@ -13270,33 +13785,23 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.string_dsr = data.string_dsr or {}\nlocal center = { x = 100, y = 0, z = 100 }\nlocal heading = math.rad(180 - eventArgs.a1 * 45)\nlocal x, y, z = TensorCore.getPosInDirection(center, heading, 23, true)\ndata.string_dsr.eyePos = { x = x, y = y, z = z }\nself.used = true",
+							actionLua = "local state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nlocal thordan = TensorCore.mGetEntity(eventArgs.entityID)\n\nif not state or not state.eyePos or not player or not player.pos\n    or not thordan or not thordan.pos then\n  self.used = true\n  return\nend\n\nlocal heading = TensorCore.Avoidance.getHeadingBetweenPos(\n  player.pos,\n  state.eyePos,\n  thordan.pos\n) + math.pi\n\nTensorCore.API.TensorACR.setLockFaceHeading(heading)\nTensorCore.API.TensorACR.toggleLockFace(true)\nTensorCore.getStaticDrawer(520093951):addTimedArrow(\n  1800,\n  player.pos.x,\n  player.pos.y,\n  player.pos.z,\n  heading,\n  6,\n  1\n)\nself.used = true",
 							conditions = 
 							{
 								
 								{
-									"82dd5e5b-7f5f-38c5-adf8-ce99ad811d13",
+									"6e68d1de-fc1b-d5a4-a295-8abe88ab0777",
 									true,
 								},
 								
 								{
-									"2f7b4ad0-c860-26b8-83c7-af3f2d9c831d",
-									true,
-								},
-								
-								{
-									"389cb7c4-4719-449c-acd1-35a7963d7b8f",
-									true,
-								},
-								
-								{
-									"83946229-477c-0b08-8d35-33df6edd2ed8",
+									"387b5fed-e9a8-e88f-a925-704fb496e121",
 									true,
 								},
 							},
 							endIfUsed = true,
-							name = "Store eye position",
-							uuid = "1c1a168e-a280-6831-80b9-123ec12f8a3f",
+							name = "Lock away from gaze",
+							uuid = "d0b6a4f6-d060-78a8-85e8-1faf9c0e7cd4",
 							version = 2.1,
 						},
 					},
@@ -13308,37 +13813,11 @@ local tbl =
 						data = 
 						{
 							category = "Event",
-							conditionLua = "return eventArgs.a1 >= 0 and eventArgs.a1 <= 7 and eventArgs.a2 == 1 and eventArgs.a3 == 2",
-							dequeueIfLuaFalse = true,
-							name = "龙眼 a1 >= 0",
-							uuid = "82dd5e5b-7f5f-38c5-adf8-ce99ad811d13",
-							version = 3,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Event",
-							comparator = 2,
-							dequeueIfLuaFalse = true,
-							eventIntValue = 7,
-							name = "龙眼 a1 <= 7",
-							uuid = "2f7b4ad0-c860-26b8-83c7-af3f2d9c831d",
-							version = 3,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Event",
-							comparator = 3,
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
-							eventIntValue = 1,
-							name = "龙眼 a2 == 1",
-							uuid = "389cb7c4-4719-449c-acd1-35a7963d7b8f",
+							eventSpellID = 25552,
+							name = "Gaze cast 25552",
+							uuid = "6e68d1de-fc1b-d5a4-a295-8abe88ab0777",
 							version = 3,
 						},
 					},
@@ -13347,27 +13826,101 @@ local tbl =
 						data = 
 						{
 							category = "Event",
-							comparator = 3,
 							dequeueIfLuaFalse = true,
-							eventArgType = 3,
-							eventIntValue = 2,
-							name = "龙眼 a3 == 2",
-							uuid = "83946229-477c-0b08-8d35-33df6edd2ed8",
+							eventArgOptionType = 2,
+							eventEntityContentID = 3632,
+							name = "Thordan C3632",
+							uuid = "387b5fed-e9a8-e88f-a925-704fb496e121",
 							version = 3,
 						},
 					},
 				},
-				eventType = 14,
-				mechanicTime = 1115.3,
-				name = "[P5] 龙眼位置状态（二）",
+				eventType = 2,
+				mechanicTime = 1114.2,
+				name = "[P5] Dragon's Gaze 自动背对（二）",
 				timeRange = true,
-				timelineIndex = 190,
-				timerEndOffset = 12,
-				timerStartOffset = -2,
-				uuid = "b6028037-9f3b-631a-8013-9105a3830b2b",
+				timelineIndex = 189,
+				timerEndOffset = 1,
+				timerStartOffset = -0.5,
+				uuid = "dca5f917-60f4-a16d-b67c-9ac95ce2320a",
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "TensorCore.API.TensorACR.toggleLockFace(false)\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"25a8ad1c-6c8e-75d8-b6d0-c82e107afc63",
+									true,
+								},
+								
+								{
+									"2b2fe23b-94fd-537f-9923-daf683010e02",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "Unlock facing",
+							uuid = "a242ac5e-49c4-d586-87d4-e5861017aab1",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventSpellID = 25553,
+							name = "Gaze resolve 25553",
+							uuid = "25a8ad1c-6c8e-75d8-b6d0-c82e107afc63",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 3632,
+							name = "Thordan C3632",
+							uuid = "2b2fe23b-94fd-537f-9923-daf683010e02",
+							version = 3,
+						},
+					},
+				},
+				eventType = 2,
+				mechanicTime = 1114.2,
+				name = "[P5] Dragon's Gaze 精确解锁（二）",
+				timeRange = true,
+				timelineIndex = 189,
+				timerEndOffset = 2.5,
+				timerStartOffset = 0.5,
+				uuid = "699cbe00-710d-5ffc-82cb-487cb9fd91f3",
+				version = 2,
+			},
+		},
+	},
+	[190] = 
+	{
 		
 		{
 			data = 
@@ -13419,70 +13972,6 @@ local tbl =
 				timerEndOffset = 10,
 				timerStartOffset = -10,
 				uuid = "a0d0b1de-466b-4b85-9e00-972699935f26",
-				version = 2,
-			},
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							aType = "Lua",
-							actionLua = "local state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nlocal thordan = TensorCore.getEntityByGroup(\"ContentID\", { contentid = 3632, subgroup = \"Nearest\" })\nif state and state.eyePos and player and thordan then\n  local heading = TensorCore.Avoidance.getHeadingBetweenPos(player.pos, state.eyePos, thordan.pos) + math.pi\n  TensorCore.API.TensorACR.setLockFaceHeading(heading)\n  TensorCore.API.TensorACR.toggleLockFace(true)\n  TensorCore.getStaticDrawer(520093951):addTimedArrow(1800, player.pos.x, player.pos.y, player.pos.z, heading, 6, 1)\nend\nself.used = true",
-							endIfUsed = true,
-							name = "Lock away from gaze",
-							uuid = "d0b6a4f6-d060-78a8-85e8-1faf9c0e7cd4",
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-				},
-				mechanicTime = 1115.3,
-				name = "[P5] Dragon's Gaze 自动背对（二）",
-				timeRange = true,
-				timelineIndex = 190,
-				timerEndOffset = -0.2,
-				timerStartOffset = -0.6,
-				uuid = "dca5f917-60f4-a16d-b67c-9ac95ce2320a",
-				version = 2,
-			},
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							aType = "Lua",
-							actionLua = "TensorCore.API.TensorACR.toggleLockFace(false)\nself.used = true",
-							endIfUsed = true,
-							name = "Unlock facing",
-							uuid = "a242ac5e-49c4-d586-87d4-e5861017aab1",
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-				},
-				mechanicTime = 1115.3,
-				name = "[P5] Dragon's Gaze 精确解锁（二）",
-				timeRange = true,
-				timelineIndex = 190,
-				timerEndOffset = 1.6,
-				timerStartOffset = 1.2,
-				uuid = "699cbe00-710d-5ffc-82cb-487cb9fd91f3",
 				version = 2,
 			},
 		},
