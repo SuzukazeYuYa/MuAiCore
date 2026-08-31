@@ -327,6 +327,7 @@ Events.init = function(M)
         if MG == nil then
             MG = MuAiGuide
         end
+        MG.CheckMenuMember()
         MG.CheckArgusRegister()
         checkHotKeyPress()
         onMapChangeCheck()

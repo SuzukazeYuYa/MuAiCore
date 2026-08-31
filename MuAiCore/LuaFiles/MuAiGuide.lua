@@ -28,6 +28,7 @@ end
 -- 代码加载顺序
 local modules = {
     'LogSystem',
+    'MenuCompatibility',
     'Tools',
     'NetWork',
     'ArgusEvents',
