@@ -4,6 +4,76 @@ local function validString(value)
     return type(value) == 'string' and value ~= ''
 end
 
+local function normalizeWindowsPath(path)
+    if not validString(path) then
+        return nil
+    end
+    local normalized = path:gsub('/', '\\'):gsub('\\+$', '')
+    for segment in normalized:gmatch('[^\\]+') do
+        if segment == '.' or segment == '..' then
+            return nil
+        end
+    end
+    return normalized
+end
+
+local function validateDeleteTarget(path)
+    if type(GetStartupPath) ~= 'function' then
+        return nil, 'GetStartupPath is unavailable'
+    end
+
+    local target = normalizeWindowsPath(path)
+    local startupRoot = normalizeWindowsPath(GetStartupPath())
+    if target == nil or startupRoot == nil then
+        return nil, 'folder path is invalid'
+    end
+
+    local targetLower = target:lower()
+    local startupLower = startupRoot:lower()
+    if targetLower:sub(1, #startupLower + 1) ~= startupLower .. '\\' then
+        return nil, 'folder path is outside the Minion startup directory'
+    end
+    return target
+end
+
+local function powerShellLiteral(value)
+    return "'" .. value:gsub("'", "''") .. "'"
+end
+
+local function deleteFolderWithPowerShell(path)
+    local target, validationError = validateDeleteTarget(path)
+    if target == nil then
+        return false, validationError
+    end
+    if type(io) ~= 'table' or type(io.popen) ~= 'function' then
+        return false, 'io.popen is unavailable'
+    end
+
+    local successToken = '__MUAI_FOLDER_DELETE_OK__'
+    local literal = powerShellLiteral(target)
+    local command = 'powershell.exe -NoProfile -NonInteractive -Command "try { '
+            .. 'if (Test-Path -LiteralPath ' .. literal .. ') { '
+            .. 'Remove-Item -LiteralPath ' .. literal .. ' -Recurse -Force -ErrorAction Stop }; '
+            .. "Write-Output '" .. successToken .. "' } catch { Write-Error $_; exit 1 }\""
+    local handle = io.popen(command .. ' 2>&1')
+    if handle == nil then
+        return false, 'failed to start PowerShell'
+    end
+    local output = handle:read('*a') or ''
+    handle:close()
+    if output:find(successToken, 1, true) ~= nil then
+        return true
+    end
+    return false, output ~= '' and output or 'PowerShell did not confirm folder deletion'
+end
+
+Compatibility.deleteFolder = function(path)
+    if type(FolderDelete) == 'function' then
+        return FolderDelete(path)
+    end
+    return deleteFolderWithPowerShell(path)
+end
+
 local function displayName(name)
     if type(GetString) == 'function' then
         local translated = GetString(name)
@@ -119,7 +189,7 @@ local function drawTabs(tabControl)
     return returnIndex, returnName
 end
 
-Compatibility.install = function()
+Compatibility.install = function(guide)
     local installed = {}
 
     if type(table.contains) ~= 'function' then
@@ -186,6 +256,13 @@ Compatibility.install = function()
     if type(GUI_DrawTabs) ~= 'function' then
         GUI_DrawTabs = drawTabs
         installed[#installed + 1] = 'GUI_DrawTabs'
+    end
+
+    if type(guide) == 'table' and guide.DeleteFolder ~= Compatibility.deleteFolder then
+        guide.DeleteFolder = Compatibility.deleteFolder
+        if type(FolderDelete) ~= 'function' then
+            installed[#installed + 1] = 'MuAiGuide.DeleteFolder'
+        end
     end
 
     return installed

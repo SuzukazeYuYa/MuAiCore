@@ -22,6 +22,7 @@ local function isValidGuide(guide)
             and guide.IsInit == true
             and type(guide.Update) == 'function'
             and type(guide.DrawUIs) == 'function'
+            and type(guide.DeleteFolder) == 'function'
             and type(guide.LogSystemLeave) == 'function'
 end
 
@@ -66,7 +67,13 @@ core.InitMuAiGuide = function()
 
     local downloadPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
     if FolderExists(downloadPath) then
-        FolderDelete(downloadPath)
+        local deleted, deleteError = candidate.DeleteFolder(downloadPath)
+        if deleted == false then
+            diagnose(candidate, 'WARN', '无法清理旧下载目录', {
+                path = downloadPath,
+                error = deleteError,
+            }, 'download_cleanup_failed')
+        end
     end
     return true
 end

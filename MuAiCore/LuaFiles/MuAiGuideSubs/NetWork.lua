@@ -411,20 +411,39 @@ NetWork.init = function(M)
             return size
         end
 
-        local function failUpdate(message, detail)
+        local function deleteTempFolder()
+            if type(M.DeleteFolder) ~= 'function' then
+                return false, 'MuAiGuide.DeleteFolder is unavailable'
+            end
+            return M.DeleteFolder(tempPath)
+        end
+
+        local function failUpdate(message, detail, skipCleanup)
             d('[MuAiCore]' .. message)
             if detail ~= nil and detail ~= '' then
                 d(detail)
             end
             M.LogError('Update', message, { detail = detail }, true)
-            FolderDelete(tempPath)
+            if skipCleanup ~= true then
+                local cleanupOk, cleanupError = deleteTempFolder()
+                if cleanupOk == false then
+                    M.LogError('Update', '更新临时目录清理失败', {
+                        path = tempPath,
+                        detail = cleanupError,
+                    }, true)
+                end
+            end
             M.ShowMsgUI(3, { message })
         end
 
         updateTime = nil
         updateNeedReLoad = false
         -- 每次更新使用独立临时目录，失败路径统一清理，不在 LuaMods 内留下半成品。
-        FolderDelete(tempPath)
+        local cleanupOk, cleanupError = deleteTempFolder()
+        if cleanupOk == false then
+            failUpdate('更新失败：无法清理临时目录。', cleanupError, true)
+            return
+        end
         FolderCreate(tempPath)
 
         -- 下载完成后先校验文件存在及合理大小，再进入解压阶段。
@@ -468,7 +487,13 @@ NetWork.init = function(M)
         end
 
         -- 安装成功后再删除工作目录，并延迟到下一帧触发 Reload。
-        FolderDelete(tempPath)
+        cleanupOk, cleanupError = deleteTempFolder()
+        if cleanupOk == false then
+            M.LogError('Update', '更新完成但临时目录清理失败', {
+                path = tempPath,
+                detail = cleanupError,
+            }, true)
+        end
         d('[MuAiCore]更新文件替换完成。')
         updateTime = Now()
         updateNeedReLoad = true

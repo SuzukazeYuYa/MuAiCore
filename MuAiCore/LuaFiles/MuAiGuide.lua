@@ -20,7 +20,7 @@ if type(compatibility) ~= 'table' or type(compatibility.install) ~= 'function' t
     M.Debug('宿主兼容模块加载失败：' .. tostring(compatibilityPath))
     return M
 end
-local installedCompatibility = compatibility.install()
+local installedCompatibility = compatibility.install(M)
 if #installedCompatibility > 0 then
     M.Debug('宿主兼容函数缺失，已安装本地实现：' .. table.concat(installedCompatibility, ','))
 end
