@@ -72,7 +72,7 @@ local tbl =
 					data = 
 					{
 						category = "Lua",
-						conditionLua = "return Player.localmapid ~= 1325 and MuAiGuide.M11S ~= nil",
+						conditionLua = "return Player.localmapid ~= 1325 and type(MuAiGuide) == \"table\" and MuAiGuide.M11S ~= nil",
 						name = "M11S存在缓存",
 						uuid = "e9cd65d2-8ce2-9094-a9a0-9f3fde648f25",
 						version = 3,
@@ -83,7 +83,7 @@ local tbl =
 					data = 
 					{
 						category = "Lua",
-						conditionLua = "return Player.localmapid ~= 1327 and MuAiGuide.M12S ~= nil",
+						conditionLua = "return Player.localmapid ~= 1327 and type(MuAiGuide) == \"table\" and MuAiGuide.M12S ~= nil",
 						name = "M12S存在缓存",
 						uuid = "7e65af4d-6699-0c47-819b-bba2ad62f686",
 						version = 3,
