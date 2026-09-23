@@ -833,6 +833,7 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
         end
     end
 end
+
 local drawTowerHeading = function()
     if not Cfg().draw
             or DM.BeLowState('P3BlackHole4_2')
@@ -851,6 +852,39 @@ local drawTowerHeading = function()
         local startPos = TensorCore.getPosInDirection(kfk.pos, heading + math.pi, 20)
         MG.CreateDrawer(1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, heading, 39.5, 0.05, 0.5, 0.5, true)
         MG.CreateDrawer(1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, heading, 20, 0.05, 0.5, 0.5, true)
+        -- 描边塔轮廓
+        local curDir = kfk.pos.h
+        local leftPos = TensorCore.getPosInDirection(DM.Center, curDir - math.pi / 2, 10)
+        local rightPos = TensorCore.getPosInDirection(DM.Center, curDir + math.pi / 2, 10)
+        local out = 5.05
+        local inner
+        if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
+            inner = out - 0.12
+        else
+            inner = out - 0.05
+        end
+        local drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
+        drawer:setRenderFlags(256)
+        drawer:addDonut(leftPos.x, MG.drawerY, leftPos.z, inner, out)
+        drawer:addDonut(rightPos.x, MG.drawerY, rightPos.z, inner, out)
+    end
+end
+
+local drawTowerGather = function()
+    if not Cfg().draw
+            or DM.BeLowState('P3BlackHole4_2')
+            or DM.OverState('P3TowerEnd')
+            or (Data().TakeTower.gatherProcess ~= 1 and Data().TakeTower.gatherProcess ~= 2)
+    then
+        return
+    end
+    if Data().TakeTower.gatherProcess == 1 and Data().TakeTower.firstEntity ~= nil then
+        local entity = TensorCore.mGetEntity(Data().TakeTower.firstEntity)
+        DM.orangeDrawer:addCircle(entity.pos.x, MG.drawerY, entity.pos.z, 6)
+    end
+    if Data().TakeTower.gatherProcess == 2 and Data().TakeTower.secondEntity ~= nil then
+        local entity = TensorCore.mGetEntity(Data().TakeTower.secondEntity)
+        DM.orangeDrawer:addCircle(entity.pos.x, MG.drawerY, entity.pos.z, 6)
     end
 end
 
@@ -1047,8 +1081,10 @@ Dmu_P3.OnEntityCast = function(entityID, spellID, castPos)
         local targetID
         if boomIndex == 1 then
             targetID = takeTower.firstEntity
+            Data().TakeTower.gatherProcess = 0
         else
             targetID = takeTower.secondEntity
+            Data().TakeTower.gatherProcess = 0
         end
         local target = targetID ~= nil and TensorCore.mGetEntity(targetID) or nil
         if target == nil or target.pos == nil then
@@ -1129,6 +1165,19 @@ Dmu_P3.OnAOECreate = function(aoeInfo)
             if DM.BeLowState('P3AoePut2') then
                 DM.ChangeState('P3AoePut2')
             end
+        end
+        -- 绘制地面放置AOE描边
+        if Cfg().draw then
+            local inner
+            local out = aoeInfo.aoeLength
+            if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
+                inner = out - 0.12
+            else
+                inner = out - 0.05
+            end
+            local drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
+            drawer:setRenderFlags(256)
+            drawer:addTimedDonut(1000 * aoeInfo.duration, aoeInfo.x, MG.drawerY, aoeInfo.z, inner, out)
         end
     elseif aoeInfo.aoeID == 47856 then
         -- 计算跺脚顺序，AOE先出，后Cast
@@ -1230,8 +1279,10 @@ Dmu_P3.OnMarkerAdd = function(entityID, markerID)
     if markerID == 161 and DM.OverState('P3BlackHole4_2', true) then
         if Data().TakeTower.firstEntity == nil then
             Data().TakeTower.firstEntity = entityID
+            Data().TakeTower.gatherProcess = 1
         else
             Data().TakeTower.secondEntity = entityID
+            Data().TakeTower.gatherProcess = 2
         end
         prepareTakeTowerGuides()
     end
@@ -1269,6 +1320,7 @@ Dmu_P3.Update = function()
     drawBlackHole()
     drawImplosion()
     drawTowerHeading()
+    drawTowerGather()
     autoTargetEx()
     prepareTakeTowerGuides()
     if Data().Elements.bigCircleTimer > 0 then
@@ -1765,7 +1817,7 @@ Dmu_P3.Update = function()
                 end
             end
             if Cfg().markType == 3 and not Data().Mark.Finish2
-                    and  Player.marker ~= nil and Player.marker > 0 then
+                    and Player.marker ~= nil and Player.marker > 0 then
                 DM.ClearMarks()
                 Data().Mark.Finish2 = true
             end

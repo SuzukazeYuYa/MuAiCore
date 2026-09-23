@@ -407,7 +407,9 @@ local dataInit = function()
                 Put2Pos = nil,
                 Types = {},
                 GuideTypes = nil,
-                GuidePos = {}
+                GuidePos = {},
+                -- 集合类似，1.点名出现; 2 第二轮点名出现; 
+                gatherProcess = 0,
             }
         },
         P4 = {
