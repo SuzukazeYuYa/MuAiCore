@@ -5,7 +5,7 @@ local Events = {}
 ===========================
 ]]
 local lastMap, lastJob
-local autoPopMap = { 968, 1238, 1122, 1325, 1327, 1317, 1363 }
+local autoPopMap = { 887, 968, 1238, 1122, 1325, 1327, 1317, 1363 }
 local partyLoadRetry
 local partyLoadRetryInterval = 500
 local partyLoadRetryTimeout = 15000
