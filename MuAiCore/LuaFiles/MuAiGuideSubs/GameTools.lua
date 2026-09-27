@@ -384,6 +384,8 @@ GameTools.init = function(M)
 
         M.GetSelfPos()
         M.RememberParty('load')
+        -- 小队列表发生改变，应该重置MultiGuide
+        M.MultiGuide.onPartyChange()
     end
 
     --- 计算当前小队成员数量（可靠）

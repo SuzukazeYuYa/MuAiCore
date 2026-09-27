@@ -252,7 +252,7 @@ local onMapChange = function()
         MG.SelfPos = nil
         checkAndPopMainUI()
         MG.RaidMapCheck()
-        MG.MultiGuide.onMapChange()
+        --MG.MultiGuide.onMapChange()
         MoogleExCheck()
         MG.inArr = nil
         --MuAiGuide.Info("地图发生改变，当前地图为：" .. Player.localmapid)

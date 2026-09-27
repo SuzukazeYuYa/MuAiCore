@@ -70,10 +70,15 @@ MultiGuide.init = function(M)
         return table.contains(mapsIds, Player.localmapid)
     end
 
-    M.MultiGuide.onMapChange = function()
+    M.MultiGuide.onMapChange = function() 
+        -- 弃用
+    end
+    
+    M.MultiGuide.onPartyChange = function()
         M.MultiGuide.enable = false
         M.MultiGuide.initList()
     end
+    
     M.MultiGuide.resetAllColor = function()
         M.Config.Main.MultiColor = {
             ['MT'] = { r = 1.0, g = 0.0, b = 0.0, a = 0.5 },
