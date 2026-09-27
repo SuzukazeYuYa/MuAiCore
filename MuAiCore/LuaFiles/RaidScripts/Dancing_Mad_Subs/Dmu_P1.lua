@@ -19,6 +19,7 @@ local Data = function()
 end
 local mtGroup = { 'MT', 'H1', 'D1', 'D3' }
 local thGroup = { 'MT', 'ST', 'H1', 'H2' }
+local dpsGroup = { 'D1', 'D2', 'D3', 'D4' }
 local trGroup = { 'MT', 'ST', 'D3', 'D4' }
 local ArrowBuffs = {
     [4876] = 'up',
@@ -74,6 +75,46 @@ local dis13 = {
     D3 = { x = 100.5, y = 0, z = 116 },
     D4 = { x = 116, y = 0, z = 100.5 },
 }
+
+-- 在击退线仍完整时保存分组，线消失后不能把击退组重新判成闲人。
+local cacheFire1KnockbackGroup = function(dataTable)
+    if dataTable.knockbackTh ~= nil or dataTable.linkGuideFinish then
+        return
+    end
+    local counts, seen = { 0, 0 }, {}
+    for index, group in ipairs({ thGroup, dpsGroup }) do
+        for _, job in ipairs(group) do
+            local member = MG.Party[job]
+            if member == nil or member.id == nil or member.id == 0 or seen[member.id] then
+                return
+            end
+            seen[member.id] = true
+            if MG.HasLine(member.id, 45) then
+                counts[index] = counts[index] + 1
+            end
+        end
+    end
+    if counts[1] == 4 and counts[2] == 0 then
+        dataTable.knockbackTh = true
+    elseif counts[1] == 0 and counts[2] == 4 then
+        dataTable.knockbackTh = false
+    end
+end
+
+local setFire1IdleNorth = function(dataTable)
+    local guide = dataTable.GuideData
+    if guide.MT == nil then
+        return
+    end
+    -- 以场地北为上。必要时整体转半圈，保留近战内侧、远程外侧的散开关系。
+    if (guide.MT.z < 100) == dataTable.knockbackTh then
+        local rotated = {}
+        for job, pos in pairs(guide) do
+            rotated[job] = { x = 200 - pos.x, y = pos.y, z = 200 - pos.z }
+        end
+        dataTable.GuideData = rotated
+    end
+end
 
 --- 绘制击退
 local drawBuffKick = function()
@@ -668,6 +709,10 @@ Dmu_P1.Update = function()
         end
     end
     -- 真假火开始
+    if Cfg().guide and Cfg().Fire1Type == 2
+            and (DM.InState('P1TrueFalse1') or DM.InState('P1TrueFalse2')) then
+        cacheFire1KnockbackGroup(Data().Fire1)
+    end
     if DM.InState('P1TrueFalse1') then
         -- 真假火画图
         if Data().Fire1.BossMark ~= 0 and Data().Fire1.PlayerMark ~= 0 then
@@ -681,7 +726,11 @@ Dmu_P1.Update = function()
             DM.ChangeState('P1TrueFalse1End')
             Data().Fire1.Time = Now()
         end
-        if Cfg().guide and Data().Fire1.iceDir ~= nil then
+        if Cfg().guide and Data().Fire1.iceDir ~= nil
+                and (Cfg().Fire1Type ~= 2 or (Data().Fire1.knockbackTh ~= nil
+                    and (Data().Fire1.BossMark == 673 or Data().Fire1.BossMark == 674)
+                    and (Data().Fire1.PlayerMark == 127
+                        or (Data().Fire1.PlayerMark == 128 and table.size(Data().Fire1.GatherPlayers) >= 2)))) then
             local dataTable = Data().Fire1
             if dataTable.GuideData == nil then
                 dataTable.GuideData = {}
@@ -757,6 +806,9 @@ Dmu_P1.Update = function()
                         end
                     end
                 end
+                if Cfg().Fire1Type == 2 then
+                    setFire1IdleNorth(dataTable)
+                end
             else
                 if Data().Fire1.linkGuideFinish then
                     MG.FrameMultiD(dataTable.GuideData)
@@ -764,8 +816,16 @@ Dmu_P1.Update = function()
                     if Data().Fire1.GuideDataLink == nil then
                         Data().Fire1.GuideDataLink = {}
                         for job, ent in pairs(MG.Party) do
-                            if MG.HasLine(ent.id, 45) then
-                                if table.contains(thGroup, job) then
+                            local hasLine = MG.HasLine(ent.id, 45)
+                            if Cfg().Fire1Type == 2 then
+                                hasLine = table.contains(thGroup, job) == dataTable.knockbackTh
+                            end
+                            if hasLine then
+                                local goLeft = table.contains(thGroup, job)
+                                if Cfg().Fire1Type == 2 then
+                                    goLeft = dataTable.GuideData[job].x < 100
+                                end
+                                if goLeft then
                                     Data().Fire1.GuideDataLink[job] = { x = 98, y = 0, z = 88 }
                                 else
                                     Data().Fire1.GuideDataLink[job] = { x = 102, y = 0, z = 88 }
