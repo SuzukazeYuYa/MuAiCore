@@ -415,7 +415,21 @@ NetWork.init = function(M)
             if type(M.DeleteFolder) ~= 'function' then
                 return false, 'MuAiGuide.DeleteFolder is unavailable'
             end
-            return M.DeleteFolder(tempPath)
+            if not FolderExists(tempPath) then
+                if FileExists(tempPath) then
+                    return false, 'Update work directory path is occupied by a file: ' .. tempPath
+                end
+                return true
+            end
+            local callOk, deleted, deleteError = pcall(M.DeleteFolder, tempPath)
+            if not callOk then
+                return false, 'DeleteFolder raised an error: ' .. tostring(deleted)
+            end
+            if not FolderExists(tempPath) and not FileExists(tempPath) then
+                return true
+            end
+            return false, deleteError or ('Update work directory still exists: ' .. tempPath
+                    .. '; DeleteFolder returned ' .. tostring(deleted))
         end
 
         local function failUpdate(message, detail, skipCleanup)
@@ -423,7 +437,7 @@ NetWork.init = function(M)
             if detail ~= nil and detail ~= '' then
                 d(detail)
             end
-            M.LogError('Update', message, { detail = detail }, true)
+            M.LogError('Update', message, { path = tempPath, detail = detail }, true)
             if skipCleanup ~= true then
                 local cleanupOk, cleanupError = deleteTempFolder()
                 if cleanupOk == false then
@@ -445,6 +459,10 @@ NetWork.init = function(M)
             return
         end
         FolderCreate(tempPath)
+        if not FolderExists(tempPath) then
+            failUpdate('更新失败：无法创建临时目录。', tempPath, true)
+            return
+        end
 
         -- 下载完成后先校验文件存在及合理大小，再进入解压阶段。
         local downloadOk, downloadOutput = downloadFile(gitZipUrl, zipFilePath)

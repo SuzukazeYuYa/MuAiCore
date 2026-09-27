@@ -61,8 +61,10 @@ local function deleteFolderWithPowerShell(path)
     end
     local output = handle:read('*a') or ''
     handle:close()
-    if output:find(successToken, 1, true) ~= nil then
-        return true
+    for line in output:gmatch('[^\r\n]+') do
+        if line == successToken then
+            return true
+        end
     end
     return false, output ~= '' and output or 'PowerShell did not confirm folder deletion'
 end
