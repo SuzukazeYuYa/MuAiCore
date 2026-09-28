@@ -406,7 +406,16 @@ DancingMadUI.draw = function()
             GUI:BulletText('一神')
             GUI:Dummy(15, 0)
             GUI:SameLine(0, 0)
-            GUI:TextColored(1, 0, 0, 1, ' 攻略: 职能固定  ')
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(' 站位方案: ')
+            GUI:SameLine(0, 0)
+            GUI:PushItemWidth(175)
+            M.Config.DmuCfg.P1.Fire1Type = GUI:Combo('##P1Fire1Type', M.Config.DmuCfg.P1.Fire1Type or 1,
+                    { 'TN左 / DPS右', '闲人上 / 击退下' }, 2)
+            GUI:PopItemWidth()
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('上为场地北侧安全区，下为南侧安全区。\n按击退连线分组，分摊和分散均适用。\n击退前先去接击退位置，击退后去下方安全区。\n请在开战前选择。')
+            end
             GUI:Dummy(15, 0)
             GUI:SameLine(0, 0)
             GUI:AlignFirstTextHeightToWidgets()
@@ -483,6 +492,13 @@ DancingMadUI.draw = function()
                     M.Config.DmuCfg.P2.useBbyPos)
             if GUI:IsItemHovered() then
                 GUI:SetTooltip('勾选后使用宝宝椅站位')
+            end
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            M.Config.DmuCfg.P2.evenConeCircle = GUI:Checkbox('偶数塔上扇下钢##P2EvenConeCircle',
+                    M.Config.DmuCfg.P2.evenConeCircle == true)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('偶数塔两边都是靠Boss扇形、靠外钢铁，不需要队伍编号标记。\n第2/6轮：同塔新点名不同留边，相同则后位换边。\n第4/8轮：同类点名按T、H、远程、近战优先分左右。\n闲人两侧接扇、对面引导分身；优先于BBY偶数站位。\n奇数塔仍按上方设置。请在开战前选择。')
             end
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)

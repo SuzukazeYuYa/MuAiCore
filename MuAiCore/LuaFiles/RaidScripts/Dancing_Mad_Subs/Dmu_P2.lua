@@ -154,6 +154,23 @@ local bbyStandTemplate = {
     },
 }
 
+-- 偶数塔：1/2 扇形在前，3/4 钢铁在后；13 左、24 右。
+-- 局部轴同 BBY。按 2026-09-27 实战站位取对称点；闲人 1/3 引导分身，2/4 接扇形。
+local evenConeCircleTemplate = {
+    doing = {
+        { x = -3.60, y = 2.80 },
+        { x = 3.60, y = 2.80 },
+        { x = -7.50, y = 8.50 },
+        { x = 7.50, y = 8.50 },
+    },
+    standBy = {
+        { x = -3.50, y = -4.80 },
+        { x = -9.50, y = 2.30 },
+        { x = 3.50, y = -4.80 },
+        { x = 9.50, y = 2.30 },
+    },
+}
+
 ---异三角爆炸位置与三角偏移量 data by String
 local trineOffsets = {
     left = { { x = -5.773, z = 0 }, { x = 2.887, z = -5 }, { x = 2.887, z = 5 } },
@@ -314,6 +331,7 @@ local calcGuidePos = function(wave, isFix)
     local curDoingPos = {}
     local curTemplate
     local useBbyPos = Cfg().useBbyPos == true
+    local useEvenConeCircle = Cfg().evenConeCircle == true and wave % 2 == 0
     local standTemplate
     if useBbyPos then
         standTemplate = bbyStandTemplate
@@ -326,12 +344,14 @@ local calcGuidePos = function(wave, isFix)
         else
             curTemplate = standTemplate.odd
         end
+    elseif useEvenConeCircle then
+        curTemplate = evenConeCircleTemplate
     else
         curTemplate = standTemplate.even
     end
     local spawn = Data().Towers.spawn[wave]
     local toWorld
-    if useBbyPos then
+    if useBbyPos or useEvenConeCircle then
         local axisOutward = MG.GetMidPos(spawn.left, spawn.right)
         toWorld = function(localPos)
             return bbyLocalToWorld(axisOutward, localPos)
@@ -463,8 +483,71 @@ local calcFirstOrderB = function()
     Data().Towers.groupOrders[index] = curOrder
 end
 
+-- 换组轮没有紧邻的踩塔站位可沿用：同类机制按 T > H > 远程 > 近战分左右。
+-- 这里只读游戏机制点名 716/717，不读取或发送队伍攻击/禁止/锁链编号。
+local evenRolePriority = { MT = 1, ST = 2, H1 = 3, H2 = 4, D3 = 5, D4 = 6, D1 = 7, D2 = 8 }
+local calcEvenConeCircleOrder = function(group, marks, roleOrder)
+    if group == nil or #group ~= 4 then
+        return nil
+    end
+    local ordered, seen = {}, {}
+    for _, job in ipairs(group) do
+        if seen[job] or evenRolePriority[job] == nil
+                or (marks[job] ~= 716 and marks[job] ~= 717) then
+            return nil
+        end
+        seen[job] = true
+        table.insert(ordered, job)
+    end
+    if roleOrder then
+        table.sort(ordered, function(a, b)
+            return evenRolePriority[a] < evenRolePriority[b]
+        end)
+    end
+    local cones, circles = {}, {}
+    for _, job in ipairs(ordered) do
+        table.insert(marks[job] == 717 and cones or circles, job)
+    end
+    if #cones ~= 2 or #circles ~= 2 then
+        return nil
+    end
+    return { cones[1], cones[2], circles[1], circles[2] }
+end
+
 local calcGroupOrder = function(wave)
     if Data().Towers.groupOrders[wave] ~= nil and table.size(Data().Towers.groupOrders) >= 4 then
+        return
+    end
+    if Cfg().evenConeCircle == true and wave % 2 == 0 then
+        local towers = Data().Towers
+        if wave == 4 then
+            -- 第三轮更新的 A 组点名留到第八轮；B 组首次进塔按职能分侧。
+            if table.size(towers.markCache) < 4 then
+                return
+            end
+            local eighth = calcEvenConeCircleOrder(towers.groupA, towers.markCache, true)
+            local fourth = calcEvenConeCircleOrder(towers.groupB, towers.curMarks, true)
+            if eighth ~= nil and fourth ~= nil then
+                towers.groupOrders[8] = eighth
+                towers.groupOrders[4] = fourth
+                towers.markCache = {}
+            end
+        elseif wave == 8 then
+            -- 正常在第四轮已缓存；只接受 A 组仍保留的完整机制点名。
+            towers.groupOrders[8] = calcEvenConeCircleOrder(towers.groupA, towers.curMarks, true)
+        elseif table.size(towers.markCache) == 4 then
+            -- 上轮从左到右的四个站位中，同类取先左后右。
+            -- 等价于：同塔新点名不同留边，相同则靠后的人换边。
+            local order = calcEvenConeCircleOrder(towers.groupOrdersLast[wave - 1], towers.markCache, false)
+            if order ~= nil then
+                towers.groupOrders[wave] = order
+                towers.markCache = {}
+            end
+        end
+        if towers.groupOrders[wave] == nil then
+            MG.LogOnce('P2Tower', 'even_cone_circle_incomplete_' .. tostring(wave),
+                    '偶数塔上扇下钢：点名或上轮站位不完整，暂不指路', { wave = wave }, true)
+        end
         return
     end
     if wave == 1 then
