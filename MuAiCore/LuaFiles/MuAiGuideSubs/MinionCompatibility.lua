@@ -1,4 +1,4 @@
-local Compatibility = {}
+local Compatibility = {} ---@class Compatibility
 
 local function validString(value)
     return type(value) == 'string' and value ~= ''
