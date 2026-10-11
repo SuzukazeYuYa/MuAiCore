@@ -9,34 +9,38 @@ end
 
 ---@param M MuAiGuide
 UpdateChannels.init = function(M)
-    if M.Config.Main.UpdateBranch ~= 'main' and M.Config.Main.UpdateBranch ~= 'dmu-String' then
+    -- main 更新包保留此模块时，作者 Config.lua 不负责迁移旧分支名称。
+    if M.Config.Main.UpdateBranch == 'dmu-String' or M.Config.Main.UpdateBranch == 'dmu_string' then
+        M.Config.Main.UpdateBranch = 'String'
+    end
+    if M.Config.Main.UpdateBranch ~= 'main' and M.Config.Main.UpdateBranch ~= 'String' then
         M.Config.Main.UpdateBranch = 'main'
     end
     M.GetUpdateBranch = function()
-        if M.Config.Main.UpdateBranch == 'dmu-String' then
-            return 'dmu-String'
+        if M.Config.Main.UpdateBranch == 'String' then
+            return 'String'
         end
         return 'main'
     end
 
     M.GetUpdateLogUrl = function()
-        if M.GetUpdateBranch() == 'dmu-String' then
-            return 'https://github.com/SuzukazeYuYa/MuAiCore/commits/dmu-String/'
+        if M.GetUpdateBranch() == 'String' then
+            return 'https://github.com/SuzukazeYuYa/MuAiCore/commits/String/'
         end
         return 'https://docs.qq.com/doc/DWnhXRXBxSXJpU0tS?rtkey=07822459d679f67ae55c279c801Xw1&nlc=1'
     end
 
     M.RequestUpdateBranch = function(branch)
-        if branch ~= 'main' and branch ~= 'dmu-String' then
+        if branch ~= 'main' and branch ~= 'String' then
             return false
         end
         if branch == M.GetUpdateBranch() then
             return true
         end
         local lines, okText
-        if branch == 'dmu-String' then
+        if branch == 'String' then
             lines = {
-                '切换到 String 分支（dmu-String）？',
+                '切换到 String 测试分支？',
                 '此分支有时是测试版本，可能出现 bug，',
                 '但可以提前体验最新功能。',
                 'String 分支通过 GitHub 下载。',
@@ -45,14 +49,14 @@ UpdateChannels.init = function(M)
             okText = '切换到 String'
         else
             lines = {
-                '切换到作者主分支（main）？',
-                '后续更新将使用作者主分支脚本，',
+                '切换到Muai主分支（main）？',
+                '后续更新将使用Muai主分支脚本，',
                 'String 分支的额外功能会被替换。',
                 '更新设置和分支选择入口会继续保留，',
                 '之后可在这里再次切换到 String 分支。',
                 '确认后仅保存选择，下次更新时生效。',
             }
-            okText = '切回主分支'
+            okText = '确认切换'
         end
         M.ShowMsgUI(1, lines, function()
             local previousBranch = M.Config.Main.UpdateBranch
@@ -74,15 +78,15 @@ UpdateChannels.init = function(M)
         M.LatestVer = nil
         M.LogInfo = nil
         local branch = M.GetUpdateBranch()
-        if branch == 'dmu-String' then
+        if branch == 'String' then
             -- 只提取版本号，不执行远端 Lua；同版本号的提交仍允许手动更新。
-            local resp = M.WebRequest('https://raw.githubusercontent.com/SuzukazeYuYa/MuAiCore/dmu-String/MuAiCore/LuaFiles/MuAiGuide.lua')
+            local resp = M.WebRequest('https://raw.githubusercontent.com/SuzukazeYuYa/MuAiCore/String/MuAiCore/LuaFiles/MuAiGuide.lua')
             if type(resp) == 'string' and #resp <= 65536 then
                 M.LatestVer = tonumber(resp:match('M%.VERSION%s*=%s*(%d+)'))
             end
             if M.LatestVer ~= nil then
                 M.LogInfo = {
-                    '更新分支：String（dmu-String）',
+                    '更新分支：String',
                     'Tab|当前版本：' .. tostring(M.VERSION),
                     'Tab|分支在线版本：' .. tostring(M.LatestVer),
                     '此分支有时是测试版本，可能出现 bug，',
@@ -107,7 +111,7 @@ UpdateChannels.init = function(M)
             local logsData = M.StringSplit(resp, "|")
             if logsData ~= nil and tonumber(logsData[1]) ~= nil then
                 M.LatestVer = tonumber(logsData[1])
-                local infoTable = { "版本检查完毕（作者主分支 main）：",
+                local infoTable = { "版本检查完毕（Muai主分支 main）：",
                                     "Tab|当前版本：" .. M.VERSION,
                                     "Tab|最新版本：" .. tostring(M.LatestVer)
                 }
@@ -158,7 +162,7 @@ UpdateChannels.init = function(M)
     M.ForceUpdate = function()
         local branch = M.GetUpdateBranch()
         local gitZipUrl
-        if branch == 'dmu-String' or M.Config.Main.DownLoadSource == 1 then
+        if branch == 'String' or M.Config.Main.DownLoadSource == 1 then
             gitZipUrl = 'https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/' .. branch
         elseif M.Config.Main.DownLoadSource == 2 then
             gitZipUrl = "https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/MuAiCore-main.zip"
@@ -334,11 +338,11 @@ UpdateChannels.init = function(M)
         GUI:NextColumn()
         GUI:PushItemWidth(165)
         local branch = M.GetUpdateBranch()
-        local branchIndex = branch == 'dmu-String' and 2 or 1
+        local branchIndex = branch == 'String' and 2 or 1
         local selectedBranch, branchChanged = GUI:Combo('##UpdateBranch', branchIndex,
-                { '作者主分支', 'String 测试分支' }, 2)
+                { 'Muai主分支', 'String 测试分支' }, 2)
         if branchChanged then
-            M.RequestUpdateBranch(selectedBranch == 2 and 'dmu-String' or 'main')
+            M.RequestUpdateBranch(selectedBranch == 2 and 'String' or 'main')
         end
         GUI:PopItemWidth()
         GUI:NextColumn()
@@ -347,7 +351,7 @@ UpdateChannels.init = function(M)
         GUI:AlignFirstTextHeightToWidgets()
         GUI:Text('更新下载源：  ')
         GUI:NextColumn()
-        if branch == 'dmu-String' then
+        if branch == 'String' then
             GUI:Text('GitHub（String 分支）')
         else
             GUI:PushItemWidth(123)
@@ -359,8 +363,8 @@ UpdateChannels.init = function(M)
     end
 
     M.DrawUpdateBranchStatus = function()
-        if M.GetUpdateBranch() == 'dmu-String' then
-            GUI:Text('   来源：String 分支（dmu-String）')
+        if M.GetUpdateBranch() == 'String' then
+            GUI:Text('   来源：String 分支')
             GUI:Text('   当前版本：ver.' .. M.VERSION)
             if M.LatestVer ~= nil then
                 GUI:Text('   分支在线版本：ver.' .. M.LatestVer)
@@ -371,7 +375,7 @@ UpdateChannels.init = function(M)
             GUI:Button('更新 String 分支', 165, 25)
             if GUI:IsItemClicked(0) then
                 M.ShowMsgUI(2, M.LogInfo or {
-                    '更新分支：String（dmu-String）',
+                    '更新分支：String',
                     '此分支有时是测试版本，可能出现 bug，',
                     '但可以提前体验最新功能。',
                     '更新将通过 GitHub 下载分支最新内容。',
@@ -384,7 +388,7 @@ UpdateChannels.init = function(M)
             end
             return
         end
-        GUI:Text('   来源：作者主分支（main）')
+        GUI:Text('   来源：Muai主分支（main）')
         if M.LatestVer == nil then
             GUI:TextColored(1, 1, 0, 1, '   获取在线版本信息失败！请检查网络状态，')
             GUI:TextColored(1, 1, 0, 1, '   或点击上方链接查看版本状态！')

@@ -5,7 +5,7 @@
     [string]$TargetRoot,
     [Parameter(Mandatory = $true)]
     [string]$WorkRoot,
-    [ValidateSet('main', 'dmu-String')]
+    [ValidateSet('main', 'String')]
     [string]$UpdateBranch = 'main',
     [switch]$PreserveUpdateChannels
 )
