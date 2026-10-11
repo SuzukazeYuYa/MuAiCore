@@ -3,6 +3,27 @@ local UpdateChannels = {}
 local updateTime
 local updateNeedReLoad = false
 
+local function formatVersion(base, revision)
+    if base == nil then return nil end
+    if type(revision) == 'number' and revision > 0 and revision % 1 == 0 then
+        return tostring(base) .. '.' .. string.format('%d', revision)
+    end
+    return tostring(base)
+end
+
+local function isNewerVersion(base, revision, currentBase, currentRevision)
+    return base > currentBase or (base == currentBase and (revision or 0) > (currentRevision or 0))
+end
+
+local function parseIntegerField(source, field)
+    local assignment = source:match('M%.' .. field .. '%s*=%s*([^\r\n;]+)')
+    if not assignment then return nil end
+    local digits = assignment:gsub('%-%-.*$', ''):match('^%s*(%d+)%s*$')
+    local value = digits and tonumber(digits)
+    if value and value <= 2147483647 then return value end
+    return nil
+end
+
 local function powerShellLiteral(value)
     return "'" .. tostring(value):gsub("'", "''") .. "'"
 end
@@ -21,6 +42,14 @@ UpdateChannels.init = function(M)
             return 'String'
         end
         return 'main'
+    end
+
+    M.GetVersionLabel = function()
+        return formatVersion(M.VERSION, M.STRING_REVISION)
+    end
+
+    M.GetOnlineVersionLabel = function()
+        return formatVersion(M.LatestVer, M.LatestStringRevision)
     end
 
     M.GetUpdateLogUrl = function()
@@ -67,6 +96,7 @@ UpdateChannels.init = function(M)
                 return
             end
             M.LatestVer = nil
+            M.LatestStringRevision = nil
             M.LogInfo = nil
             M.CheckVersion(true)
         end, nil, okText, '保留原分支')
@@ -76,19 +106,24 @@ UpdateChannels.init = function(M)
     ---@param isAuto boolean 是否为自动检查
     M.CheckVersion = function(isAuto)
         M.LatestVer = nil
+        M.LatestStringRevision = nil
         M.LogInfo = nil
         local branch = M.GetUpdateBranch()
         if branch == 'String' then
             -- 只提取版本号，不执行远端 Lua；同版本号的提交仍允许手动更新。
             local resp = M.WebRequest('https://raw.githubusercontent.com/SuzukazeYuYa/MuAiCore/String/MuAiCore/LuaFiles/MuAiGuide.lua')
             if type(resp) == 'string' and #resp <= 65536 then
-                M.LatestVer = tonumber(resp:match('M%.VERSION%s*=%s*(%d+)'))
+                M.LatestVer = parseIntegerField(resp, 'VERSION')
+                M.LatestStringRevision = parseIntegerField(resp, 'STRING_REVISION')
+                if resp:find('M%.STRING_REVISION%s*=') and M.LatestStringRevision == nil then
+                    M.LatestVer = nil
+                end
             end
             if M.LatestVer ~= nil then
                 M.LogInfo = {
                     '更新分支：String',
-                    'Tab|当前版本：' .. tostring(M.VERSION),
-                    'Tab|分支在线版本：' .. tostring(M.LatestVer),
+                    'Tab|当前版本：' .. M.GetVersionLabel(),
+                    'Tab|分支在线版本：' .. M.GetOnlineVersionLabel(),
                     '此分支有时是测试版本，可能出现 bug，',
                     '但可以提前体验最新功能。',
                     '版本号相同也可能有新提交，更新将下载分支最新内容。',
@@ -112,7 +147,7 @@ UpdateChannels.init = function(M)
             if logsData ~= nil and tonumber(logsData[1]) ~= nil then
                 M.LatestVer = tonumber(logsData[1])
                 local infoTable = { "版本检查完毕（Muai主分支 main）：",
-                                    "Tab|当前版本：" .. M.VERSION,
+                                    "Tab|当前版本：" .. M.GetVersionLabel(),
                                     "Tab|最新版本：" .. tostring(M.LatestVer)
                 }
                 table.insert(infoTable, "")
@@ -365,9 +400,14 @@ UpdateChannels.init = function(M)
     M.DrawUpdateBranchStatus = function()
         if M.GetUpdateBranch() == 'String' then
             GUI:Text('   来源：String 分支')
-            GUI:Text('   当前版本：ver.' .. M.VERSION)
+            GUI:Text('   当前版本：ver.' .. M.GetVersionLabel())
             if M.LatestVer ~= nil then
-                GUI:Text('   分支在线版本：ver.' .. M.LatestVer)
+                local online = '   分支在线版本：ver.' .. M.GetOnlineVersionLabel()
+                if isNewerVersion(M.LatestVer, M.LatestStringRevision, M.VERSION, M.STRING_REVISION) then
+                    GUI:TextColored(0, 1, 0, 1, online)
+                else
+                    GUI:Text(online)
+                end
             else
                 GUI:TextColored(1, 1, 0, 1, '   尚未取得 String 分支在线版本。')
             end
@@ -389,6 +429,9 @@ UpdateChannels.init = function(M)
             return
         end
         GUI:Text('   来源：Muai主分支（main）')
+        if M.STRING_REVISION ~= nil then
+            GUI:Text('   当前安装：ver.' .. M.GetVersionLabel())
+        end
         if M.LatestVer == nil then
             GUI:TextColored(1, 1, 0, 1, '   获取在线版本信息失败！请检查网络状态，')
             GUI:TextColored(1, 1, 0, 1, '   或点击上方链接查看版本状态！')
