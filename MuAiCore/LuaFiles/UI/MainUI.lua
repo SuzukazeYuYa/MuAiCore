@@ -833,10 +833,13 @@ end
 local drawRaidSettingTab = function(M)
     GUI:TextColored(1, 1, 0, 1, ' 使用说明:')
     GUI:TextColored(1, 0, 0, 1, '  部分副本采用时间轴开发, 需要继承对应时间!')
-    GUI:TextColored(1, 1, 0, 1, '  1.绝龙诗, 时间轴: String\\DragonsongsReprise')
-    GUI:TextColored(1, 1, 0, 1, '  2.绝欧米茄, 时间轴: MuAi\\MuAiGuideTop')
-    GUI:TextColored(1, 1, 0, 1, '  3.绝伊甸, 时间轴: MuAi\\MuaiGuideFru')
-    GUI:TextColored(1, 1, 0, 1, '  4.M11S|M12S, [全局]: MuAi\\MuAiGeneral')
+    GUI:TextColored(0, 1, 1, 1, '  具体对应关系如下:')
+    GUI:TextColored(1, 1, 0, 1, '  1.绝亚: String\\TheEpicOfAlexander')
+    GUI:TextColored(1, 1, 0, 1, '  2.绝龙诗: String\\DragonsongsReprise')
+    GUI:TextColored(1, 1, 0, 1, '  3.绝欧米茄: MuAi\\MuAiGuideTop')
+    GUI:TextColored(1, 1, 0, 1, '  4.绝伊甸: MuAi\\MuaiGuideFru')
+    GUI:TextColored(1, 1, 0, 1, '  5.M11S|M12S, [全局]: MuAi\\MuAiGeneral')
+    GUI:TextColored(0, 1, 1, 1, '  上述外均无需继承, 到下面的设置中开启即可!')
     
     if GUI:CollapsingHeader('绝本') then
         GUI:BulletText('幻想龙诗绝境战 by String,')

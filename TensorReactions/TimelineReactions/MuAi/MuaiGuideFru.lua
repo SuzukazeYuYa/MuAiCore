@@ -59,7 +59,7 @@ local tbl =
 				uuid = "db69b28f-01d0-ec40-a2c6-7157106baa6d",
 				version = 2,
 			},
-			inheritedIndex = 4,
+			inheritedIndex = 2,
 		},
 	},
 	
@@ -736,7 +736,7 @@ local tbl =
 				uuid = "d48a1e68-63d9-e8e5-9330-3723784ecf94",
 				version = 2,
 			},
-			inheritedIndex = 2,
+			inheritedIndex = 1,
 		},
 	},
 	[25] = 
@@ -849,7 +849,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local one = { 40131, 40135 }\nlocal two = { 40122, 40125 }\nlocal three = { 40123, 40126 }\nlocal four = { 40124, 40127 }\n\nif data.MuAiGd_P1_Towers == nil then\n    data.MuAiGd_P1_Towers = {}\nend\n\nif table.contains(one, eventArgs.spellID) then\n    local ent = TensorCore.mGetEntity(eventArgs.entityID)\n    table.insert(data.MuAiGd_P1_Towers, { entity = ent, need = 1 })\nelseif table.contains(two, eventArgs.spellID) then\n    local ent = TensorCore.mGetEntity(eventArgs.entityID)\n    table.insert(data.MuAiGd_P1_Towers, { entity = ent, need = 2 })\nelseif table.contains(three, eventArgs.spellID) then\n    local ent = TensorCore.mGetEntity(eventArgs.entityID)\n    table.insert(data.MuAiGd_P1_Towers, { entity = ent, need = 3 })\nelseif table.contains(four, eventArgs.spellID) then\n    local ent = TensorCore.mGetEntity(eventArgs.entityID)\n    table.insert(data.MuAiGd_P1_Towers, { entity = ent, need = 4 })\nend\nself.used = true\n",
+							actionLua = "local one = { 40131, 40135 }\nlocal two = { 40122, 40125 }\nlocal three = { 40123, 40126 }\nlocal four = { 40124, 40127 }\n\nif data.MuAiGd_P1_Towers == nil then\n    data.MuAiGd_P1_Towers = {}\nend\n\nif table.contains(one, eventArgs.spellID) then\n    local ent = TensorCore.mGetEntity(eventArgs.entityID)\n    table.insert(data.MuAiGd_P1_Towers, { entity = { pos = ent.pos }, need = 1 })\nelseif table.contains(two, eventArgs.spellID) then\n    local ent = TensorCore.mGetEntity(eventArgs.entityID)\n    table.insert(data.MuAiGd_P1_Towers, { entity = { pos = ent.pos }, need = 2 })\nelseif table.contains(three, eventArgs.spellID) then\n    local ent = TensorCore.mGetEntity(eventArgs.entityID)\n    table.insert(data.MuAiGd_P1_Towers, { entity = { pos = ent.pos }, need = 3 })\nelseif table.contains(four, eventArgs.spellID) then\n    local ent = TensorCore.mGetEntity(eventArgs.entityID)\n    table.insert(data.MuAiGd_P1_Towers, { entity = { pos = ent.pos }, need = 4 })\nend\nself.used = true\n",
 							conditions = 
 							{
 								
@@ -1040,7 +1040,7 @@ local tbl =
 				uuid = "bed0da6f-ee8d-e3df-8bbd-7d36f25ae95b",
 				version = 2,
 			},
-			inheritedIndex = 8,
+			inheritedIndex = 4,
 		},
 	},
 	[33] = 
@@ -1125,9 +1125,9 @@ local tbl =
 						{
 							aType = "Lua",
 							actionLua = "local M = MuAiGuide\nif data.MuAiGd_DiamondDustTarget == nil then\n    M.Debug(\"===================== DD冰花位置收集 && DD 指路1 =====================\")\n    data.MuAiGd_DiamondDustTarget = {}\n    data.MuAiGd_DiamondDustSelfGuideDir = 0\n    ---  DD中的1情况  1： 钢铁冰花，2：钢铁水波，3：月环冰花，4：月环水波\n    data.MuAiGd_DiamondDustSelfGuideType = 0\nend\n\n\nif table.size(data.MuAiGd_DiamondDustTarget) < 4 then\n    for jobPos, player in pairs(M.Party) do\n        if player.id == eventArgs.entityID then\n            table.insert(data.MuAiGd_DiamondDustTarget, M.IndexOf(MuAiGuide.Config.FruCfg.JobPos, jobPos))\n            break\n        end\n    end\n    if table.size(data.MuAiGd_DiamondDustTarget) == 4 then\n        -- 如果点名人的站位序列和初次出现的2个冰花存在重合, 则需要换位\n        for i = 1, #data.MuAiGd_DiamondDustTarget do\n            for j = 1, #data.MuAiGd_DiamondDustStartPoint do\n                if data.MuAiGd_DiamondDustStartPoint[j] == data.MuAiGd_DiamondDustTarget[i] then\n                    data.MuAiGd_DiamondDustNeedExChange = true\n                    M.Info(\"冰花方向重合，需要换位。\", true)\n                    break\n                end\n            end\n            if data.MuAiGd_DiamondDustNeedExChange then\n                break\n            end\n        end\n\n        -- 计算指路方位\n        local selfBaseDir = M.IndexOf(MuAiGuide.Config.FruCfg.JobPos, M.SelfPos)\n        if data.MuAiGd_DiamondDustNeedExChange then\n            if MuAiGuide.Config.FruCfg.DDChangeType == 1 then\n                if M.IsDps(M.GetPlayer().job) then\n                    data.MuAiGd_DiamondDustSelfGuideDir = selfBaseDir - 1\n                else\n                    data.MuAiGd_DiamondDustSelfGuideDir = selfBaseDir + 1\n                end\n            else\n                data.MuAiGd_DiamondDustSelfGuideDir = selfBaseDir - 1\n            end\n            if data.MuAiGd_DiamondDustSelfGuideDir > 8 then\n                data.MuAiGd_DiamondDustSelfGuideDir = data.MuAiGd_DiamondDustSelfGuideDir - 8\n            elseif data.MuAiGd_DiamondDustSelfGuideDir < 0 then\n                data.MuAiGd_DiamondDustSelfGuideDir = data.MuAiGd_DiamondDustSelfGuideDir + 8\n            end\n        else\n            data.MuAiGd_DiamondDustSelfGuideDir = selfBaseDir\n        end\n\n        -- 指路时间\n        -- 钢铁时间\n        local timeAimFar = 7000  -- 冰花人： 直接指过去，呆着\n        local timeFar = 5000     -- 无冰花人： 指过去，等钢/月判定后立刻回中，当前脚本仅指路第一阶段\n        -- 月环时间\n        local timeAimNear = 5000 -- 冰花人 指路到 钢/月判定\n        local timeNear = 5000    -- 没冰花人，呆着\n\n        local guideTime\n        local guideDistance\n        if TensorCore.isAnyEntityCasting(40203) then\n            data.MuAiGd_DiamondDustStandType = 1 --月环\n            -- 冰花点名\n            if table.contains(data.MuAiGd_DiamondDustTarget, selfBaseDir) then\n                guideTime = timeAimNear\n                guideDistance = 3.7\n                data.MuAiGd_DiamondDustSelfGuideType = 3 --月环冰花\n            else\n                guideTime = timeNear\n                guideDistance = 1.5\n                data.MuAiGd_DiamondDustSelfGuideType = 4 --月环水波\n            end\n        elseif TensorCore.isAnyEntityCasting(40202) then\n            data.MuAiGd_DiamondDustStandType = 2 --钢铁\n            -- 冰花点名\n            if table.contains(data.MuAiGd_DiamondDustTarget, selfBaseDir) then\n                guideTime = timeAimFar\n                guideDistance = 19.7\n                data.MuAiGd_DiamondDustSelfGuideType = 1 --钢铁冰花\n            else\n                guideTime = timeFar\n                guideDistance = 16.5\n                data.MuAiGd_DiamondDustSelfGuideType = 2 --钢铁水波\n            end\n        end\n\n        local guidePos = TensorCore.getPosInDirection(\n                { x = 100, y = 0, z = 100 },\n                (data.MuAiGd_DiamondDustSelfGuideDir - 1) * math.pi / 4,\n                guideDistance)\n        M.DirectTo(guidePos.x, guidePos.z, guideTime, 0.3)\n        M.Debug(\"===================== DD冰花位置收集 && DD 指路1 结束 =====================\")\n        self.used = true\n    end\nend\n",
-							conditions =
+							conditions = 
 							{
-
+								
 								{
 									"fdc8e6c3-5795-8e23-b268-c66c76d51218",
 									true,
@@ -1808,25 +1808,22 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local M = MuAiGuide\nfor curJobPos, ent in pairs(M.Party) do\n    local buff = TensorCore.getBuff(ent.id, 4157)\n    if buff == nil then\n        local curPlayer = TensorCore.mGetEntity(ent.id)\n        if MuAiGuide.Config.FruCfg.FruLightRampantType == 1 then\n            if curPlayer.pos.z < 100 then\n                table.insert(data.MuAiGd_LightRampantGroupDown, curJobPos)\n            else\n                table.insert(data.MuAiGd_LightRampantGroupUp, curJobPos)\n            end\n        else\n            if curPlayer.pos.x < 100 then\n                table.insert(data.MuAiGd_LightRampantGroupRight, curJobPos)\n            else\n                table.insert(data.MuAiGd_LightRampantGroupLeft, curJobPos)\n            end\n        end\n\n    end\nend\nif M.Config.FruCfg.FruLightRampantType == 1 then\n    M.Info(\"最终分摊分组，上：\" .. M.StringJoin(data.MuAiGd_LightRampantGroupUp, \",\"))\n    M.Info(\"最终分摊分组，下：\" .. M.StringJoin(data.MuAiGd_LightRampantGroupDown, \",\"))\nelse\n    M.Info(\"最终分摊分组，左：\" .. M.StringJoin(data.MuAiGd_LightRampantGroupLeft, \",\"))\n    M.Info(\"最终分摊分组，右：\" .. M.StringJoin(data.MuAiGd_LightRampantGroupRight, \",\"))\nend\nself.used = true\n",
+							actionLua = "data.MuAiGd_P2_LRDropState = 2\nself.used = true",
 							gVar = "ACR_TensorRequiem3_CD",
-							uuid = "a6c1ea18-2ef9-0376-85e3-11c4f319846d",
+							uuid = "7433200e-db52-d2f8-ab50-3c8ab70bb2d4",
 							version = 2.1,
 						},
-						inheritedIndex = 1,
 					},
 				},
 				conditions = 
 				{
 				},
 				mechanicTime = 339.7,
-				name = "[MuAiGuide]光之暴走-分组补充",
+				name = "[MuAiGuide]光之暴走-放圈1完毕",
 				timelineIndex = 82,
-				timerOffset = -2,
-				uuid = "c49867de-10d6-b9eb-9d12-6ac9faa926aa",
+				uuid = "c16e0482-22ba-c8f9-9967-d0394ec98d1c",
 				version = 2,
 			},
-			inheritedIndex = 3,
 		},
 		
 		{
@@ -1893,22 +1890,25 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.MuAiGd_P2_LRDropState = 2\nself.used = true",
+							actionLua = "local M = MuAiGuide\nfor curJobPos, ent in pairs(M.Party) do\n    local buff = TensorCore.getBuff(ent.id, 4157)\n    if buff == nil then\n        local curPlayer = TensorCore.mGetEntity(ent.id)\n        if MuAiGuide.Config.FruCfg.FruLightRampantType == 1 then\n            if curPlayer.pos.z < 100 then\n                table.insert(data.MuAiGd_LightRampantGroupDown, curJobPos)\n            else\n                table.insert(data.MuAiGd_LightRampantGroupUp, curJobPos)\n            end\n        else\n            if curPlayer.pos.x < 100 then\n                table.insert(data.MuAiGd_LightRampantGroupRight, curJobPos)\n            else\n                table.insert(data.MuAiGd_LightRampantGroupLeft, curJobPos)\n            end\n        end\n\n    end\nend\nif M.Config.FruCfg.FruLightRampantType == 1 then\n    M.Info(\"最终分摊分组，上：\" .. M.StringJoin(data.MuAiGd_LightRampantGroupUp, \",\"))\n    M.Info(\"最终分摊分组，下：\" .. M.StringJoin(data.MuAiGd_LightRampantGroupDown, \",\"))\nelse\n    M.Info(\"最终分摊分组，左：\" .. M.StringJoin(data.MuAiGd_LightRampantGroupLeft, \",\"))\n    M.Info(\"最终分摊分组，右：\" .. M.StringJoin(data.MuAiGd_LightRampantGroupRight, \",\"))\nend\nself.used = true\n",
 							gVar = "ACR_TensorRequiem3_CD",
-							uuid = "7433200e-db52-d2f8-ab50-3c8ab70bb2d4",
+							uuid = "a6c1ea18-2ef9-0376-85e3-11c4f319846d",
 							version = 2.1,
 						},
+						inheritedIndex = 1,
 					},
 				},
 				conditions = 
 				{
 				},
 				mechanicTime = 339.7,
-				name = "[MuAiGuide]光之暴走-放圈1完毕",
+				name = "[MuAiGuide]光之暴走-分组补充",
 				timelineIndex = 82,
-				uuid = "c16e0482-22ba-c8f9-9967-d0394ec98d1c",
+				timerOffset = -2,
+				uuid = "c49867de-10d6-b9eb-9d12-6ac9faa926aa",
 				version = 2,
 			},
+			inheritedIndex = 3,
 		},
 	},
 	[83] = 
@@ -2086,7 +2086,7 @@ local tbl =
 				uuid = "a3f96fa1-b32d-ae88-a093-1747d1332164",
 				version = 2,
 			},
-			inheritedIndex = 2,
+			inheritedIndex = 1,
 		},
 		
 		{
@@ -2169,7 +2169,7 @@ local tbl =
 				uuid = "b3ff0fd1-15e9-36e1-8b7e-dac02e3dd343",
 				version = 2,
 			},
-			inheritedIndex = 2,
+			inheritedIndex = 1,
 		},
 	},
 	[92] = 
@@ -3232,9 +3232,9 @@ local tbl =
 						{
 							actionID = 3,
 							atomicPriority = true,
-							conditions =
+							conditions = 
 							{
-
+								
 								{
 									"0cafd4d1-998e-3408-aaae-95101e215085",
 									true,
@@ -4208,7 +4208,7 @@ local tbl =
 				uuid = "fc943854-2d7a-c3f2-a3fa-424c142de4d5",
 				version = 2,
 			},
-			inheritedIndex = 2,
+			inheritedIndex = 1,
 		},
 	},
 	[201] = 
@@ -4349,7 +4349,7 @@ local tbl =
 				uuid = "3f1eab28-067f-b86b-929d-8b282470e3e1",
 				version = 2,
 			},
-			inheritedIndex = 2,
+			inheritedIndex = 1,
 		},
 	},
 	[215] = 
@@ -4418,7 +4418,7 @@ local tbl =
 				uuid = "e49b6e6b-d23a-88a2-93d9-df846d94e167",
 				version = 2,
 			},
-			inheritedIndex = 1,
+			inheritedIndex = 2,
 		},
 	},
 	[222] = 
@@ -4532,7 +4532,7 @@ local tbl =
 				uuid = "5d5aac25-32a9-3239-84a7-30236bbe05f7",
 				version = 2,
 			},
-			inheritedIndex = 4,
+			inheritedIndex = 2,
 		},
 		
 		{
@@ -4973,58 +4973,6 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if data.MuAiGd_P5_Towers == nil then\n\tlocal result = data.MuAiGd_GetP5TowerTable(eventArgs.a1)\n\tif result ~= nil then\n\t\td(eventArgs.a1)\n\t\td(result)\n\t\tdata.MuAiGd_P5_Towers = result\n\tend\nend\nself.used = true\n",
-							conditions = 
-							{
-								
-								{
-									"a84a5896-c18a-d96e-98c7-7113928e3731",
-									true,
-								},
-							},
-							gVar = "ACR_RikuGNB3_CD",
-							uuid = "c5ce03af-9d98-db9c-99c3-585821790223",
-							version = 2.1,
-						},
-						inheritedIndex = 1,
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							category = "Lua",
-							conditionLua = "return eventArgs.a2 == 1 and eventArgs.a3 == 2 and data.MuAiGd_P5_Towers == nil",
-							uuid = "a84a5896-c18a-d96e-98c7-7113928e3731",
-							version = 3,
-						},
-						inheritedIndex = 1,
-					},
-				},
-				eventType = 14,
-				mechanicTime = 1150.3,
-				name = "[MuAiGuide]分析塔位置",
-				timeRange = true,
-				timelineIndex = 250,
-				timerStartOffset = -20,
-				uuid = "6fdcc152-dc0a-2a8b-a278-483079c843c9",
-				version = 2,
-			},
-			inheritedIndex = 5,
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							aType = "Lua",
 							actionLua = "data.MuAiGd_P5CastInfo = data.MuAiGd_P5GetCastInfo(eventArgs.spellID)\nd(data.MuAiGd_P5CastInfo)\nself.used = true",
 							conditions = 
 							{
@@ -5069,6 +5017,58 @@ local tbl =
 				timerEndOffset = 20,
 				timerStartOffset = -20,
 				uuid = "0d97e63c-d9dc-f5fd-82fa-b059761eda42",
+				version = 2,
+			},
+			inheritedIndex = 1,
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "if data.MuAiGd_P5_Towers == nil then\n\tlocal result = data.MuAiGd_GetP5TowerTable(eventArgs.a1)\n\tif result ~= nil then\n\t\td(eventArgs.a1)\n\t\td(result)\n\t\tdata.MuAiGd_P5_Towers = result\n\tend\nend\nself.used = true\n",
+							conditions = 
+							{
+								
+								{
+									"a84a5896-c18a-d96e-98c7-7113928e3731",
+									true,
+								},
+							},
+							gVar = "ACR_RikuGNB3_CD",
+							uuid = "c5ce03af-9d98-db9c-99c3-585821790223",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "return eventArgs.a2 == 1 and eventArgs.a3 == 2 and data.MuAiGd_P5_Towers == nil",
+							uuid = "a84a5896-c18a-d96e-98c7-7113928e3731",
+							version = 3,
+						},
+						inheritedIndex = 1,
+					},
+				},
+				eventType = 14,
+				mechanicTime = 1150.3,
+				name = "[MuAiGuide]分析塔位置",
+				timeRange = true,
+				timelineIndex = 250,
+				timerStartOffset = -20,
+				uuid = "6fdcc152-dc0a-2a8b-a278-483079c843c9",
 				version = 2,
 			},
 			inheritedIndex = 2,

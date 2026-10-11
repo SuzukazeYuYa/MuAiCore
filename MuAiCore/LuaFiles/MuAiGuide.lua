@@ -4,7 +4,7 @@
     MuAiGuide逻辑总脚本
 ===========================
 ]]
-M.VERSION = 351
+M.VERSION = 353
 M.GlobalGuideY = nil
 M.IsInit = false;
 --- 输出信息到控制台 
@@ -15,11 +15,13 @@ M.Debug = function(msg)
 end
 
 local compatibilityPath = MuAiGuideRoot .. 'MuAiGuideSubs\\MinionCompatibility.lua'
+--- @type Compatibility
 local compatibility = FileLoad(compatibilityPath)
 if type(compatibility) ~= 'table' or type(compatibility.install) ~= 'function' then
     M.Debug('宿主兼容模块加载失败：' .. tostring(compatibilityPath))
     return M
 end
+
 local installedCompatibility = compatibility.install(M)
 if #installedCompatibility > 0 then
     M.Debug('宿主兼容函数缺失，已安装本地实现：' .. table.concat(installedCompatibility, ','))

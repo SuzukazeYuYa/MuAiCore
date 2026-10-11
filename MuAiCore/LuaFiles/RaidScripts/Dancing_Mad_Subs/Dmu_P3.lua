@@ -875,19 +875,33 @@ local drawTowerGather = function()
             or DM.BeLowState('P3BlackHole4_2')
             or DM.OverState('P3TowerEnd')
             or (Data().TakeTower.gatherProcess ~= 1 and Data().TakeTower.gatherProcess ~= 2)
+
     then
         return
     end
+
+    -- 调整颜色到黄色
+    local drawer = DM.yellowDrawer
+    if Data().TakeTower.GuideTypes ~= nil then
+        local curGuideType = Data().TakeTower.GuideTypes[MG.SelfPos]
+        if curGuideType ~= nil then
+            -- 如果自己组分摊，那么颜色应该为绿色
+            if curGuideType == takeTowerType.Mid then
+                drawer = DM.greenDrawer
+            end
+        end
+    end
+
     if Data().TakeTower.gatherProcess == 1 and Data().TakeTower.firstEntity ~= nil then
         local entity = getLiveEntity(Data().TakeTower.firstEntity, 'P3TowerGather', 'first')
         if entity ~= nil then
-            DM.orangeDrawer:addCircle(entity.pos.x, MG.drawerY, entity.pos.z, 6)
+            drawer:addCircle(entity.pos.x, MG.drawerY, entity.pos.z, 6)
         end
     end
     if Data().TakeTower.gatherProcess == 2 and Data().TakeTower.secondEntity ~= nil then
         local entity = getLiveEntity(Data().TakeTower.secondEntity, 'P3TowerGather', 'second')
         if entity ~= nil then
-            DM.orangeDrawer:addCircle(entity.pos.x, MG.drawerY, entity.pos.z, 6)
+            drawer:addCircle(entity.pos.x, MG.drawerY, entity.pos.z, 6)
         end
     end
 end
@@ -1174,14 +1188,10 @@ Dmu_P3.OnAOECreate = function(aoeInfo)
         if Cfg().draw then
             local inner
             local out = aoeInfo.aoeLength
-            if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
-                inner = out - 0.12
-            else
-                inner = out - 0.05
-            end
+            inner = out - 0.05
             local drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
             drawer:setRenderFlags(256)
-            drawer:addTimedDonut(1000 * aoeInfo.duration, aoeInfo.x, MG.drawerY, aoeInfo.z, inner, out)
+            drawer:addTimedDonut(1000 * aoeInfo.duration, aoeInfo.x, MG.drawerY, aoeInfo.z, inner, out, 0, true)
         end
     elseif aoeInfo.aoeID == 47856 then
         -- 计算跺脚顺序，AOE先出，后Cast
