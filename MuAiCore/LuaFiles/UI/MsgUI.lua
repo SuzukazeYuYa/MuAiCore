@@ -57,7 +57,7 @@ MsgUI.draw = function()
         elseif M.MsgUI.Type == 2 then
             GUI:Button('详细日志', 100, 25)
             if GUI:IsItemClicked(0) then
-                io.popen('start https://docs.qq.com/doc/DWnhXRXBxSXJpU0tS?rtkey=07822459d679f67ae55c279c801Xw1&nlc=1')
+                io.popen('start ' .. M.GetUpdateLogUrl())
             end
             GUI:SameLine(0, 15)
             GUI:Button('更新', 100, 25)

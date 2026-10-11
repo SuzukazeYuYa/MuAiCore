@@ -59,6 +59,9 @@ local LoadUIConfig = function(M)
     local defMainCfg = M.CreateDefMainCfg()
     M.Config.Main = defMainCfg -- 这里只是让编辑器可以默认识别，无实际作用
     M.Config.Main = M.LoadConfig(M.Config.MainPath, M.Config.MainFile, defMainCfg)
+    if M.Config.Main.UpdateBranch ~= 'main' and M.Config.Main.UpdateBranch ~= 'dmu-String' then
+        M.Config.Main.UpdateBranch = 'main'
+    end
     M.Config.MainPrevious = table.deepcopy(M.Config.Main)
     --- 读取绝伊甸存档
     local defFruCfg = M.CreateFruDefaultCfg()
@@ -189,6 +192,8 @@ Config.init = function(M)
             },
             -- 更新源，1 github 2腾讯云
             DownLoadSource = 1,
+            -- 默认作者主分支；String 分支须经切换提醒后选择。
+            UpdateBranch = 'main',
             -- 开启日志系统
             LogEnable = true,
             ShowBotState = false,

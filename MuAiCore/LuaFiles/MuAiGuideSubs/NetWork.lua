@@ -234,6 +234,62 @@ NetWork.init = function(M)
     M.ShuffleListInPlace(M.LocalSponsorList)
     M.ShuffleListInPlace(M.ThxList)
     M.ParseSponsorsList = parseSponsorsList
+    M.GetUpdateBranch = function()
+        if M.Config.Main.UpdateBranch == 'dmu-String' then
+            return 'dmu-String'
+        end
+        return 'main'
+    end
+
+    M.GetUpdateLogUrl = function()
+        if M.GetUpdateBranch() == 'dmu-String' then
+            return 'https://github.com/SuzukazeYuYa/MuAiCore/commits/dmu-String/'
+        end
+        return 'https://docs.qq.com/doc/DWnhXRXBxSXJpU0tS?rtkey=07822459d679f67ae55c279c801Xw1&nlc=1'
+    end
+
+    M.RequestUpdateBranch = function(branch)
+        if branch ~= 'main' and branch ~= 'dmu-String' then
+            return false
+        end
+        if branch == M.GetUpdateBranch() then
+            return true
+        end
+        local lines, okText
+        if branch == 'dmu-String' then
+            lines = {
+                '切换到 String 分支（dmu-String）？',
+                '此分支有时是测试版本，可能出现 bug，',
+                '但可以提前体验最新功能。',
+                'String 分支通过 GitHub 下载。',
+                '确认后仅保存选择，下次更新时生效。',
+            }
+            okText = '切换到 String'
+        else
+            lines = {
+                '切换到作者主分支（main）？',
+                '后续更新将完整覆盖为作者主分支，',
+                'String 分支的额外功能会被替换。',
+                '作者尚未合入的分支选择界面也会消失；',
+                '再次使用 String 分支需手动安装该分支。',
+                '确认后仅保存选择，下次更新时生效。',
+            }
+            okText = '切回主分支'
+        end
+        M.ShowMsgUI(1, lines, function()
+            local previousBranch = M.Config.Main.UpdateBranch
+            M.Config.Main.UpdateBranch = branch
+            if M.SaveConfig(M.Config.MainPath, M.Config.MainFile, 'Main') ~= true then
+                M.Config.Main.UpdateBranch = previousBranch
+                M.ShowMsgUI(3, { '更新分支保存失败，已保留原选择。' })
+                return
+            end
+            M.LatestVer = nil
+            M.LogInfo = nil
+            M.CheckVersion(true)
+        end, nil, okText, '保留原分支')
+        return true
+    end
     ---使用系统CMD请求网络数据
     ---@param url string 地址
     ---@return string 获取的值
@@ -261,14 +317,41 @@ NetWork.init = function(M)
     M.CheckVersion = function(isAuto)
         M.LatestVer = nil
         M.LogInfo = nil
+        local branch = M.GetUpdateBranch()
+        if branch == 'dmu-String' then
+            -- 只提取版本号，不执行远端 Lua；同版本号的提交仍允许手动更新。
+            local resp = M.WebRequest('https://raw.githubusercontent.com/SuzukazeYuYa/MuAiCore/dmu-String/MuAiCore/LuaFiles/MuAiGuide.lua')
+            if type(resp) == 'string' and #resp <= 65536 then
+                M.LatestVer = tonumber(resp:match('M%.VERSION%s*=%s*(%d+)'))
+            end
+            if M.LatestVer ~= nil then
+                M.LogInfo = {
+                    '更新分支：String（dmu-String）',
+                    'Tab|当前版本：' .. tostring(M.VERSION),
+                    'Tab|分支在线版本：' .. tostring(M.LatestVer),
+                    '此分支有时是测试版本，可能出现 bug，',
+                    '但可以提前体验最新功能。',
+                    '版本号相同也可能有新提交，更新将下载分支最新内容。',
+                    '如进行更新，过程中会短暂卡屏，请耐心等待。',
+                }
+            end
+            if not isAuto then
+                if M.LogInfo ~= nil then
+                    M.ShowMsgUI(2, M.LogInfo)
+                else
+                    M.ShowMsgUI(3, { 'String 分支版本检查失败，请检查 GitHub 网络连接后重试。' })
+                end
+            end
+            return
+        end
         --local resp = M.WebRequest('https://gist.githubusercontent.com/SuzukazeYuYa/cb01eb35b958b57d7d962235262ea05d/raw/MuAiCoreChangeLog.txt')
         -- 改用腾讯云存储
         local resp = M.WebRequest('https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/versionLog.txt')
         if resp ~= nil and resp ~= '' then
             local logsData = M.StringSplit(resp, "|")
-            if logsData ~= nil and table.size(logsData) >= 0 then
+            if logsData ~= nil and tonumber(logsData[1]) ~= nil then
                 M.LatestVer = tonumber(logsData[1])
-                local infoTable = { "版本检查完毕：",
+                local infoTable = { "版本检查完毕（作者主分支 main）：",
                                     "Tab|当前版本：" .. M.VERSION,
                                     "Tab|最新版本：" .. tostring(M.LatestVer)
                 }
@@ -357,13 +440,16 @@ NetWork.init = function(M)
 
     ---强制更新所有脚本
     M.ForceUpdate = function()
+        local branch = M.GetUpdateBranch()
         local gitZipUrl
-        if M.Config.Main.DownLoadSource == 1 then
-            gitZipUrl = "https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/main"
+        if branch == 'dmu-String' or M.Config.Main.DownLoadSource == 1 then
+            gitZipUrl = 'https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/' .. branch
         elseif M.Config.Main.DownLoadSource == 2 then
             gitZipUrl = "https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/MuAiCore-main.zip"
         end
         if gitZipUrl == nil then
+            M.LogError('Update', '更新失败：下载源设置无效。', { source = M.Config.Main.DownLoadSource }, true)
+            M.ShowMsgUI(3, { '更新失败：下载源设置无效，请在基本设置中重新选择。' })
             return
         end
 
@@ -372,7 +458,7 @@ NetWork.init = function(M)
         local replacePath = GetStartupPath() .. "\\LuaMods"
         local zipFilePath = tempPath .. "\\repository.zip"
         local extractPath = tempPath .. "\\Extracted"
-        local exPath = extractPath .. "\\MuAiCore-main"
+        local exPath = extractPath .. '\\MuAiCore-' .. branch
         local installerPath = MuAiGuideRoot .. "MuAiGuideSubs\\InstallUpdate.ps1"
         local successToken = '__MUAI_COMMAND_OK__'
 
