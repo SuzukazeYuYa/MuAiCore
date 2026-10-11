@@ -629,35 +629,10 @@ local drawJobTab = function(M)
 end
 ---@param M MuAiGuide
 local drawBaseSettingTab = function(M)
+    -- MUAI_UPDATE_CHANNELS_SETTINGS_BEGIN
+    M.DrawUpdateBranchSettings()
+    -- MUAI_UPDATE_CHANNELS_SETTINGS_END
     GUI:Columns(2, 'BindKey', false)
-    GUI:Dummy(6, 0)
-    GUI:SameLine()
-    GUI:AlignFirstTextHeightToWidgets()
-    GUI:Text('更新分支：  ')
-    GUI:NextColumn()
-    GUI:PushItemWidth(165)
-    local branch = M.GetUpdateBranch()
-    local branchIndex = branch == 'dmu-String' and 2 or 1
-    local selectedBranch, branchChanged = GUI:Combo('##UpdateBranch', branchIndex,
-            { '作者主分支', 'String 测试分支' }, 2)
-    if branchChanged then
-        M.RequestUpdateBranch(selectedBranch == 2 and 'dmu-String' or 'main')
-    end
-    GUI:PopItemWidth()
-    GUI:NextColumn()
-    GUI:Dummy(6, 0)
-    GUI:SameLine()
-    GUI:AlignFirstTextHeightToWidgets()
-    GUI:Text('更新下载源：  ')
-    GUI:NextColumn()
-    if branch == 'dmu-String' then
-        GUI:Text('GitHub（String 分支）')
-    else
-        GUI:PushItemWidth(123)
-        M.Config.Main.DownLoadSource = GUI:Combo('##DownLoadSource', M.Config.Main.DownLoadSource, { 'GitHub', '腾讯云' }, 2)
-        GUI:PopItemWidth()
-    end
-    GUI:NextColumn()
     GUI:Dummy(6, 0)
     GUI:SameLine()
     GUI:AlignFirstTextHeightToWidgets()
@@ -1463,38 +1438,19 @@ local drawCommon = function(M)
     GUI:SameLine(200)
     GUI:Button('点击查看', 145, 20)
     if GUI:IsItemClicked(0) then
+        --io.popen('start https://github.com/SuzukazeYuYa/MuAiCore/commits/main/')
         io.popen('start ' .. M.GetUpdateLogUrl())
     end
     GUI:Dummy(10, 2)
     GUI:Separator()
     GUI:Dummy(10, 2)
     GUI:BulletText('版本信息')
-    if M.GetUpdateBranch() == 'dmu-String' then
-        GUI:Text('   来源：String 分支（dmu-String）')
-        GUI:Text('   当前版本：ver.' .. M.VERSION)
-        if M.LatestVer ~= nil then
-            GUI:Text('   分支在线版本：ver.' .. M.LatestVer)
-        else
-            GUI:TextColored(1, 1, 0, 1, '   尚未取得 String 分支在线版本。')
-        end
-        GUI:TextWrapped('测试版本可能出现 bug，但可提前体验最新功能；版本号相同也可能有新提交。')
-        GUI:Button('更新 String 分支', 165, 25)
-        if GUI:IsItemClicked(0) then
-            M.ShowMsgUI(2, M.LogInfo or {
-                '更新分支：String（dmu-String）',
-                '此分支有时是测试版本，可能出现 bug，',
-                '但可以提前体验最新功能。',
-                '更新将通过 GitHub 下载分支最新内容。',
-            })
-        end
-        GUI:SameLine(0, 5)
-        GUI:Button('检查 String 版本', 165, 25)
-        if GUI:IsItemClicked(0) then
-            M.CheckVersion()
-        end
+    -- MUAI_UPDATE_CHANNELS_STATUS_BEGIN
+    if type(M.DrawUpdateBranchStatus) == 'function' then
+        M.DrawUpdateBranchStatus()
         return
     end
-    GUI:Text('   来源：作者主分支（main）')
+    -- MUAI_UPDATE_CHANNELS_STATUS_END
     if M.LatestVer == nil then
         GUI:TextColored(1, 1, 0, 1, '   获取在线版本信息失败！请检查网络状态，')
         GUI:TextColored(1, 1, 0, 1, '   或点击上方链接查看版本状态！')

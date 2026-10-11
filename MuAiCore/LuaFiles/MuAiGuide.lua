@@ -1,4 +1,4 @@
-﻿local M = {} ---@class MuAiGuide 识别符
+local M = {} ---@class MuAiGuide 识别符
 --[[
 ===========================
     MuAiGuide逻辑总脚本
@@ -103,6 +103,13 @@ end
 local initOk = M.DiagnosticCall('Lifecycle', '执行初始化收尾', function()
     M.FruMitigation.ChangeJob()
     M.DumCfgJobChange()
+    -- MUAI_UPDATE_CHANNELS_BOOTSTRAP_BEGIN
+    local updateChannels = FileLoad(MuAiGuideRoot .. 'MuAiGuideSubs\\UpdateChannels.lua')
+    if type(updateChannels) ~= 'table' or type(updateChannels.init) ~= 'function' then
+        error('更新渠道模块加载失败，无法保留分支选择。')
+    end
+    updateChannels.init(M)
+    -- MUAI_UPDATE_CHANNELS_BOOTSTRAP_END
     M.CheckVersion(true)
     M.GetSponsorsList()
 end, { version = M.VERSION })
