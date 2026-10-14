@@ -498,7 +498,7 @@ DancingMadUI.draw = function()
             M.Config.DmuCfg.P2.evenConeCircle = GUI:Checkbox('偶数塔上扇下钢##P2EvenConeCircle',
                     M.Config.DmuCfg.P2.evenConeCircle == true)
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('偶数塔两边都是靠Boss扇形、靠外钢铁，不需要队伍编号标记。\n第2/6轮：同塔新点名不同留边，相同则后位换边。\n第4/8轮：同类点名按T、H、远程、近战优先分左右。\n闲人两侧接扇、对面引导分身；优先于BBY偶数站位。\n奇数塔仍按上方设置。请在开战前选择。')
+                GUI:SetTooltip('偶数塔两边都是靠Boss扇形、靠外钢铁，不需要队伍编号标记。\n第2/6轮：同塔新点名不同留边，相同则后位换边。\n第4/8轮：同类点名按T、H、近战、远程优先分左右。\n闲人两侧接扇、对面引导分身；优先于BBY偶数站位。\n奇数塔仍按上方设置。请在开战前选择。')
             end
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)

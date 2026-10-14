@@ -483,9 +483,9 @@ local calcFirstOrderB = function()
     Data().Towers.groupOrders[index] = curOrder
 end
 
--- 换组轮没有紧邻的踩塔站位可沿用：同类机制按 T > H > 远程 > 近战分左右。
+-- 换组轮没有紧邻的踩塔站位可沿用：同类机制按初始职能顺序 T > H > 近战 > 远程分左右。
 -- 这里只读游戏机制点名 716/717，不读取或发送队伍攻击/禁止/锁链编号。
-local evenRolePriority = { MT = 1, ST = 2, H1 = 3, H2 = 4, D3 = 5, D4 = 6, D1 = 7, D2 = 8 }
+local evenRolePriority = { MT = 1, ST = 2, H1 = 3, H2 = 4, D1 = 5, D2 = 6, D3 = 7, D4 = 8 }
 local calcEvenConeCircleOrder = function(group, marks, roleOrder)
     if group == nil or #group ~= 4 then
         return nil
