@@ -489,7 +489,9 @@ DancingMadUI.draw = function()
             GUI:BulletText('8次踩塔')
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
-            GUI:TextColored(1, 0, 0, 1, ' 攻略: 混合优化, 闲人固定')
+            GUI:TextColored(1, 0, 0, 1, M.Config.DmuCfg.P2.fixType == 4
+                    and ' 攻略: 完全扇左钢右, 闲人随点名'
+                    or ' 攻略: 混合优化, 闲人固定')
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:AlignFirstTextHeightToWidgets()
