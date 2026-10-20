@@ -448,7 +448,7 @@ DancingMadUI.draw = function()
             end
             GUI:PopItemWidth()
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('八人先C再A：两轮在C、A侧近战最远距离放泥。\n放泥后重力组回中，石头组西MT组、东ST组分散，第二轮上下反转。\n半场刀后TN西侧向北接击退吃A泥，DPS东侧向南接击退吃C泥。\n放击退的人随后跟入同侧泥，八层全消后回中。请在开战前选择。')
+                GUI:SetTooltip('八人先C再A：两轮在C、A侧近战最远距离放泥。\n放泥后重力组回中，石头组西MT组、东ST组分散，第二轮上下反转。\n半场刀后TN在上、DPS在下，队友站击退源靠场中一侧。\nTN向下击退进C泥，DPS向上击退进A泥，击退源跟入本组落点。\n八层全消后回中。请在开战前选择。')
             end
             GUI:Dummy(0, 0)
             GUI:Dummy(0, 0)

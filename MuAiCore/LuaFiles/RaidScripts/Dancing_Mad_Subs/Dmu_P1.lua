@@ -441,7 +441,8 @@ end
 
 -- 两边各四层黑泥必须有共同覆盖区。只使用已采集的真实八个物体，缺失时等待。
 local getCaPuddles = function()
-    if Data().Shit.caPuddles ~= nil then return Data().Shit.caPuddles end
+    local cached = Data().Shit.caPuddles
+    if cached ~= nil and cached.centers ~= nil and cached.innerEdges ~= nil then return cached end
     local shits = Data().Line3.Shits
     if shits == nil or #shits ~= 8 then return nil end
     local groups, seen = { north = {}, south = {} }, {}
@@ -457,12 +458,14 @@ local getCaPuddles = function()
         seen[ent.id] = true
         table.insert(pos.z < 100 and groups.north or groups.south, pos)
     end
-    local result = {}
+    local result = { centers = {}, innerEdges = {} }
     for side, positions in pairs(groups) do
         if #positions ~= 4 then return nil end
         local center = { x = 0, y = 0, z = 0 }
+        local innerEdge = positions[1].z
         for _, pos in ipairs(positions) do
             center.x, center.z = center.x + pos.x / 4, center.z + pos.z / 4
+            innerEdge = side == 'north' and math.max(innerEdge, pos.z) or math.min(innerEdge, pos.z)
         end
         -- 目标在四层共同覆盖区的内侧，放击退的人也跟入同一目标。
         local target = { x = center.x, y = 0, z = center.z + (side == 'north' and 2 or -2) }
@@ -471,13 +474,14 @@ local getCaPuddles = function()
             if dx * dx + dz * dz >= 16 then return nil end
         end
         result[side] = target
+        result.centers[side], result.innerEdges[side] = center, innerEdge
     end
     Data().Shit.caPuddles = result
     return result
 end
 
 local guideCaTrap = function(dataTable)
-    -- 半场刀结算后再分西 TN、东 DPS，避免提前站入危险半场。
+    -- 半场刀后 TN 在北、DPS 在南；朝场中接击退，跨场直接落入对面的泥。
     if Data().Half.offSetX ~= nil then
         local guide = {}
         for job in pairs(MG.Party) do
@@ -486,7 +490,8 @@ local guideCaTrap = function(dataTable)
         MG.FrameMultiD(guide)
         return
     end
-    if getCaPuddles() == nil then
+    local puddles = getCaPuddles()
+    if puddles == nil then
         MG.LogOnce('P1Ca', 'puddles_incomplete', '八人C-A黑泥位置不完整，暂不指路')
         return
     end
@@ -505,7 +510,10 @@ local guideCaTrap = function(dataTable)
     end
     local guide = {}
     for side, owner in pairs(owners) do
-        local source = { x = side == 'north' and 95 or 105, y = 0, z = 100 }
+        local targetSide = side == 'north' and 'south' or 'north'
+        local target = puddles.centers[targetSide]
+        local source = { x = puddles.centers[side].x, y = 0,
+            z = puddles.innerEdges[side] + (side == 'north' and 5.5 or -5.5) }
         local live = TensorCore.mGetEntity(MG.Party[owner].id)
         if live == nil or live.pos == nil then
             MG.LogOnce('P1Ca', 'missing_trap_owner_' .. owner, '八人C-A击退源实体不可用，暂不指路')
@@ -513,11 +521,33 @@ local guideCaTrap = function(dataTable)
         end
         local anchor = source
         if TensorCore.getDistance2d(live.pos, source) < 1 then anchor = live.pos end
+        local dx, dz = target.x - anchor.x, target.z - anchor.z
+        local distance = math.sqrt(dx * dx + dz * dz)
+        if distance < 1 then return end
+        dx, dz = dx / distance, dz / distance
+        local receiver = { x = anchor.x + dx, y = 0, z = anchor.z + dz }
+        -- 接击退者离源 1 米，再沿该方向被推 14 米，必须直接进入对面四层共同覆盖区。
+        local landing = { x = receiver.x + dx * 14, z = receiver.z + dz * 14 }
+        for _, ent in ipairs(Data().Line3.Shits) do
+            if TensorCore.getDistance2d(source, ent.pos) <= 5
+                    or TensorCore.getDistance2d(receiver, ent.pos) <= 5
+                    or ((ent.pos.z < 100) == (targetSide == 'north')
+                        and TensorCore.getDistance2d(landing, ent.pos) >= 4) then
+                MG.LogOnce('P1Ca', 'trap_landing_invalid', '八人C-A击退落点不能覆盖四层黑泥，暂不指路')
+                return
+            end
+        end
         for job in pairs(MG.Party) do
             if (side == 'north') == table.contains(thGroup, job) then
-                guide[job] = job == owner and source
-                        or { x = anchor.x, y = 0, z = anchor.z + (side == 'north' and -1 or 1) }
+                guide[job] = job == owner and source or receiver
             end
+        end
+    end
+    for job, pos in pairs(guide) do
+        local otherOwner = table.contains(thGroup, job) and owners.south or owners.north
+        if TensorCore.getDistance2d(pos, guide[otherOwner]) <= 6 then
+            MG.LogOnce('P1Ca', 'trap_groups_overlap', '八人C-A两组传毒范围重叠，暂不指路')
+            return
         end
     end
     MG.FrameMultiD(guide)
@@ -1295,7 +1325,7 @@ Dmu_P1.Update = function()
                 if puddles ~= nil then
                     local guide = {}
                     for job in pairs(MG.Party) do
-                        guide[job] = table.contains(thGroup, job) and puddles.north or puddles.south
+                        guide[job] = table.contains(thGroup, job) and puddles.south or puddles.north
                     end
                     MG.FrameMultiD(guide)
                 else
