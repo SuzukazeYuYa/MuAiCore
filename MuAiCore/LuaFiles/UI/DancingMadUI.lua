@@ -436,20 +436,19 @@ DancingMadUI.draw = function()
             GUI:AlignFirstTextHeightToWidgets()
             GUI:Text(' 站位方案: ')
             GUI:SameLine(0, 30)
-            GUI:PushItemWidth(130)
-            M.Config.DmuCfg.P1.Line2Type = GUI:Combo('##P1Line2Type', M.Config.DmuCfg.P1.Line2Type, { 'MT组上/ST组下', 'T远上/奶近下', }, 2)
-            GUI:PopItemWidth()
-            GUI:Dummy(15, 0)
-            GUI:SameLine(0, 0)
-            GUI:AlignFirstTextHeightToWidgets()
-            GUI:Text(' 放黑泥: ')
-            GUI:SameLine(0, 0)
             GUI:PushItemWidth(165)
-            M.Config.DmuCfg.P1.blackMudType = GUI:Combo('##P1BlackMudType', M.Config.DmuCfg.P1.blackMudType or 1,
-                    { '按上方分组', '八人先C再A' }, 2)
+            local line2Type = M.Config.DmuCfg.P1.blackMudType == 2 and 3 or M.Config.DmuCfg.P1.Line2Type
+            local selectedLine2Type = GUI:Combo('##P1Line2Type', line2Type,
+                    { 'MT组上/ST组下', 'T远上/奶近下', '八人先C再A' }, 3)
+            if selectedLine2Type == 3 then
+                M.Config.DmuCfg.P1.blackMudType = 2
+            else
+                M.Config.DmuCfg.P1.Line2Type = selectedLine2Type
+                M.Config.DmuCfg.P1.blackMudType = 1
+            end
             GUI:PopItemWidth()
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('八人先C再A：第一轮全员去C侧场边放黑泥，第二轮全员去A侧场边。\n第一轮保留冰半场安全侧微调。\n放泥后的分摊、分散仍使用上方站位方案，请在开战前选择。')
+                GUI:SetTooltip('八人先C再A：第一轮全员去C侧场边放黑泥，第二轮全员去A侧场边。\n第一轮保留冰半场安全侧微调。\n放泥后的分摊、分散沿用此前的职能站位，请在开战前选择。')
             end
             GUI:Dummy(0, 0)
             GUI:Dummy(0, 0)
