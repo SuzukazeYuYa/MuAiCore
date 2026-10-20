@@ -634,10 +634,10 @@ DancingMadUI.draw = function()
             GUI:Text(' 标记类型:  ')
             GUI:SameLine()
             GUI:PushItemWidth(150)
-            M.Config.DmuCfg.P3.markType = GUI:Combo('##P3markType', M.Config.DmuCfg.P3.markType, { '不标记', '标记自身(随机)', '标记全队', '标记自身(优先级)' }, 4)
+            M.Config.DmuCfg.P3.markType = GUI:Combo('##P3markType', M.Config.DmuCfg.P3.markType, { '不标记', '标记自身(随机)', '标记全队', '标记自身(优先级)', '补位标记' }, 5)
             GUI:PopItemWidth()
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('标记自身(随机): 龙诗同款,自动123先到先得\n\n标记全队: 如果有人噶了导致没有BUFF会不标记\n\n标记自身(优先级): 按照设置的优先级分配123, 如果有人嘎了没BUFF可能会错\n\n  举例, 假设优先级为[MT,ST,D1,D2,D3,D4,H1,H2], \n\n  1.你是D3 buff为第2目标, 且同组点名为MT,D1,D3, 此时你标记为锁链3\n\n  2.你是H1 buff为第1目标, 且同组点名为MT,H1,H2, 此时你标记为攻击2 \n\n标记全队和标记自身(优先级)共用同一套标记优先级。\n另外如果有人抢了标记, 插件是不给你补的, 你得自己手动补一下!')
+                GUI:SetTooltip('标记自身(随机): 龙诗同款,自动123先到先得\n\n标记全队: 如果有人噶了导致没有BUFF会不标记\n\n标记自身(优先级): 按照设置的优先级分配123, 如果有人嘎了没BUFF可能会错\n\n  举例, 假设优先级为[MT,ST,D1,D2,D3,D4,H1,H2], \n\n  1.你是D3 buff为第2目标, 且同组点名为MT,D1,D3, 此时你标记为锁链3\n\n  2.你是H1 buff为第1目标, 且同组点名为MT,H1,H2, 此时你标记为攻击2 \n\n标记全队和标记自身(优先级)共用同一套标记优先级。\n原有优先级方案不自动修正被占用的号。\n\n补位标记: 本人先不标, 等同Buff组其余人标记齐后补唯一空号。\n攻击1和2 -> 攻击3; 锁链1和3 -> 锁链2; 禁止1 -> 禁止2。\n只补本人, 不改队友标记; 缺Buff或同组标记不齐时继续等待。')
             end
             if M.Config.DmuCfg.P3.markType == 2 or M.Config.DmuCfg.P3.markType == 4 then
                 GUI:Dummy(10, 0)

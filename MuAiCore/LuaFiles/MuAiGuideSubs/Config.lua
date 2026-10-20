@@ -632,7 +632,7 @@ Config.init = function(M)
                 autoTargetEx = false,
                 slapHappyDraw = true,
                 slapHappyDir = true,
-                -- 标记类型，1 关闭； 2  随机标记自己；  3 标记全队,  4, 精确标记自己
+                -- 标记类型: 1关闭, 2随机自身, 3全队, 4优先级自身, 5同Buff组补位自身
                 markType = 1,
                 takeLineAttack12 = false,
                 takeLineStop22 = false,
