@@ -448,7 +448,7 @@ DancingMadUI.draw = function()
             end
             GUI:PopItemWidth()
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('八人先C再A：两轮在C、A侧近战最远距离放泥。\n放泥后重力组回中，石头组西MT组、东ST组分散，第二轮上下反转。\n半场刀后TN在上、DPS在下，队友站击退源靠场中一侧。\nTN向下击退进C泥，DPS向上击退进A泥，击退源跟入本组落点。\n八层全消后回中。请在开战前选择。')
+                GUI:SetTooltip('八人先C再A：两轮在离场中12米的C、A侧放泥。\n放泥后重力组回中，石头组面向Boss左MT组、右ST组分散，第二轮整体旋转半圈。\n默认预站位TN上、DPS下；实际已组成的四人组优先。\n三名受击退者去对面踩泥，原击退源留在原侧，和对面过来的三人一起踩泥。\n八层全消后结束本段指路。请在开战前选择。')
             end
             GUI:Dummy(0, 0)
             GUI:Dummy(0, 0)
@@ -483,12 +483,16 @@ DancingMadUI.draw = function()
             end
         end
         if M.Config.DmuCfg.P2.enable and GUI:CollapsingHeader('P2 凯夫卡·神') then
+            if M.Config.DmuCfg.P2.fixType == 4 then
+                M.Config.DmuCfg.P2.fixType = 1
+                M.Config.DmuCfg.P2.completeConeLeft = true
+            end
             GUI:Dummy(0, 0)
             GUI:SameLine(0, 0)
             GUI:BulletText('8次踩塔')
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
-            GUI:TextColored(1, 0, 0, 1, M.Config.DmuCfg.P2.fixType == 4
+            GUI:TextColored(1, 0, 0, 1, M.Config.DmuCfg.P2.completeConeLeft == true
                     and ' 攻略: 完全扇左钢右, 闲人随点名'
                     or ' 攻略: 混合优化, 闲人固定')
             GUI:Dummy(0, 0)
@@ -497,10 +501,14 @@ DancingMadUI.draw = function()
             GUI:Text(' 固定方式: ')
             GUI:SameLine(0, 0)
             GUI:PushItemWidth(165)
-            M.Config.DmuCfg.P2.fixType = GUI:Combo('##T8fixType', M.Config.DmuCfg.P2.fixType, { '职能固定', '扇左钢右', '职能固定[近U]', '完全扇左钢右' }, 4)
+            M.Config.DmuCfg.P2.fixType = GUI:Combo('##T8fixType', M.Config.DmuCfg.P2.fixType, { '职能固定', '扇左钢右', '职能固定[近U]' }, 3)
             GUI:PopItemWidth()
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            M.Config.DmuCfg.P2.completeConeLeft = GUI:Checkbox('完全扇左钢右##P2CompleteConeLeft',
+                    M.Config.DmuCfg.P2.completeConeLeft == true)
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('完全扇左钢右：八轮踩塔均为扇形左、钢铁右。\n闲人也按最近一次点名分侧，扇形去左、钢铁去右。\n换组后不沿用初始点名分侧；优先于偶数塔上扇下钢。\n左右以当轮两塔面向Boss为准，请在开战前选择。')
+                GUI:SetTooltip('可与职能固定或职能固定[近U]组合，保留对应的普通或近U站位。\n踩塔扇形在左、钢铁在右，闲人按最近点名分侧。\n第八轮闲人沿用第七轮左右塔分组，不等待不存在的新点名。\n优先于偶数塔上扇下钢，左右以面向Boss为准。请在开战前选择。')
             end
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
@@ -509,7 +517,7 @@ DancingMadUI.draw = function()
             if GUI:IsItemHovered() then
                 GUI:SetTooltip('勾选后使用宝宝椅站位')
             end
-            if M.Config.DmuCfg.P2.fixType ~= 4 then
+            if M.Config.DmuCfg.P2.completeConeLeft ~= true then
                 GUI:Dummy(0, 0)
                 GUI:SameLine(20, 0)
                 M.Config.DmuCfg.P2.evenConeCircle = GUI:Checkbox('偶数塔上扇下钢##P2EvenConeCircle',

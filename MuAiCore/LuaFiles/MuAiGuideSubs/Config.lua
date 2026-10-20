@@ -603,8 +603,10 @@ Config.init = function(M)
             },
             P2 = {
                 enable = true, draw = true, guide = true,
-                -- 1职能固定，2扇左钢右，3职固Uptime，4完全扇左钢右
+                -- 1职能固定，2扇左钢右，3职固Uptime
                 fixType = 1,
+                -- 独立于固定方式：闲人按机制分侧，第八轮沿用第七轮塔侧。
+                completeConeLeft = false,
                 -- 使用 BBY（宝宝椅）站位
                 useBbyPos = false,
                 -- 踩塔开启指挥模式

@@ -14,6 +14,11 @@ local Cfg = function()
     return MG.Config.DmuCfg.P2
 end
 
+-- 兼容今天保存的第四项；打开配置界面时迁移为独立子选项。
+local useCompleteConeLeft = function()
+    return Cfg().completeConeLeft == true or Cfg().fixType == 4
+end
+
 local Data = function()
     if MG.DancingMad == nil then
         return nil
@@ -251,9 +256,9 @@ local initGroups = function()
     end
 
     -- 两种扇左钢右方案的初始闲人都按点名分侧。
-    if MG.Config.DmuCfg.P2.fixType == 2 or MG.Config.DmuCfg.P2.fixType == 4 then
+    if Cfg().fixType == 2 or useCompleteConeLeft() then
         -- 旧方案换组后仍沿用初始二人组；完全方案另按最近点名计算。
-        if MG.Config.DmuCfg.P2.fixType == 2 then
+        if Cfg().fixType == 2 and not useCompleteConeLeft() then
             local groupA = Data().Towers.groupA
             local firstPairHasCone = Data().Towers.curMarks[groupA[1]] == 717
                     or Data().Towers.curMarks[groupA[2]] == 717
@@ -332,30 +337,43 @@ end
 
 local calcGuidePos = function(wave, isFix)
     -- 完全扇左钢右按闲人最近一次点名分侧，不能沿用初始二人组。
-    if Cfg().fixType == 4 then
-        local group = Data().Towers.standBy
-        local seen, cones, circles = {}, 0, 0
-        local complete = #group == 4
-        for _, job in ipairs(group) do
-            local mark = Data().Towers.curMarks[job]
-            if seen[job] or (mark ~= 716 and mark ~= 717) then
+    if useCompleteConeLeft() then
+        local towers = Data().Towers
+        local group = wave == 8 and towers.groupOrders[7] or towers.standBy
+        local seen, cones, circles, stacks = {}, 0, 0, 0
+        local complete = group ~= nil and #group == 4
+        for _, job in ipairs(group or {}) do
+            local mark = towers.curMarks[job]
+            if seen[job] or not table.contains(towers.standBy, job)
+                    or (mark ~= 715 and mark ~= 716 and mark ~= 717) then
                 complete = false
                 break
             end
             seen[job] = true
-            if mark == 717 then cones = cones + 1 else circles = circles + 1 end
+            if mark == 717 then cones = cones + 1
+            elseif mark == 716 then circles = circles + 1
+            else stacks = stacks + 1 end
         end
-        if not complete or cones ~= 2 or circles ~= 2 then
+        -- 第七轮没有下一批头标。第八轮闲人沿用上一轮左塔两人、右塔两人，
+        -- 其中一扇一钢和两分摊不能被误判为缺失的两扇两钢。
+        if wave == 8 then
+            complete = complete and cones == 1 and circles == 1 and stacks == 2
+                    and towers.curMarks[group[1]] == 715 and towers.curMarks[group[2]] == 717
+                    and towers.curMarks[group[3]] == 716 and towers.curMarks[group[4]] == 715
+        else
+            complete = complete and cones == 2 and circles == 2 and stacks == 0
+        end
+        if not complete then
             MG.LogOnce('P2Tower', 'complete_cone_left_incomplete_' .. tostring(wave),
-                    '完全扇左钢右：闲人点名不完整，暂不指路', { wave = wave }, true)
+                    '完全扇左钢右：闲人点名或上轮站位不完整，暂不指路', { wave = wave }, true)
             return nil
         end
-        Data().Towers.standBy = calcConeLeft(group)
+        towers.standBy = wave == 8 and table.deepcopy(group) or calcConeLeft(group)
     end
     local curDoingPos = {}
     local curTemplate
     local useBbyPos = Cfg().useBbyPos == true
-    local useEvenConeCircle = Cfg().fixType ~= 4 and Cfg().evenConeCircle == true and wave % 2 == 0
+    local useEvenConeCircle = not useCompleteConeLeft() and Cfg().evenConeCircle == true and wave % 2 == 0
     local standTemplate
     if useBbyPos then
         standTemplate = bbyStandTemplate
@@ -398,7 +416,7 @@ local calcGuidePos = function(wave, isFix)
         curStbPos[i] = toWorld(curTemplate.standBy[i])
     end
     local guideData = {}
-    if Cfg().fixType == 2 and wave >= 4 and wave < 8 and not isFix then
+    if Cfg().fixType == 2 and not useCompleteConeLeft() and wave >= 4 and wave < 8 and not isFix then
         Data().Towers.standBy = table.deepcopy(Data().Towers.groupAStandByOrder)
     end
     for i = 1, 4 do
@@ -493,7 +511,7 @@ local calcFirstOrderB = function()
     local firstJob = group[1]
     local firstMark = Data().Towers.curMarks[firstJob] --这里一定是T
     if firstMark == 716 then
-        if MG.Config.DmuCfg.P2.fixType == 2 or MG.Config.DmuCfg.P2.fixType == 4 then
+        if Cfg().fixType == 2 or useCompleteConeLeft() then
             --扇左钢右, TH组钢铁 在右边，且面向BOSS H左T右 近左远右
             curOrder = { group[3], group[4], group[2], group[1] }
         else
@@ -542,7 +560,7 @@ local calcGroupOrder = function(wave)
     if Data().Towers.groupOrders[wave] ~= nil and table.size(Data().Towers.groupOrders) >= 4 then
         return
     end
-    if Cfg().fixType ~= 4 and Cfg().evenConeCircle == true and wave % 2 == 0 then
+    if not useCompleteConeLeft() and Cfg().evenConeCircle == true and wave % 2 == 0 then
         local towers = Data().Towers
         if wave == 4 then
             -- 第三轮更新的 A 组点名留到第八轮；B 组首次进塔按职能分侧。
@@ -583,7 +601,7 @@ local calcGroupOrder = function(wave)
         --local lstOdr = Data().Towers.groupOrders[wave - 1]
         local lstOdr = Data().Towers.groupOrdersLast[wave - 1]
         if wave % 2 == 0 then
-            if (Cfg().fixType == 2 or Cfg().fixType == 4) and wave == 8 then
+            if (Cfg().fixType == 2 or useCompleteConeLeft()) and wave == 8 then
                 Data().Towers.groupOrders[wave] = calcConeLeft(Data().Towers.groupA)
             else
                 local curWave
