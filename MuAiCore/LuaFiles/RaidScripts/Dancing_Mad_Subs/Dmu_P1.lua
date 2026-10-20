@@ -21,6 +21,13 @@ local mtGroup = { 'MT', 'H1', 'D1', 'D3' }
 local thGroup = { 'MT', 'ST', 'H1', 'H2' }
 local dpsGroup = { 'D1', 'D2', 'D3', 'D4' }
 local trGroup = { 'MT', 'ST', 'D3', 'D4' }
+-- 八人 C-A：两轮石头分散上下反转，不继承旧分组方案的散点。
+local caRockPositions = {
+    MT = { x = 90, z = 103 }, ST = { x = 110, z = 103 },
+    H1 = { x = 88, z = 114 }, H2 = { x = 112, z = 114 },
+    D1 = { x = 90, z = 103 }, D2 = { x = 110, z = 103 },
+    D3 = { x = 88, z = 114 }, D4 = { x = 112, z = 114 },
+}
 local ArrowBuffs = {
     [4876] = 'up',
     [4877] = 'down',
@@ -245,9 +252,21 @@ local shitBoom = function(entityID, a1, a2, a3)
     if not (a1 == 4 and a2 == 8 and a3 == 0) then
         return
     end
-    local boomObj = TensorCore.mGetEntity(entityID)
-    if boomObj == nil or boomObj.contentid ~= 2015266 then
-        return
+    local boomObj
+    if Cfg().blackMudType == 2 then
+        -- 结算时物体可能已从实体表消失，按本轮已确认的 runtime ID 识别。
+        for _, ent in ipairs(Data().Line3.Shits or {}) do
+            if ent.id == entityID then boomObj = ent; break end
+        end
+    else
+        boomObj = TensorCore.mGetEntity(entityID)
+        if boomObj ~= nil and boomObj.contentid ~= 2015266 then return end
+    end
+    if boomObj == nil then return end
+    if Cfg().blackMudType == 2 then
+        for _, previous in ipairs(Data().Shit.Boomed) do
+            if previous.id == boomObj.id then return end
+        end
     end
     table.insert(Data().Shit.Boomed, boomObj)
 end
@@ -287,7 +306,7 @@ local autoLookAtUpdate = function()
 end
 
 -- 2、3次被连线画图和指路
-local guideAndDrawL2L3 = function(lineData)
+local guideAndDrawL2L3 = function(lineData, north)
     if Cfg().draw then
         for _, id in pairs(lineData.DisPlayers) do
             local player = TensorCore.mGetEntity(id)
@@ -297,7 +316,16 @@ local guideAndDrawL2L3 = function(lineData)
     if Cfg().guide then
         if lineData.Guide2 == nil then
             lineData.Guide2 = {}
-            if Cfg().Line2Type == 1 then
+            if Cfg().blackMudType == 2 then
+                for job, member in pairs(MG.Party) do
+                    if table.contains(lineData.DisPlayers, member.id) then
+                        local pos = caRockPositions[job]
+                        lineData.Guide2[job] = { x = pos.x, y = 0, z = north and 200 - pos.z or pos.z }
+                    else
+                        lineData.Guide2[job] = { x = 100, y = 0, z = 100 }
+                    end
+                end
+            elseif Cfg().Line2Type == 1 then
                 for job, member in pairs(MG.Party) do
                     if table.contains(lineData.DisPlayers, member.id) then
                         if job == 'MT' or job == 'D1' then
@@ -337,7 +365,7 @@ local guideAndDrawL2L3 = function(lineData)
 end
 
 --- buff传递
-local turnBuff = function(dataTable, stateChangeFunc)
+local turnBuff = function(dataTable, stateChangeFunc, guideOverride)
     if stateChangeFunc() then
         DM.ChangeState(dataTable.NextState)
     else
@@ -365,6 +393,10 @@ local turnBuff = function(dataTable, stateChangeFunc)
             end
         else
             if Cfg().guide then
+                if guideOverride ~= nil then
+                    guideOverride(dataTable)
+                    return
+                end
                 local guideData = {}
                 local dpsJob, thJob
                 -- 填入
@@ -405,6 +437,90 @@ local turnBuff = function(dataTable, stateChangeFunc)
             end
         end
     end
+end
+
+-- 两边各四层黑泥必须有共同覆盖区。只使用已采集的真实八个物体，缺失时等待。
+local getCaPuddles = function()
+    if Data().Shit.caPuddles ~= nil then return Data().Shit.caPuddles end
+    local shits = Data().Line3.Shits
+    if shits == nil or #shits ~= 8 then return nil end
+    local groups, seen = { north = {}, south = {} }, {}
+    for _, ent in ipairs(shits) do
+        local pos = ent.pos
+        if ent.id == nil or seen[ent.id] or pos == nil
+                or type(pos.x) ~= 'number' or type(pos.z) ~= 'number'
+                or pos.x ~= pos.x or pos.z ~= pos.z
+                or pos.x < 80 or pos.x > 120 or pos.z <= 80 or pos.z >= 120
+                or pos.z == 100 then
+            return nil
+        end
+        seen[ent.id] = true
+        table.insert(pos.z < 100 and groups.north or groups.south, pos)
+    end
+    local result = {}
+    for side, positions in pairs(groups) do
+        if #positions ~= 4 then return nil end
+        local center = { x = 0, y = 0, z = 0 }
+        for _, pos in ipairs(positions) do
+            center.x, center.z = center.x + pos.x / 4, center.z + pos.z / 4
+        end
+        -- 目标在四层共同覆盖区的内侧，放击退的人也跟入同一目标。
+        local target = { x = center.x, y = 0, z = center.z + (side == 'north' and 2 or -2) }
+        for _, pos in ipairs(positions) do
+            local dx, dz = target.x - pos.x, target.z - pos.z
+            if dx * dx + dz * dz >= 16 then return nil end
+        end
+        result[side] = target
+    end
+    Data().Shit.caPuddles = result
+    return result
+end
+
+local guideCaTrap = function(dataTable)
+    -- 半场刀结算后再分西 TN、东 DPS，避免提前站入危险半场。
+    if Data().Half.offSetX ~= nil then
+        local guide = {}
+        for job in pairs(MG.Party) do
+            guide[job] = { x = 100 + Data().Half.offSetX * 2, y = 0, z = 100 }
+        end
+        MG.FrameMultiD(guide)
+        return
+    end
+    if getCaPuddles() == nil then
+        MG.LogOnce('P1Ca', 'puddles_incomplete', '八人C-A黑泥位置不完整，暂不指路')
+        return
+    end
+    local owners = {}
+    for _, job in ipairs(dataTable.BuffJobs) do
+        local side = table.contains(thGroup, job) and 'north' or 'south'
+        if owners[side] ~= nil then
+            MG.LogOnce('P1Ca', 'trap_owners_invalid', '八人C-A击退源分组不完整，暂不指路')
+            return
+        end
+        owners[side] = job
+    end
+    if #dataTable.BuffJobs ~= 2 or owners.north == nil or owners.south == nil then
+        MG.LogOnce('P1Ca', 'trap_owners_invalid', '八人C-A击退源分组不完整，暂不指路')
+        return
+    end
+    local guide = {}
+    for side, owner in pairs(owners) do
+        local source = { x = side == 'north' and 95 or 105, y = 0, z = 100 }
+        local live = TensorCore.mGetEntity(MG.Party[owner].id)
+        if live == nil or live.pos == nil then
+            MG.LogOnce('P1Ca', 'missing_trap_owner_' .. owner, '八人C-A击退源实体不可用，暂不指路')
+            return
+        end
+        local anchor = source
+        if TensorCore.getDistance2d(live.pos, source) < 1 then anchor = live.pos end
+        for job in pairs(MG.Party) do
+            if (side == 'north') == table.contains(thGroup, job) then
+                guide[job] = job == owner and source
+                        or { x = anchor.x, y = 0, z = anchor.z + (side == 'north' and -1 or 1) }
+            end
+        end
+    end
+    MG.FrameMultiD(guide)
 end
 
 -- 计算出移动表
@@ -999,7 +1115,7 @@ Dmu_P1.Update = function()
                             if Cfg().blackMudType ~= 2 and table.contains(groupBy, job) then
                                 Data().Line2.Guide1[job] = { x = 99.5, y = 0, z = 81 }
                             else
-                                Data().Line2.Guide1[job] = { x = 100.5, y = 0, z = 119 }
+                                Data().Line2.Guide1[job] = { x = 100.5, y = 0, z = Cfg().blackMudType == 2 and 110 or 119 }
                             end
                         end
                     else
@@ -1007,7 +1123,7 @@ Dmu_P1.Update = function()
                             if Cfg().blackMudType ~= 2 and table.contains(groupBy, job) then
                                 Data().Line2.Guide1[job] = { x = 100.5, y = 0, z = 81 }
                             else
-                                Data().Line2.Guide1[job] = { x = 99.5, y = 0, z = 119 }
+                                Data().Line2.Guide1[job] = { x = 99.5, y = 0, z = Cfg().blackMudType == 2 and 110 or 119 }
                             end
                         end
                     end
@@ -1018,7 +1134,7 @@ Dmu_P1.Update = function()
                             if Cfg().blackMudType ~= 2 and table.contains(groupBy, job) then
                                 Data().Line2.Guide0[job] = { x = 100, y = 0, z = 81 }
                             else
-                                Data().Line2.Guide0[job] = { x = 100, y = 0, z = 119 }
+                                Data().Line2.Guide0[job] = { x = 100, y = 0, z = Cfg().blackMudType == 2 and 110 or 119 }
                             end
                         end
                     else
@@ -1040,8 +1156,16 @@ Dmu_P1.Update = function()
                 end
             end
         else
-            guideAndDrawL2L3(Data().Line2)
+            guideAndDrawL2L3(Data().Line2, false)
         end
+    end
+    if Cfg().blackMudType == 2 and Cfg().guide and DM.InState('P1Line2_2') then
+        local guide = {}
+        for job in pairs(MG.Party) do
+            guide[job] = { x = 100 + (Data().Half.offSetX or 0) * 2, y = 0,
+                z = (job == 'MT' or job == 'ST') and 104 or 96 }
+        end
+        MG.FrameMultiD(guide)
     end
     -- 第二次扇形死刑后
     if DM.InState('P1DeathBfLine3') then
@@ -1075,8 +1199,8 @@ Dmu_P1.Update = function()
             end
             for job, member in pairs(MG.Party) do
                 if Cfg().blackMudType == 2 then
-                    -- 第一轮全员在 C 放泥，第二轮 A 侧尚无黑泥，直接去北侧场边。
-                    Data().Line3.Guide1[job] = { x = 100, y = 0, z = 81 }
+                    -- 第一轮全员在 C 放泥，第二轮去 A 侧近战最远距离，保留场边空间。
+                    Data().Line3.Guide1[job] = { x = 100, y = 0, z = 90 }
                 elseif table.contains(groupBy, job) then
                     Data().Line3.Guide1[job] = { x = 100, y = 0, z = upZ + 6 }
                 else
@@ -1108,7 +1232,7 @@ Dmu_P1.Update = function()
     end
     -- 第二次放圈后分散
     if DM.InState('P1Line3_1') then
-        guideAndDrawL2L3(Data().Line3)
+        guideAndDrawL2L3(Data().Line3, true)
         if Data().Line3.Shits == nil or table.size(Data().Line3.Shits) < 8 then
             Data().Line3.Shits = {}
             for _, ent in pairs(TensorCore.entityList("contentid=2015266")) do
@@ -1128,66 +1252,94 @@ Dmu_P1.Update = function()
 
     -- 第二次传毒
     if DM.InState('P1Line3_2') then
-        if Data().Half.offSetX == nil then
-            Data().Turn2.thGroupGuidePos = {
-                x = 100,
-                y = Data().Line3.UpShit.pos.y,
-                z = Data().Line3.UpShit.pos.z + 5.5
-            }
-            Data().Turn2.dpsGroupGuidePos = {
-                x = 100,
-                y = Data().Line3.DownShit.pos.y,
-                z = Data().Line3.DownShit.pos.z - 5.5
-            }
+        if Cfg().blackMudType == 2 then
+            turnBuff(Data().Turn2, function()
+                return MG.IsAnyMemberHasBuff(5078, 40)
+            end, guideCaTrap)
         else
-            Data().Turn2.thGroupGuidePos = {
-                x = 100 + Data().Half.offSetX,
-                y = Data().Line3.UpShit.pos.y,
-                z = Data().Line3.UpShit.pos.z + 5.5
-            }
-            Data().Turn2.dpsGroupGuidePos = {
-                x = 100 + Data().Half.offSetX,
-                y = Data().Line3.DownShit.pos.y,
-                z = Data().Line3.DownShit.pos.z - 5.5
-            }
+            if Data().Half.offSetX == nil then
+                Data().Turn2.thGroupGuidePos = {
+                    x = 100,
+                    y = Data().Line3.UpShit.pos.y,
+                    z = Data().Line3.UpShit.pos.z + 5.5
+                }
+                Data().Turn2.dpsGroupGuidePos = {
+                    x = 100,
+                    y = Data().Line3.DownShit.pos.y,
+                    z = Data().Line3.DownShit.pos.z - 5.5
+                }
+            else
+                Data().Turn2.thGroupGuidePos = {
+                    x = 100 + Data().Half.offSetX,
+                    y = Data().Line3.UpShit.pos.y,
+                    z = Data().Line3.UpShit.pos.z + 5.5
+                }
+                Data().Turn2.dpsGroupGuidePos = {
+                    x = 100 + Data().Half.offSetX,
+                    y = Data().Line3.DownShit.pos.y,
+                    z = Data().Line3.DownShit.pos.z - 5.5
+                }
+            end
+            turnBuff(Data().Turn2, function()
+                return MG.IsAnyMemberHasBuff(5078, 40)
+            end)
         end
-        turnBuff(Data().Turn2, function()
-            return MG.IsAnyMemberHasBuff(5078, 40)
-        end)
     end
 
     if DM.InState('P1Turn2End') then
-        if table.size(Data().Shit.Boomed) >= 8 then
-            DM.ChangeState('P1ShitBoom')
-        end
-        if Data().Shit.StateTimer == 0 then
-            Data().Shit.StateTimer = Now()
-        end
-        if TimeSince(Data().Shit.StateTimer) > 1200 then
-            local player = MG.GetPlayer()
-            if Data().Shit.Guide1 == nil
-                    or Data().Shit.Guide2 == nil
-            then
-                if player.pos.z > 100 then
-                    Data().Shit.Guide1 = Data().Line3.DownShit.pos
-                    Data().Shit.Guide2 = MG.VectorXZAdd(Data().Line3.DownShit.pos, { x = 0, y = 0, z = 6 })
-                else
-                    Data().Shit.Guide1 = Data().Line3.UpShit.pos
-                    Data().Shit.Guide2 = MG.VectorXZAdd(Data().Line3.UpShit.pos, { x = 0, y = 0, z = -6 })
-                end
-            else
-                if Data().Shit.first then
-                    for _, shit in pairs(Data().Shit.Boomed) do
-                        if TensorCore.getDistance2d(shit.pos, player.pos) < 6 then
-                            Data().Shit.first = false
-                        end
+        if Cfg().blackMudType == 2 then
+            if #Data().Shit.Boomed >= 8 then
+                DM.ChangeState('P1ShitBoom')
+            elseif Cfg().guide then
+                local puddles = getCaPuddles()
+                if puddles ~= nil then
+                    local guide = {}
+                    for job in pairs(MG.Party) do
+                        guide[job] = table.contains(thGroup, job) and puddles.north or puddles.south
                     end
-                    MG.FrameDirect(Data().Shit.Guide1.x, Data().Shit.Guide1.z)
+                    MG.FrameMultiD(guide)
                 else
-                    MG.FrameDirect(Data().Shit.Guide2.x, Data().Shit.Guide2.z)
+                    MG.LogOnce('P1Ca', 'puddles_incomplete', '八人C-A黑泥位置不完整，暂不指路')
+                end
+            end
+        else
+            if table.size(Data().Shit.Boomed) >= 8 then
+                DM.ChangeState('P1ShitBoom')
+            end
+            if Data().Shit.StateTimer == 0 then
+                Data().Shit.StateTimer = Now()
+            end
+            if TimeSince(Data().Shit.StateTimer) > 1200 then
+                local player = MG.GetPlayer()
+                if Data().Shit.Guide1 == nil
+                        or Data().Shit.Guide2 == nil
+                then
+                    if player.pos.z > 100 then
+                        Data().Shit.Guide1 = Data().Line3.DownShit.pos
+                        Data().Shit.Guide2 = MG.VectorXZAdd(Data().Line3.DownShit.pos, { x = 0, y = 0, z = 6 })
+                    else
+                        Data().Shit.Guide1 = Data().Line3.UpShit.pos
+                        Data().Shit.Guide2 = MG.VectorXZAdd(Data().Line3.UpShit.pos, { x = 0, y = 0, z = -6 })
+                    end
+                else
+                    if Data().Shit.first then
+                        for _, shit in pairs(Data().Shit.Boomed) do
+                            if TensorCore.getDistance2d(shit.pos, player.pos) < 6 then
+                                Data().Shit.first = false
+                            end
+                        end
+                        MG.FrameDirect(Data().Shit.Guide1.x, Data().Shit.Guide1.z)
+                    else
+                        MG.FrameDirect(Data().Shit.Guide2.x, Data().Shit.Guide2.z)
+                    end
                 end
             end
         end
+    end
+    if Cfg().blackMudType == 2 and Cfg().guide and DM.InState('P1ShitBoom') then
+        local guide = {}
+        for job in pairs(MG.Party) do guide[job] = { x = 100, y = 0, z = 100 } end
+        MG.FrameMultiD(guide)
     end
     --箭头
     if DM.InState('P1TeleTrouncing') then
