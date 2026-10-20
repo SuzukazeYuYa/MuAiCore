@@ -996,7 +996,7 @@ Dmu_P1.Update = function()
                     local dir = MG.SetHeading2Pi(Data().Line2.dangerDir)
                     if (math.pi / 2 < dir and dir < math.pi) or (math.pi * 3 / 2 < dir and dir < 2 * math.pi) then
                         for job, _ in pairs(MG.Party) do
-                            if table.contains(groupBy, job) then
+                            if Cfg().blackMudType ~= 2 and table.contains(groupBy, job) then
                                 Data().Line2.Guide1[job] = { x = 99.5, y = 0, z = 81 }
                             else
                                 Data().Line2.Guide1[job] = { x = 100.5, y = 0, z = 119 }
@@ -1004,7 +1004,7 @@ Dmu_P1.Update = function()
                         end
                     else
                         for job, _ in pairs(MG.Party) do
-                            if table.contains(groupBy, job) then
+                            if Cfg().blackMudType ~= 2 and table.contains(groupBy, job) then
                                 Data().Line2.Guide1[job] = { x = 100.5, y = 0, z = 81 }
                             else
                                 Data().Line2.Guide1[job] = { x = 99.5, y = 0, z = 119 }
@@ -1015,7 +1015,7 @@ Dmu_P1.Update = function()
                     if Data().Line2.Guide0 == nil then
                         Data().Line2.Guide0 = {}
                         for job, _ in pairs(MG.Party) do
-                            if table.contains(groupBy, job) then
+                            if Cfg().blackMudType ~= 2 and table.contains(groupBy, job) then
                                 Data().Line2.Guide0[job] = { x = 100, y = 0, z = 81 }
                             else
                                 Data().Line2.Guide0[job] = { x = 100, y = 0, z = 119 }
@@ -1060,19 +1060,24 @@ Dmu_P1.Update = function()
             --找到前次黑泥，
             local upZ = 0
             local downZ = 1000
-            for _, ent in pairs(TensorCore.entityList("contentid=2015266")) do
-                if ent.pos.z > 100 then
-                    if ent.pos.z < downZ then
-                        downZ = ent.pos.z
-                    end
-                else
-                    if ent.pos.z > upZ then
-                        upZ = ent.pos.z
+            if Cfg().blackMudType ~= 2 then
+                for _, ent in pairs(TensorCore.entityList("contentid=2015266")) do
+                    if ent.pos.z > 100 then
+                        if ent.pos.z < downZ then
+                            downZ = ent.pos.z
+                        end
+                    else
+                        if ent.pos.z > upZ then
+                            upZ = ent.pos.z
+                        end
                     end
                 end
             end
             for job, member in pairs(MG.Party) do
-                if table.contains(groupBy, job) then
+                if Cfg().blackMudType == 2 then
+                    -- 第一轮全员在 C 放泥，第二轮 A 侧尚无黑泥，直接去北侧场边。
+                    Data().Line3.Guide1[job] = { x = 100, y = 0, z = 81 }
+                elseif table.contains(groupBy, job) then
                     Data().Line3.Guide1[job] = { x = 100, y = 0, z = upZ + 6 }
                 else
                     Data().Line3.Guide1[job] = { x = 100, y = 0, z = downZ - 6 }

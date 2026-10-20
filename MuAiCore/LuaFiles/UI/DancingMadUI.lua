@@ -439,6 +439,18 @@ DancingMadUI.draw = function()
             GUI:PushItemWidth(130)
             M.Config.DmuCfg.P1.Line2Type = GUI:Combo('##P1Line2Type', M.Config.DmuCfg.P1.Line2Type, { 'MT组上/ST组下', 'T远上/奶近下', }, 2)
             GUI:PopItemWidth()
+            GUI:Dummy(15, 0)
+            GUI:SameLine(0, 0)
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(' 放黑泥: ')
+            GUI:SameLine(0, 0)
+            GUI:PushItemWidth(165)
+            M.Config.DmuCfg.P1.blackMudType = GUI:Combo('##P1BlackMudType', M.Config.DmuCfg.P1.blackMudType or 1,
+                    { '按上方分组', '八人先C再A' }, 2)
+            GUI:PopItemWidth()
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('八人先C再A：第一轮全员去C侧场边放黑泥，第二轮全员去A侧场边。\n第一轮保留冰半场安全侧微调。\n放泥后的分摊、分散仍使用上方站位方案，请在开战前选择。')
+            end
             GUI:Dummy(0, 0)
             GUI:Dummy(0, 0)
             GUI:SameLine(0, 0)
@@ -483,9 +495,12 @@ DancingMadUI.draw = function()
             GUI:AlignFirstTextHeightToWidgets()
             GUI:Text(' 固定方式: ')
             GUI:SameLine(0, 0)
-            GUI:PushItemWidth(120)
-            M.Config.DmuCfg.P2.fixType = GUI:Combo('##T8fixType', M.Config.DmuCfg.P2.fixType, { '职能固定', '扇左钢右', '职能固定[近U]' }, 3)
+            GUI:PushItemWidth(165)
+            M.Config.DmuCfg.P2.fixType = GUI:Combo('##T8fixType', M.Config.DmuCfg.P2.fixType, { '职能固定', '扇左钢右', '职能固定[近U]', '完全扇左钢右' }, 4)
             GUI:PopItemWidth()
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('完全扇左钢右：八轮踩塔均为扇形左、钢铁右。\n闲人也按最近一次点名分侧，扇形去左、钢铁去右。\n换组后不沿用初始点名分侧；优先于偶数塔上扇下钢。\n左右以当轮两塔面向Boss为准，请在开战前选择。')
+            end
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             M.Config.DmuCfg.P2.useBbyPos = GUI:Checkbox('BBY站位##P2UseBbyPos',
@@ -493,12 +508,14 @@ DancingMadUI.draw = function()
             if GUI:IsItemHovered() then
                 GUI:SetTooltip('勾选后使用宝宝椅站位')
             end
-            GUI:Dummy(0, 0)
-            GUI:SameLine(20, 0)
-            M.Config.DmuCfg.P2.evenConeCircle = GUI:Checkbox('偶数塔上扇下钢##P2EvenConeCircle',
-                    M.Config.DmuCfg.P2.evenConeCircle == true)
-            if GUI:IsItemHovered() then
-                GUI:SetTooltip('偶数塔两边都是靠Boss扇形、靠外钢铁，不需要队伍编号标记。\n第2/6轮：同塔新点名不同留边，相同则后位换边。\n第4/8轮：同类点名按T、H、近战、远程优先分左右。\n闲人两侧接扇、对面引导分身；优先于BBY偶数站位。\n奇数塔仍按上方设置。请在开战前选择。')
+            if M.Config.DmuCfg.P2.fixType ~= 4 then
+                GUI:Dummy(0, 0)
+                GUI:SameLine(20, 0)
+                M.Config.DmuCfg.P2.evenConeCircle = GUI:Checkbox('偶数塔上扇下钢##P2EvenConeCircle',
+                        M.Config.DmuCfg.P2.evenConeCircle == true)
+                if GUI:IsItemHovered() then
+                    GUI:SetTooltip('偶数塔两边都是靠Boss扇形、靠外钢铁，不需要队伍编号标记。\n第2/6轮：同塔新点名不同留边，相同则后位换边。\n第4/8轮：同类点名按T、H、近战、远程优先分左右。\n闲人两侧接扇、对面引导分身；优先于BBY偶数站位。\n奇数塔仍按上方设置。请在开战前选择。')
+                end
             end
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)

@@ -597,11 +597,13 @@ Config.init = function(M)
                 hardLock = false,
                 -- 1 MS 2 A:T远 C:奶近
                 Line2Type = 1,
+                -- 1按职能分组放泥，2八人先C再A
+                blackMudType = 1,
                 BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
             },
             P2 = {
                 enable = true, draw = true, guide = true,
-                -- 1职能固定，2扇左钢右 3职固Uptime
+                -- 1职能固定，2扇左钢右，3职固Uptime，4完全扇左钢右
                 fixType = 1,
                 -- 使用 BBY（宝宝椅）站位
                 useBbyPos = false,
