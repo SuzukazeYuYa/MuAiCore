@@ -3,6 +3,7 @@ local wide = 350
 local key2 = {
     'Flaflare1',
     'LightOfJudgment1',
+    'StatueDebuff2',
     'LightOfJudgment2',
     'Flaflare2',
     'TwinArms',
@@ -16,8 +17,8 @@ local key2 = {
     'ThunderIII_T_2',
     'ThunderIII_T_3',
     'Shockwave1',
-    'ThunderIII_T_4',
     'Shockwave2',
+    'ThunderIII_T_4',
     'Shockwave3',
     'Blaze',
     'GrandCross1',
@@ -26,6 +27,7 @@ local key2 = {
     'UltimaUpsideDown1',
     'UltimaUpsideDown2',
     'ConsecutiveUltima1',
+    'Flood_P5',
     'MaddeningOrchestra1',
     'ConsecutiveUltima2',
     'MaddeningOrchestra2',
@@ -51,6 +53,62 @@ local jobMap = {
     [35] = { "混乱", "抗死" },
 }
 
+-- Config.lua predates these two team-mitigation rows. Keep the migration local
+-- to this UI and fill only fields that are absent from the active config.
+local teamMitigationDefaults = {
+    StatueDebuff2 = {
+        p = 1,
+        team = true,
+        Target = false,
+        Field = false,
+        nameCn = '传毒/踩泥',
+        time = 118.1,
+    },
+    Flood_P5 = {
+        p = 5,
+        team = true,
+        Target = false,
+        Field = false,
+        nameCn = '洪水/地水',
+        time = 990.3,
+    },
+}
+
+local ensureTeamMitigationConfig = function(M, config)
+    if config == nil then
+        config = M.CreateDmuMigCfg()
+    end
+    assert(type(config) == 'table', 'Dmu mitigation config must be a table')
+    for key, defaultConfig in pairs(teamMitigationDefaults) do
+        local currentConfig = config[key]
+        if currentConfig == nil then
+            currentConfig = {}
+            config[key] = currentConfig
+        else
+            assert(type(currentConfig) == 'table', 'Dmu mitigation entry must be a table: ' .. key)
+        end
+        if currentConfig.p == nil then
+            currentConfig.p = defaultConfig.p
+        end
+        if currentConfig.team == nil then
+            currentConfig.team = defaultConfig.team
+        end
+        if currentConfig.Target == nil then
+            currentConfig.Target = defaultConfig.Target
+        end
+        if currentConfig.Field == nil then
+            currentConfig.Field = defaultConfig.Field
+        end
+        if currentConfig.nameCn == nil then
+            currentConfig.nameCn = defaultConfig.nameCn
+        end
+        if currentConfig.time == nil then
+            currentConfig.time = defaultConfig.time
+        end
+    end
+    return config
+end
+
 local singleLine = false
 local newFileName = ""
 local fileListIndex = 1
@@ -67,6 +125,7 @@ DmuDpsUI.draw = function()
         M.DmuDpsUI.open = false
         return
     end
+    M.Config.DmuDpsCfg = ensureTeamMitigationConfig(M, M.Config.DmuDpsCfg)
     local jobValue = jobMap[Player.job]
     local fileList = M.Config.DmuMitigJobConfigs
     GUI:SetNextWindowPos(M.MainUI.uiPos.x, M.MainUI.uiPos.y)
@@ -166,6 +225,7 @@ DmuDpsUI.draw = function()
                     local fileName = fileList[fileListIndex]
                     local defCfg = M.CreateDmuMigCfg()
                     M.Config.DmuDpsCfg = M.LoadFileConfig(getFilePath(), fileName, defCfg)
+                    M.Config.DmuDpsCfg = ensureTeamMitigationConfig(M, M.Config.DmuDpsCfg)
                 end
                 GUI:SameLine()
                 GUI:Button("新建配置", 90, 20)

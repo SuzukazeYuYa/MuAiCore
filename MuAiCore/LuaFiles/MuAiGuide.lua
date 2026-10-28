@@ -8,7 +8,7 @@ M.VERSION = 353
 M.GlobalGuideY = nil
 M.IsInit = false;
 -- String 修订号独立保存，避免 353.10 被当作浮点数 353.1。
-M.STRING_REVISION = 10
+M.STRING_REVISION = 11
 --- 输出信息到控制台 
 --- @param msg string
 M.Debug = function(msg)
