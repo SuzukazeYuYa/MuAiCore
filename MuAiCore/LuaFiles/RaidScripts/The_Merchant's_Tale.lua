@@ -393,15 +393,18 @@ local OnUpdateMark20 = function()
     if TimeSince(MuAiGuide.Merchant.mark20Timer) < 7000 then
         for _, ent in pairs(MuAiGuide.Party) do
             if ent.id ~= Player.id then
+                local curEnt = TensorCore.mGetEntity(ent.id)
                 local dis = 100000000
                 local curPoint
-                for _, row in pairs(_gridCenters) do
-                    for _, point in pairs(row) do
-                        local curEnt = TensorCore.mGetEntity(ent.id)
-                        local curDis = TensorCore.getDistance2d(curEnt.pos, { x = point.x, y = _boss1Center.y, z = point.z })
-                        if curDis < dis then
-                            dis = curDis
-                            curPoint = point
+                if curEnt ~= nil and curEnt.pos ~= nil then
+                    local playerPos = curEnt.pos
+                    for _, row in pairs(_gridCenters) do
+                        for _, point in pairs(row) do
+                            local curDis = TensorCore.getDistance2d(playerPos, point)
+                            if curDis < dis then
+                                dis = curDis
+                                curPoint = point
+                            end
                         end
                     end
                 end

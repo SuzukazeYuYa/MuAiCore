@@ -6,6 +6,7 @@ local DM
 
 ---@type MuAiGuide
 local MG
+local lineSpreadDrawer
 
 local Cfg = function()
     return MG.Config.DmuCfg.P1
@@ -308,9 +309,12 @@ end
 -- 2、3次被连线画图和指路
 local guideAndDrawL2L3 = function(lineData, north)
     if Cfg().draw then
+        if lineSpreadDrawer == nil then
+            lineSpreadDrawer = MG.CreateDrawer(1, 0.5, 0, 0.3, 2)
+        end
         for _, id in pairs(lineData.DisPlayers) do
             local player = TensorCore.mGetEntity(id)
-            MG.CreateDrawer(1, 0.5, 0, 0.3, 2):addCircle(player.pos.x, MG.drawerY, player.pos.z, 5)
+            lineSpreadDrawer:addCircle(player.pos.x, MG.drawerY, player.pos.z, 5)
         end
     end
     if Cfg().guide then
@@ -740,6 +744,7 @@ end
 Dmu_P1.Init = function(dm, m)
     DM = dm
     MG = m
+    lineSpreadDrawer = nil
 end
 
 Dmu_P1.OnEntityChannel = function(entityID, spellID, _)

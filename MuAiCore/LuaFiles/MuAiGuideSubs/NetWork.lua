@@ -232,43 +232,8 @@ NetWork.init = function(M)
     M.ShuffleListInPlace(M.LocalSponsorList)
     M.ShuffleListInPlace(M.ThxList)
     M.ParseSponsorsList = parseSponsorsList
-    ---使用系统CMD请求网络数据
-    ---@param url string 地址
-    ---@return string 获取的值
-    M.WebRequest = function(url)
-        if type(url) ~= 'string'
-                or not url:match('^https://[%w%._~:/%-%?=]+$')
-        then
-            return nil
-        end
-        local urlStr = url .. '?t=' .. os.time()
-        local handle = io.popen('curl --fail --silent --show-error --connect-timeout 3 --max-time 5 "' .. urlStr .. '"')
-        if handle == nil then
-            return nil
-        end
-        local result = handle:read("*all")
-        handle:close()
-        if type(result) ~= 'string' or result == '' then
-            return nil
-        end
-        return result
-    end
-
-    M.GetSponsorsList = function()
-        --local resp = M.WebRequest('https://gist.github.com/SuzukazeYuYa/e598918cc010089df3387e8246b9c0dd/raw/SponsorsList.txt')
-        -- 改用腾讯云存储
-        local resp = M.WebRequest('https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/sponsorsList.txt')
-        local parseError
-        if resp ~= nil then
-            M.FinalSponsorList, parseError = parseSponsorsList(resp)
-        end
-        if M.FinalSponsorList == nil then
-            M.FinalSponsorList = M.LocalSponsorList
-            if parseError ~= nil then
-                M.LogError('Network', '远端赞助名单解析失败，已使用本地名单', { err = parseError }, true)
-            end
-        end
-        M.ShuffleListInPlace(M.FinalSponsorList)
+    -- Sponsor icons are still fetched only when missing.
+    local downloadSponsorIcons = function()
         --local iconUrl = "https://raw.githubusercontent.com/SuzukazeYuYa/MuAiCore/main/MuAiCore/Image/HeadIcons/"
         local iconUrl = "https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/HeadIcons/"
         local scheduledDownloads = 0
@@ -292,6 +257,27 @@ NetWork.init = function(M)
                 scheduledDownloads = scheduledDownloads + 1
             end
         end
+    end
+
+    M.GetSponsorsList = function()
+        -- Startup/UI can use the bundled list before any remote request completes.
+        M.FinalSponsorList = M.LocalSponsorList
+        M.ShuffleListInPlace(M.FinalSponsorList)
+        local function complete(resp, requestError)
+            local sponsors, parseError
+            if resp ~= nil then sponsors, parseError = parseSponsorsList(resp) end
+            if sponsors ~= nil then
+                M.FinalSponsorList = sponsors
+                M.ShuffleListInPlace(M.FinalSponsorList)
+            elseif requestError ~= nil or parseError ~= nil then
+                M.LogError('Network', '远端赞助名单不可用，已使用本地名单',
+                        { err = requestError or parseError }, true)
+            end
+            downloadSponsorIcons()
+        end
+        local accepted, err = M.WebRequestAsync('sponsors',
+                'https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/sponsorsList.txt', complete)
+        if not accepted then complete(nil, err) end
     end
 
 end

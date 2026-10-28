@@ -368,6 +368,9 @@ Drawers.init = function(M)
     --- @param z number 指路位置z
     --- @param size number 圆圈大小
     M.FrameDirect = function(x, z, size, color)
+        if not validDirectTarget(x, z, 0, 'frame_direct') then
+            return false
+        end
         local curPlayer = M.GetPlayer() or Player
         if curPlayer == nil then
             M.LogOnce('Drawers', 'frame_direct_missing_player', '帧指路跳过：未找到当前玩家')
@@ -386,6 +389,11 @@ Drawers.init = function(M)
     --- @param data table 数据表 key job, value 位置
     --- @param size number 圆圈大小
     M.FrameMultiD = function(data, size)
+        if type(data) ~= 'table' then
+            M.LogOnce('Drawers', 'frame_multi_invalid_input',
+                    '多人帧指路跳过：职能坐标数据不是表', { dataType = type(data) })
+            return false
+        end
         local hasDrawn = false
         local selfDrawn = false
         local curPlayer = M.GetPlayer() or Player
@@ -397,7 +405,9 @@ Drawers.init = function(M)
             local isCurrentPlayer = curPlayerId ~= nil and entityId == curPlayerId
             local pos = isCurrentPlayer and data[M.SelfPos] or data[job]
             if pos ~= nil and not (job == M.SelfPos and curPlayerId ~= nil and not isCurrentPlayer) then
-                local playerPos = entityId ~= nil and getLiveEntityPos(entityId, caller) or nil
+                local validPos = validDirectTarget(type(pos) == 'table' and pos.x or nil,
+                        type(pos) == 'table' and pos.z or nil, 0, caller)
+                local playerPos = validPos and entityId ~= nil and getLiveEntityPos(entityId, caller) or nil
                 if playerPos ~= nil then
                     commonFrameDirect(pos.x, pos.z, playerPos, multiData.color, size)
                     hasDrawn = true
@@ -406,7 +416,9 @@ Drawers.init = function(M)
             end
         end
         if not selfDrawn and data[M.SelfPos] ~= nil then
-            local fallbackDrawn = M.FrameDirect(data[M.SelfPos].x, data[M.SelfPos].z, size)
+            local pos = data[M.SelfPos]
+            local fallbackDrawn = M.FrameDirect(type(pos) == 'table' and pos.x or nil,
+                    type(pos) == 'table' and pos.z or nil, size)
             if fallbackDrawn then
                 local fallbackReason = multiPlayers[M.SelfPos] == nil and 'missing' or 'stale'
                 M.LogOnce('Drawers', 'frame_multi_self_fallback_' .. fallbackReason,
