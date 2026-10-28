@@ -171,34 +171,17 @@ local function parseSponsorsList(text)
     return result
 end
 
-local function powerShellLiteral(value)
-    return "'" .. tostring(value):gsub("'", "''") .. "'"
-end
-
-local function startDetachedCommand(command)
-    if type(command) ~= 'string' or command == '' then
-        return false, 'invalid command'
-    end
-    if type(io) ~= 'table' or type(io.popen) ~= 'function' then
-        return false, 'io.popen is unavailable'
-    end
-
-    local openOk, handle = pcall(io.popen, command)
-    if not openOk then
-        return false, tostring(handle)
-    end
-    if handle == nil then
-        return false, 'failed to start command'
-    end
-
-    local closeOk, closeResult, closeReason, closeCode = pcall(function()
-        return handle:close()
-    end)
-    if not closeOk then
-        return false, tostring(closeResult)
-    end
-    if closeResult == nil then
-        return false, tostring(closeReason or closeCode or 'command failed')
+local function saveSponsorIcon(path, body)
+    if body:sub(1, 8) ~= '\137PNG\r\n\26\n' then return false, 'invalid PNG response' end
+    local file, err = io.open(path, 'wb')
+    if file == nil then return false, err end
+    local ok, written, writeError = pcall(file.write, file, body)
+    local closeOk, closed, closeError = pcall(file.close, file)
+    if not ok or not written or not closeOk or not closed then
+        -- A failed write must not leave a partial file that looks cached forever.
+        local removed = FileDelete(path)
+        return false, tostring(not ok and written or writeError or not closeOk and closed or closeError)
+                .. (removed ~= true and '; partial icon cleanup failed' or '')
     end
     return true
 end
@@ -234,7 +217,6 @@ NetWork.init = function(M)
     M.ParseSponsorsList = parseSponsorsList
     -- Sponsor icons are still fetched only when missing.
     local downloadSponsorIcons = function()
-        --local iconUrl = "https://raw.githubusercontent.com/SuzukazeYuYa/MuAiCore/main/MuAiCore/Image/HeadIcons/"
         local iconUrl = "https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/HeadIcons/"
         local scheduledDownloads = 0
         for _, spName in pairs(M.FinalSponsorList) do
@@ -242,12 +224,15 @@ NetWork.init = function(M)
             iconPath = string.gsub(iconPath, "\\", "/")
             if not FileExists(iconPath) and scheduledDownloads < 4 then
                 local url = iconUrl .. spName.icon .. '.png'
-                local arguments = "@('--fail','--silent','--show-error','--location',"
-                        .. "'--remove-on-error','--connect-timeout','2','--max-time','5','--output',"
-                        .. powerShellLiteral(iconPath) .. ',' .. powerShellLiteral(url) .. ')'
-                local cmd = 'powershell.exe -NoProfile -NonInteractive -Command "Start-Process '
-                        .. "-WindowStyle Hidden -FilePath 'curl.exe' -ArgumentList " .. arguments .. '"'
-                local started, startError = startDetachedCommand(cmd)
+                local started, startError = M.WebRequestAsync('sponsor_icon_' .. spName.icon, url,
+                        function(body, requestError)
+                            local saved, saveError = false, requestError
+                            if body ~= nil then saved, saveError = saveSponsorIcon(iconPath, body) end
+                            if not saved then
+                                M.LogOnce('Network', 'sponsor-icon-' .. spName.icon,
+                                        '赞助头像下载失败，已跳过缺失头像', { icon = spName.icon, err = saveError }, true)
+                            end
+                        end)
                 if not started then
                     M.LogOnce('Network', 'sponsor-icon-download-unavailable',
                             '赞助头像下载未启动，已跳过缺失头像',

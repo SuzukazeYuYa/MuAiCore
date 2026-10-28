@@ -1,174 +1,128 @@
 local AsyncHttp = {}
 
-local function psLiteral(value)
-    return "'" .. value:gsub("'", "''") .. "'"
+-- HttpRequest is the host's asynchronous transport. It returns no cancellation
+-- handle: retain a small in-flight reservation until its native callback, even
+-- after a Lua timeout or guide replacement, rather than starting duplicate jobs.
+local transport = rawget(_G, 'MuAiHttpTransport')
+if transport == nil then
+    transport = { flights = {} }
+    rawset(_G, 'MuAiHttpTransport', transport)
+end
+local pollInterval, timeout, maxBytes, maxFlights, maxPending = 250, 15000, 65536, 6, 8
+
+local function parseUrl(url)
+    if type(url) ~= 'string' or url:find('[%c%s]') then return end
+    local authority, path = url:match('^https://([^/]+)(/.*)$')
+    if authority == nil or not path:match('^/[%w%._~:/%-%?=&%%]*$') then return end
+    local host, port = authority:match('^([%w%.%-]+):(%d+)$')
+    if host == nil and authority:match('^[%w%.%-]+$') then host, port = authority, 443 end
+    port = tonumber(port)
+    if host == nil or port == nil or port < 1 or port > 65535 then return end
+    return host, port, path
 end
 
--- -EncodedCommand avoids cmd.exe expansion of %, &, quotes and non-ASCII
--- paths. PowerShell expects UTF-16LE; the host supplies UTF-8 Lua strings.
-local function encodeCommand(value)
-    local bytes, index = {}, 1
-    local function appendUnit(unit)
-        bytes[#bytes + 1] = unit % 256
-        bytes[#bytes + 1] = math.floor(unit / 256)
-    end
-    while index <= #value do
-        local point, width = value:byte(index), 1
-        if point >= 240 then point, width = point - 240, 4
-        elseif point >= 224 then point, width = point - 224, 3
-        elseif point >= 192 then point, width = point - 192, 2
-        elseif point >= 128 then error('invalid UTF-8 command') end
-        for offset = 1, width - 1 do
-            local continuation = value:byte(index + offset)
-            assert(continuation and continuation >= 128 and continuation < 192, 'invalid UTF-8 command')
-            point = point * 64 + continuation - 128
-        end
-        if point >= 65536 then
-            point = point - 65536
-            appendUnit(55296 + math.floor(point / 1024))
-            appendUnit(56320 + point % 1024)
+local function start(url, host, port, path)
+    local flight = { startedAt = Now() }
+    transport.flights[url] = flight
+    -- Native callbacks retain only this small token, never M or a business
+    -- callback. Timed-out/replaced owners can be collected immediately.
+    local function finish(body, err, status)
+        if flight.done then return end
+        if transport.flights[url] == flight then transport.flights[url] = nil end
+        flight.done, flight.completedAt, flight.status = true, Now(), tonumber(status)
+        if flight.retired then return end
+        if err ~= nil then
+            flight.err = tostring(err):sub(1, 512)
+        elseif flight.status == nil or flight.status < 200 or flight.status >= 300 then
+            flight.err = 'HTTP status ' .. tostring(status)
+        elseif type(body) ~= 'string' or #body == 0 then
+            flight.err = 'empty response'
+        elseif #body > maxBytes then
+            flight.err = 'response exceeds size limit'
         else
-            appendUnit(point)
+            flight.body = body
         end
-        index = index + width
     end
-    local alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-    local result = {}
-    local function digit(n) return alphabet:sub(n + 1, n + 1) end
-    for i = 1, #bytes, 3 do
-        local packed = bytes[i] * 65536 + (bytes[i + 1] or 0) * 256 + (bytes[i + 2] or 0)
-        result[#result + 1] = digit(math.floor(packed / 262144))
-                .. digit(math.floor(packed / 4096) % 64)
-                .. (bytes[i + 1] and digit(math.floor(packed / 64) % 64) or '=')
-                .. (bytes[i + 2] and digit(packed % 64) or '=')
-    end
-    return table.concat(result)
+    local separator = path:find('?', 1, true) and '&' or '?'
+    local ok, result = pcall(HttpRequest, {
+        host = host, port = port, path = path .. separator .. 't=' .. tostring(os.time()),
+        method = 'GET', https = true, headers = { Connection = 'close' },
+        onsuccess = function(body, _, status) finish(body, nil, status) end,
+        onfailure = function(err, _, status) finish(nil, err or 'HTTP request failed', status) end,
+    })
+    if not ok or result == false then finish(nil, ok and 'HTTP request was not accepted' or result) end
+    return flight
 end
 
-local function readLimited(path, limit)
-    local file, err = io.open(path, 'rb')
-    if file == nil then return nil, err end
-    local content = file:read(limit + 1)
-    file:close()
-    if content == nil or #content == 0 then return nil, 'empty response' end
-    if #content > limit then return nil, 'response exceeds size limit' end
-    return content
-end
-
--- Only the launcher is waited on. curl runs in a hidden worker; no network read
--- or subprocess wait is performed by the game update while it is in flight.
 AsyncHttp.init = function(M)
-    local pending = {}
-    local sequence = 0
-    local lastPollAt
-    local pollInterval, timeout = 250, 15000
-    local worker = MuAiGuideRoot .. 'MuAiGuideSubs\\HttpRequest.ps1'
-
-    local function cleanup(request)
-        if request.base == nil then return end
-        for _, suffix in ipairs({ '.body', '.done', '.done.tmp', '.pending' }) do
-            local path = request.base .. suffix
-            if FileExists(path) and FileDelete(path) ~= true then
-                M.LogOnce('HTTP', 'cleanup_' .. request.key,
-                        '后台请求临时文件清理失败，稍后由过期清理回收', { file = path })
-            end
-        end
-    end
-
-    local function start(request)
-        local root = GetStartupPath() .. '\\MuAiCoreHttp'
-        if not FolderExists(root) and FolderCreate(root) ~= true then
-            return false, 'cannot create HTTP work directory'
-        end
-        repeat
-            sequence = sequence + 1
-            request.base = root .. '\\request_' .. tostring(os.time()) .. '_'
-                    .. tostring(math.floor(Now())) .. '_' .. tostring(sequence)
-        until not FileExists(request.base .. '.pending')
-                and not FileExists(request.base .. '.done')
-                and not FileExists(request.base .. '.body')
-        if FileWrite(request.base .. '.pending', '', false) ~= true then
-            return false, 'cannot reserve HTTP response file'
-        end
-        local workerCommand = '& ' .. psLiteral(worker) .. ' -Uri ' .. psLiteral(request.requestUrl)
-                .. ' -OutputBase ' .. psLiteral(request.base)
-        -- Start-Process breaks the inherited pipe chain; cmd start does not
-        -- reliably detach a child from Lua's CRT popen handle on Windows.
-        local command = 'powershell.exe -NoProfile -NonInteractive -WindowStyle Hidden -Command "'
-                .. "$ErrorActionPreference='Stop'; Start-Process -WindowStyle Hidden -FilePath powershell.exe"
-                .. " -ArgumentList '-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -EncodedCommand "
-                .. encodeCommand(workerCommand) .. "'; Write-Output '__MUAI_HTTP_STARTED__'\""
-        local handle = io.popen(command)
-        if handle == nil then return false, 'cannot start HTTP worker' end
-        -- Read the launch acknowledgement only. The detached child can inherit
-        -- another copy of the CRT pipe handle; waiting for EOF waits for curl.
-        local output = handle:read('*l')
-        handle:close()
-        if type(output) ~= 'string' or not output:find('__MUAI_HTTP_STARTED__', 1, true) then
-            return false, 'HTTP worker launcher failed'
-        end
-        request.startedAt = Now()
-        return true
-    end
+    if type(M.CloseWebRequests) == 'function' then M.CloseWebRequests() end
+    local pending, lastPollAt, closed = {}, nil, false
 
     M.WebRequestAsync = function(key, url, callback)
-        if type(key) ~= 'string' or type(callback) ~= 'function'
-                or type(url) ~= 'string' or not url:match('^https://[%w%._~:/%-%?=]+$') then
+        local host, port, path = parseUrl(url)
+        if closed then return false, 'HTTP owner is closed' end
+        if type(key) ~= 'string' or key == '' or type(callback) ~= 'function' or host == nil then
             return false, 'invalid HTTP request'
         end
         local current = pending[key]
         if current ~= nil then
             if current.url ~= url then return false, 'request key already uses another URL' end
-            -- The same resource needs only one worker. Its latest owner receives
-            -- the result (e.g. switching away from a branch and back again).
             current.callback = callback
             return true
         end
-        local separator = url:find('?', 1, true) and '&' or '?'
-        pending[key] = { key = key, url = url, callback = callback,
-                requestUrl = url .. separator .. 't=' .. tostring(os.time()) }
+        if type(HttpRequest) ~= 'function' then return false, 'host asynchronous HttpRequest is unavailable' end
+        local count = 0
+        for _ in pairs(pending) do count = count + 1 end
+        if count >= maxPending then return false, 'HTTP request queue is full' end
+        pending[key] = { key = key, url = url, host = host, port = port, path = path,
+            queuedAt = Now(), callback = callback }
         return true
     end
 
+    M.CloseWebRequests = function()
+        closed = true
+        for key, request in pairs(pending) do
+            if request.flight then
+                request.flight.retired, request.flight.body = true, nil
+            end
+            request.callback = nil
+            pending[key] = nil
+        end
+    end
+
     M.PollWebRequests = function()
-        if next(pending) == nil then return end
+        if closed or next(pending) == nil then return end
         if lastPollAt ~= nil and TimeSince(lastPollAt) < pollInterval then return end
         lastPollAt = Now()
         local finished = {}
         for key, request in pairs(pending) do
-            -- Isolate host/filesystem failures to this read-only request.
-            local ok, complete, body, err = pcall(function()
-                if request.startedAt == nil then
-                    local started, launchError = start(request)
-                    return not started, nil, launchError
-                end
-                if FileExists(request.base .. '.done') then
-                    local status, statusError = readLimited(request.base .. '.done', 1024)
-                    if status ~= 'OK' then return true, nil, statusError or status end
-                    local response, readError = readLimited(request.base .. '.body', 65536)
-                    return true, response, readError
-                end
-                if TimeSince(request.startedAt) >= timeout then
-                    return true, nil, 'HTTP worker timed out'
-                end
-                return false
-            end)
-            if not ok then complete, body, err = true, nil, tostring(complete) end
-            if complete then
+            local flight = request.flight
+            if flight and flight.done and flight.completedAt - request.queuedAt < timeout then
                 pending[key] = nil
-                finished[#finished + 1] = { request = request, body = body, err = err }
+                finished[#finished + 1] = { request = request, body = flight.body, err = flight.err }
+                flight.body = nil
+            elseif TimeSince(request.queuedAt) >= timeout then
+                pending[key] = nil
+                if flight then flight.retired, flight.body = true, nil end
+                finished[#finished + 1] = { request = request, err = 'HTTP request timed out' }
+            elseif flight == nil and transport.flights[request.url] == nil then
+                local count = 0
+                for _ in pairs(transport.flights) do count = count + 1 end
+                if count < maxFlights then
+                    request.flight = start(request.url, request.host, request.port, request.path)
+                end
             end
         end
         for _, result in ipairs(finished) do
-            local ok, err = pcall(cleanup, result.request)
-            if not ok then
-                M.LogOnce('HTTP', 'cleanup_' .. result.request.key,
-                        '后台请求临时文件清理异常', { error = tostring(err) })
+            local callback = result.request.callback
+            result.request.callback = nil
+            -- A callback may replace/close the owner. Do not deliver its peers to
+            -- an old guide; isolate one consumer's error from the other results.
+            if not closed then
+                M.DiagnosticCall('HTTP', '处理后台请求结果', function()
+                    callback(result.body, result.err)
+                end, { request = result.request.key })
             end
-            -- Callback errors are recorded without losing other completed requests.
-            M.DiagnosticCall('HTTP', '处理后台请求结果', function()
-                result.request.callback(result.body, result.err)
-            end, { request = result.request.key })
         end
     end
 end

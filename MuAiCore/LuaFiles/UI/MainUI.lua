@@ -1266,6 +1266,7 @@ local drawDeveloperTab = function(M)
             if M.CurRaidScript ~= nil then
                 M.Log('Lifecycle', '重新初始化插件')
             end
+            if type(M.CloseWebRequests) == 'function' then M.CloseWebRequests() end
             M.LogSystemLeave()
             MuAiGuide = candidate
         else

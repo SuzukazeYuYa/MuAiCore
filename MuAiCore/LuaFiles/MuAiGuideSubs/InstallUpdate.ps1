@@ -60,10 +60,13 @@ function Prepare-UpdateChannels {
         }
     }
     $channelsText = [System.IO.File]::ReadAllText((Join-Path $assetRoot $channelsRelative))
-    # Async update checks must retain their worker alongside the channel module.
+    # Async update checks must retain their transport alongside the channel module.
     # Older packages without this dependency can still be installed normally.
     if ($channelsText.Contains('AsyncHttp.lua')) {
-        foreach ($name in @('AsyncHttp.lua', 'HttpRequest.ps1')) {
+        $httpNames = @('AsyncHttp.lua')
+        $httpText = [IO.File]::ReadAllText((Join-Path $assetRoot ('MuAiCore\LuaFiles\MuAiGuideSubs\AsyncHttp.lua')))
+        if ($httpText.Contains('HttpRequest.ps1')) { $httpNames += 'HttpRequest.ps1' }
+        foreach ($name in $httpNames) {
             $relative = 'MuAiCore\LuaFiles\MuAiGuideSubs\' + $name
             if (-not (Test-Path -LiteralPath (Join-Path $assetRoot $relative) -PathType Leaf)) {
                 throw "Persistent update asset is missing: $relative"
