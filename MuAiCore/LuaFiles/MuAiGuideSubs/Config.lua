@@ -91,6 +91,34 @@ end
 
 ---@param M MuAiGuide
 Config.init = function(M)
+    -- Failed autosaves stay dirty, but disk/console work is retried per file, not per frame.
+    local failedSaves = {}
+    local saveRetryInterval = 5000
+    local function saveChangedConfig(path, fileName, curConfig, preConfig, configName)
+        local saveFile = path .. '\\' .. fileName
+        if table.deepcompare(curConfig, preConfig) then
+            failedSaves[saveFile] = nil
+            return nil
+        end
+        local lastFailure = failedSaves[saveFile]
+        if lastFailure ~= nil and TimeSince(lastFailure) < saveRetryInterval then
+            return false
+        end
+        local ok, saved = pcall(function()
+            if not FolderExists(path) and FolderCreate(path) ~= true then
+                return false
+            end
+            return FileSave(saveFile, curConfig)
+        end)
+        if ok and saved then
+            failedSaves[saveFile] = nil
+            return true
+        end
+        failedSaves[saveFile] = Now()
+        M.LogError('Config', configName and '保存配置失败' or '保存职业配置失败',
+                { file = saveFile, config = configName, error = not ok and tostring(saved) or nil }, true)
+        return false
+    end
     M.LoadDefWithOutRaidSetting = function()
         local oldConfig = M.Config.Main
         M.Config.Main = M.CreateDefMainCfg()
@@ -597,12 +625,16 @@ Config.init = function(M)
                 hardLock = false,
                 -- 1 MS 2 A:T远 C:奶近
                 Line2Type = 1,
+                -- 1按职能分组放泥，2八人先C再A
+                blackMudType = 1,
                 BeamOrder = { 'H2', 'H1', 'ST', 'MT', 'D1', 'D2', 'D3', 'D4', },
             },
             P2 = {
                 enable = true, draw = true, guide = true,
-                -- 1职能固定，2扇左钢右 3职固Uptime
+                -- 1职能固定，2扇左钢右，3职固Uptime
                 fixType = 1,
+                -- 独立于固定方式：闲人按机制分侧，第八轮沿用第七轮塔侧。
+                completeConeLeft = false,
                 -- 使用 BBY（宝宝椅）站位
                 useBbyPos = false,
                 -- 踩塔开启指挥模式
@@ -628,7 +660,7 @@ Config.init = function(M)
                 autoTargetEx = false,
                 slapHappyDraw = true,
                 slapHappyDir = true,
-                -- 标记类型，1 关闭； 2  随机标记自己；  3 标记全队,  4, 精确标记自己
+                -- 标记类型: 1关闭, 2随机自身, 3全队, 4优先级自身, 5同Buff组补位自身
                 markType = 1,
                 -- 是否开启类型提示
                 markHit = true,
@@ -861,17 +893,12 @@ Config.init = function(M)
         if curConfig == nil or preConfig == nil then
             return
         end
-        if not table.deepcompare(curConfig, preConfig) then
-            local saveFile = path .. '\\' .. fileName
-            if (not FolderExists(path)) then
-                FolderCreate(path)
-            end
-            if FileSave(saveFile, curConfig) then
-                M.Config[configName .. 'Previous'] = table.deepcopy(curConfig)
-                return true
-            end
-            M.LogError('Config', '保存配置失败', { file = saveFile, config = configName }, true)
+        local saved = saveChangedConfig(path, fileName, curConfig, preConfig, configName)
+        if saved == false then
             return false
+        end
+        if saved then
+            M.Config[configName .. 'Previous'] = table.deepcopy(curConfig)
         end
         return true
     end
@@ -880,18 +907,7 @@ Config.init = function(M)
         if curConfig == nil or preConfig == nil then
             return false
         end
-        if not table.deepcompare(curConfig, preConfig) then
-            local saveFile = path .. '\\' .. fileName
-            if (not FolderExists(path)) then
-                FolderCreate(path)
-            end
-            if FileSave(saveFile, curConfig) then
-                return true
-            end
-            M.LogError('Config', '保存职业配置失败', { file = saveFile }, true)
-            return false
-        end
-        return false
+        return saveChangedConfig(path, fileName, curConfig, preConfig) == true
     end
 
     LoadUIConfig(M)

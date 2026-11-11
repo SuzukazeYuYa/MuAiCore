@@ -328,6 +328,78 @@ local getBuffType = function(player)
     return 0
 end
 
+-- 补位仅使用本次完整队伍快照：同 Buff 其余人先上号，本人只取唯一空位。
+local markSelfFill = function()
+    local player = TensorCore.mGetPlayer()
+    if player == nil or player.id == nil then return end
+    local markData = Data().Mark
+    local pending = markData.FillPending
+    if pending ~= nil then
+        if player.marker == pending.marker then
+            pending.confirmed = true
+            markData.SelfType, markData.Finish = pending.buffType, true
+            MG.Info('补位标记已确认: ' .. pending.label)
+        elseif TimeSince(pending.requestedAt) >= 2000 then
+            pending.failed, markData.Finish = true, true
+            MG.LogOnce('P3Mark', 'fill_unconfirmed', '补位标记请求后未确认, 本轮不重复抢号', {
+                expected = pending.marker, actual = player.marker, buffType = pending.buffType,
+            }, true)
+        end
+        return
+    end
+    local buffType = getBuffType(player)
+    local first, count, command
+    if buffType == 3004 then first, count, command = MG.HeadMark.Attack1, 3, 'attack'
+    elseif buffType == 3005 then first, count, command = MG.HeadMark.Bind1, 3, 'bind'
+    elseif buffType == 3006 then first, count, command = MG.HeadMark.Stop1, 2, 'stop'
+    else return end
+
+    local seenIDs, usedMarks, peers = {}, {}, {}
+    local total, groupCount, selfFound, invalid = 0, 0, false, false
+    local selfMarker
+    MG.OnCurrentPartyDo(function(_, member)
+        if member.id == nil or seenIDs[member.id] then invalid = true; return end
+        seenIDs[member.id], total = true, total + 1
+        local marker = member.marker
+        if marker ~= nil and marker > 0 then
+            if usedMarks[marker] then invalid = true end
+            usedMarks[marker] = true
+        end
+        if getBuffType(member) == buffType then
+            groupCount = groupCount + 1
+            if member.id == player.id then
+                selfFound, selfMarker = true, marker
+            else
+                peers[#peers + 1] = marker or 0
+            end
+        end
+    end)
+    if invalid or total ~= 8 or not selfFound or groupCount ~= count or #peers ~= count - 1 then return end
+    local peerMarks = {}
+    for _, marker in ipairs(peers) do
+        if marker < first or marker >= first + count or peerMarks[marker] then return end
+        peerMarks[marker] = true
+    end
+    if selfMarker ~= nil and selfMarker > 0 then
+        -- 已被队友正确标记时保留；其他已有标记不覆盖。
+        if selfMarker >= first and selfMarker < first + count and not peerMarks[selfMarker] then
+            markData.SelfType, markData.Finish = buffType, true
+        end
+        return
+    end
+    local remaining
+    for marker = first, first + count - 1 do
+        if not peerMarks[marker] then
+            if usedMarks[marker] then return end -- 空号被其他 Buff 组占用时不抢。
+            remaining = marker
+        end
+    end
+    if remaining == nil then return end
+    local label = command .. tostring(remaining - first + 1)
+    markData.FillPending = { marker = remaining, buffType = buffType, label = label, requestedAt = Now() }
+    SendTextCommand('/mk ' .. label .. ' <me>')
+end
+
 -- 根据buff，使用手摇宏标记自己
 local markSelfMacro = function()
     local player = TensorCore.mGetPlayer()
@@ -1649,7 +1721,9 @@ Dmu_P3.Update = function()
 
     if DM.InState('P3BlackHoleStart') then
         if Cfg().markType ~= 1 and not Data().Mark.Finish then
-            if Cfg().markType == 2 or Cfg().markType == 4 then
+            if Cfg().markType == 5 then
+                markSelfFill()
+            elseif Cfg().markType == 2 or Cfg().markType == 4 then
                 if Cfg().delayMark then
                     MG.OnCurrentPartyDo(function(_, member)
                         if member.marker ~= nil and member.marker > 0 then

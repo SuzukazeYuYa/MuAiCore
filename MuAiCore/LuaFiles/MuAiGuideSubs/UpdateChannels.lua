@@ -30,6 +30,11 @@ end
 
 ---@param M MuAiGuide
 UpdateChannels.init = function(M)
+    if type(M.WebRequestAsync) ~= 'function' then
+        local http = FileLoad(MuAiGuideRoot .. 'MuAiGuideSubs\\AsyncHttp.lua')
+        assert(type(http) == 'table' and type(http.init) == 'function', '后台 HTTP 模块不可用')
+        http.init(M)
+    end
     -- main 更新包保留此模块时，作者 Config.lua 不负责迁移旧分支名称。
     if M.Config.Main.UpdateBranch == 'dmu-String' or M.Config.Main.UpdateBranch == 'dmu_string' then
         M.Config.Main.UpdateBranch = 'String'
@@ -102,16 +107,9 @@ UpdateChannels.init = function(M)
         end, nil, okText, '保留原分支')
         return true
     end
-    ---使用系统CMD检查版本
-    ---@param isAuto boolean 是否为自动检查
-    M.CheckVersion = function(isAuto)
-        M.LatestVer = nil
-        M.LatestStringRevision = nil
-        M.LogInfo = nil
-        local branch = M.GetUpdateBranch()
+    local applyVersionResponse = function(branch, isAuto, resp)
         if branch == 'String' then
             -- 只提取版本号，不执行远端 Lua；同版本号的提交仍允许手动更新。
-            local resp = M.WebRequest('https://raw.githubusercontent.com/SuzukazeYuYa/MuAiCore/String/MuAiCore/LuaFiles/MuAiGuide.lua')
             if type(resp) == 'string' and #resp <= 65536 then
                 M.LatestVer = parseIntegerField(resp, 'VERSION')
                 M.LatestStringRevision = parseIntegerField(resp, 'STRING_REVISION')
@@ -139,9 +137,6 @@ UpdateChannels.init = function(M)
             end
             return
         end
-        --local resp = M.WebRequest('https://gist.githubusercontent.com/SuzukazeYuYa/cb01eb35b958b57d7d962235262ea05d/raw/MuAiCoreChangeLog.txt')
-        -- 改用腾讯云存储
-        local resp = M.WebRequest('https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/versionLog.txt')
         if resp ~= nil and resp ~= '' then
             local logsData = M.StringSplit(resp, "|")
             if logsData ~= nil and tonumber(logsData[1]) ~= nil then
@@ -176,13 +171,42 @@ UpdateChannels.init = function(M)
                     M.ShowMsgUI(2, M.LogInfo)
                 end
             else
-                M.ShowMsgUI(3, { "版本检查失败，请检查网络或重新启动游戏后再次尝试。" })
+                M.ShowMsgUI(3, { "版本检查失败，请检查网络后重试。" })
             end
         end
     end
 
+    local versionRequest
+    ---@param isAuto boolean 是否为自动检查
+    M.CheckVersion = function(isAuto)
+        local branch = M.GetUpdateBranch()
+        if versionRequest ~= nil and versionRequest.branch == branch then
+            -- A manual click during the automatic request still gets its result UI.
+            versionRequest.manual = versionRequest.manual or not isAuto
+            return true
+        end
+        M.LatestVer, M.LatestStringRevision, M.LogInfo = nil, nil, nil
+        local request = { branch = branch, manual = not isAuto }
+        versionRequest = request
+        local function complete(resp, requestError)
+            if versionRequest ~= request or M.GetUpdateBranch() ~= branch then return end
+            versionRequest = nil
+            if requestError ~= nil then
+                M.LogError('Update', '版本检查请求失败', { branch = branch, error = requestError })
+            end
+            applyVersionResponse(branch, not request.manual, resp)
+        end
+        local url = branch == 'String'
+                and 'https://raw.githubusercontent.com/SuzukazeYuYa/MuAiCore/String/MuAiCore/LuaFiles/MuAiGuide.lua'
+                or 'https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/versionLog.txt'
+        local accepted, err = M.WebRequestAsync('version_' .. branch, url, complete)
+        if not accepted then complete(nil, err) end
+        return accepted
+    end
+
     --- 检查更新是否需要重新加载
     M.CheckNeedReload = function()
+        if M.PollWebRequests ~= nil then M.PollWebRequests() end
         if not updateNeedReLoad
                 or updateTime == nil or updateTime == 0
                 or TimeSince(updateTime) < 3000

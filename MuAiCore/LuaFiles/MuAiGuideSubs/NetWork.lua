@@ -171,34 +171,17 @@ local function parseSponsorsList(text)
     return result
 end
 
-local function powerShellLiteral(value)
-    return "'" .. tostring(value):gsub("'", "''") .. "'"
-end
-
-local function startDetachedCommand(command)
-    if type(command) ~= 'string' or command == '' then
-        return false, 'invalid command'
-    end
-    if type(io) ~= 'table' or type(io.popen) ~= 'function' then
-        return false, 'io.popen is unavailable'
-    end
-
-    local openOk, handle = pcall(io.popen, command)
-    if not openOk then
-        return false, tostring(handle)
-    end
-    if handle == nil then
-        return false, 'failed to start command'
-    end
-
-    local closeOk, closeResult, closeReason, closeCode = pcall(function()
-        return handle:close()
-    end)
-    if not closeOk then
-        return false, tostring(closeResult)
-    end
-    if closeResult == nil then
-        return false, tostring(closeReason or closeCode or 'command failed')
+local function saveSponsorIcon(path, body)
+    if body:sub(1, 8) ~= '\137PNG\r\n\26\n' then return false, 'invalid PNG response' end
+    local file, err = io.open(path, 'wb')
+    if file == nil then return false, err end
+    local ok, written, writeError = pcall(file.write, file, body)
+    local closeOk, closed, closeError = pcall(file.close, file)
+    if not ok or not written or not closeOk or not closed then
+        -- A failed write must not leave a partial file that looks cached forever.
+        local removed = FileDelete(path)
+        return false, tostring(not ok and written or writeError or not closeOk and closed or closeError)
+                .. (removed ~= true and '; partial icon cleanup failed' or '')
     end
     return true
 end
@@ -232,44 +215,8 @@ NetWork.init = function(M)
     M.ShuffleListInPlace(M.LocalSponsorList)
     M.ShuffleListInPlace(M.ThxList)
     M.ParseSponsorsList = parseSponsorsList
-    ---使用系统CMD请求网络数据
-    ---@param url string 地址
-    ---@return string 获取的值
-    M.WebRequest = function(url)
-        if type(url) ~= 'string'
-                or not url:match('^https://[%w%._~:/%-%?=]+$')
-        then
-            return nil
-        end
-        local urlStr = url .. '?t=' .. os.time()
-        local handle = io.popen('curl --fail --silent --show-error --connect-timeout 3 --max-time 5 "' .. urlStr .. '"')
-        if handle == nil then
-            return nil
-        end
-        local result = handle:read("*all")
-        handle:close()
-        if type(result) ~= 'string' or result == '' then
-            return nil
-        end
-        return result
-    end
-
-    M.GetSponsorsList = function()
-        --local resp = M.WebRequest('https://gist.github.com/SuzukazeYuYa/e598918cc010089df3387e8246b9c0dd/raw/SponsorsList.txt')
-        -- 改用腾讯云存储
-        local resp = M.WebRequest('https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/sponsorsList.txt')
-        local parseError
-        if resp ~= nil then
-            M.FinalSponsorList, parseError = parseSponsorsList(resp)
-        end
-        if M.FinalSponsorList == nil then
-            M.FinalSponsorList = M.LocalSponsorList
-            if parseError ~= nil then
-                M.LogError('Network', '远端赞助名单解析失败，已使用本地名单', { err = parseError }, true)
-            end
-        end
-        M.ShuffleListInPlace(M.FinalSponsorList)
-        --local iconUrl = "https://raw.githubusercontent.com/SuzukazeYuYa/MuAiCore/main/MuAiCore/Image/HeadIcons/"
+    -- Sponsor icons are still fetched only when missing.
+    local downloadSponsorIcons = function()
         local iconUrl = "https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/HeadIcons/"
         local scheduledDownloads = 0
         for _, spName in pairs(M.FinalSponsorList) do
@@ -277,12 +224,15 @@ NetWork.init = function(M)
             iconPath = string.gsub(iconPath, "\\", "/")
             if not FileExists(iconPath) and scheduledDownloads < 4 then
                 local url = iconUrl .. spName.icon .. '.png'
-                local arguments = "@('--fail','--silent','--show-error','--location',"
-                        .. "'--remove-on-error','--connect-timeout','2','--max-time','5','--output',"
-                        .. powerShellLiteral(iconPath) .. ',' .. powerShellLiteral(url) .. ')'
-                local cmd = 'powershell.exe -NoProfile -NonInteractive -Command "Start-Process '
-                        .. "-WindowStyle Hidden -FilePath 'curl.exe' -ArgumentList " .. arguments .. '"'
-                local started, startError = startDetachedCommand(cmd)
+                local started, startError = M.WebRequestAsync('sponsor_icon_' .. spName.icon, url,
+                        function(body, requestError)
+                            local saved, saveError = false, requestError
+                            if body ~= nil then saved, saveError = saveSponsorIcon(iconPath, body) end
+                            if not saved then
+                                M.LogOnce('Network', 'sponsor-icon-' .. spName.icon,
+                                        '赞助头像下载失败，已跳过缺失头像', { icon = spName.icon, err = saveError }, true)
+                            end
+                        end)
                 if not started then
                     M.LogOnce('Network', 'sponsor-icon-download-unavailable',
                             '赞助头像下载未启动，已跳过缺失头像',
@@ -292,6 +242,27 @@ NetWork.init = function(M)
                 scheduledDownloads = scheduledDownloads + 1
             end
         end
+    end
+
+    M.GetSponsorsList = function()
+        -- Startup/UI can use the bundled list before any remote request completes.
+        M.FinalSponsorList = M.LocalSponsorList
+        M.ShuffleListInPlace(M.FinalSponsorList)
+        local function complete(resp, requestError)
+            local sponsors, parseError
+            if resp ~= nil then sponsors, parseError = parseSponsorsList(resp) end
+            if sponsors ~= nil then
+                M.FinalSponsorList = sponsors
+                M.ShuffleListInPlace(M.FinalSponsorList)
+            elseif requestError ~= nil or parseError ~= nil then
+                M.LogError('Network', '远端赞助名单不可用，已使用本地名单',
+                        { err = requestError or parseError }, true)
+            end
+            downloadSponsorIcons()
+        end
+        local accepted, err = M.WebRequestAsync('sponsors',
+                'https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/sponsorsList.txt', complete)
+        if not accepted then complete(nil, err) end
     end
 
 end

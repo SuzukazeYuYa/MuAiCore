@@ -57,6 +57,7 @@ core.InitMuAiGuide = function()
         if previous.CurRaidScript ~= nil and type(previous.Log) == 'function' then
             previous.Log('Lifecycle', '重新初始化插件')
         end
+        if type(previous.CloseWebRequests) == 'function' then previous.CloseWebRequests() end
         previous.LogSystemLeave()
     end
     MuAiGuide = candidate

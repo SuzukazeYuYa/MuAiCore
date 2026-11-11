@@ -436,9 +436,20 @@ DancingMadUI.draw = function()
             GUI:AlignFirstTextHeightToWidgets()
             GUI:Text(' 站位方案: ')
             GUI:SameLine(0, 30)
-            GUI:PushItemWidth(130)
-            M.Config.DmuCfg.P1.Line2Type = GUI:Combo('##P1Line2Type', M.Config.DmuCfg.P1.Line2Type, { 'MT组上/ST组下', 'T远上/奶近下', }, 2)
+            GUI:PushItemWidth(165)
+            local line2Type = M.Config.DmuCfg.P1.blackMudType == 2 and 3 or M.Config.DmuCfg.P1.Line2Type
+            local selectedLine2Type = GUI:Combo('##P1Line2Type', line2Type,
+                    { 'MT组上/ST组下', 'T远上/奶近下', '八人先C再A' }, 3)
+            if selectedLine2Type == 3 then
+                M.Config.DmuCfg.P1.blackMudType = 2
+            else
+                M.Config.DmuCfg.P1.Line2Type = selectedLine2Type
+                M.Config.DmuCfg.P1.blackMudType = 1
+            end
             GUI:PopItemWidth()
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('八人先C再A：两轮在离场中12米的C、A侧放泥。\n放泥后重力组回中，石头组面向Boss左MT组、右ST组分散，第二轮整体旋转半圈。\n默认预站位TN上、DPS下；实际已组成的四人组优先。\n三名受击退者去对面踩泥，原击退源留在原侧，和对面过来的三人一起踩泥。\n八层全消后结束本段指路。请在开战前选择。')
+            end
             GUI:Dummy(0, 0)
             GUI:Dummy(0, 0)
             GUI:SameLine(0, 0)
@@ -472,20 +483,33 @@ DancingMadUI.draw = function()
             end
         end
         if M.Config.DmuCfg.P2.enable and GUI:CollapsingHeader('P2 凯夫卡·神') then
+            if M.Config.DmuCfg.P2.fixType == 4 then
+                M.Config.DmuCfg.P2.fixType = 1
+                M.Config.DmuCfg.P2.completeConeLeft = true
+            end
             GUI:Dummy(0, 0)
             GUI:SameLine(0, 0)
             GUI:BulletText('8次踩塔')
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
-            GUI:TextColored(1, 0, 0, 1, ' 攻略: 混合优化, 闲人固定')
+            GUI:TextColored(1, 0, 0, 1, M.Config.DmuCfg.P2.completeConeLeft == true
+                    and ' 攻略: 完全扇左钢右, 闲人随点名'
+                    or ' 攻略: 混合优化, 闲人固定')
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             GUI:AlignFirstTextHeightToWidgets()
             GUI:Text(' 固定方式: ')
             GUI:SameLine(0, 0)
-            GUI:PushItemWidth(120)
+            GUI:PushItemWidth(165)
             M.Config.DmuCfg.P2.fixType = GUI:Combo('##T8fixType', M.Config.DmuCfg.P2.fixType, { '职能固定', '扇左钢右', '职能固定[近U]' }, 3)
             GUI:PopItemWidth()
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            M.Config.DmuCfg.P2.completeConeLeft = GUI:Checkbox('完全扇左钢右##P2CompleteConeLeft',
+                    M.Config.DmuCfg.P2.completeConeLeft == true)
+            if GUI:IsItemHovered() then
+                GUI:SetTooltip('可与职能固定或职能固定[近U]组合，保留对应的普通或近U站位。\n踩塔扇形在左、钢铁在右，闲人按最近点名分侧。\n第八轮闲人沿用第七轮左右塔分组，不等待不存在的新点名。\n优先于偶数塔上扇下钢，左右以面向Boss为准。请在开战前选择。')
+            end
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
             M.Config.DmuCfg.P2.useBbyPos = GUI:Checkbox('BBY站位##P2UseBbyPos',
@@ -493,12 +517,14 @@ DancingMadUI.draw = function()
             if GUI:IsItemHovered() then
                 GUI:SetTooltip('勾选后使用宝宝椅站位')
             end
-            GUI:Dummy(0, 0)
-            GUI:SameLine(20, 0)
-            M.Config.DmuCfg.P2.evenConeCircle = GUI:Checkbox('偶数塔上扇下钢##P2EvenConeCircle',
-                    M.Config.DmuCfg.P2.evenConeCircle == true)
-            if GUI:IsItemHovered() then
-                GUI:SetTooltip('偶数塔两边都是靠Boss扇形、靠外钢铁，不需要队伍编号标记。\n第2/6轮：同塔新点名不同留边，相同则后位换边。\n第4/8轮：同类点名按T、H、远程、近战优先分左右。\n闲人两侧接扇、对面引导分身；优先于BBY偶数站位。\n奇数塔仍按上方设置。请在开战前选择。')
+            if M.Config.DmuCfg.P2.completeConeLeft ~= true then
+                GUI:Dummy(0, 0)
+                GUI:SameLine(20, 0)
+                M.Config.DmuCfg.P2.evenConeCircle = GUI:Checkbox('偶数塔上扇下钢##P2EvenConeCircle',
+                        M.Config.DmuCfg.P2.evenConeCircle == true)
+                if GUI:IsItemHovered() then
+                    GUI:SetTooltip('偶数塔两边都是靠Boss扇形、靠外钢铁，不需要队伍编号标记。\n第2/6轮：同塔新点名不同留边，相同则后位换边。\n第4/8轮：同类点名按T、H、近战、远程优先分左右。\n闲人两侧接扇、对面引导分身；优先于BBY偶数站位。\n奇数塔仍按上方设置。请在开战前选择。')
+                end
             end
             GUI:Dummy(0, 0)
             GUI:SameLine(20, 0)
@@ -608,10 +634,10 @@ DancingMadUI.draw = function()
             GUI:Text(' 标记类型:  ')
             GUI:SameLine()
             GUI:PushItemWidth(150)
-            M.Config.DmuCfg.P3.markType = GUI:Combo('##P3markType', M.Config.DmuCfg.P3.markType, { '不标记', '标记自身(随机)', '标记全队', '标记自身(优先级)' }, 4)
+            M.Config.DmuCfg.P3.markType = GUI:Combo('##P3markType', M.Config.DmuCfg.P3.markType, { '不标记', '标记自身(随机)', '标记全队', '标记自身(优先级)', '补位标记' }, 5)
             GUI:PopItemWidth()
             if GUI:IsItemHovered() then
-                GUI:SetTooltip('标记自身(随机): 龙诗同款,自动123先到先得\n\n标记全队: 如果有人噶了导致没有BUFF会不标记\n\n标记自身(优先级): 按照设置的优先级分配123, 如果有人嘎了没BUFF可能会错\n\n  举例, 假设优先级为[MT,ST,D1,D2,D3,D4,H1,H2], \n\n  1.你是D3 buff为第2目标, 且同组点名为MT,D1,D3, 此时你标记为锁链3\n\n  2.你是H1 buff为第1目标, 且同组点名为MT,H1,H2, 此时你标记为攻击2 \n\n标记全队和标记自身(优先级)共用同一套标记优先级。\n另外如果有人抢了标记, 插件是不给你补的, 你得自己手动补一下!')
+                GUI:SetTooltip('标记自身(随机): 龙诗同款,自动123先到先得\n\n标记全队: 如果有人噶了导致没有BUFF会不标记\n\n标记自身(优先级): 按照设置的优先级分配123, 如果有人嘎了没BUFF可能会错\n\n  举例, 假设优先级为[MT,ST,D1,D2,D3,D4,H1,H2], \n\n  1.你是D3 buff为第2目标, 且同组点名为MT,D1,D3, 此时你标记为锁链3\n\n  2.你是H1 buff为第1目标, 且同组点名为MT,H1,H2, 此时你标记为攻击2 \n\n标记全队和标记自身(优先级)共用同一套标记优先级。\n原有优先级方案不自动修正被占用的号。\n\n补位标记: 本人先不标, 等同Buff组其余人标记齐后补唯一空号。\n攻击1和2 -> 攻击3; 锁链1和3 -> 锁链2; 禁止1 -> 禁止2。\n只补本人, 不改队友标记; 缺Buff或同组标记不齐时继续等待。')
             end
             GUI:Dummy(10, 0)
             GUI:SameLine()
