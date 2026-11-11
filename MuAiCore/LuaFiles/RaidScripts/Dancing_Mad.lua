@@ -1093,6 +1093,21 @@ DM.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
         --决战
         if DM.BeLowState('P3Start') then
             DM.ChangeState('P3Start')
+            if MG.Config.DmuCfg.P3.markHit then
+                if MG.Config.DmuCfg.P3.markType == 1 then
+                    TensorCore.showRaidWarning( "P3二运标记类型为：关闭，需要有人开狗！", 0, 1)
+                    TensorCore.addAlertText(6, "P3二运标记类型为：关闭，需要有人开狗！", 0.1, 1, true)
+                elseif MG.Config.DmuCfg.P3.markType == 2 then
+                    TensorCore.showRaidWarning( "P3二运标记类型为：随机标记自己！", 0, 1)
+                    TensorCore.addAlertText(6, "P3二运标记类型为：随机标记自己！", 0.1, 1, true)
+                elseif MG.Config.DmuCfg.P3.markType == 3 then
+                    TensorCore.showRaidWarning( "P3二运标记类型为：标记全队！", 0, 1)
+                    TensorCore.addAlertText(6, "P3二运标记类型为：标记全队！", 0.1, 1, true)
+                elseif MG.Config.DmuCfg.P3.markType == 4 then
+                    TensorCore.showRaidWarning( "P3二运标记类型为：优先级标记自身！", 0, 1)
+                    TensorCore.addAlertText(6, "P3二运标记类型为：优先级标记自身！", 0.1, 1, true)
+                end
+            end
         end
     elseif spellID == 49884 then
         if DM.BeLowState('P4Start') then

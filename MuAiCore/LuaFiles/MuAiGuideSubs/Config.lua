@@ -630,6 +630,8 @@ Config.init = function(M)
                 slapHappyDir = true,
                 -- 标记类型，1 关闭； 2  随机标记自己；  3 标记全队,  4, 精确标记自己
                 markType = 1,
+                -- 是否开启类型提示
+                markHit = true,
                 takeLineAttack12 = false,
                 takeLineStop22 = false,
                 markOrderSelf = { 'MT', 'ST', 'D1', 'D2', 'D3', 'D4', 'H1', 'H2' },
