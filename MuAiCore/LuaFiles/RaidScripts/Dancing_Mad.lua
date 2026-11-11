@@ -1094,18 +1094,19 @@ DM.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
         if DM.BeLowState('P3Start') then
             DM.ChangeState('P3Start')
             if MG.Config.DmuCfg.P3.markHit then
+                local msg
                 if MG.Config.DmuCfg.P3.markType == 1 then
-                    TensorCore.showRaidWarning( "P3二运标记类型为：关闭，需要有人开狗！", 0, 1)
-                    TensorCore.addAlertText(6, "P3二运标记类型为：关闭，需要有人开狗！", 0.1, 1, true)
+                    msg = "P3二运标记类型为：关闭，需要有人开狗！"
                 elseif MG.Config.DmuCfg.P3.markType == 2 then
-                    TensorCore.showRaidWarning( "P3二运标记类型为：随机标记自己！", 0, 1)
-                    TensorCore.addAlertText(6, "P3二运标记类型为：随机标记自己！", 0.1, 1, true)
+                    msg = "P3二运标记类型为：随机标记自己！"
                 elseif MG.Config.DmuCfg.P3.markType == 3 then
-                    TensorCore.showRaidWarning( "P3二运标记类型为：标记全队！", 0, 1)
-                    TensorCore.addAlertText(6, "P3二运标记类型为：标记全队！", 0.1, 1, true)
+                    msg = "P3二运标记类型为：标记全队！"
                 elseif MG.Config.DmuCfg.P3.markType == 4 then
-                    TensorCore.showRaidWarning( "P3二运标记类型为：优先级标记自身！", 0, 1)
-                    TensorCore.addAlertText(6, "P3二运标记类型为：优先级标记自身！", 0.1, 1, true)
+                    msg = "P3二运标记类型为：优先级标记自身！"
+                end
+                if msg ~= nil then
+                    MG.InfoNoLog(msg, true)
+                    TensorCore.showRaidWarning(msg, 0, 4)
                 end
             end
         end
