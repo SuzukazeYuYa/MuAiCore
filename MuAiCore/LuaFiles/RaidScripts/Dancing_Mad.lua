@@ -1105,7 +1105,8 @@ DM.OnEntityChannel = function(entityID, spellID, targetID, channelTimeMax)
                     msg = "P3二运标记类型为：优先级标记自身！"
                 end
                 if msg ~= nil then
-                    MG.InfoNoLog(msg, true)
+                    MG.Info(msg)
+                    TensorCore.addAlertText(0, msg, 1, 2, true)
                     TensorCore.showRaidWarning(msg, 0, 4)
                 end
             end
