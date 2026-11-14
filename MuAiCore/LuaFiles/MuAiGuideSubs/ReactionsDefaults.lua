@@ -1,0 +1,22 @@
+-- 公开默认设置不包含个人身份或已保存队伍。实际配置位于 Configs/Reactions。
+return {
+    DebugLevel=1, Shotcaller=true, ShotcallerTTS=true,
+    ShotcallerTextScale=0.8, ShotcallerVolume=0.8,
+    ShotcallerColor={r=25,g=204,b=0}, ShotcallerImportantColor={r=204,g=0,b=0},
+    Roster={enabled=true, nearMatchTolerance=1, maxRosters=20,
+        labelRoleColors=true, labelScale=1.4, labelSelf=true, labelHeight=1,
+        identityMode=1, toastOnRecall=true, anonymizeNames=false, popup=true,
+        labelSeconds=20, dpsNotation=1, tankLabels=1, casterLabel=1, labels=true},
+    Reactions={fruP3URHelper=false, fruFMBGAM1=2, fruApocWaterSwapLabel=1,
+        fruCTHelper=false, fruPolarizingTMRH=true, fruPrimaryMitigation=true,
+        fruAutoIceSlide=false, fruP1FOFHelper=false, fruP4CleaveHold=true,
+        fruApocPermaSwap=false, fruJPCTOrder=1, fruP2LightRampant44Helper=false,
+        fruApocStrat=0, fruApocWaterSwap=false, fruP1FOFHelperType=2,
+        fruFMBGTankMitPrio=1, fruCTKnockback=false, fruDarklitTetherNAUR=false,
+        fruColorIcicles=true, fruFMBGTankMits=false, fruDarklitLPDU=false,
+        fruExasOldDraws=false, fruLatePot=1, fruFMBGAM2=2},
+    DutyHelper={enabled=false,knockback=true,requirebotenabled=true,
+        SecondPackThreshhold=4,mitigation=false,FirstPackThreshhold=3,
+        LargePullInvulnThreshhold=10,LargePullThreshhold=55,ControlDoTs=false,
+        SmartTarget=false,actions={},HealingUsage=false},
+}

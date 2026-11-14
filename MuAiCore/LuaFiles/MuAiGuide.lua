@@ -18,9 +18,16 @@ end
 
 local compatibilityPath = MuAiGuideRoot .. 'MuAiGuideSubs\\MinionCompatibility.lua'
 --- @type Compatibility
-local compatibility = FileLoad(compatibilityPath)
+-- FileLoad 会把整段源码作为 chunk source；宿主格式化兼容函数时可能复制超长源码。
+-- loadfile 保留 @文件路径，避免全局兼容函数携带整个文件作为调试名称。
+local compatibilityChunk, compatibilityError = loadfile(compatibilityPath)
+local compatibility
+if compatibilityChunk then
+    local ok, result = pcall(compatibilityChunk)
+    if ok then compatibility = result else compatibilityError = result end
+end
 if type(compatibility) ~= 'table' or type(compatibility.install) ~= 'function' then
-    M.Debug('宿主兼容模块加载失败：' .. tostring(compatibilityPath))
+    M.Debug('宿主兼容模块加载失败：' .. compatibilityPath .. '；' .. tostring(compatibilityError or '返回值无效'))
     return M
 end
 
@@ -37,6 +44,7 @@ local modules = {
     'NetWork',
     'ArgusEvents',
     'Config',
+    'Reactions',
     'Develop',
     'Drawers',
     'Events',

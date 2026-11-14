@@ -60,6 +60,9 @@ core.InitMuAiGuide = function()
         if type(previous.CloseWebRequests) == 'function' then previous.CloseWebRequests() end
         previous.LogSystemLeave()
     end
+    if candidate.Reactions and type(candidate.Reactions.adopt) == 'function' then
+        candidate.Reactions.adopt(type(previous) == 'table' and previous.Reactions)
+    end
     MuAiGuide = candidate
     diagnose(candidate, 'INFO', 'MuAiGuide实例已激活', {
         path = guidePath,
@@ -103,12 +106,14 @@ end
 
 core.Update = function()
     if MuAiGuide and MuAiGuide.IsInit then
+        if MuAiGuide.Reactions then MuAiGuide.Reactions.update() end
         MuAiGuide.Update()
     end
 end
 
 core.Draw = function()
     if MuAiGuide and MuAiGuide.IsInit then
+        if MuAiGuide.Reactions then MuAiGuide.Reactions.draw() end
         MuAiGuide.DrawUIs()
     end
 end
