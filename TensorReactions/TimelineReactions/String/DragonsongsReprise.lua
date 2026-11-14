@@ -659,7 +659,7 @@ local tbl =
 				name = "[P1] 次元斩标记指路状态 1",
 				timeRange = true,
 				timelineIndex = 10,
-				timerEndOffset = -6,
+				timerEndOffset = -5.3,
 				timerStartOffset = -8,
 				uuid = "9224a6bc-1d9b-d641-af60-9fe06c0f0579",
 				version = 2,
@@ -783,9 +783,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"29393d9a-fda3-3355-b291-9cdff4a435c4",
+									true,
+								},
 								
 								{
 									"ac00488b-26c1-ed90-bc00-5fafc1cd623f",
@@ -809,9 +814,90 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
-							name = "策动",
+							ignoreWeaveRules = true,
+							name = "行吟",
 							uuid = "19ad416c-7b3d-ffc2-af8c-2d48d9ed97a1",
 							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
+								
+								{
+									"fc8f7fc8-d12d-3d53-a087-63591d3cff7e",
+									true,
+								},
+								
+								{
+									"ac00488b-26c1-ed90-bc00-5fafc1cd623f",
+									true,
+								},
+								
+								{
+									"b0d06522-7153-9919-80bf-e693b93f65b5",
+									true,
+								},
+								
+								{
+									"cce559d9-22e9-af9c-807b-c954b7d424f5",
+									true,
+								},
+								
+								{
+									"d90f183c-a9e5-21e6-85c2-d3066aca7ca5",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "策动",
+							uuid = "1fe810b2-d786-7a76-9388-a71b0961c26b",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"79410aa2-e065-5a18-97c6-7e8ee4bd4766",
+									true,
+								},
+								
+								{
+									"ac00488b-26c1-ed90-bc00-5fafc1cd623f",
+									true,
+								},
+								
+								{
+									"b0d06522-7153-9919-80bf-e693b93f65b5",
+									true,
+								},
+								
+								{
+									"cce559d9-22e9-af9c-807b-c954b7d424f5",
+									true,
+								},
+								
+								{
+									"d90f183c-a9e5-21e6-85c2-d3066aca7ca5",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "545acd29-f5dd-5318-aaae-189dc383fde1",
 							version = 2.1,
 						},
 					},
@@ -866,6 +952,45 @@ local tbl =
 							buffID = 1826,
 							category = "Self",
 							uuid = "d90f183c-a9e5-21e6-85c2-d3066aca7ca5",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "29393d9a-fda3-3355-b291-9cdff4a435c4",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "fc8f7fc8-d12d-3d53-a087-63591d3cff7e",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "79410aa2-e065-5a18-97c6-7e8ee4bd4766",
 							version = 3,
 						},
 					},
@@ -1139,7 +1264,7 @@ local tbl =
 				name = "[P1] 次元斩标记动态指路 2",
 				timeRange = true,
 				timelineIndex = 11,
-				timerStartOffset = -8,
+				timerStartOffset = -7.09,
 				uuid = "4184a4fd-03f6-4555-891b-d340e27fa2f9",
 				version = 2,
 			},
@@ -1353,9 +1478,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"adfbb1ee-a52b-08d6-b95e-a8573625016b",
+									true,
+								},
 								
 								{
 									"ec30b706-0522-f3ea-ba62-d5f30e0769fc",
@@ -1379,9 +1509,90 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
-							name = "策动",
+							ignoreWeaveRules = true,
+							name = "行吟",
 							uuid = "6de390ba-64da-98ed-bb22-91e13aa9203a",
 							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
+								
+								{
+									"71fe136c-d365-8c50-9887-e5f5da691cfe",
+									true,
+								},
+								
+								{
+									"ec30b706-0522-f3ea-ba62-d5f30e0769fc",
+									true,
+								},
+								
+								{
+									"2f69cc33-6c2f-0abb-8419-b7f29f45eeaf",
+									true,
+								},
+								
+								{
+									"cf3cd82b-669b-f0a3-87de-6afdbfe2c7ec",
+									true,
+								},
+								
+								{
+									"6e8a5f8b-c67a-4cce-9d69-effe483d980c",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "策动",
+							uuid = "a22a1f97-faa1-27a3-b43e-946ac4938b36",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"02865ffd-19ef-abaf-8d78-f5b204f8d8ad",
+									true,
+								},
+								
+								{
+									"ec30b706-0522-f3ea-ba62-d5f30e0769fc",
+									true,
+								},
+								
+								{
+									"2f69cc33-6c2f-0abb-8419-b7f29f45eeaf",
+									true,
+								},
+								
+								{
+									"cf3cd82b-669b-f0a3-87de-6afdbfe2c7ec",
+									true,
+								},
+								
+								{
+									"6e8a5f8b-c67a-4cce-9d69-effe483d980c",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "56250c2e-13b2-a6ce-b121-22b0944c0055",
 							version = 2.1,
 						},
 					},
@@ -1436,6 +1647,45 @@ local tbl =
 							buffID = 1826,
 							category = "Self",
 							uuid = "6e8a5f8b-c67a-4cce-9d69-effe483d980c",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "adfbb1ee-a52b-08d6-b95e-a8573625016b",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "71fe136c-d365-8c50-9887-e5f5da691cfe",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "02865ffd-19ef-abaf-8d78-f5b204f8d8ad",
 							version = 3,
 						},
 					},
@@ -2062,7 +2312,7 @@ local tbl =
 								283,
 								284,
 							},
-							name = "PS 标记 281–284",
+							name = "PS 标记 281-284",
 							uuid = "995d1d5c-3c7f-0ad9-bae6-3afe62a146d8",
 							version = 3,
 						},
@@ -2849,7 +3099,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or H1ID == nil or H2ID == nil or H1ID == H2ID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == H1ID or playerID == H2ID then\n  local frontDX = px - 90.55\n  local frontDZ = pz - 106.75\n  local backDX = px - 87.45\n  local backDZ = pz - 106.75\n  if frontDX * frontDX + frontDZ * frontDZ\n      <= backDX * backDX + backDZ * backDZ then\n    targetX = 90.55\n    targetZ = 106.75\n  else\n    targetX = 87.45\n    targetZ = 106.75\n  end\n\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
+							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or H1ID == nil or H2ID == nil or H1ID == H2ID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == H1ID or playerID == H2ID then\n  -- Assign the two existing points together: both players must not choose one point.\n  local first = TensorCore.mGetEntity(H1ID)\n  local second = TensorCore.mGetEntity(H2ID)\n  local firstPos = first and first.pos\n  local secondPos = second and second.pos\n  local firstX = tonumber(firstPos and firstPos.x)\n  local secondX = tonumber(secondPos and secondPos.x)\n  if firstX == nil or secondX == nil then return end\n  -- Both destinations have the same Z. Sorting X minimizes total squared distance.\n  -- Equal positions use the existing pair order as a stable tie-break.\n  local firstFront = firstX >= secondX\n  local ownFront = (playerID == H1ID) == firstFront\n  targetX = ownFront and 90.55 or 87.45\n  targetZ = 106.75\n\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
 							name = "H1H2 阶段动态指路",
 							uuid = "f5214cc8-5e1b-3dfe-9d41-5c26ce37adfb",
 							version = 2.1,
@@ -2912,7 +3162,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or D3ID == nil or D4ID == nil or D3ID == D4ID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == D3ID or playerID == D4ID then\n  local frontDX = px - 90.55\n  local frontDZ = pz - 106.75\n  local backDX = px - 87.45\n  local backDZ = pz - 106.75\n  if frontDX * frontDX + frontDZ * frontDZ\n      <= backDX * backDX + backDZ * backDZ then\n    targetX = 90.55\n    targetZ = 106.75\n  else\n    targetX = 87.45\n    targetZ = 106.75\n  end\nelseif playerID == H1ID or playerID == H2ID then\n  targetX = 82\n  targetZ = 100\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
+							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or D3ID == nil or D4ID == nil or D3ID == D4ID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == D3ID or playerID == D4ID then\n  -- Assign the two existing points together: both players must not choose one point.\n  local first = TensorCore.mGetEntity(D3ID)\n  local second = TensorCore.mGetEntity(D4ID)\n  local firstPos = first and first.pos\n  local secondPos = second and second.pos\n  local firstX = tonumber(firstPos and firstPos.x)\n  local secondX = tonumber(secondPos and secondPos.x)\n  if firstX == nil or secondX == nil then return end\n  -- Both destinations have the same Z. Sorting X minimizes total squared distance.\n  -- Equal positions use the existing pair order as a stable tie-break.\n  local firstFront = firstX >= secondX\n  local ownFront = (playerID == D3ID) == firstFront\n  targetX = ownFront and 90.55 or 87.45\n  targetZ = 106.75\nelseif playerID == H1ID or playerID == H2ID then\n  targetX = 82\n  targetZ = 100\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
 							name = "D3D4 阶段动态指路",
 							uuid = "a92b5979-793c-a890-87b2-b28af5d4c7a5",
 							version = 2.1,
@@ -2975,7 +3225,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or D1ID == nil or D2ID == nil or D1ID == D2ID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == D1ID or playerID == D2ID then\n  local frontDX = px - 90.55\n  local frontDZ = pz - 106.75\n  local backDX = px - 87.45\n  local backDZ = pz - 106.75\n  if frontDX * frontDX + frontDZ * frontDZ\n      <= backDX * backDX + backDZ * backDZ then\n    targetX = 90.55\n    targetZ = 106.75\n  else\n    targetX = 87.45\n    targetZ = 106.75\n  end\nelseif playerID == D3ID or playerID == D4ID then\n  targetX = 96\n  targetZ = 101.5\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
+							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or D1ID == nil or D2ID == nil or D1ID == D2ID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == D1ID or playerID == D2ID then\n  -- Assign the two existing points together: both players must not choose one point.\n  local first = TensorCore.mGetEntity(D1ID)\n  local second = TensorCore.mGetEntity(D2ID)\n  local firstPos = first and first.pos\n  local secondPos = second and second.pos\n  local firstX = tonumber(firstPos and firstPos.x)\n  local secondX = tonumber(secondPos and secondPos.x)\n  if firstX == nil or secondX == nil then return end\n  -- Both destinations have the same Z. Sorting X minimizes total squared distance.\n  -- Equal positions use the existing pair order as a stable tie-break.\n  local firstFront = firstX >= secondX\n  local ownFront = (playerID == D1ID) == firstFront\n  targetX = ownFront and 90.55 or 87.45\n  targetZ = 106.75\nelseif playerID == D3ID or playerID == D4ID then\n  targetX = 96\n  targetZ = 101.5\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
 							name = "D1D2 阶段动态指路",
 							uuid = "0cba2db0-80c9-ba6d-a969-1be9fc3d3939",
 							version = 2.1,
@@ -3038,7 +3288,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or MTID == nil or STID == nil or MTID == STID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == MTID or playerID == STID then\n  local frontDX = px - 90.55\n  local frontDZ = pz - 106.75\n  local backDX = px - 87.45\n  local backDZ = pz - 106.75\n  if frontDX * frontDX + frontDZ * frontDZ\n      <= backDX * backDX + backDZ * backDZ then\n    targetX = 90.55\n    targetZ = 106.75\n  else\n    targetX = 87.45\n    targetZ = 106.75\n  end\nelseif playerID == D1ID or playerID == D2ID then\n  targetX = 82\n  targetZ = 97\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
+							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or MTID == nil or STID == nil or MTID == STID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == MTID or playerID == STID then\n  -- Assign the two existing points together: both players must not choose one point.\n  local first = TensorCore.mGetEntity(MTID)\n  local second = TensorCore.mGetEntity(STID)\n  local firstPos = first and first.pos\n  local secondPos = second and second.pos\n  local firstX = tonumber(firstPos and firstPos.x)\n  local secondX = tonumber(secondPos and secondPos.x)\n  if firstX == nil or secondX == nil then return end\n  -- Both destinations have the same Z. Sorting X minimizes total squared distance.\n  -- Equal positions use the existing pair order as a stable tie-break.\n  local firstFront = firstX >= secondX\n  local ownFront = (playerID == MTID) == firstFront\n  targetX = ownFront and 90.55 or 87.45\n  targetZ = 106.75\nelseif playerID == D1ID or playerID == D2ID then\n  targetX = 82\n  targetZ = 97\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
 							name = "MTST 阶段动态指路",
 							uuid = "891e6cac-bc60-ac54-9aed-ffd6609ab519",
 							version = 2.1,
@@ -3100,9 +3350,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"58621890-dbad-a5ff-b2c9-938fe4d64cb5",
+									true,
+								},
 								
 								{
 									"7ac67a90-6045-f67f-b567-b349928dcce6",
@@ -3126,9 +3381,90 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
-							name = "策动",
+							ignoreWeaveRules = true,
+							name = "行吟",
 							uuid = "3de52baa-ba21-76cb-9fc2-bc912571f6cf",
 							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
+								
+								{
+									"b86cd953-22e7-5505-8fc6-ff386f5e5914",
+									true,
+								},
+								
+								{
+									"7ac67a90-6045-f67f-b567-b349928dcce6",
+									true,
+								},
+								
+								{
+									"74f88d46-72b7-0bc7-abcf-a8278412dc8c",
+									true,
+								},
+								
+								{
+									"e4aa1cc7-8c68-0cb1-a050-5fe6fb8934c8",
+									true,
+								},
+								
+								{
+									"a0ef2338-bf39-0047-93fa-d8fc5e49fd7a",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "策动",
+							uuid = "baf0b9ed-8286-f4fc-852a-f2ab39179b8e",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"da654a9c-a943-a837-b3d8-d54541b3ab7b",
+									true,
+								},
+								
+								{
+									"7ac67a90-6045-f67f-b567-b349928dcce6",
+									true,
+								},
+								
+								{
+									"74f88d46-72b7-0bc7-abcf-a8278412dc8c",
+									true,
+								},
+								
+								{
+									"e4aa1cc7-8c68-0cb1-a050-5fe6fb8934c8",
+									true,
+								},
+								
+								{
+									"a0ef2338-bf39-0047-93fa-d8fc5e49fd7a",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "5af4f73b-bc21-b572-9247-92c98ed9085e",
 							version = 2.1,
 						},
 					},
@@ -3183,6 +3519,45 @@ local tbl =
 							buffID = 1826,
 							category = "Self",
 							uuid = "a0ef2338-bf39-0047-93fa-d8fc5e49fd7a",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "58621890-dbad-a5ff-b2c9-938fe4d64cb5",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "b86cd953-22e7-5505-8fc6-ff386f5e5914",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "da654a9c-a943-a837-b3d8-d54541b3ab7b",
 							version = 3,
 						},
 					},
@@ -3776,6 +4151,41 @@ local tbl =
 			},
 		},
 	},
+	[46] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "-- 双骑士中点穿过场心得到相对 12 点。只画方位箭头，不提交走位。\nlocal timer = TensorReactions_CurrentTimer\nif type(timer) ~= \"number\" or timer < 322.1 or timer >= 345.4 then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal root = data.string_dsr\nlocal north = root.p2Op15North\n-- 回放向前重走时重新求解；正常 wipe 由 pull-scoped data 自然清空。\nif north and north.lastTimer and timer < north.lastTimer - 0.1 then\n  root.p2Op15North = nil\n  north = nil\nend\nif not north then\n  north = {}\n  root.p2Op15North = north\nend\nnorth.lastTimer = timer\n\nif not north.x then\n  local adelphel, janlenoux\n  local aCount, bCount = 0, 0\n  for _, entity in pairs(TensorCore.entityList(\"contentid=3634\")) do\n    if Argus.getEntityModel(entity.id) == 12601 then\n      adelphel = entity\n      aCount = aCount + 1\n    end\n  end\n  for _, entity in pairs(TensorCore.entityList(\"contentid=3635\")) do\n    if Argus.getEntityModel(entity.id) == 12632 then\n      janlenoux = entity\n      bCount = bCount + 1\n    end\n  end\n  if aCount ~= 1 or bCount ~= 1 then return end\n  local a, b = adelphel.pos, janlenoux.pos\n  if type(a) ~= \"table\" or type(b) ~= \"table\"\n      or type(a.x) ~= \"number\" or type(a.z) ~= \"number\"\n      or type(b.x) ~= \"number\" or type(b.z) ~= \"number\" then return end\n  local ax, az, bx, bz = a.x - 100, a.z - 100, b.x - 100, b.z - 100\n  local ar2, br2 = ax * ax + az * az, bx * bx + bz * bz\n  local mx, mz = (ax + bx) * 0.5, (az + bz) * 0.5\n  local mr2 = mx * mx + mz * mz\n  local dx, dz = ax - bx, az - bz\n  local separation2 = dx * dx + dz * dz\n  if not (ar2 >= 90.25 and ar2 <= 110.25\n      and br2 >= 90.25 and br2 <= 110.25\n      and mr2 >= 20.25 and mr2 <= 30.25\n      and separation2 >= 282.24 and separation2 <= 316.84) then return end\n  local scale = 23 / math.sqrt(mr2)\n  north.x, north.z = 100 - mx * scale, 100 - mz * scale\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal pos = player and player.pos\nif type(pos) ~= \"table\" or type(pos.x) ~= \"number\"\n    or type(pos.y) ~= \"number\" or type(pos.z) ~= \"number\" then return end\nlocal state = root.p2Op15\nlocal color = 2365587455 -- 点名未知: 半透明白色。\nif type(state) == \"table\" then\n  if state.isBlue == true then color = 2349665791\n  elseif state.isBlue == false then color = 2350907156 end\nend\nif north.color ~= color then\n  north.drawer = TensorCore.getCachedDrawer(nil, nil, color, 4294967295, 2, 0, 0)\n  north.color = color\nend\nlocal heading = math.atan2(north.x - pos.x, north.z - pos.z)\n-- 总长 3 米 = 箭身 2 米 + 箭头 1 米；随本人移动实时转向固定 12 点。\nnorth.drawer:addArrow(pos.x, pos.y + 0.05, pos.z, heading, 2, 0.6, 1, 1.4, false, 0)",
+							name = "双骑士12点白绿红3米箭头",
+							uuid = "c388b5fa-ae02-ce58-940d-d6dd5e650456",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 13,
+				mechanicTime = 320.6,
+				name = "[P2] 1.5运双骑士12点三色箭头",
+				timeRange = true,
+				timelineIndex = 46,
+				timerEndOffset = 24.79,
+				timerStartOffset = 1.5,
+				uuid = "5b1b23ae-5746-8b9e-ab93-d08a2743663c",
+				version = 2,
+			},
+		},
+	},
 	[48] = 
 	{
 		
@@ -4000,12 +4410,17 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nlocal entityID = tonumber(eventArgs.entityID)\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(state) ~= \"table\" or type(state.blueSeen) ~= \"table\"\n    or not state.blueRangeDrawer or not entityID or not playerID then\n  self.used = true\n  return\nend\n\nif state.blueSeen[entityID] then\n  self.used = true\n  return\nend\nstate.blueSeen[entityID] = true\nstate.blueCount = (tonumber(state.blueCount) or 0) + 1\nstate.blueIDs[state.blueCount] = entityID\n\nif entityID == playerID then\n  state.isBlue = true\nelse\n  state.blueRangeDrawer:addTimedCircleOnEnt(\n    9300, entityID, 24, 0, false, true\n  )\nend\nself.used = true",
+							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nif type(state) == \"table\" then\n  state.isBlue = true\nend\nself.used = true",
 							conditions = 
 							{
 								
 								{
 									"0c609a7c-a37e-c676-9bee-82024d93082c",
+									true,
+								},
+								
+								{
+									"edadfbf3-7c7f-e5cd-86ac-5841c7d989d1",
 									true,
 								},
 							},
@@ -4031,14 +4446,26 @@ local tbl =
 							version = 3,
 						},
 					},
+					
+					{
+						data = 
+						{
+							category = "Party",
+							conditionType = 10,
+							dequeueIfLuaFalse = true,
+							name = "蓝圈点名本人",
+							partyTargetType = "Event Entity",
+							uuid = "edadfbf3-7c7f-e5cd-86ac-5841c7d989d1",
+							version = 3,
+						},
+					},
 				},
 				eventType = 4,
-				loop = true,
 				mechanicTime = 335.3,
-				name = "[P2] 1.5运蓝圈标记处理",
+				name = "[P2] 1.5运本人蓝圈点名",
 				timeRange = true,
 				timelineIndex = 50,
-				timerEndOffset = 11,
+				timerEndOffset = 3,
 				timerStartOffset = -1,
 				uuid = "e38609b3-2700-82a3-8746-93ea21a679dc",
 				version = 2,
@@ -4085,9 +4512,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"0c8d7b9a-11d5-1eb9-aed6-8728fc536dfc",
+									true,
+								},
 								
 								{
 									"2603e111-81c0-42e2-90f9-05cc030fe2d5",
@@ -4111,9 +4543,90 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
-							name = "策动",
+							ignoreWeaveRules = true,
+							name = "行吟",
 							uuid = "9d58b91d-8ae9-c87c-9a08-00c757eeb33e",
 							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
+								
+								{
+									"663088f8-29c4-f4c8-9108-8e074721147e",
+									true,
+								},
+								
+								{
+									"2603e111-81c0-42e2-90f9-05cc030fe2d5",
+									true,
+								},
+								
+								{
+									"ca1e956a-addc-504b-a1ff-15a3547b866e",
+									true,
+								},
+								
+								{
+									"f3e9efc3-6994-21bc-83a1-e5285a841922",
+									true,
+								},
+								
+								{
+									"0f9cfd25-9eb7-5fa0-a2ab-408ffed520df",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "策动",
+							uuid = "3d00561c-5613-2737-8f45-5eeda6242afe",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"92f1bc86-2ce9-0be2-800a-156f070ed10c",
+									true,
+								},
+								
+								{
+									"2603e111-81c0-42e2-90f9-05cc030fe2d5",
+									true,
+								},
+								
+								{
+									"ca1e956a-addc-504b-a1ff-15a3547b866e",
+									true,
+								},
+								
+								{
+									"f3e9efc3-6994-21bc-83a1-e5285a841922",
+									true,
+								},
+								
+								{
+									"0f9cfd25-9eb7-5fa0-a2ab-408ffed520df",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "a09feb71-3d2e-8587-adec-bb9963070f1c",
 							version = 2.1,
 						},
 					},
@@ -4171,6 +4684,45 @@ local tbl =
 							version = 3,
 						},
 					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "0c8d7b9a-11d5-1eb9-aed6-8728fc536dfc",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "663088f8-29c4-f4c8-9108-8e074721147e",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "92f1bc86-2ce9-0be2-800a-156f070ed10c",
+							version = 3,
+						},
+					},
 				},
 				enabled = false,
 				mechanicTime = 335.3,
@@ -4192,7 +4744,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal state = {\n  blueIDs = {},\n  blueSeen = {},\n  blueCount = 0,\n  isBlue = false,\n  blueRangeDrawer = TensorCore.getCachedDrawer(\n    1207942497, 1207942497, 1207942497, 4205190917, 3\n  ),\n  redArrowColor = 2349665791,\n  greenArrowColor = 2350907156,\n  arrowOutlineColor = 4294967295\n}\n\ndata.string_dsr.p2Op15 = state\nself.used = true",
+							actionLua = "data.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal state = {\n  -- 本人点名窗口结束前，职责保持未知。\n  blueRangeDrawer = TensorCore.getCachedDrawer(\n    1207942497, 1207942497, 1207942497, 4205190917, 3\n  ),\n  redArrowColor = 2349665791,\n  greenArrowColor = 2350907156,\n  arrowOutlineColor = 4294967295\n}\n\ndata.string_dsr.p2Op15 = state\nself.used = true",
 							name = "初始化1.5运状态与绘图参数",
 							uuid = "19068115-1baf-0b1c-ad28-8ec48fed67c4",
 							version = 2.1,
@@ -4206,6 +4758,78 @@ local tbl =
 				name = "[P2] 1.5运状态初始化",
 				timelineIndex = 50,
 				uuid = "10d29bd2-fbd3-8a53-bf79-76fa243641ba",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local entityID = tonumber(eventArgs.entityID)\nif entityID then\n  TensorCore.getCachedDrawer(\n    1207942497, 1207942497, 1207942497, 4205190917, 3\n  ):addTimedCircleOnEnt(9300, entityID, 24, 0, false, true)\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"b4c1aa28-b4de-2422-a5fe-b48c17680a42",
+									true,
+								},
+								
+								{
+									"85db57a5-a5bf-6b60-b5ea-ea60611d4bd3",
+									false,
+								},
+							},
+							name = "[P2] 1.5运其他蓝圈范围",
+							uuid = "efe8026e-9f21-fa5b-ba23-c47564c5d063",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventMarkerID = 330,
+							name = "Marker 330",
+							uuid = "b4c1aa28-b4de-2422-a5fe-b48c17680a42",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Party",
+							conditionType = 10,
+							dequeueIfLuaFalse = true,
+							name = "蓝圈点名本人",
+							partyTargetType = "Event Entity",
+							uuid = "85db57a5-a5bf-6b60-b5ea-ea60611d4bd3",
+							version = 3,
+						},
+					},
+				},
+				eventType = 4,
+				loop = true,
+				mechanicTime = 335.3,
+				name = "[P2] 1.5运其他蓝圈范围",
+				timeRange = true,
+				timelineIndex = 50,
+				timerEndOffset = 3,
+				timerStartOffset = -1,
+				uuid = "9462ad3e-84bd-b14d-a3be-95c69821ac8a",
 				version = 2,
 			},
 		},
@@ -4252,8 +4876,21 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal thordanID = tonumber(state and state.thordanID)\nlocal pos = player and player.pos\nif type(state) ~= \"table\" or state.ready ~= true or not playerID or not thordanID\n    or not state.redArrowColor or not state.greenArrowColor or not state.arrowOutlineColor\n    or type(pos) ~= \"table\" or type(pos.x) ~= \"number\" or type(pos.z) ~= \"number\" then\n  return\nend\n\nlocal fillColor = state.isBlue == true and state.redArrowColor or state.greenArrowColor\nArgus2.addTimedArrowFilled(\n  7000,\n  pos.x, pos.y or 0, pos.z,\n  5, 1, 2, 3, 0,\n  fillColor, fillColor, nil,\n  0, playerID, thordanID,\n  state.arrowOutlineColor, 2,\n  0, 1, 0,\n  false, 0, false,\n  0, 0, 0, 0, 0.05\n)\nself.used = true",
-							name = "半透明描边 OnEnt 箭头指向托尔丹",
+							actionLua = "-- 用 25540 的实际落点校正提前辨向，不再创建第二根箭头。\nlocal x, z = tonumber(eventArgs.castPosX), tonumber(eventArgs.castPosZ)\nlocal dx, dz = x and x - 100, z and z - 100\nlocal radius2 = dx and dz and dx * dx + dz * dz\nif not radius2 or not (radius2 >= 400 and radius2 <= 676) then\n  self.used = true\n  return\nend\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal north = data.string_dsr.p2Op15North\nif type(north) ~= \"table\" then\n  north = {}\n  data.string_dsr.p2Op15North = north\nend\nnorth.x, north.z = x, z\nnorth.lastTimer = TensorReactions_CurrentTimer\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"1ded784a-00c9-6a83-8145-334efa24f67b",
+									true,
+								},
+								
+								{
+									"c7bcf9f7-88aa-ba01-b8c0-f6da646658d4",
+									true,
+								},
+							},
+							name = "25540校正12点方向",
 							uuid = "3202f216-ed61-c996-a8ad-1263b809a930",
 							version = 2.1,
 						},
@@ -4261,12 +4898,45 @@ local tbl =
 				},
 				conditions = 
 				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 3,
+							eventArgType = 2,
+							name = "托尔丹移动事件",
+							spellIDList = 
+							{
+								25540,
+							},
+							uuid = "1ded784a-00c9-6a83-8145-334efa24f67b",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 2,
+							eventEntityContentID = 3632,
+							name = "托尔丹事件来源",
+							uuid = "c7bcf9f7-88aa-ba01-b8c0-f6da646658d4",
+							version = 3,
+						},
+					},
 				},
+				eventType = 2,
 				mechanicTime = 345.4,
-				name = "[P2] 1.5运人群托尔丹箭头",
+				name = "[P2] 1.5运托尔丹实际落点确认",
+				timeRange = true,
 				timelineIndex = 51,
+				timerEndOffset = -4,
 				timerOffset = -7,
-				timerStartOffset = -7,
+				timerStartOffset = -9,
 				uuid = "7e42afa7-f948-31f7-a689-cdbae894d202",
 				version = 2,
 			},
@@ -4285,7 +4955,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(state) ~= \"table\" or state.ready ~= true or not playerID\n    or type(player.pos) ~= \"table\"\n    or type(MuAiGuide) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or type(Argus) ~= \"table\"\n    or type(Argus.getCurrentAOEs) ~= \"function\" then\n  return\nend\n\nif not state.role then\n  local party = MuAiGuide.Party\n  if type(party) ~= \"table\" then\n    return\n  end\n  if tonumber(party.MT and party.MT.id) == playerID then state.role = \"MT\"\n  elseif tonumber(party.ST and party.ST.id) == playerID then state.role = \"ST\"\n  elseif tonumber(party.H1 and party.H1.id) == playerID then state.role = \"H1\"\n  elseif tonumber(party.H2 and party.H2.id) == playerID then state.role = \"H2\"\n  elseif tonumber(party.D1 and party.D1.id) == playerID then state.role = \"D1\"\n  elseif tonumber(party.D2 and party.D2.id) == playerID then state.role = \"D2\"\n  elseif tonumber(party.D3 and party.D3.id) == playerID then state.role = \"D3\"\n  elseif tonumber(party.D4 and party.D4.id) == playerID then state.role = \"D4\"\n  end\nend\nif not state.role then\n  return\nend\n\nif state.role == \"MT\" or state.role == \"ST\" then\n  self.used = true\n  return\nend\n\nlocal thordan = TensorCore.mGetEntity(tonumber(state.thordanID))\nlocal thordanPos = thordan and thordan.pos or nil\nif type(thordanPos) ~= \"table\"\n    or type(thordanPos.x) ~= \"number\"\n    or type(thordanPos.z) ~= \"number\"\n    or type(state.rx) ~= \"number\"\n    or type(state.rz) ~= \"number\" then\n  return\nend\n\nlocal crowdSlot = nil\nif state.isBlue ~= true then\n  if state.crowdSlotsReady ~= true then\n    local party = MuAiGuide.Party\n    if type(party) ~= \"table\" then\n      return\n    end\n\n    if type(state.crowdRoleIDs) ~= \"table\" then\n      state.crowdRoleIDs = {}\n    end\n    local ids = state.crowdRoleIDs\n    ids[1] = tonumber(party.H1 and party.H1.id)\n    ids[2] = tonumber(party.H2 and party.H2.id)\n    ids[3] = tonumber(party.D1 and party.D1.id)\n    ids[4] = tonumber(party.D2 and party.D2.id)\n    ids[5] = tonumber(party.D3 and party.D3.id)\n    ids[6] = tonumber(party.D4 and party.D4.id)\n\n    if type(state.crowdCandidates) ~= \"table\" then\n      state.crowdCandidates = {{}, {}, {}, {}, {}, {}}\n    end\n    local candidates = state.crowdCandidates\n\n    for i = 1, 6 do\n      local id = ids[i]\n      if not id then\n        return\n      end\n      for j = 1, i - 1 do\n        if ids[j] == id then\n          return\n        end\n      end\n\n      local entity = TensorCore.mGetEntity(id)\n      local pos = entity and entity.pos or nil\n      if type(pos) ~= \"table\"\n          or type(pos.x) ~= \"number\"\n          or type(pos.z) ~= \"number\" then\n        return\n      end\n\n      local dx = pos.x - thordanPos.x\n      local dz = pos.z - thordanPos.z\n      local candidate = candidates[i]\n      candidate.id = id\n      candidate.d2 = dx * dx + dz * dz\n      candidate.lateral = dx * state.rx + dz * state.rz\n    end\n\n    for i = 1, 4 do\n      local best = i\n      for j = i + 1, 6 do\n        if candidates[j].d2 < candidates[best].d2 then\n          best = j\n        end\n      end\n      if best ~= i then\n        candidates[i], candidates[best] = candidates[best], candidates[i]\n      end\n    end\n\n    if candidates[3].d2 > 100 or candidates[4].d2 < 144 then\n      return\n    end\n\n    if candidates[1].lateral > candidates[2].lateral then\n      candidates[1], candidates[2] = candidates[2], candidates[1]\n    end\n    if candidates[2].lateral > candidates[3].lateral then\n      candidates[2], candidates[3] = candidates[3], candidates[2]\n    end\n    if candidates[1].lateral > candidates[2].lateral then\n      candidates[1], candidates[2] = candidates[2], candidates[1]\n    end\n\n    if candidates[2].lateral - candidates[1].lateral < 0.25\n        or candidates[3].lateral - candidates[2].lateral < 0.25 then\n      return\n    end\n\n    state.crowdLeftID = candidates[1].id\n    state.crowdMiddleID = candidates[2].id\n    state.crowdRightID = candidates[3].id\n    state.crowdSlotsReady = true\n    return\n  end\n\n  if state.crowdLeftID == playerID then\n    crowdSlot = 1\n  elseif state.crowdMiddleID == playerID then\n    crowdSlot = 2\n  elseif state.crowdRightID == playerID then\n    crowdSlot = 3\n  else\n    return\n  end\nend\n\nif not state.towerTargetX then\n  if type(state.towerCandidates) ~= \"table\" then\n    state.towerCandidates = {{}, {}, {}, {}, {}, {}}\n  end\n  local towers = state.towerCandidates\n  local towerCount = 0\n  local aoes = Argus.getCurrentAOEs()\n  if type(aoes) ~= \"table\" then\n    return\n  end\n\n  for i = 1, #aoes do\n    local aoe = aoes[i]\n    if aoe.aoeID == 25567\n        and type(aoe.x) == \"number\"\n        and type(aoe.z) == \"number\"\n        and tonumber(aoe.entityID) then\n      local entityID = tonumber(aoe.entityID)\n      local duplicate = false\n      for j = 1, towerCount do\n        if towers[j].id == entityID then\n          duplicate = true\n          break\n        end\n      end\n      if not duplicate then\n        towerCount = towerCount + 1\n        if towerCount > 6 then\n          return\n        end\n        local tower = towers[towerCount]\n        tower.id = entityID\n        tower.x = aoe.x\n        tower.z = aoe.z\n      end\n    end\n  end\n  if towerCount ~= 6 then\n    return\n  end\n\n  if state.isBlue == true then\n    local best, bestD2 = nil, nil\n    for i = 1, 6 do\n      local tower = towers[i]\n      local dx = player.pos.x - tower.x\n      local dz = player.pos.z - tower.z\n      local d2 = dx * dx + dz * dz\n      if bestD2 == nil or d2 < bestD2 then\n        best = tower\n        bestD2 = d2\n      end\n    end\n    state.towerTargetX = best.x\n    state.towerTargetZ = best.z\n  else\n    for i = 1, 6 do\n      local tower = towers[i]\n      local dx = tower.x - thordanPos.x\n      local dz = tower.z - thordanPos.z\n      tower.d2 = dx * dx + dz * dz\n      tower.lateral = dx * state.rx + dz * state.rz\n    end\n\n    for i = 1, 4 do\n      local best = i\n      for j = i + 1, 6 do\n        if towers[j].d2 < towers[best].d2 then\n          best = j\n        end\n      end\n      if best ~= i then\n        towers[i], towers[best] = towers[best], towers[i]\n      end\n    end\n\n    if towers[4].d2 <= towers[3].d2 then\n      return\n    end\n\n    if towers[1].lateral > towers[2].lateral then\n      towers[1], towers[2] = towers[2], towers[1]\n    end\n    if towers[2].lateral > towers[3].lateral then\n      towers[2], towers[3] = towers[3], towers[2]\n    end\n    if towers[1].lateral > towers[2].lateral then\n      towers[1], towers[2] = towers[2], towers[1]\n    end\n\n    if towers[2].lateral - towers[1].lateral < 0.25\n        or towers[3].lateral - towers[2].lateral < 0.25 then\n      return\n    end\n\n    state.towerTargetX = towers[crowdSlot].x\n    state.towerTargetZ = towers[crowdSlot].z\n  end\nend\n\nif MuAiGuide.FrameDirect(\n    state.towerTargetX, state.towerTargetZ, 0.5\n) then\n  self.used = true\nend",
+							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(state) ~= \"table\" or state.ready ~= true or not playerID\n    or type(player.pos) ~= \"table\"\n    or type(MuAiGuide) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or type(Argus) ~= \"table\"\n    or type(Argus.getCurrentAOEs) ~= \"function\" then\n  return\nend\n\nif not state.role then\n  local party = MuAiGuide.Party\n  if type(party) ~= \"table\" then\n    return\n  end\n  if tonumber(party.MT and party.MT.id) == playerID then state.role = \"MT\"\n  elseif tonumber(party.ST and party.ST.id) == playerID then state.role = \"ST\"\n  elseif tonumber(party.H1 and party.H1.id) == playerID then state.role = \"H1\"\n  elseif tonumber(party.H2 and party.H2.id) == playerID then state.role = \"H2\"\n  elseif tonumber(party.D1 and party.D1.id) == playerID then state.role = \"D1\"\n  elseif tonumber(party.D2 and party.D2.id) == playerID then state.role = \"D2\"\n  elseif tonumber(party.D3 and party.D3.id) == playerID then state.role = \"D3\"\n  elseif tonumber(party.D4 and party.D4.id) == playerID then state.role = \"D4\"\n  end\nend\nif not state.role then\n  return\nend\n\nif state.role == \"MT\" or state.role == \"ST\" then\n  self.used = true\n  return\nend\n\nlocal thordan = TensorCore.mGetEntity(tonumber(state.thordanID))\nlocal thordanPos = thordan and thordan.pos or nil\nif type(thordanPos) ~= \"table\"\n    or type(thordanPos.x) ~= \"number\"\n    or type(thordanPos.z) ~= \"number\"\n    or type(state.rx) ~= \"number\"\n    or type(state.rz) ~= \"number\" then\n  return\nend\n\nif type(state.isBlue) ~= \"boolean\" then return end\nlocal crowdSlot = nil\nif state.isBlue ~= true then\n  if state.crowdSlotsReady ~= true then\n    local party = MuAiGuide.Party\n    if type(party) ~= \"table\" then\n      return\n    end\n\n    if type(state.crowdRoleIDs) ~= \"table\" then\n      state.crowdRoleIDs = {}\n    end\n    local ids = state.crowdRoleIDs\n    ids[1] = tonumber(party.H1 and party.H1.id)\n    ids[2] = tonumber(party.H2 and party.H2.id)\n    ids[3] = tonumber(party.D1 and party.D1.id)\n    ids[4] = tonumber(party.D2 and party.D2.id)\n    ids[5] = tonumber(party.D3 and party.D3.id)\n    ids[6] = tonumber(party.D4 and party.D4.id)\n\n    if type(state.crowdCandidates) ~= \"table\" then\n      state.crowdCandidates = {{}, {}, {}, {}, {}, {}}\n    end\n    local candidates = state.crowdCandidates\n\n    for i = 1, 6 do\n      local id = ids[i]\n      if not id then\n        return\n      end\n      for j = 1, i - 1 do\n        if ids[j] == id then\n          return\n        end\n      end\n\n      local entity = TensorCore.mGetEntity(id)\n      local pos = entity and entity.pos or nil\n      if type(pos) ~= \"table\"\n          or type(pos.x) ~= \"number\"\n          or type(pos.z) ~= \"number\" then\n        return\n      end\n\n      local dx = pos.x - thordanPos.x\n      local dz = pos.z - thordanPos.z\n      local candidate = candidates[i]\n      candidate.id = id\n      candidate.d2 = dx * dx + dz * dz\n      candidate.lateral = dx * state.rx + dz * state.rz\n    end\n\n    for i = 1, 4 do\n      local best = i\n      for j = i + 1, 6 do\n        if candidates[j].d2 < candidates[best].d2 then\n          best = j\n        end\n      end\n      if best ~= i then\n        candidates[i], candidates[best] = candidates[best], candidates[i]\n      end\n    end\n\n    if candidates[3].d2 > 100 or candidates[4].d2 < 144 then\n      return\n    end\n\n    if candidates[1].lateral > candidates[2].lateral then\n      candidates[1], candidates[2] = candidates[2], candidates[1]\n    end\n    if candidates[2].lateral > candidates[3].lateral then\n      candidates[2], candidates[3] = candidates[3], candidates[2]\n    end\n    if candidates[1].lateral > candidates[2].lateral then\n      candidates[1], candidates[2] = candidates[2], candidates[1]\n    end\n\n    if candidates[2].lateral - candidates[1].lateral < 0.25\n        or candidates[3].lateral - candidates[2].lateral < 0.25 then\n      return\n    end\n\n    state.crowdLeftID = candidates[1].id\n    state.crowdMiddleID = candidates[2].id\n    state.crowdRightID = candidates[3].id\n    state.crowdSlotsReady = true\n    return\n  end\n\n  if state.crowdLeftID == playerID then\n    crowdSlot = 1\n  elseif state.crowdMiddleID == playerID then\n    crowdSlot = 2\n  elseif state.crowdRightID == playerID then\n    crowdSlot = 3\n  else\n    return\n  end\nend\n\nif not state.towerTargetX then\n  if type(state.towerCandidates) ~= \"table\" then\n    state.towerCandidates = {{}, {}, {}, {}, {}, {}}\n  end\n  local towers = state.towerCandidates\n  local towerCount = 0\n  local aoes = Argus.getCurrentAOEs()\n  if type(aoes) ~= \"table\" then\n    return\n  end\n\n  for i = 1, #aoes do\n    local aoe = aoes[i]\n    if aoe.aoeID == 25567\n        and type(aoe.x) == \"number\"\n        and type(aoe.z) == \"number\"\n        and tonumber(aoe.entityID) then\n      local entityID = tonumber(aoe.entityID)\n      local duplicate = false\n      for j = 1, towerCount do\n        if towers[j].id == entityID then\n          duplicate = true\n          break\n        end\n      end\n      if not duplicate then\n        towerCount = towerCount + 1\n        if towerCount > 6 then\n          return\n        end\n        local tower = towers[towerCount]\n        tower.id = entityID\n        tower.x = aoe.x\n        tower.z = aoe.z\n      end\n    end\n  end\n  if towerCount ~= 6 then\n    return\n  end\n\n  if state.isBlue == true then\n    local best, bestD2 = nil, nil\n    for i = 1, 6 do\n      local tower = towers[i]\n      local dx = player.pos.x - tower.x\n      local dz = player.pos.z - tower.z\n      local d2 = dx * dx + dz * dz\n      if bestD2 == nil or d2 < bestD2 then\n        best = tower\n        bestD2 = d2\n      end\n    end\n    state.towerTargetX = best.x\n    state.towerTargetZ = best.z\n  else\n    for i = 1, 6 do\n      local tower = towers[i]\n      local dx = tower.x - thordanPos.x\n      local dz = tower.z - thordanPos.z\n      tower.d2 = dx * dx + dz * dz\n      tower.lateral = dx * state.rx + dz * state.rz\n    end\n\n    for i = 1, 4 do\n      local best = i\n      for j = i + 1, 6 do\n        if towers[j].d2 < towers[best].d2 then\n          best = j\n        end\n      end\n      if best ~= i then\n        towers[i], towers[best] = towers[best], towers[i]\n      end\n    end\n\n    if towers[4].d2 <= towers[3].d2 then\n      return\n    end\n\n    if towers[1].lateral > towers[2].lateral then\n      towers[1], towers[2] = towers[2], towers[1]\n    end\n    if towers[2].lateral > towers[3].lateral then\n      towers[2], towers[3] = towers[3], towers[2]\n    end\n    if towers[1].lateral > towers[2].lateral then\n      towers[1], towers[2] = towers[2], towers[1]\n    end\n\n    if towers[2].lateral - towers[1].lateral < 0.25\n        or towers[3].lateral - towers[2].lateral < 0.25 then\n      return\n    end\n\n    state.towerTargetX = towers[crowdSlot].x\n    state.towerTargetZ = towers[crowdSlot].z\n  end\nend\n\nif MuAiGuide.FrameDirect(\n    state.towerTargetX, state.towerTargetZ, 0.5\n) then\n  self.used = true\nend",
 							name = "MuAi 指向本人分配塔",
 							uuid = "8dafbbfd-be39-dbe1-8ab0-f9a93ec72d4f",
 							version = 2.1,
@@ -4316,7 +4986,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(state) ~= \"table\" or state.ready ~= true or not playerID\n    or type(MuAiGuide) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\" then\n  return\nend\n\nif not state.role then\n  local party = MuAiGuide.Party\n  if type(party) ~= \"table\" then\n    return\n  end\n  if tonumber(party.MT and party.MT.id) == playerID then state.role = \"MT\"\n  elseif tonumber(party.ST and party.ST.id) == playerID then state.role = \"ST\"\n  elseif tonumber(party.H1 and party.H1.id) == playerID then state.role = \"H1\"\n  elseif tonumber(party.H2 and party.H2.id) == playerID then state.role = \"H2\"\n  elseif tonumber(party.D1 and party.D1.id) == playerID then state.role = \"D1\"\n  elseif tonumber(party.D2 and party.D2.id) == playerID then state.role = \"D2\"\n  elseif tonumber(party.D3 and party.D3.id) == playerID then state.role = \"D3\"\n  elseif tonumber(party.D4 and party.D4.id) == playerID then state.role = \"D4\"\n  end\nend\nif not state.role then\n  return\nend\n\nif state.isBlue == nil then\n  state.isBlue = false\n  for i = 1, tonumber(state.blueCount) or 0 do\n    if state.blueIDs[i] == playerID then\n      state.isBlue = true\n      break\n    end\n  end\nend\n\nif state.role == \"MT\" or state.role == \"ST\" then\n  self.used = true\n  return\nend\n\nlocal targetX = nil\nlocal targetZ = nil\nif state.isBlue == true then\n  local pos = player.pos\n  if type(pos) ~= \"table\"\n      or type(pos.x) ~= \"number\"\n      or type(pos.z) ~= \"number\"\n      or type(state.blueLeftX) ~= \"number\"\n      or type(state.blueLeftZ) ~= \"number\"\n      or type(state.blueRightX) ~= \"number\"\n      or type(state.blueRightZ) ~= \"number\"\n      or type(state.blueBackX) ~= \"number\"\n      or type(state.blueBackZ) ~= \"number\" then\n    return\n  end\n\n  if not state.blueTargetX then\n    local leftD2 =\n      (pos.x - state.blueLeftX) ^ 2 + (pos.z - state.blueLeftZ) ^ 2\n    local rightD2 =\n      (pos.x - state.blueRightX) ^ 2 + (pos.z - state.blueRightZ) ^ 2\n    local backD2 =\n      (pos.x - state.blueBackX) ^ 2 + (pos.z - state.blueBackZ) ^ 2\n\n    state.blueTargetX = state.blueLeftX\n    state.blueTargetZ = state.blueLeftZ\n    local bestD2 = leftD2\n    if rightD2 < bestD2 then\n      bestD2 = rightD2\n      state.blueTargetX = state.blueRightX\n      state.blueTargetZ = state.blueRightZ\n    end\n    if backD2 < bestD2 then\n      state.blueTargetX = state.blueBackX\n      state.blueTargetZ = state.blueBackZ\n    end\n  end\n\n  targetX = state.blueTargetX\n  targetZ = state.blueTargetZ\nelse\n  if type(state.groupX) ~= \"number\"\n      or type(state.groupZ) ~= \"number\" then\n    return\n  end\n  targetX = state.groupX\n  targetZ = state.groupZ\nend\n\nif MuAiGuide.FrameDirect(targetX, targetZ, 0.5) then\n  self.used = true\nend",
+							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(state) ~= \"table\" or state.ready ~= true or not playerID\n    or type(MuAiGuide) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\" then\n  return\nend\n\nif not state.role then\n  local party = MuAiGuide.Party\n  if type(party) ~= \"table\" then\n    return\n  end\n  if tonumber(party.MT and party.MT.id) == playerID then state.role = \"MT\"\n  elseif tonumber(party.ST and party.ST.id) == playerID then state.role = \"ST\"\n  elseif tonumber(party.H1 and party.H1.id) == playerID then state.role = \"H1\"\n  elseif tonumber(party.H2 and party.H2.id) == playerID then state.role = \"H2\"\n  elseif tonumber(party.D1 and party.D1.id) == playerID then state.role = \"D1\"\n  elseif tonumber(party.D2 and party.D2.id) == playerID then state.role = \"D2\"\n  elseif tonumber(party.D3 and party.D3.id) == playerID then state.role = \"D3\"\n  elseif tonumber(party.D4 and party.D4.id) == playerID then state.role = \"D4\"\n  end\nend\nif not state.role then\n  return\nend\n\nif type(state.isBlue) ~= \"boolean\" then return end\n\nif state.role == \"MT\" or state.role == \"ST\" then\n  self.used = true\n  return\nend\n\nlocal targetX = nil\nlocal targetZ = nil\nif state.isBlue == true then\n  local pos = player.pos\n  if type(pos) ~= \"table\"\n      or type(pos.x) ~= \"number\"\n      or type(pos.z) ~= \"number\"\n      or type(state.blueLeftX) ~= \"number\"\n      or type(state.blueLeftZ) ~= \"number\"\n      or type(state.blueRightX) ~= \"number\"\n      or type(state.blueRightZ) ~= \"number\"\n      or type(state.blueBackX) ~= \"number\"\n      or type(state.blueBackZ) ~= \"number\" then\n    return\n  end\n\n  if not state.blueTargetX then\n    local leftD2 =\n      (pos.x - state.blueLeftX) ^ 2 + (pos.z - state.blueLeftZ) ^ 2\n    local rightD2 =\n      (pos.x - state.blueRightX) ^ 2 + (pos.z - state.blueRightZ) ^ 2\n    local backD2 =\n      (pos.x - state.blueBackX) ^ 2 + (pos.z - state.blueBackZ) ^ 2\n\n    state.blueTargetX = state.blueLeftX\n    state.blueTargetZ = state.blueLeftZ\n    local bestD2 = leftD2\n    if rightD2 < bestD2 then\n      bestD2 = rightD2\n      state.blueTargetX = state.blueRightX\n      state.blueTargetZ = state.blueRightZ\n    end\n    if backD2 < bestD2 then\n      state.blueTargetX = state.blueBackX\n      state.blueTargetZ = state.blueBackZ\n    end\n  end\n\n  targetX = state.blueTargetX\n  targetZ = state.blueTargetZ\nelse\n  if type(state.groupX) ~= \"number\"\n      or type(state.groupZ) ~= \"number\" then\n    return\n  end\n  targetX = state.groupX\n  targetZ = state.groupZ\nend\n\nif MuAiGuide.FrameDirect(targetX, targetZ, 0.5) then\n  self.used = true\nend",
 							name = "MuAi 指向蓝圈安全点或人群分摊点",
 							uuid = "b4dd1a85-cd42-0474-b97d-8d3305a21b72",
 							version = 2.1,
@@ -4351,7 +5021,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nif type(state) ~= \"table\" then\n  self.used = true\n  return\nend\n\nlocal thordans = TensorCore.entityList(\"contentid=3632\")\nlocal outer = nil\nlocal bestD2 = 0\nfor _, entity in pairs(thordans) do\n  if entity.pos then\n    local dx = entity.pos.x - 100\n    local dz = entity.pos.z - 100\n    local d2 = dx * dx + dz * dz\n    if d2 > bestD2 then\n      bestD2 = d2\n      outer = entity\n    end\n  end\nend\nif not outer or bestD2 < 225 then\n  self.used = true\n  return\nend\n\nlocal distance = math.sqrt(bestD2)\nlocal fx = (outer.pos.x - 100) / distance\nlocal fz = (outer.pos.z - 100) / distance\nlocal rx = fz\nlocal rz = -fx\n\nstate.thordanID = tonumber(outer.id)\nstate.fx = fx\nstate.fz = fz\nstate.rx = rx\nstate.rz = rz\nstate.groupX = 100 + fx * 20\nstate.groupZ = 100 + fz * 20\nstate.blueLeftX = 100 - rx * 20 - fx * 1.5\nstate.blueLeftZ = 100 - rz * 20 - fz * 1.5\nstate.blueRightX = 100 + rx * 20 - fx * 1.5\nstate.blueRightZ = 100 + rz * 20 - fz * 1.5\nstate.blueBackX = 100 - fx * 20\nstate.blueBackZ = 100 - fz * 20\nstate.mtLineX = 100 + rx * 8 - fx * 4.5\nstate.mtLineZ = 100 + rz * 8 - fz * 4.5\nstate.stLineX = 100 - rx * 8 - fx * 4.5\nstate.stLineZ = 100 - rz * 8 - fz * 4.5\nstate.mtFinalX = 100 - rx * 5.5 + fx * 19\nstate.mtFinalZ = 100 - rz * 5.5 + fz * 19\nstate.stFinalX = 100 + rx * 5.5 + fx * 19\nstate.stFinalZ = 100 + rz * 5.5 + fz * 19\nstate.ready = true\nself.used = true",
+							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nif type(state) ~= \"table\" then\n  self.used = true\n  return\nend\n\nlocal thordans = TensorCore.entityList(\"contentid=3632\")\nlocal outer = nil\nlocal bestD2 = 0\nfor _, entity in pairs(thordans) do\n  if entity.pos then\n    local dx = entity.pos.x - 100\n    local dz = entity.pos.z - 100\n    local d2 = dx * dx + dz * dz\n    if d2 > bestD2 then\n      bestD2 = d2\n      outer = entity\n    end\n  end\nend\nif not outer or bestD2 < 225 then\n  self.used = true\n  return\nend\n\nlocal distance = math.sqrt(bestD2)\nlocal fx = (outer.pos.x - 100) / distance\nlocal fz = (outer.pos.z - 100) / distance\nlocal rx = fz\nlocal rz = -fx\n\nstate.thordanID = tonumber(outer.id)\nstate.fx = fx\nstate.fz = fz\nstate.rx = rx\nstate.rz = rz\nstate.groupX = 100 + fx * 20\nstate.groupZ = 100 + fz * 20\nstate.blueLeftX = 100 - rx * 20 - fx * 1.5\nstate.blueLeftZ = 100 - rz * 20 - fz * 1.5\nstate.blueRightX = 100 + rx * 20 - fx * 1.5\nstate.blueRightZ = 100 + rz * 20 - fz * 1.5\nstate.blueBackX = 100 - fx * 20\nstate.blueBackZ = 100 - fz * 20\nstate.mtLineX = 100 + rx * 8 - fx * 4.5\nstate.mtLineZ = 100 + rz * 8 - fz * 4.5\nstate.stLineX = 100 - rx * 8 - fx * 4.5\nstate.stLineZ = 100 - rz * 8 - fz * 4.5\nstate.mtFinalX = 100 - rx * 5.5 + fx * 19\nstate.mtFinalZ = 100 - rz * 5.5 + fz * 19\nstate.stFinalX = 100 + rx * 5.5 + fx * 19\nstate.stFinalZ = 100 + rz * 5.5 + fz * 19\n-- 本节点 338.5 晚于本轮 Marker 330（实测约 337.3）。\nif state.isBlue == nil then state.isBlue = false end\nstate.ready = true\nself.used = true",
 							name = "计算世界方位与托尔丹实体",
 							uuid = "649e2ac9-bf5a-8b37-a4d8-a212eccec6be",
 							version = 2.1,
@@ -4710,9 +5380,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"eed157a7-8236-6b78-a87c-66db0d0a9b25",
+									true,
+								},
 								
 								{
 									"1579c847-048e-d691-9d27-a7b63003b668",
@@ -4723,16 +5398,70 @@ local tbl =
 									"b206f5b3-0087-c411-8a30-6b9ef9f1e281",
 									true,
 								},
+							},
+							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
+							ignoreWeaveRules = true,
+							name = "行吟",
+							uuid = "fc3a7f27-2b6e-600b-8b20-5c66c157f4a8",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
 								
 								{
-									"7929901b-4d56-d6f8-a1af-192ee3ab5cb6",
+									"68c7a3ae-d144-ca07-a121-60db704a3a8e",
+									true,
+								},
+								
+								{
+									"1579c847-048e-d691-9d27-a7b63003b668",
+									true,
+								},
+								
+								{
+									"b206f5b3-0087-c411-8a30-6b9ef9f1e281",
 									true,
 								},
 							},
-							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
+							ignoreWeaveRules = true,
 							name = "策动",
-							uuid = "fc3a7f27-2b6e-600b-8b20-5c66c157f4a8",
-							variableTogglesType = 2,
+							uuid = "02918212-63ac-5437-8a06-8c1394e7602b",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"0bad8fb3-df0e-7622-a9ad-3bb14bdd9a60",
+									true,
+								},
+								
+								{
+									"1579c847-048e-d691-9d27-a7b63003b668",
+									true,
+								},
+								
+								{
+									"b206f5b3-0087-c411-8a30-6b9ef9f1e281",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "1bbf03ed-bd06-42bc-b4fc-a03beda11fee",
 							version = 2.1,
 						},
 					},
@@ -4778,13 +5507,38 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Party",
-							conditionType = 4,
-							inRangeValue = 20,
-							minTargetPercent = true,
-							partyTargetNumber = 100,
-							partyTargetSubType = "Number",
-							uuid = "7929901b-4d56-d6f8-a1af-192ee3ab5cb6",
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "eed157a7-8236-6b78-a87c-66db0d0a9b25",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "68c7a3ae-d144-ca07-a121-60db704a3a8e",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "0bad8fb3-df0e-7622-a9ad-3bb14bdd9a60",
 							version = 3,
 						},
 					},
@@ -5767,7 +6521,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = type(root) == \"table\" and root.p2Sanctity25 or nil\nlocal markerIDs = type(state) == \"table\" and state.markerIDs or nil\nif type(state) ~= \"table\"\n    or state.markersReady ~= true\n    or type(markerIDs) ~= \"table\"\n    or #markerIDs ~= 2 then\n  return\nend\n\nlocal initialGroup = {\n  MT = 0, D1 = 0,\n  H2 = 1, D4 = 1,\n  ST = 2, D2 = 2,\n  H1 = 3, D3 = 3,\n}\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n\nlocal function norm360(v)\n  v = v % 360\n  if v < 0 then v = v + 360 end\n  return v\nend\n\nlocal function angleDiff(v)\n  v = norm360(v + 180) - 180\n  return v\nend\n\nlocal function bearing(pos)\n  return norm360(math.deg(math.atan2(pos.x - 100, 100 - pos.z)))\nend\n\nlocal function posAt(deg, radius)\n  local rad = math.rad(deg)\n  return {\n    x = 100 + math.sin(rad) * radius,\n    y = 0,\n    z = 100 - math.cos(rad) * radius,\n  }\nend\n\nlocal function findSelfRole(player)\n  if state and state.ready == true and type(state.roleByID) == \"table\" then\n    return state.roleByID[tonumber(player.id)]\n  end\n  if type(MuAiGuide) ~= \"table\" or type(MuAiGuide.Party) ~= \"table\" then\n    return nil\n  end\n  for _, role in ipairs(roles) do\n    local ent = MuAiGuide.Party[role]\n    if ent and tonumber(ent.id) == tonumber(player.id) then\n      return role\n    end\n  end\n  return nil\nend\n\nif state and state.ready ~= true\n    and type(state.markerIDs) == \"table\" and #state.markerIDs >= 2\n    and type(MuAiGuide) == \"table\" and type(MuAiGuide.Party) == \"table\" then\n  local roleByID, idByRole = {}, {}\n  local valid = true\n\n  for _, role in ipairs(roles) do\n    local ent = MuAiGuide.Party[role]\n    local id = ent and tonumber(ent.id)\n    if not id or roleByID[id] then\n      valid = false\n      break\n    end\n    roleByID[id] = role\n    idByRole[role] = id\n  end\n\n  local meteorRoles = {}\n  if valid then\n    for i = 1, 2 do\n      local role = roleByID[state.markerIDs[i]]\n      if not role then\n        valid = false\n        break\n      end\n      meteorRoles[#meteorRoles + 1] = role\n    end\n  end\n\n  if valid then\n    local g1 = initialGroup[meteorRoles[1]]\n    local g2 = initialGroup[meteorRoles[2]]\n    if g1 > g2 then\n      g1, g2 = g2, g1\n      meteorRoles[1], meteorRoles[2] = meteorRoles[2], meteorRoles[1]\n    end\n\n    local swap = { [0] = 0, [1] = 1, [2] = 2, [3] = 3 }\n    local pair = tostring(g1) .. tostring(g2)\n    if pair == \"01\" then\n      swap[1], swap[2] = 2, 1\n    elseif pair == \"03\" then\n      swap[3], swap[2] = 2, 3\n    elseif pair == \"12\" then\n      swap[1], swap[0] = 0, 1\n    elseif pair == \"23\" then\n      swap[3], swap[0] = 0, 3\n    elseif pair ~= \"02\" and pair ~= \"13\" then\n      valid = false\n    end\n\n    if valid then\n      local isMeteorByRole = {}\n      isMeteorByRole[meteorRoles[1]] = true\n      isMeteorByRole[meteorRoles[2]] = true\n\n      local finalQuadrantByRole = {}\n      for _, role in ipairs(roles) do\n        finalQuadrantByRole[role] = swap[initialGroup[role]]\n      end\n\n      state.roles = roles\n      state.groupByRole = initialGroup\n      state.roleByID = roleByID\n      state.idByRole = idByRole\n      state.meteorRoles = meteorRoles\n      state.isMeteorByRole = isMeteorByRole\n      state.finalQuadrantByRole = finalQuadrantByRole\n      state.meteorGroupPair = pair\n      state.ready = true\n    end\n  end\nend\n\nif state and state.ready == true and state.firstReady ~= true\n    and type(Argus) == \"table\" and type(Argus.getCurrentAOEs) == \"function\" then\n  local outerByQ = { [0] = {}, [1] = {}, [2] = {}, [3] = {} }\n  local inner = {}\n  local seen, towerCount = {}, 0\n\n  for _, aoe in pairs(Argus.getCurrentAOEs()) do\n    if tonumber(aoe.aoeID) == 29564\n        and type(aoe.x) == \"number\" and type(aoe.z) == \"number\" then\n      local key = string.format(\"%.2f:%.2f\", aoe.x, aoe.z)\n      if not seen[key] then\n        seen[key] = true\n        towerCount = towerCount + 1\n        local pos = { x = aoe.x, y = tonumber(aoe.y or 0) or 0, z = aoe.z }\n        local dx, dz = pos.x - 100, pos.z - 100\n        local radius = math.sqrt(dx * dx + dz * dz)\n        local b = bearing(pos)\n        local tower = { pos = pos, bearing = b, key = key }\n\n        if radius > 10 then\n          local q = math.floor((b + 45) / 90) % 4\n          local diff = angleDiff(b - q * 90)\n          if math.abs(diff) < 10 then\n            tower.rank = 0\n          elseif diff < 0 then\n            tower.rank = 1\n          else\n            tower.rank = 2\n          end\n          outerByQ[q][#outerByQ[q] + 1] = tower\n        else\n          inner[#inner + 1] = tower\n        end\n      end\n    end\n  end\n\n  local layoutValid = towerCount == 8\n  for q = 0, 3 do\n    table.sort(outerByQ[q], function(a, b)\n      if a.rank ~= b.rank then return a.rank < b.rank end\n      return a.bearing < b.bearing\n    end)\n    if #outerByQ[q] < 1 or #outerByQ[q] > 2 then\n      layoutValid = false\n    end\n  end\n  table.sort(inner, function(a, b) return a.bearing < b.bearing end)\n\n  if layoutValid then\n    local membersByQ = { [0] = {}, [1] = {}, [2] = {}, [3] = {} }\n    for _, role in ipairs(state.roles or roles) do\n      local q = state.finalQuadrantByRole[role]\n      if q == nil then\n        layoutValid = false\n        break\n      end\n      membersByQ[q][#membersByQ[q] + 1] = role\n    end\n    for q = 0, 3 do\n      if #membersByQ[q] ~= 2 then layoutValid = false end\n    end\n\n    if layoutValid then\n      local firstByRole, firstBearingByRole = {}, {}\n      local usedOuterKeyByQ = {}\n      local meteorGroups = {}\n\n      local function meteorInGroup(q)\n        for _, role in ipairs(membersByQ[q]) do\n          if state.isMeteorByRole[role] then return role end\n        end\n        return nil\n      end\n\n      for q = 0, 3 do\n        local meteorRole = meteorInGroup(q)\n        if meteorRole then\n          meteorGroups[#meteorGroups + 1] = { q = q, role = meteorRole }\n        end\n      end\n      table.sort(meteorGroups, function(a, b) return a.q < b.q end)\n\n      if #meteorGroups == 2 then\n        local g1, g2 = meteorGroups[1], meteorGroups[2]\n        local best1, best2, bestDeviation, bestRank\n        for _, t1 in ipairs(outerByQ[g1.q]) do\n          for _, t2 in ipairs(outerByQ[g2.q]) do\n            local cw = norm360(t2.bearing - t1.bearing)\n            local deviation = math.abs(cw - 180)\n            local rank = t1.rank + t2.rank\n            if not bestDeviation\n                or deviation < bestDeviation\n                or (deviation == bestDeviation and rank < bestRank)\n                or (deviation == bestDeviation and rank == bestRank\n                    and (t1.bearing < best1.bearing\n                      or (t1.bearing == best1.bearing and t2.bearing < best2.bearing))) then\n              best1, best2 = t1, t2\n              bestDeviation, bestRank = deviation, rank\n            end\n          end\n        end\n\n        if best1 and best2 then\n          firstByRole[g1.role], firstBearingByRole[g1.role] = best1.pos, best1.bearing\n          firstByRole[g2.role], firstBearingByRole[g2.role] = best2.pos, best2.bearing\n          usedOuterKeyByQ[g1.q] = best1.key\n          usedOuterKeyByQ[g2.q] = best2.key\n        else\n          layoutValid = false\n        end\n      else\n        layoutValid = false\n      end\n\n      local pendingInner = {}\n      if layoutValid then\n        for q = 0, 3 do\n          local members = membersByQ[q]\n          local meteorRole = meteorInGroup(q)\n          local dpsRole\n          for _, role in ipairs(members) do\n            if string.sub(role, 1, 1) == \"D\" then dpsRole = role end\n          end\n          local highRole = meteorRole or dpsRole\n          local lowRole = members[1] == highRole and members[2] or members[1]\n\n          if not highRole or not lowRole then\n            layoutValid = false\n            break\n          end\n\n          if not firstByRole[highRole] then\n            local chosen = outerByQ[q][1]\n            firstByRole[highRole], firstBearingByRole[highRole] = chosen.pos, chosen.bearing\n            usedOuterKeyByQ[q] = chosen.key\n          end\n\n          local remainingOuter\n          for _, tower in ipairs(outerByQ[q]) do\n            if tower.key ~= usedOuterKeyByQ[q] then\n              remainingOuter = tower\n              break\n            end\n          end\n\n          if remainingOuter then\n            firstByRole[lowRole] = remainingOuter.pos\n            firstBearingByRole[lowRole] = remainingOuter.bearing\n          else\n            pendingInner[#pendingInner + 1] = { q = q, role = lowRole }\n          end\n        end\n      end\n\n      if layoutValid and #pendingInner == #inner then\n        local used, current = {}, {}\n        local best, bestLeftCount, bestRightCount, bestFillCost, bestCode\n\n        local function innerPreference(q, tower)\n          local left = norm360(q * 90 + 45)\n          local right = norm360(q * 90 - 45)\n          local dl = math.abs(angleDiff(tower.bearing - left))\n          local dr = math.abs(angleDiff(tower.bearing - right))\n          if dl < 10 then return 1, 0, 0 end\n          if dr < 10 then return 0, 1, 0 end\n          return 0, 0, math.min(dl, dr)\n        end\n\n        local function isBetter(leftCount, rightCount, fillCost, code)\n          if bestLeftCount == nil then return true end\n          if leftCount ~= bestLeftCount then return leftCount > bestLeftCount end\n          if rightCount ~= bestRightCount then return rightCount > bestRightCount end\n          if fillCost ~= bestFillCost then return fillCost < bestFillCost end\n          return code < bestCode\n        end\n\n        local function search(i, leftCount, rightCount, fillCost, code)\n          if i > #pendingInner then\n            if isBetter(leftCount, rightCount, fillCost, code) then\n              bestLeftCount, bestRightCount = leftCount, rightCount\n              bestFillCost, bestCode = fillCost, code\n              best = {}\n              for role, tower in pairs(current) do best[role] = tower end\n            end\n            return\n          end\n\n          local entry = pendingInner[i]\n          for index, tower in ipairs(inner) do\n            if not used[index] then\n              used[index] = true\n              current[entry.role] = tower\n              local addLeft, addRight, addFill = innerPreference(entry.q, tower)\n              search(\n                i + 1,\n                leftCount + addLeft,\n                rightCount + addRight,\n                fillCost + addFill,\n                code .. string.format(\"%02d\", index)\n              )\n              current[entry.role] = nil\n              used[index] = nil\n            end\n          end\n        end\n\n        search(1, 0, 0, 0, \"\")\n        if best then\n          for role, tower in pairs(best) do\n            firstByRole[role] = tower.pos\n            firstBearingByRole[role] = tower.bearing\n          end\n        else\n          layoutValid = false\n        end\n      elseif layoutValid then\n        layoutValid = false\n      end\n\n      if layoutValid then\n        for _, role in ipairs(state.roles or roles) do\n          if not firstByRole[role] then\n            layoutValid = false\n            break\n          end\n        end\n      end\n\n      if layoutValid then\n        local secondByRole, preKBByRole, secondBearingByRole = {}, {}, {}\n        for q = 0, 3 do\n          local members = membersByQ[q]\n          local meteorRole = meteorInGroup(q)\n          local oppositeQ = (q + 2) % 4\n          for _, role in ipairs(members) do\n            local b\n            if meteorRole then\n              b = state.isMeteorByRole[role] and (oppositeQ * 90) or (q * 90 + 45)\n            else\n              b = string.sub(role, 1, 1) == \"D\" and (q * 90) or (q * 90 + 45)\n            end\n            b = norm360(b)\n            secondBearingByRole[role] = b\n            secondByRole[role] = posAt(b, 18)\n            preKBByRole[role] = posAt(b, 2)\n          end\n        end\n\n        state.membersByFinalQuadrant = membersByQ\n        state.firstTowerByRole = firstByRole\n        state.firstTowerBearingByRole = firstBearingByRole\n        state.secondTowerByRole = secondByRole\n        state.secondTowerBearingByRole = secondBearingByRole\n        state.preKnockbackByRole = preKBByRole\n        state.firstReady = true\n      end\n    end\n  end\nend\n\nlocal player = TensorCore.mGetPlayer()\nif player and state and state.ready == true then\n  local role = findSelfRole(player)\n  local q = role and state.finalQuadrantByRole[role] or nil\n  if q ~= nil and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    local target = posAt(q * 90, 12)\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\n\nself.used = true",
+							actionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = type(root) == \"table\" and root.p2Sanctity25 or nil\nlocal markerIDs = type(state) == \"table\" and state.markerIDs or nil\nif type(state) ~= \"table\"\n    or state.markersReady ~= true\n    or type(markerIDs) ~= \"table\"\n    or #markerIDs ~= 2 then\n  return\nend\n\nlocal cache = state.__tensorOpt_3764a3df\nif type(cache) ~= \"table\" then\n  cache = {\n    initialGroup = {\n      MT = 0, D1 = 0,\n      H2 = 1, D4 = 1,\n      ST = 2, D2 = 2,\n      H1 = 3, D3 = 3,\n    },\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n  }\n\n  cache.norm360 = function(v)\n    v = v % 360\n    if v < 0 then v = v + 360 end\n    return v\n  end\n\n  cache.angleDiff = function(v)\n    v = (v + 180) % 360\n    if v < 0 then v = v + 360 end\n    return v - 180\n  end\n\n  cache.bearing = function(pos)\n    local v = math.deg(math.atan2(pos.x - 100, 100 - pos.z))\n    v = v % 360\n    if v < 0 then v = v + 360 end\n    return v\n  end\n\n  cache.posAt = function(deg, radius)\n    local rad = math.rad(deg)\n    return 100 + math.sin(rad) * radius,\n      100 - math.cos(rad) * radius\n  end\n\n  cache.findSelfRole = function(currentState, player, currentRoles)\n    if currentState and currentState.ready == true\n        and type(currentState.roleByID) == \"table\" then\n      return currentState.roleByID[tonumber(player.id)]\n    end\n    if type(MuAiGuide) ~= \"table\" or type(MuAiGuide.Party) ~= \"table\" then\n      return nil\n    end\n    for _, role in ipairs(currentRoles) do\n      local ent = MuAiGuide.Party[role]\n      if ent and tonumber(ent.id) == tonumber(player.id) then\n        return role\n      end\n    end\n    return nil\n  end\n\n  state.__tensorOpt_3764a3df = cache\nend\n\nlocal initialGroup = cache.initialGroup\nlocal roles = cache.roles\nlocal norm360 = cache.norm360\nlocal angleDiff = cache.angleDiff\nlocal bearing = cache.bearing\nlocal posAt = cache.posAt\nlocal findSelfRole = cache.findSelfRole\n\nif state and state.ready ~= true\n    and type(state.markerIDs) == \"table\" and #state.markerIDs >= 2\n    and type(MuAiGuide) == \"table\" and type(MuAiGuide.Party) == \"table\" then\n  local roleByID, idByRole = {}, {}\n  local valid = true\n\n  for _, role in ipairs(roles) do\n    local ent = MuAiGuide.Party[role]\n    local id = ent and tonumber(ent.id)\n    if not id or roleByID[id] then\n      valid = false\n      break\n    end\n    roleByID[id] = role\n    idByRole[role] = id\n  end\n\n  local meteorRoles = {}\n  if valid then\n    for i = 1, 2 do\n      local role = roleByID[state.markerIDs[i]]\n      if not role then\n        valid = false\n        break\n      end\n      meteorRoles[#meteorRoles + 1] = role\n    end\n  end\n\n  if valid then\n    local g1 = initialGroup[meteorRoles[1]]\n    local g2 = initialGroup[meteorRoles[2]]\n    if g1 > g2 then\n      g1, g2 = g2, g1\n      meteorRoles[1], meteorRoles[2] = meteorRoles[2], meteorRoles[1]\n    end\n\n    local swap = { [0] = 0, [1] = 1, [2] = 2, [3] = 3 }\n    local pair = tostring(g1) .. tostring(g2)\n    if pair == \"01\" then\n      swap[1], swap[2] = 2, 1\n    elseif pair == \"03\" then\n      swap[3], swap[2] = 2, 3\n    elseif pair == \"12\" then\n      swap[1], swap[0] = 0, 1\n    elseif pair == \"23\" then\n      swap[3], swap[0] = 0, 3\n    elseif pair ~= \"02\" and pair ~= \"13\" then\n      valid = false\n    end\n\n    if valid then\n      local isMeteorByRole = {}\n      isMeteorByRole[meteorRoles[1]] = true\n      isMeteorByRole[meteorRoles[2]] = true\n\n      local finalQuadrantByRole = {}\n      for _, role in ipairs(roles) do\n        finalQuadrantByRole[role] = swap[initialGroup[role]]\n      end\n\n      state.roles = roles\n      state.groupByRole = initialGroup\n      state.roleByID = roleByID\n      state.idByRole = idByRole\n      state.meteorRoles = meteorRoles\n      state.isMeteorByRole = isMeteorByRole\n      state.finalQuadrantByRole = finalQuadrantByRole\n      state.meteorGroupPair = pair\n      state.ready = true\n    end\n  end\nend\n\nif state and state.ready == true and state.firstReady ~= true\n    and type(Argus) == \"table\" and type(Argus.getCurrentAOEs) == \"function\" then\n  local outerByQ = { [0] = {}, [1] = {}, [2] = {}, [3] = {} }\n  local inner = {}\n  local seen, towerCount = {}, 0\n\n  for _, aoe in pairs(Argus.getCurrentAOEs()) do\n    if tonumber(aoe.aoeID) == 29564\n        and type(aoe.x) == \"number\" and type(aoe.z) == \"number\" then\n      local key = string.format(\"%.2f:%.2f\", aoe.x, aoe.z)\n      if not seen[key] then\n        seen[key] = true\n        towerCount = towerCount + 1\n        local pos = { x = aoe.x, y = tonumber(aoe.y or 0) or 0, z = aoe.z }\n        local dx, dz = pos.x - 100, pos.z - 100\n        local radius = math.sqrt(dx * dx + dz * dz)\n        local b = bearing(pos)\n        local tower = { pos = pos, bearing = b, key = key }\n\n        if radius > 10 then\n          local q = math.floor((b + 45) / 90) % 4\n          local diff = angleDiff(b - q * 90)\n          if math.abs(diff) < 10 then\n            tower.rank = 0\n          elseif diff < 0 then\n            tower.rank = 1\n          else\n            tower.rank = 2\n          end\n          outerByQ[q][#outerByQ[q] + 1] = tower\n        else\n          inner[#inner + 1] = tower\n        end\n      end\n    end\n  end\n\n  local layoutValid = towerCount == 8\n  for q = 0, 3 do\n    table.sort(outerByQ[q], function(a, b)\n      if a.rank ~= b.rank then return a.rank < b.rank end\n      return a.bearing < b.bearing\n    end)\n    if #outerByQ[q] < 1 or #outerByQ[q] > 2 then\n      layoutValid = false\n    end\n  end\n  table.sort(inner, function(a, b) return a.bearing < b.bearing end)\n\n  if layoutValid then\n    local membersByQ = { [0] = {}, [1] = {}, [2] = {}, [3] = {} }\n    for _, role in ipairs(state.roles or roles) do\n      local q = state.finalQuadrantByRole[role]\n      if q == nil then\n        layoutValid = false\n        break\n      end\n      membersByQ[q][#membersByQ[q] + 1] = role\n    end\n    for q = 0, 3 do\n      if #membersByQ[q] ~= 2 then layoutValid = false end\n    end\n\n    if layoutValid then\n      local firstByRole, firstBearingByRole = {}, {}\n      local usedOuterKeyByQ = {}\n      local meteorGroups = {}\n\n      local function meteorInGroup(q)\n        for _, role in ipairs(membersByQ[q]) do\n          if state.isMeteorByRole[role] then return role end\n        end\n        return nil\n      end\n\n      for q = 0, 3 do\n        local meteorRole = meteorInGroup(q)\n        if meteorRole then\n          meteorGroups[#meteorGroups + 1] = { q = q, role = meteorRole }\n        end\n      end\n      table.sort(meteorGroups, function(a, b) return a.q < b.q end)\n\n      if #meteorGroups == 2 then\n        local g1, g2 = meteorGroups[1], meteorGroups[2]\n        local best1, best2, bestDeviation, bestRank\n        for _, t1 in ipairs(outerByQ[g1.q]) do\n          for _, t2 in ipairs(outerByQ[g2.q]) do\n            local cw = norm360(t2.bearing - t1.bearing)\n            local deviation = math.abs(cw - 180)\n            local rank = t1.rank + t2.rank\n            if not bestDeviation\n                or deviation < bestDeviation\n                or (deviation == bestDeviation and rank < bestRank)\n                or (deviation == bestDeviation and rank == bestRank\n                    and (t1.bearing < best1.bearing\n                      or (t1.bearing == best1.bearing and t2.bearing < best2.bearing))) then\n              best1, best2 = t1, t2\n              bestDeviation, bestRank = deviation, rank\n            end\n          end\n        end\n\n        if best1 and best2 then\n          firstByRole[g1.role], firstBearingByRole[g1.role] = best1.pos, best1.bearing\n          firstByRole[g2.role], firstBearingByRole[g2.role] = best2.pos, best2.bearing\n          usedOuterKeyByQ[g1.q] = best1.key\n          usedOuterKeyByQ[g2.q] = best2.key\n        else\n          layoutValid = false\n        end\n      else\n        layoutValid = false\n      end\n\n      local pendingInner = {}\n      if layoutValid then\n        for q = 0, 3 do\n          local members = membersByQ[q]\n          local meteorRole = meteorInGroup(q)\n          local dpsRole\n          for _, role in ipairs(members) do\n            if string.sub(role, 1, 1) == \"D\" then dpsRole = role end\n          end\n          local highRole = meteorRole or dpsRole\n          local lowRole = members[1] == highRole and members[2] or members[1]\n\n          if not highRole or not lowRole then\n            layoutValid = false\n            break\n          end\n\n          if not firstByRole[highRole] then\n            local chosen = outerByQ[q][1]\n            firstByRole[highRole], firstBearingByRole[highRole] = chosen.pos, chosen.bearing\n            usedOuterKeyByQ[q] = chosen.key\n          end\n\n          local remainingOuter\n          for _, tower in ipairs(outerByQ[q]) do\n            if tower.key ~= usedOuterKeyByQ[q] then\n              remainingOuter = tower\n              break\n            end\n          end\n\n          if remainingOuter then\n            firstByRole[lowRole] = remainingOuter.pos\n            firstBearingByRole[lowRole] = remainingOuter.bearing\n          else\n            pendingInner[#pendingInner + 1] = { q = q, role = lowRole }\n          end\n        end\n      end\n\n      if layoutValid and #pendingInner == #inner then\n        local used, current = {}, {}\n        local best, bestLeftCount, bestRightCount, bestFillCost, bestCode\n\n        local function innerPreference(q, tower)\n          local left = norm360(q * 90 + 45)\n          local right = norm360(q * 90 - 45)\n          local dl = math.abs(angleDiff(tower.bearing - left))\n          local dr = math.abs(angleDiff(tower.bearing - right))\n          if dl < 10 then return 1, 0, 0 end\n          if dr < 10 then return 0, 1, 0 end\n          return 0, 0, math.min(dl, dr)\n        end\n\n        local function isBetter(leftCount, rightCount, fillCost, code)\n          if bestLeftCount == nil then return true end\n          if leftCount ~= bestLeftCount then return leftCount > bestLeftCount end\n          if rightCount ~= bestRightCount then return rightCount > bestRightCount end\n          if fillCost ~= bestFillCost then return fillCost < bestFillCost end\n          return code < bestCode\n        end\n\n        local function search(i, leftCount, rightCount, fillCost, code)\n          if i > #pendingInner then\n            if isBetter(leftCount, rightCount, fillCost, code) then\n              bestLeftCount, bestRightCount = leftCount, rightCount\n              bestFillCost, bestCode = fillCost, code\n              best = {}\n              for role, tower in pairs(current) do best[role] = tower end\n            end\n            return\n          end\n\n          local entry = pendingInner[i]\n          for index, tower in ipairs(inner) do\n            if not used[index] then\n              used[index] = true\n              current[entry.role] = tower\n              local addLeft, addRight, addFill = innerPreference(entry.q, tower)\n              search(\n                i + 1,\n                leftCount + addLeft,\n                rightCount + addRight,\n                fillCost + addFill,\n                code .. string.format(\"%02d\", index)\n              )\n              current[entry.role] = nil\n              used[index] = nil\n            end\n          end\n        end\n\n        search(1, 0, 0, 0, \"\")\n        if best then\n          for role, tower in pairs(best) do\n            firstByRole[role] = tower.pos\n            firstBearingByRole[role] = tower.bearing\n          end\n        else\n          layoutValid = false\n        end\n      elseif layoutValid then\n        layoutValid = false\n      end\n\n      if layoutValid then\n        for _, role in ipairs(state.roles or roles) do\n          if not firstByRole[role] then\n            layoutValid = false\n            break\n          end\n        end\n      end\n\n      if layoutValid then\n        local secondByRole, preKBByRole, secondBearingByRole = {}, {}, {}\n        for q = 0, 3 do\n          local members = membersByQ[q]\n          local meteorRole = meteorInGroup(q)\n          local oppositeQ = (q + 2) % 4\n          for _, role in ipairs(members) do\n            local b\n            if meteorRole then\n              b = state.isMeteorByRole[role] and (oppositeQ * 90) or (q * 90 + 45)\n            else\n              b = string.sub(role, 1, 1) == \"D\" and (q * 90) or (q * 90 + 45)\n            end\n            b = norm360(b)\n            secondBearingByRole[role] = b\n            local secondX, secondZ = posAt(b, 18)\n            secondByRole[role] = { x = secondX, y = 0, z = secondZ }\n            local preKBX, preKBZ = posAt(b, 2)\n            preKBByRole[role] = { x = preKBX, y = 0, z = preKBZ }\n          end\n        end\n\n        state.membersByFinalQuadrant = membersByQ\n        state.firstTowerByRole = firstByRole\n        state.firstTowerBearingByRole = firstBearingByRole\n        state.secondTowerByRole = secondByRole\n        state.secondTowerBearingByRole = secondBearingByRole\n        state.preKnockbackByRole = preKBByRole\n        state.firstReady = true\n      end\n    end\n  end\nend\n\nlocal player = TensorCore.mGetPlayer()\nif player and state and state.ready == true then\n  local role = findSelfRole(state, player, roles)\n  local q = role and state.finalQuadrantByRole[role] or nil\n  if q ~= nil and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    local targetX, targetZ = posAt(q * 90, 12)\n    MuAiGuide.FrameDirect(targetX, targetZ, 0.5)\n  end\nend\n\nself.used = true",
 							endIfUsed = true,
 							name = "动态指路",
 							uuid = "91497969-a432-8ed1-ad53-0ac4d6bc1122",
@@ -6298,7 +7052,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Sanctity25 or nil\nlocal player = TensorCore.mGetPlayer()\n\nlocal function norm360(v)\n  v = v % 360\n  if v < 0 then v = v + 360 end\n  return v\nend\n\nlocal function bearing(pos)\n  return norm360(math.deg(math.atan2(pos.x - 100, 100 - pos.z)))\nend\n\nlocal function posAt(deg, radius)\n  local rad = math.rad(deg)\n  return {\n    x = 100 + math.sin(rad) * radius,\n    z = 100 - math.cos(rad) * radius,\n  }\nend\n\nif state and state.firstReady == true and player\n    and type(state.roleByID) == \"table\"\n    and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local role = state.roleByID[tonumber(player.id)]\n  local target\n\n  if role and state.isMeteorByRole[role] then\n    local otherRole\n    for _, meteorRole in ipairs(state.meteorRoles or {}) do\n      if meteorRole ~= role then otherRole = meteorRole end\n    end\n    local startBearing = state.firstTowerBearingByRole[role]\n    local endBearing = otherRole and state.firstTowerBearingByRole[otherRole] or nil\n    if type(startBearing) == \"number\" and type(endBearing) == \"number\" then\n      local total = norm360(endBearing - startBearing)\n      local progress = norm360(bearing(player.pos) - startBearing)\n      if progress > total then\n        if progress > total + 60 then\n          progress = 0\n        else\n          progress = total\n        end\n      end\n      local nextProgress = math.min(total, progress + 25)\n      target = posAt(startBearing + nextProgress, 20)\n    end\n  elseif role and type(state.secondTowerByRole) == \"table\" then\n    target = state.secondTowerByRole[role]\n  end\n\n  if target then\n    local targetX = target.x\n    local targetZ = target.z\n    if role and not state.isMeteorByRole[role] then\n      local dx = targetX - 100\n      local dz = targetZ - 100\n      local length = math.sqrt(dx * dx + dz * dz)\n      if length > 0.001 then\n        local scale = 20 / length\n        targetX = 100 + dx * scale\n        targetZ = 100 + dz * scale\n      end\n    end\n    MuAiGuide.FrameDirect(targetX, targetZ, 0.5)\n  end\nend\nself.used = true",
+							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Sanctity25 or nil\nlocal player = TensorCore.mGetPlayer()\nif type(state) ~= \"table\" then\n  self.used = true\n  return\nend\n\nlocal cache = state.__tensorOpt_d5585051\nif type(cache) ~= \"table\" then\n  cache = {}\n\n  cache.norm360 = function(v)\n    v = v % 360\n    if v < 0 then v = v + 360 end\n    return v\n  end\n\n  cache.bearing = function(pos)\n    local v = math.deg(math.atan2(pos.x - 100, 100 - pos.z))\n    v = v % 360\n    if v < 0 then v = v + 360 end\n    return v\n  end\n\n  cache.posAt = function(deg, radius)\n    local rad = math.rad(deg)\n    return 100 + math.sin(rad) * radius,\n      100 - math.cos(rad) * radius\n  end\n\n  state.__tensorOpt_d5585051 = cache\nend\n\nlocal norm360 = cache.norm360\nlocal bearing = cache.bearing\nlocal posAt = cache.posAt\n\nif state and state.firstReady == true and player\n    and type(state.roleByID) == \"table\"\n    and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local role = state.roleByID[tonumber(player.id)]\n  local targetX, targetZ\n  local targetReady = false\n\n  if role and state.isMeteorByRole[role] then\n    local otherRole\n    for _, meteorRole in ipairs(state.meteorRoles or {}) do\n      if meteorRole ~= role then otherRole = meteorRole end\n    end\n    local startBearing = state.firstTowerBearingByRole[role]\n    local endBearing = otherRole and state.firstTowerBearingByRole[otherRole] or nil\n    if type(startBearing) == \"number\" and type(endBearing) == \"number\" then\n      local total = norm360(endBearing - startBearing)\n      local progress = norm360(bearing(player.pos) - startBearing)\n      if progress > total then\n        if progress > total + 60 then\n          progress = 0\n        else\n          progress = total\n        end\n      end\n      local nextProgress = math.min(total, progress + 25)\n      targetX, targetZ = posAt(startBearing + nextProgress, 20)\n      targetReady = true\n    end\n  elseif role and type(state.secondTowerByRole) == \"table\" then\n    local target = state.secondTowerByRole[role]\n    if target then\n      targetX, targetZ = target.x, target.z\n      targetReady = true\n    end\n  end\n\n  if targetReady then\n    if role and not state.isMeteorByRole[role] then\n      local dx = targetX - 100\n      local dz = targetZ - 100\n      local length = math.sqrt(dx * dx + dz * dz)\n      if length > 0.001 then\n        local scale = 20 / length\n        targetX = 100 + dx * scale\n        targetZ = 100 + dz * scale\n      end\n    end\n    MuAiGuide.FrameDirect(targetX, targetZ, 0.5)\n  end\nend\nself.used = true",
 							endIfUsed = true,
 							name = "动态指路",
 							uuid = "4208868c-68cd-db1b-866f-c5002392f7d1",
@@ -7004,7 +7758,7 @@ local tbl =
 									true,
 								},
 							},
-							name = "逐刀绘制三次 120°",
+							name = "逐刀绘制三次 120度",
 							uuid = "ef184e0b-b027-75bf-8c78-22ad350ecd8c",
 							version = 2.1,
 						},
@@ -7033,7 +7787,7 @@ local tbl =
 				},
 				eventType = 3,
 				mechanicTime = 465.3,
-				name = "[P2] 奋力一挥 1 - 三连 120°",
+				name = "[P2] 奋力一挥 1 - 三连 120度",
 				timeRange = true,
 				timelineIndex = 86,
 				timerEndOffset = -2.4000000953674,
@@ -7065,7 +7819,7 @@ local tbl =
 									true,
 								},
 							},
-							name = "逐刀绘制三次 120°",
+							name = "逐刀绘制三次 120度",
 							uuid = "b5084d2e-44d1-78a0-9977-d2a981f32069",
 							version = 2.1,
 						},
@@ -7094,7 +7848,7 @@ local tbl =
 				},
 				eventType = 3,
 				mechanicTime = 473.8,
-				name = "[P2] 奋力一挥 2 - 三连 120°",
+				name = "[P2] 奋力一挥 2 - 三连 120度",
 				timeRange = true,
 				timelineIndex = 90,
 				timerEndOffset = -2.4,
@@ -7257,9 +8011,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"4312c172-9924-9721-a413-fb0944ba477a",
+									true,
+								},
 								
 								{
 									"92a308ca-869c-cfab-b481-e854e378f83a",
@@ -7272,9 +8031,68 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
-							name = "策动",
+							ignoreWeaveRules = true,
+							name = "行吟",
 							uuid = "c5d02e8b-7d5d-c3c6-80af-abc4c213987e",
 							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
+								
+								{
+									"cfcd5d11-ce07-2b7b-9838-9217c7b07a7a",
+									true,
+								},
+								
+								{
+									"92a308ca-869c-cfab-b481-e854e378f83a",
+									true,
+								},
+								
+								{
+									"b724da2f-a9ac-4b40-a889-e7955f0e6184",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "策动",
+							uuid = "1b865bc9-cf66-22a9-a0ae-c26dd1b6bc2d",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"f314b432-79d0-a25a-9a25-c79a5bc1dd07",
+									true,
+								},
+								
+								{
+									"92a308ca-869c-cfab-b481-e854e378f83a",
+									true,
+								},
+								
+								{
+									"b724da2f-a9ac-4b40-a889-e7955f0e6184",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "b2306e9b-91b5-11eb-9e1b-01974e5dc980",
 							version = 2.1,
 						},
 					},
@@ -7316,6 +8134,45 @@ local tbl =
 							version = 3,
 						},
 					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "4312c172-9924-9721-a413-fb0944ba477a",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "cfcd5d11-ce07-2b7b-9838-9217c7b07a7a",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "f314b432-79d0-a25a-9a25-c79a5bc1dd07",
+							version = 3,
+						},
+					},
 				},
 				mechanicTime = 602.3,
 				name = "[P3] 远敏团队减伤 1",
@@ -7337,9 +8194,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"812d556b-3add-8949-a0f5-4bd02a43d245",
+									true,
+								},
 								
 								{
 									"b3bb6b47-6d5a-7432-b03c-d1630a470156",
@@ -7353,9 +8215,70 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
-							name = "策动",
+							ignoreWeaveRules = true,
+							name = "行吟",
 							uuid = "d365a6a9-0691-df2c-9bec-b08038d971b9",
 							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
+								
+								{
+									"d3ea8bb1-dcb8-cf34-bf3b-bd12f2b98910",
+									true,
+								},
+								
+								{
+									"b3bb6b47-6d5a-7432-b03c-d1630a470156",
+									true,
+								},
+								
+								{
+									"52513bdc-e73e-5380-940f-e555b7f0f09f",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "策动",
+							uuid = "5f76978e-6d8d-0740-96b1-0ccad35233b5",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"3c57b607-a064-dcd4-8313-58a4fa96b9cc",
+									true,
+								},
+								
+								{
+									"b3bb6b47-6d5a-7432-b03c-d1630a470156",
+									true,
+								},
+								
+								{
+									"52513bdc-e73e-5380-940f-e555b7f0f09f",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "65cb08b9-d108-7efd-aec3-0cb571933725",
 							version = 2.1,
 						},
 					},
@@ -7394,6 +8317,45 @@ local tbl =
 							category = "Self",
 							name = "Missing Buffs",
 							uuid = "52513bdc-e73e-5380-940f-e555b7f0f09f",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "812d556b-3add-8949-a0f5-4bd02a43d245",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "d3ea8bb1-dcb8-cf34-bf3b-bd12f2b98910",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "3c57b607-a064-dcd4-8313-58a4fa96b9cc",
 							version = 3,
 						},
 					},
@@ -7715,7 +8677,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local moogle = TensorCore.getMoogleDrawer()\nlocal function raiseOpacity(color)\n  local r, g, b, a = GUI:ColorConvertU32ToFloat4(color)\n  return GUI:ColorConvertFloat4ToU32(r, g, b, math.min(a + 0.15, 1))\nend\nlocal drawer = TensorCore.getCachedDrawer(\n  raiseOpacity(moogle.colorStart),\n  raiseOpacity(moogle.colorMid),\n  raiseOpacity(moogle.colorEnd),\n  GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),\n  moogle.outlineThickness,\n  0,\n  0\n)\ndrawer:setGradient(moogle.gradientDistance, moogle.gradientMinOpacity, moogle.gradientIntensity)\ndrawer:setHeightOffset(moogle.heightOffset)\nif eventArgs.entityID then\n  if eventArgs.spellID == 26386 then\n    drawer:addTimedCircleOnEnt(11266, eventArgs.entityID, 8)\n    drawer:addTimedDonutOnEnt(3000, eventArgs.entityID, 8, 40, 11266)\n  elseif eventArgs.spellID == 26387 then\n    drawer:addTimedDonutOnEnt(11266, eventArgs.entityID, 8, 40)\n    drawer:addTimedCircleOnEnt(3000, eventArgs.entityID, 8, 11266)\n  end\nend\nself.used = true",
+							actionLua = "local moogle = TensorCore.getMoogleDrawer()\nlocal function raiseOpacity(color)\n  local r, g, b, a = GUI:ColorConvertU32ToFloat4(color)\n  return GUI:ColorConvertFloat4ToU32(r, g, b, math.min(a + 0.15, 1))\nend\nlocal drawer = TensorCore.getCachedDrawer(\n  raiseOpacity(moogle.colorStart),\n  raiseOpacity(moogle.colorMid),\n  raiseOpacity(moogle.colorEnd),\n  GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),\n  moogle.outlineThickness,\n  0,\n  0\n)\ndrawer:setGradient(moogle.gradientDistance, moogle.gradientMinOpacity, moogle.gradientIntensity)\ndrawer:setHeightOffset(0.05)\nif eventArgs.entityID then\n  if eventArgs.spellID == 26386 then\n    drawer:addTimedCircleOnEnt(11266, eventArgs.entityID, 8)\n    drawer:addTimedDonutOnEnt(3000, eventArgs.entityID, 8, 40, 11266)\n  elseif eventArgs.spellID == 26387 then\n    drawer:addTimedDonutOnEnt(11266, eventArgs.entityID, 8, 40)\n    drawer:addTimedCircleOnEnt(3000, eventArgs.entityID, 8, 11266)\n  end\nend\nself.used = true",
 							conditions = 
 							{
 								
@@ -7775,7 +8737,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.string_dsr = data.string_dsr or {}\nlocal state = data.string_dsr\nlocal spellID = tonumber(eventArgs.spellID)\nlocal currentTimer = tonumber(TensorReactions_CurrentTimer)\nif (spellID ~= 26386 and spellID ~= 26387) or currentTimer == nil then\n  self.used = true\n  return\nend\n\n-- 两轮连旋的 channel 实战为 622.591 / 643.900；取无事件区间中的 638\n-- 作为轮次边界，回放倒退时不再依赖旧 state 是否为 nil。\nif currentTimer < 638 then\n  state.p3WheelFirstSpellID = spellID\n  state.p3WheelFirstResolved = false\n  state.p3WheelFirstResolvedAt = nil\n  state.p3WheelSecondSpellID = nil\n  state.p3WheelSecondFirstResolved = false\n  state.p3WheelSecondFirstResolvedAt = nil\n  state.p3SecondStackResolvedAt = nil\nelse\n  state.p3WheelSecondSpellID = spellID\n  state.p3WheelSecondFirstResolved = false\n  state.p3WheelSecondFirstResolvedAt = nil\n  state.p3SecondStackResolvedAt = nil\nend\nstate.p3WheelEntityID = eventArgs.entityID\nself.used = true",
+							actionLua = "data.string_dsr = data.string_dsr or {}\nlocal state = data.string_dsr\nstate.p3WheelFirstSpellID = tonumber(eventArgs.spellID)\nstate.p3WheelFirstResolved = false\nstate.p3WheelFirstResolvedAt = nil\nstate.p3WheelEntityID = eventArgs.entityID\nself.used = true\n",
 							conditions = 
 							{
 								
@@ -7785,7 +8747,7 @@ local tbl =
 								},
 							},
 							endIfUsed = true,
-							name = "记录两轮钢铁月环顺序",
+							name = "记录第一轮连旋",
 							uuid = "c104f96d-0f87-014c-ab90-e71f4271662c",
 							version = 2.1,
 						},
@@ -7814,10 +8776,9 @@ local tbl =
 				},
 				eventType = 3,
 				mechanicTime = 630.2,
-				name = "[P3] 钢铁月环顺序状态",
+				name = "[P3] 第一轮钢铁月环顺序状态",
 				timeRange = true,
 				timelineIndex = 100,
-				timerEndOffset = 22,
 				timerStartOffset = -10,
 				uuid = "064217a2-41ce-8f6c-905a-431a6b4e3f68",
 				version = 2,
@@ -7837,7 +8798,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal function validPoint(point)\n  return point\n    and type(point.x) == \"number\"\n    and type(point.z) == \"number\"\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal function northSafePoint(spellID)\n  if spellID == 26386 then\n    return { x = 100, y = player.pos.y, z = 90 }\n  elseif spellID == 26387 then\n    return { x = 100, y = player.pos.y, z = 93.2 }\n  end\n  return nil\nend\n\nlocal function drawArrowTower()\n  local towerType = state.towerType\n  if towerType ~= \"forward\" and towerType ~= \"backward\" then\n    return\n  end\n  if type(player.pos.h) ~= \"number\" then\n    return\n  end\n  local heading = player.pos.h\n  if towerType == \"backward\" then\n    heading = heading + math.pi\n  end\n  local x, y, z = TensorCore.getPosInDirection(player.pos, heading, 14, true)\n  local drawer = TensorCore.getStaticDrawer(520093951)\n  if drawer and type(drawer.addCircle) == \"function\" then\n    drawer:addCircle(x, y, z, 5)\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal base = state.towerTarget\nlocal target = nil\nif marker == 1 then\n  if validPoint(base) then\n    target = base\n  end\n  drawArrowTower()\nelseif marker == 2 or marker == 3 then\n  target = northSafePoint(activeWheel(state.p3WheelFirstSpellID))\nend\n\nif target and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(target.x, target.z, 0.5)\nend\nself.used = true",
+							actionLua = "local p3Step, p3Round = \"north_before\", 1\n-- The builder supplies p3Step and p3Round from this reaction's timeline node.\n-- Resolve number two in this render path from one complete live party snapshot.\nlocal p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nif not p3Player or not p3Player.pos then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3Player.id]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3Player.id] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3Player.id then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID) or nil\n  if not boss then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n    if boss then p3Cache.bossID = boss.id end\n  end\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel == 26386 or channel == 26387 then\n    if p3Round == 1 then p3Cache.firstSpell = channel\n    else p3Cache.secondSpell = channel end\n  end\n  local spell = p3Round == 1 and p3Cache.firstSpell or p3Cache.secondSpell\n  local side = p3Cache.side\n  local x, z\n  if p3Step == \"north_before\" then\n    -- Before the next cast starts, gather north inside the target circle.\n    x, z = 100, spell == 26386 and 90 or 93.2\n  elseif p3Step == \"first_outer\" then\n    if spell == 26386 then x, z = 100, 90\n    elseif spell == 26387 then x, z = 100, 93.2 end\n  elseif p3Step == \"first_inner\" then\n    if spell == 26386 then x, z = 100, 93.2\n    elseif spell == 26387 then x, z = 100, 90 end\n  elseif p3Step == \"place\" then\n    x, z = side < 0 and 90.666 or 109.333, 90.666\n    if p3Cache.type == 2756 or p3Cache.type == 2757 then\n      local heading = tonumber(p3Player.pos.h)\n      if heading then\n        if p3Cache.type == 2757 then heading = heading + math.pi end\n        local tx, ty, tz = TensorCore.getPosInDirection(p3Player.pos, heading, 14, true)\n        TensorCore.getStaticDrawer(520093951):addCircle(tx, ty, tz, 5)\n      end\n    end\n  elseif p3Step == \"second_outer\" then\n    if spell == 26386 then\n      x = 100 + side * 10\n      z = (side * (p3Player.pos.x - 100) < 9.5 and p3Player.pos.z < 97) and 90 or 100\n    elseif spell == 26387 then x, z = 100 + side * 7.5, 100 end\n  elseif p3Step == \"third_tower\" then\n    x, z = 100 + side * 7.5, 100\n  elseif p3Step == \"handoff\" then\n    if spell == 26386 then x, z = 100 + side * 7.5, 100\n    elseif spell == 26387 then x, z = 100 + side * 10, 100 end\n  elseif p3Step == \"bait\" then\n    x, z = 100 + side * 10, 100\n  elseif p3Step == \"dodge\" then\n    x, z = 100 + side * 6, 100\n  end\n  if x ~= nil and p3Guide and type(p3Guide.FrameDirect) == \"function\" then\n    p3Guide.FrameDirect(x, z, 0.5)\n  end\n  self.used = true\n  return\nend\n-- Legacy number-one/three paths below are for the actual player only.\nlocal p3Actual = TensorCore.mGetPlayer()\nif not p3Actual or p3Actual.id ~= p3Player.id then return end\n\n\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal function validPoint(point)\n  return point\n    and type(point.x) == \"number\"\n    and type(point.z) == \"number\"\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal function northSafePoint(spellID)\n  if spellID == 26386 then\n    return { x = 100, y = player.pos.y, z = 90 }\n  elseif spellID == 26387 then\n    return { x = 100, y = player.pos.y, z = 93.2 }\n  end\n  return nil\nend\n\nlocal function drawArrowTower()\n  local towerType = state.towerType\n  if towerType ~= \"forward\" and towerType ~= \"backward\" then\n    return\n  end\n  if type(player.pos.h) ~= \"number\" then\n    return\n  end\n  local heading = player.pos.h\n  if towerType == \"backward\" then\n    heading = heading + math.pi\n  end\n  local x, y, z = TensorCore.getPosInDirection(player.pos, heading, 14, true)\n  local drawer = TensorCore.getStaticDrawer(520093951)\n  if drawer and type(drawer.addCircle) == \"function\" then\n    drawer:addCircle(x, y, z, 5)\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal base = state.towerTarget\nlocal target = nil\nif marker == 1 then\n  if validPoint(base) then\n    target = base\n  end\n  drawArrowTower()\nelseif marker == 2 or marker == 3 then\n  target = northSafePoint(activeWheel(state.p3WheelFirstSpellID))\nend\n\nif target and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(target.x, target.z, 0.5)\nend\nself.used = true",
 							endIfUsed = true,
 							name = "MuAiCore 阶段指路+14m预估落塔范围",
 							uuid = "6ef3230d-6759-4c63-b75e-d2bc957bdea7",
@@ -7848,7 +8809,7 @@ local tbl =
 				conditions = 
 				{
 				},
-				eventType = 12,
+				eventType = 13,
 				mechanicTime = 630.3,
 				name = "[P3] 第1轮塔位",
 				timeRange = true,
@@ -8185,7 +9146,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal towerRingRadius = 7.5\n\nlocal function sendGuide(target)\n  if target and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal firstSpellID = activeWheel(state.p3WheelFirstSpellID)\nlocal target = nil\nif marker == 3 then\n  local base = state.towerTarget\n  if base and type(base.x) == \"number\" and type(base.z) == \"number\" then\n    if firstSpellID == 26386 then\n      target = projectRadius(base, 10)\n    elseif firstSpellID == 26387 then\n      target = projectRadius(base, towerRingRadius)\n    end\n  end\nelseif marker == 1 or marker == 2 then\n  if firstSpellID == 26386 then\n    target = { x = 100, y = player.pos.y, z = 90 }\n  elseif firstSpellID == 26387 then\n    target = { x = 100, y = player.pos.y, z = 93.2 }\n  end\nend\n\nsendGuide(target)\nself.used = true",
+							actionLua = "local p3Step, p3Round = \"first_outer\", 1\n-- The builder supplies p3Step and p3Round from this reaction's timeline node.\n-- Resolve number two in this render path from one complete live party snapshot.\nlocal p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nif not p3Player or not p3Player.pos then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3Player.id]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3Player.id] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3Player.id then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID) or nil\n  if not boss then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n    if boss then p3Cache.bossID = boss.id end\n  end\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel == 26386 or channel == 26387 then\n    if p3Round == 1 then p3Cache.firstSpell = channel\n    else p3Cache.secondSpell = channel end\n  end\n  local spell = p3Round == 1 and p3Cache.firstSpell or p3Cache.secondSpell\n  local side = p3Cache.side\n  local x, z\n  if p3Step == \"north_before\" then\n    -- Before the next cast starts, gather north inside the target circle.\n    x, z = 100, spell == 26386 and 90 or 93.2\n  elseif p3Step == \"first_outer\" then\n    if spell == 26386 then x, z = 100, 90\n    elseif spell == 26387 then x, z = 100, 93.2 end\n  elseif p3Step == \"first_inner\" then\n    if spell == 26386 then x, z = 100, 93.2\n    elseif spell == 26387 then x, z = 100, 90 end\n  elseif p3Step == \"place\" then\n    x, z = side < 0 and 90.666 or 109.333, 90.666\n    if p3Cache.type == 2756 or p3Cache.type == 2757 then\n      local heading = tonumber(p3Player.pos.h)\n      if heading then\n        if p3Cache.type == 2757 then heading = heading + math.pi end\n        local tx, ty, tz = TensorCore.getPosInDirection(p3Player.pos, heading, 14, true)\n        TensorCore.getStaticDrawer(520093951):addCircle(tx, ty, tz, 5)\n      end\n    end\n  elseif p3Step == \"second_outer\" then\n    if spell == 26386 then\n      x = 100 + side * 10\n      z = (side * (p3Player.pos.x - 100) < 9.5 and p3Player.pos.z < 97) and 90 or 100\n    elseif spell == 26387 then x, z = 100 + side * 7.5, 100 end\n  elseif p3Step == \"third_tower\" then\n    x, z = 100 + side * 7.5, 100\n  elseif p3Step == \"handoff\" then\n    if spell == 26386 then x, z = 100 + side * 7.5, 100\n    elseif spell == 26387 then x, z = 100 + side * 10, 100 end\n  elseif p3Step == \"bait\" then\n    x, z = 100 + side * 10, 100\n  elseif p3Step == \"dodge\" then\n    x, z = 100 + side * 6, 100\n  end\n  if x ~= nil and p3Guide and type(p3Guide.FrameDirect) == \"function\" then\n    p3Guide.FrameDirect(x, z, 0.5)\n  end\n  self.used = true\n  return\nend\n-- Legacy number-one/three paths below are for the actual player only.\nlocal p3Actual = TensorCore.mGetPlayer()\nif not p3Actual or p3Actual.id ~= p3Player.id then return end\n\n\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal towerRingRadius = 7.5\n\nlocal function sendGuide(target)\n  if target and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal firstSpellID = activeWheel(state.p3WheelFirstSpellID)\nlocal target = nil\nif marker == 3 then\n  local base = state.towerTarget\n  if base and type(base.x) == \"number\" and type(base.z) == \"number\" then\n    if firstSpellID == 26386 then\n      target = projectRadius(base, 10)\n    elseif firstSpellID == 26387 then\n      target = projectRadius(base, towerRingRadius)\n    end\n  end\nelseif marker == 1 or marker == 2 then\n  if firstSpellID == 26386 then\n    target = { x = 100, y = player.pos.y, z = 90 }\n  elseif firstSpellID == 26387 then\n    target = { x = 100, y = player.pos.y, z = 93.2 }\n  end\nend\n\nsendGuide(target)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAiCore 第1轮踩塔安全区",
 							uuid = "e3364617-2405-3787-8046-ee43cf3418be",
@@ -8196,9 +9157,9 @@ local tbl =
 				conditions = 
 				{
 				},
-				eventType = 12,
+				eventType = 13,
 				mechanicTime = 630.4,
-				name = "[P3] 第1轮踩塔·钢铁月环前半",
+				name = "[P3] 第1轮踩塔 - 钢铁月环前半",
 				timeRange = true,
 				timelineIndex = 102,
 				timerEndOffset = 3.4,
@@ -8220,7 +9181,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal towerRingRadius = 7.5\n\nlocal function sendGuide(target)\n  if target and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal currentTimer = tonumber(TensorReactions_CurrentTimer)\nlocal resolvedAt = tonumber(state.p3WheelFirstResolvedAt)\nlocal firstResolved = currentTimer ~= nil\n  and resolvedAt ~= nil\n  and currentTimer >= resolvedAt\nlocal marker = tonumber(state.towerMarker)\nlocal firstSpellID = activeWheel(state.p3WheelFirstSpellID)\nlocal target = nil\nif marker == 3 then\n  local base = state.towerTarget\n  if base and type(base.x) == \"number\" and type(base.z) == \"number\" then\n    if firstSpellID == 26386 then\n      target = projectRadius(base, firstResolved and towerRingRadius or 10)\n    elseif firstSpellID == 26387 then\n      target = projectRadius(base, firstResolved and 10 or towerRingRadius)\n    end\n  end\nelseif marker == 1 or marker == 2 then\n  if firstSpellID == 26386 then\n    target = {\n      x = 100,\n      y = player.pos.y,\n      z = firstResolved and 93.2 or 90,\n    }\n  elseif firstSpellID == 26387 then\n    target = {\n      x = 100,\n      y = player.pos.y,\n      z = firstResolved and 90 or 93.2,\n    }\n  end\nend\n\nsendGuide(target)\nself.used = true",
+							actionLua = "local p3Step, p3Round = \"first_inner\", 1\n-- The builder supplies p3Step and p3Round from this reaction's timeline node.\n-- Resolve number two in this render path from one complete live party snapshot.\nlocal p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nif not p3Player or not p3Player.pos then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3Player.id]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3Player.id] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3Player.id then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID) or nil\n  if not boss then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n    if boss then p3Cache.bossID = boss.id end\n  end\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel == 26386 or channel == 26387 then\n    if p3Round == 1 then p3Cache.firstSpell = channel\n    else p3Cache.secondSpell = channel end\n  end\n  local spell = p3Round == 1 and p3Cache.firstSpell or p3Cache.secondSpell\n  local side = p3Cache.side\n  local x, z\n  if p3Step == \"north_before\" then\n    -- Before the next cast starts, gather north inside the target circle.\n    x, z = 100, spell == 26386 and 90 or 93.2\n  elseif p3Step == \"first_outer\" then\n    if spell == 26386 then x, z = 100, 90\n    elseif spell == 26387 then x, z = 100, 93.2 end\n  elseif p3Step == \"first_inner\" then\n    if spell == 26386 then x, z = 100, 93.2\n    elseif spell == 26387 then x, z = 100, 90 end\n  elseif p3Step == \"place\" then\n    x, z = side < 0 and 90.666 or 109.333, 90.666\n    if p3Cache.type == 2756 or p3Cache.type == 2757 then\n      local heading = tonumber(p3Player.pos.h)\n      if heading then\n        if p3Cache.type == 2757 then heading = heading + math.pi end\n        local tx, ty, tz = TensorCore.getPosInDirection(p3Player.pos, heading, 14, true)\n        TensorCore.getStaticDrawer(520093951):addCircle(tx, ty, tz, 5)\n      end\n    end\n  elseif p3Step == \"second_outer\" then\n    if spell == 26386 then\n      x = 100 + side * 10\n      z = (side * (p3Player.pos.x - 100) < 9.5 and p3Player.pos.z < 97) and 90 or 100\n    elseif spell == 26387 then x, z = 100 + side * 7.5, 100 end\n  elseif p3Step == \"third_tower\" then\n    x, z = 100 + side * 7.5, 100\n  elseif p3Step == \"handoff\" then\n    if spell == 26386 then x, z = 100 + side * 7.5, 100\n    elseif spell == 26387 then x, z = 100 + side * 10, 100 end\n  elseif p3Step == \"bait\" then\n    x, z = 100 + side * 10, 100\n  elseif p3Step == \"dodge\" then\n    x, z = 100 + side * 6, 100\n  end\n  if x ~= nil and p3Guide and type(p3Guide.FrameDirect) == \"function\" then\n    p3Guide.FrameDirect(x, z, 0.5)\n  end\n  self.used = true\n  return\nend\n-- Legacy number-one/three paths below are for the actual player only.\nlocal p3Actual = TensorCore.mGetPlayer()\nif not p3Actual or p3Actual.id ~= p3Player.id then return end\n\n\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal towerRingRadius = 7.5\n\nlocal function sendGuide(target)\n  if target and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal currentTimer = tonumber(TensorReactions_CurrentTimer)\nlocal resolvedAt = tonumber(state.p3WheelFirstResolvedAt)\nlocal firstResolved = currentTimer ~= nil\n  and resolvedAt ~= nil\n  and currentTimer >= resolvedAt\nlocal marker = tonumber(state.towerMarker)\nlocal firstSpellID = activeWheel(state.p3WheelFirstSpellID)\nlocal target = nil\nif marker == 3 then\n  local base = state.towerTarget\n  if base and type(base.x) == \"number\" and type(base.z) == \"number\" then\n    if firstSpellID == 26386 then\n      target = projectRadius(base, firstResolved and towerRingRadius or 10)\n    elseif firstSpellID == 26387 then\n      target = projectRadius(base, firstResolved and 10 or towerRingRadius)\n    end\n  end\nelseif marker == 1 or marker == 2 then\n  if firstSpellID == 26386 then\n    target = {\n      x = 100,\n      y = player.pos.y,\n      z = firstResolved and 93.2 or 90,\n    }\n  elseif firstSpellID == 26387 then\n    target = {\n      x = 100,\n      y = player.pos.y,\n      z = firstResolved and 90 or 93.2,\n    }\n  end\nend\n\nsendGuide(target)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAiCore 第1轮踩塔安全区切换",
 							uuid = "3b3ef3e5-b92d-440c-bc41-60dc20f3e767",
@@ -8231,9 +9192,9 @@ local tbl =
 				conditions = 
 				{
 				},
-				eventType = 12,
+				eventType = 13,
 				mechanicTime = 633.8,
-				name = "[P3] 第1轮踩塔·钢铁月环后半",
+				name = "[P3] 第1轮踩塔 - 钢铁月环后半",
 				timeRange = true,
 				timelineIndex = 103,
 				timerEndOffset = 3,
@@ -8314,7 +9275,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal towerRingRadius = 7.5\n\nlocal function validPoint(point)\n  return point\n    and type(point.x) == \"number\"\n    and type(point.z) == \"number\"\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal function secondHalfNorthPoint(firstSpellID)\n  if firstSpellID == 26386 then\n    return { x = 100, y = player.pos.y, z = 93.2 }\n  elseif firstSpellID == 26387 then\n    return { x = 100, y = player.pos.y, z = 90 }\n  end\n  return nil\nend\n\nlocal function drawArrowTower()\n  local towerType = state.towerType\n  if towerType ~= \"forward\" and towerType ~= \"backward\" then\n    return\n  end\n  if type(player.pos.h) ~= \"number\" then\n    return\n  end\n  local heading = player.pos.h\n  if towerType == \"backward\" then\n    heading = heading + math.pi\n  end\n  local x, y, z = TensorCore.getPosInDirection(player.pos, heading, 14, true)\n  local drawer = TensorCore.getStaticDrawer(520093951)\n  if drawer and type(drawer.addCircle) == \"function\" then\n    drawer:addCircle(x, y, z, 5)\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal base = state.towerTarget\nlocal firstSpellID = activeWheel(state.p3WheelFirstSpellID)\nlocal target = nil\nif marker == 1 then\n  target = secondHalfNorthPoint(firstSpellID)\nelseif marker == 2 then\n  if validPoint(base) then\n    target = base\n  end\n  drawArrowTower()\nelseif marker == 3 and validPoint(base) then\n  if firstSpellID == 26386 then\n    target = projectRadius(base, towerRingRadius)\n  elseif firstSpellID == 26387 then\n    target = projectRadius(base, 10)\n  end\nend\n\nif target and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(target.x, target.z, 0.5)\nend\nself.used = true",
+							actionLua = "local p3Step, p3Round = \"place\", 1\n-- The builder supplies p3Step and p3Round from this reaction's timeline node.\n-- Resolve number two in this render path from one complete live party snapshot.\nlocal p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nif not p3Player or not p3Player.pos then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3Player.id]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3Player.id] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3Player.id then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID) or nil\n  if not boss then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n    if boss then p3Cache.bossID = boss.id end\n  end\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel == 26386 or channel == 26387 then\n    if p3Round == 1 then p3Cache.firstSpell = channel\n    else p3Cache.secondSpell = channel end\n  end\n  local spell = p3Round == 1 and p3Cache.firstSpell or p3Cache.secondSpell\n  local side = p3Cache.side\n  local x, z\n  if p3Step == \"north_before\" then\n    -- Before the next cast starts, gather north inside the target circle.\n    x, z = 100, spell == 26386 and 90 or 93.2\n  elseif p3Step == \"first_outer\" then\n    if spell == 26386 then x, z = 100, 90\n    elseif spell == 26387 then x, z = 100, 93.2 end\n  elseif p3Step == \"first_inner\" then\n    if spell == 26386 then x, z = 100, 93.2\n    elseif spell == 26387 then x, z = 100, 90 end\n  elseif p3Step == \"place\" then\n    x, z = side < 0 and 90.666 or 109.333, 90.666\n    if p3Cache.type == 2756 or p3Cache.type == 2757 then\n      local heading = tonumber(p3Player.pos.h)\n      if heading then\n        if p3Cache.type == 2757 then heading = heading + math.pi end\n        local tx, ty, tz = TensorCore.getPosInDirection(p3Player.pos, heading, 14, true)\n        TensorCore.getStaticDrawer(520093951):addCircle(tx, ty, tz, 5)\n      end\n    end\n  elseif p3Step == \"second_outer\" then\n    if spell == 26386 then\n      x = 100 + side * 10\n      z = (side * (p3Player.pos.x - 100) < 9.5 and p3Player.pos.z < 97) and 90 or 100\n    elseif spell == 26387 then x, z = 100 + side * 7.5, 100 end\n  elseif p3Step == \"third_tower\" then\n    x, z = 100 + side * 7.5, 100\n  elseif p3Step == \"handoff\" then\n    if spell == 26386 then x, z = 100 + side * 7.5, 100\n    elseif spell == 26387 then x, z = 100 + side * 10, 100 end\n  elseif p3Step == \"bait\" then\n    x, z = 100 + side * 10, 100\n  elseif p3Step == \"dodge\" then\n    x, z = 100 + side * 6, 100\n  end\n  if x ~= nil and p3Guide and type(p3Guide.FrameDirect) == \"function\" then\n    p3Guide.FrameDirect(x, z, 0.5)\n  end\n  self.used = true\n  return\nend\n-- Legacy number-one/three paths below are for the actual player only.\nlocal p3Actual = TensorCore.mGetPlayer()\nif not p3Actual or p3Actual.id ~= p3Player.id then return end\n\n\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal towerRingRadius = 7.5\n\nlocal function validPoint(point)\n  return point\n    and type(point.x) == \"number\"\n    and type(point.z) == \"number\"\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal function secondHalfNorthPoint(firstSpellID)\n  if firstSpellID == 26386 then\n    return { x = 100, y = player.pos.y, z = 93.2 }\n  elseif firstSpellID == 26387 then\n    return { x = 100, y = player.pos.y, z = 90 }\n  end\n  return nil\nend\n\nlocal function drawArrowTower()\n  local towerType = state.towerType\n  if towerType ~= \"forward\" and towerType ~= \"backward\" then\n    return\n  end\n  if type(player.pos.h) ~= \"number\" then\n    return\n  end\n  local heading = player.pos.h\n  if towerType == \"backward\" then\n    heading = heading + math.pi\n  end\n  local x, y, z = TensorCore.getPosInDirection(player.pos, heading, 14, true)\n  local drawer = TensorCore.getStaticDrawer(520093951)\n  if drawer and type(drawer.addCircle) == \"function\" then\n    drawer:addCircle(x, y, z, 5)\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal base = state.towerTarget\nlocal firstSpellID = activeWheel(state.p3WheelFirstSpellID)\nlocal target = nil\nif marker == 1 then\n  target = secondHalfNorthPoint(firstSpellID)\nelseif marker == 2 then\n  if validPoint(base) then\n    target = base\n  end\n  drawArrowTower()\nelseif marker == 3 and validPoint(base) then\n  if firstSpellID == 26386 then\n    target = projectRadius(base, towerRingRadius)\n  elseif firstSpellID == 26387 then\n    target = projectRadius(base, 10)\n  end\nend\n\nif target and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(target.x, target.z, 0.5)\nend\nself.used = true",
 							endIfUsed = true,
 							name = "MuAiCore 阶段指路+14m预估落塔范围",
 							uuid = "b7f6e75c-6f6c-75e5-b92d-865136834bf3",
@@ -8325,7 +9286,7 @@ local tbl =
 				conditions = 
 				{
 				},
-				eventType = 12,
+				eventType = 13,
 				mechanicTime = 640.2,
 				name = "[P3] 第2轮塔位",
 				timeRange = true,
@@ -8412,7 +9373,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal function sendGuide(target)\n  if target and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(state, stored)\n  local spellID = tonumber(stored)\n  local nidhogg = state.nidhoggID and TensorCore.mGetEntity(state.nidhoggID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal function northSafePoint(spellID, y)\n  if spellID == 26386 then\n    return { x = 100, y = y, z = 90 }\n  elseif spellID == 26387 then\n    return { x = 100, y = y, z = 93.2 }\n  end\n  return nil\nend\n\nlocal towerType = state.towerType\nif towerType ~= \"circle\"\n    and towerType ~= \"forward\"\n    and towerType ~= \"backward\" then\n  if TensorCore.hasBuff(player.id, 2755) then\n    towerType = \"circle\"\n  elseif TensorCore.hasBuff(player.id, 2756) then\n    towerType = \"forward\"\n  elseif TensorCore.hasBuff(player.id, 2757) then\n    towerType = \"backward\"\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal spellID = activeWheel(state, state.p3WheelSecondSpellID)\nlocal target = nil\nif marker == 1 then\n  local side = nil\n  if state.towerGroupHasFacing == true then\n    if towerType == \"forward\" then\n      side = \"right\"\n    elseif towerType == \"backward\" then\n      side = \"left\"\n    end\n  elseif state.towerGroupHasFacing == false then\n    if state.towerSlot == \"left\" or state.towerSlot == \"right\" then\n      side = state.towerSlot\n    end\n  end\n\n  if side then\n    local x = side == \"left\" and 90.666 or 109.333\n    local base = { x = x, y = player.pos.y, z = 90.666 }\n    if spellID == 26387 then\n      target = projectRadius(base, 7.5)\n    else\n      target = base\n    end\n  elseif state.towerGroupHasFacing ~= nil then\n    target = northSafePoint(spellID, player.pos.y)\n  end\nelseif marker == 2 then\n  target = northSafePoint(spellID, player.pos.y)\nend\n\nsendGuide(target)\nself.used = true",
+							actionLua = "local p3Step, p3Round = \"skip\", 2\n-- The builder supplies p3Step and p3Round from this reaction's timeline node.\n-- Resolve number two in this render path from one complete live party snapshot.\nlocal p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nif not p3Player or not p3Player.pos then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3Player.id]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3Player.id] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3Player.id then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID) or nil\n  if not boss then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n    if boss then p3Cache.bossID = boss.id end\n  end\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel == 26386 or channel == 26387 then\n    if p3Round == 1 then p3Cache.firstSpell = channel\n    else p3Cache.secondSpell = channel end\n  end\n  local spell = p3Round == 1 and p3Cache.firstSpell or p3Cache.secondSpell\n  local side = p3Cache.side\n  local x, z\n  if p3Step == \"north_before\" then\n    -- Before the next cast starts, gather north inside the target circle.\n    x, z = 100, spell == 26386 and 90 or 93.2\n  elseif p3Step == \"first_outer\" then\n    if spell == 26386 then x, z = 100, 90\n    elseif spell == 26387 then x, z = 100, 93.2 end\n  elseif p3Step == \"first_inner\" then\n    if spell == 26386 then x, z = 100, 93.2\n    elseif spell == 26387 then x, z = 100, 90 end\n  elseif p3Step == \"place\" then\n    x, z = side < 0 and 90.666 or 109.333, 90.666\n    if p3Cache.type == 2756 or p3Cache.type == 2757 then\n      local heading = tonumber(p3Player.pos.h)\n      if heading then\n        if p3Cache.type == 2757 then heading = heading + math.pi end\n        local tx, ty, tz = TensorCore.getPosInDirection(p3Player.pos, heading, 14, true)\n        TensorCore.getStaticDrawer(520093951):addCircle(tx, ty, tz, 5)\n      end\n    end\n  elseif p3Step == \"second_outer\" then\n    if spell == 26386 then\n      x = 100 + side * 10\n      z = (side * (p3Player.pos.x - 100) < 9.5 and p3Player.pos.z < 97) and 90 or 100\n    elseif spell == 26387 then x, z = 100 + side * 7.5, 100 end\n  elseif p3Step == \"third_tower\" then\n    x, z = 100 + side * 7.5, 100\n  elseif p3Step == \"handoff\" then\n    if spell == 26386 then x, z = 100 + side * 7.5, 100\n    elseif spell == 26387 then x, z = 100 + side * 10, 100 end\n  elseif p3Step == \"bait\" then\n    x, z = 100 + side * 10, 100\n  elseif p3Step == \"dodge\" then\n    x, z = 100 + side * 6, 100\n  end\n  if x ~= nil and p3Guide and type(p3Guide.FrameDirect) == \"function\" then\n    p3Guide.FrameDirect(x, z, 0.5)\n  end\n  self.used = true\n  return\nend\n-- Legacy number-one/three paths below are for the actual player only.\nlocal p3Actual = TensorCore.mGetPlayer()\nif not p3Actual or p3Actual.id ~= p3Player.id then return end\n\n\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal function sendGuide(target)\n  if target and type(MuAiGuide) == \"table\"\n      and type(MuAiGuide.FrameDirect) == \"function\" then\n    MuAiGuide.FrameDirect(target.x, target.z, 0.5)\n  end\nend\n\nlocal function projectRadius(base, radius)\n  local dx = base.x - 100\n  local dz = base.z - 100\n  local length = math.sqrt(dx * dx + dz * dz)\n  if length < 0.001 then\n    return base\n  end\n  return {\n    x = 100 + dx / length * radius,\n    y = base.y,\n    z = 100 + dz / length * radius,\n  }\nend\n\nlocal function activeWheel(state, stored)\n  local spellID = tonumber(stored)\n  local nidhogg = state.nidhoggID and TensorCore.mGetEntity(state.nidhoggID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal function northSafePoint(spellID, y)\n  if spellID == 26386 then\n    return { x = 100, y = y, z = 90 }\n  elseif spellID == 26387 then\n    return { x = 100, y = y, z = 93.2 }\n  end\n  return nil\nend\n\nlocal towerType = state.towerType\nif towerType ~= \"circle\"\n    and towerType ~= \"forward\"\n    and towerType ~= \"backward\" then\n  if TensorCore.hasBuff(player.id, 2755) then\n    towerType = \"circle\"\n  elseif TensorCore.hasBuff(player.id, 2756) then\n    towerType = \"forward\"\n  elseif TensorCore.hasBuff(player.id, 2757) then\n    towerType = \"backward\"\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal spellID = activeWheel(state, state.p3WheelSecondSpellID)\nlocal target = nil\nif marker == 1 then\n  local side = nil\n  if state.towerGroupHasFacing == true then\n    if towerType == \"forward\" then\n      side = \"right\"\n    elseif towerType == \"backward\" then\n      side = \"left\"\n    end\n  elseif state.towerGroupHasFacing == false then\n    if state.towerSlot == \"left\" or state.towerSlot == \"right\" then\n      side = state.towerSlot\n    end\n  end\n\n  if side then\n    local x = side == \"left\" and 90.666 or 109.333\n    local base = { x = x, y = player.pos.y, z = 90.666 }\n    if spellID == 26387 then\n      target = projectRadius(base, 7.5)\n    else\n      target = base\n    end\n  elseif state.towerGroupHasFacing ~= nil then\n    target = northSafePoint(spellID, player.pos.y)\n  end\nelseif marker == 2 then\n  target = northSafePoint(spellID, player.pos.y)\nend\n\nsendGuide(target)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAiCore 第2轮左右踩塔安全区",
 							uuid = "914b7ae6-cb09-a1e0-820b-16b54f2866dc",
@@ -8423,7 +9384,7 @@ local tbl =
 				conditions = 
 				{
 				},
-				eventType = 12,
+				eventType = 13,
 				mechanicTime = 640.2,
 				name = "[P3] 第2轮左右踩塔",
 				timeRange = true,
@@ -8557,7 +9518,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = data.string_dsr\nif not state then\n  self.used = true\n  return\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal waitsForThird = false\nif marker == 1 then\n  if state.towerGroupHasFacing == true then\n    waitsForThird = state.towerType == \"circle\"\n  elseif state.towerGroupHasFacing == false then\n    waitsForThird = state.towerSlot == \"rear\"\n  end\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nif waitsForThird\n    and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local currentTimer = tonumber(TensorReactions_CurrentTimer)\n  local stackResolvedAt = tonumber(state.p3SecondStackResolvedAt)\n  local firstResolvedAt = tonumber(state.p3WheelSecondFirstResolvedAt)\n  local stackResolved = currentTimer ~= nil\n    and stackResolvedAt ~= nil\n    and currentTimer >= stackResolvedAt\n  local firstResolved = currentTimer ~= nil\n    and firstResolvedAt ~= nil\n    and currentTimer >= firstResolvedAt\n  local spellID = activeWheel(state.p3WheelSecondSpellID)\n  local towerRingRadius = 7.5\n  local steelOuterRadius = 10\n  local targetZ = nil\n\n  if not stackResolved then\n    if spellID == 26386 then\n      targetZ = 100 - steelOuterRadius\n    elseif spellID == 26387 then\n      targetZ = 93.2\n    end\n  elseif spellID == 26386 then\n    if firstResolved then\n      targetZ = 100 + towerRingRadius\n    else\n      targetZ = 100 + steelOuterRadius\n    end\n  elseif spellID == 26387 then\n    targetZ = 100 + towerRingRadius\n  end\n\n  if targetZ ~= nil then\n    MuAiGuide.FrameDirect(100, targetZ, 0.5)\n  end\nend\nself.used = true",
+							actionLua = "local state = data.string_dsr\nif not state or tonumber(state.towerMarker) ~= 1 then return end\n\n-- Only the original C player soaks the third C tower.\n-- The two side players already soaked round two and remain with the north group.\nlocal waitsForThird\nif state.towerGroupHasFacing == true then\n  if state.towerType == \"circle\" then waitsForThird = true\n  elseif state.towerType == \"forward\" or state.towerType == \"backward\" then\n    waitsForThird = false\n  end\nelseif state.towerGroupHasFacing == false then\n  if state.towerSlot == \"rear\" then waitsForThird = true\n  elseif state.towerSlot == \"left\" or state.towerSlot == \"right\" then\n    waitsForThird = false\n  end\nend\nif waitsForThird == nil then return end\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nif type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local currentTimer = tonumber(TensorReactions_CurrentTimer)\n  local stackResolvedAt = tonumber(state.p3SecondStackResolvedAt)\n  local firstResolvedAt = tonumber(state.p3WheelSecondFirstResolvedAt)\n  local stackResolved = currentTimer ~= nil\n    and stackResolvedAt ~= nil\n    and currentTimer >= stackResolvedAt\n  local firstResolved = currentTimer ~= nil\n    and firstResolvedAt ~= nil\n    and currentTimer >= firstResolvedAt\n  local spellID = activeWheel(state.p3WheelSecondSpellID)\n  local towerRingRadius = 7.5\n  local steelOuterRadius = 10\n  local targetZ = nil\n\n  if not stackResolved then\n    if spellID == 26386 then\n      targetZ = 100 - steelOuterRadius\n    elseif spellID == 26387 then\n      targetZ = 93.2\n    end\n  elseif not waitsForThird then\n    if spellID == 26386 then\n      targetZ = firstResolved and 93.2 or 90\n    elseif spellID == 26387 then\n      targetZ = firstResolved and 90 or 93.2\n    end\n  elseif spellID == 26386 then\n    if firstResolved then\n      targetZ = 100 + towerRingRadius\n    else\n      targetZ = 100 + steelOuterRadius\n    end\n  elseif spellID == 26387 then\n    targetZ = 100 + towerRingRadius\n  end\n\n  if targetZ ~= nil then\n    MuAiGuide.FrameDirect(100, targetZ, 0.5)\n  end\nend\nself.used = true",
 							endIfUsed = true,
 							name = "MuAiCore 1麻第二次分摊后去C塔",
 							uuid = "6acbb720-2d45-06ba-ac63-fad644369e16",
@@ -8570,7 +9531,7 @@ local tbl =
 				},
 				eventType = 12,
 				mechanicTime = 646.8,
-				name = "[P3] 1麻第二次分摊后去第三轮C塔",
+				name = "[P3] 1麻回人群与第三轮C塔",
 				timeRange = true,
 				timelineIndex = 108,
 				timerEndOffset = 11,
@@ -8592,7 +9553,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal function validPoint(point)\n  return point\n    and type(point.x) == \"number\"\n    and type(point.z) == \"number\"\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal function northSafePoint(spellID)\n  if spellID == 26386 then\n    return { x = 100, y = player.pos.y, z = 90 }\n  elseif spellID == 26387 then\n    return { x = 100, y = player.pos.y, z = 93.2 }\n  end\n  return nil\nend\n\nlocal function drawArrowTower()\n  local towerType = state.towerType\n  if towerType ~= \"forward\" and towerType ~= \"backward\" then\n    return\n  end\n  if type(player.pos.h) ~= \"number\" then\n    return\n  end\n  local heading = player.pos.h\n  if towerType == \"backward\" then\n    heading = heading + math.pi\n  end\n  local x, y, z = TensorCore.getPosInDirection(player.pos, heading, 14, true)\n  local drawer = TensorCore.getStaticDrawer(520093951)\n  if drawer and type(drawer.addCircle) == \"function\" then\n    drawer:addCircle(x, y, z, 5)\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal base = state.towerTarget\nlocal target = nil\nif marker == 2 then\n  target = northSafePoint(activeWheel(state.p3WheelSecondSpellID))\nelseif marker == 3 then\n  if validPoint(base) then\n    target = base\n  end\n  drawArrowTower()\nend\n\nif target and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(target.x, target.z, 0.5)\nend\nself.used = true",
+							actionLua = "local p3Step, p3Round = \"north_before\", 2\n-- The builder supplies p3Step and p3Round from this reaction's timeline node.\n-- Resolve number two in this render path from one complete live party snapshot.\nlocal p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nif not p3Player or not p3Player.pos then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3Player.id]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3Player.id] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3Player.id then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID) or nil\n  if not boss then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n    if boss then p3Cache.bossID = boss.id end\n  end\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel == 26386 or channel == 26387 then\n    if p3Round == 1 then p3Cache.firstSpell = channel\n    else p3Cache.secondSpell = channel end\n  end\n  local spell = p3Round == 1 and p3Cache.firstSpell or p3Cache.secondSpell\n  local side = p3Cache.side\n  local x, z\n  if p3Step == \"north_before\" then\n    -- Before the next cast starts, gather north inside the target circle.\n    x, z = 100, spell == 26386 and 90 or 93.2\n  elseif p3Step == \"first_outer\" then\n    if spell == 26386 then x, z = 100, 90\n    elseif spell == 26387 then x, z = 100, 93.2 end\n  elseif p3Step == \"first_inner\" then\n    if spell == 26386 then x, z = 100, 93.2\n    elseif spell == 26387 then x, z = 100, 90 end\n  elseif p3Step == \"place\" then\n    x, z = side < 0 and 90.666 or 109.333, 90.666\n    if p3Cache.type == 2756 or p3Cache.type == 2757 then\n      local heading = tonumber(p3Player.pos.h)\n      if heading then\n        if p3Cache.type == 2757 then heading = heading + math.pi end\n        local tx, ty, tz = TensorCore.getPosInDirection(p3Player.pos, heading, 14, true)\n        TensorCore.getStaticDrawer(520093951):addCircle(tx, ty, tz, 5)\n      end\n    end\n  elseif p3Step == \"second_outer\" then\n    if spell == 26386 then\n      x = 100 + side * 10\n      z = (side * (p3Player.pos.x - 100) < 9.5 and p3Player.pos.z < 97) and 90 or 100\n    elseif spell == 26387 then x, z = 100 + side * 7.5, 100 end\n  elseif p3Step == \"third_tower\" then\n    x, z = 100 + side * 7.5, 100\n  elseif p3Step == \"handoff\" then\n    if spell == 26386 then x, z = 100 + side * 7.5, 100\n    elseif spell == 26387 then x, z = 100 + side * 10, 100 end\n  elseif p3Step == \"bait\" then\n    x, z = 100 + side * 10, 100\n  elseif p3Step == \"dodge\" then\n    x, z = 100 + side * 6, 100\n  end\n  if x ~= nil and p3Guide and type(p3Guide.FrameDirect) == \"function\" then\n    p3Guide.FrameDirect(x, z, 0.5)\n  end\n  self.used = true\n  return\nend\n-- Legacy number-one/three paths below are for the actual player only.\nlocal p3Actual = TensorCore.mGetPlayer()\nif not p3Actual or p3Actual.id ~= p3Player.id then return end\n\nif TensorReactions_CurrentTimer > 651.2 then return end\n\n\nlocal state = data.string_dsr\nlocal player = TensorCore.mGetPlayer()\nif not state or not player or not player.pos then\n  self.used = true\n  return\nend\n\nlocal function validPoint(point)\n  return point\n    and type(point.x) == \"number\"\n    and type(point.z) == \"number\"\nend\n\nlocal function activeWheel(stored)\n  local spellID = tonumber(stored)\n  local entityID = state.p3WheelEntityID or state.nidhoggID\n  local nidhogg = entityID and TensorCore.mGetEntity(entityID) or nil\n  local channelID = nidhogg and nidhogg.castinginfo\n    and tonumber(nidhogg.castinginfo.channelingid) or nil\n  if channelID == 26386 or channelID == 26387 then\n    spellID = channelID\n  end\n  return spellID\nend\n\nlocal function northSafePoint(spellID)\n  if spellID == 26386 then\n    return { x = 100, y = player.pos.y, z = 90 }\n  elseif spellID == 26387 then\n    return { x = 100, y = player.pos.y, z = 93.2 }\n  end\n  return nil\nend\n\nlocal function drawArrowTower()\n  local towerType = state.towerType\n  if towerType ~= \"forward\" and towerType ~= \"backward\" then\n    return\n  end\n  if type(player.pos.h) ~= \"number\" then\n    return\n  end\n  local heading = player.pos.h\n  if towerType == \"backward\" then\n    heading = heading + math.pi\n  end\n  local x, y, z = TensorCore.getPosInDirection(player.pos, heading, 14, true)\n  local drawer = TensorCore.getStaticDrawer(520093951)\n  if drawer and type(drawer.addCircle) == \"function\" then\n    drawer:addCircle(x, y, z, 5)\n  end\nend\n\nlocal marker = tonumber(state.towerMarker)\nlocal base = state.towerTarget\nlocal target = nil\nif marker == 2 then\n  target = northSafePoint(activeWheel(state.p3WheelSecondSpellID))\nelseif marker == 3 then\n  if validPoint(base) then\n    target = base\n  end\n  drawArrowTower()\nend\n\nif target and type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(target.x, target.z, 0.5)\nend\nself.used = true",
 							endIfUsed = true,
 							name = "MuAiCore 阶段指路+14m预估落塔范围",
 							uuid = "72dc7845-a61c-efa8-945a-3e8d13edf231",
@@ -8603,11 +9564,12 @@ local tbl =
 				conditions = 
 				{
 				},
-				eventType = 12,
+				eventType = 13,
 				mechanicTime = 651.2,
 				name = "[P3] 第3轮塔位",
 				timeRange = true,
 				timelineIndex = 109,
+				timerEndOffset = 0.69,
 				timerStartOffset = -11,
 				uuid = "ce41350d-cc3b-c973-b178-a29618a1ed6b",
 				version = 2,
@@ -8801,7 +9763,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local moogle = TensorCore.getMoogleDrawer()\nlocal function raiseOpacity(color)\n  local r, g, b, a = GUI:ColorConvertU32ToFloat4(color)\n  return GUI:ColorConvertFloat4ToU32(r, g, b, math.min(a + 0.15, 1))\nend\nlocal drawer = TensorCore.getCachedDrawer(\n  raiseOpacity(moogle.colorStart),\n  raiseOpacity(moogle.colorMid),\n  raiseOpacity(moogle.colorEnd),\n  GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),\n  moogle.outlineThickness,\n  0,\n  0\n)\ndrawer:setGradient(moogle.gradientDistance, moogle.gradientMinOpacity, moogle.gradientIntensity)\ndrawer:setHeightOffset(moogle.heightOffset)\nif eventArgs.entityID then\n  if eventArgs.spellID == 26386 then\n    drawer:addTimedCircleOnEnt(11266, eventArgs.entityID, 8)\n    drawer:addTimedDonutOnEnt(3000, eventArgs.entityID, 8, 40, 11266)\n  elseif eventArgs.spellID == 26387 then\n    drawer:addTimedDonutOnEnt(11266, eventArgs.entityID, 8, 40)\n    drawer:addTimedCircleOnEnt(3000, eventArgs.entityID, 8, 11266)\n  end\nend\nself.used = true",
+							actionLua = "local moogle = TensorCore.getMoogleDrawer()\nlocal function raiseOpacity(color)\n  local r, g, b, a = GUI:ColorConvertU32ToFloat4(color)\n  return GUI:ColorConvertFloat4ToU32(r, g, b, math.min(a + 0.15, 1))\nend\nlocal drawer = TensorCore.getCachedDrawer(\n  raiseOpacity(moogle.colorStart),\n  raiseOpacity(moogle.colorMid),\n  raiseOpacity(moogle.colorEnd),\n  GUI:ColorConvertFloat4ToU32(1, 1, 1, 1),\n  moogle.outlineThickness,\n  0,\n  0\n)\ndrawer:setGradient(moogle.gradientDistance, moogle.gradientMinOpacity, moogle.gradientIntensity)\ndrawer:setHeightOffset(0.05)\nif eventArgs.entityID then\n  if eventArgs.spellID == 26386 then\n    drawer:addTimedCircleOnEnt(11266, eventArgs.entityID, 8)\n    drawer:addTimedDonutOnEnt(3000, eventArgs.entityID, 8, 40, 11266)\n  elseif eventArgs.spellID == 26387 then\n    drawer:addTimedDonutOnEnt(11266, eventArgs.entityID, 8, 40)\n    drawer:addTimedCircleOnEnt(3000, eventArgs.entityID, 8, 11266)\n  end\nend\nself.used = true",
 							conditions = 
 							{
 								
@@ -8847,6 +9809,64 @@ local tbl =
 				timerEndOffset = 16,
 				timerStartOffset = -10,
 				uuid = "ebe457b0-7385-51ef-994b-ffb0ac6f63f8",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "data.string_dsr = data.string_dsr or {}\nlocal state = data.string_dsr\nstate.p3WheelSecondSpellID = tonumber(eventArgs.spellID)\nstate.p3WheelSecondFirstResolved = false\nstate.p3WheelSecondFirstResolvedAt = nil\nstate.p3SecondStackResolvedAt = nil\nstate.p3WheelEntityID = eventArgs.entityID\nself.used = true\n",
+							conditions = 
+							{
+								
+								{
+									"0c4e350e-64ce-4f9b-84a5-329610f72ab0",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "[P3] 第二轮钢铁月环顺序状态",
+							uuid = "f1e14f78-9010-194d-87cb-9d848c1edab5",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 3,
+							eventArgType = 2,
+							name = "仅钢铁月环读条",
+							spellIDList = 
+							{
+								26386,
+								26387,
+							},
+							uuid = "0c4e350e-64ce-4f9b-84a5-329610f72ab0",
+							version = 3,
+						},
+					},
+				},
+				eventType = 3,
+				mechanicTime = 651.6,
+				name = "[P3] 第二轮钢铁月环顺序状态",
+				timeRange = true,
+				timelineIndex = 110,
+				timerStartOffset = -8,
+				uuid = "365d3b49-4f11-c100-b76d-835fa29e6c2e",
 				version = 2,
 			},
 		},
@@ -9278,6 +10298,37 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local p3Step, p3Round = \"second_outer\", 2\n-- The builder supplies p3Step and p3Round from this reaction's timeline node.\n-- Resolve number two in this render path from one complete live party snapshot.\nlocal p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nif not p3Player or not p3Player.pos then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3Player.id]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3Player.id] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3Player.id then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID) or nil\n  if not boss then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n    if boss then p3Cache.bossID = boss.id end\n  end\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel == 26386 or channel == 26387 then\n    if p3Round == 1 then p3Cache.firstSpell = channel\n    else p3Cache.secondSpell = channel end\n  end\n  local spell = p3Round == 1 and p3Cache.firstSpell or p3Cache.secondSpell\n  local side = p3Cache.side\n  local x, z\n  if p3Step == \"north_before\" then\n    -- Before the next cast starts, gather north inside the target circle.\n    x, z = 100, spell == 26386 and 90 or 93.2\n  elseif p3Step == \"first_outer\" then\n    if spell == 26386 then x, z = 100, 90\n    elseif spell == 26387 then x, z = 100, 93.2 end\n  elseif p3Step == \"first_inner\" then\n    if spell == 26386 then x, z = 100, 93.2\n    elseif spell == 26387 then x, z = 100, 90 end\n  elseif p3Step == \"place\" then\n    x, z = side < 0 and 90.666 or 109.333, 90.666\n    if p3Cache.type == 2756 or p3Cache.type == 2757 then\n      local heading = tonumber(p3Player.pos.h)\n      if heading then\n        if p3Cache.type == 2757 then heading = heading + math.pi end\n        local tx, ty, tz = TensorCore.getPosInDirection(p3Player.pos, heading, 14, true)\n        TensorCore.getStaticDrawer(520093951):addCircle(tx, ty, tz, 5)\n      end\n    end\n  elseif p3Step == \"second_outer\" then\n    if spell == 26386 then\n      x = 100 + side * 10\n      z = (side * (p3Player.pos.x - 100) < 9.5 and p3Player.pos.z < 97) and 90 or 100\n    elseif spell == 26387 then x, z = 100 + side * 7.5, 100 end\n  elseif p3Step == \"third_tower\" then\n    x, z = 100 + side * 7.5, 100\n  elseif p3Step == \"handoff\" then\n    if spell == 26386 then x, z = 100 + side * 7.5, 100\n    elseif spell == 26387 then x, z = 100 + side * 10, 100 end\n  elseif p3Step == \"bait\" then\n    x, z = 100 + side * 10, 100\n  elseif p3Step == \"dodge\" then\n    x, z = 100 + side * 6, 100\n  end\n  if x ~= nil and p3Guide and type(p3Guide.FrameDirect) == \"function\" then\n    p3Guide.FrameDirect(x, z, 0.5)\n  end\n  self.used = true\n  return\nend\n-- Legacy number-one/three paths below are for the actual player only.\nlocal p3Actual = TensorCore.mGetPlayer()\nif not p3Actual or p3Actual.id ~= p3Player.id then return end\n\nlocal state = data.string_dsr\nif type(state) ~= \"table\" or tonumber(state.towerMarker) ~= 2 then return end\nlocal base = state.towerTarget\nif type(base) ~= \"table\" or type(base.x) ~= \"number\"\n    or math.abs(base.x - 100) < 1 then return end\nif type(MuAiGuide) ~= \"table\" or type(MuAiGuide.FrameDirect) ~= \"function\" then return end\n-- 二麻原放塔西北 -> 西塔，东北 -> 东塔；不能沿原斜点延长。\nlocal side = base.x < 100 and -1 or 1\nlocal spellID = tonumber(state.p3WheelSecondSpellID)\nlocal timer = tonumber(TensorReactions_CurrentTimer)\nlocal stackAt = tonumber(state.p3SecondStackResolvedAt)\nlocal firstAt = tonumber(state.p3WheelSecondFirstResolvedAt)\nif not timer then return end\nlocal x, z\nif not stackAt or timer < stackAt then\n  if spellID == 26386 then x, z = 100, 90\n  elseif spellID == 26387 then x, z = 100, 93.2 end\nelseif spellID == 26386 then\n  if firstAt and timer >= firstAt then\n    x, z = 100 + side * 7.5, 100\n  else\n    local player = TensorCore.mGetPlayer()\n    local pos = player and player.pos\n    if type(pos) ~= \"table\" or type(pos.x) ~= \"number\" or type(pos.z) ~= \"number\" then return end\n    -- 钢铁先经外侧拐点，避免从正面直接斜穿目标圈。\n    x = 100 + side * 10\n    z = (side * (pos.x - 100) < 9.5 and pos.z < 97) and 90 or 100\n  end\nelseif spellID == 26387 then\n  x, z = 100 + side * 7.5, 100\nend\nif x then MuAiGuide.FrameDirect(x, z, 0.5) end\nself.used = true",
+							name = "[P3] 2麻第二次分摊后去第三轮左右塔",
+							uuid = "2ee6d532-1e85-b79b-8b62-4b5101894111",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 13,
+				mechanicTime = 651.9,
+				name = "[P3] 2麻第二次分摊后去第三轮左右塔",
+				timeRange = true,
+				timelineIndex = 111,
+				timerEndOffset = 3.39,
+				uuid = "6ab24d6e-cf73-7a1b-b661-5d05bb6254cc",
+				version = 2,
+			},
+		},
 	},
 	[113] = 
 	{
@@ -9340,6 +10391,38 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local p3Step, p3Round = \"third_tower\", 2\n-- The builder supplies p3Step and p3Round from this reaction's timeline node.\n-- Resolve number two in this render path from one complete live party snapshot.\nlocal p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nif not p3Player or not p3Player.pos then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3Player.id]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3Player.id] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3Player.id then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID) or nil\n  if not boss then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n    if boss then p3Cache.bossID = boss.id end\n  end\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel == 26386 or channel == 26387 then\n    if p3Round == 1 then p3Cache.firstSpell = channel\n    else p3Cache.secondSpell = channel end\n  end\n  local spell = p3Round == 1 and p3Cache.firstSpell or p3Cache.secondSpell\n  local side = p3Cache.side\n  local x, z\n  if p3Step == \"north_before\" then\n    -- Before the next cast starts, gather north inside the target circle.\n    x, z = 100, spell == 26386 and 90 or 93.2\n  elseif p3Step == \"first_outer\" then\n    if spell == 26386 then x, z = 100, 90\n    elseif spell == 26387 then x, z = 100, 93.2 end\n  elseif p3Step == \"first_inner\" then\n    if spell == 26386 then x, z = 100, 93.2\n    elseif spell == 26387 then x, z = 100, 90 end\n  elseif p3Step == \"place\" then\n    x, z = side < 0 and 90.666 or 109.333, 90.666\n    if p3Cache.type == 2756 or p3Cache.type == 2757 then\n      local heading = tonumber(p3Player.pos.h)\n      if heading then\n        if p3Cache.type == 2757 then heading = heading + math.pi end\n        local tx, ty, tz = TensorCore.getPosInDirection(p3Player.pos, heading, 14, true)\n        TensorCore.getStaticDrawer(520093951):addCircle(tx, ty, tz, 5)\n      end\n    end\n  elseif p3Step == \"second_outer\" then\n    if spell == 26386 then\n      x = 100 + side * 10\n      z = (side * (p3Player.pos.x - 100) < 9.5 and p3Player.pos.z < 97) and 90 or 100\n    elseif spell == 26387 then x, z = 100 + side * 7.5, 100 end\n  elseif p3Step == \"third_tower\" then\n    x, z = 100 + side * 7.5, 100\n  elseif p3Step == \"handoff\" then\n    if spell == 26386 then x, z = 100 + side * 7.5, 100\n    elseif spell == 26387 then x, z = 100 + side * 10, 100 end\n  elseif p3Step == \"bait\" then\n    x, z = 100 + side * 10, 100\n  elseif p3Step == \"dodge\" then\n    x, z = 100 + side * 6, 100\n  end\n  if x ~= nil and p3Guide and type(p3Guide.FrameDirect) == \"function\" then\n    p3Guide.FrameDirect(x, z, 0.5)\n  end\n  self.used = true\n  return\nend\n-- Legacy number-one/three paths below are for the actual player only.\nlocal p3Actual = TensorCore.mGetPlayer()\nif not p3Actual or p3Actual.id ~= p3Player.id then return end\n",
+							endIfUsed = true,
+							name = "[P3] 2麻第二轮钢铁月环后踩第三塔",
+							uuid = "7972c9e3-c86e-048e-a5e2-1d4854d56fdf",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 13,
+				mechanicTime = 655.3,
+				name = "[P3] 2麻第二轮钢铁月环后踩第三塔",
+				timeRange = true,
+				timelineIndex = 113,
+				timerEndOffset = 2.49,
+				uuid = "6cb5219c-e634-8ab2-8a7a-5b818d9cd2d3",
+				version = 2,
+			},
+		},
 	},
 	[114] = 
 	{
@@ -9354,7 +10437,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = data.string_dsr\nif not state or tonumber(state.towerMarker) ~= 1 then\n  self.used = true\n  return\nend\n\nlocal base = state.towerTarget\nif not base or type(base.x) ~= \"number\" or type(base.z) ~= \"number\" then\n  self.used = true\n  return\nend\n\nlocal spellID = tonumber(state.p3WheelSecondSpellID)\nlocal safeRadius = nil\nif spellID == 26386 then\n  safeRadius = 7.5\nelseif spellID == 26387 then\n  safeRadius = 10\nend\n\nlocal radius = safeRadius\nif type(radius) ~= \"number\" then\n  self.used = true\n  return\nend\n\nlocal dx = base.x - 100\nlocal dz = base.z - 100\nlocal length = math.sqrt(dx * dx + dz * dz)\nif length <= 0.001 then\n  self.used = true\n  return\nend\n\nif type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local targetX = 100 + dx / length * radius\n  local targetZ = 100 + dz / length * radius\n  MuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nend\nself.used = true",
+							actionLua = "local state = data.string_dsr\nif not state or tonumber(state.towerMarker) ~= 1 then return end\n\n-- Only the original C player soaks the third C tower.\n-- The two side players already soaked round two and remain with the north group.\nlocal waitsForThird\nif state.towerGroupHasFacing == true then\n  if state.towerType == \"circle\" then waitsForThird = true\n  elseif state.towerType == \"forward\" or state.towerType == \"backward\" then\n    waitsForThird = false\n  end\nelseif state.towerGroupHasFacing == false then\n  if state.towerSlot == \"rear\" then waitsForThird = true\n  elseif state.towerSlot == \"left\" or state.towerSlot == \"right\" then\n    waitsForThird = false\n  end\nend\nif waitsForThird == nil then return end\n\nlocal spellID = tonumber(state.p3WheelSecondSpellID)\nlocal radius\nif spellID == 26386 then radius = 7.5\nelseif spellID == 26387 then radius = 10 end\nif not radius then return end\nlocal targetZ = waitsForThird and (100 + radius)\n  or (spellID == 26386 and 93.2 or 90)\nif type(MuAiGuide) == \"table\" and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(100, targetZ, 0.5)\nend\nself.used = true\n",
 							endIfUsed = true,
 							name = "1麻第三塔后按轮盘留内或去外",
 							uuid = "b6c284ae-0a60-2dc6-87a2-f9729563d191",
@@ -9375,6 +10458,37 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local p3Step, p3Round = \"handoff\", 2\n-- The builder supplies p3Step and p3Round from this reaction's timeline node.\n-- Resolve number two in this render path from one complete live party snapshot.\nlocal p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nif not p3Player or not p3Player.pos then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3Player.id]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3Player.id] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3Player.id then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID) or nil\n  if not boss then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n    if boss then p3Cache.bossID = boss.id end\n  end\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel == 26386 or channel == 26387 then\n    if p3Round == 1 then p3Cache.firstSpell = channel\n    else p3Cache.secondSpell = channel end\n  end\n  local spell = p3Round == 1 and p3Cache.firstSpell or p3Cache.secondSpell\n  local side = p3Cache.side\n  local x, z\n  if p3Step == \"north_before\" then\n    -- Before the next cast starts, gather north inside the target circle.\n    x, z = 100, spell == 26386 and 90 or 93.2\n  elseif p3Step == \"first_outer\" then\n    if spell == 26386 then x, z = 100, 90\n    elseif spell == 26387 then x, z = 100, 93.2 end\n  elseif p3Step == \"first_inner\" then\n    if spell == 26386 then x, z = 100, 93.2\n    elseif spell == 26387 then x, z = 100, 90 end\n  elseif p3Step == \"place\" then\n    x, z = side < 0 and 90.666 or 109.333, 90.666\n    if p3Cache.type == 2756 or p3Cache.type == 2757 then\n      local heading = tonumber(p3Player.pos.h)\n      if heading then\n        if p3Cache.type == 2757 then heading = heading + math.pi end\n        local tx, ty, tz = TensorCore.getPosInDirection(p3Player.pos, heading, 14, true)\n        TensorCore.getStaticDrawer(520093951):addCircle(tx, ty, tz, 5)\n      end\n    end\n  elseif p3Step == \"second_outer\" then\n    if spell == 26386 then\n      x = 100 + side * 10\n      z = (side * (p3Player.pos.x - 100) < 9.5 and p3Player.pos.z < 97) and 90 or 100\n    elseif spell == 26387 then x, z = 100 + side * 7.5, 100 end\n  elseif p3Step == \"third_tower\" then\n    x, z = 100 + side * 7.5, 100\n  elseif p3Step == \"handoff\" then\n    if spell == 26386 then x, z = 100 + side * 7.5, 100\n    elseif spell == 26387 then x, z = 100 + side * 10, 100 end\n  elseif p3Step == \"bait\" then\n    x, z = 100 + side * 10, 100\n  elseif p3Step == \"dodge\" then\n    x, z = 100 + side * 6, 100\n  end\n  if x ~= nil and p3Guide and type(p3Guide.FrameDirect) == \"function\" then\n    p3Guide.FrameDirect(x, z, 0.5)\n  end\n  self.used = true\n  return\nend\n-- Legacy number-one/three paths below are for the actual player only.\nlocal p3Actual = TensorCore.mGetPlayer()\nif not p3Actual or p3Actual.id ~= p3Player.id then return end\n\nlocal state = data.string_dsr\nif type(state) ~= \"table\" or tonumber(state.towerMarker) ~= 2 then return end\nlocal base = state.towerTarget\nif type(base) ~= \"table\" or type(base.x) ~= \"number\"\n    or math.abs(base.x - 100) < 1 then return end\nif type(MuAiGuide) ~= \"table\" or type(MuAiGuide.FrameDirect) ~= \"function\" then return end\n-- 二麻原放塔西北 -> 西塔，东北 -> 东塔；不能沿原斜点延长。\nlocal side = base.x < 100 and -1 or 1\nlocal spellID = tonumber(state.p3WheelSecondSpellID)\nlocal radius\nif spellID == 26386 then radius = 7.5\nelseif spellID == 26387 then radius = 10 end\nif radius then MuAiGuide.FrameDirect(100 + side * radius, 100, 0.5) end\nself.used = true",
+							name = "[P3] 2麻第三塔后轮盘交接",
+							uuid = "6f916ba3-24d2-2305-b3ea-ae2fb0c5893f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 13,
+				mechanicTime = 657.8,
+				name = "[P3] 2麻第三塔后轮盘交接",
+				timeRange = true,
+				timelineIndex = 114,
+				timerEndOffset = 0.59,
+				uuid = "b203842c-0e21-89a1-94f5-a98b80f6c9f1",
+				version = 2,
+			},
+		},
 	},
 	[115] = 
 	{
@@ -9389,7 +10503,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = data.string_dsr\nif not state or tonumber(state.towerMarker) ~= 1 then\n  self.used = true\n  return\nend\n\nlocal base = state.towerTarget\nif not base or type(base.x) ~= \"number\" or type(base.z) ~= \"number\" then\n  self.used = true\n  return\nend\n\nlocal radius = 10\nif type(radius) ~= \"number\" then\n  self.used = true\n  return\nend\n\nlocal dx = base.x - 100\nlocal dz = base.z - 100\nlocal length = math.sqrt(dx * dx + dz * dz)\nif length <= 0.001 then\n  self.used = true\n  return\nend\n\nif type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local targetX = 100 + dx / length * radius\n  local targetZ = 100 + dz / length * radius\n  MuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nend\nself.used = true",
+							actionLua = "local state = data.string_dsr\nif not state or tonumber(state.towerMarker) ~= 1 then return end\n\n-- Only the original C player soaks the third C tower.\n-- The two side players already soaked round two and remain with the north group.\nlocal waitsForThird\nif state.towerGroupHasFacing == true then\n  if state.towerType == \"circle\" then waitsForThird = true\n  elseif state.towerType == \"forward\" or state.towerType == \"backward\" then\n    waitsForThird = false\n  end\nelseif state.towerGroupHasFacing == false then\n  if state.towerSlot == \"rear\" then waitsForThird = true\n  elseif state.towerSlot == \"left\" or state.towerSlot == \"right\" then\n    waitsForThird = false\n  end\nend\nif waitsForThird == nil then return end\n\nlocal targetZ = waitsForThird and 110 or 93.2\nif type(MuAiGuide) == \"table\" and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(100, targetZ, 0.5)\nend\nself.used = true\n",
 							endIfUsed = true,
 							name = "1麻沿本人塔方向外出引导",
 							uuid = "5df869c0-c75d-6dab-8c40-aeb763ed61bc",
@@ -9410,6 +10524,37 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local p3Step, p3Round = \"bait\", 2\n-- The builder supplies p3Step and p3Round from this reaction's timeline node.\n-- Resolve number two in this render path from one complete live party snapshot.\nlocal p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nif not p3Player or not p3Player.pos then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3Player.id]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3Player.id] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3Player.id then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID) or nil\n  if not boss then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n    if boss then p3Cache.bossID = boss.id end\n  end\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel == 26386 or channel == 26387 then\n    if p3Round == 1 then p3Cache.firstSpell = channel\n    else p3Cache.secondSpell = channel end\n  end\n  local spell = p3Round == 1 and p3Cache.firstSpell or p3Cache.secondSpell\n  local side = p3Cache.side\n  local x, z\n  if p3Step == \"north_before\" then\n    -- Before the next cast starts, gather north inside the target circle.\n    x, z = 100, spell == 26386 and 90 or 93.2\n  elseif p3Step == \"first_outer\" then\n    if spell == 26386 then x, z = 100, 90\n    elseif spell == 26387 then x, z = 100, 93.2 end\n  elseif p3Step == \"first_inner\" then\n    if spell == 26386 then x, z = 100, 93.2\n    elseif spell == 26387 then x, z = 100, 90 end\n  elseif p3Step == \"place\" then\n    x, z = side < 0 and 90.666 or 109.333, 90.666\n    if p3Cache.type == 2756 or p3Cache.type == 2757 then\n      local heading = tonumber(p3Player.pos.h)\n      if heading then\n        if p3Cache.type == 2757 then heading = heading + math.pi end\n        local tx, ty, tz = TensorCore.getPosInDirection(p3Player.pos, heading, 14, true)\n        TensorCore.getStaticDrawer(520093951):addCircle(tx, ty, tz, 5)\n      end\n    end\n  elseif p3Step == \"second_outer\" then\n    if spell == 26386 then\n      x = 100 + side * 10\n      z = (side * (p3Player.pos.x - 100) < 9.5 and p3Player.pos.z < 97) and 90 or 100\n    elseif spell == 26387 then x, z = 100 + side * 7.5, 100 end\n  elseif p3Step == \"third_tower\" then\n    x, z = 100 + side * 7.5, 100\n  elseif p3Step == \"handoff\" then\n    if spell == 26386 then x, z = 100 + side * 7.5, 100\n    elseif spell == 26387 then x, z = 100 + side * 10, 100 end\n  elseif p3Step == \"bait\" then\n    x, z = 100 + side * 10, 100\n  elseif p3Step == \"dodge\" then\n    x, z = 100 + side * 6, 100\n  end\n  if x ~= nil and p3Guide and type(p3Guide.FrameDirect) == \"function\" then\n    p3Guide.FrameDirect(x, z, 0.5)\n  end\n  self.used = true\n  return\nend\n-- Legacy number-one/three paths below are for the actual player only.\nlocal p3Actual = TensorCore.mGetPlayer()\nif not p3Actual or p3Actual.id ~= p3Player.id then return end\n\nlocal state = data.string_dsr\nif type(state) ~= \"table\" or tonumber(state.towerMarker) ~= 2 then return end\nlocal base = state.towerTarget\nif type(base) ~= \"table\" or type(base.x) ~= \"number\"\n    or math.abs(base.x - 100) < 1 then return end\nif type(MuAiGuide) ~= \"table\" or type(MuAiGuide.FrameDirect) ~= \"function\" then return end\n-- 二麻原放塔西北 -> 西塔，东北 -> 东塔；不能沿原斜点延长。\nlocal side = base.x < 100 and -1 or 1\nMuAiGuide.FrameDirect(100 + side * 10, 100, 0.5)\nself.used = true",
+							name = "[P3] 2麻第三塔后外侧引导",
+							uuid = "9d7a0286-22f9-d32b-8a64-a08dece0dfc7",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 13,
+				mechanicTime = 658.4,
+				name = "[P3] 2麻第三塔后外侧引导",
+				timeRange = true,
+				timelineIndex = 115,
+				timerEndOffset = 1.89,
+				uuid = "898bdeb3-9100-16d0-abef-1e81d86964d9",
+				version = 2,
+			},
+		},
 	},
 	[116] = 
 	{
@@ -9424,7 +10569,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = data.string_dsr\nif not state or tonumber(state.towerMarker) ~= 1 then\n  self.used = true\n  return\nend\n\nlocal base = state.towerTarget\nif not base or type(base.x) ~= \"number\" or type(base.z) ~= \"number\" then\n  self.used = true\n  return\nend\n\nlocal radius = 6\nif type(radius) ~= \"number\" then\n  self.used = true\n  return\nend\n\nlocal dx = base.x - 100\nlocal dz = base.z - 100\nlocal length = math.sqrt(dx * dx + dz * dz)\nif length <= 0.001 then\n  self.used = true\n  return\nend\n\nif type(MuAiGuide) == \"table\"\n    and type(MuAiGuide.FrameDirect) == \"function\" then\n  local targetX = 100 + dx / length * radius\n  local targetZ = 100 + dz / length * radius\n  MuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nend\nself.used = true",
+							actionLua = "local state = data.string_dsr\nif not state or tonumber(state.towerMarker) ~= 1 then return end\n\n-- Only the original C player soaks the third C tower.\n-- The two side players already soaked round two and remain with the north group.\nlocal waitsForThird\nif state.towerGroupHasFacing == true then\n  if state.towerType == \"circle\" then waitsForThird = true\n  elseif state.towerType == \"forward\" or state.towerType == \"backward\" then\n    waitsForThird = false\n  end\nelseif state.towerGroupHasFacing == false then\n  if state.towerSlot == \"rear\" then waitsForThird = true\n  elseif state.towerSlot == \"left\" or state.towerSlot == \"right\" then\n    waitsForThird = false\n  end\nend\nif waitsForThird == nil then return end\n\nlocal targetZ = waitsForThird and 106 or 93.2\nif type(MuAiGuide) == \"table\" and type(MuAiGuide.FrameDirect) == \"function\" then\n  MuAiGuide.FrameDirect(100, targetZ, 0.5)\nend\nself.used = true\n",
 							endIfUsed = true,
 							name = "1麻离开分身正面",
 							uuid = "ab85d6ac-1b54-ae1e-ad88-86f2fbc7a3fc",
@@ -9442,6 +10587,37 @@ local tbl =
 				timelineIndex = 116,
 				timerStartOffset = -4.6,
 				uuid = "5b19efa4-0169-6f9e-9646-f41b922f0244",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local p3Step, p3Round = \"dodge\", 2\n-- The builder supplies p3Step and p3Round from this reaction's timeline node.\n-- Resolve number two in this render path from one complete live party snapshot.\nlocal p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nif not p3Player or not p3Player.pos then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3Player.id]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3Player.id] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3Player.id then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID) or nil\n  if not boss then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n    if boss then p3Cache.bossID = boss.id end\n  end\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel == 26386 or channel == 26387 then\n    if p3Round == 1 then p3Cache.firstSpell = channel\n    else p3Cache.secondSpell = channel end\n  end\n  local spell = p3Round == 1 and p3Cache.firstSpell or p3Cache.secondSpell\n  local side = p3Cache.side\n  local x, z\n  if p3Step == \"north_before\" then\n    -- Before the next cast starts, gather north inside the target circle.\n    x, z = 100, spell == 26386 and 90 or 93.2\n  elseif p3Step == \"first_outer\" then\n    if spell == 26386 then x, z = 100, 90\n    elseif spell == 26387 then x, z = 100, 93.2 end\n  elseif p3Step == \"first_inner\" then\n    if spell == 26386 then x, z = 100, 93.2\n    elseif spell == 26387 then x, z = 100, 90 end\n  elseif p3Step == \"place\" then\n    x, z = side < 0 and 90.666 or 109.333, 90.666\n    if p3Cache.type == 2756 or p3Cache.type == 2757 then\n      local heading = tonumber(p3Player.pos.h)\n      if heading then\n        if p3Cache.type == 2757 then heading = heading + math.pi end\n        local tx, ty, tz = TensorCore.getPosInDirection(p3Player.pos, heading, 14, true)\n        TensorCore.getStaticDrawer(520093951):addCircle(tx, ty, tz, 5)\n      end\n    end\n  elseif p3Step == \"second_outer\" then\n    if spell == 26386 then\n      x = 100 + side * 10\n      z = (side * (p3Player.pos.x - 100) < 9.5 and p3Player.pos.z < 97) and 90 or 100\n    elseif spell == 26387 then x, z = 100 + side * 7.5, 100 end\n  elseif p3Step == \"third_tower\" then\n    x, z = 100 + side * 7.5, 100\n  elseif p3Step == \"handoff\" then\n    if spell == 26386 then x, z = 100 + side * 7.5, 100\n    elseif spell == 26387 then x, z = 100 + side * 10, 100 end\n  elseif p3Step == \"bait\" then\n    x, z = 100 + side * 10, 100\n  elseif p3Step == \"dodge\" then\n    x, z = 100 + side * 6, 100\n  end\n  if x ~= nil and p3Guide and type(p3Guide.FrameDirect) == \"function\" then\n    p3Guide.FrameDirect(x, z, 0.5)\n  end\n  self.used = true\n  return\nend\n-- Legacy number-one/three paths below are for the actual player only.\nlocal p3Actual = TensorCore.mGetPlayer()\nif not p3Actual or p3Actual.id ~= p3Player.id then return end\n\nlocal state = data.string_dsr\nif type(state) ~= \"table\" or tonumber(state.towerMarker) ~= 2 then return end\nlocal base = state.towerTarget\nif type(base) ~= \"table\" or type(base.x) ~= \"number\"\n    or math.abs(base.x - 100) < 1 then return end\nif type(MuAiGuide) ~= \"table\" or type(MuAiGuide.FrameDirect) ~= \"function\" then return end\n-- 二麻原放塔西北 -> 西塔，东北 -> 东塔；不能沿原斜点延长。\nlocal side = base.x < 100 and -1 or 1\nMuAiGuide.FrameDirect(100 + side * 6, 100, 0.5)\nself.used = true",
+							name = "[P3] 2麻第三塔后躲武神枪",
+							uuid = "024289c9-df7e-b923-98b7-5442295f2724",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				eventType = 13,
+				mechanicTime = 664.9,
+				name = "[P3] 2麻第三塔后躲武神枪",
+				timeRange = true,
+				timelineIndex = 116,
+				timerStartOffset = -4.6,
+				uuid = "95674bf3-586f-3305-887f-eb7f7fd7cd64",
 				version = 2,
 			},
 		},
@@ -10843,7 +12019,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or H1ID == nil or H2ID == nil or H1ID == H2ID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == H1ID or playerID == H2ID then\n  local frontDX = px - 90.55\n  local frontDZ = pz - 106.75\n  local backDX = px - 87.45\n  local backDZ = pz - 106.75\n  if frontDX * frontDX + frontDZ * frontDZ\n      <= backDX * backDX + backDZ * backDZ then\n    targetX = 90.55\n    targetZ = 106.75\n  else\n    targetX = 87.45\n    targetZ = 106.75\n  end\n\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
+							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or H1ID == nil or H2ID == nil or H1ID == H2ID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == H1ID or playerID == H2ID then\n  -- Assign the two existing points together: both players must not choose one point.\n  local first = TensorCore.mGetEntity(H1ID)\n  local second = TensorCore.mGetEntity(H2ID)\n  local firstPos = first and first.pos\n  local secondPos = second and second.pos\n  local firstX = tonumber(firstPos and firstPos.x)\n  local secondX = tonumber(secondPos and secondPos.x)\n  if firstX == nil or secondX == nil then return end\n  -- Both destinations have the same Z. Sorting X minimizes total squared distance.\n  -- Equal positions use the existing pair order as a stable tie-break.\n  local firstFront = firstX >= secondX\n  local ownFront = (playerID == H1ID) == firstFront\n  targetX = ownFront and 90.55 or 87.45\n  targetZ = 106.75\n\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
 							name = "H1H2 阶段动态指路",
 							uuid = "50c09ce8-3e93-4cd5-9f5d-a9ad876a43df",
 							version = 2.1,
@@ -10905,9 +12081,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"bb5110c3-7690-c76c-9ae9-81eb067cc275",
+									true,
+								},
 								
 								{
 									"cbac0eab-d232-afc2-8121-580da8495957",
@@ -10931,9 +12112,90 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
-							name = "策动",
+							ignoreWeaveRules = true,
+							name = "行吟",
 							uuid = "8292a029-2463-33d4-ae04-4f41fa1ba170",
 							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
+								
+								{
+									"bdbd8c59-d6f4-6cb2-b28f-d342524cc2a5",
+									true,
+								},
+								
+								{
+									"cbac0eab-d232-afc2-8121-580da8495957",
+									true,
+								},
+								
+								{
+									"31bdbde2-36be-2adf-b119-e5d4b54440e6",
+									true,
+								},
+								
+								{
+									"cd92b68f-f420-1a4b-bb88-e2c4601a4233",
+									true,
+								},
+								
+								{
+									"aeb34e53-2add-a8f8-9b59-7cba35dc3eb7",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "策动",
+							uuid = "6ade9186-54bf-2335-9fbb-a5528946ce0c",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"9112dc97-23c0-ae3c-957d-34e1fb01c169",
+									true,
+								},
+								
+								{
+									"cbac0eab-d232-afc2-8121-580da8495957",
+									true,
+								},
+								
+								{
+									"31bdbde2-36be-2adf-b119-e5d4b54440e6",
+									true,
+								},
+								
+								{
+									"cd92b68f-f420-1a4b-bb88-e2c4601a4233",
+									true,
+								},
+								
+								{
+									"aeb34e53-2add-a8f8-9b59-7cba35dc3eb7",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "c367c6ac-9388-48bb-8e10-cb598ff5c526",
 							version = 2.1,
 						},
 					},
@@ -10991,6 +12253,45 @@ local tbl =
 							version = 3,
 						},
 					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "bb5110c3-7690-c76c-9ae9-81eb067cc275",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "bdbd8c59-d6f4-6cb2-b28f-d342524cc2a5",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "9112dc97-23c0-ae3c-957d-34e1fb01c169",
+							version = 3,
+						},
+					},
 				},
 				enabled = false,
 				mechanicTime = 920.9,
@@ -11012,7 +12313,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or D3ID == nil or D4ID == nil or D3ID == D4ID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == D3ID or playerID == D4ID then\n  local frontDX = px - 90.55\n  local frontDZ = pz - 106.75\n  local backDX = px - 87.45\n  local backDZ = pz - 106.75\n  if frontDX * frontDX + frontDZ * frontDZ\n      <= backDX * backDX + backDZ * backDZ then\n    targetX = 90.55\n    targetZ = 106.75\n  else\n    targetX = 87.45\n    targetZ = 106.75\n  end\nelseif playerID == H1ID or playerID == H2ID then\n  targetX = 82\n  targetZ = 100\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
+							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or D3ID == nil or D4ID == nil or D3ID == D4ID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == D3ID or playerID == D4ID then\n  -- Assign the two existing points together: both players must not choose one point.\n  local first = TensorCore.mGetEntity(D3ID)\n  local second = TensorCore.mGetEntity(D4ID)\n  local firstPos = first and first.pos\n  local secondPos = second and second.pos\n  local firstX = tonumber(firstPos and firstPos.x)\n  local secondX = tonumber(secondPos and secondPos.x)\n  if firstX == nil or secondX == nil then return end\n  -- Both destinations have the same Z. Sorting X minimizes total squared distance.\n  -- Equal positions use the existing pair order as a stable tie-break.\n  local firstFront = firstX >= secondX\n  local ownFront = (playerID == D3ID) == firstFront\n  targetX = ownFront and 90.55 or 87.45\n  targetZ = 106.75\nelseif playerID == H1ID or playerID == H2ID then\n  targetX = 82\n  targetZ = 100\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
 							name = "D3D4 阶段动态指路",
 							uuid = "e29e58a5-7c54-7d9f-9908-3a2158968fb5",
 							version = 2.1,
@@ -11075,7 +12376,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or D1ID == nil or D2ID == nil or D1ID == D2ID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == D1ID or playerID == D2ID then\n  local frontDX = px - 90.55\n  local frontDZ = pz - 106.75\n  local backDX = px - 87.45\n  local backDZ = pz - 106.75\n  if frontDX * frontDX + frontDZ * frontDZ\n      <= backDX * backDX + backDZ * backDZ then\n    targetX = 90.55\n    targetZ = 106.75\n  else\n    targetX = 87.45\n    targetZ = 106.75\n  end\nelseif playerID == D3ID or playerID == D4ID then\n  targetX = 96\n  targetZ = 101.5\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
+							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or D1ID == nil or D2ID == nil or D1ID == D2ID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == D1ID or playerID == D2ID then\n  -- Assign the two existing points together: both players must not choose one point.\n  local first = TensorCore.mGetEntity(D1ID)\n  local second = TensorCore.mGetEntity(D2ID)\n  local firstPos = first and first.pos\n  local secondPos = second and second.pos\n  local firstX = tonumber(firstPos and firstPos.x)\n  local secondX = tonumber(secondPos and secondPos.x)\n  if firstX == nil or secondX == nil then return end\n  -- Both destinations have the same Z. Sorting X minimizes total squared distance.\n  -- Equal positions use the existing pair order as a stable tie-break.\n  local firstFront = firstX >= secondX\n  local ownFront = (playerID == D1ID) == firstFront\n  targetX = ownFront and 90.55 or 87.45\n  targetZ = 106.75\nelseif playerID == D3ID or playerID == D4ID then\n  targetX = 96\n  targetZ = 101.5\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
 							name = "D1D2 阶段动态指路",
 							uuid = "7656bf30-792a-081b-9b38-2e87c8c2b0de",
 							version = 2.1,
@@ -11138,7 +12439,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or MTID == nil or STID == nil or MTID == STID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == MTID or playerID == STID then\n  local frontDX = px - 90.55\n  local frontDZ = pz - 106.75\n  local backDX = px - 87.45\n  local backDZ = pz - 106.75\n  if frontDX * frontDX + frontDZ * frontDZ\n      <= backDX * backDX + backDZ * backDZ then\n    targetX = 90.55\n    targetZ = 106.75\n  else\n    targetX = 87.45\n    targetZ = 106.75\n  end\nelseif playerID == D1ID or playerID == D2ID then\n  targetX = 82\n  targetZ = 97\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
+							actionLua = "local party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal ppos = player and player.pos or nil\nif type(party) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(ppos) ~= \"table\" then\n  return\nend\n\nlocal H1ID = tonumber(party.H1 and party.H1.id)\nlocal H2ID = tonumber(party.H2 and party.H2.id)\nlocal D3ID = tonumber(party.D3 and party.D3.id)\nlocal D4ID = tonumber(party.D4 and party.D4.id)\nlocal D1ID = tonumber(party.D1 and party.D1.id)\nlocal D2ID = tonumber(party.D2 and party.D2.id)\nlocal MTID = tonumber(party.MT and party.MT.id)\nlocal STID = tonumber(party.ST and party.ST.id)\nlocal knownRole = playerID == H1ID or playerID == H2ID\n  or playerID == D3ID or playerID == D4ID\n  or playerID == D1ID or playerID == D2ID\n  or playerID == MTID or playerID == STID\nif not knownRole or MTID == nil or STID == nil or MTID == STID then\n  return\nend\n\nlocal px = tonumber(ppos.x)\nlocal pz = tonumber(ppos.z)\nif px == nil or pz == nil then\n  return\nend\n\nlocal targetX = 89\nlocal targetZ = 100\nif playerID == MTID or playerID == STID then\n  -- Assign the two existing points together: both players must not choose one point.\n  local first = TensorCore.mGetEntity(MTID)\n  local second = TensorCore.mGetEntity(STID)\n  local firstPos = first and first.pos\n  local secondPos = second and second.pos\n  local firstX = tonumber(firstPos and firstPos.x)\n  local secondX = tonumber(secondPos and secondPos.x)\n  if firstX == nil or secondX == nil then return end\n  -- Both destinations have the same Z. Sorting X minimizes total squared distance.\n  -- Equal positions use the existing pair order as a stable tie-break.\n  local firstFront = firstX >= secondX\n  local ownFront = (playerID == MTID) == firstFront\n  targetX = ownFront and 90.55 or 87.45\n  targetZ = 106.75\nelseif playerID == D1ID or playerID == D2ID then\n  targetX = 82\n  targetZ = 97\nend\n\nMuAiGuide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
 							name = "MTST 阶段动态指路",
 							uuid = "d0124ffd-cc1f-104a-9fe9-1ce90381406b",
 							version = 2.1,
@@ -11403,9 +12704,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"5e5e2266-923a-439f-9938-57f031fea7f5",
+									true,
+								},
 								
 								{
 									"229d0dff-f035-0f2e-802e-2fa7744de825",
@@ -11418,9 +12724,68 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
-							name = "策动",
+							ignoreWeaveRules = true,
+							name = "行吟",
 							uuid = "06c37ef9-2af9-00c2-bd98-3a4a486ed366",
 							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
+								
+								{
+									"b774b367-2121-f55b-8a52-9d0343276d80",
+									true,
+								},
+								
+								{
+									"229d0dff-f035-0f2e-802e-2fa7744de825",
+									true,
+								},
+								
+								{
+									"f28b3508-072a-b493-900a-597f096c2027",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "策动",
+							uuid = "12d5e336-9341-e8d1-a806-74e699dc7741",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"81e474fb-7217-e211-9acd-9eae28aabe44",
+									true,
+								},
+								
+								{
+									"229d0dff-f035-0f2e-802e-2fa7744de825",
+									true,
+								},
+								
+								{
+									"f28b3508-072a-b493-900a-597f096c2027",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "1f339d62-72b1-f354-b953-f0db5b6e5c7a",
 							version = 2.1,
 						},
 					},
@@ -11459,6 +12824,45 @@ local tbl =
 							category = "Self",
 							name = "Missing Buffs",
 							uuid = "f28b3508-072a-b493-900a-597f096c2027",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "5e5e2266-923a-439f-9938-57f031fea7f5",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "b774b367-2121-f55b-8a52-9d0343276d80",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "81e474fb-7217-e211-9acd-9eae28aabe44",
 							version = 3,
 						},
 					},
@@ -11756,7 +13160,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "TensorCore.API.TensorACR.toggleLockFace(false)\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\ndata.string_dsr.eyePos = nil\ndata.string_dsr.cometCount = nil\ndata.string_dsr.cometsArmed = nil\ndata.string_dsr.drawnExaflares = nil\ndata.string_dsr.p5WrathMarkerID = nil\ndata.string_dsr.p5WrathCauterizeID = nil\ndata.string_dsr.p5WrathLiquidID = nil\ndata.string_dsr.p5WrathLiquidSide = nil\ndata.string_dsr.p5WrathAltarID = nil\ndata.string_dsr.p5WrathAltarSide = nil\ndata.string_dsr.p5WrathThunderID1 = nil\ndata.string_dsr.p5WrathThunderID2 = nil\ndata.string_dsr.p5WrathThunderLeftID = nil\ndata.string_dsr.p5WrathThunderRightID = nil\ndata.string_dsr.p5WrathThunderScanBucket = nil\ndata.string_dsr.p5WrathWarriorID = nil\nself.used = true",
+							actionLua = "TensorCore.API.TensorACR.toggleLockFace(false)\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\ndata.string_dsr.eyePos = nil\ndata.string_dsr.cometCount = nil\ndata.string_dsr.cometsArmed = nil\ndata.string_dsr.drawnExaflares = nil\ndata.string_dsr.p5WrathMarkerID = nil\ndata.string_dsr.p5WrathCauterizeID = nil\ndata.string_dsr.p5WrathCauterizeGate = nil\ndata.string_dsr.p5WrathLiquidID = nil\ndata.string_dsr.p5WrathLiquidSide = nil\ndata.string_dsr.p5WrathAltarID = nil\ndata.string_dsr.p5WrathAltarSide = nil\ndata.string_dsr.p5WrathThunderID1 = nil\ndata.string_dsr.p5WrathThunderID2 = nil\ndata.string_dsr.p5WrathThunderLeftID = nil\ndata.string_dsr.p5WrathThunderRightID = nil\ndata.string_dsr.p5WrathThunderScanBucket = nil\ndata.string_dsr.p5WrathWarriorID = nil\nself.used = true",
 							endIfUsed = true,
 							name = "Unlock face and reset phase state",
 							uuid = "a21b2870-fb66-7044-be55-1e81c8e38d8e",
@@ -12030,7 +13434,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(Argus) ~= \"table\"\n    or type(Argus.getCurrentTethers) ~= \"function\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal members = {}\nlocal byID = {}\nfor i = 1, #roles do\n  local roleEntry = party[roles[i]]\n  local id = tonumber(roleEntry and roleEntry.id)\n  if id == nil or byID[id] ~= nil then\n    return\n  end\n\n  local entity = TensorCore.mGetEntity(id)\n  local pos = entity and entity.pos or nil\n  if entity == nil\n      or entity.alive == false\n      or type(pos) ~= \"table\"\n      or type(pos.x) ~= \"number\"\n      or type(pos.z) ~= \"number\" then\n    return\n  end\n\n  local member = { id = id, roleIndex = i, entity = entity }\n  members[#members + 1] = member\n  byID[id] = member\nend\n\nlocal dragon\nlocal dragonCount = 0\nfor _, entity in pairs(TensorCore.entityList(\"contentid=3984\") or {}) do\n  local id = tonumber(entity and entity.id)\n  local pos = entity and entity.pos or nil\n  if id ~= nil\n      and entity.alive ~= false\n      and type(pos) == \"table\"\n      and type(pos.x) == \"number\"\n      and type(pos.z) == \"number\" then\n    dragon = entity\n    dragonCount = dragonCount + 1\n  end\nend\nif dragonCount ~= 1 then\n  return\nend\n\nlocal centerX, centerZ = 100, 100\nlocal nx = dragon.pos.x - centerX\nlocal nz = dragon.pos.z - centerZ\nlocal nLength = math.sqrt(nx * nx + nz * nz)\nif nLength < 15 or nLength > 30 then\n  return\nend\nnx, nz = nx / nLength, nz / nLength\nlocal rx, rz = -nz, nx\n\nlocal root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal markerID = tonumber(root and root.p5WrathMarkerID)\nif markerID == nil or byID[markerID] == nil then\n  return\nend\n\nlocal tetherByTarget = {}\nlocal sourceSeen = {}\nlocal tetherCount = 0\nfor rawSourceID, tethers in pairs(Argus.getCurrentTethers() or {}) do\n  local sourceID = tonumber(rawSourceID)\n  local source = sourceID and TensorCore.mGetEntity(sourceID) or nil\n  local contentID = tonumber(source and source.contentid)\n  if sourceID ~= nil\n      and (contentID == 3636 or contentID == 3638)\n      and type(tethers) == \"table\" then\n    for _, tether in pairs(tethers) do\n      local targetID = tonumber(tether and tether.targetid)\n      if tonumber(tether and tether.type) == 5\n          and targetID ~= nil\n          and byID[targetID] ~= nil\n          and tetherByTarget[targetID] == nil\n          and sourceSeen[sourceID] ~= true then\n        tetherByTarget[targetID] = { source = source, sourceID = sourceID }\n        sourceSeen[sourceID] = true\n        tetherCount = tetherCount + 1\n      end\n    end\n  end\nend\nif tetherCount ~= 2 or tetherByTarget[markerID] ~= nil then\n  return\nend\n\nlocal targetX\nlocal targetZ\nif playerID == markerID then\n  local diagonal = math.sqrt(300)\n  targetX = centerX + nx * 10 - rx * diagonal\n  targetZ = centerZ + nz * 10 - rz * diagonal\nelseif tetherByTarget[playerID] ~= nil then\n  local source = tetherByTarget[playerID].source\n  local sourcePos = source and source.pos or nil\n  if type(sourcePos) ~= \"table\"\n      or type(sourcePos.x) ~= \"number\"\n      or type(sourcePos.z) ~= \"number\" then\n    return\n  end\n\n  local sourceSide =\n      (sourcePos.x - centerX) * rx + (sourcePos.z - centerZ) * rz\n  if math.abs(sourceSide) < 0.1 then\n    return\n  end\n\n  local sideSign = sourceSide > 0 and 1 or -1\n  local back = math.sqrt(336)\n  targetX = centerX - nx * back - rx * sideSign * 8\n  targetZ = centerZ - nz * back - rz * sideSign * 8\nelse\n  local idle = {}\n  for i = 1, #members do\n    local member = members[i]\n    if member.id ~= markerID and tetherByTarget[member.id] == nil then\n      idle[#idle + 1] = member\n    end\n  end\n  if #idle ~= 5 then\n    return\n  end\n\n  local forwardOffsets = { -6, -2, 2, 6, 10 }\n  local slots = {}\n  for i = 1, #forwardOffsets do\n    local forward = forwardOffsets[i]\n    local lateral = math.sqrt(400 - forward * forward)\n    slots[i] = {\n      x = centerX + nx * forward + rx * lateral,\n      z = centerZ + nz * forward + rz * lateral,\n    }\n  end\n\n  local memberUsed = {}\n  local slotUsed = {}\n  local assignment = {}\n  for _ = 1, 5 do\n    local bestMember\n    local bestSlot\n    local bestDistance\n    local bestRoleIndex\n    for i = 1, #idle do\n      if memberUsed[i] ~= true then\n        local pos = idle[i].entity.pos\n        for j = 1, #slots do\n          if slotUsed[j] ~= true then\n            local dx = pos.x - slots[j].x\n            local dz = pos.z - slots[j].z\n            local distance = dx * dx + dz * dz\n            local better = bestDistance == nil\n                or distance < bestDistance - 0.000001\n            if not better\n                and bestDistance ~= nil\n                and math.abs(distance - bestDistance) <= 0.000001 then\n              better = idle[i].roleIndex < bestRoleIndex\n                  or (idle[i].roleIndex == bestRoleIndex and j < bestSlot)\n            end\n            if better then\n              bestMember = i\n              bestSlot = j\n              bestDistance = distance\n              bestRoleIndex = idle[i].roleIndex\n            end\n          end\n        end\n      end\n    end\n\n    if bestMember == nil or bestSlot == nil then\n      return\n    end\n    memberUsed[bestMember] = true\n    slotUsed[bestSlot] = true\n    assignment[idle[bestMember].id] = slots[bestSlot]\n  end\n\n  local ownSlot = assignment[playerID]\n  if ownSlot == nil then\n    return\n  end\n  targetX, targetZ = ownSlot.x, ownSlot.z\nend\n\nif type(targetX) == \"number\" and type(targetZ) == \"number\" then\n  guide.FrameDirect(targetX, targetZ, 0.5)\n  self.used = true\nend",
+							actionLua = "data.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal root = data.string_dsr\nlocal state = root.p5OpeningFrameCache\nif type(state) ~= \"table\" then\n  state = {}\n  root.p5OpeningFrameCache = state\nend\n\nif type(state.clearMap) ~= \"function\" then\n  state.clearMap = function(map)\n    for key in pairs(map) do\n      map[key] = nil\n    end\n  end\nend\nlocal clearMap = state.clearMap\n\nif type(state.roles) ~= \"table\" then\n  state.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nend\nif type(state.forwardOffsets) ~= \"table\" then\n  state.forwardOffsets = { -6, -2, 2, 6, 10 }\nend\nlocal roles = state.roles\nlocal forwardOffsets = state.forwardOffsets\n\nlocal members = type(state.members) == \"table\" and state.members or {}\nstate.members = members\nlocal byID = type(state.byID) == \"table\" and state.byID or {}\nstate.byID = byID\nlocal tetherByTarget = type(state.tetherByTarget) == \"table\"\n    and state.tetherByTarget or {}\nstate.tetherByTarget = tetherByTarget\nlocal sourceSeen = type(state.sourceSeen) == \"table\"\n    and state.sourceSeen or {}\nstate.sourceSeen = sourceSeen\nlocal tetherRecords = type(state.tetherRecords) == \"table\"\n    and state.tetherRecords or {}\nstate.tetherRecords = tetherRecords\nlocal idle = type(state.idle) == \"table\" and state.idle or {}\nstate.idle = idle\nlocal slots = type(state.slots) == \"table\" and state.slots or {}\nstate.slots = slots\nlocal memberUsed = type(state.memberUsed) == \"table\"\n    and state.memberUsed or {}\nstate.memberUsed = memberUsed\nlocal slotUsed = type(state.slotUsed) == \"table\" and state.slotUsed or {}\nstate.slotUsed = slotUsed\nlocal assignment = type(state.assignment) == \"table\"\n    and state.assignment or {}\nstate.assignment = assignment\n\nlocal memberCapacity = tonumber(state.memberCapacity) or 0\nfor i = 1, memberCapacity do\n  local member = members[i]\n  if type(member) == \"table\" then\n    member.id = nil\n    member.roleIndex = nil\n    member.entity = nil\n  end\nend\nstate.memberCount = 0\nclearMap(byID)\n\nlocal oldTetherCount = tonumber(state.tetherRecordCount) or 0\nfor i = 1, oldTetherCount do\n  local record = tetherRecords[i]\n  if type(record) == \"table\" then\n    record.source = nil\n    record.sourceID = nil\n  end\nend\nstate.tetherRecordCount = 0\nclearMap(tetherByTarget)\nclearMap(sourceSeen)\n\nlocal oldIdleCount = tonumber(state.idleCount) or 0\nfor i = 1, oldIdleCount do\n  idle[i] = nil\nend\nstate.idleCount = 0\n\nlocal slotCapacity = tonumber(state.slotCapacity) or 0\nfor i = 1, slotCapacity do\n  local slot = slots[i]\n  if type(slot) == \"table\" then\n    slot.x = nil\n    slot.z = nil\n  end\nend\nstate.slotCount = 0\nclearMap(memberUsed)\nclearMap(slotUsed)\nclearMap(assignment)\n\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(Argus) ~= \"table\"\n    or type(Argus.getCurrentTethers) ~= \"function\" then\n  return\nend\n\nfor i = 1, #roles do\n  local roleEntry = party[roles[i]]\n  local id = tonumber(roleEntry and roleEntry.id)\n  if id == nil or byID[id] ~= nil then\n    return\n  end\n\n  local entity = TensorCore.mGetEntity(id)\n  local pos = entity and entity.pos or nil\n  if entity == nil\n      or entity.alive == false\n      or type(pos) ~= \"table\"\n      or type(pos.x) ~= \"number\"\n      or type(pos.z) ~= \"number\" then\n    return\n  end\n\n  local member = members[i]\n  if type(member) ~= \"table\" then\n    member = {}\n    members[i] = member\n  end\n  member.id = id\n  member.roleIndex = i\n  member.entity = entity\n  if i > memberCapacity then\n    memberCapacity = i\n    state.memberCapacity = memberCapacity\n  end\n  state.memberCount = i\n  byID[id] = member\nend\n\nlocal dragon\nlocal dragonCount = 0\nfor _, entity in pairs(TensorCore.entityList(\"contentid=3984\") or {}) do\n  local id = tonumber(entity and entity.id)\n  local pos = entity and entity.pos or nil\n  if id ~= nil\n      and entity.alive ~= false\n      and type(pos) == \"table\"\n      and type(pos.x) == \"number\"\n      and type(pos.z) == \"number\" then\n    dragon = entity\n    dragonCount = dragonCount + 1\n  end\nend\nif dragonCount ~= 1 then\n  return\nend\n\nlocal centerX, centerZ = 100, 100\nlocal nx = dragon.pos.x - centerX\nlocal nz = dragon.pos.z - centerZ\nlocal nLength = math.sqrt(nx * nx + nz * nz)\nif nLength < 15 or nLength > 30 then\n  return\nend\nnx, nz = nx / nLength, nz / nLength\nlocal rx, rz = -nz, nx\n\nlocal markerID = tonumber(root.p5WrathMarkerID)\nif markerID == nil or byID[markerID] == nil then\n  return\nend\n\nlocal tetherCount = 0\nfor rawSourceID, tethers in pairs(Argus.getCurrentTethers() or {}) do\n  local sourceID = tonumber(rawSourceID)\n  local source = sourceID and TensorCore.mGetEntity(sourceID) or nil\n  local contentID = tonumber(source and source.contentid)\n  if sourceID ~= nil\n      and (contentID == 3636 or contentID == 3638)\n      and type(tethers) == \"table\" then\n    for _, tether in pairs(tethers) do\n      local targetID = tonumber(tether and tether.targetid)\n      if tonumber(tether and tether.type) == 5\n          and targetID ~= nil\n          and byID[targetID] ~= nil\n          and tetherByTarget[targetID] == nil\n          and sourceSeen[sourceID] ~= true then\n        tetherCount = tetherCount + 1\n        local record = tetherRecords[tetherCount]\n        if type(record) ~= \"table\" then\n          record = {}\n          tetherRecords[tetherCount] = record\n          if tetherCount > (tonumber(state.tetherRecordCapacity) or 0) then\n            state.tetherRecordCapacity = tetherCount\n          end\n        end\n        record.source = source\n        record.sourceID = sourceID\n        tetherByTarget[targetID] = record\n        sourceSeen[sourceID] = true\n        state.tetherRecordCount = tetherCount\n      end\n    end\n  end\nend\nif tetherCount ~= 2 or tetherByTarget[markerID] ~= nil then\n  return\nend\n\nlocal targetX\nlocal targetZ\nif playerID == markerID then\n  local diagonal = math.sqrt(300)\n  targetX = centerX + nx * 10 - rx * diagonal\n  targetZ = centerZ + nz * 10 - rz * diagonal\nelseif tetherByTarget[playerID] ~= nil then\n  local source = tetherByTarget[playerID].source\n  local sourcePos = source and source.pos or nil\n  if type(sourcePos) ~= \"table\"\n      or type(sourcePos.x) ~= \"number\"\n      or type(sourcePos.z) ~= \"number\" then\n    return\n  end\n\n  local sourceSide =\n      (sourcePos.x - centerX) * rx + (sourcePos.z - centerZ) * rz\n  if math.abs(sourceSide) < 0.1 then\n    return\n  end\n\n  local sideSign = sourceSide > 0 and 1 or -1\n  local back = math.sqrt(336)\n  targetX = centerX - nx * back - rx * sideSign * 8\n  targetZ = centerZ - nz * back - rz * sideSign * 8\nelse\n  local idleCount = 0\n  for i = 1, state.memberCount do\n    local member = members[i]\n    if member.id ~= markerID and tetherByTarget[member.id] == nil then\n      idleCount = idleCount + 1\n      idle[idleCount] = member\n    end\n  end\n  state.idleCount = idleCount\n  if idleCount ~= 5 then\n    return\n  end\n\n  local slotCount = 0\n  for i = 1, #forwardOffsets do\n    local forward = forwardOffsets[i]\n    local lateral = math.sqrt(400 - forward * forward)\n    local slot = slots[i]\n    if type(slot) ~= \"table\" then\n      slot = {}\n      slots[i] = slot\n    end\n    slot.x = centerX + nx * forward + rx * lateral\n    slot.z = centerZ + nz * forward + rz * lateral\n    slotCount = i\n    if i > slotCapacity then\n      slotCapacity = i\n      state.slotCapacity = slotCapacity\n    end\n  end\n  state.slotCount = slotCount\n\n  for _ = 1, 5 do\n    local bestMember\n    local bestSlot\n    local bestDistance\n    local bestRoleIndex\n    for i = 1, idleCount do\n      if memberUsed[i] ~= true then\n        local pos = idle[i].entity.pos\n        for j = 1, slotCount do\n          if slotUsed[j] ~= true then\n            local dx = pos.x - slots[j].x\n            local dz = pos.z - slots[j].z\n            local distance = dx * dx + dz * dz\n            local better = bestDistance == nil\n                or distance < bestDistance - 0.000001\n            if not better\n                and bestDistance ~= nil\n                and math.abs(distance - bestDistance) <= 0.000001 then\n              better = idle[i].roleIndex < bestRoleIndex\n                  or (idle[i].roleIndex == bestRoleIndex and j < bestSlot)\n            end\n            if better then\n              bestMember = i\n              bestSlot = j\n              bestDistance = distance\n              bestRoleIndex = idle[i].roleIndex\n            end\n          end\n        end\n      end\n    end\n\n    if bestMember == nil or bestSlot == nil then\n      return\n    end\n    memberUsed[bestMember] = true\n    slotUsed[bestSlot] = true\n    assignment[idle[bestMember].id] = slots[bestSlot]\n  end\n\n  local ownSlot = assignment[playerID]\n  if ownSlot == nil then\n    return\n  end\n  targetX, targetZ = ownSlot.x, ownSlot.z\nend\n\nif type(targetX) == \"number\" and type(targetZ) == \"number\" then\n  guide.FrameDirect(targetX, targetZ, 0.5)\n  self.used = true\nend",
 							endIfUsed = true,
 							name = "MuAi opening assignment guidance",
 							uuid = "8143f420-0d7c-f4d2-af27-c8ad29ce9397",
@@ -12102,38 +13506,6 @@ local tbl =
 				timerEndOffset = 0.5,
 				timerStartOffset = -0.3,
 				uuid = "905adf91-ce21-f841-8a52-156b2b05b57f",
-				version = 2,
-			},
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
-							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal cauterizeID = tonumber(root and root.p5WrathCauterizeID)\nif guide == nil\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or playerID ~= cauterizeID then\n  return\nend\n\nlocal warrior = TensorCore.getEntityByGroup(\n  \"ContentID\", { contentid = 3639, subgroup = \"Nearest\" })\nlocal pos = warrior and warrior.pos or nil\nif type(pos) ~= \"table\"\n    or type(pos.x) ~= \"number\"\n    or type(pos.z) ~= \"number\" then\n  return\nend\n\nlocal dx = pos.x - 100\nlocal dz = pos.z - 100\nlocal length = math.sqrt(dx * dx + dz * dz)\nif length < 5 or length > 15 then\n  return\nend\n\nguide.FrameDirect(\n  100 - dx / length * 20,\n  100 - dz / length * 20,\n  0.5)\nself.used = true",
-							endIfUsed = true,
-							name = "MuAi 指向战士安全区对面",
-							uuid = "6e6dea6a-d277-9ccd-9ad5-bc0af9e93706",
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-				},
-				eventType = 12,
-				mechanicTime = 1036.7,
-				name = "[P5] 俯冲点名动态指路",
-				timeRange = true,
-				timelineIndex = 157,
-				timerEndOffset = 5.4,
-				uuid = "db3cb124-0e85-eda5-95d7-8dbcf4bb8487",
 				version = 2,
 			},
 		},
@@ -12487,9 +13859,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal timelineTime = tonumber(TensorReactions_CurrentTimer)\nif guide == nil\n    or type(guide.FrameDirect) ~= \"function\"\n    or root == nil\n    or playerID == nil\n    or timelineTime == nil then\n  return\nend\n\nlocal liquidID = tonumber(root.p5WrathLiquidID)\nlocal altarID = tonumber(root.p5WrathAltarID)\nif liquidID == nil\n    or altarID == nil\n    or liquidID == altarID then\n  return\nend\n\nlocal fireType\nlocal side\nif playerID == liquidID then\n  fireType = \"liquid\"\n  side = tonumber(root.p5WrathLiquidSide)\nelseif playerID == altarID then\n  fireType = \"altar\"\n  side = tonumber(root.p5WrathAltarSide)\n  if side ~= 1 and side ~= -1 then\n    local liquidSide = tonumber(root.p5WrathLiquidSide)\n    if liquidSide == 1 or liquidSide == -1 then\n      side = -liquidSide\n    end\n  end\nend\n\nlocal warriorID = tonumber(root.p5WrathWarriorID)\nlocal warrior = warriorID and TensorCore.mGetEntity(warriorID) or nil\nlocal warriorPos = warrior and warrior.pos or nil\nlocal warriorValid = tonumber(warrior and warrior.contentid) == 3639\n    and type(warriorPos) == \"table\"\n    and type(warriorPos.x) == \"number\"\n    and type(warriorPos.z) == \"number\"\n\nif not warriorValid then\n  warrior = nil\n  warriorPos = nil\n  root.p5WrathWarriorID = nil\n\n  local warriorDistance\n  local playerPos = player and player.pos or nil\n  for _, candidate in pairs(\n      TensorCore.entityList(\"contentid=3639\") or {}) do\n    local candidatePos = candidate and candidate.pos or nil\n    if type(candidatePos) == \"table\"\n        and type(candidatePos.x) == \"number\"\n        and type(candidatePos.z) == \"number\" then\n      local distance = 0\n      if type(playerPos) == \"table\"\n          and type(playerPos.x) == \"number\"\n          and type(playerPos.z) == \"number\" then\n        local dx = candidatePos.x - playerPos.x\n        local dz = candidatePos.z - playerPos.z\n        distance = dx * dx + dz * dz\n      end\n      if warrior == nil or distance < warriorDistance then\n        warrior = candidate\n        warriorDistance = distance\n      end\n    end\n  end\n\n  warriorID = tonumber(warrior and warrior.id)\n  warriorPos = warrior and warrior.pos or nil\n  if warriorID ~= nil then\n    root.p5WrathWarriorID = warriorID\n  end\nend\n\nif type(warriorPos) ~= \"table\"\n    or type(warriorPos.x) ~= \"number\"\n    or type(warriorPos.z) ~= \"number\" then\n  return\nend\n\nlocal safeX = warriorPos.x - 100\nlocal safeZ = warriorPos.z - 100\nlocal length = math.sqrt(safeX * safeX + safeZ * safeZ)\nif length < 5 or length > 15 then\n  return\nend\nsafeX, safeZ = safeX / length, safeZ / length\nlocal lateralX, lateralZ = -safeZ, safeX\nlocal targetX\nlocal targetZ\n\nif fireType ~= nil then\n  if side ~= 1 and side ~= -1 then\n    return\n  end\n\n  if fireType == \"liquid\" then\n    if timelineTime < 1044.3 then\n      targetX = 100 - safeX * 6 + lateralX * side * 18\n      targetZ = 100 - safeZ * 6 + lateralZ * side * 18\n    elseif timelineTime < 1045.45 then\n      targetX = 100 + lateralX * side * 19\n      targetZ = 100 + lateralZ * side * 19\n    elseif timelineTime < 1046.65 then\n      targetX = 100 + safeX * 6 + lateralX * side * 18\n      targetZ = 100 + safeZ * 6 + lateralZ * side * 18\n    elseif timelineTime < 1047.8 then\n      targetX = warriorPos.x + lateralX * side * 13\n      targetZ = warriorPos.z + lateralZ * side * 13\n    else\n      targetX = warriorPos.x\n      targetZ = warriorPos.z\n    end\n  else\n    if timelineTime < 1044.6 then\n      targetX = 100 - safeX * 5 + lateralX * side * 18\n      targetZ = 100 - safeZ * 5 + lateralZ * side * 18\n    elseif timelineTime < 1046.2 then\n      targetX = 100 + lateralX * side * 19\n      targetZ = 100 + lateralZ * side * 19\n    elseif timelineTime < 1047.7 then\n      targetX = warriorPos.x + lateralX * side * 15\n      targetZ = warriorPos.z + lateralZ * side * 15\n    else\n      targetX = warriorPos.x\n      targetZ = warriorPos.z\n    end\n  end\nelse\n  local firstThunderID = tonumber(root.p5WrathThunderID1)\n  local secondThunderID = tonumber(root.p5WrathThunderID2)\n  if firstThunderID == nil\n      or secondThunderID == nil\n      or firstThunderID == secondThunderID then\n    local scanBucket = math.floor(timelineTime * 5)\n    if tonumber(root.p5WrathThunderScanBucket) == scanBucket then\n      return\n    end\n    root.p5WrathThunderScanBucket = scanBucket\n\n    local scannedFirstID\n    local scannedSecondID\n    local scannedCount = 0\n    for _, member in pairs(\n        TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local memberID = tonumber(member and member.id)\n      if memberID ~= nil and member.alive ~= false then\n        local buff = TensorCore.getBuff(member, 2833)\n        local remaining = tonumber(buff and buff.duration)\n        if remaining ~= nil and remaining > 0 then\n          scannedCount = scannedCount + 1\n          if scannedCount == 1 then\n            scannedFirstID = memberID\n          elseif scannedCount == 2 then\n            scannedSecondID = memberID\n          else\n            return\n          end\n        end\n      end\n    end\n    if scannedCount ~= 2\n        or scannedFirstID == nil\n        or scannedSecondID == nil\n        or scannedFirstID == scannedSecondID then\n      return\n    end\n    firstThunderID = scannedFirstID\n    secondThunderID = scannedSecondID\n    root.p5WrathThunderID1 = firstThunderID\n    root.p5WrathThunderID2 = secondThunderID\n    root.p5WrathThunderLeftID = nil\n    root.p5WrathThunderRightID = nil\n    root.p5WrathThunderScanBucket = nil\n  end\n  if firstThunderID == liquidID\n      or firstThunderID == altarID\n      or secondThunderID == liquidID\n      or secondThunderID == altarID then\n    return\n  end\n\n  local ordinaryX = warriorPos.x - safeX * 4.5\n  local ordinaryZ = warriorPos.z - safeZ * 4.5\n  local thunderLeftX = warriorPos.x + safeX * 3.5 - lateralX * 3.5\n  local thunderLeftZ = warriorPos.z + safeZ * 3.5 - lateralZ * 3.5\n  local thunderRightX = warriorPos.x + safeX * 3.5 + lateralX * 3.5\n  local thunderRightZ = warriorPos.z + safeZ * 3.5 + lateralZ * 3.5\n\n  local thunderLeftID = tonumber(root.p5WrathThunderLeftID)\n  local thunderRightID = tonumber(root.p5WrathThunderRightID)\n  local cacheMatches = thunderLeftID ~= nil\n      and thunderRightID ~= nil\n      and thunderLeftID ~= thunderRightID\n      and ((thunderLeftID == firstThunderID\n              and thunderRightID == secondThunderID)\n        or (thunderLeftID == secondThunderID\n              and thunderRightID == firstThunderID))\n  if not cacheMatches then\n    local firstThunder = TensorCore.mGetEntity(firstThunderID)\n    local secondThunder = TensorCore.mGetEntity(secondThunderID)\n    local firstPos = firstThunder and firstThunder.pos or nil\n    local secondPos = secondThunder and secondThunder.pos or nil\n    if type(firstPos) ~= \"table\"\n        or type(firstPos.x) ~= \"number\"\n        or type(firstPos.z) ~= \"number\"\n        or type(secondPos) ~= \"table\"\n        or type(secondPos.x) ~= \"number\"\n        or type(secondPos.z) ~= \"number\" then\n      return\n    end\n\n    local firstLeftX = firstPos.x - thunderLeftX\n    local firstLeftZ = firstPos.z - thunderLeftZ\n    local firstRightX = firstPos.x - thunderRightX\n    local firstRightZ = firstPos.z - thunderRightZ\n    local secondLeftX = secondPos.x - thunderLeftX\n    local secondLeftZ = secondPos.z - thunderLeftZ\n    local secondRightX = secondPos.x - thunderRightX\n    local secondRightZ = secondPos.z - thunderRightZ\n    local directDistance =\n        firstLeftX * firstLeftX\n        + firstLeftZ * firstLeftZ\n        + secondRightX * secondRightX\n        + secondRightZ * secondRightZ\n    local swappedDistance =\n        firstRightX * firstRightX\n        + firstRightZ * firstRightZ\n        + secondLeftX * secondLeftX\n        + secondLeftZ * secondLeftZ\n    if directDistance <= swappedDistance then\n      thunderLeftID = firstThunderID\n      thunderRightID = secondThunderID\n    else\n      thunderLeftID = secondThunderID\n      thunderRightID = firstThunderID\n    end\n    root.p5WrathThunderLeftID = thunderLeftID\n    root.p5WrathThunderRightID = thunderRightID\n  end\n\n  if playerID == thunderLeftID then\n    targetX = thunderLeftX\n    targetZ = thunderLeftZ\n  elseif playerID == thunderRightID then\n    targetX = thunderRightX\n    targetZ = thunderRightZ\n  else\n    targetX = ordinaryX\n    targetZ = ordinaryZ\n  end\nend\n\nguide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal timelineTime = tonumber(TensorReactions_CurrentTimer)\nif guide == nil\n    or type(guide.FrameDirect) ~= \"function\"\n    or root == nil\n    or playerID == nil\n    or timelineTime == nil then\n  return\nend\n\nlocal cauterizeID = tonumber(root.p5WrathCauterizeID)\nlocal isCauterizeTarget = playerID == cauterizeID\n-- Keep the existing start for everyone except the dive bait target.\nif not isCauterizeTarget and timelineTime < 1042.9 then\n  return\nend\n\nlocal warriorID = tonumber(root.p5WrathWarriorID)\nlocal warrior = warriorID and TensorCore.mGetEntity(warriorID) or nil\nlocal warriorPos = warrior and warrior.pos or nil\nlocal warriorValid = tonumber(warrior and warrior.contentid) == 3639\n    and type(warriorPos) == \"table\"\n    and type(warriorPos.x) == \"number\"\n    and type(warriorPos.z) == \"number\"\n\nif not warriorValid then\n  warrior = nil\n  warriorPos = nil\n  root.p5WrathWarriorID = nil\n\n  local warriorDistance\n  local playerPos = player and player.pos or nil\n  for _, candidate in pairs(\n      TensorCore.entityList(\"contentid=3639\") or {}) do\n    local candidatePos = candidate and candidate.pos or nil\n    if type(candidatePos) == \"table\"\n        and type(candidatePos.x) == \"number\"\n        and type(candidatePos.z) == \"number\" then\n      local distance = 0\n      if type(playerPos) == \"table\"\n          and type(playerPos.x) == \"number\"\n          and type(playerPos.z) == \"number\" then\n        local dx = candidatePos.x - playerPos.x\n        local dz = candidatePos.z - playerPos.z\n        distance = dx * dx + dz * dz\n      end\n      if warrior == nil or distance < warriorDistance then\n        warrior = candidate\n        warriorDistance = distance\n      end\n    end\n  end\n\n  warriorID = tonumber(warrior and warrior.id)\n  warriorPos = warrior and warrior.pos or nil\n  if warriorID ~= nil then\n    root.p5WrathWarriorID = warriorID\n  end\nend\n\nif type(warriorPos) ~= \"table\"\n    or type(warriorPos.x) ~= \"number\"\n    or type(warriorPos.z) ~= \"number\" then\n  return\nend\n\nlocal safeX = warriorPos.x - 100\nlocal safeZ = warriorPos.z - 100\nlocal length = math.sqrt(safeX * safeX + safeZ * safeZ)\nif length < 5 or length > 15 then\n  return\nend\nsafeX, safeZ = safeX / length, safeZ / length\nlocal lateralX, lateralZ = -safeZ, safeX\nlocal targetX\nlocal targetZ\n\n-- One frame solver owns the bait and handoff; no simultaneous-event aggregate.\nif isCauterizeTarget then\n  local gate = root.p5WrathCauterizeGate\n  if type(gate) ~= \"table\" or gate.targetID ~= playerID then\n    gate = { targetID = playerID, locked = false }\n    root.p5WrathCauterizeGate = gate\n  end\n\n  if not gate.locked\n      and type(Argus) == \"table\"\n      and type(Argus.getCurrentAOEs) == \"function\" then\n    local blackSourceID\n    local whiteSourceID\n    local conflicting = false\n    local now = Now()\n    -- 20261026-2140-968-6: both directional AOEs appear at 1043.825.\n    for _, aoe in pairs(Argus.getCurrentAOEs() or {}) do\n      local actionID = tonumber(aoe.aoeID)\n      if actionID == 27533 or actionID == 27534 then\n        local sourceID = tonumber(aoe.entityID)\n        local contentID = tonumber(aoe.contentID)\n        if contentID == nil and sourceID ~= nil then\n          local source = TensorCore.mGetEntity(sourceID)\n          contentID = tonumber(source and source.contentid)\n        end\n        local started = tonumber(aoe.startTime)\n        local duration = tonumber(aoe.duration)\n        if sourceID ~= nil\n            and type(aoe.heading) == \"number\"\n            and started ~= nil\n            and duration ~= nil\n            and duration > 0\n            and started <= now\n            and started + duration * 1000 > now then\n          if actionID == 27533 and contentID == 3983 then\n            if blackSourceID ~= nil and blackSourceID ~= sourceID then\n              conflicting = true\n            end\n            blackSourceID = sourceID\n          elseif actionID == 27534 and contentID == 11314 then\n            if whiteSourceID ~= nil and whiteSourceID ~= sourceID then\n              conflicting = true\n            end\n            whiteSourceID = sourceID\n          end\n        end\n      end\n    end\n\n    if not conflicting\n        and blackSourceID ~= nil\n        and whiteSourceID ~= nil\n        and blackSourceID ~= whiteSourceID then\n      gate.locked = true\n      gate.blackSourceID = blackSourceID\n      gate.whiteSourceID = whiteSourceID\n      gate.lockedAt = timelineTime\n    end\n  end\n\n  if not gate.locked then\n    -- Guide page 42: bait at the black mage side, opposite the warrior.\n    guide.FrameDirect(100 - safeX * 20, 100 - safeZ * 20, 0.5)\n    self.used = true\n    return\n  end\nend\n\nlocal liquidID = tonumber(root.p5WrathLiquidID)\nlocal altarID = tonumber(root.p5WrathAltarID)\nif liquidID == nil\n    or altarID == nil\n    or liquidID == altarID then\n  return\nend\n\nlocal fireType\nlocal side\nif playerID == liquidID then\n  fireType = \"liquid\"\n  side = tonumber(root.p5WrathLiquidSide)\nelseif playerID == altarID then\n  fireType = \"altar\"\n  side = tonumber(root.p5WrathAltarSide)\n  if side ~= 1 and side ~= -1 then\n    local liquidSide = tonumber(root.p5WrathLiquidSide)\n    if liquidSide == 1 or liquidSide == -1 then\n      side = -liquidSide\n    end\n  end\nend\n\nif fireType ~= nil then\n  if side ~= 1 and side ~= -1 then\n    return\n  end\n\n  if fireType == \"liquid\" then\n    if timelineTime < 1044.3 then\n      targetX = 100 - safeX * 6 + lateralX * side * 18\n      targetZ = 100 - safeZ * 6 + lateralZ * side * 18\n    elseif timelineTime < 1045.45 then\n      targetX = 100 + lateralX * side * 19\n      targetZ = 100 + lateralZ * side * 19\n    elseif timelineTime < 1046.65 then\n      targetX = 100 + safeX * 6 + lateralX * side * 18\n      targetZ = 100 + safeZ * 6 + lateralZ * side * 18\n    elseif timelineTime < 1047.8 then\n      targetX = warriorPos.x + lateralX * side * 13\n      targetZ = warriorPos.z + lateralZ * side * 13\n    else\n      targetX = warriorPos.x\n      targetZ = warriorPos.z\n    end\n  else\n    if timelineTime < 1044.6 then\n      targetX = 100 - safeX * 5 + lateralX * side * 18\n      targetZ = 100 - safeZ * 5 + lateralZ * side * 18\n    elseif timelineTime < 1046.2 then\n      targetX = 100 + lateralX * side * 19\n      targetZ = 100 + lateralZ * side * 19\n    elseif timelineTime < 1047.7 then\n      targetX = warriorPos.x + lateralX * side * 15\n      targetZ = warriorPos.z + lateralZ * side * 15\n    else\n      targetX = warriorPos.x\n      targetZ = warriorPos.z\n    end\n  end\nelse\n  local firstThunderID = tonumber(root.p5WrathThunderID1)\n  local secondThunderID = tonumber(root.p5WrathThunderID2)\n  if firstThunderID == nil\n      or secondThunderID == nil\n      or firstThunderID == secondThunderID then\n    local scanBucket = math.floor(timelineTime * 5)\n    if tonumber(root.p5WrathThunderScanBucket) == scanBucket then\n      return\n    end\n    root.p5WrathThunderScanBucket = scanBucket\n\n    local scannedFirstID\n    local scannedSecondID\n    local scannedCount = 0\n    for _, member in pairs(\n        TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local memberID = tonumber(member and member.id)\n      if memberID ~= nil and member.alive ~= false then\n        local buff = TensorCore.getBuff(member, 2833)\n        local remaining = tonumber(buff and buff.duration)\n        if remaining ~= nil and remaining > 0 then\n          scannedCount = scannedCount + 1\n          if scannedCount == 1 then\n            scannedFirstID = memberID\n          elseif scannedCount == 2 then\n            scannedSecondID = memberID\n          else\n            return\n          end\n        end\n      end\n    end\n    if scannedCount ~= 2\n        or scannedFirstID == nil\n        or scannedSecondID == nil\n        or scannedFirstID == scannedSecondID then\n      return\n    end\n    firstThunderID = scannedFirstID\n    secondThunderID = scannedSecondID\n    root.p5WrathThunderID1 = firstThunderID\n    root.p5WrathThunderID2 = secondThunderID\n    root.p5WrathThunderLeftID = nil\n    root.p5WrathThunderRightID = nil\n    root.p5WrathThunderScanBucket = nil\n  end\n  if firstThunderID == liquidID\n      or firstThunderID == altarID\n      or secondThunderID == liquidID\n      or secondThunderID == altarID then\n    return\n  end\n\n  local ordinaryX = warriorPos.x - safeX * 4.5\n  local ordinaryZ = warriorPos.z - safeZ * 4.5\n  local thunderLeftX = warriorPos.x + safeX * 3.5 - lateralX * 3.5\n  local thunderLeftZ = warriorPos.z + safeZ * 3.5 - lateralZ * 3.5\n  local thunderRightX = warriorPos.x + safeX * 3.5 + lateralX * 3.5\n  local thunderRightZ = warriorPos.z + safeZ * 3.5 + lateralZ * 3.5\n\n  local thunderLeftID = tonumber(root.p5WrathThunderLeftID)\n  local thunderRightID = tonumber(root.p5WrathThunderRightID)\n  local cacheMatches = thunderLeftID ~= nil\n      and thunderRightID ~= nil\n      and thunderLeftID ~= thunderRightID\n      and ((thunderLeftID == firstThunderID\n              and thunderRightID == secondThunderID)\n        or (thunderLeftID == secondThunderID\n              and thunderRightID == firstThunderID))\n  if not cacheMatches then\n    local firstThunder = TensorCore.mGetEntity(firstThunderID)\n    local secondThunder = TensorCore.mGetEntity(secondThunderID)\n    local firstPos = firstThunder and firstThunder.pos or nil\n    local secondPos = secondThunder and secondThunder.pos or nil\n    if type(firstPos) ~= \"table\"\n        or type(firstPos.x) ~= \"number\"\n        or type(firstPos.z) ~= \"number\"\n        or type(secondPos) ~= \"table\"\n        or type(secondPos.x) ~= \"number\"\n        or type(secondPos.z) ~= \"number\" then\n      return\n    end\n\n    local firstLeftX = firstPos.x - thunderLeftX\n    local firstLeftZ = firstPos.z - thunderLeftZ\n    local firstRightX = firstPos.x - thunderRightX\n    local firstRightZ = firstPos.z - thunderRightZ\n    local secondLeftX = secondPos.x - thunderLeftX\n    local secondLeftZ = secondPos.z - thunderLeftZ\n    local secondRightX = secondPos.x - thunderRightX\n    local secondRightZ = secondPos.z - thunderRightZ\n    local directDistance =\n        firstLeftX * firstLeftX\n        + firstLeftZ * firstLeftZ\n        + secondRightX * secondRightX\n        + secondRightZ * secondRightZ\n    local swappedDistance =\n        firstRightX * firstRightX\n        + firstRightZ * firstRightZ\n        + secondLeftX * secondLeftX\n        + secondLeftZ * secondLeftZ\n    if directDistance <= swappedDistance then\n      thunderLeftID = firstThunderID\n      thunderRightID = secondThunderID\n    else\n      thunderLeftID = secondThunderID\n      thunderRightID = firstThunderID\n    end\n    root.p5WrathThunderLeftID = thunderLeftID\n    root.p5WrathThunderRightID = thunderRightID\n  end\n\n  if playerID == thunderLeftID then\n    targetX = thunderLeftX\n    targetZ = thunderLeftZ\n  elseif playerID == thunderRightID then\n    targetX = thunderRightX\n    targetZ = thunderRightZ\n  else\n    targetX = ordinaryX\n    targetZ = ordinaryZ\n  end\nend\n\nguide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
 							endIfUsed = true,
-							name = "MuAi 普通、雷与火圈安全区指路",
+							name = "MuAi 贴边引导并在双龙锁向后衔接",
 							uuid = "126b4a74-d38a-5935-b16d-a1b175c7e260",
 							version = 2.1,
 						},
@@ -12500,11 +13872,11 @@ local tbl =
 				},
 				eventType = 12,
 				mechanicTime = 1042.2,
-				name = "[P5] 旋风后安全区与火圈动态指路",
+				name = "[P5] 俯冲引导与后续机制动态指路",
 				timeRange = true,
 				timelineIndex = 160,
 				timerEndOffset = 8.2,
-				timerStartOffset = 0.7,
+				timerStartOffset = -5.5,
 				uuid = "f02b87ca-6ef2-c8b3-9437-7eec88471c0d",
 				version = 2,
 			},
@@ -12614,9 +13986,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"301efae1-7b0b-d48e-ba6f-1cb086614133",
+									true,
+								},
 								
 								{
 									"11270765-301b-a4de-993d-50790d746d5b",
@@ -12637,17 +14014,93 @@ local tbl =
 									"d7675074-7cc0-2655-b165-f385f4c0024b",
 									true,
 								},
+							},
+							endIfUsed = true,
+							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
+							ignoreWeaveRules = true,
+							name = "行吟",
+							uuid = "8b2aa6d7-e663-adda-88e7-f8ffaf54d79f",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
 								
 								{
-									"5e3976ca-3b72-8963-b5cb-7dc726060a4e",
+									"0f9eaf96-73c1-5ffa-ba75-b9598e7be7b6",
+									true,
+								},
+								
+								{
+									"11270765-301b-a4de-993d-50790d746d5b",
+									true,
+								},
+								
+								{
+									"ee1c6590-1dab-e650-a14d-e2a50ebdb423",
+									true,
+								},
+								
+								{
+									"8b65c67f-5533-591c-a2c8-b00792eda7f1",
+									true,
+								},
+								
+								{
+									"d7675074-7cc0-2655-b165-f385f4c0024b",
 									true,
 								},
 							},
 							endIfUsed = true,
-							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
+							ignoreWeaveRules = true,
 							name = "策动",
-							uuid = "8b2aa6d7-e663-adda-88e7-f8ffaf54d79f",
-							variableTogglesType = 2,
+							uuid = "a2214b3c-87b6-13c8-83ed-00dfe776ae00",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"5b9a0080-2746-2b95-872f-8c82b689690a",
+									true,
+								},
+								
+								{
+									"11270765-301b-a4de-993d-50790d746d5b",
+									true,
+								},
+								
+								{
+									"ee1c6590-1dab-e650-a14d-e2a50ebdb423",
+									true,
+								},
+								
+								{
+									"8b65c67f-5533-591c-a2c8-b00792eda7f1",
+									true,
+								},
+								
+								{
+									"d7675074-7cc0-2655-b165-f385f4c0024b",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "4d34f02f-330d-6422-88de-ce87f7912a27",
 							version = 2.1,
 						},
 					},
@@ -12709,13 +14162,38 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Party",
-							conditionType = 4,
-							inRangeValue = 20,
-							minTargetPercent = true,
-							partyTargetNumber = 100,
-							partyTargetSubType = "Number",
-							uuid = "5e3976ca-3b72-8963-b5cb-7dc726060a4e",
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "301efae1-7b0b-d48e-ba6f-1cb086614133",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "0f9eaf96-73c1-5ffa-ba75-b9598e7be7b6",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "5b9a0080-2746-2b95-872f-8c82b689690a",
 							version = 3,
 						},
 					},
@@ -13986,7 +15464,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal entityID = tonumber(eventArgs.entityID)\nlocal markerID = tonumber(eventArgs.markerID)\nif playerID == nil or entityID ~= playerID\n    or markerID == nil or markerID < 281 or markerID > 284 then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal root = data.string_dsr\nroot.p5Op2 = type(root.p5Op2) == \"table\" and root.p5Op2 or {\n  version = 1,\n  whiteCircles = {},\n}\nlocal op = root.p5Op2\nop.selfMarkerID = markerID\nop.markerTargetX = nil\nop.markerTargetZ = nil\nself.used = true",
+							actionLua = "local op = type(data.string_dsr) == \"table\" and data.string_dsr.p5Op2 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal entityID = tonumber(eventArgs.entityID)\nlocal markerID = tonumber(eventArgs.markerID)\nif type(op) ~= \"table\" or type(op.markerByID) ~= \"table\"\n    or type(op.roleByID) ~= \"table\" or type(op.roleIDs) ~= \"table\"\n    or #op.roleIDs ~= 8 or playerID == nil or entityID == nil\n    or op.roleByID[entityID] == nil or markerID == nil\n    or markerID % 1 ~= 0 or markerID < 281 or markerID > 284 then\n  d(\"[DSR P5 Sony] capture rejected: invalid initialized state or event\")\n  self.used = true\n  return\nend\nlocal before = tonumber(op.markerCount) or 0\nlocal previous = op.markerByID[entityID]\nif previous ~= nil and previous ~= markerID then\n  op.markersInvalid = true\n  op.markersReady = false\n  d(\"[DSR P5 Sony] capture rejected: conflicting marker for \" .. tostring(entityID))\n  self.used = true\n  return\nend\nif previous == nil then\n  op.markerByID[entityID] = markerID\n  op.markerCount = before + 1\nend\nif entityID == playerID then\n  op.selfMarkerID = markerID\nend\nlocal counts = { [281] = 0, [282] = 0, [283] = 0, [284] = 0 }\nlocal signature = {}\nlocal count = 0\nfor _, id in ipairs(op.roleIDs) do\n  local mark = op.markerByID[id]\n  signature[#signature + 1] = tostring(id) .. \":\" .. tostring(mark)\n  if mark ~= nil then\n    if counts[mark] == nil then\n      op.markersInvalid = true\n    else\n      counts[mark] = counts[mark] + 1\n      count = count + 1\n      if counts[mark] > 2 then op.markersInvalid = true end\n    end\n  end\nend\nop.markersReady = op.markersInvalid ~= true and count == 8\n    and op.markerCount == 8 and counts[281] == 2 and counts[282] == 2\n    and counts[283] == 2 and counts[284] == 2\nif previous == nil then\n  d(string.format(\"[DSR P5 Sony] capture t=%.3f event=%s marker=%d count=%d->%d ready=%s ids=%s\",\n    tonumber(TensorReactions_CurrentTimer) or -1, tostring(entityID), markerID,\n    before, op.markerCount, tostring(op.markersReady), table.concat(signature, \",\")))\nend\nself.used = true",
 							conditions = 
 							{
 								
@@ -14001,7 +15479,7 @@ local tbl =
 								},
 							},
 							endIfUsed = true,
-							name = "记录本人 PS 标记",
+							name = "收集索尼标记并核对四对",
 							uuid = "e219272e-b92f-ae40-875e-252fc2bd496e",
 							version = 2.1,
 						},
@@ -14023,7 +15501,7 @@ local tbl =
 								283,
 								284,
 							},
-							name = "PS 标记 281–284",
+							name = "PS 标记 281-284",
 							uuid = "a17b298a-3e10-813e-a81d-81db355c6d5e",
 							version = 3,
 						},
@@ -14035,7 +15513,8 @@ local tbl =
 							category = "Party",
 							conditionType = 10,
 							dequeueIfLuaFalse = true,
-							name = "Marker is on self",
+							inGroupTargetType = "Party",
+							name = "标记目标在小队",
 							partyTargetType = "Event Entity",
 							uuid = "e908acff-88fd-849f-bdc1-7879f985b570",
 							version = 3,
@@ -14045,11 +15524,11 @@ local tbl =
 				eventType = 4,
 				loop = true,
 				mechanicTime = 1115.3,
-				name = "[P5] 2.5运本人标记状态",
+				name = "[P5] 2.5运索尼标记配对状态",
 				timeRange = true,
 				timelineIndex = 190,
 				timerEndOffset = -4.65,
-				timerStartOffset = -5.15,
+				timerStartOffset = -5.6,
 				uuid = "1c3d2e63-4407-6feb-88d7-e8b6886ccf57",
 				version = 2,
 			},
@@ -14065,9 +15544,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local op = type(data.string_dsr) == \"table\" and data.string_dsr.p5Op2 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(op) ~= \"table\"\n    or playerID == nil\n    or type(op.selfMarkerID) ~= \"number\"\n    or type(op.roleByID) ~= \"table\"\n    or type(op.fx) ~= \"number\" or type(op.fz) ~= \"number\"\n    or type(op.rx) ~= \"number\" or type(op.rz) ~= \"number\"\n    or op.selfIsDoom == nil\n    or type(op.selfGroupRank) ~= \"number\"\n    or type(MuAiGuide) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\" then\n  return\nend\n\nif type(op.markerTargetX) ~= \"number\" or type(op.markerTargetZ) ~= \"number\" then\n  local markerRadius = 2\n  local diagonalScale = markerRadius / math.sqrt(10.25)\n  local markerID = tonumber(op.selfMarkerID)\n  local forward\n  local right\n  if markerID == 281 then\n    forward = 0\n    right = op.selfGroupRank <= 2 and -markerRadius or markerRadius\n  elseif markerID == 282 then\n    if op.selfIsDoom then\n      forward, right = -2.5 * diagonalScale, 2 * diagonalScale\n    else\n      forward, right = 2.5 * diagonalScale, -2 * diagonalScale\n    end\n  elseif markerID == 283 then\n    if op.selfIsDoom then\n      forward, right = -2.5 * diagonalScale, -2 * diagonalScale\n    else\n      forward, right = 2.5 * diagonalScale, 2 * diagonalScale\n    end\n  elseif markerID == 284\n      and type(Argus) == \"table\"\n      and type(Argus.getTethersOnEnt) == \"function\" then\n    local selfRole = tonumber(op.roleByID[playerID])\n    local partnerID\n    local partnerCount = 0\n    for _, tether in ipairs(Argus.getTethersOnEnt(playerID) or {}) do\n      local candidateID = tonumber(tether.partnerid)\n      if tonumber(tether.type) == 9\n          and candidateID ~= nil\n          and tonumber(op.roleByID[candidateID]) ~= nil then\n        partnerID = candidateID\n        partnerCount = partnerCount + 1\n      end\n    end\n    local partnerRole = partnerID and tonumber(op.roleByID[partnerID]) or nil\n    if partnerCount == 1\n        and selfRole ~= nil and partnerRole ~= nil\n        and selfRole ~= partnerRole then\n      forward = selfRole > partnerRole and -markerRadius or markerRadius\n      right = 0\n      op.selfMarkerPartnerID = partnerID\n    end\n  end\n\n  if forward ~= nil and right ~= nil then\n    op.markerTargetX = 100 + forward * op.fx + right * op.rx\n    op.markerTargetZ = 100 + forward * op.fz + right * op.rz\n  end\nend\n\nif type(op.markerTargetX) == \"number\" and type(op.markerTargetZ) == \"number\" then\n  MuAiGuide.FrameDirect(op.markerTargetX, op.markerTargetZ, 0.5)\n  self.used = true\nend",
+							actionLua = "local now = tonumber(TensorReactions_CurrentTimer)\nif now == nil or now >= 1115.75 then\n  d(\"[DSR P5 Sony] guide expired before submission\")\n  self.used = true\n  return\nend\nlocal op = type(data.string_dsr) == \"table\" and data.string_dsr.p5Op2 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(op) ~= \"table\" or playerID == nil\n    or type(op.selfMarkerID) ~= \"number\" or type(op.roleByID) ~= \"table\"\n    or type(op.fx) ~= \"number\" or type(op.fz) ~= \"number\"\n    or type(op.rx) ~= \"number\" or type(op.rz) ~= \"number\"\n    or op.selfIsDoom == nil or type(op.selfGroupRank) ~= \"number\" then\n  if not self.reportedMissing then\n    d(\"[DSR P5 Sony] guide waiting: marker or mechanic state missing\")\n    self.reportedMissing = true\n  end\n  return\nend\nif type(op.markerTargetX) ~= \"number\" or type(op.markerTargetZ) ~= \"number\" then\n  local markerRadius = 2\n  local diagonalScale = markerRadius / math.sqrt(10.25)\n  local markerID = tonumber(op.selfMarkerID)\n  local forward\n  local right\n  if markerID == 281 then\n    forward = 0\n    right = op.selfGroupRank <= 2 and -markerRadius or markerRadius\n  elseif markerID == 282 then\n    if op.selfIsDoom then\n      forward, right = -2.5 * diagonalScale, 2 * diagonalScale\n    else\n      forward, right = 2.5 * diagonalScale, -2 * diagonalScale\n    end\n  elseif markerID == 283 then\n    if op.selfIsDoom then\n      forward, right = -2.5 * diagonalScale, -2 * diagonalScale\n    else\n      forward, right = 2.5 * diagonalScale, 2 * diagonalScale\n    end\n  elseif markerID == 284 then\n    local selfRole = tonumber(op.roleByID[playerID])\n    local partnerID\n    local partnerCount = 0\n    if op.markersReady == true and op.markersInvalid ~= true then\n      for _, id in ipairs(op.roleIDs) do\n        if id ~= playerID and op.markerByID[id] == 284 then\n          partnerID = id\n          partnerCount = partnerCount + 1\n        end\n      end\n      op.markerPartnerSource = \"markers\"\n\n    end\n    local partnerRole = partnerID and tonumber(op.roleByID[partnerID]) or nil\n    if partnerCount == 1 and selfRole ~= nil and partnerRole ~= nil and selfRole ~= partnerRole then\n      forward = selfRole > partnerRole and -markerRadius or markerRadius\n      right = 0\n      op.selfMarkerPartnerID = partnerID\n    end\n  end\n\n  if forward ~= nil and right ~= nil then\n    op.markerTargetX = 100 + forward * op.fx + right * op.rx\n    op.markerTargetZ = 100 + forward * op.fz + right * op.rz\n  end\nend\n\nif type(op.markerTargetX) ~= \"number\" or type(op.markerTargetZ) ~= \"number\" then\n  if not self.reportedPartner then\n    d(\"[DSR P5 Sony] guide waiting: complete marker pairs\")\n    self.reportedPartner = true\n  end\n  return\nend\nlocal duration = math.floor((1115.75 - now) * 1000)\n-- Match MuAiGuide's existing personal guide style while keeping timed submission.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal color = guide and guide.Config and guide.Config.Main and guide.Config.Main.GuideColor\nlocal playerPos = player and player.pos\nif type(color) ~= \"table\" or type(color.r) ~= \"number\"\n    or type(color.g) ~= \"number\" or type(color.b) ~= \"number\"\n    or type(color.a) ~= \"number\" or type(playerPos) ~= \"table\"\n    or type(playerPos.y) ~= \"number\" then\n  if not self.reportedStyle then\n    d(\"[DSR P5 Sony] guide waiting: MuAi style or player height unavailable\")\n    self.reportedStyle = true\n  end\n  return\nend\nlocal y = tonumber(guide.GlobalGuideY) or playerPos.y\nlocal fill = GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a)\nlocal lineColor = GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 1)\nlocal white = GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)\nlocal magenta = GUI:ColorConvertFloat4ToU32(1, 0, 1, 1)\nlocal drawer = TensorCore.getCachedDrawer(fill, fill, fill, white, 2)\nlocal circleID = drawer:addTimedCircle(duration, op.markerTargetX, y, op.markerTargetZ, 0.5, 0, true, true)\n-- The fixed world point follows the player at the other end, as in MuAi DirectTo.\nlocal lineID = Argus2.addTimedRectFilled(duration,\n  op.markerTargetX, y, op.markerTargetZ, 0.3, 0.05, math.pi,\n  lineColor, lineColor, nil, 0, nil, playerID, false, nil, 0.01,\n  nil, nil, nil, true, true, 0, false)\nlocal centerDrawer = TensorCore.getCachedDrawer(magenta, magenta, magenta, nil, 1)\nlocal centerID = centerDrawer:addTimedCircle(duration, op.markerTargetX, y, op.markerTargetZ, 0.03, 0, true, true)\nd(string.format(\"[DSR P5 Sony] timed t=%.3f marker=%d source=%s target=%.3f,%.3f ms=%d circle=%s line=%s center=%s\",\n  now, op.selfMarkerID, op.markerPartnerSource or \"self\",\n  op.markerTargetX, op.markerTargetZ, duration, tostring(circleID), tostring(lineID), tostring(centerID)))\nif type(circleID) ~= \"string\" or type(lineID) ~= \"string\" or type(centerID) ~= \"string\" then\n  d(\"[DSR P5 Sony] ERROR: timed draw returned no shape ID\")\nend\nself.used = true",
 							endIfUsed = true,
-							name = "按本人标记与 Tether 9 伙伴前往站位",
+							name = "按索尼配对提交个人指路",
 							uuid = "7999177f-afb1-18b2-b857-5e7a84560177",
 							version = 2.1,
 						},
@@ -14076,9 +15555,8 @@ local tbl =
 				conditions = 
 				{
 				},
-				eventType = 12,
 				mechanicTime = 1115.3,
-				name = "[P5] 2.5运标记站位动态指路",
+				name = "[P5] 2.5运索尼站位定时指路",
 				timeRange = true,
 				timelineIndex = 190,
 				timerEndOffset = 0.44999998807907,
@@ -14791,9 +16269,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"c48c7f7b-e6a0-4edc-be60-e645017c4ab4",
+									true,
+								},
 								
 								{
 									"8f8c398f-d715-8ea9-9615-3cd4d96010f9",
@@ -14822,9 +16305,100 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
-							name = "策动",
+							ignoreWeaveRules = true,
+							name = "行吟",
 							uuid = "3b4c6523-47a2-bb29-b177-128a04a8cffc",
 							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
+								
+								{
+									"64f38c96-83a5-c98e-908c-22ff8c83a5ab",
+									true,
+								},
+								
+								{
+									"8f8c398f-d715-8ea9-9615-3cd4d96010f9",
+									true,
+								},
+								
+								{
+									"da10f9ae-045f-30f1-9a49-1632d1a037b0",
+									true,
+								},
+								
+								{
+									"95db07e0-e226-fe69-9ad3-afadd8c7be63",
+									true,
+								},
+								
+								{
+									"1e8f5f3c-837f-8f93-bb75-a24274eedc7b",
+									true,
+								},
+								
+								{
+									"83683451-0ac8-7190-9f1f-795d50810a38",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "策动",
+							uuid = "734949ce-f813-d078-adef-c7edbad836b5",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"9dfdfb8a-f220-c39a-ab43-5b8c5963970c",
+									true,
+								},
+								
+								{
+									"8f8c398f-d715-8ea9-9615-3cd4d96010f9",
+									true,
+								},
+								
+								{
+									"da10f9ae-045f-30f1-9a49-1632d1a037b0",
+									true,
+								},
+								
+								{
+									"95db07e0-e226-fe69-9ad3-afadd8c7be63",
+									true,
+								},
+								
+								{
+									"1e8f5f3c-837f-8f93-bb75-a24274eedc7b",
+									true,
+								},
+								
+								{
+									"83683451-0ac8-7190-9f1f-795d50810a38",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "c9cac072-9a76-0d64-af2b-0c078bb6d088",
 							version = 2.1,
 						},
 					},
@@ -14891,6 +16465,45 @@ local tbl =
 							eventArgType = 2,
 							eventSpellID = 25542,
 							uuid = "83683451-0ac8-7190-9f1f-795d50810a38",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "c48c7f7b-e6a0-4edc-be60-e645017c4ab4",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "64f38c96-83a5-c98e-908c-22ff8c83a5ab",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "9dfdfb8a-f220-c39a-ab43-5b8c5963970c",
 							version = 3,
 						},
 					},
@@ -15155,6 +16768,249 @@ local tbl =
 			},
 		},
 	},
+	[201] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local timelineTime = tonumber(TensorReactions_CurrentTimer)\nif timelineTime == nil then return end\nif timelineTime >= 1217.6 then\n  self.used = true\n  return\nend\n\nlocal bossID = tonumber(self.bossID)\nlocal boss = bossID and TensorCore.mGetEntity(bossID) or nil\nif boss == nil or tonumber(boss.contentid) ~= 3632 then\n  boss = nil\n  self.bossID = nil\n  local count = 0\n  for _, candidate in pairs(TensorCore.entityList(\"contentid=3632\") or {}) do\n    local hp = candidate and candidate.hp or nil\n    if tonumber(candidate and candidate.contentid) == 3632\n        and candidate.alive ~= false\n        and candidate.targetable ~= false\n        and type(hp) == \"table\"\n        and type(hp.current) == \"number\"\n        and type(hp.max) == \"number\"\n        and hp.current > 0 and hp.max > 0 then\n      boss = candidate\n      count = count + 1\n    end\n  end\n  if count ~= 1 then return end\n  self.bossID = tonumber(boss.id)\nend\n\nlocal hp = boss and boss.hp or nil\nif boss.alive == false or boss.targetable == false\n    or type(hp) ~= \"table\"\n    or type(hp.current) ~= \"number\"\n    or type(hp.max) ~= \"number\"\n    or hp.current <= 0 or hp.max <= 0\n    or hp.current * 100 > hp.max * 2 then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\ndata.string_dsr.p5MercyStop = {\n  targetID = boss.id,\n  armed = true,\n  active = false,\n  reachedAt = timelineTime,\n}\nself.used = true",
+							name = "读取托尔丹真实血量并准备停手",
+							uuid = "963ccfcb-44fd-304a-bf8a-993ef5957298",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local state = data.string_dsr.p5MercyStop\nstate.active = true\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"b60d5fab-e93a-039b-a9e7-0ff7a4a7ceb7",
+									true,
+								},
+								
+								{
+									"da09c111-539c-c84e-85f9-072f0e47d4b3",
+									true,
+								},
+							},
+							name = "启用托尔丹攻击目标保护",
+							stopAllActions = true,
+							stopCasting = true,
+							untarget = true,
+							uuid = "83d1056e-dd62-6572-92e2-35dddd29f8ba",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = root and root.p5MercyStop or nil\nif type(state) == \"table\" then state.active = false end\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"841e12a2-569d-9fd1-a553-48c41261d1f3",
+									true,
+								},
+								
+								{
+									"e658b6d3-baf6-a789-bf84-69b9d866b4d7",
+									true,
+								},
+							},
+							name = "结束托尔丹攻击目标保护",
+							resumeAllActions = true,
+							uuid = "58a7e681-32a6-690a-b54a-dfb35fd5fd16",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nif root ~= nil then root.p5MercyStop = nil end\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"6a261035-1432-cbec-9229-2e7cf1b3a1ae",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "清理本次停手状态",
+							uuid = "8daae20f-f3f6-d121-bc19-29e513648435",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							actionUUID = "963ccfcb-44fd-304a-bf8a-993ef5957298",
+							category = "Action",
+							name = "本次确认血量达标",
+							uuid = "b60d5fab-e93a-039b-a9e7-0ff7a4a7ceb7",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = root and root.p5MercyStop or nil\nreturn type(state) == \"table\" and state.armed == true",
+							name = "本次停手已准备",
+							uuid = "da09c111-539c-c84e-85f9-072f0e47d4b3",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionUUID = "83d1056e-dd62-6572-92e2-35dddd29f8ba",
+							category = "Action",
+							name = "本次攻击目标保护已启用",
+							uuid = "841e12a2-569d-9fd1-a553-48c41261d1f3",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = root and root.p5MercyStop or nil\nif type(state) ~= \"table\" or state.active ~= true then return false end\nlocal timelineTime = tonumber(TensorReactions_CurrentTimer)\nif timelineTime ~= nil and timelineTime >= 1217.6 then return true end\nlocal bossID = tonumber(state.targetID)\nlocal boss = bossID and TensorCore.mGetEntity(bossID) or nil\n-- A missing entity is incomplete evidence; await a real transition or P6.\nreturn boss ~= nil\n    and tonumber(boss.contentid) == 3632\n    and (boss.targetable == false or boss.alive == false)",
+							name = "托尔丹已离场或进入P6",
+							uuid = "e658b6d3-baf6-a789-bf84-69b9d866b4d7",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionUUID = "58a7e681-32a6-690a-b54a-dfb35fd5fd16",
+							category = "Action",
+							name = "本次攻击目标保护已结束",
+							uuid = "6a261035-1432-cbec-9229-2e7cf1b3a1ae",
+							version = 3,
+						},
+					},
+				},
+				mechanicTime = 1175.7,
+				name = "[P5] 托尔丹2%攻击目标保护",
+				timeRange = true,
+				timelineIndex = 201,
+				timerEndOffset = 51.9,
+				timerStartOffset = -38.5,
+				uuid = "daa3fb19-b7dd-9292-b6ab-7c673bd40699",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"9cd42446-6bb4-1657-bb04-f0629f3d5251",
+									true,
+								},
+							},
+							name = "仅取消对求饶托尔丹的施法",
+							stopCasting = true,
+							uuid = "db0d7b4f-299c-18bb-ae9e-2b1df6457b52",
+							version = 2.1,
+						},
+						inheritedIndex = 1,
+					},
+					
+					{
+						data = 
+						{
+							aType = "Misc",
+							conditions = 
+							{
+								
+								{
+									"222de98e-0bcd-3aa9-89fc-ce6d431d2d26",
+									true,
+								},
+							},
+							name = "仅清除求饶托尔丹目标",
+							untarget = true,
+							uuid = "e571ba9d-2cee-3647-8546-161723d58976",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = root and root.p5MercyStop or nil\nif type(state) ~= \"table\" or state.active ~= true then return false end\nlocal target = TensorCore.mGetTarget()\nreturn target ~= nil\n    and tonumber(target.id) == tonumber(state.targetID)\n    and tonumber(target.contentid) == 3632",
+							name = "本次停手中重新选中托尔丹",
+							uuid = "222de98e-0bcd-3aa9-89fc-ce6d431d2d26",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = root and root.p5MercyStop or nil\nif type(state) ~= \"table\" or state.active ~= true then return false end\nlocal protectedID = tonumber(state.targetID)\nif protectedID == nil then return false end\nlocal player = TensorCore.mGetPlayer()\nlocal cast = player and player.castinginfo or nil\nif type(cast) ~= \"table\" then return false end\nif (tonumber(cast.channelingid) or 0) > 0\n    and tonumber(cast.channeltargetid) == protectedID then\n  return true\nend\nif (tonumber(cast.castingid) or 0) > 0\n    and type(cast.castingtargets) == \"table\" then\n  for _, targetID in pairs(cast.castingtargets) do\n    if tonumber(targetID) == protectedID then return true end\n  end\nend\nreturn false",
+							name = "当前施法目标是求饶托尔丹",
+							uuid = "9cd42446-6bb4-1657-bb04-f0629f3d5251",
+							version = 3,
+						},
+					},
+				},
+				eventType = 12,
+				mechanicTime = 1175.7,
+				name = "[P5] 托尔丹求饶期间重选保护",
+				timeRange = true,
+				timelineIndex = 201,
+				timerEndOffset = 41.9,
+				timerStartOffset = -38.5,
+				uuid = "a1a92260-3d24-c946-a153-ccdd4fa3dfb2",
+				version = 2,
+			},
+		},
+	},
 	[203] = 
 	{
 		
@@ -15240,6 +17096,87 @@ local tbl =
 				timerEndOffset = 5,
 				timerStartOffset = -5,
 				uuid = "12054e00-5fe2-7697-8804-3337cac8f058",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = root and root.p5MercyStop or nil\nif type(state) == \"table\" then state.active = false end\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"a6d6a433-42ed-8f9d-bf83-1580ec3976aa",
+									true,
+								},
+							},
+							name = "结束P5攻击目标保护",
+							resumeAllActions = true,
+							uuid = "09aa67cc-1c7d-563c-a7d8-598157f96096",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nif root ~= nil then root.p5MercyStop = nil end\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"ea6cbbdd-ceb4-35d0-a18b-6a6bd3307973",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "清理本次停手状态",
+							uuid = "09e72943-cf1d-f9c4-a31b-7e48cd362d96",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = root and root.p5MercyStop or nil\nreturn type(state) == \"table\" and state.active == true",
+							name = "仅本次保护发起的停手",
+							uuid = "a6d6a433-42ed-8f9d-bf83-1580ec3976aa",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionUUID = "09aa67cc-1c7d-563c-a7d8-598157f96096",
+							category = "Action",
+							name = "本次保护已结束",
+							uuid = "ea6cbbdd-ceb4-35d0-a18b-6a6bd3307973",
+							version = 3,
+						},
+					},
+				},
+				mechanicTime = 1217.6,
+				name = "[P6] 托尔丹攻击目标保护清理",
+				timeRange = true,
+				timelineIndex = 203,
+				timerEndOffset = 15,
+				uuid = "63b8edb4-c176-30da-b72b-b36722a44b18",
 				version = 2,
 			},
 		},
@@ -15517,7 +17454,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(Argus) ~= \"table\"\n    or type(Argus.getCurrentTethers) ~= \"function\" then\n  return\nend\n\nlocal roles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal idByRole = {}\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  idByRole[role] = id\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\nif selfRole == nil then\n  return\nend\n\nlocal groups = {\n  { fixed = \"H1\", mover = \"D3\", x = 95.115, z = 119.39 },\n  { fixed = \"H2\", mover = \"D4\", x = 104.885, z = 119.39 },\n  { fixed = \"D1\", mover = \"D2\", x = 100.0, z = 108.725 },\n}\nlocal targetByRole = {}\nfor _, group in ipairs(groups) do\n  targetByRole[group.fixed] = group\n  targetByRole[group.mover] = group\nend\n\nlocal colorByID = {}\nfor rawSourceID, tethers in pairs(Argus.getCurrentTethers() or {}) do\n  local sourceID = tonumber(rawSourceID)\n  if sourceID ~= nil and roleByID[sourceID] ~= nil\n      and type(tethers) == \"table\" then\n    for _, tether in pairs(tethers) do\n      local tetherType = tonumber(tether and tether.type)\n      if tetherType == 194 then\n        colorByID[sourceID] = \"fire\"\n      elseif tetherType == 195 or tetherType == 196 then\n        colorByID[sourceID] = \"ice\"\n      end\n    end\n  end\nend\n\nlocal fireCount = 0\nlocal iceCount = 0\nfor _, role in ipairs(roles) do\n  local color = colorByID[idByRole[role]]\n  if color == \"fire\" then\n    fireCount = fireCount + 1\n  elseif color == \"ice\" then\n    iceCount = iceCount + 1\n  end\nend\n\nif fireCount ~= 3 or iceCount ~= 3 then\n  return\nend\n\nlocal sameGroups = {}\nfor index, group in ipairs(groups) do\n  local fixedColor = colorByID[idByRole[group.fixed]]\n  local moverColor = colorByID[idByRole[group.mover]]\n  if fixedColor ~= nil and fixedColor == moverColor then\n    sameGroups[#sameGroups + 1] = index\n  end\nend\n\nif #sameGroups == 2 then\n  local first = groups[sameGroups[1]]\n  local second = groups[sameGroups[2]]\n  local firstColor = colorByID[idByRole[first.fixed]]\n  local secondColor = colorByID[idByRole[second.fixed]]\n  if firstColor == secondColor then\n    return\n  end\n  targetByRole[first.mover] = second\n  targetByRole[second.mover] = first\nelseif #sameGroups ~= 0 then\n  return\nend\n\nlocal target = targetByRole[selfRole]\nif target ~= nil then\n  guide.FrameDirect(target.x, target.z, 0.5)\n  self.used = true\nend",
+							actionLua = "data.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal root = data.string_dsr\nlocal state = root.p6FirstIceFireFrameCache\nif type(state) ~= \"table\" then\n  state = {}\n  root.p6FirstIceFireFrameCache = state\nend\n\nif type(state.clearMap) ~= \"function\" then\n  state.clearMap = function(map)\n    for key in pairs(map) do\n      map[key] = nil\n    end\n  end\nend\nlocal clearMap = state.clearMap\n\nif type(state.roles) ~= \"table\" then\n  state.roles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nend\nif type(state.groups) ~= \"table\" then\n  state.groups = {\n    { fixed = \"H1\", mover = \"D3\", x = 95.115, z = 119.39 },\n    { fixed = \"H2\", mover = \"D4\", x = 104.885, z = 119.39 },\n    { fixed = \"D1\", mover = \"D2\", x = 100.0, z = 108.725 },\n  }\nend\nif type(state.groupByRole) ~= \"table\" then\n  state.groupByRole = {}\n  for i = 1, #state.groups do\n    local group = state.groups[i]\n    state.groupByRole[group.fixed] = group\n    state.groupByRole[group.mover] = group\n  end\nend\n\nlocal roles = state.roles\nlocal groups = state.groups\nlocal groupByRole = state.groupByRole\nlocal idByRole = type(state.idByRole) == \"table\" and state.idByRole or {}\nstate.idByRole = idByRole\nlocal roleByID = type(state.roleByID) == \"table\"\n    and state.roleByID or {}\nstate.roleByID = roleByID\nlocal targetByRole = type(state.targetByRole) == \"table\"\n    and state.targetByRole or {}\nstate.targetByRole = targetByRole\nlocal colorByID = type(state.colorByID) == \"table\"\n    and state.colorByID or {}\nstate.colorByID = colorByID\nlocal sameGroups = type(state.sameGroups) == \"table\"\n    and state.sameGroups or {}\nstate.sameGroups = sameGroups\n\nclearMap(idByRole)\nclearMap(roleByID)\nclearMap(targetByRole)\nclearMap(colorByID)\nlocal oldSameGroupCount = tonumber(state.sameGroupCount) or 0\nfor i = 1, oldSameGroupCount do\n  sameGroups[i] = nil\nend\nstate.sameGroupCount = 0\n\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = guide and type(guide.GetPlayer) == \"function\"\n    and guide.GetPlayer() or TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil\n    or type(Argus) ~= \"table\"\n    or type(Argus.getCurrentTethers) ~= \"function\" then\n  return\nend\n\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  idByRole[role] = id\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\nif selfRole == nil then\n  return\nend\n\nfor i = 1, #roles do\n  local role = roles[i]\n  targetByRole[role] = groupByRole[role]\nend\n\n-- 196 is the near-distance appearance of either dragon's tether.\n-- Element comes from the actual dragon endpoint, never from 196 alone.\nlocal dragonColors = state.dragonColors\nif type(dragonColors) ~= \"table\" then\n  dragonColors = {}\n  state.dragonColors = dragonColors\nend\nclearMap(dragonColors)\nfor rawSourceID, tethers in pairs(Argus.getCurrentTethers() or {}) do\n  local sourceID = tonumber(rawSourceID)\n  if sourceID ~= nil and roleByID[sourceID] ~= nil\n      and type(tethers) == \"table\" then\n    for _, tether in pairs(tethers) do\n      local tetherType = tonumber(tether and tether.type)\n      if tetherType == 194 or tetherType == 195 or tetherType == 196 then\n        local dragonID = tonumber(tether.targetid)\n        local color = dragonID and dragonColors[dragonID] or nil\n        if color == nil and dragonID ~= nil then\n          local dragon = TensorCore.mGetEntity(dragonID)\n          local contentID = tonumber(dragon and dragon.contentid)\n          if contentID == 3458 then color = \"fire\"\n          elseif contentID == 4954 then color = \"ice\"\n          else return end\n          dragonColors[dragonID] = color\n        end\n        if color == nil then return end\n        if colorByID[sourceID] ~= nil and colorByID[sourceID] ~= color then\n          return\n        end\n        colorByID[sourceID] = color\n      end\n    end\n  end\nend\n\nlocal fireCount = 0\nlocal iceCount = 0\nfor _, role in ipairs(roles) do\n  local color = colorByID[idByRole[role]]\n  if color == \"fire\" then\n    fireCount = fireCount + 1\n  elseif color == \"ice\" then\n    iceCount = iceCount + 1\n  end\nend\n\nif fireCount ~= 3 or iceCount ~= 3 then\n  return\nend\n\nlocal sameGroupCount = 0\nfor index, group in ipairs(groups) do\n  local fixedColor = colorByID[idByRole[group.fixed]]\n  local moverColor = colorByID[idByRole[group.mover]]\n  if fixedColor ~= nil and fixedColor == moverColor then\n    sameGroupCount = sameGroupCount + 1\n    sameGroups[sameGroupCount] = index\n  end\nend\nstate.sameGroupCount = sameGroupCount\n\nif sameGroupCount == 2 then\n  local first = groups[sameGroups[1]]\n  local second = groups[sameGroups[2]]\n  local firstColor = colorByID[idByRole[first.fixed]]\n  local secondColor = colorByID[idByRole[second.fixed]]\n  if firstColor == secondColor then\n    return\n  end\n  targetByRole[first.mover] = second\n  targetByRole[second.mover] = first\nelseif sameGroupCount ~= 0 then\n  return\nend\n\nlocal target = targetByRole[selfRole]\nif target ~= nil then\n  guide.FrameDirect(target.x, target.z, 0.5)\n  self.used = true\nend",
 							endIfUsed = true,
 							name = "按三组冰火组合动态指路",
 							uuid = "9a126380-d391-a6bd-84ee-52aee9db2bb9",
@@ -15528,7 +17465,7 @@ local tbl =
 				conditions = 
 				{
 				},
-				eventType = 12,
+				eventType = 13,
 				mechanicTime = 1235.1,
 				name = "[P6] 第一次冰火线换位动态指路",
 				timeRange = true,
@@ -15607,6 +17544,37 @@ local tbl =
 				timerEndOffset = 10,
 				timerStartOffset = -10,
 				uuid = "3a17f324-d0a8-d0c7-beff-870bcad8b83b",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local expectedPass = 0\n-- One queued instance waits within this node, then draws once until expiry.\nif self.used then return end\nif self.started == nil then self.started = Now() end\nif TimeSince(self.started) > 3000 then\n  self.used = true\n  return\nend\nif type(self.p6VowScan) ~= \"table\" then self.p6VowScan = {} end\nlocal cache = self.p6VowScan\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nlocal timeout = expectedPass == 0 and 4000 or math.floor(remaining * 1000)\nif timeout <= 0 then self.used = true; return end\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nif receiverID ~= nil then\n  local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n  local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n  local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n  safe:setGradient(0, 0.28, 0)\n  safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\nend\nself.used = true\n",
+							endIfUsed = true,
+							name = "当前持毒者范围与接毒者标记",
+							uuid = "e63342e0-4a50-09b0-bb01-b95708858104",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 1243.1,
+				name = "[P6] 灭杀的誓言初始点名范围",
+				timeRange = true,
+				timelineIndex = 207,
+				timerEndOffset = 3,
+				uuid = "22974e95-d697-ead6-a387-3d2fdbe5e1a1",
 				version = 2,
 			},
 		},
@@ -15908,10 +17876,10 @@ local tbl =
 				},
 				eventType = 3,
 				mechanicTime = 1268.7,
-				name = "[P6] 神圣之翼左右矩形与坦克圈",
+				name = "[P6] 第一次神圣之翼左右矩形与坦克圈",
 				timeRange = true,
 				timelineIndex = 211,
-				timerEndOffset = 70,
+				timerEndOffset = 0.5,
 				timerStartOffset = -10,
 				uuid = "7958223d-9077-c9d7-8a66-f7db71ee6f94",
 				version = 2,
@@ -15964,17 +17932,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.string_dsr = data.string_dsr or {}\nlocal root = data.string_dsr\nlocal entityID = tonumber(eventArgs.entityID)\nlocal duration = tonumber(eventArgs.buffDuration)\nif entityID == nil or duration == nil or duration <= 0 then\n  self.used = true\n  return\nend\n\nlocal state = root.p6Vow\nif type(state) ~= \"table\" or (tonumber(state.pass) or 0) >= 5 then\n  state = { pass = 0, valid = true }\n  root.p6Vow = state\nend\n\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nlocal idByRole = {}\nlocal mappingValid = type(party) == \"table\"\nif mappingValid then\n  for _, role in ipairs(roles) do\n    local id = tonumber(party[role] and party[role].id)\n    if id == nil or roleByID[id] ~= nil then\n      mappingValid = false\n      break\n    end\n    roleByID[id] = role\n    idByRole[role] = id\n  end\nend\n\nlocal pass = (tonumber(state.pass) or 0) + 1\nlocal holderRole = mappingValid and roleByID[entityID] or nil\nif pass == 1 then\n  local isDPS = holderRole == \"D1\" or holderRole == \"D2\"\n    or holderRole == \"D3\" or holderRole == \"D4\"\n  state.initialRole = isDPS and holderRole or nil\n  state.valid = mappingValid and isDPS\nelseif state.valid and holderRole ~= state.receiverRole then\n  state.valid = false\nend\n\nlocal receiverRole\nif state.valid then\n  if pass == 1 then\n    receiverRole = \"MT\"\n  elseif pass == 2 then\n    receiverRole = \"ST\"\n  elseif pass == 3 then\n    receiverRole = state.initialRole == \"D1\" and \"D2\" or \"D1\"\n  elseif pass == 4 then\n    receiverRole = state.initialRole == \"D1\" and \"D1\" or \"D2\"\n  end\nend\n\nstate.pass = pass\nstate.holderID = entityID\nstate.holderRole = holderRole\nstate.receiverRole = receiverRole\nstate.receiverID = receiverRole and idByRole[receiverRole] or nil\n\nif type(Argus2) == \"table\"\n    and type(Argus2.addTimedCircleFilled) == \"function\"\n    and type(GUI) == \"table\"\n    and type(GUI.ColorConvertFloat4ToU32) == \"function\" then\n  local pinkStart = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\n  local pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\n  local pinkEnd = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\n  local purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\n  local greenFill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n  local greenOutline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n  local delay = math.max(0, math.floor((duration - 4) * 1000 + 0.5))\n\n  local function drawDanger(drawDelay)\n    Argus2.addTimedCircleFilled(\n      4000, 0, 0, 0, 5, 50,\n      pinkStart, pinkEnd, pinkMid,\n      drawDelay, entityID,\n      purple, 2, 2, 0.10, 1.8,\n      false, true)\n  end\n\n  if pass == 1 then\n    drawDanger(0)\n  end\n  drawDanger(delay)\n\n  if state.valid and state.receiverID ~= nil then\n    Argus2.addTimedCircleFilled(\n      4000, 0, 0, 0, 1, 32,\n      greenFill, greenFill, nil,\n      delay, state.receiverID,\n      greenOutline, 2, 0, 0.28, 0,\n      false, true)\n  end\nend\n\nself.used = true",
-							conditions = 
-							{
-								
-								{
-									"8591d194-1a58-8a2a-a36c-0d73130dba2c",
-									true,
-								},
-							},
+							actionLua = "local expectedPass = 1\n-- One queued instance waits within this node, then draws once until expiry.\nif self.used then return end\nif self.started == nil then self.started = Now() end\nif TimeSince(self.started) > 6000 then\n  self.used = true\n  return\nend\nif type(self.p6VowScan) ~= \"table\" then self.p6VowScan = {} end\nlocal cache = self.p6VowScan\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nlocal timeout = expectedPass == 0 and 4000 or math.floor(remaining * 1000)\nif timeout <= 0 then self.used = true; return end\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nif receiverID ~= nil then\n  local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n  local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n  local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n  safe:setGradient(0, 0.28, 0)\n  safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\nend\nself.used = true\n",
 							endIfUsed = true,
-							name = "记录传毒顺位并预绘交接范围",
+							name = "当前持毒者范围与接毒者标记",
 							uuid = "952c1d16-9ce8-2cf0-bea9-482da49f3b5e",
 							version = 2.1,
 						},
@@ -15982,27 +17942,13 @@ local tbl =
 				},
 				conditions = 
 				{
-					
-					{
-						data = 
-						{
-							category = "Event",
-							dequeueIfLuaFalse = true,
-							eventArgType = 2,
-							eventBuffID = 2896,
-							name = "Mortal Vow",
-							uuid = "8591d194-1a58-8a2a-a36c-0d73130dba2c",
-							version = 3,
-						},
-					},
 				},
-				eventType = 8,
 				mechanicTime = 1277.2,
-				name = "[P6] 灭杀的誓言传毒范围与顺位状态",
+				name = "[P6] 第一次传毒判定范围",
 				timeRange = true,
 				timelineIndex = 212,
-				timerEndOffset = 105,
-				timerStartOffset = -35,
+				timerEndOffset = 0.8,
+				timerStartOffset = -5.2,
 				uuid = "462a943d-5968-b7f2-8c22-2890c87e3ba9",
 				version = 2,
 			},
@@ -16018,9 +17964,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local expectedPass = 1\nlocal root = data.string_dsr\nlocal state = type(root) == \"table\" and root.p6Vow or nil\nif type(state) ~= \"table\"\n    or state.valid ~= true\n    or tonumber(state.pass) ~= expectedPass then\n  return\nend\n\nlocal holderID = tonumber(state.holderID)\nlocal receiverID = tonumber(state.receiverID)\nif holderID == nil or receiverID == nil then\n  return\nend\n\nlocal vow = TensorCore.getBuff(holderID, 2896)\nlocal remaining = tonumber(vow and vow.duration)\nif remaining == nil or remaining <= 0 or remaining > 4.1 then\n  return\nend\n\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(guide) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nlocal holder = TensorCore.mGetEntity(holderID)\nlocal receiver = TensorCore.mGetEntity(receiverID)\nlocal holderPos = holder and holder.pos or nil\nlocal receiverPos = receiver and receiver.pos or nil\nlocal targetX\nlocal targetZ\n\nif expectedPass == 4 then\n  if playerID == holderID and receiverPos ~= nil then\n    targetX = tonumber(receiverPos.x)\n    targetZ = tonumber(receiverPos.z)\n  elseif playerID == receiverID and holderPos ~= nil then\n    targetX = tonumber(holderPos.x)\n    targetZ = tonumber(holderPos.z)\n  end\nelseif playerID == holderID then\n  targetX = 100\n  targetZ = 100\nelseif playerID == receiverID then\n  local playerPos = player.pos\n  local px = tonumber(playerPos and playerPos.x)\n  local pz = tonumber(playerPos and playerPos.z)\n  if px == nil or pz == nil then\n    return\n  end\n  local dx = px - 100\n  local dz = pz - 100\n  if dx * dx + dz * dz > 2.25 then\n    targetX = 100\n    targetZ = 100\n  elseif holderPos ~= nil then\n    targetX = tonumber(holderPos.x)\n    targetZ = tonumber(holderPos.z)\n  end\nend\n\nif targetX ~= nil and targetZ ~= nil then\n  guide.FrameDirect(targetX, targetZ, 0.5)\n  self.used = true\nend",
+							actionLua = "local expectedPass = 1\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal cache = data.string_dsr.p6VowGuide1V2\nif type(cache) ~= \"table\" then\n  cache = {}\n  data.string_dsr.p6VowGuide1V2 = cache\nend\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nif receiverID == nil or type(guide.FrameDirect) ~= \"function\" then return end\nlocal player = type(guide.GetPlayer) == \"function\"\n    and guide.GetPlayer() or TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif playerID ~= holderID and playerID ~= receiverID then return end\n\nlocal holder = TensorCore.mGetEntity(holderID)\nlocal receiver = TensorCore.mGetEntity(receiverID)\nlocal holderPos = holder and holder.pos or nil\nlocal receiverPos = receiver and receiver.pos or nil\nlocal targetX, targetZ\nif expectedPass == 4 then\n  local target = playerID == holderID and receiverPos or holderPos\n  targetX, targetZ = tonumber(target and target.x), tonumber(target and target.z)\nelseif playerID == holderID then\n  targetX, targetZ = 100, 100\nelse\n  local pos = player and player.pos or nil\n  local px, pz = tonumber(pos and pos.x), tonumber(pos and pos.z)\n  if px == nil or pz == nil then return end\n  local dx, dz = px - 100, pz - 100\n  if dx * dx + dz * dz > 2.25 then targetX, targetZ = 100, 100\n  else\n    targetX = tonumber(holderPos and holderPos.x)\n    targetZ = tonumber(holderPos and holderPos.z)\n  end\nend\nif targetX ~= nil and targetZ ~= nil then\n  guide.FrameDirect(targetX, targetZ, 0.5)\nend\n",
 							endIfUsed = true,
-							name = "按毒剩余时间动态指引交接",
+							name = "按当前毒与疫苗指引交接",
 							uuid = "ba8432bc-9ac2-8359-9954-68968979932f",
 							version = 2.1,
 						},
@@ -16029,7 +17975,7 @@ local tbl =
 				conditions = 
 				{
 				},
-				eventType = 12,
+				eventType = 13,
 				mechanicTime = 1277.2,
 				name = "[P6] 第一次传毒动态指路",
 				timeRange = true,
@@ -16154,9 +18100,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"7323b0ca-b8c2-51f2-b322-ca7a20727c42",
+									true,
+								},
 								
 								{
 									"1992c688-0163-8649-a146-009d2594563f",
@@ -16167,16 +18118,70 @@ local tbl =
 									"006acaf9-5110-87c4-898c-bd20f2925a60",
 									true,
 								},
+							},
+							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
+							ignoreWeaveRules = true,
+							name = "行吟",
+							uuid = "23b9a8b3-31a7-f1bf-ad66-a5e53fa48ec0",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
 								
 								{
-									"d1506441-7348-c238-ac91-8ef7b49ee5fe",
+									"90d988b5-59e9-2eaf-b4f7-3238334b5204",
+									true,
+								},
+								
+								{
+									"1992c688-0163-8649-a146-009d2594563f",
+									true,
+								},
+								
+								{
+									"006acaf9-5110-87c4-898c-bd20f2925a60",
 									true,
 								},
 							},
-							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
+							ignoreWeaveRules = true,
 							name = "策动",
-							uuid = "23b9a8b3-31a7-f1bf-ad66-a5e53fa48ec0",
-							variableTogglesType = 2,
+							uuid = "5e7f5c25-737c-3961-bb3e-941ceb43b08e",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"b0c1eaf9-250a-d28e-9871-05a66993eb65",
+									true,
+								},
+								
+								{
+									"1992c688-0163-8649-a146-009d2594563f",
+									true,
+								},
+								
+								{
+									"006acaf9-5110-87c4-898c-bd20f2925a60",
+									true,
+								},
+							},
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "854ce5c7-dbdd-a9ea-be74-6acd7cd695cb",
 							version = 2.1,
 						},
 					},
@@ -16222,13 +18227,38 @@ local tbl =
 					{
 						data = 
 						{
-							category = "Party",
-							conditionType = 4,
-							inRangeValue = 20,
-							minTargetPercent = true,
-							partyTargetNumber = 100,
-							partyTargetSubType = "Number",
-							uuid = "d1506441-7348-c238-ac91-8ef7b49ee5fe",
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "7323b0ca-b8c2-51f2-b322-ca7a20727c42",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "90d988b5-59e9-2eaf-b4f7-3238334b5204",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "b0c1eaf9-250a-d28e-9871-05a66993eb65",
 							version = 3,
 						},
 					},
@@ -17071,9 +19101,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local expectedPass = 2\nlocal root = data.string_dsr\nlocal state = type(root) == \"table\" and root.p6Vow or nil\nif type(state) ~= \"table\"\n    or state.valid ~= true\n    or tonumber(state.pass) ~= expectedPass then\n  return\nend\n\nlocal holderID = tonumber(state.holderID)\nlocal receiverID = tonumber(state.receiverID)\nif holderID == nil or receiverID == nil then\n  return\nend\n\nlocal vow = TensorCore.getBuff(holderID, 2896)\nlocal remaining = tonumber(vow and vow.duration)\nif remaining == nil or remaining <= 0 or remaining > 4.1 then\n  return\nend\n\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(guide) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nlocal holder = TensorCore.mGetEntity(holderID)\nlocal receiver = TensorCore.mGetEntity(receiverID)\nlocal holderPos = holder and holder.pos or nil\nlocal receiverPos = receiver and receiver.pos or nil\nlocal targetX\nlocal targetZ\n\nif expectedPass == 4 then\n  if playerID == holderID and receiverPos ~= nil then\n    targetX = tonumber(receiverPos.x)\n    targetZ = tonumber(receiverPos.z)\n  elseif playerID == receiverID and holderPos ~= nil then\n    targetX = tonumber(holderPos.x)\n    targetZ = tonumber(holderPos.z)\n  end\nelseif playerID == holderID then\n  targetX = 100\n  targetZ = 100\nelseif playerID == receiverID then\n  local playerPos = player.pos\n  local px = tonumber(playerPos and playerPos.x)\n  local pz = tonumber(playerPos and playerPos.z)\n  if px == nil or pz == nil then\n    return\n  end\n  local dx = px - 100\n  local dz = pz - 100\n  if dx * dx + dz * dz > 2.25 then\n    targetX = 100\n    targetZ = 100\n  elseif holderPos ~= nil then\n    targetX = tonumber(holderPos.x)\n    targetZ = tonumber(holderPos.z)\n  end\nend\n\nif targetX ~= nil and targetZ ~= nil then\n  guide.FrameDirect(targetX, targetZ, 0.5)\n  self.used = true\nend",
+							actionLua = "local expectedPass = 2\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal cache = data.string_dsr.p6VowGuide2V2\nif type(cache) ~= \"table\" then\n  cache = {}\n  data.string_dsr.p6VowGuide2V2 = cache\nend\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nif receiverID == nil or type(guide.FrameDirect) ~= \"function\" then return end\nlocal player = type(guide.GetPlayer) == \"function\"\n    and guide.GetPlayer() or TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif playerID ~= holderID and playerID ~= receiverID then return end\n\nlocal holder = TensorCore.mGetEntity(holderID)\nlocal receiver = TensorCore.mGetEntity(receiverID)\nlocal holderPos = holder and holder.pos or nil\nlocal receiverPos = receiver and receiver.pos or nil\nlocal targetX, targetZ\nif expectedPass == 4 then\n  local target = playerID == holderID and receiverPos or holderPos\n  targetX, targetZ = tonumber(target and target.x), tonumber(target and target.z)\nelseif playerID == holderID then\n  targetX, targetZ = 100, 100\nelse\n  local pos = player and player.pos or nil\n  local px, pz = tonumber(pos and pos.x), tonumber(pos and pos.z)\n  if px == nil or pz == nil then return end\n  local dx, dz = px - 100, pz - 100\n  if dx * dx + dz * dz > 2.25 then targetX, targetZ = 100, 100\n  else\n    targetX = tonumber(holderPos and holderPos.x)\n    targetZ = tonumber(holderPos and holderPos.z)\n  end\nend\nif targetX ~= nil and targetZ ~= nil then\n  guide.FrameDirect(targetX, targetZ, 0.5)\nend\n",
 							endIfUsed = true,
-							name = "按毒剩余时间动态指引交接",
+							name = "按当前毒与疫苗指引交接",
 							uuid = "5e5c81c7-fa1c-f1af-bb12-a1559fa88df7",
 							version = 2.1,
 						},
@@ -17082,14 +19112,46 @@ local tbl =
 				conditions = 
 				{
 				},
-				eventType = 12,
+				eventType = 13,
 				mechanicTime = 1311.5,
 				name = "[P6] 第二次传毒动态指路",
 				timeRange = true,
 				timelineIndex = 222,
 				timerEndOffset = 0.8,
-				timerStartOffset = -5.2,
+				timerStartOffset = -4.14,
 				uuid = "1a2aa552-e5c5-6907-ab12-73e141667096",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local expectedPass = 2\n-- One queued instance waits within this node, then draws once until expiry.\nif self.used then return end\nif self.started == nil then self.started = Now() end\nif TimeSince(self.started) > 6000 then\n  self.used = true\n  return\nend\nif type(self.p6VowScan) ~= \"table\" then self.p6VowScan = {} end\nlocal cache = self.p6VowScan\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nlocal timeout = expectedPass == 0 and 4000 or math.floor(remaining * 1000)\nif timeout <= 0 then self.used = true; return end\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nif receiverID ~= nil then\n  local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n  local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n  local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n  safe:setGradient(0, 0.28, 0)\n  safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\nend\nself.used = true\n",
+							endIfUsed = true,
+							name = "当前持毒者范围与接毒者标记",
+							uuid = "0df8ab1a-9381-a656-a4f3-c2564a1e2193",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 1311.5,
+				name = "[P6] 第二次传毒判定范围",
+				timeRange = true,
+				timelineIndex = 222,
+				timerEndOffset = 0.8,
+				timerStartOffset = -5.2,
+				uuid = "97d98072-94ed-5c2f-95f2-022acd0435ae",
 				version = 2,
 			},
 		},
@@ -17444,6 +19506,67 @@ local tbl =
 				version = 2,
 			},
 		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local duration = (eventArgs.channelTimeMax + 0.8) * 1000\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif ent then\n  local offset = (eventArgs.spellID == 27939 or eventArgs.spellID == 27940) and 11 or -11\n  local h = ent.pos.h\n  local x = ent.pos.x + offset * math.cos(h)\n  local z = ent.pos.z - offset * math.sin(h)\n  local drawer = TensorCore.getMoogleDrawer()\n  drawer:addTimedRect(duration, x, ent.pos.y, z, 50, 22, h)\n  local tanks = TensorCore.getEntityGroupList(\"Tank\")\n  if tanks then\n    for _, tank in pairs(tanks) do\n      if tank.alive then drawer:addTimedCircleOnEnt(duration, tank.id, 10) end\n    end\n  end\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"fa997f74-8c74-0bb8-8d44-1b1f68a48401",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "绘制神圣之翼矩形与坦克圈",
+							uuid = "a353f25e-2162-ab47-82e6-3efa5e630bc0",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 3,
+							eventArgType = 2,
+							name = "神圣之翼读条",
+							spellIDList = 
+							{
+								27939,
+								27940,
+								27942,
+								27943,
+							},
+							uuid = "fa997f74-8c74-0bb8-8d44-1b1f68a48401",
+							version = 3,
+						},
+					},
+				},
+				eventType = 3,
+				mechanicTime = 1337,
+				name = "[P6] 第二次神圣之翼左右矩形与坦克圈",
+				timeRange = true,
+				timelineIndex = 229,
+				timerEndOffset = 0.5,
+				timerStartOffset = -10,
+				uuid = "7401ee9f-76b4-0565-81f0-6794484824bf",
+				version = 2,
+			},
+		},
 	},
 	[230] = 
 	{
@@ -17458,9 +19581,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local expectedPass = 3\nlocal root = data.string_dsr\nlocal state = type(root) == \"table\" and root.p6Vow or nil\nif type(state) ~= \"table\"\n    or state.valid ~= true\n    or tonumber(state.pass) ~= expectedPass then\n  return\nend\n\nlocal holderID = tonumber(state.holderID)\nlocal receiverID = tonumber(state.receiverID)\nif holderID == nil or receiverID == nil then\n  return\nend\n\nlocal vow = TensorCore.getBuff(holderID, 2896)\nlocal remaining = tonumber(vow and vow.duration)\nif remaining == nil or remaining <= 0 or remaining > 4.1 then\n  return\nend\n\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(guide) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nlocal holder = TensorCore.mGetEntity(holderID)\nlocal receiver = TensorCore.mGetEntity(receiverID)\nlocal holderPos = holder and holder.pos or nil\nlocal receiverPos = receiver and receiver.pos or nil\nlocal targetX\nlocal targetZ\n\nif expectedPass == 4 then\n  if playerID == holderID and receiverPos ~= nil then\n    targetX = tonumber(receiverPos.x)\n    targetZ = tonumber(receiverPos.z)\n  elseif playerID == receiverID and holderPos ~= nil then\n    targetX = tonumber(holderPos.x)\n    targetZ = tonumber(holderPos.z)\n  end\nelseif playerID == holderID then\n  targetX = 100\n  targetZ = 100\nelseif playerID == receiverID then\n  local playerPos = player.pos\n  local px = tonumber(playerPos and playerPos.x)\n  local pz = tonumber(playerPos and playerPos.z)\n  if px == nil or pz == nil then\n    return\n  end\n  local dx = px - 100\n  local dz = pz - 100\n  if dx * dx + dz * dz > 2.25 then\n    targetX = 100\n    targetZ = 100\n  elseif holderPos ~= nil then\n    targetX = tonumber(holderPos.x)\n    targetZ = tonumber(holderPos.z)\n  end\nend\n\nif targetX ~= nil and targetZ ~= nil then\n  guide.FrameDirect(targetX, targetZ, 0.5)\n  self.used = true\nend",
+							actionLua = "local expectedPass = 3\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal cache = data.string_dsr.p6VowGuide3V2\nif type(cache) ~= \"table\" then\n  cache = {}\n  data.string_dsr.p6VowGuide3V2 = cache\nend\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nif receiverID == nil or type(guide.FrameDirect) ~= \"function\" then return end\nlocal player = type(guide.GetPlayer) == \"function\"\n    and guide.GetPlayer() or TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif playerID ~= holderID and playerID ~= receiverID then return end\n\nlocal holder = TensorCore.mGetEntity(holderID)\nlocal receiver = TensorCore.mGetEntity(receiverID)\nlocal holderPos = holder and holder.pos or nil\nlocal receiverPos = receiver and receiver.pos or nil\nlocal targetX, targetZ\nif expectedPass == 4 then\n  local target = playerID == holderID and receiverPos or holderPos\n  targetX, targetZ = tonumber(target and target.x), tonumber(target and target.z)\nelseif playerID == holderID then\n  targetX, targetZ = 100, 100\nelse\n  local pos = player and player.pos or nil\n  local px, pz = tonumber(pos and pos.x), tonumber(pos and pos.z)\n  if px == nil or pz == nil then return end\n  local dx, dz = px - 100, pz - 100\n  if dx * dx + dz * dz > 2.25 then targetX, targetZ = 100, 100\n  else\n    targetX = tonumber(holderPos and holderPos.x)\n    targetZ = tonumber(holderPos and holderPos.z)\n  end\nend\nif targetX ~= nil and targetZ ~= nil then\n  guide.FrameDirect(targetX, targetZ, 0.5)\nend\n",
 							endIfUsed = true,
-							name = "按毒剩余时间动态指引交接",
+							name = "按当前毒与疫苗指引交接",
 							uuid = "c46167a6-f0b1-f87f-ae5c-bea5e7ea3fde",
 							version = 2.1,
 						},
@@ -17469,7 +19592,7 @@ local tbl =
 				conditions = 
 				{
 				},
-				eventType = 12,
+				eventType = 13,
 				mechanicTime = 1345.5,
 				name = "[P6] 第三次传毒动态指路",
 				timeRange = true,
@@ -17477,6 +19600,38 @@ local tbl =
 				timerEndOffset = 0.8,
 				timerStartOffset = -5.2,
 				uuid = "afdf40ce-7baf-d514-bac3-833304d26467",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local expectedPass = 3\n-- One queued instance waits within this node, then draws once until expiry.\nif self.used then return end\nif self.started == nil then self.started = Now() end\nif TimeSince(self.started) > 6000 then\n  self.used = true\n  return\nend\nif type(self.p6VowScan) ~= \"table\" then self.p6VowScan = {} end\nlocal cache = self.p6VowScan\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nlocal timeout = expectedPass == 0 and 4000 or math.floor(remaining * 1000)\nif timeout <= 0 then self.used = true; return end\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nif receiverID ~= nil then\n  local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n  local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n  local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n  safe:setGradient(0, 0.28, 0)\n  safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\nend\nself.used = true\n",
+							endIfUsed = true,
+							name = "当前持毒者范围与接毒者标记",
+							uuid = "f767c461-515d-2e96-8ac0-9c2b0b9a866f",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 1345.5,
+				name = "[P6] 第三次传毒判定范围",
+				timeRange = true,
+				timelineIndex = 230,
+				timerEndOffset = 0.8,
+				timerStartOffset = -5.2,
+				uuid = "35979d4a-73f2-492b-8c89-7438ebb71d2b",
 				version = 2,
 			},
 		},
@@ -17615,7 +19770,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- 固定站位按 1:2 转换；D3/D4 的 Z 坐标向内修正以避开 20–35 米冰环。\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nlocal idByRole = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\n  idByRole[role] = id\nend\n\nlocal selfRole = roleByID[playerID]\nif selfRole == nil then\n  return\nend\n\nlocal nidhogg = TensorCore.getEntityByGroup(\n  \"ContentID\", { contentid = 3458, subgroup = \"Nearest\" })\nlocal hraesvelgr = TensorCore.getEntityByGroup(\n  \"ContentID\", { contentid = 4954, subgroup = \"Nearest\" })\nif not nidhogg or not hraesvelgr then\n  return\nend\n\nlocal x, z\nif selfRole == \"MT\" or selfRole == \"ST\" then\n  local nSpell = tonumber(\n    nidhogg.castinginfo and nidhogg.castinginfo.channelingid)\n  local hSpell = tonumber(\n    hraesvelgr.castinginfo and hraesvelgr.castinginfo.channelingid)\n\n  if nSpell == 27955 and hSpell == 27957 then\n    x, z = 100.0, 100.0\n  elseif (nSpell == 27954 and hSpell == 27957)\n      or (nSpell == 27955 and hSpell == 27956) then\n    if selfRole == \"MT\" then\n      x, z = 84.25, 87.25\n    else\n      x, z = 115.75, 112.75\n    end\n  else\n    return\n  end\nelse\n  if type(Argus) ~= \"table\"\n      or type(Argus.getTethersOnEnt) ~= \"function\" then\n    return\n  end\n\n  local tethered = {}\n  local function collectTethers(dragon)\n    for _, tether in pairs(Argus.getTethersOnEnt(dragon.id) or {}) do\n      local partnerID = tonumber(tether and tether.partnerid)\n      local role = partnerID and roleByID[partnerID] or nil\n      if role ~= nil and role ~= \"MT\" and role ~= \"ST\" then\n        tethered[partnerID] = true\n      end\n    end\n  end\n\n  collectTethers(nidhogg)\n  collectTethers(hraesvelgr)\n\n  local nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  local tetherCount = 0\n  for _, role in ipairs(nonTankRoles) do\n    if tethered[idByRole[role]] then\n      tetherCount = tetherCount + 1\n    end\n  end\n  if tetherCount ~= 6 then\n    return\n  end\n\n  local targets = {\n    H1 = { x = 100.0, z = 80.0 },\n    H2 = { x = 100.0, z = 120.0 },\n    D1 = { x = 103.775, z = 89.4 },\n    D2 = { x = 96.225, z = 110.6 },\n    D3 = { x = 107.75, z = 82.25 },\n    D4 = { x = 92.25, z = 117.75 },\n  }\n  local target = targets[selfRole]\n  if target == nil then\n    return\n  end\n  x, z = target.x, target.z\nend\n\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "-- 固定站位按 1:2 转换；D3/D4 的 Z 坐标向内修正以避开 20–35 米冰环。\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal root = data.string_dsr\nlocal state = root.p6SecondBreathFrameCache\nif type(state) ~= \"table\" then\n  state = {}\n  root.p6SecondBreathFrameCache = state\nend\n\nif type(state.clearMap) ~= \"function\" then\n  state.clearMap = function(map)\n    for key in pairs(map) do\n      map[key] = nil\n    end\n  end\nend\nif type(state.collectTethers) ~= \"function\" then\n  state.collectTethers = function(dragon, roleMap, tetheredMap)\n    for _, tether in pairs(Argus.getTethersOnEnt(dragon.id) or {}) do\n      local partnerID = tonumber(tether and tether.partnerid)\n      local role = partnerID and roleMap[partnerID] or nil\n      if role ~= nil and role ~= \"MT\" and role ~= \"ST\" then\n        tetheredMap[partnerID] = true\n      end\n    end\n  end\nend\n\nif type(state.roles) ~= \"table\" then\n  state.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nend\nif type(state.nonTankRoles) ~= \"table\" then\n  state.nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nend\nif type(state.targets) ~= \"table\" then\n  state.targets = {\n    H1 = { x = 100.0, z = 80.0 },\n    H2 = { x = 100.0, z = 120.0 },\n    D1 = { x = 103.775, z = 89.4 },\n    D2 = { x = 96.225, z = 110.6 },\n    D3 = { x = 107.75, z = 82.25 },\n    D4 = { x = 92.25, z = 117.75 },\n  }\nend\n\nlocal roles = state.roles\nlocal nonTankRoles = state.nonTankRoles\nlocal targets = state.targets\nlocal idByRole = type(state.idByRole) == \"table\" and state.idByRole or {}\nstate.idByRole = idByRole\nlocal roleByID = type(state.roleByID) == \"table\"\n    and state.roleByID or {}\nstate.roleByID = roleByID\nlocal tethered = type(state.tethered) == \"table\" and state.tethered or {}\nstate.tethered = tethered\nlocal clearMap = state.clearMap\nclearMap(idByRole)\nclearMap(roleByID)\nclearMap(tethered)\n\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\n  idByRole[role] = id\nend\n\nlocal selfRole = roleByID[playerID]\nif selfRole == nil then\n  return\nend\n\nlocal nidhogg = TensorCore.getEntityByGroup(\n  \"ContentID\", { contentid = 3458, subgroup = \"Nearest\" })\nlocal hraesvelgr = TensorCore.getEntityByGroup(\n  \"ContentID\", { contentid = 4954, subgroup = \"Nearest\" })\nif not nidhogg or not hraesvelgr then\n  return\nend\n\nlocal x, z\nif selfRole == \"MT\" or selfRole == \"ST\" then\n  local nSpell = tonumber(\n    nidhogg.castinginfo and nidhogg.castinginfo.channelingid)\n  local hSpell = tonumber(\n    hraesvelgr.castinginfo and hraesvelgr.castinginfo.channelingid)\n\n  if nSpell == 27955 and hSpell == 27957 then\n    x, z = 100.0, 100.0\n  elseif (nSpell == 27954 and hSpell == 27957)\n      or (nSpell == 27955 and hSpell == 27956) then\n    if selfRole == \"MT\" then\n      x, z = 84.25, 87.25\n    else\n      x, z = 115.75, 112.75\n    end\n  else\n    return\n  end\nelse\n  if type(Argus) ~= \"table\"\n      or type(Argus.getTethersOnEnt) ~= \"function\" then\n    return\n  end\n\n  local collectTethers = state.collectTethers\n  collectTethers(nidhogg, roleByID, tethered)\n  collectTethers(hraesvelgr, roleByID, tethered)\n\n  local tetherCount = 0\n  for _, role in ipairs(nonTankRoles) do\n    if tethered[idByRole[role]] then\n      tetherCount = tetherCount + 1\n    end\n  end\n  if tetherCount ~= 6 then\n    return\n  end\n\n  local target = targets[selfRole]\n  if target == nil then\n    return\n  end\n  x, z = target.x, target.z\nend\n\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "按固定职能站位与吐息分支指路",
 							uuid = "e99badbe-63db-343b-b685-92ab0bb5b2ff",
@@ -18039,9 +20194,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local expectedPass = 4\nlocal root = data.string_dsr\nlocal state = type(root) == \"table\" and root.p6Vow or nil\nif type(state) ~= \"table\"\n    or state.valid ~= true\n    or tonumber(state.pass) ~= expectedPass then\n  return\nend\n\nlocal holderID = tonumber(state.holderID)\nlocal receiverID = tonumber(state.receiverID)\nif holderID == nil or receiverID == nil then\n  return\nend\n\nlocal vow = TensorCore.getBuff(holderID, 2896)\nlocal remaining = tonumber(vow and vow.duration)\nif remaining == nil or remaining <= 0 or remaining > 4.1 then\n  return\nend\n\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(guide) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nlocal holder = TensorCore.mGetEntity(holderID)\nlocal receiver = TensorCore.mGetEntity(receiverID)\nlocal holderPos = holder and holder.pos or nil\nlocal receiverPos = receiver and receiver.pos or nil\nlocal targetX\nlocal targetZ\n\nif expectedPass == 4 then\n  if playerID == holderID and receiverPos ~= nil then\n    targetX = tonumber(receiverPos.x)\n    targetZ = tonumber(receiverPos.z)\n  elseif playerID == receiverID and holderPos ~= nil then\n    targetX = tonumber(holderPos.x)\n    targetZ = tonumber(holderPos.z)\n  end\nelseif playerID == holderID then\n  targetX = 100\n  targetZ = 100\nelseif playerID == receiverID then\n  local playerPos = player.pos\n  local px = tonumber(playerPos and playerPos.x)\n  local pz = tonumber(playerPos and playerPos.z)\n  if px == nil or pz == nil then\n    return\n  end\n  local dx = px - 100\n  local dz = pz - 100\n  if dx * dx + dz * dz > 2.25 then\n    targetX = 100\n    targetZ = 100\n  elseif holderPos ~= nil then\n    targetX = tonumber(holderPos.x)\n    targetZ = tonumber(holderPos.z)\n  end\nend\n\nif targetX ~= nil and targetZ ~= nil then\n  guide.FrameDirect(targetX, targetZ, 0.5)\n  self.used = true\nend",
+							actionLua = "local expectedPass = 4\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal cache = data.string_dsr.p6VowGuide4V2\nif type(cache) ~= \"table\" then\n  cache = {}\n  data.string_dsr.p6VowGuide4V2 = cache\nend\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nif receiverID == nil or type(guide.FrameDirect) ~= \"function\" then return end\nlocal player = type(guide.GetPlayer) == \"function\"\n    and guide.GetPlayer() or TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif playerID ~= holderID and playerID ~= receiverID then return end\n\nlocal holder = TensorCore.mGetEntity(holderID)\nlocal receiver = TensorCore.mGetEntity(receiverID)\nlocal holderPos = holder and holder.pos or nil\nlocal receiverPos = receiver and receiver.pos or nil\nlocal targetX, targetZ\nif expectedPass == 4 then\n  local target = playerID == holderID and receiverPos or holderPos\n  targetX, targetZ = tonumber(target and target.x), tonumber(target and target.z)\nelseif playerID == holderID then\n  targetX, targetZ = 100, 100\nelse\n  local pos = player and player.pos or nil\n  local px, pz = tonumber(pos and pos.x), tonumber(pos and pos.z)\n  if px == nil or pz == nil then return end\n  local dx, dz = px - 100, pz - 100\n  if dx * dx + dz * dz > 2.25 then targetX, targetZ = 100, 100\n  else\n    targetX = tonumber(holderPos and holderPos.x)\n    targetZ = tonumber(holderPos and holderPos.z)\n  end\nend\nif targetX ~= nil and targetZ ~= nil then\n  guide.FrameDirect(targetX, targetZ, 0.5)\nend\n",
 							endIfUsed = true,
-							name = "按毒剩余时间动态指引交接",
+							name = "按当前毒与疫苗指引交接",
 							uuid = "9ee47d9f-9739-3dd1-b0f9-72c3374115ef",
 							version = 2.1,
 						},
@@ -18050,7 +20205,7 @@ local tbl =
 				conditions = 
 				{
 				},
-				eventType = 12,
+				eventType = 13,
 				mechanicTime = 1379.1,
 				name = "[P6] 第四次传毒原地动态指路",
 				timeRange = true,
@@ -18058,6 +20213,38 @@ local tbl =
 				timerEndOffset = 0.8,
 				timerStartOffset = -5.2,
 				uuid = "a95b9345-4474-b518-bbc0-31424b004058",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local expectedPass = 4\n-- One queued instance waits within this node, then draws once until expiry.\nif self.used then return end\nif self.started == nil then self.started = Now() end\nif TimeSince(self.started) > 6000 then\n  self.used = true\n  return\nend\nif type(self.p6VowScan) ~= \"table\" then self.p6VowScan = {} end\nlocal cache = self.p6VowScan\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nlocal timeout = expectedPass == 0 and 4000 or math.floor(remaining * 1000)\nif timeout <= 0 then self.used = true; return end\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nif receiverID ~= nil then\n  local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n  local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n  local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n  safe:setGradient(0, 0.28, 0)\n  safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\nend\nself.used = true\n",
+							endIfUsed = true,
+							name = "当前持毒者范围与接毒者标记",
+							uuid = "cc47623f-df9d-acc2-90e4-680c58b7b1b2",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+				},
+				mechanicTime = 1379.1,
+				name = "[P6] 第四次传毒判定范围",
+				timeRange = true,
+				timelineIndex = 236,
+				timerEndOffset = 0.8,
+				timerStartOffset = -5.2,
+				uuid = "6716b348-8def-ad9e-9813-1016601849a8",
 				version = 2,
 			},
 		},
@@ -18131,9 +20318,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"f42ad378-17f9-7ef4-aac4-c069548b8be8",
+									true,
+								},
 								
 								{
 									"dd2fb71c-9cb1-fb7a-94fb-5c19fc14ac54",
@@ -18157,9 +20349,90 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
-							name = "策动",
+							ignoreWeaveRules = true,
+							name = "行吟",
 							uuid = "e8570f56-7a1e-271c-a887-14894c7c759b",
 							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
+								
+								{
+									"2206fdb7-bf7d-017f-85dd-cbe88375e85d",
+									true,
+								},
+								
+								{
+									"dd2fb71c-9cb1-fb7a-94fb-5c19fc14ac54",
+									true,
+								},
+								
+								{
+									"33a1c884-9f47-8eab-8a15-01edba649bd5",
+									true,
+								},
+								
+								{
+									"5287f0af-ff78-82ef-847e-1544eae30839",
+									true,
+								},
+								
+								{
+									"cbf233f3-b03b-b641-88c5-758e27044985",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "策动",
+							uuid = "39de3be1-3c6c-a0b4-a389-522b056c9f99",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"99321453-9201-ae16-aabc-641d5bef50be",
+									true,
+								},
+								
+								{
+									"dd2fb71c-9cb1-fb7a-94fb-5c19fc14ac54",
+									true,
+								},
+								
+								{
+									"33a1c884-9f47-8eab-8a15-01edba649bd5",
+									true,
+								},
+								
+								{
+									"5287f0af-ff78-82ef-847e-1544eae30839",
+									true,
+								},
+								
+								{
+									"cbf233f3-b03b-b641-88c5-758e27044985",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "85b67a0b-a0d9-de41-a98b-f9d827b7494b",
 							version = 2.1,
 						},
 					},
@@ -18225,6 +20498,45 @@ local tbl =
 							buffID = 2696,
 							category = "Self",
 							uuid = "984228fb-0e97-8d6e-ab49-8527be323439",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "f42ad378-17f9-7ef4-aac4-c069548b8be8",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "2206fdb7-bf7d-017f-85dd-cbe88375e85d",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "99321453-9201-ae16-aabc-641d5bef50be",
 							version = 3,
 						},
 					},
@@ -18446,7 +20758,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D1\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D1\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：D1接刀 / 双T分开",
 							uuid = "2054c2ad-f080-d783-8ae0-3d4e890be9ff",
@@ -18511,7 +20823,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D2\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D2\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：D2接刀 / 双T分开",
 							uuid = "73c19aaa-abf9-6203-9afb-7d4e33c5cc36",
@@ -18715,7 +21027,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "self.used = true\n\nlocal round = 1\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal root = data.string_dsr\nlocal state = root.p7AkhMornTowerGuide\nif type(state) ~= \"table\" or state.round ~= round then\n  state = {\n    round = round,\n    towers = {},\n    sawFirstAOE = false,\n    firstResolved = false,\n  }\n  root.p7AkhMornTowerGuide = state\nend\n\nlocal firstAOEActive = false\nif type(Argus) == \"table\"\n    and type(Argus.getCurrentAOEs) == \"function\" then\n  for _, aoe in pairs(Argus.getCurrentAOEs() or {}) do\n    local id = tonumber(aoe and aoe.aoeID)\n    if id == 29452 or id == 29453 or id == 29454 then\n      local x = tonumber(aoe.x)\n      local y = tonumber(aoe.y)\n      local z = tonumber(aoe.z)\n      if x and y and z then\n        state.towers[id] = { x = x, y = y, z = z }\n        firstAOEActive = true\n        state.sawFirstAOE = true\n      end\n    end\n  end\nend\nif state.sawFirstAOE and not firstAOEActive then\n  state.firstResolved = true\nend\n\nlocal bossID = tonumber(root.godThordanID)\nlocal boss = bossID and TensorCore.mGetEntity(bossID) or nil\nif not boss then\n  boss = TensorCore.getEntityByGroup(\n    \"ContentID\", { contentid = 11319, subgroup = \"Nearest\" })\n  if boss then\n    root.godThordanID = tonumber(boss.id)\n  end\nend\n\n-- When replay starts a few frames before Argus exposes the cast AOEs,\n-- derive the same three radius-8 centers from the live boss heading.\nlocal bossPos = boss and boss.pos or nil\nlocal bossHeading = tonumber(bossPos and bossPos.h)\nif bossPos and bossHeading then\n  local offsets = {\n    [29453] = -math.pi / 3, -- boss left-front\n    [29452] = math.pi / 3,  -- boss right-front\n    [29454] = math.pi,      -- boss rear\n  }\n  for id, offset in pairs(offsets) do\n    if state.towers[id] == nil then\n      local position = TensorCore.getPosInDirection(\n        bossPos,\n        TensorCore.convertHeading(bossHeading + offset),\n        8)\n      if type(position) == \"table\"\n          and tonumber(position.x)\n          and tonumber(position.y)\n          and tonumber(position.z) then\n        state.towers[id] = {\n          x = tonumber(position.x),\n          y = tonumber(position.y),\n          z = tonumber(position.z),\n        }\n      end\n    end\n  end\nend\n\nlocal towerOrder = { 29453, 29452, 29454 }\nfor _, id in ipairs(towerOrder) do\n  if type(state.towers[id]) ~= \"table\" then\n    return\n  end\nend\n\nif not state.drawer then\n  local fill = GUI:ColorConvertFloat4ToU32(0.05, 0.9, 0.2, 0.26)\n  local outline = GUI:ColorConvertFloat4ToU32(0.2, 1, 0.35, 0.95)\n  state.drawer = TensorCore.getCachedFlatDrawer(\n    nil, nil, fill, outline, 2, 0)\nend\nfor _, id in ipairs(towerOrder) do\n  local tower = state.towers[id]\n  state.drawer:addCircle(tower.x, tower.y, tower.z, 4, false)\nend\n\nif not boss or type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\nlocal selfRole = roleByID[playerID]\nif selfRole == nil then\n  return\nend\n\nlocal buff = TensorCore.getBuff(boss, 2056)\nlocal stacks = tonumber(buff and buff.stacks)\nif stacks == 298 or stacks == 299 then\n  state.sword = stacks\nend\nif state.sword == nil then\n  return\nend\n\nlocal towerID\nif round == 1 then\n  if selfRole == \"H1\" or selfRole == \"D1\" or selfRole == \"D3\" then\n    towerID = 29453\n  elseif selfRole == \"H2\" or selfRole == \"D2\" or selfRole == \"D4\" then\n    towerID = 29452\n  else\n    towerID = 29454\n  end\nelse\n  if selfRole == \"MT\" then\n    towerID = 29452\n  elseif selfRole == \"ST\" then\n    towerID = 29454\n  else\n    towerID = 29453\n  end\nend\n\nlocal tower = state.towers[towerID]\nlocal centerX = tonumber(bossPos and bossPos.x)\nlocal centerZ = tonumber(bossPos and bossPos.z)\nif not tower or not centerX or not centerZ then\n  return\nend\n\nlocal dx = tower.x - centerX\nlocal dz = tower.z - centerZ\nlocal length = math.sqrt(dx * dx + dz * dz)\nif length < 0.001 then\n  return\nend\n\n-- Tower centers sit on radius 8, exactly at the steel/donut boundary.\n-- Before the first hit, steel moves 1.5 out and donut 1.5 in.\n-- After the sword resolves, all assignments settle 1.5 inward for healing\n-- while remaining comfortably inside the radius-4 tower.\nlocal shift = -1.5\nif not state.firstResolved and state.sword == 298 then\n  shift = 1.5\nend\nlocal targetX = tower.x + dx / length * shift\nlocal targetZ = tower.z + dz / length * shift\nguide.FrameDirect(targetX, targetZ, 0.5)\n",
+							actionLua = "self.used = true\n\nlocal round = 1\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal root = data.string_dsr\nlocal cache = root.p7AkhMornFrameCache\nif cache == nil then\n  cache = {\n    offsets = {\n      [29453] = -math.pi / 3, -- boss left-front\n      [29452] = math.pi / 3,  -- boss right-front\n      [29454] = math.pi,      -- boss rear\n    },\n    towerOrder = { 29453, 29452, 29454 },\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  root.p7AkhMornFrameCache = cache\nend\nlocal state = root.p7AkhMornTowerGuide\nif type(state) ~= \"table\" or state.round ~= round then\n  state = {\n    round = round,\n    towers = {},\n    sawFirstAOE = false,\n    firstResolved = false,\n  }\n  root.p7AkhMornTowerGuide = state\nend\n\nlocal firstAOEActive = false\nif type(Argus) == \"table\"\n    and type(Argus.getCurrentAOEs) == \"function\" then\n  for _, aoe in pairs(Argus.getCurrentAOEs() or {}) do\n    local id = tonumber(aoe and aoe.aoeID)\n    if id == 29452 or id == 29453 or id == 29454 then\n      local x = tonumber(aoe.x)\n      local y = tonumber(aoe.y)\n      local z = tonumber(aoe.z)\n      if x and y and z then\n        local tower = state.towers[id]\n        if type(tower) ~= \"table\" then\n          tower = {}\n          state.towers[id] = tower\n        end\n        tower.x, tower.y, tower.z = x, y, z\n        firstAOEActive = true\n        state.sawFirstAOE = true\n      end\n    end\n  end\nend\nif state.sawFirstAOE and not firstAOEActive then\n  state.firstResolved = true\nend\n\nlocal bossID = tonumber(root.godThordanID)\nlocal boss = bossID and TensorCore.mGetEntity(bossID) or nil\nif not boss then\n  boss = TensorCore.getEntityByGroup(\n    \"ContentID\", { contentid = 11319, subgroup = \"Nearest\" })\n  if boss then\n    root.godThordanID = tonumber(boss.id)\n  end\nend\n\n-- When replay starts a few frames before Argus exposes the cast AOEs,\n-- derive the same three radius-8 centers from the live boss heading.\nlocal bossPos = boss and boss.pos or nil\nlocal bossHeading = tonumber(bossPos and bossPos.h)\nif bossPos and bossHeading then\n  local offsets = cache.offsets\n  for id, offset in pairs(offsets) do\n    if state.towers[id] == nil then\n      local position = TensorCore.getPosInDirection(\n        bossPos,\n        TensorCore.convertHeading(bossHeading + offset),\n        8)\n      if type(position) == \"table\"\n          and tonumber(position.x)\n          and tonumber(position.y)\n          and tonumber(position.z) then\n        state.towers[id] = {\n          x = tonumber(position.x),\n          y = tonumber(position.y),\n          z = tonumber(position.z),\n        }\n      end\n    end\n  end\nend\n\nlocal towerOrder = cache.towerOrder\nfor _, id in ipairs(towerOrder) do\n  if type(state.towers[id]) ~= \"table\" then\n    return\n  end\nend\n\nif not state.drawer then\n  local fill = GUI:ColorConvertFloat4ToU32(0.05, 0.9, 0.2, 0.26)\n  local outline = GUI:ColorConvertFloat4ToU32(0.2, 1, 0.35, 0.95)\n  state.drawer = TensorCore.getCachedFlatDrawer(\n    nil, nil, fill, outline, 2, 0)\nend\nfor _, id in ipairs(towerOrder) do\n  local tower = state.towers[id]\n  state.drawer:addCircle(tower.x, tower.y, tower.z, 4, false)\nend\n\nif not boss or type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\nlocal selfRole = roleByID[playerID]\nif selfRole == nil then\n  return\nend\n\nlocal buff = TensorCore.getBuff(boss, 2056)\nlocal stacks = tonumber(buff and buff.stacks)\nif stacks == 298 or stacks == 299 then\n  state.sword = stacks\nend\nif state.sword == nil then\n  return\nend\n\nlocal towerID\nif round == 1 then\n  if selfRole == \"H1\" or selfRole == \"D1\" or selfRole == \"D3\" then\n    towerID = 29453\n  elseif selfRole == \"H2\" or selfRole == \"D2\" or selfRole == \"D4\" then\n    towerID = 29452\n  else\n    towerID = 29454\n  end\nelse\n  if selfRole == \"MT\" then\n    towerID = 29452\n  elseif selfRole == \"ST\" then\n    towerID = 29454\n  else\n    towerID = 29453\n  end\nend\n\nlocal tower = state.towers[towerID]\nlocal centerX = tonumber(bossPos and bossPos.x)\nlocal centerZ = tonumber(bossPos and bossPos.z)\nif not tower or not centerX or not centerZ then\n  return\nend\n\nlocal dx = tower.x - centerX\nlocal dz = tower.z - centerZ\nlocal length = math.sqrt(dx * dx + dz * dz)\nif length < 0.001 then\n  return\nend\n\n-- Tower centers sit on radius 8, exactly at the steel/donut boundary.\n-- Before the first hit, steel moves 1.5 out and donut 1.5 in.\n-- After the sword resolves, all assignments settle 1.5 inward for healing\n-- while remaining comfortably inside the radius-4 tower.\nlocal shift = -1.5\nif not state.firstResolved and state.sword == 298 then\n  shift = 1.5\nend\nlocal targetX = tower.x + dx / length * shift\nlocal targetZ = tower.z + dz / length * shift\nguide.FrameDirect(targetX, targetZ, 0.5)\n",
 							endIfUsed = true,
 							name = "绿色塔圈与 MuAi 动态指路",
 							uuid = "6a2a669b-fb09-0a66-8073-bdecd7fd91b8",
@@ -18734,6 +21046,98 @@ local tbl =
 				timerEndOffset = 5.7,
 				timerStartOffset = -6.7,
 				uuid = "aed52555-a6bc-f77e-b6ab-7661fcf09d7f",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "ACR",
+							actionID = 2887,
+							conditions = 
+							{
+								
+								{
+									"2943fb66-e104-be57-aa82-3bb1291b6e72",
+									true,
+								},
+								
+								{
+									"aeab0030-c81a-9902-b818-78e302fa23b2",
+									true,
+								},
+								
+								{
+									"b618f983-3836-b7e4-834a-0602b5049f23",
+									true,
+								},
+							},
+							endIfUsed = true,
+							gVar = "ACR_TensorMagnum3_Hotbar_Dismantle",
+							name = "第一次死亡轮回前请求武装解除",
+							targetType = "Current Target",
+							uuid = "cfd430ee-47d8-acae-a84e-1d64614f322e",
+							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							buffCheckType = 2,
+							buffID = 860,
+							name = "Dismantle check",
+							uuid = "b618f983-3836-b7e4-834a-0602b5049f23",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 14,
+							dequeueIfLuaFalse = true,
+							jobIDList = 
+							{
+								31,
+							},
+							name = "武装解除职业",
+							uuid = "2943fb66-e104-be57-aa82-3bb1291b6e72",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							conditionType = 2,
+							contentid = 11319,
+							name = "当前目标是龙威骑神",
+							uuid = "aeab0030-c81a-9902-b818-78e302fa23b2",
+							version = 3,
+						},
+					},
+				},
+				mechanicTime = 1573.9,
+				name = "[P7] 第一次死亡轮回武装解除",
+				randomTimeout = 8,
+				timeRange = true,
+				timelineIndex = 248,
+				timerEndOffset = -1.2,
+				timerStartOffset = -3.5,
+				uuid = "bd110b5b-c17b-481e-97b5-ae9d9056a4d6",
 				version = 2,
 			},
 		},
@@ -18787,7 +21191,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D3\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D3\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：D3接刀 / 双T分开",
 							uuid = "e9320e53-3be2-09eb-b834-acf9d0f489cb",
@@ -18852,7 +21256,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D4\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D4\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：D4接刀 / 双T分开",
 							uuid = "b04ba637-98a3-9551-94b5-eab32d6cba3c",
@@ -19161,7 +21565,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"H1\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"H1\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：H1接刀 / 双T分开",
 							uuid = "08ed9552-09c7-6b11-b26a-58bb8ce23c9e",
@@ -19226,7 +21630,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"H2\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"H2\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：H2接刀 / 双T分开",
 							uuid = "0c7de964-2746-b5b8-b6ba-13d945aa2df5",
@@ -19363,7 +21767,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D1\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D1\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：D1接刀 / 双T分开",
 							uuid = "e8f5ea3e-56a8-aeaa-900e-7d8c19347e27",
@@ -19427,9 +21831,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"de773acf-cb74-3d77-8b93-c2661fdee1ee",
+									true,
+								},
 								
 								{
 									"3dbdd9b3-12d3-cb82-8a9f-a7aafe2b4fc1",
@@ -19453,9 +21862,90 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
-							name = "策动",
+							ignoreWeaveRules = true,
+							name = "行吟",
 							uuid = "d234967f-405d-80b1-89ae-f83b4f4b2d49",
 							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
+								
+								{
+									"94c473f6-1de8-82a0-88e6-7ae05a01873f",
+									true,
+								},
+								
+								{
+									"3dbdd9b3-12d3-cb82-8a9f-a7aafe2b4fc1",
+									true,
+								},
+								
+								{
+									"c3936850-5b3d-0f4f-9855-8ed601e6c31a",
+									true,
+								},
+								
+								{
+									"06f96707-4ff6-1077-8b82-cc319d9b92ed",
+									true,
+								},
+								
+								{
+									"3557a422-5c15-4b52-9db2-e3b727f2de80",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "策动",
+							uuid = "d454d34f-5460-569b-856f-3dab2ff6fbd2",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"78375814-b2af-3846-a251-d5bffbf93685",
+									true,
+								},
+								
+								{
+									"3dbdd9b3-12d3-cb82-8a9f-a7aafe2b4fc1",
+									true,
+								},
+								
+								{
+									"c3936850-5b3d-0f4f-9855-8ed601e6c31a",
+									true,
+								},
+								
+								{
+									"06f96707-4ff6-1077-8b82-cc319d9b92ed",
+									true,
+								},
+								
+								{
+									"3557a422-5c15-4b52-9db2-e3b727f2de80",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "d80ec827-3123-037d-a0a7-5ac255863c41",
 							version = 2.1,
 						},
 					},
@@ -19513,6 +22003,45 @@ local tbl =
 							version = 3,
 						},
 					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "de773acf-cb74-3d77-8b93-c2661fdee1ee",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "94c473f6-1de8-82a0-88e6-7ae05a01873f",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "78375814-b2af-3846-a251-d5bffbf93685",
+							version = 3,
+						},
+					},
 				},
 				mechanicTime = 1644.3,
 				name = "[P7] 远敏团队减伤",
@@ -19533,7 +22062,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D2\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D2\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：D2接刀 / 双T分开",
 							uuid = "30df6b0a-a0a2-fbf9-9dc5-6dc654e0459d",
@@ -19812,82 +22341,8 @@ local tbl =
 					{
 						data = 
 						{
-							actionID = 2887,
-							conditions = 
-							{
-								
-								{
-									"2943fb66-e104-be57-aa82-3bb1291b6e72",
-									true,
-								},
-								
-								{
-									"b618f983-3836-b7e4-834a-0602b5049f23",
-									true,
-								},
-							},
-							endIfUsed = true,
-							name = "武装解除",
-							targetType = "Current Target",
-							uuid = "cfd430ee-47d8-acae-a84e-1d64614f322e",
-							version = 2.1,
-						},
-					},
-				},
-				conditions = 
-				{
-					
-					{
-						data = 
-						{
-							buffCheckType = 2,
-							buffID = 860,
-							name = "Dismantle check",
-							uuid = "b618f983-3836-b7e4-834a-0602b5049f23",
-							version = 3,
-						},
-					},
-					
-					{
-						data = 
-						{
-							category = "Self",
-							conditionType = 14,
-							dequeueIfLuaFalse = true,
-							jobIDList = 
-							{
-								31,
-							},
-							name = "武装解除职业",
-							uuid = "2943fb66-e104-be57-aa82-3bb1291b6e72",
-							version = 3,
-						},
-					},
-				},
-				mechanicTime = 1652.9,
-				name = "[P7] 武装解除",
-				randomTimeout = 8,
-				timeRandomRange = true,
-				timeRange = true,
-				timelineIndex = 261,
-				timerEndOffset = -1,
-				timerStartOffset = -10,
-				uuid = "bd110b5b-c17b-481e-97b5-ae9d9056a4d6",
-				version = 2,
-			},
-		},
-		
-		{
-			data = 
-			{
-				actions = 
-				{
-					
-					{
-						data = 
-						{
 							aType = "Lua",
-							actionLua = "self.used = true\n\nlocal round = 2\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal root = data.string_dsr\nlocal state = root.p7AkhMornTowerGuide\nif type(state) ~= \"table\" or state.round ~= round then\n  state = {\n    round = round,\n    towers = {},\n    sawFirstAOE = false,\n    firstResolved = false,\n  }\n  root.p7AkhMornTowerGuide = state\nend\n\nlocal firstAOEActive = false\nif type(Argus) == \"table\"\n    and type(Argus.getCurrentAOEs) == \"function\" then\n  for _, aoe in pairs(Argus.getCurrentAOEs() or {}) do\n    local id = tonumber(aoe and aoe.aoeID)\n    if id == 29452 or id == 29453 or id == 29454 then\n      local x = tonumber(aoe.x)\n      local y = tonumber(aoe.y)\n      local z = tonumber(aoe.z)\n      if x and y and z then\n        state.towers[id] = { x = x, y = y, z = z }\n        firstAOEActive = true\n        state.sawFirstAOE = true\n      end\n    end\n  end\nend\nif state.sawFirstAOE and not firstAOEActive then\n  state.firstResolved = true\nend\n\nlocal bossID = tonumber(root.godThordanID)\nlocal boss = bossID and TensorCore.mGetEntity(bossID) or nil\nif not boss then\n  boss = TensorCore.getEntityByGroup(\n    \"ContentID\", { contentid = 11319, subgroup = \"Nearest\" })\n  if boss then\n    root.godThordanID = tonumber(boss.id)\n  end\nend\n\n-- When replay starts a few frames before Argus exposes the cast AOEs,\n-- derive the same three radius-8 centers from the live boss heading.\nlocal bossPos = boss and boss.pos or nil\nlocal bossHeading = tonumber(bossPos and bossPos.h)\nif bossPos and bossHeading then\n  local offsets = {\n    [29453] = -math.pi / 3, -- boss left-front\n    [29452] = math.pi / 3,  -- boss right-front\n    [29454] = math.pi,      -- boss rear\n  }\n  for id, offset in pairs(offsets) do\n    if state.towers[id] == nil then\n      local position = TensorCore.getPosInDirection(\n        bossPos,\n        TensorCore.convertHeading(bossHeading + offset),\n        8)\n      if type(position) == \"table\"\n          and tonumber(position.x)\n          and tonumber(position.y)\n          and tonumber(position.z) then\n        state.towers[id] = {\n          x = tonumber(position.x),\n          y = tonumber(position.y),\n          z = tonumber(position.z),\n        }\n      end\n    end\n  end\nend\n\nlocal towerOrder = { 29453, 29452, 29454 }\nfor _, id in ipairs(towerOrder) do\n  if type(state.towers[id]) ~= \"table\" then\n    return\n  end\nend\n\nif not state.drawer then\n  local fill = GUI:ColorConvertFloat4ToU32(0.05, 0.9, 0.2, 0.26)\n  local outline = GUI:ColorConvertFloat4ToU32(0.2, 1, 0.35, 0.95)\n  state.drawer = TensorCore.getCachedFlatDrawer(\n    nil, nil, fill, outline, 2, 0)\nend\nfor _, id in ipairs(towerOrder) do\n  local tower = state.towers[id]\n  state.drawer:addCircle(tower.x, tower.y, tower.z, 4, false)\nend\n\nif not boss or type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\nlocal selfRole = roleByID[playerID]\nif selfRole == nil then\n  return\nend\n\nlocal buff = TensorCore.getBuff(boss, 2056)\nlocal stacks = tonumber(buff and buff.stacks)\nif stacks == 298 or stacks == 299 then\n  state.sword = stacks\nend\nif state.sword == nil then\n  return\nend\n\nlocal towerID\nif round == 1 then\n  if selfRole == \"H1\" or selfRole == \"D1\" or selfRole == \"D3\" then\n    towerID = 29453\n  elseif selfRole == \"H2\" or selfRole == \"D2\" or selfRole == \"D4\" then\n    towerID = 29452\n  else\n    towerID = 29454\n  end\nelse\n  if selfRole == \"MT\" then\n    towerID = 29452\n  elseif selfRole == \"ST\" then\n    towerID = 29454\n  else\n    towerID = 29453\n  end\nend\n\nlocal tower = state.towers[towerID]\nlocal centerX = tonumber(bossPos and bossPos.x)\nlocal centerZ = tonumber(bossPos and bossPos.z)\nif not tower or not centerX or not centerZ then\n  return\nend\n\nlocal dx = tower.x - centerX\nlocal dz = tower.z - centerZ\nlocal length = math.sqrt(dx * dx + dz * dz)\nif length < 0.001 then\n  return\nend\n\n-- Tower centers sit on radius 8, exactly at the steel/donut boundary.\n-- Before the first hit, steel moves 1.5 out and donut 1.5 in.\n-- After the sword resolves, all assignments settle 1.5 inward for healing\n-- while remaining comfortably inside the radius-4 tower.\nlocal shift = -1.5\nif not state.firstResolved and state.sword == 298 then\n  shift = 1.5\nend\nlocal targetX = tower.x + dx / length * shift\nlocal targetZ = tower.z + dz / length * shift\nguide.FrameDirect(targetX, targetZ, 0.5)\n",
+							actionLua = "self.used = true\n\nlocal round = 2\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal root = data.string_dsr\nlocal cache = root.p7AkhMornFrameCache\nif cache == nil then\n  cache = {\n    offsets = {\n      [29453] = -math.pi / 3, -- boss left-front\n      [29452] = math.pi / 3,  -- boss right-front\n      [29454] = math.pi,      -- boss rear\n    },\n    towerOrder = { 29453, 29452, 29454 },\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  root.p7AkhMornFrameCache = cache\nend\nlocal state = root.p7AkhMornTowerGuide\nif type(state) ~= \"table\" or state.round ~= round then\n  state = {\n    round = round,\n    towers = {},\n    sawFirstAOE = false,\n    firstResolved = false,\n  }\n  root.p7AkhMornTowerGuide = state\nend\n\nlocal firstAOEActive = false\nif type(Argus) == \"table\"\n    and type(Argus.getCurrentAOEs) == \"function\" then\n  for _, aoe in pairs(Argus.getCurrentAOEs() or {}) do\n    local id = tonumber(aoe and aoe.aoeID)\n    if id == 29452 or id == 29453 or id == 29454 then\n      local x = tonumber(aoe.x)\n      local y = tonumber(aoe.y)\n      local z = tonumber(aoe.z)\n      if x and y and z then\n        local tower = state.towers[id]\n        if type(tower) ~= \"table\" then\n          tower = {}\n          state.towers[id] = tower\n        end\n        tower.x, tower.y, tower.z = x, y, z\n        firstAOEActive = true\n        state.sawFirstAOE = true\n      end\n    end\n  end\nend\nif state.sawFirstAOE and not firstAOEActive then\n  state.firstResolved = true\nend\n\nlocal bossID = tonumber(root.godThordanID)\nlocal boss = bossID and TensorCore.mGetEntity(bossID) or nil\nif not boss then\n  boss = TensorCore.getEntityByGroup(\n    \"ContentID\", { contentid = 11319, subgroup = \"Nearest\" })\n  if boss then\n    root.godThordanID = tonumber(boss.id)\n  end\nend\n\n-- When replay starts a few frames before Argus exposes the cast AOEs,\n-- derive the same three radius-8 centers from the live boss heading.\nlocal bossPos = boss and boss.pos or nil\nlocal bossHeading = tonumber(bossPos and bossPos.h)\nif bossPos and bossHeading then\n  local offsets = cache.offsets\n  for id, offset in pairs(offsets) do\n    if state.towers[id] == nil then\n      local position = TensorCore.getPosInDirection(\n        bossPos,\n        TensorCore.convertHeading(bossHeading + offset),\n        8)\n      if type(position) == \"table\"\n          and tonumber(position.x)\n          and tonumber(position.y)\n          and tonumber(position.z) then\n        state.towers[id] = {\n          x = tonumber(position.x),\n          y = tonumber(position.y),\n          z = tonumber(position.z),\n        }\n      end\n    end\n  end\nend\n\nlocal towerOrder = cache.towerOrder\nfor _, id in ipairs(towerOrder) do\n  if type(state.towers[id]) ~= \"table\" then\n    return\n  end\nend\n\nif not state.drawer then\n  local fill = GUI:ColorConvertFloat4ToU32(0.05, 0.9, 0.2, 0.26)\n  local outline = GUI:ColorConvertFloat4ToU32(0.2, 1, 0.35, 0.95)\n  state.drawer = TensorCore.getCachedFlatDrawer(\n    nil, nil, fill, outline, 2, 0)\nend\nfor _, id in ipairs(towerOrder) do\n  local tower = state.towers[id]\n  state.drawer:addCircle(tower.x, tower.y, tower.z, 4, false)\nend\n\nif not boss or type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\nlocal selfRole = roleByID[playerID]\nif selfRole == nil then\n  return\nend\n\nlocal buff = TensorCore.getBuff(boss, 2056)\nlocal stacks = tonumber(buff and buff.stacks)\nif stacks == 298 or stacks == 299 then\n  state.sword = stacks\nend\nif state.sword == nil then\n  return\nend\n\nlocal towerID\nif round == 1 then\n  if selfRole == \"H1\" or selfRole == \"D1\" or selfRole == \"D3\" then\n    towerID = 29453\n  elseif selfRole == \"H2\" or selfRole == \"D2\" or selfRole == \"D4\" then\n    towerID = 29452\n  else\n    towerID = 29454\n  end\nelse\n  if selfRole == \"MT\" then\n    towerID = 29452\n  elseif selfRole == \"ST\" then\n    towerID = 29454\n  else\n    towerID = 29453\n  end\nend\n\nlocal tower = state.towers[towerID]\nlocal centerX = tonumber(bossPos and bossPos.x)\nlocal centerZ = tonumber(bossPos and bossPos.z)\nif not tower or not centerX or not centerZ then\n  return\nend\n\nlocal dx = tower.x - centerX\nlocal dz = tower.z - centerZ\nlocal length = math.sqrt(dx * dx + dz * dz)\nif length < 0.001 then\n  return\nend\n\n-- Tower centers sit on radius 8, exactly at the steel/donut boundary.\n-- Before the first hit, steel moves 1.5 out and donut 1.5 in.\n-- After the sword resolves, all assignments settle 1.5 inward for healing\n-- while remaining comfortably inside the radius-4 tower.\nlocal shift = -1.5\nif not state.firstResolved and state.sword == 298 then\n  shift = 1.5\nend\nlocal targetX = tower.x + dx / length * shift\nlocal targetZ = tower.z + dz / length * shift\nguide.FrameDirect(targetX, targetZ, 0.5)\n",
 							endIfUsed = true,
 							name = "绿色塔圈与 MuAi 动态指路",
 							uuid = "f2ce8bc4-4fe2-357e-98ea-48f43f05103e",
@@ -19959,7 +22414,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D3\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D3\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：D3接刀 / 双T分开",
 							uuid = "633887d5-6c3f-08ea-bf0e-f74e0e7caeb0",
@@ -20024,7 +22479,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D4\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D4\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：D4接刀 / 双T分开",
 							uuid = "b0531861-631e-e8c0-aeff-7ac855ae0206",
@@ -20333,7 +22788,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"H1\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"H1\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：H1接刀 / 双T分开",
 							uuid = "f41b8590-6180-3f2d-bd7f-2b013611e37d",
@@ -20398,7 +22853,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"H2\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"H2\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：H2接刀 / 双T分开",
 							uuid = "269db41c-70af-ec53-99a2-e05edcf41353",
@@ -20535,7 +22990,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D1\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D1\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：D1接刀 / 双T分开",
 							uuid = "3647b642-21c0-936d-b23b-b7dc93e3c924",
@@ -20600,7 +23055,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D2\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D2\"\nlocal firstTank = \"MT\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：D2接刀 / 双T分开",
 							uuid = "97fe2cea-b19e-a7cc-9c27-f40152e83cea",
@@ -20804,7 +23259,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "self.used = true\n\nlocal round = 3\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal root = data.string_dsr\nlocal state = root.p7AkhMornTowerGuide\nif type(state) ~= \"table\" or state.round ~= round then\n  state = {\n    round = round,\n    towers = {},\n    sawFirstAOE = false,\n    firstResolved = false,\n  }\n  root.p7AkhMornTowerGuide = state\nend\n\nlocal firstAOEActive = false\nif type(Argus) == \"table\"\n    and type(Argus.getCurrentAOEs) == \"function\" then\n  for _, aoe in pairs(Argus.getCurrentAOEs() or {}) do\n    local id = tonumber(aoe and aoe.aoeID)\n    if id == 29452 or id == 29453 or id == 29454 then\n      local x = tonumber(aoe.x)\n      local y = tonumber(aoe.y)\n      local z = tonumber(aoe.z)\n      if x and y and z then\n        state.towers[id] = { x = x, y = y, z = z }\n        firstAOEActive = true\n        state.sawFirstAOE = true\n      end\n    end\n  end\nend\nif state.sawFirstAOE and not firstAOEActive then\n  state.firstResolved = true\nend\n\nlocal bossID = tonumber(root.godThordanID)\nlocal boss = bossID and TensorCore.mGetEntity(bossID) or nil\nif not boss then\n  boss = TensorCore.getEntityByGroup(\n    \"ContentID\", { contentid = 11319, subgroup = \"Nearest\" })\n  if boss then\n    root.godThordanID = tonumber(boss.id)\n  end\nend\n\n-- When replay starts a few frames before Argus exposes the cast AOEs,\n-- derive the same three radius-8 centers from the live boss heading.\nlocal bossPos = boss and boss.pos or nil\nlocal bossHeading = tonumber(bossPos and bossPos.h)\nif bossPos and bossHeading then\n  local offsets = {\n    [29453] = -math.pi / 3, -- boss left-front\n    [29452] = math.pi / 3,  -- boss right-front\n    [29454] = math.pi,      -- boss rear\n  }\n  for id, offset in pairs(offsets) do\n    if state.towers[id] == nil then\n      local position = TensorCore.getPosInDirection(\n        bossPos,\n        TensorCore.convertHeading(bossHeading + offset),\n        8)\n      if type(position) == \"table\"\n          and tonumber(position.x)\n          and tonumber(position.y)\n          and tonumber(position.z) then\n        state.towers[id] = {\n          x = tonumber(position.x),\n          y = tonumber(position.y),\n          z = tonumber(position.z),\n        }\n      end\n    end\n  end\nend\n\nlocal towerOrder = { 29453, 29452, 29454 }\nfor _, id in ipairs(towerOrder) do\n  if type(state.towers[id]) ~= \"table\" then\n    return\n  end\nend\n\nif not state.drawer then\n  local fill = GUI:ColorConvertFloat4ToU32(0.05, 0.9, 0.2, 0.26)\n  local outline = GUI:ColorConvertFloat4ToU32(0.2, 1, 0.35, 0.95)\n  state.drawer = TensorCore.getCachedFlatDrawer(\n    nil, nil, fill, outline, 2, 0)\nend\nfor _, id in ipairs(towerOrder) do\n  local tower = state.towers[id]\n  state.drawer:addCircle(tower.x, tower.y, tower.z, 4, false)\nend\n\nif not boss or type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\nlocal selfRole = roleByID[playerID]\nif selfRole == nil then\n  return\nend\n\nlocal buff = TensorCore.getBuff(boss, 2056)\nlocal stacks = tonumber(buff and buff.stacks)\nif stacks == 298 or stacks == 299 then\n  state.sword = stacks\nend\nif state.sword == nil then\n  return\nend\n\nlocal towerID\nif round == 1 then\n  if selfRole == \"H1\" or selfRole == \"D1\" or selfRole == \"D3\" then\n    towerID = 29453\n  elseif selfRole == \"H2\" or selfRole == \"D2\" or selfRole == \"D4\" then\n    towerID = 29452\n  else\n    towerID = 29454\n  end\nelse\n  if selfRole == \"MT\" then\n    towerID = 29452\n  elseif selfRole == \"ST\" then\n    towerID = 29454\n  else\n    towerID = 29453\n  end\nend\n\nlocal tower = state.towers[towerID]\nlocal centerX = tonumber(bossPos and bossPos.x)\nlocal centerZ = tonumber(bossPos and bossPos.z)\nif not tower or not centerX or not centerZ then\n  return\nend\n\nlocal dx = tower.x - centerX\nlocal dz = tower.z - centerZ\nlocal length = math.sqrt(dx * dx + dz * dz)\nif length < 0.001 then\n  return\nend\n\n-- Tower centers sit on radius 8, exactly at the steel/donut boundary.\n-- Before the first hit, steel moves 1.5 out and donut 1.5 in.\n-- After the sword resolves, all assignments settle 1.5 inward for healing\n-- while remaining comfortably inside the radius-4 tower.\nlocal shift = -1.5\nif not state.firstResolved and state.sword == 298 then\n  shift = 1.5\nend\nlocal targetX = tower.x + dx / length * shift\nlocal targetZ = tower.z + dz / length * shift\nguide.FrameDirect(targetX, targetZ, 0.5)\n",
+							actionLua = "self.used = true\n\nlocal round = 3\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal root = data.string_dsr\nlocal cache = root.p7AkhMornFrameCache\nif cache == nil then\n  cache = {\n    offsets = {\n      [29453] = -math.pi / 3, -- boss left-front\n      [29452] = math.pi / 3,  -- boss right-front\n      [29454] = math.pi,      -- boss rear\n    },\n    towerOrder = { 29453, 29452, 29454 },\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  root.p7AkhMornFrameCache = cache\nend\nlocal state = root.p7AkhMornTowerGuide\nif type(state) ~= \"table\" or state.round ~= round then\n  state = {\n    round = round,\n    towers = {},\n    sawFirstAOE = false,\n    firstResolved = false,\n  }\n  root.p7AkhMornTowerGuide = state\nend\n\nlocal firstAOEActive = false\nif type(Argus) == \"table\"\n    and type(Argus.getCurrentAOEs) == \"function\" then\n  for _, aoe in pairs(Argus.getCurrentAOEs() or {}) do\n    local id = tonumber(aoe and aoe.aoeID)\n    if id == 29452 or id == 29453 or id == 29454 then\n      local x = tonumber(aoe.x)\n      local y = tonumber(aoe.y)\n      local z = tonumber(aoe.z)\n      if x and y and z then\n        local tower = state.towers[id]\n        if type(tower) ~= \"table\" then\n          tower = {}\n          state.towers[id] = tower\n        end\n        tower.x, tower.y, tower.z = x, y, z\n        firstAOEActive = true\n        state.sawFirstAOE = true\n      end\n    end\n  end\nend\nif state.sawFirstAOE and not firstAOEActive then\n  state.firstResolved = true\nend\n\nlocal bossID = tonumber(root.godThordanID)\nlocal boss = bossID and TensorCore.mGetEntity(bossID) or nil\nif not boss then\n  boss = TensorCore.getEntityByGroup(\n    \"ContentID\", { contentid = 11319, subgroup = \"Nearest\" })\n  if boss then\n    root.godThordanID = tonumber(boss.id)\n  end\nend\n\n-- When replay starts a few frames before Argus exposes the cast AOEs,\n-- derive the same three radius-8 centers from the live boss heading.\nlocal bossPos = boss and boss.pos or nil\nlocal bossHeading = tonumber(bossPos and bossPos.h)\nif bossPos and bossHeading then\n  local offsets = cache.offsets\n  for id, offset in pairs(offsets) do\n    if state.towers[id] == nil then\n      local position = TensorCore.getPosInDirection(\n        bossPos,\n        TensorCore.convertHeading(bossHeading + offset),\n        8)\n      if type(position) == \"table\"\n          and tonumber(position.x)\n          and tonumber(position.y)\n          and tonumber(position.z) then\n        state.towers[id] = {\n          x = tonumber(position.x),\n          y = tonumber(position.y),\n          z = tonumber(position.z),\n        }\n      end\n    end\n  end\nend\n\nlocal towerOrder = cache.towerOrder\nfor _, id in ipairs(towerOrder) do\n  if type(state.towers[id]) ~= \"table\" then\n    return\n  end\nend\n\nif not state.drawer then\n  local fill = GUI:ColorConvertFloat4ToU32(0.05, 0.9, 0.2, 0.26)\n  local outline = GUI:ColorConvertFloat4ToU32(0.2, 1, 0.35, 0.95)\n  state.drawer = TensorCore.getCachedFlatDrawer(\n    nil, nil, fill, outline, 2, 0)\nend\nfor _, id in ipairs(towerOrder) do\n  local tower = state.towers[id]\n  state.drawer:addCircle(tower.x, tower.y, tower.z, 4, false)\nend\n\nif not boss or type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\nlocal selfRole = roleByID[playerID]\nif selfRole == nil then\n  return\nend\n\nlocal buff = TensorCore.getBuff(boss, 2056)\nlocal stacks = tonumber(buff and buff.stacks)\nif stacks == 298 or stacks == 299 then\n  state.sword = stacks\nend\nif state.sword == nil then\n  return\nend\n\nlocal towerID\nif round == 1 then\n  if selfRole == \"H1\" or selfRole == \"D1\" or selfRole == \"D3\" then\n    towerID = 29453\n  elseif selfRole == \"H2\" or selfRole == \"D2\" or selfRole == \"D4\" then\n    towerID = 29452\n  else\n    towerID = 29454\n  end\nelse\n  if selfRole == \"MT\" then\n    towerID = 29452\n  elseif selfRole == \"ST\" then\n    towerID = 29454\n  else\n    towerID = 29453\n  end\nend\n\nlocal tower = state.towers[towerID]\nlocal centerX = tonumber(bossPos and bossPos.x)\nlocal centerZ = tonumber(bossPos and bossPos.z)\nif not tower or not centerX or not centerZ then\n  return\nend\n\nlocal dx = tower.x - centerX\nlocal dz = tower.z - centerZ\nlocal length = math.sqrt(dx * dx + dz * dz)\nif length < 0.001 then\n  return\nend\n\n-- Tower centers sit on radius 8, exactly at the steel/donut boundary.\n-- Before the first hit, steel moves 1.5 out and donut 1.5 in.\n-- After the sword resolves, all assignments settle 1.5 inward for healing\n-- while remaining comfortably inside the radius-4 tower.\nlocal shift = -1.5\nif not state.firstResolved and state.sword == 298 then\n  shift = 1.5\nend\nlocal targetX = tower.x + dx / length * shift\nlocal targetZ = tower.z + dz / length * shift\nguide.FrameDirect(targetX, targetZ, 0.5)\n",
 							endIfUsed = true,
 							name = "绿色塔圈与 MuAi 动态指路",
 							uuid = "0953ece3-73e9-b6c8-89a0-dd12ee609d3c",
@@ -20839,9 +23294,14 @@ local tbl =
 					{
 						data = 
 						{
-							aType = "ACR",
+							actionID = 7405,
 							conditions = 
 							{
+								
+								{
+									"91560a70-e9c5-7d3b-93ed-f2d32a4199b7",
+									true,
+								},
 								
 								{
 									"e8d2247c-d54b-089e-bee8-be9f140b4f03",
@@ -20865,9 +23325,90 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorMagnum3_Hotbar_Tactician",
-							name = "策动",
+							ignoreWeaveRules = true,
+							name = "行吟",
 							uuid = "a188b349-a61f-a3c4-88db-d3378a40a364",
 							variableTogglesType = 2,
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16889,
+							conditions = 
+							{
+								
+								{
+									"16419606-6441-29cb-8efa-29c3739ef5a2",
+									true,
+								},
+								
+								{
+									"e8d2247c-d54b-089e-bee8-be9f140b4f03",
+									true,
+								},
+								
+								{
+									"05aa5aa2-2c47-a79f-8074-06860891e79a",
+									true,
+								},
+								
+								{
+									"ffb70e5b-1606-cd67-a424-19cdd9399650",
+									true,
+								},
+								
+								{
+									"c3dd264b-a279-2656-8420-b9da44fd7911",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "策动",
+							uuid = "5f0d58cb-f07e-684e-94b8-92621b63acfe",
+							version = 2.1,
+						},
+					},
+					
+					{
+						data = 
+						{
+							actionID = 16012,
+							conditions = 
+							{
+								
+								{
+									"963dae66-e32f-233b-b465-9baff904daac",
+									true,
+								},
+								
+								{
+									"e8d2247c-d54b-089e-bee8-be9f140b4f03",
+									true,
+								},
+								
+								{
+									"05aa5aa2-2c47-a79f-8074-06860891e79a",
+									true,
+								},
+								
+								{
+									"ffb70e5b-1606-cd67-a424-19cdd9399650",
+									true,
+								},
+								
+								{
+									"c3dd264b-a279-2656-8420-b9da44fd7911",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							name = "防守之桑巴",
+							uuid = "9cdfe720-abcd-bf3d-a207-88e847a1e9c7",
 							version = 2.1,
 						},
 					},
@@ -20922,6 +23463,45 @@ local tbl =
 							buffID = 1826,
 							category = "Self",
 							uuid = "c3dd264b-a279-2656-8420-b9da44fd7911",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "BARD",
+							name = "行吟职业",
+							uuid = "91560a70-e9c5-7d3b-93ed-f2d32a4199b7",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "MACHINIST",
+							name = "策动职业",
+							uuid = "16419606-6441-29cb-8efa-29c3739ef5a2",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							dequeueIfLuaFalse = true,
+							jobValue = "DANCER",
+							name = "防守之桑巴职业",
+							uuid = "963dae66-e32f-233b-b465-9baff904daac",
 							version = 3,
 						},
 					},
@@ -20983,7 +23563,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D3\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D3\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：D3接刀 / 双T分开",
 							uuid = "cb21ecf9-7f64-51e4-b5b8-cd308c04bd28",
@@ -21048,7 +23628,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\nlocal roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nlocal roleByID = {}\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D4\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal function positionAt(heading, distance)\n  local px, _, pz = TensorCore.getPosInDirection(\n    bossPos, heading, distance, true)\n  return tonumber(px), tonumber(pz)\nend\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
+							actionLua = "local guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or playerID == nil\n    or type(player.pos) ~= \"table\" then\n  return\nend\n\ndata.string_dsr = type(data.string_dsr) == \"table\"\n    and data.string_dsr or {}\nlocal cache = data.string_dsr.p7TrinityFrameCache\nif cache == nil then\n  cache = {\n    roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    nonTankRoles = { \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" },\n    roleByID = {},\n  }\n  function cache.positionAt(pos, heading, distance)\n    local px, _, pz = TensorCore.getPosInDirection(\n      pos, heading, distance, true)\n    return tonumber(px), tonumber(pz)\n  end\n  data.string_dsr.p7TrinityFrameCache = cache\nend\n\nlocal roles = cache.roles\nlocal roleByID = cache.roleByID\nfor id in pairs(roleByID) do\n  roleByID[id] = nil\nend\nfor _, role in ipairs(roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or roleByID[id] ~= nil then\n    return\n  end\n  roleByID[id] = role\nend\n\nlocal selfRole = roleByID[playerID]\n\n-- Helpers use the same ContentID. Select the entity actually at the arena centre,\n-- so replay-specific runtime entity IDs and temporary outer helpers are ignored.\nlocal bosses = TensorCore.getEntityGroupList(\n  \"ContentID\", { contentid = 11319, noAliveCheck = true })\nif type(bosses) ~= \"table\" then\n  return\nend\n\nlocal boss\nlocal bestDistance2 = math.huge\nfor _, entity in pairs(bosses) do\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and z ~= nil then\n    local dx = x - 100.0\n    local dz = z - 100.0\n    local distance2 = dx * dx + dz * dz\n    if distance2 < bestDistance2 then\n      boss = entity\n      bestDistance2 = distance2\n    end\n  end\nend\n\nlocal bossPos = boss and boss.pos\nlocal bossX = tonumber(bossPos and bossPos.x)\nlocal bossZ = tonumber(bossPos and bossPos.z)\nif bossX == nil or bossZ == nil or bestDistance2 > 9.0 then\n  return\nend\n\n-- Trinity's physical hit snapshots the closest non-tank. Re-resolve it every\n-- frame so the circle follows target swaps inside the 3.5-second guide window.\nlocal closestPos\nlocal closestDistance2 = math.huge\nlocal nonTankRoles = cache.nonTankRoles\nfor _, role in ipairs(nonTankRoles) do\n  local id = tonumber(party[role] and party[role].id)\n  local entity = id and TensorCore.mGetEntity(id) or nil\n  local pos = entity and entity.pos\n  local x = tonumber(pos and pos.x)\n  local y = tonumber(pos and pos.y)\n  local z = tonumber(pos and pos.z)\n  if x ~= nil and y ~= nil and z ~= nil then\n    local dx = x - bossX\n    local dz = z - bossZ\n    local distance2 = dx * dx + dz * dz\n    if distance2 < closestDistance2 then\n      closestPos = pos\n      closestDistance2 = distance2\n    end\n  end\nend\n\nif closestPos ~= nil\n    and type(Argus) == \"table\"\n    and type(Argus.addCircleFilled) == \"function\" then\n  local _, _, colorEnd, colorOutline, outlineThickness =\n    TensorCore.getMoogleColors()\n  if colorEnd ~= nil and colorOutline ~= nil and outlineThickness ~= nil then\n    Argus.addCircleFilled(\n      closestPos.x, closestPos.y, closestPos.z, 3.0, 50,\n      colorEnd, colorOutline, outlineThickness)\n  end\nend\n\nif selfRole == nil\n    or type(guide.FrameDirect) ~= \"function\" then\n  return\nend\n\nlocal assignedGuide = \"D4\"\nlocal firstTank = \"ST\"\nlocal isTank = selfRole == \"MT\" or selfRole == \"ST\"\nif not isTank and selfRole ~= assignedGuide then\n  return\nend\n\nlocal bossHeading = tonumber(bossPos.h)\nif bossHeading == nil then\n  return\nend\n\nlocal x, z\nlocal positionAt = cache.positionAt\n\nif isTank then\n  if selfRole == firstTank then\n    x, z = positionAt(bossPos, bossHeading, 8.5)\n  else\n    local angle = math.rad(50)\n    local leftX, leftZ = positionAt(bossPos, bossHeading - angle, 9.5)\n    local rightX, rightZ = positionAt(bossPos, bossHeading + angle, 9.5)\n    if leftX == nil or rightX == nil then\n      return\n    end\n    local playerX = tonumber(player.pos.x)\n    local playerZ = tonumber(player.pos.z)\n    if playerX == nil or playerZ == nil then\n      return\n    end\n    local leftDistance2 = (leftX - playerX) ^ 2 + (leftZ - playerZ) ^ 2\n    local rightDistance2 = (rightX - playerX) ^ 2 + (rightZ - playerZ) ^ 2\n    if leftDistance2 <= rightDistance2 then\n      x, z = leftX, leftZ\n    else\n      x, z = rightX, rightZ\n    end\n  end\nelse\n  -- Only the role taking this hit is routed, directly to the boss centre.\n  x, z = bossX, bossZ\nend\n\nif x == nil or z == nil then\n  return\nend\nguide.FrameDirect(x, z, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "MuAi动态指路：D4接刀 / 双T分开",
 							uuid = "0278f0cd-4007-e3f3-81ea-dfa5e5a42606",
