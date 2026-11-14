@@ -227,7 +227,15 @@ Config.init = function(M)
             UpdateBranch = 'main',
             -- 开启日志系统
             LogEnable = true,
+            -- 显示MINI运行状态切换
             ShowBotState = false,
+            -- 画图类型切换
+            DrawerType = 256,
+            DrawerMix = false,
+            --[[
+            此处开始写入一些副本设置
+            PS.道理说不该写这，但是方便使用
+            ]]
             --------- M11S -----------
             M11SExDraw = false,
             M11SOrbitalOmenAllMelee = false,

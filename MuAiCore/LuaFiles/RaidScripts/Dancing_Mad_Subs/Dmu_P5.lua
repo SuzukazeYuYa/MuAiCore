@@ -1199,7 +1199,7 @@ Dmu_P5.Update = function()
                     if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
                         local drawer = MG.CreateDrawer(0, 0, 0, 1, 2, -1)
                         drawer:setGradient(0, 0.15, 0)
-                        drawer:setRenderFlags(256)
+                        drawer:setRenderFlags(MG.Config.Main.DrawerType)
                         drawer:addCircle(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10)
                     else
                         MG.CreateDrawer(1, 0, 0, 0.3, 2):addCircle(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10)
@@ -1208,7 +1208,7 @@ Dmu_P5.Update = function()
                     if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
                         local drawer = MG.CreateDrawer(0, 0, 0, 1, 2, -1)
                         drawer:setGradient(0, 0.15, 0)
-                        drawer:setRenderFlags(256)
+                        drawer:setRenderFlags(MG.Config.Main.DrawerType)
                         drawer:addDonut(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10, 25)
                     else
                         MG.CreateDrawer(1, 0, 0, 0.4, 2):addDonut(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10, 25)
@@ -1240,7 +1240,7 @@ Dmu_P5.Update = function()
                 else
                     drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
                 end
-                drawer:setRenderFlags(256)
+                drawer:setRenderFlags(MG.Config.Main.DrawerType)
                 drawer:addDonut(aoeInfo.x, MG.drawerY, aoeInfo.z, inner, out)
             end
         end

@@ -1,12 +1,34 @@
 local MainUI = {}
+--[[
+===========================
+    主UI VIEW
+===========================
+]]
+
 local WIN_WIDE = 355
+local RENDER_FLAG_NAMES = {
+    [1] = "地形扭曲",
+    [2] = "覆盖渲染",
+    [16] = "遮挡基准",
+    [256] = "UI渲染"
+}
+
+local RENDER_FLAG_DESC = {
+    [1] = "贴合地面, 地面镂空地方画图也会镂空",
+    [2] = "不贴合地面, 显示在最上面, 覆盖所有游戏内容, 类似关闭A+后效果",
+    [16] = "不贴合地面, 无视地形镂空, 部分情况下无视镂空会失效",
+    [256] = "不贴合地面, 无视地面镂空, 但类似UI的实现方式, 可能导致画图错位"
+}
+
+local RENDER_FLAG_SEL = { 1, 2, 16, 256 }
+
 local OCCULT_CRESCENT_SOUTH_ENCOUNTERS = {
     { '新月狂战士', 'CrescentBerserker',
-        'SetCrescentBerserkerMoogleDonutsEnabled', {
-            { 'DrawPreparationRing', '绿色准备站位窄环' },
-            { 'DrawGuideArrow', '指路箭头' },
-            { 'DrawSafeZone', '爆炸后安全区' },
-        } },
+      'SetCrescentBerserkerMoogleDonutsEnabled', {
+          { 'DrawPreparationRing', '绿色准备站位窄环' },
+          { 'DrawGuideArrow', '指路箭头' },
+          { 'DrawSafeZone', '爆炸后安全区' },
+      } },
     { '新月骑士群', 'OccultKnight', 'SetOccultKnightEnabled', {
         { 'DrawSpinningPrediction', '旋转十字预测' },
         { 'DrawSpinningGuide', '旋转安全指路' },
@@ -28,10 +50,10 @@ local OCCULT_CRESCENT_SOUTH_ENCOUNTERS = {
         { 'DrawCostOfLivingGuide', '30米击退指路' },
     } },
     { '夺心魔', 'MysteriousMindflayer',
-        'SetMysteriousMindflayerEnabled', {
-            { 'DrawMatchingImpDanger', '同元素小恶魔未来危险圈' },
-            { 'DrawSeductionGuide', '魅惑强制行进起落点指路' },
-        } },
+      'SetMysteriousMindflayerEnabled', {
+          { 'DrawMatchingImpDanger', '同元素小恶魔未来危险圈' },
+          { 'DrawSeductionGuide', '魅惑强制行进起落点指路' },
+      } },
     { '黑色天星', 'BlackChocobo', 'SetBlackChocoboEnabled', {
         { 'DrawSlaughterPredictions', '陆行鸟杀戮定时地火圈' },
         { 'DrawSlaughterDirection', '连爆推进方向线' },
@@ -42,7 +64,7 @@ local OCCULT_CRESCENT_SOUTH_ENCOUNTERS = {
     } },
     { '金色石面', 'GildedHeadstone', 'SetGildedHeadstoneEnabled', {
         { 'AutoFace', '侵蚀魔眼自动面对/背对',
-            'SetGildedHeadstoneAutoFaceEnabled' },
+          'SetGildedHeadstoneAutoFaceEnabled' },
         { 'DrawFacingArrow', '侵蚀魔眼面向箭头' },
     } },
     { '跃立狮', 'LionRampant', 'SetLionRampantEnabled', {
@@ -55,125 +77,123 @@ local OCCULT_CRESCENT_SOUTH_ENCOUNTERS = {
     } },
     { '岛屿监视者', 'IslandWatcher', 'SetIslandWatcherEnabled', {
         { 'AutoFacePetrifyingGaze', '石化视线自动背对',
-            'SetIslandWatcherAutoFaceEnabled' },
+          'SetIslandWatcherAutoFaceEnabled' },
     } },
     { '高等魔鸟', 'HigherBird', 'SetHigherBirdEnabled', {
         { 'AutoFacePetrifyingGaze', '石化射线自动背对',
-            'SetHigherBirdAutoFaceEnabled' },
+          'SetHigherBirdAutoFaceEnabled' },
     } },
     { '纳木', 'Nammu', 'SetNammuEnabled' },
     { '南岛通用范围', 'OccultReferenceDrawings',
-        'SetOccultReferenceDrawingsEnabled' },
+      'SetOccultReferenceDrawingsEnabled' },
 }
-
 local OCCULT_CRESCENT_NORTH_ENCOUNTERS = {
     { '两歧塔·双头怪鸟', 'TwoHeadedAevis',
-        'SetTwoHeadedAevisEnabled' },
+      'SetTwoHeadedAevisEnabled' },
     { '两歧塔·剑舞者', 'SwordDancer',
-            'SetSwordDancerEnabled', {
-        { 'DynamicGuide', '跃进步法与剑技爆发动态指路',
+      'SetSwordDancerEnabled', {
+          { 'DynamicGuide', '跃进步法与剑技爆发动态指路',
             'SetSwordDancerDynamicGuideEnabled' },
-    } },
+      } },
     { '两歧塔·惧死者', 'Necrophobia',
-        'SetNecrophobiaEnabled' },
+      'SetNecrophobiaEnabled' },
     { '两歧塔·目录', 'Index', 'SetIndexEnabled', {
         { 'DynamicGuide', '元素危险区动态指路',
-            'SetIndexDynamicGuideEnabled' },
+          'SetIndexDynamicGuideEnabled' },
     } },
     { '赤龙', 'ClaretDragon', 'SetClaretDragonEnabled' },
     { '神木巨人', 'SacredTreeGiant',
-        'SetSacredTreeGiantEnabled' },
+      'SetSacredTreeGiantEnabled' },
     { '古术魔典', 'OccultGrimoire',
-        'SetOccultGrimoireEnabled' },
+      'SetOccultGrimoireEnabled' },
     { '阿尔戈尔', 'Argol', 'SetArgolEnabled' },
     { '卡洛菲斯提莉二重身', 'CalofisteriDoppelganger',
-        'SetCalofisteriDoppelgangerEnabled' },
+      'SetCalofisteriDoppelgangerEnabled' },
     { '雪石膏之剑', 'AlabasterBlade',
-        'SetAlabasterBladeEnabled' },
+      'SetAlabasterBladeEnabled' },
     { '魔亡灵法师', 'MagiNecromancer',
-            'SetMagiNecromancerEnabled', {
-        { 'DrawRevealPrediction', '亡灵显形与魔法阵提前预测',
+      'SetMagiNecromancerEnabled', {
+          { 'DrawRevealPrediction', '亡灵显形与魔法阵提前预测',
             'SetMagiNecromancerPredictionEnabled' },
-    } },
+      } },
     { '统领奇美拉', 'LeaderChimera',
-            'SetLeaderChimeraEnabled', {
-        { 'DrawBreathSequencePrediction', '三连吐息与咆哮提前预测',
+      'SetLeaderChimeraEnabled', {
+          { 'DrawBreathSequencePrediction', '三连吐息与咆哮提前预测',
             'SetLeaderChimeraBreathPredictionEnabled' },
-    } },
+      } },
     { '魔许德拉', 'MagiHydra', 'SetMagiHydraEnabled', {
         { 'AutoFaceStunningFlash', '眩晕闪光自动背对',
-            'SetMagiHydraAutoFaceEnabled' },
+          'SetMagiHydraAutoFaceEnabled' },
         { 'DrawMultipleBreathPrediction', '多重吐息下一次判定提前预测',
-            'SetMagiHydraBreathPredictionEnabled' },
+          'SetMagiHydraBreathPredictionEnabled' },
     } },
     { '伊阿姆柏', 'Iambe', 'SetIambeEnabled', {
         { 'DrawSeedExplosionPrediction', '种子爆炸范围提前预测',
-            'SetIambePredictionEnabled' },
+          'SetIambePredictionEnabled' },
     } },
     { '呼风狮鹫', 'GaleGriffin', 'SetGaleGriffinEnabled', {
         { 'DrawWindOrbPrediction', '风球钢铁提前预测',
-            'SetGaleGriffinWindPredictionEnabled' },
+          'SetGaleGriffinWindPredictionEnabled' },
         { 'DynamicGuide', '三角跳扩散最短路径指路',
-            'SetGaleGriffinDynamicGuideEnabled' },
+          'SetGaleGriffinDynamicGuideEnabled' },
     } },
     { '诱拐魔', 'KidnapDemon', 'SetKidnapDemonEnabled', {
         { 'DrawTearingWindPrediction', '撕裂之风冰花提前预测',
-            'SetKidnapDemonPredictionEnabled' },
+          'SetKidnapDemonPredictionEnabled' },
     } },
     { '变形法师', 'ShapeshiftingMage',
-            'SetShapeshiftingMageEnabled', {
-        { 'CorrectSupercellDonut', '超级细胞月环内径修正',
+      'SetShapeshiftingMageEnabled', {
+          { 'CorrectSupercellDonut', '超级细胞月环内径修正',
             'SetShapeshiftingMageDonutCorrectionEnabled' },
-        { 'DrawHellishBreathPrediction', '炼狱吐息三连提前预测',
+          { 'DrawHellishBreathPrediction', '炼狱吐息三连提前预测',
             'SetShapeshiftingMageBreathPredictionEnabled' },
-        { 'DrawHellfireRushPrediction', '烈火地狱冲四连矩形提前预测',
+          { 'DrawHellfireRushPrediction', '烈火地狱冲四连矩形提前预测',
             'SetShapeshiftingMageRushPredictionEnabled' },
-    } },
+      } },
     { '凯尔派总领', 'KelpieCaptain',
-            'SetKelpieCaptainEnabled', {
-        { 'DrawWaveburstPrediction', '浪暴扩散地火提前预测',
+      'SetKelpieCaptainEnabled', {
+          { 'DrawWaveburstPrediction', '浪暴扩散地火提前预测',
             'SetKelpieCaptainPredictionEnabled' },
-    } },
+      } },
     { '忍耐基路伯', 'PatientKuribu',
-        'SetPatientKuribuEnabled' },
+      'SetPatientKuribuEnabled' },
     { '负隅宝石兽', 'GemstoneBeast',
-            'SetGemstoneBeastEnabled', {
-        { 'DrawSafeZone', '绿色正方形/L形安全区',
+      'SetGemstoneBeastEnabled', {
+          { 'DrawSafeZone', '绿色正方形/L形安全区',
             'SetGemstoneBeastSafeZoneEnabled' },
-        { 'DynamicGuide', '最近安全内点指路',
+          { 'DynamicGuide', '最近安全内点指路',
             'SetGemstoneBeastDynamicGuideEnabled' },
-    } },
+      } },
     { '惨白魔人', 'Pallmagia', 'SetPallmagiaEnabled', {
         { 'DrawInstructionPrediction', '学习指令范围预测',
-            'SetPallmagiaPredictionEnabled' },
+          'SetPallmagiaPredictionEnabled' },
         { 'DynamicGuide', '动态安全指路' },
         { 'RouletteGuide', '死亡轮盘动态指路',
-            'SetPallmagiaRouletteGuideEnabled' },
+          'SetPallmagiaRouletteGuideEnabled' },
     } },
     { '小小法师', 'LittleMage', 'SetLittleMageEnabled', {
         { 'DynamicGuide', '传球/双球合并预测与动态指路',
-            'SetLittleMageDynamicGuideEnabled' },
+          'SetLittleMageDynamicGuideEnabled' },
     } },
     { '邪瞳', 'EvilSeer', 'SetEvilSeerEnabled', {
         { 'AutoFacePetrifyingGaze', '诅咒之瞳/诅咒目光自动背对',
-            'SetEvilSeerAutoFaceEnabled' },
+          'SetEvilSeerAutoFaceEnabled' },
     } },
     { '新月阿剌克涅', 'Arachne', 'SetArachneEnabled', {
         { 'DrawChargePrediction', '蜘蛛突进矩形预测',
-            'SetArachneChargePredictionEnabled' },
+          'SetArachneChargePredictionEnabled' },
         { 'DrawConformityPrediction', '追随扇形提前预测',
-            'SetArachneConformityPredictionEnabled' },
+          'SetArachneConformityPredictionEnabled' },
         { 'DynamicGuide', '动态安全指路',
-            'SetArachneDynamicGuideEnabled' },
+          'SetArachneDynamicGuideEnabled' },
     } },
     { '好战弥诺陶洛斯', 'WarlikeMinotaur',
-            'SetWarlikeMinotaurEnabled', {
-        { 'DrawEightfoldSweepPrediction', '八重横扫下一次真实判定',
+      'SetWarlikeMinotaurEnabled', {
+          { 'DrawEightfoldSweepPrediction', '八重横扫下一次真实判定',
             'SetWarlikeMinotaurPredictionEnabled' },
-    } },
+      } },
 }
 local OCCULT_CRESCENT_REGIONS = { '南岛', '北岛' }
-
 local buildEncounterNames = function(encounters)
     local names = {}
     for index, encounter in ipairs(encounters) do
@@ -181,17 +201,13 @@ local buildEncounterNames = function(encounters)
     end
     return names
 end
-local OCCULT_CRESCENT_SOUTH_ENCOUNTER_NAMES =
-        buildEncounterNames(OCCULT_CRESCENT_SOUTH_ENCOUNTERS)
-local OCCULT_CRESCENT_NORTH_ENCOUNTER_NAMES =
-        buildEncounterNames(OCCULT_CRESCENT_NORTH_ENCOUNTERS)
-
+local OCCULT_CRESCENT_SOUTH_ENCOUNTER_NAMES = buildEncounterNames(OCCULT_CRESCENT_SOUTH_ENCOUNTERS)
+local OCCULT_CRESCENT_NORTH_ENCOUNTER_NAMES = buildEncounterNames(OCCULT_CRESCENT_NORTH_ENCOUNTERS)
 local drawOccultCheckbox = function(label, id, value)
     GUI:Dummy(6, 5)
     GUI:SameLine()
     return GUI:Checkbox(label .. '##' .. id, value)
 end
-
 local drawOccultCrescentEncounterSettings = function(
         M,
         encounters,
@@ -212,7 +228,7 @@ local drawOccultCrescentEncounterSettings = function(
     GUI:PushItemWidth(205)
     local selected = M.MainUI[selectedField]
             or (selectedField == 'occultCrescentSouthEncounter'
-                    and M.MainUI.occultCrescentEncounter)
+            and M.MainUI.occultCrescentEncounter)
             or 1
     if selected < 1 or selected > #encounters then
         selected = 1
@@ -289,12 +305,6 @@ local drawOccultCrescentSettings = function(M)
                 '##OccultCrescentNorthEncounter')
     end
 end
---[[
-===========================
-    主UI VIEW
-===========================
-]]
-
 --- 判断当前成员是否被选中
 local IsSelected = function(member)
     if member.label == MuAiGuide.MainUI.selected then
@@ -302,6 +312,8 @@ local IsSelected = function(member)
     end
     return false
 end
+
+local drawTable, descMix
 
 ---@param M MuAiGuide
 local drawJobTab = function(M)
@@ -744,6 +756,77 @@ local drawBaseSettingTab = function(M)
     if GUI:IsItemHovered() then
         GUI:SetTooltip('BOT状态切换时, 在默语终显示当前状态')
     end
+    if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
+        GUI:Separator()
+        GUI:Dummy(0, 3)
+        GUI:NextColumn()
+        GUI:Dummy(3, 0)
+        GUI:SameLine()
+        GUI:Text('A+画图设置:')
+        GUI:NextColumn()
+        GUI:Dummy()
+        GUI:NextColumn()
+        GUI:Dummy(15, 0)
+        GUI:SameLine(0, 0)
+        local mixChanged
+        M.Config.Main.DrawerMix, mixChanged = GUI:Checkbox('混合模式##DrawerMix', M.Config.Main.DrawerMix)
+        if GUI:IsItemHovered() then
+            GUI:SetTooltip('使用多个画图模式进行混合, 由于部分效果优先级过高可能混合无效')
+        end
+        GUI:NextColumn()
+        GUI:Dummy()
+        GUI:NextColumn()
+        if M.Config.Main.DrawerMix then
+            for i, value in ipairs(RENDER_FLAG_SEL) do
+                local name = RENDER_FLAG_NAMES[value]
+                local key = value
+                if name ~= nil then
+                    if i % 2 ~= 0 then
+                        GUI:Dummy(15, 0)
+                        GUI:SameLine(0, 0)
+                    end
+                    local checked, changed = GUI:Checkbox(name .. '##' .. key, M.Config.Main.DrawerType & value ~= 0)
+                    GUI:NextColumn()
+                    local desc = RENDER_FLAG_DESC[value]
+                    if desc and GUI:IsItemHovered() then
+                        GUI:SetTooltip(desc)
+                    end
+                    if changed then
+                        if checked then
+                            M.Config.Main.DrawerType = M.Config.Main.DrawerType | value
+                        else
+                            if M.Config.Main.DrawerType % (value * 2) >= value then
+                                M.Config.Main.DrawerType = M.Config.Main.DrawerType - value
+                            end
+                        end
+                    end
+                end
+            end
+        else
+            if mixChanged then
+                M.Config.Main.DrawerType = RENDER_FLAG_SEL[4]
+            end
+            local selIdx = 1
+            for i = 1, #RENDER_FLAG_SEL do
+                if M.Config.Main.DrawerType == RENDER_FLAG_SEL[i] then
+                    selIdx = i
+                    break
+                end
+            end
+            GUI:Dummy(0, 0)
+            GUI:SameLine(20, 0)
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:Text(' 画图类型:  ')
+            GUI:NextColumn()
+            local sel, mixChanged2 = GUI:Combo('##DrawerType', selIdx, drawTable, #drawTable)
+            if mixChanged2 then
+                M.Config.Main.DrawerType = RENDER_FLAG_SEL[sel]
+            end
+            if descMix and GUI:IsItemHovered() then
+                GUI:SetTooltip(descMix)
+            end
+        end
+    end
     GUI:Columns(1)
     GUI:Separator()
     GUI:Dummy(0, 0)
@@ -834,14 +917,14 @@ local drawRaidSettingTab = function(M)
     GUI:TextColored(1, 1, 0, 1, '  4.绝伊甸: MuAi\\MuaiGuideFru')
     GUI:TextColored(1, 1, 0, 1, '  5.M11S|M12S, [全局]: MuAi\\MuAiGeneral')
     GUI:TextColored(0, 1, 1, 1, '  上述外均无需继承, 到下面的设置中开启即可!')
-    
+
     if GUI:CollapsingHeader('绝本') then
         GUI:BulletText('幻想龙诗绝境战 by String,')
         GUI:Text('   无设置, 仅支持国服野队一套打法')
         GUI:Dummy(0, 7)
         GUI:BulletText('欧米茄绝境检定战')
         GUI:Text('   无设置, 仅支持国服野队一套打法')
-        GUI:Dummy(0, 7) 
+        GUI:Dummy(0, 7)
         GUI:BulletText('光暗未来绝境战')
         GUI:Dummy(15, 0)
         GUI:SameLine()
@@ -1009,7 +1092,7 @@ local drawRaidSettingTab = function(M)
             end
         end
     end
-   
+
     if GUI:CollapsingHeader('新月岛 By String') then
         drawOccultCrescentSettings(M)
     end
@@ -1266,7 +1349,9 @@ local drawDeveloperTab = function(M)
             if M.CurRaidScript ~= nil then
                 M.Log('Lifecycle', '重新初始化插件')
             end
-            if type(M.CloseWebRequests) == 'function' then M.CloseWebRequests() end
+            if type(M.CloseWebRequests) == 'function' then
+                M.CloseWebRequests()
+            end
             M.LogSystemLeave()
             MuAiGuide = candidate
         else
@@ -1490,6 +1575,15 @@ end
 
 MainUI.draw = function()
     local M = MuAiGuide
+    if drawTable == nil then
+        drawTable = {}
+        descMix = ''
+        for i = 1, #RENDER_FLAG_SEL do
+            local index = RENDER_FLAG_SEL[i]
+            table.insert(drawTable, RENDER_FLAG_NAMES[index])
+            descMix = descMix .. RENDER_FLAG_NAMES[index] ..': ' .. RENDER_FLAG_DESC[index] ..'\n\n'
+        end
+    end
     if M.MainUI.tabs == nil then
         M.MainUI.tabs = GUI_CreateTabs('职能,基本,副本,辅助,开发,赞助')
     end

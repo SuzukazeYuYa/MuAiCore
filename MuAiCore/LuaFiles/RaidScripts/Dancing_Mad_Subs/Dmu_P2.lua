@@ -1097,7 +1097,7 @@ Dmu_P2.Update = function()
                 inner = out - 0.05
             end
             local drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
-            drawer:setRenderFlags(256)
+            drawer:setRenderFlags(MG.Config.Main.DrawerType)
             drawer:addDonut(left.x, MG.drawerY, left.z, inner, out)
             drawer:addDonut(right.x, MG.drawerY, right.z, inner, out)
             for job, member in pairs(MG.Party) do
@@ -1139,7 +1139,7 @@ Dmu_P2.Update = function()
                                 if leadJob ~= nil then
                                     local leader = TensorCore.mGetEntity(MG.Party[leadJob].id)
                                     local ldDraw = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
-                                    ldDraw:setRenderFlags(256)
+                                    ldDraw:setRenderFlags(MG.Config.Main.DrawerType)
                                     ldDraw:addCircle(leader.pos.x, MG.drawerY, leader.pos.z, 0.5)
                                 end
                             end

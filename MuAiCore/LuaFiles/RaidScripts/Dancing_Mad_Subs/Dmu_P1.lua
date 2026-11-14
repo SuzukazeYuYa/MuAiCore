@@ -928,7 +928,7 @@ Dmu_P1.Update = function()
             inner = out - 0.08
         end
         local drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
-        drawer:setRenderFlags(256)
+        drawer:setRenderFlags(MG.Config.Main.DrawerType)
         for _, ent in pairs(Data().Line3.Shits) do
             drawer:addDonut(ent.pos.x, MG.drawerY, ent.pos.z, inner, out)
         end
