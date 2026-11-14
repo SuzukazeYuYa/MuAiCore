@@ -652,6 +652,7 @@ Drawers.init = function(M)
     ---@return ShapeDrawer
     M.CreateDrawer = function(r, g, b, a, lineSize, gradient)
         local color = GUI:ColorConvertFloat4ToU32(r, g, b, a or 0.3)
+        -- 缺省值，如果未指定则设置为3
         gradient = gradient or 3
         local lineColor = GUI:ColorConvertFloat4ToU32(1, 1, 1, 1)
         if lineSize == nil then
@@ -662,12 +663,21 @@ Drawers.init = function(M)
         end
         local drawer = Argus2.ShapeDrawer:new(color, color, color, lineColor, lineSize)
         if gradient > 0 then
-            drawer:setRenderFlags(256)
+            drawer:setRenderFlags(M.Config.Main.DrawerType)
             drawer:setGradient(gradient, 0.15, 2)
         end
         return drawer
     end
-
+    
+    -- 更改全局参数
+    M.ChangeDrawer = function(changeType, changeValue)
+        
+    end
+    
+    M.loadMix = function()
+        
+    end
+    
     --- 绘制一个圆（已废弃仿报错用）
     M.DrawCircleUI = function()
     end

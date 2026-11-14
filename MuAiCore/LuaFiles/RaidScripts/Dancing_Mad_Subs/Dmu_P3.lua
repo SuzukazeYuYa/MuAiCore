@@ -936,7 +936,7 @@ local drawTowerHeading = function()
             inner = out - 0.05
         end
         local drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
-        drawer:setRenderFlags(256)
+        drawer:setRenderFlags(MG.Config.Main.DrawerType)
         drawer:addDonut(leftPos.x, MG.drawerY, leftPos.z, inner, out)
         drawer:addDonut(rightPos.x, MG.drawerY, rightPos.z, inner, out)
     end
@@ -1262,7 +1262,7 @@ Dmu_P3.OnAOECreate = function(aoeInfo)
             local out = aoeInfo.aoeLength
             inner = out - 0.05
             local drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
-            drawer:setRenderFlags(256)
+            drawer:setRenderFlags(MG.Config.Main.DrawerType)
             drawer:addTimedDonut(1000 * aoeInfo.duration, aoeInfo.x, MG.drawerY, aoeInfo.z, inner, out, 0, true)
         end
     elseif aoeInfo.aoeID == 47856 then
