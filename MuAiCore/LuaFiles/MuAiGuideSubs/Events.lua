@@ -327,6 +327,7 @@ Events.init = function(M)
         if MG == nil then
             MG = MuAiGuide
         end
+        if MG.NativeCore then MG.NativeCore.update() end
         MG.CheckMenuMember()
         MG.CheckArgusRegister()
         checkHotKeyPress()

@@ -1,6 +1,8 @@
 ﻿.idea
 MuAiCore/Temp
 .vscode
+/Native/
+/private_native/
 TensorReactions/TimelineReactions/Jackpot/fru-pld.lua
 TensorReactions/TimelineReactions/MuAi/p12s_exdraw.lua
 TensorReactions/TimelineReactions/MuAi/self.lua

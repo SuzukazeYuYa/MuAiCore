@@ -145,11 +145,27 @@ Config.init = function(M)
             return true
         end
         if not visit(left, right) then return nil end
-        return { left = left, right = right, nodes = nodes, compare = table.deepcompare }
+        local plan = { tables = {}, flat = {} }
+        for _, node in ipairs(nodes) do
+            for _, side in ipairs({ node.left, node.right }) do
+                plan.tables[#plan.tables + 1] = side
+                plan.flat[#plan.flat + 1] = side
+                plan.flat[#plan.flat + 1] = node.count
+                for key, value in pairs(side) do
+                    plan.flat[#plan.flat + 1] = key
+                    plan.flat[#plan.flat + 1] = value
+                end
+            end
+        end
+        return { left = left, right = right, nodes = nodes, compare = table.deepcompare, nativePlan = plan }
     end
     local function isUnchanged(check, left, right)
         if check == nil or check.left ~= left or check.right ~= right
                 or check.compare ~= table.deepcompare then return false end
+        if M.NativeCore and type(M.NativeCore.configUnchanged) == 'function' then
+            local unchanged = M.NativeCore.configUnchanged(check.nativePlan)
+            if unchanged ~= nil then return unchanged end
+        end
         for i = 1, #check.nodes do
             local node = check.nodes[i]
             if getmetatable(node.left) ~= nil or getmetatable(node.right) ~= nil then return false end

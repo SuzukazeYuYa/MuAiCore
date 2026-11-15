@@ -335,6 +335,7 @@ local groundFirePointInHit = function(point, hit)
 end
 
 local updateGroundFirePointTriggers = function(state)
+    if MG.NativeCore and MG.NativeCore.groundfire(state) then return end
     -- 路线点只有在覆盖它的最后一枚地火结算后才前移，避免仅按固定时间提前换点。
     local nextOrder
     state.PointTriggers = {}

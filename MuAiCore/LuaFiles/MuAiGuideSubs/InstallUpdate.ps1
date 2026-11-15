@@ -169,6 +169,12 @@ function Get-RelativePath {
 function Copy-VerifiedFile {
     param([string]$Source, [string]$Destination)
 
+    # 相同内容不重复替换文件；正常更新只写入实际发生变化的发布资产。
+    $sourceHash = (Get-FileHash -LiteralPath $Source -Algorithm SHA256).Hash
+    if ((Test-Path -LiteralPath $Destination -PathType Leaf) -and
+        (Get-FileHash -LiteralPath $Destination -Algorithm SHA256).Hash -eq $sourceHash) {
+        return
+    }
     $destinationDirectory = Split-Path -Parent $Destination
     [System.IO.Directory]::CreateDirectory($destinationDirectory) | Out-Null
 
@@ -312,6 +318,12 @@ try {
             if ((Test-Path -LiteralPath $destination) -and -not (Test-Path -LiteralPath $destination -PathType Leaf)) {
                 throw "Update file path is occupied by a directory: $relativePath"
             }
+            $copySource = if ($patchedFiles.ContainsKey($relativePath)) { $patchedFiles[$relativePath] } else { $_.FullName }
+            if ((Test-Path -LiteralPath $destination -PathType Leaf) -and
+                (Get-FileHash -LiteralPath $copySource -Algorithm SHA256).Hash -eq
+                (Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash) {
+                return
+            }
             if (Test-Path -LiteralPath $destination -PathType Leaf) {
                 $backupFile = Join-Path $backupRoot $relativePath
                 $backupDirectory = Split-Path -Parent $backupFile
@@ -322,7 +334,6 @@ try {
                 $createdFiles.Add($destination)
             }
 
-            $copySource = if ($patchedFiles.ContainsKey($relativePath)) { $patchedFiles[$relativePath] } else { $_.FullName }
             Copy-VerifiedFile -Source $copySource -Destination $destination
         }
     }

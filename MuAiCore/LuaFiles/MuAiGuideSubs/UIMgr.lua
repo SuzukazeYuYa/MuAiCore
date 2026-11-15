@@ -58,9 +58,11 @@ UIMgr.init = function(M)
         if M.Develop.UIRefresh then
             M.LoadUI(true)
         end
+        local allClosed = true
         for _, uiName in pairs(M.UINames) do
             local uiState = M[uiName]
             local uiModule = M.UIMap[uiName]
+            allClosed = allClosed and uiState ~= nil and uiState.open == false
             if uiState ~= nil and uiState.open
                     and uiModule ~= nil and type(uiModule.draw) == 'function'
             then
@@ -70,7 +72,7 @@ UIMgr.init = function(M)
                 end
             end
         end
-        if not M.MainUI.open then
+        if not allClosed and not M.MainUI.open then
             M.CloseAllUI({ 'MsgUI' })
         end
     end

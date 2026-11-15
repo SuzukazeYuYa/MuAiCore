@@ -20,6 +20,10 @@ Drawers.init = function(M)
     M.NotDelayGuides = {}
     M.NotDelayGuidesMulti = {}
     local frameDirectCenterDrawer = TensorCore.getCachedDrawer(pp_1, pp_1, pp_1, nil, 1)
+    -- 连续拉线只复用样式，位置仍在每次调用中重新提交。
+    local singleTakeLineDrawer
+    local multiTakeLineDrawers = {}
+    local defaultTakeLineColor = { r = 1, g = 0, b = 0 }
 
     local optionalNumber = function(value, defaultValue, caller, name)
         if value == nil then
@@ -482,13 +486,16 @@ Drawers.init = function(M)
     --- @param size number 线粗(可缺省)
     M.FrameTakeLine = function(pos1, pos2, playerPos, size)
         size = size or 5
-        local drawer = Argus2.ShapeDrawer:new(
+        if singleTakeLineDrawer == nil then
+            singleTakeLineDrawer = Argus2.ShapeDrawer:new(
                 (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)),
                 (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)),
                 (GUI:ColorConvertFloat4ToU32(0, 1, 0, 0)),
                 (GUI:ColorConvertFloat4ToU32(1, 0, 0, 1)),
                 3
-        )
+            )
+        end
+        local drawer = singleTakeLineDrawer
         drawer:addLine(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z, size, 0)
         local isInLine, nearestPos = getLinePos(pos2, pos1, playerPos)
         if isInLine then
@@ -509,12 +516,19 @@ Drawers.init = function(M)
             if playerPos ~= nil and curJobData ~= nil and table.size(curJobData) > 0 then
                 for i = 1, #curJobData do
                     local data = curJobData[i]
-                    local color = data.color or { r = 1, g = 0, b = 0 }
-                    local drawer = Argus2.ShapeDrawer:new(
+                    local color = data.color or defaultTakeLineColor
+                    local playerDrawers = multiTakeLineDrawers[job]
+                    if playerDrawers == nil then playerDrawers = {}; multiTakeLineDrawers[job] = playerDrawers end
+                    local cached = playerDrawers[i]
+                    if cached == nil or cached.r ~= color.r or cached.g ~= color.g or cached.b ~= color.b then
+                        cached = { r = color.r, g = color.g, b = color.b, drawer = Argus2.ShapeDrawer:new(
                             (GUI:ColorConvertFloat4ToU32(0, 0, 0, 0)),
                             (GUI:ColorConvertFloat4ToU32(0, 0, 0, 0)),
                             (GUI:ColorConvertFloat4ToU32(0, 0, 0, 0)),
-                            (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 1)), 3)
+                            (GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, 1)), 3) }
+                        playerDrawers[i] = cached
+                    end
+                    local drawer = cached.drawer
                     drawer:addLine(data.posPlayer.x, data.posPlayer.y, data.posPlayer.z, data.posObj.x, data.posObj.y, data.posObj.z, 4, 0)
                     local isInLine, nearestPos, isClosePlayer = getLinePos(data.posPlayer, data.posObj, playerPos)
                     local guidePos

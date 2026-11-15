@@ -568,32 +568,43 @@ LogSystem.init = function(M)
         return diagnosticState.filePath
     end
 
-    M.DiagnosticCall = function(moduleName, operation, fn, context)
-        if type(fn) ~= 'function' then
-            error('DiagnosticCall requires a function')
+    -- 每层同步调用复用独立记录，递归调用不互相覆盖；返回后清掉临时引用。
+    local diagnosticFrames, diagnosticDepth = {}, 0
+    local function newDiagnosticFrame()
+        local frame = {}
+        frame.run = function()
+            frame.first, frame.second, frame.third, frame.fourth = frame.fn()
         end
-        local first, second, third, fourth
-        local function onError(err)
+        frame.onError = function(err)
             local stack = tostring(err)
             if debug ~= nil and type(debug.traceback) == 'function' then
                 stack = debug.traceback(tostring(err), 2)
             end
-            local details = {}
+            local details, context = {}, frame.context
             if type(context) == 'table' then
-                for key, value in pairs(context) do
-                    details[key] = value
-                end
+                for key, value in pairs(context) do details[key] = value end
             elseif context ~= nil then
                 details.context = context
             end
-            details.error = tostring(err)
-            details.traceback = stack
-            writeDiagnostic('ERROR', moduleName, operation .. '失败', details, operation)
+            details.error, details.traceback = tostring(err), stack
+            writeDiagnostic('ERROR', frame.moduleName, frame.operation .. '失败', details, frame.operation)
             return stack
         end
-        local ok, caught = xpcall(function()
-            first, second, third, fourth = fn()
-        end, onError)
+        return frame
+    end
+    M.DiagnosticCall = function(moduleName, operation, fn, context)
+        if type(fn) ~= 'function' then
+            error('DiagnosticCall requires a function')
+        end
+        diagnosticDepth = diagnosticDepth + 1
+        local frame = diagnosticFrames[diagnosticDepth]
+        if frame == nil then frame = newDiagnosticFrame(); diagnosticFrames[diagnosticDepth] = frame end
+        frame.fn, frame.context, frame.moduleName, frame.operation = fn, context, moduleName, operation
+        local ok, caught = xpcall(frame.run, frame.onError)
+        local first, second, third, fourth = frame.first, frame.second, frame.third, frame.fourth
+        frame.fn, frame.context, frame.moduleName, frame.operation = nil, nil, nil, nil
+        frame.first, frame.second, frame.third, frame.fourth = nil, nil, nil, nil
+        diagnosticDepth = diagnosticDepth - 1
         if not ok then
             return false, caught
         end
