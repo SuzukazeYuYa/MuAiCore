@@ -6,6 +6,7 @@ Dmu_P2.StateName = "P2"
 local DM
 ---@type MuAiGuide
 local MG
+local frameDrawers = {}
 
 -- 时间轴与实战判定点均为读条开始后 4.0 秒，不得由日志到达抖动延长。
 local farNearDeathDrawDuration = 4000
@@ -205,7 +206,7 @@ local drawAllThingEnding = function()
             elseif preSkill == 47826 then
                 dir = curCaster.pos.h
             end
-            MG.CreateDrawer(1, 0.5, 0, nil, 2)
+            MG.GetFrameDrawer(frameDrawers, 'drawAllThingEnding.1', 1, 0.5, 0, nil, 2)
               :addRect(curCaster.pos.x, MG.drawerY, curCaster.pos.z, 25, 50, dir)
         end
     else
@@ -816,7 +817,7 @@ local drawTowerHeading = function()
     local mid = MG.GetMidPos(Data().Towers.spawn[wave].left, Data().Towers.spawn[wave].right)
     local dir = TensorCore.getHeadingToTarget(DM.Center, mid)
     local startPos = TensorCore.getPosInDirection(DM.Center, dir, 20)
-    MG.CreateDrawer(1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, dir + math.pi, 39.5, 0.05, 0.5, 0.5, true)
+    MG.GetFrameDrawer(frameDrawers, 'drawTowerHeading.1', 1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, dir + math.pi, 39.5, 0.05, 0.5, 0.5, true)
 end
 
 local drawWingsOfDestroy = function()
@@ -894,6 +895,7 @@ end
 --- @param dm DancingMad
 --- @param m MuAiGuide
 Dmu_P2.Init = function(dm, m)
+    frameDrawers = {}
     DM = dm
     MG = m
 end
@@ -1088,6 +1090,19 @@ Dmu_P2.Update = function()
         if Cfg().draw then
             local left = Data().Towers.spawn[wave].left
             local right = Data().Towers.spawn[wave].right
+            -- 仅在本次绘制内复用查询结果；未找到的实体也只查询一次，下一帧重查。
+            local entities = {}
+            local function getEntity(id)
+                if id == nil or id ~= id then
+                    return TensorCore.mGetEntity(id)
+                end
+                local entity = entities[id]
+                if entity == nil then
+                    entity = TensorCore.mGetEntity(id) or false
+                    entities[id] = entity
+                end
+                return entity or nil
+            end
             local out = 4
             local inner
             if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
@@ -1096,13 +1111,13 @@ Dmu_P2.Update = function()
                 out = out - 0.035
                 inner = out - 0.05
             end
-            local drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
+            local drawer = MG.GetFrameDrawer(frameDrawers, 'Dmu_P2.Update.1', 1, 0, 0, 1, 0, 0)
             drawer:setRenderFlags(MG.Config.Main.DrawerType)
             drawer:addDonut(left.x, MG.drawerY, left.z, inner, out)
             drawer:addDonut(right.x, MG.drawerY, right.z, inner, out)
             for job, member in pairs(MG.Party) do
                 if table.contains(Data().Towers.doing, job) then
-                    local curMember = TensorCore.mGetEntity(member.id)
+                    local curMember = getEntity(member.id)
                     if curMember ~= nil and curMember.pos ~= nil
                             and (TensorCore.getDistance2d(curMember.pos, left) < 4
                             or TensorCore.getDistance2d(curMember.pos, right) < 4)
@@ -1115,7 +1130,7 @@ Dmu_P2.Update = function()
                                 local cnt = 0
                                 for job2, member2 in pairs(MG.Party) do
                                     if job2 ~= job then
-                                        local otherMember = TensorCore.mGetEntity(member2.id)
+                                        local otherMember = getEntity(member2.id)
                                         if otherMember and TensorCore.getDistance2d(member.pos, otherMember.pos) < 5.1 then
                                             cnt = cnt + 1
                                         end
@@ -1137,8 +1152,8 @@ Dmu_P2.Update = function()
                                 --如果4个人，那么一定是引导扇形人也在分摊范围
                                 local leadJob = Data().Towers.standBy[2]
                                 if leadJob ~= nil then
-                                    local leader = TensorCore.mGetEntity(MG.Party[leadJob].id)
-                                    local ldDraw = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
+                                    local leader = getEntity(MG.Party[leadJob].id)
+                                    local ldDraw = MG.GetFrameDrawer(frameDrawers, 'Dmu_P2.Update.2', 1, 0, 0, 1, 0, 0)
                                     ldDraw:setRenderFlags(MG.Config.Main.DrawerType)
                                     ldDraw:addCircle(leader.pos.x, MG.drawerY, leader.pos.z, 0.5)
                                 end
@@ -1152,7 +1167,7 @@ Dmu_P2.Update = function()
                             local dis = 1000
                             for _, mmb in pairs(MG.Party) do
                                 if mmb.id ~= curMember.id then
-                                    local memberNew = TensorCore.mGetEntity(mmb.id)
+                                    local memberNew = getEntity(mmb.id)
                                     if memberNew ~= nil and memberNew.pos ~= nil then
                                         local distance = TensorCore.getDistance2d(memberNew.pos, curMember.pos)
                                         if distance < dis then
@@ -1164,7 +1179,7 @@ Dmu_P2.Update = function()
                             end
                             if nearest ~= nil then
                                 local dir = TensorCore.getHeadingToTarget(curMember.pos, nearest.pos)
-                                MG.CreateDrawer(0, 0.6, 1, 0.3, 2, 13)
+                                MG.GetFrameDrawer(frameDrawers, 'Dmu_P2.Update.3', 0, 0.6, 1, 0.3, 2, 13)
                                   :addCone(curMember.pos.x, MG.drawerY, curMember.pos.z, 40, math.pi / 2, dir)
                             end
                         end

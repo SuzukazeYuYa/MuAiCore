@@ -4,6 +4,7 @@ Dmu_P4.StateName = "P4"
 local DM
 ---@type MuAiGuide
 local MG
+local frameDrawers = {}
 
 -- OnAOECreate 到实际结算存在帧级抖动，按实战日志上界保留余量。
 local chaosAoeDrawDuration = 5500
@@ -310,7 +311,7 @@ local ThunderWater = function(wave)
             local drawer
             if buffType == 5544 then
                 --雷
-                drawer = MG.CreateDrawer(1, 0.5, 0)
+                drawer = MG.GetFrameDrawer(frameDrawers, 'ThunderWater.1', 1, 0.5, 0)
             elseif buffType == 5545 then
                 drawer = DM.cyanDrawer --水
             end
@@ -532,6 +533,7 @@ end
 --- @param dm DancingMad
 --- @param m MuAiGuide
 Dmu_P4.Init = function(dm, m)
+    frameDrawers = {}
     DM = dm
     MG = m
     MG.Develop.TempDebug = function()
@@ -811,9 +813,9 @@ Dmu_P4.Update = function()
                     local posDeath = Data().ExDeath.deathDrawPos
                     local posAlive = Data().ExDeath.aliveDrawPos
                     local posBoth = Data().ExDeath.DothBeamObj.pos
-                    MG.CreateDrawer(0, 0, 1, nil, 1):addRect(posDeath.x, MG.drawerY, posDeath.z, 40, 20, Data().ExDeath.DeathBeamObj.pos.h)
-                    MG.CreateDrawer(1, 0, 1, nil, 1):addRect(posAlive.x, MG.drawerY, posAlive.z, 40, 20, Data().ExDeath.AliveBeamObj.pos.h)
-                    MG.CreateDrawer(1, 0, 0, nil, 1):addRect(posBoth.x, MG.drawerY, posBoth.z, 40, 3, Data().ExDeath.DothBeamObj.pos.h)
+                    MG.GetFrameDrawer(frameDrawers, 'Dmu_P4.Update.1', 0, 0, 1, nil, 1):addRect(posDeath.x, MG.drawerY, posDeath.z, 40, 20, Data().ExDeath.DeathBeamObj.pos.h)
+                    MG.GetFrameDrawer(frameDrawers, 'Dmu_P4.Update.2', 1, 0, 1, nil, 1):addRect(posAlive.x, MG.drawerY, posAlive.z, 40, 20, Data().ExDeath.AliveBeamObj.pos.h)
+                    MG.GetFrameDrawer(frameDrawers, 'Dmu_P4.Update.3', 1, 0, 0, nil, 1):addRect(posBoth.x, MG.drawerY, posBoth.z, 40, 3, Data().ExDeath.DothBeamObj.pos.h)
                 end
                 if Cfg().guide then
                     if Data().ExDeath.GuideData == nil or table.size(Data().ExDeath.GuideData) < 8 then

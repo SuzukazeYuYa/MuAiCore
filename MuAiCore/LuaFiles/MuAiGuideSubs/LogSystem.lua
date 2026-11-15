@@ -236,13 +236,13 @@ local createDiagnosticSessionName = function()
     return candidate
 end
 
-local formatDiagnosticLine = function(level, moduleName, msg, data)
+local formatDiagnosticLine = function(level, moduleName, msg, data, formattedContext)
     local line = '[' .. os.date('%Y-%m-%d %H:%M:%S') .. ']'
             .. '[' .. safeString(level) .. ']'
             .. '[' .. safeString(moduleName) .. '] '
             .. safeString(msg)
     if data ~= nil then
-        line = line .. '|' .. logValue(data, 0, {})
+        line = line .. '|' .. (formattedContext or logValue(data, 0, {}))
     end
     if #line > DIAGNOSTIC_MAX_LINE_BYTES then
         line = line:sub(1, DIAGNOSTIC_MAX_LINE_BYTES - 18) .. '...[line-truncated]'
@@ -351,15 +351,80 @@ local flushDiagnosticSuppressed = function()
     end
 end
 
+-- 固定字段的重复诊断可直接比较原值。复杂对象仍沿用原来的格式化逻辑。
+local function plainScalar(value)
+    local kind = type(value)
+    return kind == 'nil' or kind == 'string' or kind == 'number' or kind == 'boolean'
+end
+
+local function snapshotContext(data)
+    if plainScalar(data) then return { kind = type(data), value = data } end
+    if type(data) ~= 'table' or getmetatable(data) ~= nil then return nil end
+    local values, count = {}, 0
+    for key, value in pairs(data) do
+        if not plainScalar(key) or not plainScalar(value) then return nil end
+        count = count + 1
+        if count > 16 then return nil end
+        values[key] = value
+    end
+    return { kind = 'table', values = values, count = count }
+end
+
+local function sameContext(snapshot, data)
+    if snapshot == nil or snapshot.kind ~= type(data) then return false end
+    if snapshot.kind ~= 'table' then return rawequal(snapshot.value, data) end
+    if getmetatable(data) ~= nil then return false end
+    local count = 0
+    for key, value in pairs(data) do
+        if not rawequal(snapshot.values[key], value) then return false end
+        count = count + 1
+    end
+    return count == snapshot.count
+end
+
+-- 职能、名字和实体 ID 会影响日志脱敏；这些值或遍历顺序改变后重新格式化。
+local contextParty, contextPartyRevision, emptyParty = {}, 0, {}
+local function partyRevision()
+    local party = activeGuide and activeGuide.Party
+    if party ~= nil and (type(party) ~= 'table' or getmetatable(party) ~= nil) then return nil end
+    local count, changed = 0, false
+    for role, member in pairs(party or emptyParty) do
+        if type(member) ~= 'table' or getmetatable(member) ~= nil
+                or not plainScalar(role) or not plainScalar(member.name) or not plainScalar(member.id) then
+            return nil
+        end
+        count = count + 1
+        local old = contextParty[count]
+        if old == nil or old.role ~= role or old.name ~= member.name or old.id ~= member.id then
+            changed = true
+        end
+    end
+    if changed or count ~= #contextParty then
+        contextParty = {}
+        for role, member in pairs(party or emptyParty) do
+            contextParty[#contextParty + 1] = { role = role, name = member.name, id = member.id }
+        end
+        contextPartyRevision = contextPartyRevision + 1
+    end
+    return contextPartyRevision
+end
+
 local writeDiagnostic = function(level, moduleName, msg, data, key)
     level = string.upper(tostring(level or 'INFO'))
     moduleName = tostring(moduleName or 'Core')
     msg = tostring(msg or '')
-    local context = data ~= nil and logValue(data, 0, {}) or ''
-    local signature = level .. '|' .. safeString(msg) .. '|' .. context
     local cacheKey = diagnosticKey(moduleName, key, msg)
     local now = os.time()
     local state = diagnosticState.throttles[cacheKey]
+    local revision = partyRevision()
+    local context, signature
+    if state ~= nil and revision ~= nil and state.partyRevision == revision
+            and state.level == level and state.message == msg and sameContext(state.contextSnapshot, data) then
+        context, signature = state.context, state.signature
+    else
+        context = data ~= nil and logValue(data, 0, {}) or ''
+        signature = level .. '|' .. safeString(msg) .. '|' .. context
+    end
 
     if state ~= nil and state.signature == signature
             and now - state.lastWrittenAt < DIAGNOSTIC_THROTTLE_SECONDS
@@ -370,13 +435,16 @@ local writeDiagnostic = function(level, moduleName, msg, data, key)
     if state ~= nil then
         writeSuppressedSummary(cacheKey, state)
     end
-    local written = writeDiagnosticLine(formatDiagnosticLine(level, moduleName, msg, data))
+    local written = writeDiagnosticLine(formatDiagnosticLine(level, moduleName, msg, data, context))
     diagnosticState.throttles[cacheKey] = {
         lastWrittenAt = now,
         level = level,
         message = msg,
         moduleName = moduleName,
         signature = signature,
+        context = context,
+        contextSnapshot = snapshotContext(data),
+        partyRevision = revision,
         suppressed = 0,
     }
     return written

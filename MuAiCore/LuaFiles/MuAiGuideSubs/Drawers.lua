@@ -556,9 +556,11 @@ Drawers.init = function(M)
         end
     end
     M.DrawTargetPos = function()
+        if not M.Config.Main.ShowTargetPos then
+            return
+        end
         local target = TensorCore.mGetTarget()
-        if not M.Config.Main.ShowTargetPos
-                or target == nil
+        if target == nil
                 or not target.attackable
                 or (M.IsTank(TensorCore.mGetPlayer().job) and not M.Config.Main.ShowTargetPosTank)
         then
@@ -667,6 +669,22 @@ Drawers.init = function(M)
             drawer:setGradient(gradient, 0.15, 2)
         end
         return drawer
+    end
+
+    -- 每个持续绘图调用点独占一个缓存，不与定时图形或其他调用点共享。
+    -- 样式变化时只替换对应的 drawer；模块重新初始化时清空自己的缓存。
+    M.GetFrameDrawer = function(cache, key, r, g, b, a, lineSize, gradient)
+        local flags = M.Config.Main.DrawerType
+        local cached = cache[key]
+        if cached == nil or cached.r ~= r or cached.g ~= g or cached.b ~= b
+                or cached.a ~= a or cached.lineSize ~= lineSize
+                or cached.gradient ~= gradient or cached.flags ~= flags then
+            cached = { r = r, g = g, b = b, a = a, lineSize = lineSize,
+                       gradient = gradient, flags = flags,
+                       drawer = M.CreateDrawer(r, g, b, a, lineSize, gradient) }
+            cache[key] = cached
+        end
+        return cached.drawer
     end
     
     -- 更改全局参数

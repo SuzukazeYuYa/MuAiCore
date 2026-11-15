@@ -6,6 +6,7 @@ local DM
 
 ---@type MuAiGuide
 local MG
+local frameDrawers = {}
 local lineSpreadDrawer
 
 local Cfg = function()
@@ -742,6 +743,7 @@ end
 --- @param dm DancingMad
 --- @param m MuAiGuide
 Dmu_P1.Init = function(dm, m)
+    frameDrawers = {}
     DM = dm
     MG = m
     lineSpreadDrawer = nil
@@ -927,7 +929,7 @@ Dmu_P1.Update = function()
         else
             inner = out - 0.08
         end
-        local drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
+        local drawer = MG.GetFrameDrawer(frameDrawers, 'Dmu_P1.Update.1', 1, 0, 0, 1, 0, 0)
         drawer:setRenderFlags(MG.Config.Main.DrawerType)
         for _, ent in pairs(Data().Line3.Shits) do
             drawer:addDonut(ent.pos.x, MG.drawerY, ent.pos.z, inner, out)
@@ -1091,7 +1093,7 @@ Dmu_P1.Update = function()
                 local curMember = TensorCore.mGetEntity(member.id)
                 if curMember ~= nil then
                     local dir = TensorCore.getHeadingToTarget(point, curMember.pos)
-                    MG.CreateDrawer(0, 1, 1, 0.3, 2, 1)
+                    MG.GetFrameDrawer(frameDrawers, 'Dmu_P1.Update.2', 0, 1, 1, 0.3, 2, 1)
                       :addRect(point.x, MG.drawerY, point.z, 60, 6, dir, false)
                 end
             end
@@ -1220,7 +1222,7 @@ Dmu_P1.Update = function()
             if Cfg().draw then
                 for _, id in pairs(Data().Line2.GatherPlayers) do
                     local player = TensorCore.mGetEntity(id)
-                    MG.CreateDrawer(0.2, 0, 0.6, 0.3, 2):addCircle(player.pos.x, MG.drawerY, player.pos.z, 5)
+                    MG.GetFrameDrawer(frameDrawers, 'Dmu_P1.Update.3', 0.2, 0, 0.6, 0.3, 2):addCircle(player.pos.x, MG.drawerY, player.pos.z, 5)
                 end
             end
         end
@@ -1351,7 +1353,7 @@ Dmu_P1.Update = function()
             if Cfg().draw then
                 for _, id in pairs(Data().Line3.GatherPlayers) do
                     local player = TensorCore.mGetEntity(id)
-                    MG.CreateDrawer(0.2, 0, 0.6, 0.3, 2):addCircle(player.pos.x, MG.drawerY, player.pos.z, 5)
+                    MG.GetFrameDrawer(frameDrawers, 'Dmu_P1.Update.4', 0.2, 0, 0.6, 0.3, 2):addCircle(player.pos.x, MG.drawerY, player.pos.z, 5)
                 end
             end
         end
@@ -1579,7 +1581,7 @@ Dmu_P1.Update = function()
             if Cfg().draw then
                 for _, job in pairs(Data().LastLink.SleepGroup) do
                     local player = TensorCore.mGetEntity(MG.Party[job].id)
-                    MG.CreateDrawer(0.2, 0, 0.6, 0.3, 2)
+                    MG.GetFrameDrawer(frameDrawers, 'Dmu_P1.Update.5', 0.2, 0, 0.6, 0.3, 2)
                       :addCircle(player.pos.x, MG.drawerY, player.pos.z, 5)
                 end
             end

@@ -6,6 +6,7 @@ Dmu_P3.StateName = "P3"
 local DM
 ---@type MuAiGuide
 local MG
+local frameDrawers = {}
 
 -- OnEntityChannel 到实际结算存在帧级抖动，按实战日志上界保留余量。
 local damningEdictDrawDuration = 5200
@@ -156,13 +157,22 @@ local drawFireWater = function(buffId)
                 end
                 table.insert(curFramePlayer, curMember)
             end
+            local distances = {}
+            local function distanceTo(entity)
+                local distance = distances[entity]
+                if distance == nil then
+                    distance = TensorCore.getDistance2d(object.pos, entity.pos)
+                    distances[entity] = distance
+                end
+                return distance
+            end
             table.sort(curFramePlayer, function(a, b)
                 if a.alive and not b.alive then
                     return true
                 elseif not a.alive and b.alive then
                     return false
                 else
-                    return TensorCore.getDistance2d(object.pos, a.pos) < TensorCore.getDistance2d(object.pos, b.pos)
+                    return distanceTo(a) < distanceTo(b)
                 end
             end)
             if buffId == 1600 then
@@ -455,9 +465,9 @@ local drawSlapHappy = function()
         elseif i == 3 then
             pos = TensorCore.getPosInDirection(pos, curCaster.pos.h, 4)
         end
-        MG.CreateDrawer(0.9, 0.3, 0, 0.4):addCircle(pos.x, MG.drawerY, pos.z, r3)
+        MG.GetFrameDrawer(frameDrawers, 'drawSlapHappy.1', 0.9, 0.3, 0, 0.4):addCircle(pos.x, MG.drawerY, pos.z, r3)
     end
-    MG.CreateDrawer(0.7, 0.1, 0):addCircle(100, MG.drawerY, 100, 6)
+    MG.GetFrameDrawer(frameDrawers, 'drawSlapHappy.2', 0.7, 0.1, 0):addCircle(100, MG.drawerY, 100, 6)
     -- 如果开启范围画图
     if Cfg().slapHappyDraw then
         if isRight then
@@ -478,13 +488,13 @@ local drawSlapHappy = function()
             local dirH1 = TensorCore.getHeadingToTarget(DM.Center, curH1.pos)
             local dirD1 = TensorCore.getHeadingToTarget(DM.Center, curD1.pos)
             if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
-                MG.CreateDrawer(0, 0, 0.2, 0.4):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirMt)
-                MG.CreateDrawer(0, 0.2, 0, 0.4):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirH1)
-                MG.CreateDrawer(0.2, 0, 0, 0.4):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirD1)
+                MG.GetFrameDrawer(frameDrawers, 'drawSlapHappy.3', 0, 0, 0.2, 0.4):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirMt)
+                MG.GetFrameDrawer(frameDrawers, 'drawSlapHappy.4', 0, 0.2, 0, 0.4):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirH1)
+                MG.GetFrameDrawer(frameDrawers, 'drawSlapHappy.5', 0.2, 0, 0, 0.4):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirD1)
             else
-                MG.CreateDrawer(0, 0, 1, 0.1, 1):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirMt)
-                MG.CreateDrawer(0, 1, 0, 0.1, 1):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirH1)
-                MG.CreateDrawer(1, 0, 0, 0.1, 1):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirD1)
+                MG.GetFrameDrawer(frameDrawers, 'drawSlapHappy.6', 0, 0, 1, 0.1, 1):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirMt)
+                MG.GetFrameDrawer(frameDrawers, 'drawSlapHappy.7', 0, 1, 0, 0.1, 1):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirH1)
+                MG.GetFrameDrawer(frameDrawers, 'drawSlapHappy.8', 1, 0, 0, 0.1, 1):addCone(100, MG.drawerY, 100, 30, math.pi / 3, dirD1)
             end
         end
     end
@@ -492,19 +502,19 @@ local drawSlapHappy = function()
     if Cfg().slapHappyDir then
         if isRight then
             local dir = curHeading + math.pi / 2
-            MG.CreateDrawer(1, 1, 1, 0.6, 0)
+            MG.GetFrameDrawer(frameDrawers, 'drawSlapHappy.9', 1, 1, 1, 0.6, 0)
               :addArrow(DM.Center.x, 0, DM.Center.z, dir, 10, 0.2, 0.5, 0.3, true)
         else
             local player = TensorCore.mGetPlayer()
             local drawer, dir
             if MG.IsTank(player.job) then
-                drawer = MG.CreateDrawer(0, 0.8, 1, 0.6, 0)
+                drawer = MG.GetFrameDrawer(frameDrawers, 'drawSlapHappy.10', 0, 0.8, 1, 0.6, 0)
                 dir = curHeading - math.pi * 5 / 6
             elseif MG.IsHealer(player.job) then
-                drawer = MG.CreateDrawer(0, 1, 0, 0.6, 0)
+                drawer = MG.GetFrameDrawer(frameDrawers, 'drawSlapHappy.11', 0, 1, 0, 0.6, 0)
                 dir = curHeading - math.pi / 2
             elseif MG.IsDps(player.job) then
-                drawer = MG.CreateDrawer(1, 0, 0, 0.6, 0)
+                drawer = MG.GetFrameDrawer(frameDrawers, 'drawSlapHappy.12', 1, 0, 0, 0.6, 0)
                 dir = curHeading - math.pi / 6
             end
             if drawer ~= nil then
@@ -529,7 +539,7 @@ local drawLookUponMe = function()
         return
     end
     local curHeading = curCaster.pos.h
-    MG.CreateDrawer(1, 0.1, 0):addCenteredRect(100, MG.drawerY, 100, 40, 16, curHeading)
+    MG.GetFrameDrawer(frameDrawers, 'drawLookUponMe.1', 1, 0.1, 0):addCenteredRect(100, MG.drawerY, 100, 40, 16, curHeading)
     if TimeSince(Data().LookUponMe.Timer) > 5700 then
         Data().LookUponMe.OnDraw = false
         Data().LookUponMe.CasterId = 0
@@ -547,7 +557,7 @@ local drawDamningEdict = function()
         return
     end
     local curHeading = curCaster.pos.h
-    MG.CreateDrawer(1, 0.5, 0):addRect(curCaster.pos.x, MG.drawerY, curCaster.pos.z, 50, 50, curHeading)
+    MG.GetFrameDrawer(frameDrawers, 'drawDamningEdict.1', 1, 0.5, 0):addRect(curCaster.pos.x, MG.drawerY, curCaster.pos.z, 50, 50, curHeading)
     if TimeSince(Data().DamningEdict.Timer) > damningEdictDrawDuration then
         Data().DamningEdict.OnDraw = false
         Data().DamningEdict.CasterId = 0
@@ -621,7 +631,7 @@ local drawBlackHole = function()
         for _, obj in pairs(Data().BlackHolds.Object[curWave]) do
             local curObj = TensorCore.mGetEntity(obj.id)
             if curObj ~= nil then
-                MG.CreateDrawer(1, 0, 0, 0.4, 1):addCircle(curObj.pos.x, MG.drawerY, curObj.pos.z, 2)
+                MG.GetFrameDrawer(frameDrawers, 'drawBlackHole.1', 1, 0, 0, 0.4, 1):addCircle(curObj.pos.x, MG.drawerY, curObj.pos.z, 2)
             end
 
         end
@@ -634,7 +644,7 @@ local drawBlackHole = function()
             local target = getLiveEntity(tether.targetid, 'P3BlackHole', 'target')
             if object ~= nil and target ~= nil then
                 local dir = TensorCore.getHeadingToTarget(object.pos, target.pos)
-                MG.CreateDrawer(0, 0.5, 1, 0.3, 2, 1)
+                MG.GetFrameDrawer(frameDrawers, 'drawBlackHole.2', 0, 0.5, 1, 0.3, 2, 1)
                   :addRect(object.pos.x, MG.drawerY, object.pos.z, 40, 6, dir)
             end
         end
@@ -922,8 +932,8 @@ local drawTowerHeading = function()
             heading = kfk.pos.h
         end
         local startPos = TensorCore.getPosInDirection(kfk.pos, heading + math.pi, 20)
-        MG.CreateDrawer(1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, heading, 39.5, 0.05, 0.5, 0.5, true)
-        MG.CreateDrawer(1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, heading, 20, 0.05, 0.5, 0.5, true)
+        MG.GetFrameDrawer(frameDrawers, 'drawTowerHeading.1', 1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, heading, 39.5, 0.05, 0.5, 0.5, true)
+        MG.GetFrameDrawer(frameDrawers, 'drawTowerHeading.2', 1, 1, 1, 1, 1):addArrow(startPos.x, 0, startPos.z, heading, 20, 0.05, 0.5, 0.5, true)
         -- 描边塔轮廓
         local curDir = kfk.pos.h
         local leftPos = TensorCore.getPosInDirection(DM.Center, curDir - math.pi / 2, 10)
@@ -935,7 +945,7 @@ local drawTowerHeading = function()
         else
             inner = out - 0.05
         end
-        local drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
+        local drawer = MG.GetFrameDrawer(frameDrawers, 'drawTowerHeading.3', 1, 0, 0, 1, 0, 0)
         drawer:setRenderFlags(MG.Config.Main.DrawerType)
         drawer:addDonut(leftPos.x, MG.drawerY, leftPos.z, inner, out)
         drawer:addDonut(rightPos.x, MG.drawerY, rightPos.z, inner, out)
@@ -999,6 +1009,7 @@ end
 --- @param dm DancingMad
 --- @param m MuAiGuide
 Dmu_P3.Init = function(dm, m)
+    frameDrawers = {}
     DM = dm
     MG = m
     catchMarkMap = {
@@ -1548,7 +1559,7 @@ Dmu_P3.Update = function()
                     if Data().UmbraSmash.LeadPlayer == nil then
                         Data().UmbraSmash.LeadPlayer = farest
                     end
-                    MG.CreateDrawer(1, 0, 0, 0.3, 2, 10)
+                    MG.GetFrameDrawer(frameDrawers, 'Dmu_P3.Update.1', 1, 0, 0, 0.3, 2, 10)
                       :addCircle(farest.pos.x, MG.drawerY, farest.pos.z, 19)
                 end
             else
@@ -1561,7 +1572,7 @@ Dmu_P3.Update = function()
                     end
                     local pos = Data().UmbraSmash.drawPos
                     if pos ~= nil then
-                        MG.CreateDrawer(1, 0, 0, 0.3, 2, 10)
+                        MG.GetFrameDrawer(frameDrawers, 'Dmu_P3.Update.2', 1, 0, 0, 0.3, 2, 10)
                           :addCircle(pos.x, MG.drawerY, pos.z, 19)
                     end
                 end
@@ -1642,7 +1653,7 @@ Dmu_P3.Update = function()
                 end
             elseif timeSince < 12700 then
                 if Cfg().draw then
-                    local drawer = MG.CreateDrawer(0.1, 0.5, 0, 0.1, 2, 0.1)
+                    local drawer = MG.GetFrameDrawer(frameDrawers, 'Dmu_P3.Update.3', 0.1, 0.5, 0, 0.1, 2, 0.1)
                     MG.OnCurrentPartyDo(function(job, member)
                         drawer:addCircle(member.pos.x, MG.drawerY, member.pos.z, 6)
                     end)
@@ -1706,7 +1717,7 @@ Dmu_P3.Update = function()
                     local curMember = TensorCore.mGetEntity(member.id)
                     if curMember ~= nil and curMember.pos ~= nil then
                         local dir = TensorCore.getHeadingToTarget(curDrawData.from, curMember.pos)
-                        MG.CreateDrawer(0, 0.5, 1, 0.3, 2, 1.5)
+                        MG.GetFrameDrawer(frameDrawers, 'Dmu_P3.Update.4', 0, 0.5, 1, 0.3, 2, 1.5)
                           :addRect(curDrawData.from.x, MG.drawerY, curDrawData.from.z, 40, 10, dir)
                     end
                 end

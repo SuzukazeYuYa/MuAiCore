@@ -4,6 +4,7 @@ Dmu_P5.StateName = "P5"
 local DM
 ---@type MuAiGuide
 local MG
+local frameDrawers = {}
 
 -- OnEntityChannel 到实际结算存在帧级抖动，按实战日志上界保留余量。
 local chaosVortexDrawDuration = 5200
@@ -671,10 +672,10 @@ local drawBloodArrow = function(wave)
     end
     if data.first ~= nil and data.second then
         if wave < 3 then
-            MG.CreateDrawer(0, 1, 0, 1, 1):addArrow(data.first.p.x, 0, data.first.p.z, data.first.h, data.first.l - 1.3, 0.1, 0.3, 0.2, true)
-            MG.CreateDrawer(0, 1, 0, 1, 1):addArrow(data.second.p.x, 0, data.second.p.z, data.second.h, data.second.l - 1.3, 0.1, 0.3, 0.2, true)
+            MG.GetFrameDrawer(frameDrawers, 'drawBloodArrow.1', 0, 1, 0, 1, 1):addArrow(data.first.p.x, 0, data.first.p.z, data.first.h, data.first.l - 1.3, 0.1, 0.3, 0.2, true)
+            MG.GetFrameDrawer(frameDrawers, 'drawBloodArrow.2', 0, 1, 0, 1, 1):addArrow(data.second.p.x, 0, data.second.p.z, data.second.h, data.second.l - 1.3, 0.1, 0.3, 0.2, true)
         else
-            MG.CreateDrawer(0, 1, 0, 1, 1):addArrow(data.second.p.x, 0, data.second.p.z, data.second.h, data.second.l - 1.3, 0.1, 0.3, 0.2, true)
+            MG.GetFrameDrawer(frameDrawers, 'drawBloodArrow.3', 0, 1, 0, 1, 1):addArrow(data.second.p.x, 0, data.second.p.z, data.second.h, data.second.l - 1.3, 0.1, 0.3, 0.2, true)
         end
     end
 end
@@ -684,6 +685,7 @@ end
 --- @param dm DancingMad
 --- @param m MuAiGuide
 Dmu_P5.Init = function(dm, m)
+    frameDrawers = {}
     DM = dm
     MG = m
 end
@@ -994,9 +996,9 @@ Dmu_P5.Update = function()
             MG.OnCurrentPartyDo(function(job, member)
                 local drawer
                 if MG.IsTank(member.job) then
-                    drawer = MG.CreateDrawer(1, 0.5, 0, 0.2, 2)
+                    drawer = MG.GetFrameDrawer(frameDrawers, 'Dmu_P5.Update.1', 1, 0.5, 0, 0.2, 2)
                 else
-                    drawer = MG.CreateDrawer(0, 0.5, 1, 0.2, 2)
+                    drawer = MG.GetFrameDrawer(frameDrawers, 'Dmu_P5.Update.2', 0, 0.5, 1, 0.2, 2)
                 end
                 drawer:addCircle(member.pos.x, MG.drawerY, member.pos.z, 5)
             end)
@@ -1044,12 +1046,12 @@ Dmu_P5.Update = function()
             for i = 1, #curParty do
                 local member = curParty[i]
                 if i < 4 then
-                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addCircle(member.pos.x, MG.drawerY, member.pos.z, 5)
+                    MG.GetFrameDrawer(frameDrawers, 'Dmu_P5.Update.3', 0, 0.5, 1, 0.2, 2):addCircle(member.pos.x, MG.drawerY, member.pos.z, 5)
                 end
             end
             local mt = TensorCore.mGetEntity(MG.Party.MT.id)
             if mt ~= nil and mt.pos ~= nil then
-                MG.CreateDrawer(1, 0.5, 0, 0.2, 2):addCircle(mt.pos.x, MG.drawerY, mt.pos.z, 5)
+                MG.GetFrameDrawer(frameDrawers, 'Dmu_P5.Update.4', 1, 0.5, 0, 0.2, 2):addCircle(mt.pos.x, MG.drawerY, mt.pos.z, 5)
             end
         end
         -- 获取DebuffHD
@@ -1122,11 +1124,11 @@ Dmu_P5.Update = function()
             if Cfg().draw then
                 local curPlayer = TensorCore.mGetEntity(Data().MaddeningOrchestra.RedBuff.id)
                 if curPlayer ~= nil and curPlayer.pos ~= nil then
-                    MG.CreateDrawer(1, 0.5, 0, 0.2, 2):addCircle(curPlayer.pos.x, MG.drawerY, curPlayer.pos.z, 26)
+                    MG.GetFrameDrawer(frameDrawers, 'Dmu_P5.Update.5', 1, 0.5, 0, 0.2, 2):addCircle(curPlayer.pos.x, MG.drawerY, curPlayer.pos.z, 26)
                 end
                 curPlayer = TensorCore.mGetEntity(Data().MaddeningOrchestra.BlueBuff.id)
                 if curPlayer ~= nil and curPlayer.pos ~= nil then
-                    MG.CreateDrawer(0, 0.5, 1, 0.2, 2):addCircle(curPlayer.pos.x, MG.drawerY, curPlayer.pos.z, 6)
+                    MG.GetFrameDrawer(frameDrawers, 'Dmu_P5.Update.6', 0, 0.5, 1, 0.2, 2):addCircle(curPlayer.pos.x, MG.drawerY, curPlayer.pos.z, 6)
                 end
             end
             if Cfg().guide then
@@ -1197,21 +1199,21 @@ Dmu_P5.Update = function()
                 local curBoss = Data().Celestriad.BossOnDraw
                 if Data().Celestriad.CatastrophicChoiceId == 49742 then
                     if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
-                        local drawer = MG.CreateDrawer(0, 0, 0, 1, 2, -1)
+                        local drawer = MG.GetFrameDrawer(frameDrawers, 'Dmu_P5.Update.7', 0, 0, 0, 1, 2, -1)
                         drawer:setGradient(0, 0.15, 0)
                         drawer:setRenderFlags(MG.Config.Main.DrawerType)
                         drawer:addCircle(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10)
                     else
-                        MG.CreateDrawer(1, 0, 0, 0.3, 2):addCircle(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10)
+                        MG.GetFrameDrawer(frameDrawers, 'Dmu_P5.Update.8', 1, 0, 0, 0.3, 2):addCircle(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10)
                     end
                 elseif Data().Celestriad.CatastrophicChoiceId == 49743 then
                     if ArgusDrawsPlus ~= nil and ArgusDrawsPlus.getEnabled() then
-                        local drawer = MG.CreateDrawer(0, 0, 0, 1, 2, -1)
+                        local drawer = MG.GetFrameDrawer(frameDrawers, 'Dmu_P5.Update.9', 0, 0, 0, 1, 2, -1)
                         drawer:setGradient(0, 0.15, 0)
                         drawer:setRenderFlags(MG.Config.Main.DrawerType)
                         drawer:addDonut(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10, 25)
                     else
-                        MG.CreateDrawer(1, 0, 0, 0.4, 2):addDonut(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10, 25)
+                        MG.GetFrameDrawer(frameDrawers, 'Dmu_P5.Update.10', 1, 0, 0, 0.4, 2):addDonut(curBoss.pos.x, MG.drawerY, curBoss.pos.z, 10, 25)
                     end
                 end
             end
@@ -1234,11 +1236,11 @@ Dmu_P5.Update = function()
                 local timeSince = TimeSince(aoeInfo.startTime)
                 local endTime = aoeInfo.duration * 1000 - 500
                 if timeSince < 2500 then
-                    drawer = MG.CreateDrawer(0, 1, 0, 1, 0, 0)
+                    drawer = MG.GetFrameDrawer(frameDrawers, 'Dmu_P5.Update.11', 0, 1, 0, 1, 0, 0)
                 elseif timeSince < endTime then
-                    drawer = MG.CreateDrawer(1, 1, 0, 1, 0, 0)
+                    drawer = MG.GetFrameDrawer(frameDrawers, 'Dmu_P5.Update.12', 1, 1, 0, 1, 0, 0)
                 else
-                    drawer = MG.CreateDrawer(1, 0, 0, 1, 0, 0)
+                    drawer = MG.GetFrameDrawer(frameDrawers, 'Dmu_P5.Update.13', 1, 0, 0, 1, 0, 0)
                 end
                 drawer:setRenderFlags(MG.Config.Main.DrawerType)
                 drawer:addDonut(aoeInfo.x, MG.drawerY, aoeInfo.z, inner, out)

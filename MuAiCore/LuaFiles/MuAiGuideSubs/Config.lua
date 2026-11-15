@@ -91,15 +91,72 @@ end
 
 ---@param M MuAiGuide
 Config.init = function(M)
-    -- Failed autosaves stay dirty, but disk/console work is retried per file, not per frame.
+    -- 保存失败时保留编辑，各文件分别退避重试，不在每帧重复写磁盘或报错。
     local failedSaves = {}
+    local unchangedChecks = {}
+    -- 比较成功后记住普通配置表的结构，后续无变化时无需递归分配临时表。
+    -- 仍检查当前配置和保存快照，直接修改、增删字段或替换子表都能被发现，
+    -- 不要求界面或其他 Lua 代码改用专门的配置写入函数。
+    local function makeUnchangedCheck(left, right)
+        local nodes, seenLeft, seenRight = {}, {}, {}
+        local function visit(a, b)
+            if type(a) ~= 'table' or type(b) ~= 'table'
+                    or getmetatable(a) ~= nil or getmetatable(b) ~= nil
+                    or seenLeft[a] or seenRight[b] then
+                return false
+            end
+            seenLeft[a], seenRight[b] = true, true
+            local node = { left = a, right = b, leftValues = {}, rightValues = {}, count = 0 }
+            nodes[#nodes + 1] = node
+            for key, value in pairs(a) do
+                local kind = type(value)
+                if kind == 'table' then
+                    if not visit(value, b[key]) then return false end
+                elseif kind ~= 'number' and kind ~= 'string' and kind ~= 'boolean' then
+                    return false
+                end
+                node.leftValues[key], node.rightValues[key] = value, b[key]
+                node.count = node.count + 1
+            end
+            return true
+        end
+        if not visit(left, right) then return nil end
+        return { left = left, right = right, nodes = nodes, compare = table.deepcompare }
+    end
+    local function isUnchanged(check, left, right)
+        if check == nil or check.left ~= left or check.right ~= right
+                or check.compare ~= table.deepcompare then return false end
+        for i = 1, #check.nodes do
+            local node = check.nodes[i]
+            if getmetatable(node.left) ~= nil or getmetatable(node.right) ~= nil then return false end
+            local count = 0
+            for key, value in pairs(node.left) do
+                if not rawequal(value, node.leftValues[key]) then return false end
+                count = count + 1
+            end
+            if count ~= node.count then return false end
+            count = 0
+            for key, value in pairs(node.right) do
+                if not rawequal(value, node.rightValues[key]) then return false end
+                count = count + 1
+            end
+            if count ~= node.count then return false end
+        end
+        return true
+    end
     local saveRetryInterval = 5000
     local function saveChangedConfig(path, fileName, curConfig, preConfig, configName)
         local saveFile = path .. '\\' .. fileName
-        if table.deepcompare(curConfig, preConfig) then
+        if isUnchanged(unchangedChecks[saveFile], curConfig, preConfig) then
             failedSaves[saveFile] = nil
             return nil
         end
+        if table.deepcompare(curConfig, preConfig) then
+            unchangedChecks[saveFile] = makeUnchangedCheck(curConfig, preConfig)
+            failedSaves[saveFile] = nil
+            return nil
+        end
+        unchangedChecks[saveFile] = nil
         local lastFailure = failedSaves[saveFile]
         if lastFailure ~= nil and TimeSince(lastFailure) < saveRetryInterval then
             return false
