@@ -5,6 +5,11 @@ local RaidMgr = {}
 ===========================
 ]]
 local raidScript
+-- 旧安装器只覆盖文件；即使首次升级仍残留旧入口，也不能重新加载已退役功能。
+local retiredRaidScripts = {
+    ['Occult_Crescent.lua'] = true,
+    ['Occult_Crescent_North.lua'] = true,
+}
 
 --- 初始化
 ---@param M MuAiGuide
@@ -53,6 +58,9 @@ RaidMgr.init = function(M)
                 resultType = type(list),
             }, 'folder_list')
             return false
+        end
+        for key, fileName in pairs(list) do
+            if retiredRaidScripts[fileName] then list[key] = nil end
         end
         M.Diagnostic('INFO', 'RaidLoader', isReload and '开始热重载副本脚本' or '开始加载副本脚本', {
             currentMapID = currentMapId,

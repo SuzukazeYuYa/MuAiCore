@@ -4,6 +4,20 @@ local Config = {}
     配置文件处理模块
 ===========================
 ]]
+-- 这些设置对应已移除的功能；只用于清理已有存档，不再创建默认值。
+local retiredMainKeys = {
+    'ForkedTowerBlood', 'NorthReferenceDrawings',
+    'CrescentBerserker', 'OccultKnight', 'Hinkypunk', 'NymianPetalodus', 'TradeTortoise',
+    'MysteriousMindflayer', 'BlackChocobo', 'CloisterDemon', 'GildedHeadstone', 'LionRampant',
+    'CrystalDragon', 'DeathClaw', 'IslandWatcher', 'HigherBird', 'Nammu',
+    'OccultReferenceDrawings', 'TwoHeadedAevis', 'SwordDancer', 'Necrophobia', 'Index',
+    'ClaretDragon', 'SacredTreeGiant', 'OccultGrimoire', 'Argol', 'CalofisteriDoppelganger',
+    'AlabasterBlade', 'MagiNecromancer', 'LeaderChimera', 'MagiHydra', 'Iambe',
+    'GaleGriffin', 'KidnapDemon', 'ShapeshiftingMage', 'KelpieCaptain', 'PatientKuribu',
+    'GemstoneBeast', 'Pallmagia', 'LittleMage', 'EvilSeer', 'Arachne',
+    'WarlikeMinotaur',
+}
+
 local reservedFileNames = {
     CON = true,
     PRN = true,
@@ -60,6 +74,16 @@ local LoadUIConfig = function(M)
     M.Config.Main = defMainCfg -- 这里只是让编辑器可以默认识别，无实际作用
     M.Config.Main = M.LoadConfig(M.Config.MainPath, M.Config.MainFile, defMainCfg)
     M.Config.MainPrevious = table.deepcopy(M.Config.Main)
+    local removedSettings = false
+    for _, key in ipairs(retiredMainKeys) do
+        if M.Config.Main[key] ~= nil then
+            M.Config.Main[key] = nil
+            removedSettings = true
+        end
+    end
+    if removedSettings then
+        M.SaveConfig(M.Config.MainPath, M.Config.MainFile, 'Main')
+    end
     if M.Config.Main.UpdateBranch == 'dmu-String' or M.Config.Main.UpdateBranch == 'dmu_string' then
         M.Config.Main.UpdateBranch = 'String'
     end
@@ -197,29 +221,6 @@ Config.init = function(M)
         M.Config.Main.MerchantGuide = oldConfig.MerchantGuide
         M.Config.Main.MerchantLockFace = oldConfig.MerchantLockFace
         M.Config.Main.MerchantAimTool = oldConfig.MerchantAimTool
-        local occultConfigKeys = {
-            'CrescentBerserker', 'OccultKnight', 'Hinkypunk',
-            'NymianPetalodus', 'TradeTortoise',
-            'MysteriousMindflayer', 'BlackChocobo', 'CloisterDemon',
-            'GildedHeadstone', 'LionRampant', 'CrystalDragon',
-            'DeathClaw', 'IslandWatcher', 'HigherBird', 'Nammu',
-            'OccultReferenceDrawings',
-            'TwoHeadedAevis', 'SwordDancer', 'Necrophobia', 'Index',
-            'ClaretDragon',
-            'SacredTreeGiant', 'OccultGrimoire', 'Argol',
-            'CalofisteriDoppelganger',
-            'AlabasterBlade',
-            'MagiNecromancer', 'LeaderChimera', 'MagiHydra',
-            'Iambe', 'KidnapDemon', 'ShapeshiftingMage',
-            'KelpieCaptain', 'PatientKuribu', 'GemstoneBeast',
-            'Pallmagia', 'LittleMage', 'EvilSeer',
-            'Arachne', 'WarlikeMinotaur',
-        }
-        for _, key in ipairs(occultConfigKeys) do
-            if type(oldConfig[key]) == 'table' then
-                M.Config.Main[key] = oldConfig[key]
-            end
-        end
         M.InfoNoLog('已恢复默认设置.')
     end
     M.CreateDefMainCfg = function()
@@ -318,223 +319,6 @@ Config.init = function(M)
             MerchantGuide = true,
             MerchantLockFace = true,
             MerchantAimTool = true,
-            --------- 新月岛·南岛：新月狂战士 ---------
-            CrescentBerserker = {
-                Enable = true,
-                DrawPreparationRing = true,
-                DrawGuideArrow = true,
-                DrawSafeZone = true,
-            },
-            --------- 新月岛·南岛：Occult Knight ---------
-            OccultKnight = {
-                Enable = true,
-                DrawSpinningPrediction = true,
-                DrawSpinningGuide = true,
-                DrawKnockbackGuide = true,
-                DrawFlurryPrediction = true,
-            },
-            --------- 新月岛·南岛：Hinkypunk ---------
-            Hinkypunk = {
-                Enable = true,
-                DrawNextBird = true,
-                DrawDonutCrossGuide = true,
-                DrawKnockbackGuide = true,
-            },
-            --------- 新月岛·南岛：Nymian Petalodus ---------
-            NymianPetalodus = {
-                Enable = true,
-                DrawOpenWaterPrediction = true,
-                DrawTidalGuillotineMarkers = true,
-            },
-            --------- 新月岛·南岛：Trade Tortoise ---------
-            TradeTortoise = {
-                Enable = true,
-                DrawCoinRoute = true,
-                DrawGreenKnockback = true,
-                DrawCostOfLivingGuide = true,
-            },
-            --------- 新月岛·南岛：Mysterious Mindflayer ---------
-            MysteriousMindflayer = {
-                Enable = true,
-                DrawMatchingImpDanger = true,
-                DrawSeductionGuide = true,
-            },
-            --------- 新月岛·南岛：Black Chocobo ---------
-            BlackChocobo = {
-                Enable = true,
-                DrawSlaughterPredictions = true,
-                DrawSlaughterDirection = true,
-            },
-            --------- 新月岛·南岛：Cloister Demon ---------
-            CloisterDemon = {
-                Enable = true,
-                DrawSealTowers = true,
-                DrawNearestSealGuide = false,
-            },
-            --------- 新月岛·南岛：Gilded Headstone ---------
-            GildedHeadstone = {
-                Enable = true,
-                DrawFacingArrow = true,
-                AutoFace = true,
-            },
-            --------- 新月岛·南岛：跃立狮 ---------
-            LionRampant = {
-                Enable = true,
-                DrawBrightPulsePrediction = true,
-            },
-            --------- 新月岛·南岛：水晶龙 ---------
-            CrystalDragon = {
-                Enable = true,
-            },
-            --------- 新月岛·南岛：死亡爪 ---------
-            DeathClaw = {
-                Enable = true,
-                DrawCrosshatchPrediction = true,
-                DrawSkulkingPrediction = true,
-            },
-            --------- 新月岛·南岛：岛屿监视者 ---------
-            IslandWatcher = {
-                Enable = true,
-                AutoFacePetrifyingGaze = true,
-            },
-            --------- 新月岛·南岛：高等魔鸟 ---------
-            HigherBird = {
-                Enable = true,
-                AutoFacePetrifyingGaze = true,
-            },
-            --------- 新月岛·南岛：纳木 ---------
-            Nammu = {
-                Enable = true,
-            },
-            --------- 新月岛·南岛：通用参考范围 ---------
-            OccultReferenceDrawings = {
-                Enable = true,
-            },
-            --------- 新月岛·北岛：两歧塔·双头怪鸟 ---------
-            TwoHeadedAevis = {
-                Enable = true,
-            },
-            --------- 新月岛·北岛：两歧塔·剑舞者 ---------
-            SwordDancer = {
-                Enable = true,
-                DynamicGuide = true,
-            },
-            --------- 新月岛·北岛：两歧塔·惧死者 ---------
-            Necrophobia = {
-                Enable = true,
-            },
-            --------- 新月岛·北岛：两歧塔·目录 ---------
-            Index = {
-                Enable = true,
-                DynamicGuide = true,
-            },
-            --------- 新月岛·北岛：赤龙 ---------
-            ClaretDragon = {
-                Enable = true,
-            },
-            --------- 新月岛·北岛：神木巨人 ---------
-            SacredTreeGiant = {
-                Enable = true,
-            },
-            --------- 新月岛·北岛：古术魔典 ---------
-            OccultGrimoire = {
-                Enable = true,
-            },
-            --------- 新月岛·北岛：阿尔戈尔 ---------
-            Argol = {
-                Enable = true,
-            },
-            --------- 新月岛·北岛：卡洛菲斯提莉二重身 ---------
-            CalofisteriDoppelganger = {
-                Enable = true,
-            },
-            --------- 新月岛·北岛：雪石膏之剑 ---------
-            AlabasterBlade = {
-                Enable = true,
-            },
-            --------- 新月岛·北岛：魔亡灵法师 ---------
-            MagiNecromancer = {
-                Enable = true,
-                DrawRevealPrediction = true,
-            },
-            --------- 新月岛·北岛：统领奇美拉 ---------
-            LeaderChimera = {
-                Enable = true,
-                DrawBreathSequencePrediction = true,
-            },
-            --------- 新月岛·北岛：魔许德拉 ---------
-            MagiHydra = {
-                Enable = true,
-                AutoFaceStunningFlash = true,
-                DrawMultipleBreathPrediction = true,
-            },
-            --------- 新月岛·北岛：伊阿姆柏 ---------
-            Iambe = {
-                Enable = true,
-                DrawSeedExplosionPrediction = true,
-            },
-            --------- 新月岛·北岛：呼风狮鹫 ---------
-            GaleGriffin = {
-                Enable = true,
-                DrawWindOrbPrediction = true,
-                DynamicGuide = true,
-            },
-            --------- 新月岛·北岛：诱拐魔 ---------
-            KidnapDemon = {
-                Enable = true,
-                DrawTearingWindPrediction = true,
-            },
-            --------- 新月岛·北岛：变形法师 ---------
-            ShapeshiftingMage = {
-                Enable = true,
-                CorrectSupercellDonut = true,
-                DrawHellishBreathPrediction = true,
-                DrawHellfireRushPrediction = true,
-            },
-            --------- 新月岛·北岛：凯尔派总领 ---------
-            KelpieCaptain = {
-                Enable = true,
-                DrawWaveburstPrediction = true,
-            },
-            --------- 新月岛·北岛：忍耐基路伯 ---------
-            PatientKuribu = {
-                Enable = true,
-            },
-            --------- 新月岛·北岛：负隅宝石兽 ---------
-            GemstoneBeast = {
-                Enable = true,
-                DrawSafeZone = true,
-                DynamicGuide = true,
-            },
-            --------- 新月岛·北岛：惨白魔人 ---------
-            Pallmagia = {
-                Enable = true,
-                DrawInstructionPrediction = true,
-                DynamicGuide = true,
-                RouletteGuide = true,
-            },
-            --------- 新月岛·北岛：小小法师 ---------
-            LittleMage = {
-                Enable = true,
-                DynamicGuide = true,
-            },
-            --------- 新月岛·北岛：邪瞳 ---------
-            EvilSeer = {
-                Enable = true,
-                AutoFacePetrifyingGaze = true,
-            },
-            --------- 新月岛·北岛：新月阿剌克涅 ---------
-            Arachne = {
-                Enable = true,
-                DrawChargePrediction = true,
-                DrawConformityPrediction = true,
-                DynamicGuide = true,
-            },
-            --------- 新月岛·北岛：好战弥诺陶洛斯 ---------
-            WarlikeMinotaur = {
-                Enable = true,
-                DrawEightfoldSweepPrediction = true,
-            },
         }
         return mainCfg
     end

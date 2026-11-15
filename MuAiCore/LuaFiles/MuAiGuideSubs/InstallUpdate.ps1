@@ -16,6 +16,7 @@ $createdFiles = [System.Collections.Generic.List[string]]::new()
 $patchedFiles = @{}
 $skipInstaller = $false
 $transactionStarted = $false
+$removedFiles = [System.Collections.Generic.List[string]]::new()
 $channelsRelative = 'MuAiCore\LuaFiles\MuAiGuideSubs\UpdateChannels.lua'
 $installerRelative = 'MuAiCore\LuaFiles\MuAiGuideSubs\InstallUpdate.ps1'
 
@@ -247,11 +248,54 @@ try {
         Prepare-UpdateChannels
     }
 
+    # 清单只允许删除本插件已退役的 Lua 源码，所有路径在开始写入前核验。
+    $removalList = Join-Path $SourceRoot 'MuAiCore\RemovedFiles.txt'
+    if (Test-Path -LiteralPath $removalList -PathType Leaf) {
+        $codeRoot = [System.IO.Path]::GetFullPath((Join-Path $TargetRoot 'MuAiCore\LuaFiles'))
+        foreach ($line in [System.IO.File]::ReadAllLines($removalList)) {
+            $relative = $line.Trim().Replace('/', '\')
+            if ($relative -eq '' -or $relative.StartsWith('#')) { continue }
+            if ($relative -notmatch '^MuAiCore\\LuaFiles\\[^:]+\.lua$' -or $relative -match '(^|\\)\.\.(\\|$)') {
+                throw "Invalid removed-file entry: $relative"
+            }
+            $destination = [System.IO.Path]::GetFullPath((Join-Path $TargetRoot $relative))
+            if (-not (Test-WithinPath $destination $codeRoot) -or
+                (Test-Path -LiteralPath (Join-Path $SourceRoot $relative))) {
+                throw "Conflicting removed-file entry: $relative"
+            }
+            $parent = Split-Path -Parent $destination
+            while (Test-WithinPath $parent $TargetRoot) {
+                if ((Test-Path -LiteralPath $parent) -and
+                    ((Get-Item -LiteralPath $parent -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+                    throw "Removed-file path crosses a linked directory: $relative"
+                }
+                if ($parent -eq $TargetRoot) { break }
+                $parent = Split-Path -Parent $parent
+            }
+            if (Test-Path -LiteralPath $destination) {
+                $item = Get-Item -LiteralPath $destination -Force
+                if ($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+                    throw "Removed-file path is not a regular file: $relative"
+                }
+            }
+            if (-not $removedFiles.Contains($relative)) { $removedFiles.Add($relative) }
+        }
+    }
+
     if (Test-Path -LiteralPath $backupRoot) {
         Remove-Item -LiteralPath $backupRoot -Recurse -Force -ErrorAction Stop
     }
     [System.IO.Directory]::CreateDirectory($backupRoot) | Out-Null
     $transactionStarted = $true
+
+    # 与覆盖文件共用回滚目录；后续任一安装步骤失败时，旧文件也能恢复。
+    foreach ($relative in $removedFiles) {
+        $destination = Join-Path $TargetRoot $relative
+        if (Test-Path -LiteralPath $destination -PathType Leaf) {
+            Copy-VerifiedFile -Source $destination -Destination (Join-Path $backupRoot $relative)
+            Remove-Item -LiteralPath $destination -Force -ErrorAction Stop
+        }
+    }
 
     foreach ($topLevel in @('MuAiCore', 'TensorReactions')) {
         $sourceDirectory = Join-Path $SourceRoot $topLevel
