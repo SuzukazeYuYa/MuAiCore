@@ -23,9 +23,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif MuAiGuide.Reactions.Settings.DutyHelper.enabled then\n\tMuAiGuide.Reactions.Settings.DutyHelper.saved = true\n\tMuAiGuide.Reactions.Settings.DutyHelper.enabled = false\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif MuAiGuide.Reactions.Settings.DutyHelper.enabled then\n    MuAiGuide.Reactions.Settings.DutyHelper.saved = true\n    MuAiGuide.Reactions.Settings.DutyHelper.enabled = false\nend\n\nself.used = true",
 							gVar = "ACR_RikuWAR3_CD",
-							name = "Disable Duty Helper",
+							name = "关闭副本助手",
 							uuid = "a7d807a8-f61a-5cd2-8650-c633dd89894d",
 							version = 2.1,
 						},
@@ -54,7 +54,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nMuAiGuide.Reactions.log(\"Stance is enabled, remembering this for later\")\nMuAiGuide.Reactions.Data.StanceEnabled = true\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nMuAiGuide.Reactions.log(\"[FRU/初始化] 已记录盾姿开启。\")\nMuAiGuide.Reactions.Data.StanceEnabled = true\nself.used = true",
 							conditions = 
 							{
 								
@@ -65,7 +65,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuWAR3_CD",
-							name = "Remember Has Stance",
+							name = "记录已开盾姿",
 							uuid = "ba68c7de-9a2a-514d-beb8-c4ca19cbc843",
 							version = 2.1,
 						},
@@ -75,7 +75,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nMuAiGuide.Reactions.log(\"Stance is disabled, remembering this for later\")\nMuAiGuide.Reactions.Data.StanceEnabled = false\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nMuAiGuide.Reactions.log(\"[FRU/初始化] 已记录盾姿关闭。\")\nMuAiGuide.Reactions.Data.StanceEnabled = false\nself.used = true",
 							conditions = 
 							{
 								
@@ -86,7 +86,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuWAR3_CD",
-							name = "Remember No Stance",
+							name = "记录未开盾姿",
 							uuid = "4bd8db2c-e5c9-591f-96f8-316f275447c2",
 							version = 2.1,
 						},
@@ -108,7 +108,7 @@ local tbl =
 							},
 							category = "Self",
 							matchAnyBuff = true,
-							name = "Has Stance",
+							name = "已开盾姿",
 							uuid = "bd3552fb-ce81-5fb3-8f74-75a8f5a14782",
 							version = 3,
 						},
@@ -126,7 +126,7 @@ local tbl =
 								1833,
 							},
 							category = "Self",
-							name = "No Stance",
+							name = "未开盾姿",
 							uuid = "611e0093-32eb-57fd-ac30-182627e9f676",
 							version = 3,
 						},
@@ -152,9 +152,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nMuAiGuide.Reactions.Toggle(\"setpots\", true)\nMuAiGuide.Reactions.Toggle(\"aoe\", true)\nif MuAiGuide.Reactions.Settings.Reactions.fruLatePot >= 2 then\n\tMuAiGuide.Reactions.Toggle(\"pots\", false)\nend\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nMuAiGuide.Reactions.Toggle(\"setpots\", true)\nMuAiGuide.Reactions.Toggle(\"aoe\", true)\nif MuAiGuide.Reactions.Settings.Reactions.fruLatePot >= 2 then\n    MuAiGuide.Reactions.Toggle(\"pots\", false)\nend\nself.used = true",
 							gVar = "ACR_RikuWAR3_CD",
-							name = "Set Toggles",
+							name = "初始化开关",
 							uuid = "341efc47-3ec6-578c-bb00-a0f554bccdbb",
 							version = 2.1,
 						},
@@ -184,9 +184,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- P2 Scythe Kick inner radius.\nMoogleTelegraphs.Settings.aoeIDUserSetDonuts[40203]= {name=\"Scythe Kick (FRU)\", radius=4, source=\"String 反应\"}\n\n-- P2 Mirrors' Reflected Scythe Kicks\nMoogleTelegraphs.Settings.aoeIDUserSetDonuts[40204] = {name=\"Reflected Scythe Kick (FRU)\", radius=4, source=\"String 反应\"}\nMoogleTelegraphs.Settings.aoeIDUserSetDonuts[40205] = {name=\"Reflected Scythe Kick (FRU)\", radius=4, source=\"String 反应\"}\n\n-- P5 Exas\nMoogleTelegraphs.Settings.aoeIDUserSetDonuts[40118] = {name=\"Path of Darkness (FRU)\", radius=4, source=\"String 反应\"}\nMoogleTelegraphs.Settings.aoeIDUserSetDonuts[40307] = {name=\"Path of Light (FRU)\", radius=4, source=\"String 反应\"}\n\nself.used = true",
+							actionLua = "-- P2 镰形回旋踢内径。\nMoogleTelegraphs.Settings.aoeIDUserSetDonuts[40203] =\n    { name = \"Scythe Kick (FRU)\", radius = 4, source = \"String 反应\" }\n\n-- P2 镜像镰形回旋踢内径。\nMoogleTelegraphs.Settings.aoeIDUserSetDonuts[40204] =\n    { name = \"Reflected Scythe Kick (FRU)\", radius = 4, source = \"String 反应\" }\nMoogleTelegraphs.Settings.aoeIDUserSetDonuts[40205] =\n    { name = \"Reflected Scythe Kick (FRU)\", radius = 4, source = \"String 反应\" }\n\n-- P5 光暗地火内径。\nMoogleTelegraphs.Settings.aoeIDUserSetDonuts[40118] =\n    { name = \"Path of Darkness (FRU)\", radius = 4, source = \"String 反应\" }\nMoogleTelegraphs.Settings.aoeIDUserSetDonuts[40307] =\n    { name = \"Path of Light (FRU)\", radius = 4, source = \"String 反应\" }\n\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set Donut Inner Radii",
+							name = "设置月环内径",
 							uuid = "b22b4232-3e10-50b0-99fc-62e18ad4313f",
 							version = 2.1,
 						},
@@ -196,9 +196,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- P2 Twin Silence (90* first -> 270* second)\nMoogleTelegraphs.Settings.aoeIDUserSetCones[40194] = {name=\"Twin Silence (FRU)\", angle=90, source=\"String 反应\"}\nMoogleTelegraphs.Settings.aoeIDUserSetCones[40195] = {name=\"Twin Silence (FRU)\", angle=270, source=\"String 反应\"}\n-- (270* first -> 90* second)\nMoogleTelegraphs.Settings.aoeIDUserSetCones[40193] = {name=\"Twin Stillness (FRU)\", angle=270, source=\"String 反应\"}\nMoogleTelegraphs.Settings.aoeIDUserSetCones[40196] = {name=\"Twin Stillness (FRU)\", angle=90, source=\"String 反应\"}\n\nself.used = true",
+							actionLua = "-- P2 双剑技: 先90度, 后270度。\nMoogleTelegraphs.Settings.aoeIDUserSetCones[40194] =\n    { name = \"Twin Silence (FRU)\", angle = 90, source = \"String 反应\" }\nMoogleTelegraphs.Settings.aoeIDUserSetCones[40195] =\n    { name = \"Twin Silence (FRU)\", angle = 270, source = \"String 反应\" }\n-- 另一分支先270度, 后90度。\nMoogleTelegraphs.Settings.aoeIDUserSetCones[40193] =\n    { name = \"Twin Stillness (FRU)\", angle = 270, source = \"String 反应\" }\nMoogleTelegraphs.Settings.aoeIDUserSetCones[40196] =\n    { name = \"Twin Stillness (FRU)\", angle = 90, source = \"String 反应\" }\n\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set Cone Angles",
+							name = "设置扇形角度",
 							uuid = "3389231e-0da8-55bd-a530-b073ded90f1d",
 							version = 2.1,
 						},
@@ -208,9 +208,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- P1 Knockback telegraph (covers entire arena, useless)\nMoogleTelegraphs.Settings.aoeIDUserBlacklist[40162] = \"Blastburn (FRU) - String 反应\"\nMoogleTelegraphs.Settings.aoeIDUserBlacklist[40130] = \"Blastburn (FRU) - String 反应\"\n\n-- P1 Towers that only require a single person to soak\nMoogleTelegraphs.Settings.aoeIDUserBlacklist[40135] = \"Explosion (FRU) - String 反应\"\nMoogleTelegraphs.Settings.aoeIDUserBlacklist[40131] = \"Explosion (FRU) - String 反应\"\n\n-- Intermission AOEs that already have an in-game telegraph\nMoogleTelegraphs.Settings.aoeIDUserBlacklist[40256] = \"Hiemal Storm (FRU) - String 反应\"\n\nself.used = true",
+							actionLua = "-- 全场击退改由中线和方向提示表达。\nMoogleTelegraphs.Settings.aoeIDUserBlacklist[40162] = \"Blastburn (FRU) - String 反应\"\nMoogleTelegraphs.Settings.aoeIDUserBlacklist[40130] = \"Blastburn (FRU) - String 反应\"\n\n-- 单人塔范围由本轴统一显示。\nMoogleTelegraphs.Settings.aoeIDUserBlacklist[40135] = \"Explosion (FRU) - String 反应\"\nMoogleTelegraphs.Settings.aoeIDUserBlacklist[40131] = \"Explosion (FRU) - String 反应\"\n\n-- 转场时已有游戏原生预兆的范围不重复显示。\nMoogleTelegraphs.Settings.aoeIDUserBlacklist[40256] = \"Hiemal Storm (FRU) - String 反应\"\n\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Blacklist Useless Draws",
+							name = "屏蔽重复范围",
 							uuid = "4fbfa6e0-2471-5a39-8132-7d7f5f12cc16",
 							version = 2.1,
 						},
@@ -239,7 +239,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal mtID = eventArgs.prevDetectionTargetID\nlocal otID = eventArgs.detectionTargetID\n\nif (mtID == nil) then\n    MuAiGuide.Reactions.log(\"[Tank Roles] MT ID was nil!\", 5)\n    self.used = true\n    return\nend\nif (otID == nil) then\n    MuAiGuide.Reactions.log(\"[Tank Roles] OT ID was nil!\", 5)\n    self.used = true\n    return\nend\n\nlocal mtEnt = TensorCore.mGetEntity(mtID)\nlocal otEnt = TensorCore.mGetEntity(otID)\n\nif (mtEnt == nil) then\n    MuAiGuide.Reactions.log(\"[Tank Roles] MT returned nil ent!\", 5)\n    self.used = true\n    return\nend\nif (otEnt == nil) then\n    MuAiGuide.Reactions.log(\"[Tank Roles] OT returned nil ent!\", 5)\n    self.used = true\n    return\nend\n\n---@enum\nlocal jobEnum = {\n    [19] = 1, -- PLD\n    [21] = 2, -- DRK\n    [32] = 3, -- DRK\n    [37] = 4, -- GNB\n}\nlocal playerID = TensorCore.mGetPlayer().id\nlocal playerIsMT = playerID == mtID\nlocal playerIsOT = playerID == otID\nlocal buddyEnt = playerIsMT and otEnt or mtEnt\n\ndata.selfIsMT = playerIsMT\ndata.selfIsOT = playerIsOT\ndata.mtRole = jobEnum[mtEnt.job]\ndata.otRole = jobEnum[otEnt.job]\ndata.tankBuddyRole = jobEnum[buddyEnt.job]\ndata.mtID = mtID\ndata.otID = otID\n\nlocal str = string.format(\"[Tank Roles] MTRole: %d, OTRole: %d, BuddyRole: %s, MTID: %d, OTID: %d, SelfIsMT: %s\", data.mtRole, data.otRole, tostring(data.tankBuddyRole), mtID, otID, tostring(playerIsMT))\nMuAiGuide.Reactions.log(str, 5)\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal mainTankId = eventArgs.prevDetectionTargetID\nlocal offTankId = eventArgs.detectionTargetID\n\nif mainTankId == nil then\n    MuAiGuide.Reactions.log(\"[FRU/双坦分工] 主坦ID缺失。\", 5)\n    self.used = true\n    return\nend\nif offTankId == nil then\n    MuAiGuide.Reactions.log(\"[FRU/双坦分工] 副坦ID缺失。\", 5)\n    self.used = true\n    return\nend\n\nlocal mainTank = TensorCore.mGetEntity(mainTankId)\nlocal offTank = TensorCore.mGetEntity(offTankId)\n\nif mainTank == nil then\n    MuAiGuide.Reactions.log(\"[FRU/双坦分工] 主坦实体暂不可读。\", 5)\n    self.used = true\n    return\nend\nif offTank == nil then\n    MuAiGuide.Reactions.log(\"[FRU/双坦分工] 副坦实体暂不可读。\", 5)\n    self.used = true\n    return\nend\n\n---@enum\nlocal tankJobRoles = {\n    [19] = 1, -- PLD\n    [21] = 2, -- DRK\n    [32] = 3, -- DRK\n    [37] = 4, -- GNB\n}\nlocal playerId = TensorCore.mGetPlayer().id\nlocal isMainTank = playerId == mainTankId\nlocal isOffTank = playerId == offTankId\nlocal partnerTank = isMainTank and offTank or mainTank\n\ndata.selfIsMT = isMainTank\ndata.selfIsOT = isOffTank\ndata.mtRole = tankJobRoles[mainTank.job]\ndata.otRole = tankJobRoles[offTank.job]\ndata.tankBuddyRole = tankJobRoles[partnerTank.job]\ndata.mtID = mainTankId\ndata.otID = offTankId\n\nlocal message = string.format(\n    \"[FRU/双坦分工] 主坦职责%d, 副坦职责%d, 搭档职责%s, 主坦ID%d, 副坦ID%d, 本人为主坦%s\",\n    data.mtRole,\n    data.otRole,\n    tostring(data.tankBuddyRole),\n    mainTankId,\n    offTankId,\n    tostring(isMainTank)\n)\nMuAiGuide.Reactions.log(message, 5)\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -254,7 +254,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Set Tank Roles",
+							name = "记录双坦分工",
 							uuid = "5d89786f-97a7-5d4d-a2b9-7d65987e0333",
 							version = 2.1,
 						},
@@ -268,7 +268,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Main Tank",
-							name = "Get MT",
+							name = "选取主坦",
 							uuid = "0cb85bb1-31c8-5a92-872d-03a07b5d4f89",
 							version = 3,
 						},
@@ -279,7 +279,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Off Tank",
-							name = "Get OT",
+							name = "选取副坦",
 							uuid = "c66ba4d0-d869-557b-8eca-20a83a02b4e6",
 							version = 3,
 						},
@@ -305,9 +305,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal party = MuAiGuide.Reactions.API.getAgnosticPartyList(\"Party\")\nif (not table.valid(party)) then\n    MuAiGuide.Reactions.log(\"[Record Party IDs] Failed to retrieve party list!\", 5)\n    self.used = true\n    return\nend\n\nlocal idArray = {}\nlocal count = 0\n---@diagnostic disable-next-line: param-type-mismatch\nfor _, ent in pairs(party) do\n    count = count + 1\n    table.insert(idArray, ent.id)\nend\n\nif (count ~= 8) then\n    MuAiGuide.Reactions.log(\"[Record Party IDs] Didn't retrieve 8 party members. Retrieved \" .. tostring(count), 5)\n    self.used = true\n    return\nend\ndata.partyIDArray = idArray\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal party = MuAiGuide.Reactions.API.getAgnosticPartyList(\"Party\")\nif not table.valid(party) then\n    MuAiGuide.Reactions.log(\"[FRU/队伍] 队伍集合不可用。\", 5)\n    self.used = true\n    return\nend\n\nlocal idArray = {}\nlocal count = 0\n---@diagnostic disable-next-line: param-type-mismatch\nfor _, entity in pairs(party) do\n    count = count + 1\n    table.insert(idArray, entity.id)\nend\n\nif count ~= 8 then\n    MuAiGuide.Reactions.log(\"[FRU/队伍] 未完整读取8人, 实际人数: \" .. tostring(count), 5)\n    self.used = true\n    return\nend\ndata.partyIDArray = idArray\nself.used = true",
 							gVar = "ACR_RikuWHM3_CD",
-							name = "Record Party IDs",
+							name = "记录队员ID",
 							uuid = "80bc74d2-392e-59f9-8018-387d8b842d67",
 							version = 2.1,
 						},
@@ -337,7 +337,7 @@ local tbl =
 				},
 				displayPath = "核心逻辑",
 				eventType = 9,
-				execute = "if MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready then MuAiGuide.Reactions.resetTransient(true) end\nself.used = true",
+				execute = "if MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready then\n    MuAiGuide.Reactions.resetTransient(true)\nend\nself.used = true",
 				executeType = 2,
 				mechanicTime = 13.7,
 				name = "团灭清理",
@@ -370,9 +370,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- P1 before-KB telegraph, for redrawing to make it less cluttered\nMoogleTelegraphs.Settings.aoeIDUserBlacklist[40161] = \"Burn Strike (FRU) - String 反应\"\n\nself.used = true",
+							actionLua = "-- 燃烧击范围由本轴接管, 避免与原电报重叠。\nMoogleTelegraphs.Settings.aoeIDUserBlacklist[40161] = \"Burn Strike (FRU) - String 反应\"\n\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Blacklist Redrawn Telegraphs",
+							name = "屏蔽已接管电报",
 							uuid = "1da3af1f-ebe5-5191-8c2f-1b7df3448951",
 							version = 2.1,
 						},
@@ -401,7 +401,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal center = {x=100, y=1, z=100}\nlocal radius = 21\n\nlocal south = TensorCore.getPosInDirection(center, math.rad(0), radius+3)\nMuAiGuide.Reactions.addTimedWorldText(1500000, \"S\", south, nil, nil, 3)\n\nlocal east = TensorCore.getPosInDirection(center, math.rad(90), radius+3)\nMuAiGuide.Reactions.addTimedWorldText(1500000, \"E\", east, nil, nil, 3)\n\nlocal north = TensorCore.getPosInDirection(center, math.rad(180), radius+3)\nMuAiGuide.Reactions.addTimedWorldText(1500000, \"N\", north, nil, nil, 3)\n\nlocal west = TensorCore.getPosInDirection(center, math.rad(270), radius+3)\nMuAiGuide.Reactions.addTimedWorldText(1500000, \"W\", west, nil, nil, 3)\n\nself.used = true\n",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal center = { x = 100, y = 1, z = 100 }\nlocal radius = 21\n\nlocal south = TensorCore.getPosInDirection(center, math.rad(0), radius + 3)\nMuAiGuide.Reactions.addTimedWorldText(1500000, \"S\", south, nil, nil, 3)\n\nlocal east = TensorCore.getPosInDirection(center, math.rad(90), radius + 3)\nMuAiGuide.Reactions.addTimedWorldText(1500000, \"E\", east, nil, nil, 3)\n\nlocal north = TensorCore.getPosInDirection(center, math.rad(180), radius + 3)\nMuAiGuide.Reactions.addTimedWorldText(1500000, \"N\", north, nil, nil, 3)\n\nlocal west = TensorCore.getPosInDirection(center, math.rad(270), radius + 3)\nMuAiGuide.Reactions.addTimedWorldText(1500000, \"W\", west, nil, nil, 3)\n\nself.used = true",
 							gVar = "ACR_RikuWAR3_CD",
 							uuid = "3aa1b208-fd2b-5e8e-81fc-436f5aa06452",
 							version = 2.1,
@@ -431,7 +431,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(3000, TensorCore.mGetPlayer().id, 6, 6000, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(3000, TensorCore.mGetPlayer().id, 6, 6000, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -442,7 +442,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Queue Partners",
+							name = "显示双人分摊",
 							uuid = "a4767129-0852-51bb-b63b-b26bed34833f",
 							version = 2.1,
 						},
@@ -452,7 +452,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal playerID = TensorCore.mGetPlayer().id\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, ent in pairs(party) do\n    if (ent.id ~= playerID) then\n        drawer:addTimedCircleOnEnt(3000, ent.id, 6, 6000, false, nil, 256)\n    end\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal playerId = TensorCore.mGetPlayer().id\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, entity in pairs(party) do\n    if entity.id ~= playerId then\n        drawer:addTimedCircleOnEnt(3000, entity.id, 6, 6000, false, nil, 256)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -463,7 +463,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Queue Spread",
+							name = "显示分散范围",
 							uuid = "494fcb12-027e-5dfb-9fb5-50e63616978e",
 							version = 2.1,
 						},
@@ -479,7 +479,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40144,
-							name = "Partners",
+							name = "双人分摊",
 							uuid = "b34cf492-f28c-5151-a231-2f3092411648",
 							version = 3,
 						},
@@ -492,7 +492,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40148,
-							name = "Spread",
+							name = "分散",
 							uuid = "636a1ad0-c4da-521f-9418-ddd6af87715e",
 							version = 3,
 						},
@@ -521,7 +521,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then return end\n\nlocal entPos = ent.pos\nlocal x = entPos.x\nlocal z = entPos.z\nlocal h = eventArgs.heading\nlocal coneAngle = math.rad(22.5)\nlocal coneAdvancement = math.rad(22.5)\n\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCone(2000, x, 0.05, z, 25, coneAngle, h, nil, false, nil, 256)\ndrawer:addTimedCone(2000, x, 0.05, z, 25, coneAngle, h - (coneAdvancement * 1), 2000, false, nil, 256)\ndrawer:addTimedCone(2000, x, 0.05, z, 25, coneAngle, h - (coneAdvancement * 2), 4000, false, nil, 256)\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    return\nend\n\nlocal entityPosition = entity.pos\nlocal x = entityPosition.x\nlocal z = entityPosition.z\nlocal h = eventArgs.heading\nlocal coneAngle = math.rad(22.5)\nlocal coneAdvancement = math.rad(22.5)\n\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCone(2000, x, 0.05, z, 25, coneAngle, h, nil, false, nil, 256)\ndrawer:addTimedCone(2000, x, 0.05, z, 25, coneAngle, h - (coneAdvancement * 1), 2000, false, nil, 256)\ndrawer:addTimedCone(2000, x, 0.05, z, 25, coneAngle, h - (coneAdvancement * 2), 4000, false, nil, 256)\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -531,7 +531,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Queue Cones",
+							name = "显示后续扇形",
 							uuid = "90911af5-3ee3-5ab9-bb28-1315ebd20731",
 							version = 2.1,
 						},
@@ -547,7 +547,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40145,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "c2f95afc-4f9b-56d3-ade2-4ffa110cbdab",
 							version = 3,
 						},
@@ -577,7 +577,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then return end\n\nlocal bossID = eventArgs.entityID\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal coneAngle = math.rad(22.5)\nfor _, ent in pairs(party) do\n    drawer:addTimedConeOnEnt(5000, bossID, 60, coneAngle, ent.id, 2000, false, nil, nil, nil, 256)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    return\nend\n\nlocal bossId = eventArgs.entityID\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal coneAngle = math.rad(22.5)\nfor _, entity in pairs(party) do\n    drawer:addTimedConeOnEnt(5000, bossId, 60, coneAngle, entity.id, 2000, false, nil, nil, nil, 256)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -587,7 +587,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Cones",
+							name = "显示扇形",
 							uuid = "53e42e56-99a9-571a-9f42-721a3db2c8b5",
 							version = 2.1,
 						},
@@ -603,7 +603,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 3,
 							eventArgType = 2,
-							name = "Either",
+							name = "任一技能",
 							spellIDList = 
 							{
 								40144,
@@ -648,7 +648,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Queue Partners",
+							name = "显示双人分摊",
 							uuid = "a4767129-0852-51bb-b63b-b26bed34833f",
 							version = 2.1,
 						},
@@ -669,7 +669,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Queue Spread",
+							name = "显示分散范围",
 							uuid = "494fcb12-027e-5dfb-9fb5-50e63616978e",
 							version = 2.1,
 						},
@@ -685,7 +685,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40144,
-							name = "Partners",
+							name = "双人分摊",
 							uuid = "b34cf492-f28c-5151-a231-2f3092411648",
 							version = 3,
 						},
@@ -698,7 +698,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40148,
-							name = "Spread",
+							name = "分散",
 							uuid = "636a1ad0-c4da-521f-9418-ddd6af87715e",
 							version = 3,
 						},
@@ -727,7 +727,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4DECEEC6, nil, 0x4DECEEC6, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCenteredRect(5000, 100, 0.05, 100, 0.15, 30, math.rad(90), 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4DECEEC6, nil, 0x4DECEEC6, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCenteredRect(5000, 100, 0.05, 100, 0.15, 30, math.rad(90), 0, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -737,7 +737,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuPLD3_CD",
-							name = "Draw Centerline",
+							name = "显示中线",
 							uuid = "865f60ae-dd3a-5564-af8c-7c3740045371",
 							version = 2.1,
 						},
@@ -752,7 +752,7 @@ local tbl =
 							category = "Self",
 							conditionType = 9,
 							dequeueIfLuaFalse = true,
-							name = "Is Tank",
+							name = "坦克职业",
 							partyTargetType = "Tank",
 							uuid = "d4f07b0d-9770-5463-be95-8a6dfbefc803",
 							version = 3,
@@ -779,10 +779,10 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal drawer = TensorCore.getCachedDrawer(0x4D0000FF, nil, 0x4D0000FF, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCircle(7200000, 100, 0.05, 100, 20, 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal drawer = TensorCore.getCachedDrawer(0x4D0000FF, nil, 0x4D0000FF, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCircle(7200000, 100, 0.05, 100, 20, 0, false, nil, 256)\nself.used = true",
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Arena",
+							name = "显示场地边界",
 							uuid = "07f1f68f-c2f5-5477-a9ac-af608c13fa8b",
 							version = 2.1,
 						},
@@ -835,7 +835,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Store Stacks",
+							name = "记录分摊",
 							uuid = "b9000538-afd3-524c-a4b6-f4beb62b2ea8",
 							version = 2.1,
 						},
@@ -855,7 +855,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Store Spread",
+							name = "记录分散",
 							uuid = "82cb3baa-b35c-5b55-8f40-3e3b14e56fa8",
 							version = 2.1,
 						},
@@ -871,7 +871,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40154,
-							name = "Stacks",
+							name = "分摊",
 							uuid = "20b324c1-ac1f-50b0-8db3-ac41bbba6cfc",
 							version = 3,
 						},
@@ -884,7 +884,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40155,
-							name = "Spread",
+							name = "分散",
 							uuid = "1cec652f-685a-5bb2-86c7-279fe4e2a24f",
 							version = 3,
 						},
@@ -914,7 +914,7 @@ local tbl =
 							aType = "Lua",
 							actionLua = "data.p1CyclonicStartTime = nil\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Reset Time",
+							name = "重置计时",
 							uuid = "dc0bcf92-a732-5c66-b0a7-7ed5c00dfbf6",
 							version = 2.1,
 						},
@@ -964,7 +964,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Call Stacks",
+							name = "播报分摊",
 							uuid = "b9000538-afd3-524c-a4b6-f4beb62b2ea8",
 							version = 2.1,
 						},
@@ -985,7 +985,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Call Spreads",
+							name = "播报分散",
 							uuid = "82cb3baa-b35c-5b55-8f40-3e3b14e56fa8",
 							version = 2.1,
 						},
@@ -1001,7 +1001,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40154,
-							name = "Stacks",
+							name = "分摊",
 							uuid = "20b324c1-ac1f-50b0-8db3-ac41bbba6cfc",
 							version = 3,
 						},
@@ -1014,7 +1014,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40155,
-							name = "Spread",
+							name = "分散",
 							uuid = "1cec652f-685a-5bb2-86c7-279fe4e2a24f",
 							version = 3,
 						},
@@ -1065,7 +1065,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Set Powder Mark ID",
+							name = "记录爆印目标",
 							uuid = "37c6c8d5-b15d-51a8-842b-78f4357623dd",
 							version = 2.1,
 						},
@@ -1087,7 +1087,7 @@ local tbl =
 								},
 							},
 							filterTargetType = "Party",
-							name = "Powder Mark Filter",
+							name = "选取爆印目标",
 							uuid = "694e2ae1-a990-55e2-a1ea-87634f97e618",
 							version = 3,
 						},
@@ -1098,7 +1098,7 @@ local tbl =
 						{
 							buffID = 4166,
 							category = "Party",
-							name = "Has Powder Mark",
+							name = "持有爆印",
 							partyTargetType = "Detection Target",
 							uuid = "d71d2fd8-faf7-5b2c-ba4f-1ebd3fca56af",
 							version = 3,
@@ -1138,7 +1138,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then return end\n\nlocal pos = ent.pos\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedRect(9150, pos.x, 0.05, pos.z, 50, 16, pos.h, nil, false, nil, 256)\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    return\nend\n\nlocal position = entity.pos\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedRect(9150, position.x, 0.05, position.z, 50, 16, position.h, nil, false, nil, 256)\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -1158,7 +1158,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Blasting Zone",
+							name = "显示爆破领域",
 							uuid = "ba79b3d2-dd13-5063-8f95-8ca409b0b092",
 							version = 2.1,
 						},
@@ -1178,7 +1178,7 @@ local tbl =
 							eventEntityContentID = 9708,
 							inGroupTargetContentID = 9708,
 							inGroupTargetType = "ContentID",
-							name = "ContentID",
+							name = "实体类型ID",
 							partyTargetType = "Event Entity",
 							uuid = "507ce46c-8e94-5cf6-86e2-4e2750c53a5d",
 							version = 3,
@@ -1195,7 +1195,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 4,
 							eventIntValue = 210,
-							name = "New AnimID",
+							name = "当前动画",
 							uuid = "66183d06-abca-5e7a-bad6-f8750559a42e",
 							version = 3,
 						},
@@ -1210,7 +1210,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 3,
 							eventIntValue = 34,
-							name = "Old AnimID",
+							name = "此前动画",
 							uuid = "5e40aaa0-ad4b-56ee-bde6-245bdd02c852",
 							version = 3,
 						},
@@ -1240,7 +1240,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nif (data.p1CloneMech == \"spread\") then\n    local party = TensorCore.getEntityGroupList(\"Party\")\n    if (not table.valid(party)) then\n        self.used = true\n        return\n    end\n\n    local fruMoogle1 = TensorCore.getMoogleDrawer()\n    local drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    for _, ent in pairs(party) do\n        drawer:addTimedCircleOnEnt(5000, ent.id, 5, 4800, false, nil, 256)\n    end\nelseif (data.p1CloneMech == \"stack\") then\n    local fruMuai2 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    fruMuai2:setGradient(3, 0.15, 2)\n    fruMuai2:setHeightOffset(0.05)\n    fruMuai2:addTimedCircleOnEnt(5000, TensorCore.mGetPlayer().id, 6, 4800, false, nil, 256)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nif data.p1CloneMech == \"spread\" then\n    local party = TensorCore.getEntityGroupList(\"Party\")\n    if not table.valid(party) then\n        self.used = true\n        return\n    end\n\n    local moogleColors1 = TensorCore.getMoogleDrawer()\n    local drawer = TensorCore.getCachedDrawer(\n        (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n        (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n        (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n        0xFFFFFFFF,\n        2,\n        0,\n        256\n    )\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    for _, entity in pairs(party) do\n        drawer:addTimedCircleOnEnt(5000, entity.id, 5, 4800, false, nil, 256)\n    end\nelseif data.p1CloneMech == \"stack\" then\n    local shapeDrawer2 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    shapeDrawer2:setGradient(3, 0.15, 2)\n    shapeDrawer2:setHeightOffset(0.05)\n    shapeDrawer2:addTimedCircleOnEnt(5000, TensorCore.mGetPlayer().id, 6, 4800, false, nil, 256)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -1256,7 +1256,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Stack/Spread",
+							name = "显示分散分摊",
 							uuid = "ba79b3d2-dd13-5063-8f95-8ca409b0b092",
 							version = 2.1,
 						},
@@ -1271,7 +1271,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p1CloneMech ~= nil",
 							dequeueIfLuaFalse = true,
-							name = "Clone Mech Stored",
+							name = "已记录分身机制",
 							uuid = "67a0b0fe-14f0-50ac-8197-2a297b498cd3",
 							version = 3,
 						},
@@ -1301,7 +1301,7 @@ local tbl =
 								},
 							},
 							dequeueIfLuaFalse = true,
-							name = "AnimID Check",
+							name = "动画条件",
 							partyTargetNumber = 0,
 							uuid = "9f4aa53e-3b32-5a19-ba94-fd65bba1ac80",
 							version = 3,
@@ -1385,7 +1385,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "TTS Clone Mech",
+							name = "播报分身机制",
 							uuid = "ba79b3d2-dd13-5063-8f95-8ca409b0b092",
 							version = 2.1,
 						},
@@ -1400,7 +1400,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p1CloneMech ~= nil",
 							dequeueIfLuaFalse = true,
-							name = "Clone Mech Stored",
+							name = "已记录分身机制",
 							uuid = "66183d06-abca-5e7a-bad6-f8750559a42e",
 							version = 3,
 						},
@@ -1430,7 +1430,7 @@ local tbl =
 								},
 							},
 							dequeueIfLuaFalse = true,
-							name = "AnimID Check",
+							name = "动画条件",
 							partyTargetNumber = 0,
 							uuid = "e8870e3a-1217-509a-978b-7bf549a6db71",
 							version = 3,
@@ -1498,7 +1498,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal drawTime = (40.3 - TensorReactions_CurrentTimer) * 1000\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(drawTime, eventArgs.detectionTargetID, 10, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal durationMs = (40.3 - TensorReactions_CurrentTimer) * 1000\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(durationMs, eventArgs.detectionTargetID, 10, nil, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -1508,7 +1508,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Timed Draw Powder Mark",
+							name = "显示爆印范围",
 							uuid = "37c6c8d5-b15d-51a8-842b-78f4357623dd",
 							version = 2.1,
 						},
@@ -1530,7 +1530,7 @@ local tbl =
 								},
 							},
 							filterTargetType = "Party",
-							name = "Powder Mark Filter",
+							name = "选取爆印目标",
 							uuid = "694e2ae1-a990-55e2-a1ea-87634f97e618",
 							version = 3,
 						},
@@ -1541,7 +1541,7 @@ local tbl =
 						{
 							buffID = 4166,
 							category = "Party",
-							name = "Has Powder Mark",
+							name = "持有爆印",
 							partyTargetType = "Detection Target",
 							uuid = "d71d2fd8-faf7-5b2c-ba4f-1ebd3fca56af",
 							version = 3,
@@ -1571,7 +1571,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal pm = TensorCore.mGetEntity(data.p1PowderMarkID).pos\nlocal closest = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal dist = TensorCore.getDistance2d(pm, closest)\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addDonut(pm.x, 0.05, pm.z, dist-0.5, dist, false, 256)\ndrawer:addCircle(closest.x, 0.05, closest.z, 10, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal pm = TensorCore.mGetEntity(data.p1PowderMarkID).pos\nlocal closest = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal dist = TensorCore.getDistance2d(pm, closest)\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addDonut(pm.x, 0.05, pm.z, dist - 0.5, dist, false, 256)\ndrawer:addCircle(closest.x, 0.05, closest.z, 10, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -1586,7 +1586,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Draw Closest",
+							name = "显示最近目标范围",
 							uuid = "c25dfc90-f8fc-5757-8025-3047c5dd366c",
 							version = 2.1,
 						},
@@ -1608,7 +1608,7 @@ local tbl =
 								},
 							},
 							filterTargetType = "Party",
-							name = "Powder Mark Filter",
+							name = "选取爆印目标",
 							uuid = "146cd19c-0aaf-55c3-9c23-828f300a3069",
 							version = 3,
 						},
@@ -1619,7 +1619,7 @@ local tbl =
 						{
 							buffID = 4166,
 							category = "Party",
-							name = "Has Powder Mark",
+							name = "持有爆印",
 							partyTargetType = "Detection Target",
 							uuid = "2f3bb281-74bc-5604-a125-9f4fd7f51358",
 							version = 3,
@@ -1645,7 +1645,7 @@ local tbl =
 								},
 							},
 							filterTargetType = "Party",
-							name = "Nearest to Prev",
+							name = "距前一目标最近",
 							subtypeRangeCheckSourceType = "Prev Detection Target",
 							uuid = "d3c915a8-0d47-5780-8284-df5f0c72ba6a",
 							version = 3,
@@ -1659,7 +1659,7 @@ local tbl =
 							conditionType = 2,
 							hpType = 2,
 							hpValue = 1,
-							name = "Exists",
+							name = "目标存在",
 							partyTargetType = "Detection Target",
 							uuid = "b1da3352-b859-5f19-9994-9f78029101ba",
 							version = 3,
@@ -1703,7 +1703,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal bossID = eventArgs.entityID\nlocal coneAngle = math.rad(22.5)\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, ent in pairs(party) do\n    drawer:addTimedConeOnEnt(3600, bossID, 25, coneAngle, ent.id, 4000, false, nil, nil, nil, 256)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal bossId = eventArgs.entityID\nlocal coneAngle = math.rad(22.5)\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, entity in pairs(party) do\n    drawer:addTimedConeOnEnt(3600, bossId, 25, coneAngle, entity.id, 4000, false, nil, nil, nil, 256)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -1714,7 +1714,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Cones",
+							name = "显示扇形",
 							uuid = "ce3eb6df-2620-563f-9d22-bf0c5b94d49c",
 							version = 2.1,
 						},
@@ -1729,7 +1729,7 @@ local tbl =
 							category = "Event",
 							eventArgOptionType = 3,
 							eventArgType = 2,
-							name = "Channel ID",
+							name = "读条技能",
 							spellIDList = 
 							{
 								40329,
@@ -1763,7 +1763,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal playerID = TensorCore.mGetPlayer().id\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, ent in pairs(party) do\n    if (ent.id ~= playerID) then\n        drawer:addTimedCircleOnEnt(3700, ent.id, 6, 6000, false, nil, 256)\n    end\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal playerId = TensorCore.mGetPlayer().id\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, entity in pairs(party) do\n    if entity.id ~= playerId then\n        drawer:addTimedCircleOnEnt(3700, entity.id, 6, 6000, false, nil, 256)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -1774,7 +1774,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Spread",
+							name = "显示分散范围",
 							uuid = "1867f967-a660-5263-991b-b810f44ff1f2",
 							version = 2.1,
 						},
@@ -1785,7 +1785,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(3700, TensorCore.mGetPlayer().id, 6, 6000, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(3700, TensorCore.mGetPlayer().id, 6, 6000, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -1796,7 +1796,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Partners",
+							name = "显示双人分摊",
 							uuid = "7ac6dc04-a4bc-5cd4-b756-7add673f2d80",
 							version = 2.1,
 						},
@@ -1813,7 +1813,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40330,
-							name = "Spread",
+							name = "分散",
 							uuid = "c3fbaf5b-7d53-5b98-b39d-0caaf2e80602",
 							version = 3,
 						},
@@ -1826,7 +1826,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40329,
-							name = "Partners",
+							name = "双人分摊",
 							uuid = "7ccd6482-51ef-5fec-b7d8-8020d9d5ce10",
 							version = 3,
 						},
@@ -1871,7 +1871,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Shotcall Spread",
+							name = "播报分散",
 							uuid = "70e4d0e9-5e39-56d0-a2a6-4456e94c69f3",
 							version = 2.1,
 						},
@@ -1897,7 +1897,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Shotcall Partners",
+							name = "播报双人分摊",
 							uuid = "91e6270e-66ef-5cbe-9e0d-db292fc567c4",
 							version = 2.1,
 						},
@@ -1913,7 +1913,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40330,
-							name = "Spread",
+							name = "分散",
 							uuid = "c3fbaf5b-7d53-5b98-b39d-0caaf2e80602",
 							version = 3,
 						},
@@ -1926,7 +1926,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40329,
-							name = "Partners",
+							name = "双人分摊",
 							uuid = "7ccd6482-51ef-5fec-b7d8-8020d9d5ce10",
 							version = 3,
 						},
@@ -1940,7 +1940,7 @@ local tbl =
 							channelCheckType = 3,
 							comparator = 2,
 							conditionType = 5,
-							name = "Channel Time",
+							name = "读条时间",
 							partyTargetType = "Event Entity",
 							uuid = "09d8f2e9-08d2-5873-9102-bce9f689c8e0",
 							version = 3,
@@ -1994,7 +1994,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Store Lightning",
+							name = "记录雷属性",
 							uuid = "ee928c8e-fa45-5efa-b044-61e73abf269b",
 							version = 2.1,
 						},
@@ -2015,7 +2015,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Store Fire",
+							name = "记录火属性",
 							uuid = "15f06ec9-02d4-58f6-bbf4-8c8220719ee8",
 							version = 2.1,
 						},
@@ -2031,7 +2031,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40150,
-							name = "Lightning Safe",
+							name = "雷属性安全",
 							uuid = "5e3b0e16-9ace-57d6-a6c4-f7f2dd00d8fc",
 							version = 3,
 						},
@@ -2044,7 +2044,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40151,
-							name = "Fire Safe",
+							name = "火属性安全",
 							uuid = "bfb222da-f847-54f0-8029-65167e5bd25b",
 							version = 3,
 						},
@@ -2094,7 +2094,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Lightning Safe",
+							name = "雷属性安全",
 							uuid = "ee928c8e-fa45-5efa-b044-61e73abf269b",
 							version = 2.1,
 						},
@@ -2115,7 +2115,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Fire Safe",
+							name = "火属性安全",
 							uuid = "15f06ec9-02d4-58f6-bbf4-8c8220719ee8",
 							version = 2.1,
 						},
@@ -2131,7 +2131,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40150,
-							name = "Lightning Safe",
+							name = "雷属性安全",
 							uuid = "5e3b0e16-9ace-57d6-a6c4-f7f2dd00d8fc",
 							version = 3,
 						},
@@ -2144,7 +2144,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40151,
-							name = "Fire Safe",
+							name = "火属性安全",
 							uuid = "bfb222da-f847-54f0-8029-65167e5bd25b",
 							version = 3,
 						},
@@ -2173,7 +2173,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then return end\n\nlocal entPos = ent.pos\nlocal x = entPos.x\nlocal z = entPos.z\nlocal h = eventArgs.heading\nlocal coneAngle = math.rad(22.5)\nlocal coneAdvancement = math.rad(22.5)\n\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCone(2000, x, 0.05, z, 25, coneAngle, h, nil, false, nil, 256)\ndrawer:addTimedCone(2000, x, 0.05, z, 25, coneAngle, h - (coneAdvancement * 1), 2000, false, nil, 256)\ndrawer:addTimedCone(2000, x, 0.05, z, 25, coneAngle, h - (coneAdvancement * 2), 4000, false, nil, 256)\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    return\nend\n\nlocal entityPosition = entity.pos\nlocal x = entityPosition.x\nlocal z = entityPosition.z\nlocal h = eventArgs.heading\nlocal coneAngle = math.rad(22.5)\nlocal coneAdvancement = math.rad(22.5)\n\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCone(2000, x, 0.05, z, 25, coneAngle, h, nil, false, nil, 256)\ndrawer:addTimedCone(2000, x, 0.05, z, 25, coneAngle, h - (coneAdvancement * 1), 2000, false, nil, 256)\ndrawer:addTimedCone(2000, x, 0.05, z, 25, coneAngle, h - (coneAdvancement * 2), 4000, false, nil, 256)\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -2183,7 +2183,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Queue Cones",
+							name = "显示后续扇形",
 							uuid = "90911af5-3ee3-5ab9-bb28-1315ebd20731",
 							version = 2.1,
 						},
@@ -2199,7 +2199,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40145,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "c2f95afc-4f9b-56d3-ade2-4ffa110cbdab",
 							version = 3,
 						},
@@ -2242,7 +2242,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then return end\n\nif (data.arenaCenter == nil) then data.arenaCenter = { x = 100, y = 0, z = 100 } end\n\nlocal headingToEnt = TensorCore.getHeadingToTarget(data.arenaCenter, ent.pos)\nlocal farPos = TensorCore.getPosInDirection(data.arenaCenter, headingToEnt, 40)\n\n-- Orange slim line in middle to know how close you can get to the KB.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D0070FF, nil, 0x4D0070FF, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedRect(3000, farPos.x, 0.05, farPos.z, 80, 0.22, headingToEnt + math.pi, 7700, false, nil, 256)\n-- Redraw the Burnt Strike hit itself.\nlocal fruMoogle2 = TensorCore.getMoogleDrawer()\nlocal fruMuai2 = TensorCore.getCachedDrawer((fruMoogle2.colorStart and fruMoogle2.colorStart % 0x1000000 + 0x4D000000), (fruMoogle2.colorMid and fruMoogle2.colorMid % 0x1000000 + 0x4D000000), (fruMoogle2.colorEnd and fruMoogle2.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai2:setGradient(3, 0.15, 2)\nfruMuai2:setHeightOffset(0.05)\nfruMuai2:addTimedRect(3700, farPos.x, 0.05, farPos.z, 80, 10, headingToEnt + math.pi, 4000, false, nil, 256)\n\ndata.p1BurntStrikeHeading = TensorCore.convertHeading(headingToEnt)\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    return\nend\n\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\n\nlocal headingToEnt = TensorCore.getHeadingToTarget(data.arenaCenter, entity.pos)\nlocal farPos = TensorCore.getPosInDirection(data.arenaCenter, headingToEnt, 40)\n\n-- 细线表示击退中线距离参考。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D0070FF, nil, 0x4D0070FF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedRect(3000, farPos.x, 0.05, farPos.z, 80, 0.22, headingToEnt + math.pi, 7700, false, nil, 256)\n-- 按原判定窗口显示燃烧击范围。\nlocal moogleColors2 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer2 = TensorCore.getCachedDrawer(\n    (moogleColors2.colorStart and moogleColors2.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors2.colorMid and moogleColors2.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors2.colorEnd and moogleColors2.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer2:setGradient(3, 0.15, 2)\nshapeDrawer2:setHeightOffset(0.05)\nshapeDrawer2:addTimedRect(3700, farPos.x, 0.05, farPos.z, 80, 10, headingToEnt + math.pi, 4000, false, nil, 256)\n\ndata.p1BurntStrikeHeading = TensorCore.convertHeading(headingToEnt)\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -2252,7 +2252,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Redraw Burnt Strike",
+							name = "显示燃烧击范围",
 							uuid = "81c37ddd-8ce0-5956-a625-25ce867cc3dc",
 							version = 2.1,
 						},
@@ -2268,7 +2268,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40161,
-							name = "Channel ID",
+							name = "读条技能",
 							spellIDList = 
 							{
 								40161,
@@ -2314,7 +2314,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then\n    MuAiGuide.Reactions.log(\"[Utopian Safe Side] OnEntityAdd entity was nil!?\", 5)\n    self.used = true\n    return\nend\n\nif (data.arenaCenter == nil) then data.arenaCenter = { x = 100, y = 0, z = 100 } end\n\nlocal h = TensorCore.getHeadingToTarget(data.arenaCenter, ent.pos)\nlocal d = TensorCore.getDistance2d(data.arenaCenter, ent.pos)\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedArrow(5000, 100, 0.05, 100, h, d, 1, nil, nil, nil, false, 256)\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif ent == nil then\n    MuAiGuide.Reactions.log(\"[FRU/光轮] 生成实体暂不可读。\", 5)\n    self.used = true\n    return\nend\n\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\n\nlocal heading = TensorCore.getHeadingToTarget(data.arenaCenter, ent.pos)\nlocal distance = TensorCore.getDistance2d(data.arenaCenter, ent.pos)\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedArrow(5000, 100, 0.05, 100, heading, distance, 1, nil, nil, nil, false, 256)\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -2330,7 +2330,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Safe Arrow",
+							name = "显示安全方向",
 							uuid = "b0f72dec-1507-50f8-927d-2f48c8c7f1c1",
 							version = 2.1,
 						},
@@ -2345,7 +2345,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p1UtopianSafeElement == eventArgs.entityContentID",
 							dequeueIfLuaFalse = true,
-							name = "Correct Content ID",
+							name = "实体类型匹配",
 							uuid = "2ba710b1-981a-5bea-9bbe-3417d56bc455",
 							version = 3,
 						},
@@ -2355,9 +2355,9 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "local ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then return false end\nreturn math.abs(ent.pos.z - 100) < 2",
+							conditionLua = "local entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    return false\nend\nreturn math.abs(entity.pos.z - 100) < 2",
 							dequeueIfLuaFalse = true,
-							name = "On West-East",
+							name = "位于东西轴",
 							uuid = "ffe80c6b-851d-516f-bd4a-c5e49d910c54",
 							version = 3,
 						},
@@ -2399,7 +2399,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if (data.p1UtopianTethers == nil) then\n    ---@type integer[]\n    data.p1UtopianTethers = {}\n    data.p1UtopianTetherCount = 0\nend\n\ndata.p1UtopianTetherCount = data.p1UtopianTetherCount + 1\ntable.insert(data.p1UtopianTethers, eventArgs.newTargetID)\n\nself.used = true",
+							actionLua = "if data.p1UtopianTethers == nil then\n    ---@type integer[]\n    data.p1UtopianTethers = {}\n    data.p1UtopianTetherCount = 0\nend\n\ndata.p1UtopianTetherCount = data.p1UtopianTetherCount + 1\ntable.insert(data.p1UtopianTethers, eventArgs.newTargetID)\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -2409,7 +2409,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Tether Target",
+							name = "记录连线目标",
 							uuid = "eed7a44e-473e-5cd2-816e-403e1e194a54",
 							version = 2.1,
 						},
@@ -2427,7 +2427,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 5,
 							eventIntValue = 249,
-							name = "Tether ID",
+							name = "连线类型",
 							uuid = "d0ae2b3c-1d0d-543c-b462-30b9ed5def06",
 							version = 3,
 						},
@@ -2467,7 +2467,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal ent1 = TensorCore.mGetEntity(data.p1UtopianTethers[1])\nlocal ent2 = TensorCore.mGetEntity(data.p1UtopianTethers[2])\n\nlocal isEnt1DPS = MuAiGuide.Reactions.dpsJobs[ent1.job] == true\nlocal isEnt2DPS = MuAiGuide.Reactions.dpsJobs[ent2.job] == true\nif (isEnt1DPS == isEnt2DPS) then\n    if (isEnt1DPS) then\n        MuAiGuide.Reactions.Shotcall(\"Double DPS Tethers\", true, 9)\n    else\n        MuAiGuide.Reactions.Shotcall(\"Double Support Tethers\", true, 9)\n    end\nelse\n    MuAiGuide.Reactions.Shotcall(\"Tethers Different Roles\", true, 9)\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal firstEntity = TensorCore.mGetEntity(data.p1UtopianTethers[1])\nlocal secondEntity = TensorCore.mGetEntity(data.p1UtopianTethers[2])\n\nlocal isEnt1DPS = MuAiGuide.Reactions.dpsJobs[firstEntity.job] == true\nlocal isEnt2DPS = MuAiGuide.Reactions.dpsJobs[secondEntity.job] == true\nif isEnt1DPS == isEnt2DPS then\n    if isEnt1DPS then\n        MuAiGuide.Reactions.Shotcall(\"Double DPS Tethers\", true, 9)\n    else\n        MuAiGuide.Reactions.Shotcall(\"Double Support Tethers\", true, 9)\n    end\nelse\n    MuAiGuide.Reactions.Shotcall(\"Tethers Different Roles\", true, 9)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -2477,7 +2477,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Shotcall Tether",
+							name = "播报连线分组",
 							uuid = "eed7a44e-473e-5cd2-816e-403e1e194a54",
 							version = 2.1,
 						},
@@ -2491,7 +2491,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p1UtopianTetherCount == 2",
-							name = "Tethers Recorded",
+							name = "连线记录完整",
 							uuid = "d0ae2b3c-1d0d-543c-b462-30b9ed5def06",
 							version = 3,
 						},
@@ -2519,7 +2519,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal drawer = TensorCore.getCachedDrawer(0x4D79EB0E, nil, 0x4D79EB0E, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCircleOnEnt(12000, data.p1UtopianTethers[1], 0.25, 0, false, nil, 256)\ndrawer:addTimedCircleOnEnt(12000, data.p1UtopianTethers[2], 0.25, 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal drawer = TensorCore.getCachedDrawer(0x4D79EB0E, nil, 0x4D79EB0E, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCircleOnEnt(12000, data.p1UtopianTethers[1], 0.25, 0, false, nil, 256)\ndrawer:addTimedCircleOnEnt(12000, data.p1UtopianTethers[2], 0.25, 0, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -2529,7 +2529,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Shotcall Tether",
+							name = "播报连线分组",
 							uuid = "eed7a44e-473e-5cd2-816e-403e1e194a54",
 							version = 2.1,
 						},
@@ -2543,7 +2543,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p1UtopianTetherCount == 2",
-							name = "Tethers Recorded",
+							name = "连线记录完整",
 							uuid = "6046285b-8e3c-5882-b340-2022caf10ef6",
 							version = 3,
 						},
@@ -2594,7 +2594,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Shotcall Move In",
+							name = "播报靠近",
 							uuid = "9f326ea4-bec1-5a14-be52-d748b8cde0d9",
 							version = 2.1,
 						},
@@ -2610,7 +2610,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40161,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "d5876784-16f2-562f-9c3c-a243a5c1fa37",
 							version = 3,
 						},
@@ -2652,7 +2652,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal drawTime = (78.5 - TensorReactions_CurrentTimer) * 1000\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\n\nfor _, ent in pairs(party) do\n    if (TensorCore.hasBuff(ent.id, 4165)) then\n        drawer:addTimedCircleOnEnt(drawTime, ent.id, 6, nil, false, nil, 256)\n    end\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal durationMs = (78.5 - TensorReactions_CurrentTimer) * 1000\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\n\nfor _, entity in pairs(party) do\n    if TensorCore.hasBuff(entity.id, 4165) then\n        drawer:addTimedCircleOnEnt(durationMs, entity.id, 6, nil, false, nil, 256)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -2663,7 +2663,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Sinsmokes",
+							name = "显示罪壤断扇形",
 							uuid = "7805222b-82ea-5513-ae15-9258fd4a8c3a",
 							version = 2.1,
 						},
@@ -2678,7 +2678,7 @@ local tbl =
 							buffID = 4165,
 							category = "Party",
 							dequeueIfLuaFalse = true,
-							name = "Fated Burn Mark Exists",
+							name = "已记录连线目标",
 							partyTargetNumber = 2,
 							partyTargetSubType = "Number",
 							uuid = "56a60eea-19ee-558d-84a4-c3c7143e871e",
@@ -2751,7 +2751,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Find Boss",
+							name = "选取首领",
 							uuid = "a1149ea4-b9fa-5022-812e-00f7807d7c70",
 							version = 3,
 						},
@@ -2763,7 +2763,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Current Target",
-							name = "Target Filter",
+							name = "选取目标",
 							uuid = "8dfc223a-a42b-5cce-945a-236d694de158",
 							version = 3,
 						},
@@ -2805,7 +2805,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nif (data.p1TetherCount == nil) then\n    data.p1TetherCount = 0\n    data.p1TetherInfo = {}\n    data.p1TetherEntIDs = {}\nend\ndata.p1TetherCount = data.p1TetherCount + 1\nlocal isFire = eventArgs.newTetherID == 249\nlocal tetherTypeString = isFire and \"fire\" or \"lightning\"\nlocal shortStr = isFire and \"F\" or \"L\"\nlocal textColor = isFire and 4014567932 or 4026299465\n\nlocal targetID = eventArgs.newTargetID\nlocal tetherInfo = { id = targetID, type = tetherTypeString }\ntable.insert(data.p1TetherInfo, tetherInfo)\ndata.p1TetherEntIDs[targetID] = true\n\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(13000, tostring(data.p1TetherCount) .. shortStr, targetID, textColor, true, 2, 1.5)\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4DFFA000, nil, 0x4DFFA000, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(3000, targetID, 0.2, 10000, false, nil, 256)\n\nlocal whiteDotUUID = data.p1FOFWhiteDotUUIDs[targetID]\nif (whiteDotUUID ~= nil) then\n    Argus.deleteTimedShape(whiteDotUUID)\n    data.p1FOFWhiteDotUUIDs[targetID] = nil\nend\n\nif TensorCore.mGetPlayer().id == targetID then\n    if data.p1TetherCount == 1 or data.p1TetherCount == 3 then\n        data.playerDirection = \"west\"\n    elseif data.p1TetherCount == 2 or data.p1TetherCount == 4 then\n        data.playerDirection = \"east\"\n    end\nend\n\ndata.p1FOFUpdateWorldText = true\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nif data.p1TetherCount == nil then\n    data.p1TetherCount = 0\n    data.p1TetherInfo = {}\n    data.p1TetherEntIDs = {}\nend\ndata.p1TetherCount = data.p1TetherCount + 1\nlocal isFire = eventArgs.newTetherID == 249\nlocal tetherTypeString = isFire and \"fire\" or \"lightning\"\nlocal shortStr = isFire and \"F\" or \"L\"\nlocal textColor = isFire and 4014567932 or 4026299465\n\nlocal targetId = eventArgs.newTargetID\nlocal tetherInfo = { id = targetId, type = tetherTypeString }\ntable.insert(data.p1TetherInfo, tetherInfo)\ndata.p1TetherEntIDs[targetId] = true\n\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(\n    13000,\n    tostring(data.p1TetherCount) .. shortStr,\n    targetId,\n    textColor,\n    true,\n    2,\n    1.5\n)\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4DFFA000, nil, 0x4DFFA000, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(3000, targetId, 0.2, 10000, false, nil, 256)\n\nlocal whiteDotUUID = data.p1FOFWhiteDotUUIDs[targetId]\nif whiteDotUUID ~= nil then\n    Argus.deleteTimedShape(whiteDotUUID)\n    data.p1FOFWhiteDotUUIDs[targetId] = nil\nend\n\nif TensorCore.mGetPlayer().id == targetId then\n    if data.p1TetherCount == 1 or data.p1TetherCount == 3 then\n        data.playerDirection = \"west\"\n    elseif data.p1TetherCount == 2 or data.p1TetherCount == 4 then\n        data.playerDirection = \"east\"\n    end\nend\n\ndata.p1FOFUpdateWorldText = true\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -2815,7 +2815,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Tether Info",
+							name = "记录连线信息",
 							uuid = "f08669cb-ff8b-54af-a4b3-f8b4436240f6",
 							version = 2.1,
 						},
@@ -2844,7 +2844,7 @@ local tbl =
 							},
 							dequeueIfLuaFalse = true,
 							matchAnyBuff = true,
-							name = "Valid Tether ID",
+							name = "连线类型匹配",
 							partyTargetNumber = 0,
 							uuid = "e103fed2-768d-5875-8dda-7a7582646397",
 							version = 3,
@@ -2911,10 +2911,10 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal drawTime = (114.5 - TensorReactions_CurrentTimer) * 1000\nlocal drawer = TensorCore.getCachedDrawer(0x4DFFFFE7, nil, 0x4DFFFFE7, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\n\ndata.p1FOFWhiteDotUUIDs = {}\n\nfor _, ent in pairs(party) do\n    data.p1FOFWhiteDotUUIDs[ent.id] = drawer:addTimedCircleOnEnt(drawTime, ent.id, 0.215, 0, false, nil, 256)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal durationMs = (114.5 - TensorReactions_CurrentTimer) * 1000\nlocal drawer = TensorCore.getCachedDrawer(0x4DFFFFE7, nil, 0x4DFFFFE7, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\n\ndata.p1FOFWhiteDotUUIDs = {}\n\nfor _, entity in pairs(party) do\n    data.p1FOFWhiteDotUUIDs[entity.id] = drawer:addTimedCircleOnEnt(durationMs, entity.id, 0.215, 0, false, nil, 256)\nend\n\nself.used = true",
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw White Dots",
+							name = "显示队员白点",
 							uuid = "72f84283-7c56-5a39-9e63-f6853ee6d9c1",
 							version = 2.1,
 						},
@@ -2945,7 +2945,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif (data.p1FOFAMTetherCount == nil) then\n    data.p1FOFAMTetherCount = 0\nend\n\ndata.p1FOFAMTetherCount = data.p1FOFAMTetherCount + 1\n\nlocal curCount = data.p1FOFAMTetherCount\nlocal markerID\nif (curCount == 1) then\n    markerID = 9\nelseif (curCount == 2) then\n    markerID = 6\nelseif (curCount == 3) then\n    markerID = 10\nelse\n    markerID = 7\nend\n\nlocal ent = TensorCore.mGetEntity(eventArgs.newTargetID)\nif (ent == nil or ent.marker == markerID) then\n    self.used = true\n    return\nend\n\nMuAiGuide.Reactions.Data.autoMarkersSet = true\nActionList:Get(12, markerID):Cast(eventArgs.newTargetID)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif data.p1FOFAMTetherCount == nil then\n    data.p1FOFAMTetherCount = 0\nend\n\ndata.p1FOFAMTetherCount = data.p1FOFAMTetherCount + 1\n\nlocal currentCount = data.p1FOFAMTetherCount\nlocal markerId\nif currentCount == 1 then\n    markerId = 9\nelseif currentCount == 2 then\n    markerId = 6\nelseif currentCount == 3 then\n    markerId = 10\nelse\n    markerId = 7\nend\n\nlocal entity = TensorCore.mGetEntity(eventArgs.newTargetID)\nif entity == nil or entity.marker == markerId then\n    self.used = true\n    return\nend\n\nMuAiGuide.Reactions.Data.autoMarkersSet = true\nActionList:Get(12, markerId):Cast(eventArgs.newTargetID)\nself.used = true",
 							conditions = 
 							{
 								
@@ -2960,7 +2960,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Mark Tethers",
+							name = "标记连线顺序",
 							uuid = "1fcf20ac-d0cf-5fa0-a33a-d84b01126639",
 							version = 2.1,
 						},
@@ -2975,7 +2975,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruP1FOFAM == true",
 							dequeueIfLuaFalse = true,
-							name = "FoF AM Enabled",
+							name = "罪壤断标记已开启",
 							uuid = "0e616b03-3fef-5dff-8ef8-d735e93e2791",
 							version = 3,
 						},
@@ -3002,7 +3002,7 @@ local tbl =
 							},
 							dequeueIfLuaFalse = true,
 							matchAnyBuff = true,
-							name = "Tether ID",
+							name = "连线类型",
 							partyTargetNumber = 0,
 							uuid = "297cd211-a9c0-57c1-b302-423801db2e45",
 							version = 3,
@@ -3060,7 +3060,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nMuAiGuide.Reactions.Shotcall(\"Tether \"..data.p1TetherCount..\" on you\", true)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nMuAiGuide.Reactions.Shotcall(\"Tether \" .. data.p1TetherCount .. \" on you\", true)\nself.used = true",
 							conditions = 
 							{
 								
@@ -3070,7 +3070,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Shotcall Tether Count",
+							name = "播报连线次数",
 							uuid = "ca0ac6e0-8678-5052-a39b-984a493a5d65",
 							version = 2.1,
 						},
@@ -3084,7 +3084,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p1TetherEntIDs ~= nil and data.p1TetherEntIDs[TensorCore.mGetPlayer().id] == true",
-							name = "Player Tethered",
+							name = "本人持有连线",
 							uuid = "076b5366-1c8d-55ea-bd3d-8994186e2db8",
 							version = 3,
 						},
@@ -3125,7 +3125,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal party = MuAiGuide.Reactions.partyInfo()\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal validUUIDs = {}\nlocal textTime = (113.7 - TensorReactions_CurrentTimer) * 1000\nlocal emptyString = \"\"\nlocal partyCount = 0\n\nfor _, ent in pairs(party) do\n    partyCount = partyCount + 1\n    local uuid = MuAiGuide.Reactions.addTimedWorldTextOnEnt(textTime, emptyString, ent.id, 0, false, 2, 0.25)\n    validUUIDs[uuid] = true\nend\n\nif (partyCount < 8) then\n    MuAiGuide.Reactions.log(\"[FoF Flex Helper] Attempted to set up party list, but not all 8 party members were found? Is someone dead?\", 5)\n    self.used = true\n    return\nend\n\n---@type TimedWorldText[]\ndata.p1FOFHelperWorldTexts = {}\n\nfor _, worldText in pairs(MuAiGuide.Reactions.Data.timedWorldTextDraws) do\n    if (validUUIDs[worldText.uuid]) then\n        table.insert(data.p1FOFHelperWorldTexts, worldText)\n    end\nend\n\ndata.p1FOFHelperSetup = true\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal party = MuAiGuide.Reactions.partyInfo()\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal validUUIDs = {}\nlocal textDurationMs = (113.7 - TensorReactions_CurrentTimer) * 1000\nlocal emptyString = \"\"\nlocal partyCount = 0\n\nfor _, entity in pairs(party) do\n    partyCount = partyCount + 1\n    local uuid = MuAiGuide.Reactions.addTimedWorldTextOnEnt(textDurationMs, emptyString, entity.id, 0, false, 2, 0.25)\n    validUUIDs[uuid] = true\nend\n\nif partyCount < 8 then\n    MuAiGuide.Reactions.log(\n        \"[FRU/罪壤断] 队伍未完整读取8人, 本次提示初始化未完成。\",\n        5\n    )\n    self.used = true\n    return\nend\n\n---@type TimedWorldText[]\ndata.p1FOFHelperWorldTexts = {}\n\nfor _, worldText in pairs(MuAiGuide.Reactions.Data.timedWorldTextDraws) do\n    if validUUIDs[worldText.uuid] then\n        table.insert(data.p1FOFHelperWorldTexts, worldText)\n    end\nend\n\ndata.p1FOFHelperSetup = true\nself.used = true",
 							conditions = 
 							{
 								
@@ -3135,7 +3135,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Initialize Flex Helper",
+							name = "初始化补位提示",
 							uuid = "cecf1196-1766-5eac-80a7-a6d34371c602",
 							version = 2.1,
 						},
@@ -3150,7 +3150,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruP1FOFHelper == true",
 							dequeueIfLuaFalse = true,
-							name = "Flex Helper Enabled",
+							name = "补位提示已开启",
 							uuid = "a4de18c3-6674-5b25-977c-bc785fe899c2",
 							version = 3,
 						},
@@ -3177,7 +3177,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\ndata.p1FOFUpdateWorldText = false\n\n---@type table<integer, boolean>\nlocal hasTetherDic = data.p1TetherEntIDs\nlocal worldTextArray = data.p1FOFHelperWorldTexts\n\n---@class GameObjectWithWorldText: GameObject\n---@field worldText TimedWorldText\n\n---@type GameObjectWithWorldText[]\nlocal sortCache = data.StringFRU_FoFSort\nif sortCache == nil then\n    sortCache = {\n        entities = {},\n        byX = function(a, b) return a.pos.x < b.pos.x end,\n        byZ = function(a, b) return a.pos.z < b.pos.z end,\n    }\n    data.StringFRU_FoFSort = sortCache\nend\nlocal nonTetheredEnts = sortCache.entities\nlocal nonTetheredCount = 0\nlocal emptyString = \"\"\nfor i = 1, 8 do\n    local worldText = worldTextArray[i]\n    worldText.bg = false\n    worldText.str = emptyString\n    worldText.color = 0\n    if (hasTetherDic[worldText.entID] ~= true) then\n        local ent = TensorCore.mGetEntity(worldText.entID)\n        ---@diagnostic disable-next-line: inject-field\n        ent.worldText = worldText\n        nonTetheredCount = nonTetheredCount + 1\n        nonTetheredEnts[nonTetheredCount] = ent\n    end\nend\n\nfor i = nonTetheredCount + 1, #nonTetheredEnts do\n    nonTetheredEnts[i] = nil\nend\n\nif (nonTetheredCount < 4) then\n    MuAiGuide.Reactions.log(\"[FoF Flex Helper] Less than 4 non-tethered players found. Y'all about to be dead.\")\n    self.used = true\n    return\nend\n\nlocal stratType = MuAiGuide.Reactions.Settings.Reactions.fruP1FOFHelperType\nif stratType == 1 then -- West to East / NAUR\n    table.sort(nonTetheredEnts, sortCache.byX)\nelseif stratType == 2 then -- North to South / EU LPDU\n    table.sort(nonTetheredEnts, sortCache.byZ)\nend\n\nlocal west1 = nonTetheredEnts[1].worldText\nlocal west2 = nonTetheredEnts[2].worldText\nlocal east1 = nonTetheredEnts[nonTetheredCount].worldText\nlocal east2 = nonTetheredEnts[nonTetheredCount - 1].worldText\n\nwest1.bg = true\nwest1.color = 4294967295\nwest1.heightAddition = 0.5\n\nwest2.bg = true\nwest2.color = 4294967295\nwest2.heightAddition = 0.5\n\neast1.bg = true\neast1.color = 4294967295\neast1.heightAddition = 0.5\n\neast2.bg = true\neast2.color = 4294967295\neast2.heightAddition = 0.5\n\nif stratType == 1 then\n    west1.str = \"W1\"\n    west2.str = \"W2\"\n    east1.str = \"E1\"\n    east2.str = \"E2\"\nelseif stratType == 2 then\n    west1.str = \"N1\"\n    west2.str = \"N2\"\n    east1.str = \"S2\"\n    east2.str = \"S1\"\nelseif stratType == 3 then\n    west1.str = \"\"\n    west2.str = \"\"\n    east1.str = \"\"\n    east2.str = \"\"\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\ndata.p1FOFUpdateWorldText = false\n\n---@type table<integer, boolean>\nlocal tetheredIds = data.p1TetherEntIDs\nlocal worldTexts = data.p1FOFHelperWorldTexts\n\n---@class FruGameObjectWithWorldText: GameObject\n---@field worldText TimedWorldText\n\n---@type FruGameObjectWithWorldText[]\nlocal sortCache = data.StringFRU_FoFSort\nif sortCache == nil then\n    sortCache = {\n        entities = {},\n        byX = function(a, b)\n            return a.pos.x < b.pos.x\n        end,\n        byZ = function(a, b)\n            return a.pos.z < b.pos.z\n        end,\n    }\n    data.StringFRU_FoFSort = sortCache\nend\nlocal untetheredEntities = sortCache.entities\nlocal nonTetheredCount = 0\nlocal emptyString = \"\"\nfor i = 1, 8 do\n    local worldText = worldTexts[i]\n    worldText.bg = false\n    worldText.str = emptyString\n    worldText.color = 0\n    if tetheredIds[worldText.entID] ~= true then\n        local entity = TensorCore.mGetEntity(worldText.entID)\n        ---@diagnostic disable-next-line: inject-field\n        entity.worldText = worldText\n        nonTetheredCount = nonTetheredCount + 1\n        untetheredEntities[nonTetheredCount] = entity\n    end\nend\n\nfor i = nonTetheredCount + 1, #untetheredEntities do\n    untetheredEntities[i] = nil\nend\n\nif nonTetheredCount < 4 then\n    MuAiGuide.Reactions.log(\"[FRU/罪壤断] 无连线队员不足4人, 本次补位未完成。\")\n    self.used = true\n    return\nend\n\nlocal stratType = MuAiGuide.Reactions.Settings.Reactions.fruP1FOFHelperType\nif stratType == 1 then -- NAUR: 从西到东。\n    table.sort(untetheredEntities, sortCache.byX)\nelseif stratType == 2 then -- LPDU: 从北到南。\n    table.sort(untetheredEntities, sortCache.byZ)\nend\n\nlocal west1 = untetheredEntities[1].worldText\nlocal west2 = untetheredEntities[2].worldText\nlocal east1 = untetheredEntities[nonTetheredCount].worldText\nlocal east2 = untetheredEntities[nonTetheredCount - 1].worldText\n\nwest1.bg = true\nwest1.color = 4294967295\nwest1.heightAddition = 0.5\n\nwest2.bg = true\nwest2.color = 4294967295\nwest2.heightAddition = 0.5\n\neast1.bg = true\neast1.color = 4294967295\neast1.heightAddition = 0.5\n\neast2.bg = true\neast2.color = 4294967295\neast2.heightAddition = 0.5\n\nif stratType == 1 then\n    west1.str = \"W1\"\n    west2.str = \"W2\"\n    east1.str = \"E1\"\n    east2.str = \"E2\"\nelseif stratType == 2 then\n    west1.str = \"N1\"\n    west2.str = \"N2\"\n    east1.str = \"S2\"\n    east2.str = \"S1\"\nelseif stratType == 3 then\n    west1.str = \"\"\n    west2.str = \"\"\n    east1.str = \"\"\n    east2.str = \"\"\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -3202,7 +3202,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Update FoF WorldText",
+							name = "更新补位文字",
 							uuid = "af6c4b93-3bc6-518d-9444-e5ed83db6ad5",
 							version = 2.1,
 						},
@@ -3212,7 +3212,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\ndata.p1FOFUpdateWorldText = false\n\n---@type table<integer, boolean>\nlocal hasTetherDic = data.p1TetherEntIDs\nlocal worldTextArray = data.p1FOFHelperWorldTexts\n\n---@class GameObjectWithWorldText: GameObject\n---@field worldText TimedWorldText\n\n---@type GameObjectWithWorldText[]\nlocal sortCache = data.StringFRU_FoFSort\nif sortCache == nil then\n    sortCache = {\n        entities = {},\n        byX = function(a, b) return a.pos.x < b.pos.x end,\n        byZ = function(a, b) return a.pos.z < b.pos.z end,\n    }\n    data.StringFRU_FoFSort = sortCache\nend\nlocal nonTetheredEnts = sortCache.entities\nlocal nonTetheredCount = 0\nlocal emptyString = \"\"\nfor i = 1, 8 do\n    local worldText = worldTextArray[i]\n    worldText.bg = false\n    worldText.str = emptyString\n    worldText.color = 0\n    if (hasTetherDic[worldText.entID] ~= true) then\n        local ent = TensorCore.mGetEntity(worldText.entID)\n        ---@diagnostic disable-next-line: inject-field\n        ent.worldText = worldText\n        nonTetheredCount = nonTetheredCount + 1\n        nonTetheredEnts[nonTetheredCount] = ent\n    end\nend\n\nfor i = nonTetheredCount + 1, #nonTetheredEnts do\n    nonTetheredEnts[i] = nil\nend\n\nif (nonTetheredCount < 4) then\n    MuAiGuide.Reactions.log(\"[FoF Flex Helper] Less than 4 non-tethered players found. Y'all about to be dead.\")\n    self.used = true\n    return\nend\n\nlocal stratType = MuAiGuide.Reactions.Settings.Reactions.fruP1FOFHelperType\nif stratType == 1 then -- West to East / NAUR\n    table.sort(nonTetheredEnts, sortCache.byX)\nelseif stratType == 2 then -- North to South / EU LPDU\n    table.sort(nonTetheredEnts, sortCache.byZ)\nend\n\nlocal west1 = nonTetheredEnts[1].worldText\nlocal west2 = nonTetheredEnts[2].worldText\nlocal east1 = nonTetheredEnts[nonTetheredCount].worldText\nlocal east2 = nonTetheredEnts[nonTetheredCount - 1].worldText\n\nwest1.bg = true\nwest1.color = 4284743523\nwest1.heightAddition = 0.5\n\nwest2.bg = true\nwest2.color = 4284743523\nwest2.heightAddition = 0.5\n\neast1.bg = true\neast1.color = 4284743523\neast1.heightAddition = 0.5\n\neast2.bg = true\neast2.color = 4284743523\neast2.heightAddition = 0.5\n\nif stratType == 1 then\n    west1.str = \"W1\"\n    west2.str = \"W2\"\n    east1.str = \"E1\"\n    east2.str = \"E2\"\nelseif stratType == 2 then\n    west1.str = \"N1\"\n    west2.str = \"N2\"\n    east1.str = \"S2\"\n    east2.str = \"S1\"\nelseif stratType == 3 then\n    west1.str = \"\"\n    west2.str = \"\"\n    east1.str = \"\"\n    east2.str = \"\"\nend\n\nlocal playerID = TensorCore.mGetPlayer().id\nif west1.entID == playerID or west2.entID == playerID then\n    data.playerDirection = \"west\"\nelseif east1.entID == playerID or east2.entID == playerID then\n    data.playerDirection = \"east\"\nend\n\ndata.p1FOFHelperHasFinished = true\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\ndata.p1FOFUpdateWorldText = false\n\n---@type table<integer, boolean>\nlocal tetheredIds = data.p1TetherEntIDs\nlocal worldTexts = data.p1FOFHelperWorldTexts\n\n---@class FruGameObjectWithWorldText: GameObject\n---@field worldText TimedWorldText\n\n---@type FruGameObjectWithWorldText[]\nlocal sortCache = data.StringFRU_FoFSort\nif sortCache == nil then\n    sortCache = {\n        entities = {},\n        byX = function(a, b)\n            return a.pos.x < b.pos.x\n        end,\n        byZ = function(a, b)\n            return a.pos.z < b.pos.z\n        end,\n    }\n    data.StringFRU_FoFSort = sortCache\nend\nlocal untetheredEntities = sortCache.entities\nlocal nonTetheredCount = 0\nlocal emptyString = \"\"\nfor i = 1, 8 do\n    local worldText = worldTexts[i]\n    worldText.bg = false\n    worldText.str = emptyString\n    worldText.color = 0\n    if tetheredIds[worldText.entID] ~= true then\n        local entity = TensorCore.mGetEntity(worldText.entID)\n        ---@diagnostic disable-next-line: inject-field\n        entity.worldText = worldText\n        nonTetheredCount = nonTetheredCount + 1\n        untetheredEntities[nonTetheredCount] = entity\n    end\nend\n\nfor i = nonTetheredCount + 1, #untetheredEntities do\n    untetheredEntities[i] = nil\nend\n\nif nonTetheredCount < 4 then\n    MuAiGuide.Reactions.log(\"[FRU/罪壤断] 无连线队员不足4人, 本次补位未完成。\")\n    self.used = true\n    return\nend\n\nlocal stratType = MuAiGuide.Reactions.Settings.Reactions.fruP1FOFHelperType\nif stratType == 1 then -- NAUR: 从西到东。\n    table.sort(untetheredEntities, sortCache.byX)\nelseif stratType == 2 then -- LPDU: 从北到南。\n    table.sort(untetheredEntities, sortCache.byZ)\nend\n\nlocal west1 = untetheredEntities[1].worldText\nlocal west2 = untetheredEntities[2].worldText\nlocal east1 = untetheredEntities[nonTetheredCount].worldText\nlocal east2 = untetheredEntities[nonTetheredCount - 1].worldText\n\nwest1.bg = true\nwest1.color = 4284743523\nwest1.heightAddition = 0.5\n\nwest2.bg = true\nwest2.color = 4284743523\nwest2.heightAddition = 0.5\n\neast1.bg = true\neast1.color = 4284743523\neast1.heightAddition = 0.5\n\neast2.bg = true\neast2.color = 4284743523\neast2.heightAddition = 0.5\n\nif stratType == 1 then\n    west1.str = \"W1\"\n    west2.str = \"W2\"\n    east1.str = \"E1\"\n    east2.str = \"E2\"\nelseif stratType == 2 then\n    west1.str = \"N1\"\n    west2.str = \"N2\"\n    east1.str = \"S2\"\n    east2.str = \"S1\"\nelseif stratType == 3 then\n    west1.str = \"\"\n    west2.str = \"\"\n    east1.str = \"\"\n    east2.str = \"\"\nend\n\nlocal playerId = TensorCore.mGetPlayer().id\nif west1.entID == playerId or west2.entID == playerId then\n    data.playerDirection = \"west\"\nelseif east1.entID == playerId or east2.entID == playerId then\n    data.playerDirection = \"east\"\nend\n\ndata.p1FOFHelperHasFinished = true\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -3238,7 +3238,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Finalize FoF WorldText",
+							name = "确认最终补位",
 							uuid = "bbd0522e-5ab4-534a-b8ca-1215a3441465",
 							version = 2.1,
 						},
@@ -3253,7 +3253,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p1FOFHelperSetup == true",
 							dequeueIfLuaFalse = true,
-							name = "Helper Setup Finished",
+							name = "提示已初始化",
 							uuid = "244e964c-e1c2-59bc-8296-90b893ae3c66",
 							version = 3,
 						},
@@ -3265,7 +3265,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p1FOFHelperHasFinished ~= true",
 							dequeueIfLuaFalse = true,
-							name = "Helper Not Finalized",
+							name = "补位尚未确认",
 							uuid = "e03fce3c-16b1-5106-a330-384aebc195bd",
 							version = 3,
 						},
@@ -3278,7 +3278,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p1FOFUpdateWorldText == true",
 							dequeueIfLuaFalse = true,
-							name = "Needs updated",
+							name = "需要更新提示",
 							uuid = "96b484db-6396-5db7-995e-3e592600142d",
 							version = 3,
 						},
@@ -3291,7 +3291,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p1TetherCount == 4",
 							dequeueIfLuaFalse = true,
-							name = "Four Tethers",
+							name = "已记录四条连线",
 							uuid = "6439e10a-6f82-5eae-b7cc-62d1ac67d176",
 							version = 3,
 						},
@@ -3333,7 +3333,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal playerID = TensorCore.mGetPlayer().id\nlocal callStr = \"\"\n\nfor i = 1, 4 do\n    local tetherInfo = data.p1TetherInfo[i]\n    if (tetherInfo.type == \"fire\") then\n        callStr = callStr .. \"F\"\n    else\n        callStr = callStr .. \"L\"\n    end\n\n    if (tetherInfo.id == playerID) then\n        callStr = callStr .. \"(YOU)\"\n    end\n\n    if (i < 4) then\n        callStr = callStr .. \", \"\n    end\nend\n\nMuAiGuide.Reactions.Shotcall(callStr, false, 13)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal playerId = TensorCore.mGetPlayer().id\nlocal callText = \"\"\n\nfor i = 1, 4 do\n    local tetherInfo = data.p1TetherInfo[i]\n    if tetherInfo.type == \"fire\" then\n        callText = callText .. \"F\"\n    else\n        callText = callText .. \"L\"\n    end\n\n    if tetherInfo.id == playerId then\n        callText = callText .. \"(YOU)\"\n    end\n\n    if i < 4 then\n        callText = callText .. \", \"\n    end\nend\n\nMuAiGuide.Reactions.Shotcall(callText, false, 13)\nself.used = true",
 							conditions = 
 							{
 								
@@ -3344,7 +3344,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Shotcall Tethers",
+							name = "播报连线顺序",
 							uuid = "93cc8746-b709-5ea6-96a9-4c326f669184",
 							version = 2.1,
 						},
@@ -3358,7 +3358,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p1TetherCount == 4",
-							name = "Four Tethers",
+							name = "已记录四条连线",
 							uuid = "0c7c5aee-44f6-5d41-a4e0-a63ba80e25d1",
 							version = 3,
 						},
@@ -3399,7 +3399,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\n---@type GameObject[]\nlocal nonTetheredArray = {}\nlocal isTetherDic = data.p1TetherEntIDs\n\nfor _, ent in pairs(party) do\n    if (isTetherDic[ent.id] ~= true) then\n        table.insert(nonTetheredArray, ent)\n    end\nend\n\n-- Priority comes from the Party Roster conga order (issue #46). This also\n-- fixes the legacy bug where the dictionary was keyed by a field the old\n-- priority-list entries never carried (entityID vs id), so the sort below\n-- actually ranks players now.\nlocal prioDic = MuAiGuide.Reactions.Roster.prio(\"conga\").byId\ntable.sort(nonTetheredArray, function(a, b)\n    return (prioDic[a.id] or 99) < (prioDic[b.id] or 99)\nend)\n\nfor i = 1, 4 do\n    local ent = nonTetheredArray[i]\n    if (ent == nil) then break end\n    if (ent.marker ~= i) then\n        ActionList:Get(12, i):Cast(ent.id)\n    end\nend\n\nself.used = true\n",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\n---@type GameObject[]\nlocal untetheredEntities = {}\nlocal tetheredIds = data.p1TetherEntIDs\n\nfor _, entity in pairs(party) do\n    if tetheredIds[entity.id] ~= true then\n        table.insert(untetheredEntities, entity)\n    end\nend\n\n-- 优先级来自当前队伍的 conga 顺序, 以实体 id 查询。\n\nlocal priorityById = MuAiGuide.Reactions.Roster.prio(\"conga\").byId\ntable.sort(untetheredEntities, function(a, b)\n    return (priorityById[a.id] or 99) < (priorityById[b.id] or 99)\nend)\n\nfor i = 1, 4 do\n    local entity = untetheredEntities[i]\n    if entity == nil then\n        break\n    end\n    if entity.marker ~= i then\n        ActionList:Get(12, i):Cast(entity.id)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -3414,7 +3414,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Automark Players",
+							name = "标记无连线队员",
 							uuid = "1279211b-c66b-5adf-9494-26cc8ca6a513",
 							version = 2.1,
 						},
@@ -3429,7 +3429,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruP1FOFAM == true",
 							dequeueIfLuaFalse = true,
-							name = "FoF AM Enabled",
+							name = "罪壤断标记已开启",
 							uuid = "eee35151-1d9f-5336-ab38-cbcae73cb70e",
 							version = 3,
 						},
@@ -3441,7 +3441,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p1TetherCount == 4",
-							name = "Four Tethers",
+							name = "已记录四条连线",
 							uuid = "5f9200b7-1a7b-5e73-accf-3d1d1785686c",
 							version = 3,
 						},
@@ -3472,7 +3472,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- 罪壤断: 每次更新重选连线玩家之外最近 1/3 人, 判定事件结束本轮.\nlocal key = 25\nlocal rounds = data.StringFRUFoFDraws\nif rounds == nil then rounds = {}; data.StringFRUFoFDraws = rounds end\nlocal state = rounds[key]\nif state == nil then\n    state = {draws = {}, targets = {}}\n    rounds[key] = state\nend\nlocal remaining = (106.4 - TensorReactions_CurrentTimer) * 1000\nif remaining <= 0 or (data.StringFRUDrawHits and data.StringFRUDrawHits[key]) then\n    for i = 1, 3 do\n        if state.draws[i] then Argus.deleteTimedShape(state.draws[i]); state.draws[i] = nil end\n    end\n    self.used = true\n    return\nend\nlocal info = data.p1TetherInfo and data.p1TetherInfo[1]\nif info == nil then self.used = true; return end\nlocal source = TensorCore.mGetEntity(info.id)\nif source == nil then self.used = true; return end\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal id1, id2, id3\nlocal d1, d2, d3 = math.huge, math.huge, math.huge\nlocal origin = source.pos\nfor _, ent in pairs(party) do\n    if ent.id ~= source.id then\n        local dx, dz = ent.pos.x - origin.x, ent.pos.z - origin.z\n        local d = dx * dx + dz * dz\n        if d < d1 or (d == d1 and (id1 == nil or ent.id < id1)) then\n            id3, d3, id2, d2, id1, d1 = id2, d2, id1, d1, ent.id, d\n        elseif d < d2 or (d == d2 and (id2 == nil or ent.id < id2)) then\n            id3, d3, id2, d2 = id2, d2, ent.id, d\n        elseif d < d3 or (d == d3 and (id3 == nil or ent.id < id3)) then\n            id3, d3 = ent.id, d\n        end\n    end\nend\nlocal targets = state.targets\ntargets[1], targets[2], targets[3] = id1, id2, id3\nlocal fire = info.type == \"fire\"\nlocal count = fire and 1 or 3\nlocal angle = math.rad(fire and 90 or 120)\nlocal drawer = state.drawer\nif drawer == nil then\n    local colors = TensorCore.getMoogleDrawer()\n    drawer = TensorCore.getCachedDrawer((colors.colorStart and colors.colorStart % 0x1000000 + 0x4D000000),\n        (colors.colorMid and colors.colorMid % 0x1000000 + 0x4D000000),\n        (colors.colorEnd and colors.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nfor i = 1, 3 do\n    local target = i <= count and targets[i] or nil\n    local draw = state.draws[i]\n    if target == nil then\n        if draw then Argus.deleteTimedShape(draw); state.draws[i] = nil end\n        state[i] = nil\n    elseif draw == nil or state[i] ~= target or state.sourceID ~= source.id or state.angle ~= angle then\n        if draw and not drawer:updateTimedConeOnEnt(draw, nil, source.id, nil, angle, target) then\n            draw = nil\n        end\n        if draw == nil then\n            draw = drawer:addTimedConeOnEnt(remaining, source.id, 60, angle, target, 0, false, nil, nil, nil, 256)\n        end\n        state.draws[i] = draw\n        if draw then state[i] = target end\n    end\nend\nstate.sourceID, state.angle = source.id, angle\nself.used = true\n",
+							actionLua = "-- 罪壤断: 每次更新重选连线玩家之外最近 1/3 人, 判定事件结束本轮.\nlocal key = 25\nlocal rounds = data.StringFRUFoFDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUFoFDraws = rounds\nend\nlocal state = rounds[key]\nif state == nil then\n    state = { draws = {}, targets = {} }\n    rounds[key] = state\nend\nlocal remaining = (106.4 - TensorReactions_CurrentTimer) * 1000\nif remaining <= 0 or (data.StringFRUDrawHits and data.StringFRUDrawHits[key]) then\n    for i = 1, 3 do\n        if state.draws[i] then\n            Argus.deleteTimedShape(state.draws[i])\n            state.draws[i] = nil\n        end\n    end\n    self.used = true\n    return\nend\nlocal info = data.p1TetherInfo and data.p1TetherInfo[1]\nif info == nil then\n    self.used = true\n    return\nend\nlocal source = TensorCore.mGetEntity(info.id)\nif source == nil then\n    self.used = true\n    return\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal id1, id2, id3\nlocal d1, d2, d3 = math.huge, math.huge, math.huge\nlocal origin = source.pos\nfor _, entity in pairs(party) do\n    if entity.id ~= source.id then\n        local position = entity.pos\n        local dx, dz = position.x - origin.x, position.z - origin.z\n        local distance = dx * dx + dz * dz\n        if distance < d1 or (distance == d1 and (id1 == nil or entity.id < id1)) then\n            id3, d3, id2, d2, id1, d1 = id2, d2, id1, d1, entity.id, distance\n        elseif distance < d2 or (distance == d2 and (id2 == nil or entity.id < id2)) then\n            id3, d3, id2, d2 = id2, d2, entity.id, distance\n        elseif distance < d3 or (distance == d3 and (id3 == nil or entity.id < id3)) then\n            id3, d3 = entity.id, distance\n        end\n    end\nend\nlocal targets = state.targets\ntargets[1], targets[2], targets[3] = id1, id2, id3\nlocal fire = info.type == \"fire\"\nlocal count = fire and 1 or 3\nlocal angle = math.rad(fire and 90 or 120)\nlocal drawer = state.drawer\nif drawer == nil then\n    local colors = TensorCore.getMoogleDrawer()\n    drawer = TensorCore.getCachedDrawer(\n        (colors.colorStart and colors.colorStart % 0x1000000 + 0x4D000000),\n        (colors.colorMid and colors.colorMid % 0x1000000 + 0x4D000000),\n        (colors.colorEnd and colors.colorEnd % 0x1000000 + 0x4D000000),\n        0xFFFFFFFF,\n        2,\n        0,\n        256\n    )\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nfor i = 1, 3 do\n    local target = i <= count and targets[i] or nil\n    local draw = state.draws[i]\n    if target == nil then\n        if draw then\n            Argus.deleteTimedShape(draw)\n            state.draws[i] = nil\n        end\n        state[i] = nil\n    elseif draw == nil or state[i] ~= target or state.sourceID ~= source.id or state.angle ~= angle then\n        if draw and not drawer:updateTimedConeOnEnt(draw, nil, source.id, nil, angle, target) then\n            draw = nil\n        end\n        if draw == nil then\n            draw = drawer:addTimedConeOnEnt(remaining, source.id, 60, angle, target, 0, false, nil, nil, nil, 256)\n        end\n        state.draws[i] = draw\n        if draw then\n            state[i] = target\n        end\n    end\nend\nstate.sourceID, state.angle = source.id, angle\nself.used = true",
 							conditions = 
 							{
 								
@@ -3483,7 +3483,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Cones",
+							name = "显示扇形",
 							uuid = "c6ff4b8c-fb7c-5199-86ac-587ac9bfda3e",
 							version = 2.1,
 						},
@@ -3498,7 +3498,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p1TetherInfo ~= nil",
 							dequeueIfLuaFalse = true,
-							name = "Tethers Recorded",
+							name = "连线记录完整",
 							uuid = "600c7065-d843-53c3-90e1-5d849181bf70",
 							version = 3,
 						},
@@ -3566,7 +3566,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "TTS Dark First",
+							name = "播报先暗",
 							uuid = "e6f06481-b114-569d-b903-f0875d3acc3e",
 							version = 2.1,
 						},
@@ -3586,7 +3586,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "TTS Light First",
+							name = "播报先光",
 							uuid = "9b1080c4-b132-5ce1-8de4-9ca31aa42c13",
 							version = 2.1,
 						},
@@ -3602,7 +3602,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40233,
-							name = "Dark First",
+							name = "首轮暗属性",
 							uuid = "f64aa173-1fd9-5ad9-9098-0073a30203d4",
 							version = 3,
 						},
@@ -3615,7 +3615,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40313,
-							name = "Light First",
+							name = "首轮光属性",
 							uuid = "762fdaf4-ce81-5533-a4ae-80b3c6e18c8b",
 							version = 3,
 						},
@@ -3716,7 +3716,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- 罪壤断: 每次更新重选连线玩家之外最近 1/3 人, 判定事件结束本轮.\nlocal key = 26\nlocal rounds = data.StringFRUFoFDraws\nif rounds == nil then rounds = {}; data.StringFRUFoFDraws = rounds end\nlocal state = rounds[key]\nif state == nil then\n    state = {draws = {}, targets = {}}\n    rounds[key] = state\nend\nlocal remaining = (109.2 - TensorReactions_CurrentTimer) * 1000\nif remaining <= 0 or (data.StringFRUDrawHits and data.StringFRUDrawHits[key]) then\n    for i = 1, 3 do\n        if state.draws[i] then Argus.deleteTimedShape(state.draws[i]); state.draws[i] = nil end\n    end\n    self.used = true\n    return\nend\nlocal info = data.p1TetherInfo and data.p1TetherInfo[2]\nif info == nil then self.used = true; return end\nlocal source = TensorCore.mGetEntity(info.id)\nif source == nil then self.used = true; return end\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal id1, id2, id3\nlocal d1, d2, d3 = math.huge, math.huge, math.huge\nlocal origin = source.pos\nfor _, ent in pairs(party) do\n    if ent.id ~= source.id then\n        local dx, dz = ent.pos.x - origin.x, ent.pos.z - origin.z\n        local d = dx * dx + dz * dz\n        if d < d1 or (d == d1 and (id1 == nil or ent.id < id1)) then\n            id3, d3, id2, d2, id1, d1 = id2, d2, id1, d1, ent.id, d\n        elseif d < d2 or (d == d2 and (id2 == nil or ent.id < id2)) then\n            id3, d3, id2, d2 = id2, d2, ent.id, d\n        elseif d < d3 or (d == d3 and (id3 == nil or ent.id < id3)) then\n            id3, d3 = ent.id, d\n        end\n    end\nend\nlocal targets = state.targets\ntargets[1], targets[2], targets[3] = id1, id2, id3\nlocal fire = info.type == \"fire\"\nlocal count = fire and 1 or 3\nlocal angle = math.rad(fire and 90 or 120)\nlocal drawer = state.drawer\nif drawer == nil then\n    local colors = TensorCore.getMoogleDrawer()\n    drawer = TensorCore.getCachedDrawer((colors.colorStart and colors.colorStart % 0x1000000 + 0x4D000000),\n        (colors.colorMid and colors.colorMid % 0x1000000 + 0x4D000000),\n        (colors.colorEnd and colors.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nfor i = 1, 3 do\n    local target = i <= count and targets[i] or nil\n    local draw = state.draws[i]\n    if target == nil then\n        if draw then Argus.deleteTimedShape(draw); state.draws[i] = nil end\n        state[i] = nil\n    elseif draw == nil or state[i] ~= target or state.sourceID ~= source.id or state.angle ~= angle then\n        if draw and not drawer:updateTimedConeOnEnt(draw, nil, source.id, nil, angle, target) then\n            draw = nil\n        end\n        if draw == nil then\n            draw = drawer:addTimedConeOnEnt(remaining, source.id, 60, angle, target, 0, false, nil, nil, nil, 256)\n        end\n        state.draws[i] = draw\n        if draw then state[i] = target end\n    end\nend\nstate.sourceID, state.angle = source.id, angle\nself.used = true\n",
+							actionLua = "-- 罪壤断: 每次更新重选连线玩家之外最近 1/3 人, 判定事件结束本轮.\nlocal key = 26\nlocal rounds = data.StringFRUFoFDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUFoFDraws = rounds\nend\nlocal state = rounds[key]\nif state == nil then\n    state = { draws = {}, targets = {} }\n    rounds[key] = state\nend\nlocal remaining = (109.2 - TensorReactions_CurrentTimer) * 1000\nif remaining <= 0 or (data.StringFRUDrawHits and data.StringFRUDrawHits[key]) then\n    for i = 1, 3 do\n        if state.draws[i] then\n            Argus.deleteTimedShape(state.draws[i])\n            state.draws[i] = nil\n        end\n    end\n    self.used = true\n    return\nend\nlocal info = data.p1TetherInfo and data.p1TetherInfo[2]\nif info == nil then\n    self.used = true\n    return\nend\nlocal source = TensorCore.mGetEntity(info.id)\nif source == nil then\n    self.used = true\n    return\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal id1, id2, id3\nlocal d1, d2, d3 = math.huge, math.huge, math.huge\nlocal origin = source.pos\nfor _, entity in pairs(party) do\n    if entity.id ~= source.id then\n        local position = entity.pos\n        local dx, dz = position.x - origin.x, position.z - origin.z\n        local distance = dx * dx + dz * dz\n        if distance < d1 or (distance == d1 and (id1 == nil or entity.id < id1)) then\n            id3, d3, id2, d2, id1, d1 = id2, d2, id1, d1, entity.id, distance\n        elseif distance < d2 or (distance == d2 and (id2 == nil or entity.id < id2)) then\n            id3, d3, id2, d2 = id2, d2, entity.id, distance\n        elseif distance < d3 or (distance == d3 and (id3 == nil or entity.id < id3)) then\n            id3, d3 = entity.id, distance\n        end\n    end\nend\nlocal targets = state.targets\ntargets[1], targets[2], targets[3] = id1, id2, id3\nlocal fire = info.type == \"fire\"\nlocal count = fire and 1 or 3\nlocal angle = math.rad(fire and 90 or 120)\nlocal drawer = state.drawer\nif drawer == nil then\n    local colors = TensorCore.getMoogleDrawer()\n    drawer = TensorCore.getCachedDrawer(\n        (colors.colorStart and colors.colorStart % 0x1000000 + 0x4D000000),\n        (colors.colorMid and colors.colorMid % 0x1000000 + 0x4D000000),\n        (colors.colorEnd and colors.colorEnd % 0x1000000 + 0x4D000000),\n        0xFFFFFFFF,\n        2,\n        0,\n        256\n    )\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nfor i = 1, 3 do\n    local target = i <= count and targets[i] or nil\n    local draw = state.draws[i]\n    if target == nil then\n        if draw then\n            Argus.deleteTimedShape(draw)\n            state.draws[i] = nil\n        end\n        state[i] = nil\n    elseif draw == nil or state[i] ~= target or state.sourceID ~= source.id or state.angle ~= angle then\n        if draw and not drawer:updateTimedConeOnEnt(draw, nil, source.id, nil, angle, target) then\n            draw = nil\n        end\n        if draw == nil then\n            draw = drawer:addTimedConeOnEnt(remaining, source.id, 60, angle, target, 0, false, nil, nil, nil, 256)\n        end\n        state.draws[i] = draw\n        if draw then\n            state[i] = target\n        end\n    end\nend\nstate.sourceID, state.angle = source.id, angle\nself.used = true",
 							conditions = 
 							{
 								
@@ -3727,7 +3727,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Cones",
+							name = "显示扇形",
 							uuid = "c6ff4b8c-fb7c-5199-86ac-587ac9bfda3e",
 							version = 2.1,
 						},
@@ -3742,7 +3742,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p1TetherInfo ~= nil",
 							dequeueIfLuaFalse = true,
-							name = "Tethers Recorded",
+							name = "连线记录完整",
 							uuid = "600c7065-d843-53c3-90e1-5d849181bf70",
 							version = 3,
 						},
@@ -3872,7 +3872,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- 罪壤断: 每次更新重选连线玩家之外最近 1/3 人, 判定事件结束本轮.\nlocal key = 27\nlocal rounds = data.StringFRUFoFDraws\nif rounds == nil then rounds = {}; data.StringFRUFoFDraws = rounds end\nlocal state = rounds[key]\nif state == nil then\n    state = {draws = {}, targets = {}}\n    rounds[key] = state\nend\nlocal remaining = (111.9 - TensorReactions_CurrentTimer) * 1000\nif remaining <= 0 or (data.StringFRUDrawHits and data.StringFRUDrawHits[key]) then\n    for i = 1, 3 do\n        if state.draws[i] then Argus.deleteTimedShape(state.draws[i]); state.draws[i] = nil end\n    end\n    self.used = true\n    return\nend\nlocal info = data.p1TetherInfo and data.p1TetherInfo[3]\nif info == nil then self.used = true; return end\nlocal source = TensorCore.mGetEntity(info.id)\nif source == nil then self.used = true; return end\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal id1, id2, id3\nlocal d1, d2, d3 = math.huge, math.huge, math.huge\nlocal origin = source.pos\nfor _, ent in pairs(party) do\n    if ent.id ~= source.id then\n        local dx, dz = ent.pos.x - origin.x, ent.pos.z - origin.z\n        local d = dx * dx + dz * dz\n        if d < d1 or (d == d1 and (id1 == nil or ent.id < id1)) then\n            id3, d3, id2, d2, id1, d1 = id2, d2, id1, d1, ent.id, d\n        elseif d < d2 or (d == d2 and (id2 == nil or ent.id < id2)) then\n            id3, d3, id2, d2 = id2, d2, ent.id, d\n        elseif d < d3 or (d == d3 and (id3 == nil or ent.id < id3)) then\n            id3, d3 = ent.id, d\n        end\n    end\nend\nlocal targets = state.targets\ntargets[1], targets[2], targets[3] = id1, id2, id3\nlocal fire = info.type == \"fire\"\nlocal count = fire and 1 or 3\nlocal angle = math.rad(fire and 90 or 120)\nlocal drawer = state.drawer\nif drawer == nil then\n    local colors = TensorCore.getMoogleDrawer()\n    drawer = TensorCore.getCachedDrawer((colors.colorStart and colors.colorStart % 0x1000000 + 0x4D000000),\n        (colors.colorMid and colors.colorMid % 0x1000000 + 0x4D000000),\n        (colors.colorEnd and colors.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nfor i = 1, 3 do\n    local target = i <= count and targets[i] or nil\n    local draw = state.draws[i]\n    if target == nil then\n        if draw then Argus.deleteTimedShape(draw); state.draws[i] = nil end\n        state[i] = nil\n    elseif draw == nil or state[i] ~= target or state.sourceID ~= source.id or state.angle ~= angle then\n        if draw and not drawer:updateTimedConeOnEnt(draw, nil, source.id, nil, angle, target) then\n            draw = nil\n        end\n        if draw == nil then\n            draw = drawer:addTimedConeOnEnt(remaining, source.id, 60, angle, target, 0, false, nil, nil, nil, 256)\n        end\n        state.draws[i] = draw\n        if draw then state[i] = target end\n    end\nend\nstate.sourceID, state.angle = source.id, angle\nself.used = true\n",
+							actionLua = "-- 罪壤断: 每次更新重选连线玩家之外最近 1/3 人, 判定事件结束本轮.\nlocal key = 27\nlocal rounds = data.StringFRUFoFDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUFoFDraws = rounds\nend\nlocal state = rounds[key]\nif state == nil then\n    state = { draws = {}, targets = {} }\n    rounds[key] = state\nend\nlocal remaining = (111.9 - TensorReactions_CurrentTimer) * 1000\nif remaining <= 0 or (data.StringFRUDrawHits and data.StringFRUDrawHits[key]) then\n    for i = 1, 3 do\n        if state.draws[i] then\n            Argus.deleteTimedShape(state.draws[i])\n            state.draws[i] = nil\n        end\n    end\n    self.used = true\n    return\nend\nlocal info = data.p1TetherInfo and data.p1TetherInfo[3]\nif info == nil then\n    self.used = true\n    return\nend\nlocal source = TensorCore.mGetEntity(info.id)\nif source == nil then\n    self.used = true\n    return\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal id1, id2, id3\nlocal d1, d2, d3 = math.huge, math.huge, math.huge\nlocal origin = source.pos\nfor _, entity in pairs(party) do\n    if entity.id ~= source.id then\n        local position = entity.pos\n        local dx, dz = position.x - origin.x, position.z - origin.z\n        local distance = dx * dx + dz * dz\n        if distance < d1 or (distance == d1 and (id1 == nil or entity.id < id1)) then\n            id3, d3, id2, d2, id1, d1 = id2, d2, id1, d1, entity.id, distance\n        elseif distance < d2 or (distance == d2 and (id2 == nil or entity.id < id2)) then\n            id3, d3, id2, d2 = id2, d2, entity.id, distance\n        elseif distance < d3 or (distance == d3 and (id3 == nil or entity.id < id3)) then\n            id3, d3 = entity.id, distance\n        end\n    end\nend\nlocal targets = state.targets\ntargets[1], targets[2], targets[3] = id1, id2, id3\nlocal fire = info.type == \"fire\"\nlocal count = fire and 1 or 3\nlocal angle = math.rad(fire and 90 or 120)\nlocal drawer = state.drawer\nif drawer == nil then\n    local colors = TensorCore.getMoogleDrawer()\n    drawer = TensorCore.getCachedDrawer(\n        (colors.colorStart and colors.colorStart % 0x1000000 + 0x4D000000),\n        (colors.colorMid and colors.colorMid % 0x1000000 + 0x4D000000),\n        (colors.colorEnd and colors.colorEnd % 0x1000000 + 0x4D000000),\n        0xFFFFFFFF,\n        2,\n        0,\n        256\n    )\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nfor i = 1, 3 do\n    local target = i <= count and targets[i] or nil\n    local draw = state.draws[i]\n    if target == nil then\n        if draw then\n            Argus.deleteTimedShape(draw)\n            state.draws[i] = nil\n        end\n        state[i] = nil\n    elseif draw == nil or state[i] ~= target or state.sourceID ~= source.id or state.angle ~= angle then\n        if draw and not drawer:updateTimedConeOnEnt(draw, nil, source.id, nil, angle, target) then\n            draw = nil\n        end\n        if draw == nil then\n            draw = drawer:addTimedConeOnEnt(remaining, source.id, 60, angle, target, 0, false, nil, nil, nil, 256)\n        end\n        state.draws[i] = draw\n        if draw then\n            state[i] = target\n        end\n    end\nend\nstate.sourceID, state.angle = source.id, angle\nself.used = true",
 							conditions = 
 							{
 								
@@ -3883,7 +3883,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Cones",
+							name = "显示扇形",
 							uuid = "c6ff4b8c-fb7c-5199-86ac-587ac9bfda3e",
 							version = 2.1,
 						},
@@ -3898,7 +3898,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p1TetherInfo ~= nil",
 							dequeueIfLuaFalse = true,
-							name = "Tethers Recorded",
+							name = "连线记录完整",
 							uuid = "600c7065-d843-53c3-90e1-5d849181bf70",
 							version = 3,
 						},
@@ -3999,7 +3999,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- 罪壤断: 每次更新重选连线玩家之外最近 1/3 人, 判定事件结束本轮.\nlocal key = 28\nlocal rounds = data.StringFRUFoFDraws\nif rounds == nil then rounds = {}; data.StringFRUFoFDraws = rounds end\nlocal state = rounds[key]\nif state == nil then\n    state = {draws = {}, targets = {}}\n    rounds[key] = state\nend\nlocal remaining = (114.3 - TensorReactions_CurrentTimer) * 1000\nif remaining <= 0 or (data.StringFRUDrawHits and data.StringFRUDrawHits[key]) then\n    for i = 1, 3 do\n        if state.draws[i] then Argus.deleteTimedShape(state.draws[i]); state.draws[i] = nil end\n    end\n    self.used = true\n    return\nend\nlocal info = data.p1TetherInfo and data.p1TetherInfo[4]\nif info == nil then self.used = true; return end\nlocal source = TensorCore.mGetEntity(info.id)\nif source == nil then self.used = true; return end\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal id1, id2, id3\nlocal d1, d2, d3 = math.huge, math.huge, math.huge\nlocal origin = source.pos\nfor _, ent in pairs(party) do\n    if ent.id ~= source.id then\n        local dx, dz = ent.pos.x - origin.x, ent.pos.z - origin.z\n        local d = dx * dx + dz * dz\n        if d < d1 or (d == d1 and (id1 == nil or ent.id < id1)) then\n            id3, d3, id2, d2, id1, d1 = id2, d2, id1, d1, ent.id, d\n        elseif d < d2 or (d == d2 and (id2 == nil or ent.id < id2)) then\n            id3, d3, id2, d2 = id2, d2, ent.id, d\n        elseif d < d3 or (d == d3 and (id3 == nil or ent.id < id3)) then\n            id3, d3 = ent.id, d\n        end\n    end\nend\nlocal targets = state.targets\ntargets[1], targets[2], targets[3] = id1, id2, id3\nlocal fire = info.type == \"fire\"\nlocal count = fire and 1 or 3\nlocal angle = math.rad(fire and 90 or 120)\nlocal drawer = state.drawer\nif drawer == nil then\n    local colors = TensorCore.getMoogleDrawer()\n    drawer = TensorCore.getCachedDrawer((colors.colorStart and colors.colorStart % 0x1000000 + 0x4D000000),\n        (colors.colorMid and colors.colorMid % 0x1000000 + 0x4D000000),\n        (colors.colorEnd and colors.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nfor i = 1, 3 do\n    local target = i <= count and targets[i] or nil\n    local draw = state.draws[i]\n    if target == nil then\n        if draw then Argus.deleteTimedShape(draw); state.draws[i] = nil end\n        state[i] = nil\n    elseif draw == nil or state[i] ~= target or state.sourceID ~= source.id or state.angle ~= angle then\n        if draw and not drawer:updateTimedConeOnEnt(draw, nil, source.id, nil, angle, target) then\n            draw = nil\n        end\n        if draw == nil then\n            draw = drawer:addTimedConeOnEnt(remaining, source.id, 60, angle, target, 0, false, nil, nil, nil, 256)\n        end\n        state.draws[i] = draw\n        if draw then state[i] = target end\n    end\nend\nstate.sourceID, state.angle = source.id, angle\nself.used = true\n",
+							actionLua = "-- 罪壤断: 每次更新重选连线玩家之外最近 1/3 人, 判定事件结束本轮.\nlocal key = 28\nlocal rounds = data.StringFRUFoFDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUFoFDraws = rounds\nend\nlocal state = rounds[key]\nif state == nil then\n    state = { draws = {}, targets = {} }\n    rounds[key] = state\nend\nlocal remaining = (114.3 - TensorReactions_CurrentTimer) * 1000\nif remaining <= 0 or (data.StringFRUDrawHits and data.StringFRUDrawHits[key]) then\n    for i = 1, 3 do\n        if state.draws[i] then\n            Argus.deleteTimedShape(state.draws[i])\n            state.draws[i] = nil\n        end\n    end\n    self.used = true\n    return\nend\nlocal info = data.p1TetherInfo and data.p1TetherInfo[4]\nif info == nil then\n    self.used = true\n    return\nend\nlocal source = TensorCore.mGetEntity(info.id)\nif source == nil then\n    self.used = true\n    return\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal id1, id2, id3\nlocal d1, d2, d3 = math.huge, math.huge, math.huge\nlocal origin = source.pos\nfor _, entity in pairs(party) do\n    if entity.id ~= source.id then\n        local position = entity.pos\n        local dx, dz = position.x - origin.x, position.z - origin.z\n        local distance = dx * dx + dz * dz\n        if distance < d1 or (distance == d1 and (id1 == nil or entity.id < id1)) then\n            id3, d3, id2, d2, id1, d1 = id2, d2, id1, d1, entity.id, distance\n        elseif distance < d2 or (distance == d2 and (id2 == nil or entity.id < id2)) then\n            id3, d3, id2, d2 = id2, d2, entity.id, distance\n        elseif distance < d3 or (distance == d3 and (id3 == nil or entity.id < id3)) then\n            id3, d3 = entity.id, distance\n        end\n    end\nend\nlocal targets = state.targets\ntargets[1], targets[2], targets[3] = id1, id2, id3\nlocal fire = info.type == \"fire\"\nlocal count = fire and 1 or 3\nlocal angle = math.rad(fire and 90 or 120)\nlocal drawer = state.drawer\nif drawer == nil then\n    local colors = TensorCore.getMoogleDrawer()\n    drawer = TensorCore.getCachedDrawer(\n        (colors.colorStart and colors.colorStart % 0x1000000 + 0x4D000000),\n        (colors.colorMid and colors.colorMid % 0x1000000 + 0x4D000000),\n        (colors.colorEnd and colors.colorEnd % 0x1000000 + 0x4D000000),\n        0xFFFFFFFF,\n        2,\n        0,\n        256\n    )\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nfor i = 1, 3 do\n    local target = i <= count and targets[i] or nil\n    local draw = state.draws[i]\n    if target == nil then\n        if draw then\n            Argus.deleteTimedShape(draw)\n            state.draws[i] = nil\n        end\n        state[i] = nil\n    elseif draw == nil or state[i] ~= target or state.sourceID ~= source.id or state.angle ~= angle then\n        if draw and not drawer:updateTimedConeOnEnt(draw, nil, source.id, nil, angle, target) then\n            draw = nil\n        end\n        if draw == nil then\n            draw = drawer:addTimedConeOnEnt(remaining, source.id, 60, angle, target, 0, false, nil, nil, nil, 256)\n        end\n        state.draws[i] = draw\n        if draw then\n            state[i] = target\n        end\n    end\nend\nstate.sourceID, state.angle = source.id, angle\nself.used = true",
 							conditions = 
 							{
 								
@@ -4010,7 +4010,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Cones",
+							name = "显示扇形",
 							uuid = "c6ff4b8c-fb7c-5199-86ac-587ac9bfda3e",
 							version = 2.1,
 						},
@@ -4025,7 +4025,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p1TetherInfo ~= nil",
 							dequeueIfLuaFalse = true,
-							name = "Tethers Recorded",
+							name = "连线记录完整",
 							uuid = "600c7065-d843-53c3-90e1-5d849181bf70",
 							version = 3,
 						},
@@ -4064,7 +4064,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Clear Markers",
+							name = "清除标记",
 							uuid = "b52a352e-9ecc-5f73-a5a9-21835c5d5780",
 							version = 2.1,
 						},
@@ -4079,7 +4079,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruP1FOFAM == true",
 							dequeueIfLuaFalse = true,
-							name = "FoF AM Enabled",
+							name = "罪壤断标记已开启",
 							uuid = "08a43222-fe68-5d60-9506-8530dca36a14",
 							version = 3,
 						},
@@ -4179,7 +4179,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then return end\nMuAiGuide.Reactions.addTimedWorldText(10000, \"4\", ent.pos, 3931632764, true, 4.25)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    return\nend\nMuAiGuide.Reactions.addTimedWorldText(10000, \"4\", entity.pos, 3931632764, true, 4.25)\nself.used = true",
 							conditions = 
 							{
 								
@@ -4189,7 +4189,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "WorldText 4",
+							name = "显示四人塔",
 							uuid = "4271a336-5839-5705-812c-7c46ca3c7945",
 							version = 2.1,
 						},
@@ -4200,7 +4200,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then return end\nMuAiGuide.Reactions.addTimedWorldText(10000, \"3\", ent.pos, 3931632764, true, 4.25)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    return\nend\nMuAiGuide.Reactions.addTimedWorldText(10000, \"3\", entity.pos, 3931632764, true, 4.25)\nself.used = true",
 							conditions = 
 							{
 								
@@ -4210,7 +4210,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "WorldText 3",
+							name = "显示三人塔",
 							uuid = "b983ba97-4851-5eb1-9489-2fa41273d8da",
 							version = 2.1,
 						},
@@ -4220,7 +4220,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then return end\nMuAiGuide.Reactions.addTimedWorldText(10000, \"2\", ent.pos, 3931632764, true, 4.25)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    return\nend\nMuAiGuide.Reactions.addTimedWorldText(10000, \"2\", entity.pos, 3931632764, true, 4.25)\nself.used = true",
 							conditions = 
 							{
 								
@@ -4230,7 +4230,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "WorldText 2",
+							name = "显示两人塔",
 							uuid = "be452129-cfa6-5d7c-a3a1-303a3c6defb3",
 							version = 2.1,
 						},
@@ -4240,7 +4240,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then return end\nMuAiGuide.Reactions.addTimedWorldText(10000, \"1\", ent.pos, 3931632764, true, 4.25)\n\nlocal drawer = TensorCore.getCachedDrawer(0x4DFF2100, 0x4DFF2100, 0x4DFF2100, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCircle(10000, ent.pos.x, 0.05, ent.pos.z, 4, nil, false, nil, 256)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    return\nend\nMuAiGuide.Reactions.addTimedWorldText(10000, \"1\", entity.pos, 3931632764, true, 4.25)\n\nlocal drawer = TensorCore.getCachedDrawer(0x4DFF2100, 0x4DFF2100, 0x4DFF2100, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCircle(10000, entity.pos.x, 0.05, entity.pos.z, 4, nil, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -4250,7 +4250,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "WorldText 1",
+							name = "显示一人塔",
 							uuid = "1f8c3bcb-8405-506b-a009-f81e51582d97",
 							version = 2.1,
 						},
@@ -4267,7 +4267,7 @@ local tbl =
 							eventArgOptionType = 3,
 							eventArgType = 2,
 							eventSpellID = 40126,
-							name = "Four",
+							name = "四人塔",
 							spellIDList = 
 							{
 								40124,
@@ -4287,7 +4287,7 @@ local tbl =
 							eventArgOptionType = 3,
 							eventArgType = 2,
 							eventSpellID = 40126,
-							name = "Three",
+							name = "三人塔",
 							spellIDList = 
 							{
 								40126,
@@ -4306,7 +4306,7 @@ local tbl =
 							eventArgOptionType = 3,
 							eventArgType = 2,
 							eventSpellID = 40125,
-							name = "Two",
+							name = "两人塔",
 							spellIDList = 
 							{
 								40125,
@@ -4325,7 +4325,7 @@ local tbl =
 							eventArgOptionType = 3,
 							eventArgType = 2,
 							eventSpellID = 40135,
-							name = "One",
+							name = "一人塔",
 							spellIDList = 
 							{
 								40135,
@@ -4360,7 +4360,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D0070FF, nil, 0x4D0070FF, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCenteredRect((142.9 - TensorReactions_CurrentTimer) * 1000, 100, 0.05, 100, 40, 0.22, math.pi, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D0070FF, nil, 0x4D0070FF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCenteredRect(\n    (142.9 - TensorReactions_CurrentTimer) * 1000,\n    100,\n    0.05,\n    100,\n    40,\n    0.22,\n    math.pi,\n    nil,\n    false,\n    nil,\n    256\n)\nself.used = true",
 							conditions = 
 							{
 								
@@ -4371,7 +4371,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw KB Line",
+							name = "显示击退中线",
 							uuid = "661cebe5-f99d-5526-8d32-9b00f5a03580",
 							version = 2.1,
 						},
@@ -4387,7 +4387,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40129,
-							name = "Channel ID",
+							name = "读条技能",
 							uuid = "1c3b5fae-5458-5bdf-ab0e-31157c41defd",
 							version = 3,
 						},
@@ -4416,7 +4416,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\n-- Get all AOEs to find tower positions\nlocal aoes = Argus.getCurrentAOEs()\nif not table.valid(aoes) then\n    self.used = true\n    return\nend\n\n-- Map of tower channel IDs to required player count\nlocal towerIDToCount = {\n    [40135] = 1, [40131] = 1,\n    [40125] = 2, [40122] = 2,\n    [40126] = 3, [40123] = 3,\n    [40124] = 4, [40127] = 4\n}\n\n-- Find and sort towers by Z position (north to south)\nlocal towers = {}\nfor _, aoe in pairs(aoes) do\n    if towerIDToCount[aoe.aoeID] then\n        table.insert(towers, {\n            pos = {x = aoe.x, y = aoe.y, z = aoe.z},\n            count = towerIDToCount[aoe.aoeID]\n        })\n    end\nend\n\ntable.sort(towers, function(a,b) return a.pos.z < b.pos.z end)\nif #towers ~= 3 then\n    self.used = true \n    return\nend\n\n-- Fixed roles\nlocal targetTower\nif gCurrentRole == 7 then \n    targetTower = towers[1] -- North\nelseif gCurrentRole == 4 then\n    targetTower = towers[2] -- Middle\nelseif gCurrentRole == 8 then\n    targetTower = towers[3] -- South\nelse\n    -- Flex roles logic\n    local myDefaultTower\n    if gCurrentRole == 1 then\n        myDefaultTower = towers[1]\n    elseif gCurrentRole == 3 then  \n        myDefaultTower = towers[2]\n    elseif gCurrentRole == 2 then\n        myDefaultTower = towers[3]\n    end\n    \n    -- Adjust if default tower needs less than 2 players\n    if myDefaultTower and myDefaultTower.count < 2 then\n        for _, tower in ipairs(towers) do\n            if tower.count >= 3 then\n                targetTower = tower\n                break\n            end\n        end\n    else\n        targetTower = myDefaultTower\n    end\nend\n\nif targetTower then\n    -- Draw arrow from center to target tower\n    local drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    local centerPos = {x = 100, y = 0, z = targetTower.pos.z}\n    local heading = TensorCore.getHeadingToTarget(centerPos, targetTower.pos)\n    drawer:addTimedArrow(10000, centerPos.x, 0.05, centerPos.z, heading, 7, 1, nil, nil, nil, false, 256)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\n-- 从当前AOE集合取得塔位。\nlocal aoes = Argus.getCurrentAOEs()\nif not table.valid(aoes) then\n    self.used = true\n    return\nend\n\n-- 塔技能ID与所需人数的对应关系。\nlocal towerIDToCount = {\n    [40135] = 1,\n    [40131] = 1,\n    [40125] = 2,\n    [40122] = 2,\n    [40126] = 3,\n    [40123] = 3,\n    [40124] = 4,\n    [40127] = 4,\n}\n\n-- 按Z坐标由北到南排列三座塔。\nlocal towers = {}\nfor _, aoe in pairs(aoes) do\n    if towerIDToCount[aoe.aoeID] then\n        table.insert(towers, {\n            pos = { x = aoe.x, y = aoe.y, z = aoe.z },\n            count = towerIDToCount[aoe.aoeID],\n        })\n    end\nend\n\ntable.sort(towers, function(a, b)\n    return a.pos.z < b.pos.z\nend)\nif #towers ~= 3 then\n    self.used = true\n    return\nend\n\n-- 固定塔位职责。\nlocal targetTower\nif gCurrentRole == 7 then\n    targetTower = towers[1]\nelseif gCurrentRole == 4 then\n    targetTower = towers[2]\nelseif gCurrentRole == 8 then\n    targetTower = towers[3]\nelse\n    -- 补位职责。\n    local myDefaultTower\n    if gCurrentRole == 1 then\n        myDefaultTower = towers[1]\n    elseif gCurrentRole == 3 then\n        myDefaultTower = towers[2]\n    elseif gCurrentRole == 2 then\n        myDefaultTower = towers[3]\n    end\n\n    -- 默认塔不足两人时, 补到需要至少三人的塔。\n    if myDefaultTower and myDefaultTower.count < 2 then\n        for _, tower in ipairs(towers) do\n            if tower.count >= 3 then\n                targetTower = tower\n                break\n            end\n        end\n    else\n        targetTower = myDefaultTower\n    end\nend\n\nif targetTower then\n    -- 显示当前职责对应的塔位。\n    local drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    local centerPos = { x = 100, y = 0, z = targetTower.pos.z }\n    local heading = TensorCore.getHeadingToTarget(centerPos, targetTower.pos)\n    drawer:addTimedArrow(10000, centerPos.x, 0.05, centerPos.z, heading, 7, 1, nil, nil, nil, false, 256)\nend\n\nself.used = true",
 							gVar = "ACR_RikuPCT3_CD",
 							uuid = "35589b48-ef89-53e7-8bc1-34787cf994f2",
 							version = 2.1,
@@ -4470,7 +4470,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Shotcall Move In",
+							name = "播报靠近",
 							uuid = "9f326ea4-bec1-5a14-be52-d748b8cde0d9",
 							version = 2.1,
 						},
@@ -4486,7 +4486,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40161,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "d5876784-16f2-562f-9c3c-a243a5c1fa37",
 							version = 3,
 						},
@@ -4565,7 +4565,7 @@ local tbl =
 							eventArgOptionType = 3,
 							eventArgType = 2,
 							eventSpellID = 40131,
-							name = "Cast ID",
+							name = "判定技能",
 							spellIDList = 
 							{
 								40122,
@@ -4589,7 +4589,7 @@ local tbl =
 							category = "Self",
 							conditionType = 9,
 							dequeueIfLuaFalse = true,
-							name = "Is Tank",
+							name = "坦克职业",
 							partyTargetType = "Tank",
 							uuid = "e14754cb-9f72-595c-8c23-c813aac14299",
 							version = 3,
@@ -4604,7 +4604,7 @@ local tbl =
 							conditionType = 13,
 							dequeueIfLuaFalse = true,
 							jobValue = "NINJA",
-							name = "Is NIN",
+							name = "忍者职业",
 							uuid = "5dc3448f-5e19-5597-8cb1-23ac2e01fcc4",
 							version = 3,
 						},
@@ -4653,7 +4653,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_Hotbar_Slither",
-							name = "Toggle Dash",
+							name = "调整突进开关",
 							uuid = "8422a28a-152e-57d6-b418-737ccf9fe9a1",
 							variableTogglesType = 2,
 							version = 2.1,
@@ -4673,7 +4673,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 37964,
-							name = "On Player",
+							name = "目标为本人",
 							partyTargetType = "Event Entity",
 							uuid = "82bd98fd-fd79-5fd1-9f5c-bd522fa0c8a7",
 							version = 3,
@@ -4687,7 +4687,7 @@ local tbl =
 							category = "Self",
 							conditionType = 9,
 							dequeueIfLuaFalse = true,
-							name = "Is Tank",
+							name = "坦克职业",
 							partyTargetType = "Tank",
 							uuid = "ab41e054-487d-5174-9a8f-6c390fc1d44a",
 							version = 3,
@@ -4705,7 +4705,7 @@ local tbl =
 							eventArgType = 4,
 							eventIntValue = 200,
 							eventSpellID = 37964,
-							name = "Anim ID",
+							name = "动画匹配",
 							uuid = "ba6525f9-5681-5f29-aea9-84c698d9e2f0",
 							version = 3,
 						},
@@ -4749,7 +4749,7 @@ local tbl =
 							aType = "Lua",
 							actionLua = "data.p1PowderMarkID = nil\nself.used = true",
 							gVar = "ACR_RikuMNK3_CD",
-							name = "Reset Mark",
+							name = "清除爆印记录",
 							uuid = "5bb2fd27-13df-5d5e-a879-9eb364599e8f",
 							version = 2.1,
 						},
@@ -4788,7 +4788,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Set Powder Mark ID",
+							name = "记录爆印目标",
 							uuid = "37c6c8d5-b15d-51a8-842b-78f4357623dd",
 							version = 2.1,
 						},
@@ -4810,7 +4810,7 @@ local tbl =
 								},
 							},
 							filterTargetType = "Party",
-							name = "Powder Mark Filter",
+							name = "选取爆印目标",
 							uuid = "694e2ae1-a990-55e2-a1ea-87634f97e618",
 							version = 3,
 						},
@@ -4821,7 +4821,7 @@ local tbl =
 						{
 							buffID = 4166,
 							category = "Party",
-							name = "Has Powder Mark",
+							name = "持有爆印",
 							partyTargetType = "Detection Target",
 							uuid = "d71d2fd8-faf7-5b2c-ba4f-1ebd3fca56af",
 							version = 3,
@@ -4861,7 +4861,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal drawTime = (145.6 - TensorReactions_CurrentTimer) * 1000\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(drawTime, eventArgs.detectionTargetID, 10, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal durationMs = (145.6 - TensorReactions_CurrentTimer) * 1000\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(durationMs, eventArgs.detectionTargetID, 10, nil, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -4871,7 +4871,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Timed Draw Powder Mark",
+							name = "显示爆印范围",
 							uuid = "37c6c8d5-b15d-51a8-842b-78f4357623dd",
 							version = 2.1,
 						},
@@ -4893,7 +4893,7 @@ local tbl =
 								},
 							},
 							filterTargetType = "Party",
-							name = "Powder Mark Filter",
+							name = "选取爆印目标",
 							uuid = "694e2ae1-a990-55e2-a1ea-87634f97e618",
 							version = 3,
 						},
@@ -4904,7 +4904,7 @@ local tbl =
 						{
 							buffID = 4166,
 							category = "Party",
-							name = "Has Powder Mark",
+							name = "持有爆印",
 							partyTargetType = "Detection Target",
 							uuid = "d71d2fd8-faf7-5b2c-ba4f-1ebd3fca56af",
 							version = 3,
@@ -4934,7 +4934,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal pm = TensorCore.mGetEntity(data.p1PowderMarkID).pos\nlocal closest = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal dist = TensorCore.getDistance2d(pm, closest)\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addDonut(pm.x, 0.05, pm.z, dist-0.5, dist, false, 256)\ndrawer:addCircle(closest.x, 0.05, closest.z, 10, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal pm = TensorCore.mGetEntity(data.p1PowderMarkID).pos\nlocal closest = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal dist = TensorCore.getDistance2d(pm, closest)\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addDonut(pm.x, 0.05, pm.z, dist - 0.5, dist, false, 256)\ndrawer:addCircle(closest.x, 0.05, closest.z, 10, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -4949,7 +4949,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Draw Closest",
+							name = "显示最近目标范围",
 							uuid = "c25dfc90-f8fc-5757-8025-3047c5dd366c",
 							version = 2.1,
 						},
@@ -4971,7 +4971,7 @@ local tbl =
 								},
 							},
 							filterTargetType = "Party",
-							name = "Powder Mark Filter",
+							name = "选取爆印目标",
 							uuid = "146cd19c-0aaf-55c3-9c23-828f300a3069",
 							version = 3,
 						},
@@ -4982,7 +4982,7 @@ local tbl =
 						{
 							buffID = 4166,
 							category = "Party",
-							name = "Has Powder Mark",
+							name = "持有爆印",
 							partyTargetType = "Detection Target",
 							uuid = "2f3bb281-74bc-5604-a125-9f4fd7f51358",
 							version = 3,
@@ -5008,7 +5008,7 @@ local tbl =
 								},
 							},
 							filterTargetType = "Party",
-							name = "Nearest to Prev",
+							name = "距前一目标最近",
 							subtypeRangeCheckSourceType = "Prev Detection Target",
 							uuid = "d3c915a8-0d47-5780-8284-df5f0c72ba6a",
 							version = 3,
@@ -5022,7 +5022,7 @@ local tbl =
 							conditionType = 2,
 							hpType = 2,
 							hpValue = 1,
-							name = "Exists",
+							name = "目标存在",
 							partyTargetType = "Detection Target",
 							uuid = "b1da3352-b859-5f19-9994-9f78029101ba",
 							version = 3,
@@ -5077,7 +5077,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set P2 Start Time",
+							name = "记录P2起点",
 							uuid = "dd188058-ea59-5947-8570-577b9f59ecb8",
 							version = 2.1,
 						},
@@ -5110,7 +5110,7 @@ local tbl =
 								},
 							},
 							dequeueIfLuaFalse = true,
-							name = "Valid Args",
+							name = "事件参数匹配",
 							partyTargetNumber = 0,
 							uuid = "17dcf937-ac7b-5bcc-8a73-190e0cf3dd81",
 							version = 3,
@@ -5219,7 +5219,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Find Boss",
+							name = "选取首领",
 							uuid = "a1149ea4-b9fa-5022-812e-00f7807d7c70",
 							version = 3,
 						},
@@ -5231,7 +5231,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Current Target",
-							name = "Target Filter",
+							name = "选取目标",
 							uuid = "8dfc223a-a42b-5cce-945a-236d694de158",
 							version = 3,
 						},
@@ -5271,7 +5271,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set P2 Start Time",
+							name = "记录P2起点",
 							uuid = "dd188058-ea59-5947-8570-577b9f59ecb8",
 							version = 2.1,
 						},
@@ -5304,7 +5304,7 @@ local tbl =
 								},
 							},
 							dequeueIfLuaFalse = true,
-							name = "Valid Args",
+							name = "事件参数匹配",
 							partyTargetNumber = 0,
 							uuid = "17dcf937-ac7b-5bcc-8a73-190e0cf3dd81",
 							version = 3,
@@ -5394,7 +5394,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record In",
+							name = "记录月环",
 							uuid = "c6c8cf8d-5061-5ecf-a5a3-a99e4976ec27",
 							version = 2.1,
 						},
@@ -5415,7 +5415,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Out",
+							name = "记录钢铁",
 							uuid = "7499fdaa-23ff-5079-8271-9b855c53e5f5",
 							version = 2.1,
 						},
@@ -5431,7 +5431,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40203,
-							name = "Scythe In",
+							name = "镰形回旋踢",
 							uuid = "93689a32-be5d-5108-be67-1c53942acb17",
 							version = 3,
 						},
@@ -5444,7 +5444,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40202,
-							name = "Axe Out",
+							name = "斧形回旋踢",
 							uuid = "269d9708-6e31-5977-bdf3-396c5bb1246e",
 							version = 3,
 						},
@@ -5474,7 +5474,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if (data.p2IciclePuddleIDs == nil) then\n    data.p2IciclePuddleIDs = {}\nend\n\nif (data.p2IciclePuddleCount == nil) then\n    data.p2IciclePuddleCount = 0\nend\ndata.p2IciclePuddleCount = data.p2IciclePuddleCount + 1\n\ndata.p2IciclePuddleIDs[eventArgs.entityID2] = true\nself.used = true",
+							actionLua = "if data.p2IciclePuddleIDs == nil then\n    data.p2IciclePuddleIDs = {}\nend\n\nif data.p2IciclePuddleCount == nil then\n    data.p2IciclePuddleCount = 0\nend\ndata.p2IciclePuddleCount = data.p2IciclePuddleCount + 1\n\ndata.p2IciclePuddleIDs[eventArgs.entityID2] = true\nself.used = true",
 							conditions = 
 							{
 								
@@ -5484,7 +5484,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Marked",
+							name = "记录冰圈点名",
 							uuid = "d5aef551-c949-517d-bf9b-8fc417922c1d",
 							version = 2.1,
 						},
@@ -5500,7 +5500,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventMarkerID = 345,
-							name = "Marker ID",
+							name = "标记类型",
 							uuid = "299621ad-a551-583c-8618-f1a6c4ad1c5e",
 							version = 3,
 						},
@@ -5540,7 +5540,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set Player Puddle Status",
+							name = "记录本人冰圈状态",
 							uuid = "d5aef551-c949-517d-bf9b-8fc417922c1d",
 							version = 2.1,
 						},
@@ -5554,7 +5554,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p2IciclePuddleCount == 4",
-							name = "Puddles Recorded",
+							name = "冰圈点名完整",
 							uuid = "63304914-7b2f-5ea3-9193-f0acb6799df7",
 							version = 3,
 						},
@@ -5582,7 +5582,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nif (data.p2InitIcicleCount == nil) then\n    data.p2InitIcicleCount = 1\nelse\n    data.p2InitIcicleCount = data.p2InitIcicleCount + 1\nend\n\nif (data.p2InitIcicleCount > 2) then\n    self.used = true\n    return\nend\n\nif (data.p2InitIcicleFirstPos == nil) then\n    local ent = TensorCore.mGetEntity(eventArgs.entityID)\n    if (ent == nil) then\n        MuAiGuide.Reactions.log(\"[P2 Init Icicle] Couldn't retrieve entity for first icicle!\", 5)\n        self.used = true\n        return\n    end\n\n    data.p2InitIcicleFirstPos = ent.pos\n    self.used = true\n    return\nend\n\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then\n    MuAiGuide.Reactions.log(\"[P2 Init Icicle] Couldn't retrieve entity for second icicle!\", 5)\n        self.used = true\n        return\nend\n\nlocal firstPos = data.p2InitIcicleFirstPos\nlocal secondPos = ent.pos\n\nif (data.arenaCenter == nil) then data.arenaCenter = { x = 100, y = 0, z = 100 } end\n\nlocal baseHeading1 = TensorCore.getHeadingToTarget(data.arenaCenter, firstPos)\nlocal baseHeading2 = TensorCore.getHeadingToTarget(data.arenaCenter, secondPos)\n\nlocal nmHeading1 = TensorCore.convertHeading(baseHeading1)\nlocal nmHeading2 = TensorCore.convertHeading(baseHeading2)\nlocal north = math.pi\n\nlocal d1 = TensorCore.convertHeading(nmHeading1 - north)\nlocal d2 = TensorCore.convertHeading(nmHeading2 - north)\n\nlocal drawer1 = TensorCore.getCachedDrawer(0x4D00FF7B, nil, 0x4D00FF7B, 0xFFFFFFFF, 2, 0, 256)\ndrawer1:setGradient(3, 0.15, 2)\ndrawer1:setHeightOffset(0.05)\nlocal drawer2 = TensorCore.getCachedDrawer(0x4D62FF00, nil, 0x4D62FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer2:setGradient(3, 0.15, 2)\ndrawer2:setHeightOffset(0.05)\n\nif (d1 < d2) then\n    drawer1:addTimedArrow(6000, 100, 0.05, 100, baseHeading1, 15, 1.1, nil, nil, 10000, false, 256)\n    drawer2:addTimedArrow(6000, 100, 0.05, 100, baseHeading2, 15, 1.1, nil, nil, 10000, false, 256)\n    MuAiGuide.Reactions.addTimedWorldText(15000, \"G1\", firstPos, 4160749543, true, 3.5)\n    MuAiGuide.Reactions.addTimedWorldText(15000, \"G2\", secondPos, 4160749543, true, 3.5)\nelse\n    drawer1:addTimedArrow(6000, 100, 0.05, 100, baseHeading2, 15, 1.1, nil, nil, 10000, false, 256)\n    drawer2:addTimedArrow(6000, 100, 0.05, 100, baseHeading1, 15, 1.1, nil, nil, 10000, false, 256)\n    MuAiGuide.Reactions.addTimedWorldText(15000, \"G1\", secondPos, 4160749543, true, 3.5)\n    MuAiGuide.Reactions.addTimedWorldText(15000, \"G2\", firstPos, 4160749543, true, 3.5)\nend\n\nlocal nDir = math.round(nmHeading1 * (4 / north))\nlocal isCardinal = (nDir % 2) == 0\n\nif (isCardinal) then\n    data.p2IcicleDir = \"cardinal\"\nelse\n    data.p2IcicleDir = \"ordinal\"\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nif data.p2InitIcicleCount == nil then\n    data.p2InitIcicleCount = 1\nelse\n    data.p2InitIcicleCount = data.p2InitIcicleCount + 1\nend\n\nif data.p2InitIcicleCount > 2 then\n    self.used = true\n    return\nend\n\nif data.p2InitIcicleFirstPos == nil then\n    local ent = TensorCore.mGetEntity(eventArgs.entityID)\n    if ent == nil then\n        MuAiGuide.Reactions.log(\"[FRU/冰柱] 第一根冰柱实体暂不可读。\", 5)\n        self.used = true\n        return\n    end\n\n    data.p2InitIcicleFirstPos = ent.pos\n    self.used = true\n    return\nend\n\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif ent == nil then\n    MuAiGuide.Reactions.log(\"[FRU/冰柱] 第二根冰柱实体暂不可读。\", 5)\n    self.used = true\n    return\nend\n\nlocal firstPos = data.p2InitIcicleFirstPos\nlocal secondPos = ent.pos\n\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\n\nlocal baseHeading1 = TensorCore.getHeadingToTarget(data.arenaCenter, firstPos)\nlocal baseHeading2 = TensorCore.getHeadingToTarget(data.arenaCenter, secondPos)\n\nlocal normalizedHeading1 = TensorCore.convertHeading(baseHeading1)\nlocal normalizedHeading2 = TensorCore.convertHeading(baseHeading2)\nlocal north = math.pi\n\nlocal d1 = TensorCore.convertHeading(normalizedHeading1 - north)\nlocal d2 = TensorCore.convertHeading(normalizedHeading2 - north)\n\nlocal drawer1 = TensorCore.getCachedDrawer(0x4D00FF7B, nil, 0x4D00FF7B, 0xFFFFFFFF, 2, 0, 256)\ndrawer1:setGradient(3, 0.15, 2)\ndrawer1:setHeightOffset(0.05)\nlocal drawer2 = TensorCore.getCachedDrawer(0x4D62FF00, nil, 0x4D62FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer2:setGradient(3, 0.15, 2)\ndrawer2:setHeightOffset(0.05)\n\nif d1 < d2 then\n    drawer1:addTimedArrow(6000, 100, 0.05, 100, baseHeading1, 15, 1.1, nil, nil, 10000, false, 256)\n    drawer2:addTimedArrow(6000, 100, 0.05, 100, baseHeading2, 15, 1.1, nil, nil, 10000, false, 256)\n    MuAiGuide.Reactions.addTimedWorldText(15000, \"G1\", firstPos, 4160749543, true, 3.5)\n    MuAiGuide.Reactions.addTimedWorldText(15000, \"G2\", secondPos, 4160749543, true, 3.5)\nelse\n    drawer1:addTimedArrow(6000, 100, 0.05, 100, baseHeading2, 15, 1.1, nil, nil, 10000, false, 256)\n    drawer2:addTimedArrow(6000, 100, 0.05, 100, baseHeading1, 15, 1.1, nil, nil, 10000, false, 256)\n    MuAiGuide.Reactions.addTimedWorldText(15000, \"G1\", secondPos, 4160749543, true, 3.5)\n    MuAiGuide.Reactions.addTimedWorldText(15000, \"G2\", firstPos, 4160749543, true, 3.5)\nend\n\nlocal nDir = math.round(normalizedHeading1 * (4 / north))\nlocal isCardinal = (nDir % 2) == 0\n\nif isCardinal then\n    data.p2IcicleDir = \"cardinal\"\nelse\n    data.p2IcicleDir = \"ordinal\"\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -5597,7 +5597,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Label Icicles",
+							name = "标注冰柱分组",
 							uuid = "907c5924-d707-5d1e-8f55-2ead4f62bc59",
 							version = 2.1,
 						},
@@ -5613,7 +5613,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40198,
-							name = "Channel ID",
+							name = "读条技能",
 							uuid = "b4671947-0ed4-530c-b867-ec639c175c53",
 							version = 3,
 						},
@@ -5625,7 +5625,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p2InitIcicleCount == nil or data.p2InitIcicleCount < 2",
 							dequeueIfLuaFalse = true,
-							name = "Icicle Count",
+							name = "冰柱数量有效",
 							uuid = "798ccd00-7994-55d1-bfa5-e2c3aef7258b",
 							version = 3,
 						},
@@ -5665,7 +5665,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal cardinalPuddles = data.p2IcicleDir == \"ordinal\"\nlocal player = TensorCore.mGetPlayer()\nlocal isPlayerPuddle = data.p2IciclePuddleIDs[player.id] == true\nlocal playerDefaultIsCardinal = MuAiGuide.Reactions.dpsJobs[player.job] ~= true\nlocal playerGoesCardinal = (cardinalPuddles and isPlayerPuddle) or (not cardinalPuddles and not isPlayerPuddle)\nlocal shouldSwap = playerDefaultIsCardinal ~= playerGoesCardinal\nlocal callStr = (shouldSwap and \"Swap, \" or \"Stay, \") .. data.p2FirstKick\nMuAiGuide.Reactions.Shotcall(callStr, true)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal cardinalPuddles = data.p2IcicleDir == \"ordinal\"\nlocal player = TensorCore.mGetPlayer()\nlocal isPlayerPuddle = data.p2IciclePuddleIDs[player.id] == true\nlocal playerDefaultIsCardinal = MuAiGuide.Reactions.dpsJobs[player.job] ~= true\nlocal playerGoesCardinal = (cardinalPuddles and isPlayerPuddle) or (not cardinalPuddles and not isPlayerPuddle)\nlocal shouldSwap = playerDefaultIsCardinal ~= playerGoesCardinal\nlocal callText = (shouldSwap and \"Swap, \" or \"Stay, \") .. data.p2FirstKick\nMuAiGuide.Reactions.Shotcall(callText, true)\nself.used = true",
 							conditions = 
 							{
 								
@@ -5691,7 +5691,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Call Echo DD",
+							name = "播报钻石星尘站位",
 							uuid = "b3ac8c48-d7b4-5831-b562-fe4227695e62",
 							version = 2.1,
 						},
@@ -5706,7 +5706,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruColorIcicles == true",
 							dequeueIfLuaFalse = true,
-							name = "Setting Checked",
+							name = "站位提示已开启",
 							uuid = "028e6ca5-53e3-5550-ae01-82a4ac8da864",
 							version = 3,
 						},
@@ -5718,7 +5718,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p2IcicleDir ~= nil",
-							name = "Icicles Recorded",
+							name = "已记录冰柱方向",
 							uuid = "3dd496be-840a-5cff-aae8-72c7e3cdf291",
 							version = 3,
 						},
@@ -5729,7 +5729,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p2IciclePuddleCount == 4",
-							name = "Puddles Recorded",
+							name = "冰圈点名完整",
 							uuid = "0a912cd8-38a8-59d1-8671-f42ab56a49b3",
 							version = 3,
 						},
@@ -5740,7 +5740,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p2FirstKick ~= nil",
-							name = "Kick Recorded",
+							name = "已记录回旋踢",
 							uuid = "e991ced9-c712-5b2e-ba14-8c73d6bbb57d",
 							version = 3,
 						},
@@ -5768,7 +5768,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal cardinalPuddles = data.p2IcicleDir == \"ordinal\"\nlocal player = TensorCore.mGetPlayer()\nlocal isPlayerPuddle = data.p2IciclePuddleIDs[player.id] == true\nlocal north = math.pi\nlocal northWest = north - math.rad(45)\nlocal puddleStartH, baitStartH\nif (cardinalPuddles) then\n    puddleStartH = north\n    baitStartH = northWest\nelse\n    puddleStartH = northWest\n    baitStartH = north\nend\n\nlocal playerH\nif (isPlayerPuddle) then\n    playerH = puddleStartH\nelse\n    playerH = baitStartH\nend\n\nlocal arrowLength, tipLength\nif (data.p2FirstKick == \"in\") then\n    if (isPlayerPuddle) then\n        arrowLength, tipLength = 5.5, 2.5\n    else\n        arrowLength, tipLength = 1, 0.5\n    end\nelse\n    tipLength = 2\n    if (isPlayerPuddle) then\n        arrowLength = 18\n    else\n        arrowLength = 14\n    end\nend\n\nlocal drawTime\nif (isPlayerPuddle) then\n    drawTime = (247.1 - TensorReactions_CurrentTimer) * 1000\nelse\n    drawTime = (246.7 - TensorReactions_CurrentTimer) * 1000\nend\n\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal increment = math.rad(90)\nfor i = 0, 3 do\n    local h = playerH + (increment * i)\n    drawer:addTimedArrow(drawTime, 100, 0.05, 100, h, arrowLength, 0.15, tipLength, nil, 0, false, 256)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal cardinalPuddles = data.p2IcicleDir == \"ordinal\"\nlocal player = TensorCore.mGetPlayer()\nlocal isPlayerPuddle = data.p2IciclePuddleIDs[player.id] == true\nlocal north = math.pi\nlocal northWest = north - math.rad(45)\nlocal puddleStartH, baitStartH\nif cardinalPuddles then\n    puddleStartH = north\n    baitStartH = northWest\nelse\n    puddleStartH = northWest\n    baitStartH = north\nend\n\nlocal playerH\nif isPlayerPuddle then\n    playerH = puddleStartH\nelse\n    playerH = baitStartH\nend\n\nlocal arrowLength, tipLength\nif data.p2FirstKick == \"in\" then\n    if isPlayerPuddle then\n        arrowLength, tipLength = 5.5, 2.5\n    else\n        arrowLength, tipLength = 1, 0.5\n    end\nelse\n    tipLength = 2\n    if isPlayerPuddle then\n        arrowLength = 18\n    else\n        arrowLength = 14\n    end\nend\n\nlocal durationMs\nif isPlayerPuddle then\n    durationMs = (247.1 - TensorReactions_CurrentTimer) * 1000\nelse\n    durationMs = (246.7 - TensorReactions_CurrentTimer) * 1000\nend\n\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal increment = math.rad(90)\nfor i = 0, 3 do\n    local heading = playerH + (increment * i)\n    drawer:addTimedArrow(durationMs, 100, 0.05, 100, heading, arrowLength, 0.15, tipLength, nil, 0, false, 256)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -5794,7 +5794,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Echo DD",
+							name = "显示钻石星尘站位",
 							uuid = "b3ac8c48-d7b4-5831-b562-fe4227695e62",
 							version = 2.1,
 						},
@@ -5809,7 +5809,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruColorIcicles == true",
 							dequeueIfLuaFalse = true,
-							name = "Setting Checked",
+							name = "站位提示已开启",
 							uuid = "028e6ca5-53e3-5550-ae01-82a4ac8da864",
 							version = 3,
 						},
@@ -5821,7 +5821,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p2IcicleDir ~= nil",
-							name = "Icicles Recorded",
+							name = "已记录冰柱方向",
 							uuid = "3dd496be-840a-5cff-aae8-72c7e3cdf291",
 							version = 3,
 						},
@@ -5832,7 +5832,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p2IciclePuddleCount == 4",
-							name = "Puddles Recorded",
+							name = "冰圈点名完整",
 							uuid = "0a912cd8-38a8-59d1-8671-f42ab56a49b3",
 							version = 3,
 						},
@@ -5843,7 +5843,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p2FirstKick ~= nil",
-							name = "Kick Recorded",
+							name = "已记录回旋踢",
 							uuid = "e991ced9-c712-5b2e-ba14-8c73d6bbb57d",
 							version = 3,
 						},
@@ -5899,7 +5899,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Shotcall Move In",
+							name = "播报靠近",
 							uuid = "21ebe3b2-a7f8-5a5f-9e06-19253fac98ee",
 							version = 2.1,
 						},
@@ -5914,7 +5914,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.meBaitingPuddle ~= true",
 							dequeueIfLuaFalse = true,
-							name = "Player Is Not Puddle",
+							name = "本人无冰圈",
 							uuid = "b7a4a383-a936-52f4-b347-b906e7954a04",
 							version = 3,
 						},
@@ -5927,7 +5927,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40202,
-							name = "Axe Kick",
+							name = "斧形回旋踢",
 							uuid = "f1ad3484-9363-57ab-8d7f-1434061b15ec",
 							version = 3,
 						},
@@ -5970,7 +5970,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if (data.arenaCenter == nil) then data.arenaCenter = { x = 100, y = 0, z = 100 } end\nself.used = true",
+							actionLua = "if data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
 							uuid = "e0cf84df-c305-56e9-8bf4-99077d3ad7e3",
 							version = 2.1,
@@ -6010,9 +6010,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal center = data.arenaCenter\nlocal closestFour = MuAiGuide.Reactions.API.getNearestNumToPos(data.arenaCenter, 4)\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor i = 1, 4 do\n    local id = closestFour[i]\n    if (id == nil) then break end\n    local ent = TensorCore.mGetEntity(id)\n    local h = TensorCore.getHeadingToTarget(center, ent.pos)\n    drawer:addCone(100, 0.05, 100, 25, math.rad(30), h, false, 256)\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal center = data.arenaCenter\nlocal cache = data.StringFRU_DiamondTargets\nif cache == nil then\n    cache = { rows = {}, pool = {} }\n    cache.less = function(a, b)\n        return a.distance == b.distance and a.id < b.id or a.distance < b.distance\n    end\n    data.StringFRU_DiamondTargets = cache\nend\nlocal closestFour = cache.rows\nlocal count = 0\nif center and center.x ~= nil and center.z ~= nil then\n    local party = TensorCore.getEntityGroupList(\"Party\")\n    if party then\n        for _, value in pairs(party) do\n            local entity = type(value) == \"table\" and value or value and TensorCore.mGetEntity(value)\n            if entity then\n                local position = entity.pos\n                if position then\n                    count = count + 1\n                    local row = cache.pool[count]\n                    if row == nil then\n                        row = {}\n                        cache.pool[count] = row\n                    end\n                    row.id = entity.id\n                    row.position = position\n                    row.distance = TensorCore.getDistance2d(position, center)\n                    closestFour[count] = row\n                end\n            end\n        end\n    end\nend\nfor i = count + 1, #closestFour do\n    closestFour[i] = nil\nend\ntable.sort(closestFour, cache.less)\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor i = 1, 4 do\n    local row = closestFour[i]\n    if row == nil then\n        break\n    end\n    local heading = TensorCore.getHeadingToTarget(center, row.position)\n    drawer:addCone(100, 0.05, 100, 25, math.rad(30), heading, false, 256)\nend\n\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Cones",
+							name = "显示扇形",
 							uuid = "2ad85f3e-9ff8-50d0-b074-d32c0a616723",
 							version = 2.1,
 						},
@@ -6057,7 +6057,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal arrowDelayTime = (251.8 - TensorReactions_CurrentTimer) * 1000\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedArrowOnEnt(5000, TensorCore.mGetPlayer().id, 7, 0.35, nil, nil, eventArgs.entityID, arrowDelayTime, false, nil, nil, 256)\ndata.ddShivaPos = TensorCore.mGetEntity(eventArgs.entityID).pos\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal arrowDelayTime = (251.8 - TensorReactions_CurrentTimer) * 1000\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedArrowOnEnt(\n    5000,\n    TensorCore.mGetPlayer().id,\n    7,\n    0.35,\n    nil,\n    nil,\n    eventArgs.entityID,\n    arrowDelayTime,\n    false,\n    nil,\n    nil,\n    256\n)\ndata.ddShivaPos = TensorCore.mGetEntity(eventArgs.entityID).pos\nself.used = true",
 							conditions = 
 							{
 								
@@ -6068,7 +6068,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Arrow To Shiva",
+							name = "显示希瓦方向",
 							uuid = "0bd61043-df34-5328-81f5-aaed172c6dac",
 							version = 2.1,
 						},
@@ -6096,7 +6096,7 @@ local tbl =
 								},
 							},
 							dequeueIfLuaFalse = true,
-							name = "Anim ID",
+							name = "动画匹配",
 							partyTargetNumber = 0,
 							uuid = "9dae3d2a-ae3b-56f0-8914-b7b7e22262fe",
 							version = 3,
@@ -6152,7 +6152,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then\n    MuAiGuide.Reactions.log(\"[Shiva Donut] Ent was nil?\", 5)\n    self.used = true\n    return\nend\n\nif (data.arenaCenter == nil) then data.arenaCenter = { x = 100, y = 0, z = 100 } end\nlocal h = TensorCore.getHeadingToTarget(data.arenaCenter, ent.pos)\nlocal d = TensorCore.getDistance2d(data.arenaCenter, ent.pos)\nlocal toWallDistance = 20 - d\nlocal halfDistance = toWallDistance / 2\nlocal x, _, z = TensorCore.getPosInDirection(data.arenaCenter, h, d + halfDistance, true)\n\nlocal donutStartTime = 255.5\nlocal donutEndTime = 263.7\nlocal donutDelayTime = (donutStartTime - TensorReactions_CurrentTimer) * 1000\nlocal donutDrawTime = (donutEndTime - donutStartTime) * 1000\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedDonut(donutDrawTime, x, 0.05, z, 30.25, 30.75, donutDelayTime, false, nil, 256)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    MuAiGuide.Reactions.log(\"[FRU/钻石星尘] 希瓦实体暂不可读。\", 5)\n    self.used = true\n    return\nend\n\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\nlocal heading = TensorCore.getHeadingToTarget(data.arenaCenter, entity.pos)\nlocal distance = TensorCore.getDistance2d(data.arenaCenter, entity.pos)\nlocal toWallDistance = 20 - distance\nlocal halfDistance = toWallDistance / 2\nlocal x, _, z = TensorCore.getPosInDirection(data.arenaCenter, heading, distance + halfDistance, true)\n\nlocal donutStartTime = 255.5\nlocal donutEndTime = 263.7\nlocal donutDelayTime = (donutStartTime - TensorReactions_CurrentTimer) * 1000\nlocal donutDrawTime = (donutEndTime - donutStartTime) * 1000\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedDonut(donutDrawTime, x, 0.05, z, 30.25, 30.75, donutDelayTime, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -6163,7 +6163,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Safe Donut",
+							name = "显示滑冰安全距离",
 							uuid = "0bd61043-df34-5328-81f5-aaed172c6dac",
 							version = 2.1,
 						},
@@ -6191,7 +6191,7 @@ local tbl =
 								},
 							},
 							dequeueIfLuaFalse = true,
-							name = "Anim ID",
+							name = "动画匹配",
 							partyTargetNumber = 0,
 							uuid = "9dae3d2a-ae3b-56f0-8914-b7b7e22262fe",
 							version = 3,
@@ -6260,7 +6260,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if (data.p2SinboundHolyLocations == nil) then\n    ---@type SinboundHolyInfo[]\n    data.p2SinboundHolyLocations = {}\nend\n\nlocal curTime = Now()\nlocal posTable = { x = eventArgs.castPosX, y = 0, z = eventArgs.castPosZ }\n---@type SinboundHolyInfo\nlocal info = {\n    pos = posTable,\n    startTime = curTime,\n    endTime = curTime + 11000\n}\ntable.insert(data.p2SinboundHolyLocations, info)\nself.used = true",
+							actionLua = "if data.p2SinboundHolyLocations == nil then\n    ---@type FruSinboundHolyInfo[]\n    data.p2SinboundHolyLocations = {}\nend\n\nlocal nowMs = Now()\nlocal posTable = { x = eventArgs.castPosX, y = 0, z = eventArgs.castPosZ }\n---@type FruSinboundHolyInfo\nlocal info = {\n    pos = posTable,\n    startTime = nowMs,\n    endTime = nowMs + 11000,\n}\ntable.insert(data.p2SinboundHolyLocations, info)\nself.used = true",
 							conditions = 
 							{
 								
@@ -6270,7 +6270,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Record Puddle Info",
+							name = "记录冰圈位置",
 							uuid = "0b10c611-3e44-5d4c-a4d8-9ef961542bb7",
 							version = 2.1,
 						},
@@ -6286,7 +6286,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40209,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "969ffe2d-2986-5430-9cdd-1a9b01c1a4d7",
 							version = 3,
 						},
@@ -6326,7 +6326,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircle(11350, eventArgs.castPosX, 0.05, eventArgs.castPosZ, 6, 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircle(11350, eventArgs.castPosX, 0.05, eventArgs.castPosZ, 6, 0, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -6336,7 +6336,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Record Puddle Info",
+							name = "记录冰圈位置",
 							uuid = "0b10c611-3e44-5d4c-a4d8-9ef961542bb7",
 							version = 2.1,
 						},
@@ -6352,7 +6352,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40209,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "969ffe2d-2986-5430-9cdd-1a9b01c1a4d7",
 							version = 3,
 						},
@@ -6395,9 +6395,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif (data.p2LookawayEntID == nil) then\n    local entities = TensorCore.entityList(\"contentid=12809\")\n    if (not table.valid(entities)) then\n        self.used = true\n        return\n    end\n\n    for _, ent in pairs(entities) do\n        if (Argus.isEntityVisible(ent.id)) then\n            data.p2LookawayEntID = ent.id\n            break\n        end\n    end\n\n    if (data.p2LookawayEntID == nil) then\n        MuAiGuide.Reactions.log(\"[FRU] Couldn't find Usurper of Frost for Lookaway!\", 5)\n        self.used = true\n        return\n    end\nend\n\nlocal lookawayEnt = TensorCore.mGetEntity(data.p2LookawayEntID)\nif (lookawayEnt == nil) then\n    self.used = true\n    return\nend\n\nlocal playerPos = TensorCore.mGetPlayer().pos\nTensorCore.API.TensorACR.toggleLockFace(true)\nTensorCore.API.TensorACR.setLockFaceHeading(TensorCore.getHeadingToTarget(lookawayEnt.pos, playerPos))\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif data.p2LookawayEntID == nil then\n    local entities = TensorCore.entityList(\"contentid=12809\")\n    if not table.valid(entities) then\n        self.used = true\n        return\n    end\n\n    for _, entity in pairs(entities) do\n        if Argus.isEntityVisible(entity.id) then\n            data.p2LookawayEntID = entity.id\n            break\n        end\n    end\n\n    if data.p2LookawayEntID == nil then\n        MuAiGuide.Reactions.log(\"[FRU/背对] 未找到可见的冰巫女分身。\", 5)\n        self.used = true\n        return\n    end\nend\n\nlocal lookawayEnt = TensorCore.mGetEntity(data.p2LookawayEntID)\nif lookawayEnt == nil then\n    self.used = true\n    return\nend\n\nlocal playerPos = TensorCore.mGetPlayer().pos\nTensorCore.API.TensorACR.toggleLockFace(true)\nTensorCore.API.TensorACR.setLockFaceHeading(TensorCore.getHeadingToTarget(lookawayEnt.pos, playerPos))\n\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Lookaway",
+							name = "背对分身",
 							uuid = "785ed7da-dc41-562c-abfe-8ecfdd7637c0",
 							version = 2.1,
 						},
@@ -6441,7 +6441,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Stop Lookaway",
+							name = "结束背对",
 							uuid = "b1199f0a-9e0c-5934-b686-5dafd919630d",
 							version = 2.1,
 						},
@@ -6457,7 +6457,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40185,
-							name = "Shining Armor ID",
+							name = "光辉铠甲技能",
 							uuid = "583b7e80-e605-526e-a352-8c3557cb636a",
 							version = 3,
 						},
@@ -6524,7 +6524,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40184,
-							name = "Frost Armor ID",
+							name = "冰霜铠甲技能",
 							uuid = "c7e40b43-1cfc-566b-bdca-ee2441c3f8fa",
 							version = 3,
 						},
@@ -6553,7 +6553,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\n---@class SinboundHolyInfo\n---@field pos ThreeDimensionalPos\n---@field startTime integer\n---@field endTime integer\n\n---@alias AutoSlideStage\n---| 0 #Pre-channel phase.\n---| 1 #Channeling.\n---| 2 #Casted.\n\n---@class AutoIceSlideBase\n---@field shivaPos Position\n---@field behindShivaPos ThreeDimensionalPos\n---@field currentStage AutoSlideStage\n---@field backFirst boolean?\n---@field puddleInfo SinboundHolyInfo[]\n---@field puddleCount integer\n---@field cursedAimPos ThreeDimensionalPos?\n---@field isBehindShiva function\n---@field isNearShiva function\n---@field pathIntersectsPuddle function\n---@field pathIntersectsAnyPuddle function\n\n---@param startX number\n---@param startZ number\n---@param endX number\n---@param endZ number\n---@param puddleInfo SinboundHolyInfo\n---@param curTime integer\n---@return boolean\nlocal pathIntersectsPuddleFunc = function (startX, startZ, endX, endZ, puddleInfo, curTime)\n    local timeToEnd = curTime - puddleInfo.endTime\n    if (timeToEnd >= 0) then return false end\n    local puddlePos = puddleInfo.pos\n    local x1, _, x2, _ = MuAiGuide.Reactions.API.findSegmentCircleIntersections(puddlePos.x, puddlePos.z, 6, startX, startZ, endX, endZ)\n    return x1 ~= nil or x2 ~= nil\nend\n\n---@param startX number\n---@param startZ number\n---@param endX number\n---@param endZ number\n---@param ignoreFirstTwo boolean?\n---@return boolean\nlocal pathIntersectsAnyPuddleFunc = function (startX, startZ, endX, endZ, ignoreFirstTwo)\n    local info = data.p2AutoIceSlide\n    local puddles, count = info.puddleInfo, info.puddleCount\n    local checkFunc = info.pathIntersectsPuddle\n    local curTime = Now()\n    local startIndex = ignoreFirstTwo and 3 or 1\n    for i = startIndex, count do\n        if (checkFunc(startX, startZ, endX, endZ, puddles[i], curTime)) then\n            return true\n        end\n    end\n\n    return false\nend\n\nif (data.arenaCenter == nil) then data.arenaCenter = { x = 100, y = 0, z = 100 } end\nlocal center = data.arenaCenter\nlocal shivaPos = data.ddShivaPos\nlocal headingToShiva = TensorCore.getHeadingToTarget(center, shivaPos)\nlocal behindShivaPos = TensorCore.getPosInDirection(center, headingToShiva, 17.5)\n\n---@param startPos TwoDimensionalPos\n---@return boolean\nlocal canPosGetBehindShiva = function (startPos)\n    local startH = TensorCore.getHeadingToTarget(startPos, behindShivaPos)\n    \nend\n\n--Calculate the position to begin aiming at in case it's cursed pattern.\n--There's probably a better way to do this, especially that doesn't essentialy use brute forcing but meh. If it works, it works.\nlocal awayFromShiva = TensorCore.getHeadingToTarget(shivaPos, center)\nlocal angleIncrement = math.rad(10)\n---@type ThreeDimensionalPos?\nlocal cursedAimPos = nil\nfor i = 1, 18 do\n    local x, _, z = TensorCore.getPosInDirection(center, awayFromShiva + (angleIncrement * i), 17.5, true)\n    if (not pathIntersectsAnyPuddleFunc(100, 100, x, z)) then\n        cursedAimPos = { x = x, y = 0, z = z }\n        break\n    end\n    x, _, z = TensorCore.getPosInDirection(center, awayFromShiva - (angleIncrement * i), 17.5, true)\n    if (not pathIntersectsAnyPuddleFunc(100, 100, x, z)) then\n        cursedAimPos = { x = x, y = 0, z = z }\n        break\n    end\nend\n\nif (cursedAimPos ~= nil) then\n    local fruMuai1 = TensorCore.getCachedDrawer(0x4D7AB0F3, nil, 0x4D7AB0F3, 0xFFFFFFFF, 2, 0, 256)\n    fruMuai1:setGradient(3, 0.15, 2)\n    fruMuai1:setHeightOffset(0.05)\n    fruMuai1:addTimedCircle(8000, cursedAimPos.x, 0.05, cursedAimPos.z, 0.65, 0, false, nil, 256)\nend\n\n---@type SinboundHolyInfo[]\nlocal puddleInfoArray = data.p2SinboundHolyLocations\nlocal puddleCount = #puddleInfoArray\n\n---@param checkPos TwoDimensionalPos\n---@return boolean\nlocal isBehindShivaFunc = function (checkPos)\n    local pos = data.p2AutoIceSlide.shivaPos\n    return not MuAiGuide.Reactions.API.isInsideCone(checkPos, pos, pos.h, 4.7124)\nend\n\n---@param checkPos TwoDimensionalPos\n---@return boolean\nlocal isInWallFunc = function (checkPos)\n    return TensorCore.getDistance2d(checkPos, center) >= 19.9\nend\n\n---@param checkPos TwoDimensionalPos\n---@return boolean\nlocal isNearShivaFunc = function (checkPos)\n    return TensorCore.getDistance2d(checkPos, data.p2AutoIceSlide.behindShivaPos) < 15\nend\n\n---@type AutoIceSlideBase\ndata.p2AutoIceSlide = {\n    shivaPos = { x = shivaPos.x, y = 0, z = shivaPos.z, h = TensorCore.getHeadingToTarget(shivaPos, data.arenaCenter) },\n    behindShivaPos = behindShivaPos,\n    currentStage = 0,\n    backFirst = nil,\n    puddleInfo = data.p2SinboundHolyLocations,\n    puddleCount = puddleCount,\n    cursedAimPos = cursedAimPos,\n    isBehindShiva = isBehindShivaFunc,\n    isNearShiva = isNearShivaFunc,\n    isInWall = isInWallFunc,\n    pathIntersectsPuddle = pathIntersectsPuddleFunc,\n    pathIntersectsAnyPuddle = pathIntersectsAnyPuddleFunc\n}\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\n---@class FruSinboundHolyInfo\n---@field pos ThreeDimensionalPos\n---@field startTime integer\n---@field endTime integer\n\n---@alias FruAutoSlideStage\n\n---@class FruAutoIceSlideBase\n---@field shivaPos Position\n---@field behindShivaPos ThreeDimensionalPos\n---@field currentStage FruAutoSlideStage\n---@field backFirst boolean?\n---@field puddleInfo FruSinboundHolyInfo[]\n---@field puddleCount integer\n---@field cursedAimPos ThreeDimensionalPos?\n---@field isBehindShiva function\n---@field isNearShiva function\n---@field pathIntersectsPuddle function\n---@field pathIntersectsAnyPuddle function\n\n---@param startX number\n---@param startZ number\n---@param endX number\n---@param endZ number\n---@param puddleInfo FruSinboundHolyInfo\n---@param curTime integer\n---@return boolean\nlocal pathIntersectsPuddleFunc = function(startX, startZ, endX, endZ, puddleInfo, nowMs)\n    local timeToEnd = nowMs - puddleInfo.endTime\n    if timeToEnd >= 0 then\n        return false\n    end\n    local puddlePos = puddleInfo.pos\n    local x1, _, x2, _ =\n        MuAiGuide.Reactions.API.findSegmentCircleIntersections(puddlePos.x, puddlePos.z, 6, startX, startZ, endX, endZ)\n    return x1 ~= nil or x2 ~= nil\nend\n\n---@param startX number\n---@param startZ number\n---@param endX number\n---@param endZ number\n---@param ignoreFirstTwo boolean?\n---@return boolean\nlocal pathIntersectsAnyPuddleFunc = function(startX, startZ, endX, endZ, ignoreFirstTwo)\n    local info = data.p2AutoIceSlide\n    local puddles, count = info.puddleInfo, info.puddleCount\n    local checkFunc = info.pathIntersectsPuddle\n    local nowMs = Now()\n    local startIndex = ignoreFirstTwo and 3 or 1\n    for i = startIndex, count do\n        if checkFunc(startX, startZ, endX, endZ, puddles[i], nowMs) then\n            return true\n        end\n    end\n\n    return false\nend\n\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\nlocal center = data.arenaCenter\nlocal shivaPos = data.ddShivaPos\nlocal headingToShiva = TensorCore.getHeadingToTarget(center, shivaPos)\nlocal behindShivaPos = TensorCore.getPosInDirection(center, headingToShiva, 17.5)\n\n---@param startPos TwoDimensionalPos\n---@return boolean\nlocal canPosGetBehindShiva = function(startPos)\n    local startH = TensorCore.getHeadingToTarget(startPos, behindShivaPos)\nend\n\n-- 特殊滑冰分支: 以10度步长检查两侧, 每侧最多18个候选。\n\nlocal awayFromShiva = TensorCore.getHeadingToTarget(shivaPos, center)\nlocal angleIncrement = math.rad(10)\n---@type ThreeDimensionalPos?\nlocal cursedAimPos = nil\nfor i = 1, 18 do\n    local x, _, z = TensorCore.getPosInDirection(center, awayFromShiva + (angleIncrement * i), 17.5, true)\n    if not pathIntersectsAnyPuddleFunc(100, 100, x, z) then\n        cursedAimPos = { x = x, y = 0, z = z }\n        break\n    end\n    x, _, z = TensorCore.getPosInDirection(center, awayFromShiva - (angleIncrement * i), 17.5, true)\n    if not pathIntersectsAnyPuddleFunc(100, 100, x, z) then\n        cursedAimPos = { x = x, y = 0, z = z }\n        break\n    end\nend\n\nif cursedAimPos ~= nil then\n    local shapeDrawer1 = TensorCore.getCachedDrawer(0x4D7AB0F3, nil, 0x4D7AB0F3, 0xFFFFFFFF, 2, 0, 256)\n    shapeDrawer1:setGradient(3, 0.15, 2)\n    shapeDrawer1:setHeightOffset(0.05)\n    shapeDrawer1:addTimedCircle(8000, cursedAimPos.x, 0.05, cursedAimPos.z, 0.65, 0, false, nil, 256)\nend\n\n---@type FruSinboundHolyInfo[]\nlocal puddleInfoArray = data.p2SinboundHolyLocations\nlocal puddleCount = #puddleInfoArray\n\n---@param checkPos TwoDimensionalPos\n---@return boolean\nlocal isBehindShivaFunc = function(checkPos)\n    local pos = data.p2AutoIceSlide.shivaPos\n    return not MuAiGuide.Reactions.API.isInsideCone(checkPos, pos, pos.h, 4.7124)\nend\n\n---@param checkPos TwoDimensionalPos\n---@return boolean\nlocal isInWallFunc = function(checkPos)\n    return TensorCore.getDistance2d(checkPos, center) >= 19.9\nend\n\n---@param checkPos TwoDimensionalPos\n---@return boolean\nlocal isNearShivaFunc = function(checkPos)\n    return TensorCore.getDistance2d(checkPos, data.p2AutoIceSlide.behindShivaPos) < 15\nend\n\n---@type FruAutoIceSlideBase\ndata.p2AutoIceSlide = {\n    shivaPos = { x = shivaPos.x, y = 0, z = shivaPos.z, h = TensorCore.getHeadingToTarget(shivaPos, data.arenaCenter) },\n    behindShivaPos = behindShivaPos,\n    currentStage = 0,\n    backFirst = nil,\n    puddleInfo = data.p2SinboundHolyLocations,\n    puddleCount = puddleCount,\n    cursedAimPos = cursedAimPos,\n    isBehindShiva = isBehindShivaFunc,\n    isNearShiva = isNearShivaFunc,\n    isInWall = isInWallFunc,\n    pathIntersectsPuddle = pathIntersectsPuddleFunc,\n    pathIntersectsAnyPuddle = pathIntersectsAnyPuddleFunc,\n}\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -6568,7 +6568,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Run Ice Setup",
+							name = "初始化滑冰计算",
 							uuid = "8353fbe8-357e-508c-a481-6439c6448545",
 							version = 2.1,
 						},
@@ -6582,7 +6582,7 @@ local tbl =
 						{
 							buffID = 911,
 							category = "Self",
-							name = "Has Thin Ice",
+							name = "持有薄冰",
 							uuid = "08ece7a9-9a12-5fad-a914-ec5f7c5439cb",
 							version = 3,
 						},
@@ -6595,7 +6595,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruAutoIceSlide == true",
 							dequeueIfLuaFalse = true,
-							name = "Option Enabled",
+							name = "功能已开启",
 							uuid = "acf24784-9c5f-5998-be53-fcd8b77b3319",
 							version = 3,
 						},
@@ -6633,10 +6633,10 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedDonutOnEnt(9000, TensorCore.mGetPlayer().id, 31.85, 32.05, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedDonutOnEnt(9000, TensorCore.mGetPlayer().id, 31.85, 32.05, nil, false, nil, 256)\nself.used = true",
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Slide Radius Donut",
+							name = "显示滑冰距离",
 							uuid = "0c2421b9-ee9f-564e-9755-6a43b387993d",
 							version = 2.1,
 						},
@@ -6678,7 +6678,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif data.TwinCasts == nil then data.TwinCasts = 0 end\ndata.TwinCasts = data.TwinCasts + 1\n\nif data.TwinCasts < 2 then\n    MuAiGuide.Reactions.Shotcall(\"Move\", true)\nelse\n    data.bothTwinsCast = Now()\n    data.bothTwinsCastRandom = math.random(750, 3500)\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif data.TwinCasts == nil then\n    data.TwinCasts = 0\nend\ndata.TwinCasts = data.TwinCasts + 1\n\nif data.TwinCasts < 2 then\n    MuAiGuide.Reactions.Shotcall(\"Move\", true)\nelse\n    data.bothTwinsCast = Now()\n    data.bothTwinsCastRandom = math.random(750, 3500)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -6775,7 +6775,7 @@ local tbl =
 							actionLua = "TensorCore.API.TensorACR.toggleLockFace(false)\nself.used = true",
 							endIfUsed = true,
 							gVar = "ACR_RikuWHM3_CD",
-							name = "Disable Lockface",
+							name = "关闭锁定朝向",
 							uuid = "86b3535d-c30f-567c-bcc6-e8f7230a84b8",
 							version = 2.1,
 						},
@@ -6833,7 +6833,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Find Boss",
+							name = "选取首领",
 							uuid = "a1149ea4-b9fa-5022-812e-00f7807d7c70",
 							version = 3,
 						},
@@ -6845,7 +6845,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Current Target",
-							name = "Target Filter",
+							name = "选取目标",
 							uuid = "8dfc223a-a42b-5cce-945a-236d694de158",
 							version = 3,
 						},
@@ -6915,7 +6915,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Toggle Dash",
+							name = "调整突进开关",
 							uuid = "adec961c-fdb4-5206-9c45-bf2ab1d0fc3b",
 							version = 2.1,
 						},
@@ -6928,9 +6928,9 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "if (data.arenaCenter == nil) then data.arenaCenter = { x = 100, y = 0, z = 100 } end\nreturn TensorCore.getDistance2d(data.arenaCenter, TensorCore.mGetPlayer().pos) > 8.5",
+							conditionLua = "if data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\nreturn TensorCore.getDistance2d(data.arenaCenter, TensorCore.mGetPlayer().pos) > 8.5",
 							dequeueIfLuaFalse = true,
-							name = "Not Near Mid",
+							name = "远离场中",
 							uuid = "e99538cd-971a-52f3-a934-30e5ac443bf9",
 							version = 3,
 						},
@@ -6968,9 +6968,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal player = TensorCore.mGetPlayer()\nlocal pos = player.pos\nlocal arrowH = player.camera.h + math.pi\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addArrow(pos.x, 0.05, pos.z, arrowH, 31, 0.35, nil, nil, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal player = TensorCore.mGetPlayer()\nlocal position = player.pos\nlocal arrowHeading = player.camera.h + math.pi\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addArrow(position.x, 0.05, position.z, arrowHeading, 31, 0.35, nil, nil, false, 256)\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Camera Arrow",
+							name = "显示视角滑冰方向",
 							uuid = "25a2e58d-bbcc-5d17-a200-83f3715c02d9",
 							version = 2.1,
 						},
@@ -7015,7 +7015,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedRectOnEnt(5800, eventArgs.entityID, 65, 6, eventArgs.entityID2, 0, true, false, nil, nil, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedRectOnEnt(5800, eventArgs.entityID, 65, 6, eventArgs.entityID2, 0, true, false, nil, nil, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -7026,7 +7026,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Line Stack",
+							name = "显示直线分摊",
 							uuid = "ecc55670-1da6-556c-b622-7bf20197e3f0",
 							version = 2.1,
 						},
@@ -7042,7 +7042,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventMarkerID = 525,
-							name = "Marker ID",
+							name = "标记类型",
 							uuid = "417a4377-4d1a-5f5e-a133-4e11b7f4204f",
 							version = 3,
 						},
@@ -7083,7 +7083,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if (data.p2RedMirrorSpots == nil) then\n    data.p2RedMirrorSpots = {}\nend\n\nif (data.arenaCenter == nil) then data.arenaCenter = { x = 100, y = 0, z = 100 } end\n\nlocal north = math.pi\nlocal increment = north / 4\nlocal h = north - (increment * (eventArgs.a1 - 1))\nlocal pos = TensorCore.getPosInDirection(data.arenaCenter, h, 20)\ntable.insert(data.p2RedMirrorSpots, pos)\n\nself.used = true",
+							actionLua = "if data.p2RedMirrorSpots == nil then\n    data.p2RedMirrorSpots = {}\nend\n\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\n\nlocal north = math.pi\nlocal increment = north / 4\nlocal heading = north - (increment * (eventArgs.a1 - 1))\nlocal position = TensorCore.getPosInDirection(data.arenaCenter, heading, 20)\ntable.insert(data.p2RedMirrorSpots, position)\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -7093,7 +7093,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Red Mirror Spot",
+							name = "记录红镜位置",
 							uuid = "49479ba9-13b4-5c32-a520-dc101d4ce961",
 							version = 2.1,
 						},
@@ -7121,7 +7121,7 @@ local tbl =
 								},
 							},
 							dequeueIfLuaFalse = true,
-							name = "Valid Args",
+							name = "事件参数匹配",
 							partyTargetNumber = 0,
 							uuid = "d5cd8097-fa01-5afe-8917-40a72510e79e",
 							version = 3,
@@ -7178,7 +7178,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal mirrorEntities = TensorCore.entityList(\"contentid=9317\")\nif (not table.valid(mirrorEntities)) then\n    self.used = true\n    return\nend\n\nif (data.arenaCenter == nil) then data.arenaCenter = { x = 100, y = 0, z = 100 } end\nlocal visibleMirrors = {}\nfor _, ent in pairs(mirrorEntities) do\n    local isVisible = Argus.isEntityVisible(ent.id)\n    local centerDistance = TensorCore.getDistance2d(data.arenaCenter, ent.pos)\n    if (isVisible and centerDistance > 19 and centerDistance < 25) then\n        table.insert(visibleMirrors, ent)\n    end\nend\n\nif (#visibleMirrors ~= 3) then\n    MuAiGuide.Reactions.log(\"[Set Mirrors] Visible mirror count wasn't 3! Was \" .. tostring(#visibleMirrors), 5)\n    return\nend\n\nlocal redPos1 = data.p2RedMirrorSpots[1]\nlocal redPos2 = data.p2RedMirrorSpots[2]\n\nfor mirrorIndex = 1, 3 do\n    local mirrorEnt = visibleMirrors[mirrorIndex]\n    local redDist1 = TensorCore.getDistance2d(mirrorEnt.pos, redPos1)\n    local redDist2 = TensorCore.getDistance2d(mirrorEnt.pos, redPos2)\n    if (redDist1 > 3 and redDist2 > 3) then\n        local h = TensorCore.getHeadingToTarget(data.arenaCenter, mirrorEnt.pos)\n        data.p2BlueMirrorSpot = mirrorEnt.pos\n        break\n    end\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal mirrorEntities = TensorCore.entityList(\"contentid=9317\")\nif not table.valid(mirrorEntities) then\n    self.used = true\n    return\nend\n\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\nlocal visibleMirrors = {}\nfor _, entity in pairs(mirrorEntities) do\n    local isVisible = Argus.isEntityVisible(entity.id)\n    local centerDistance = TensorCore.getDistance2d(data.arenaCenter, entity.pos)\n    if isVisible and centerDistance > 19 and centerDistance < 25 then\n        table.insert(visibleMirrors, entity)\n    end\nend\n\nif #visibleMirrors ~= 3 then\n    MuAiGuide.Reactions.log(\"[FRU/镜子] 可见镜子数量不是3, 实际数量: \" .. tostring(#visibleMirrors), 5)\n    return\nend\n\nlocal redPos1 = data.p2RedMirrorSpots[1]\nlocal redPos2 = data.p2RedMirrorSpots[2]\n\nfor mirrorIndex = 1, 3 do\n    local mirrorEnt = visibleMirrors[mirrorIndex]\n    local redDist1 = TensorCore.getDistance2d(mirrorEnt.pos, redPos1)\n    local redDist2 = TensorCore.getDistance2d(mirrorEnt.pos, redPos2)\n    if redDist1 > 3 and redDist2 > 3 then\n        local heading = TensorCore.getHeadingToTarget(data.arenaCenter, mirrorEnt.pos)\n        data.p2BlueMirrorSpot = mirrorEnt.pos\n        break\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -7189,7 +7189,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set Mirrors",
+							name = "识别蓝镜",
 							uuid = "e3cf01a7-fc8e-5a43-a022-6dbfbf037315",
 							version = 2.1,
 						},
@@ -7203,7 +7203,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p2RedMirrorSpots ~= nil and data.p2RedMirrorSpots[2] ~= nil",
-							name = "Red Mirrors Recorded",
+							name = "红镜位置完整",
 							uuid = "c34834e1-abf6-5cdb-9ab7-e996a9182eed",
 							version = 3,
 						},
@@ -7241,7 +7241,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal mirrorEntities = TensorCore.entityList(\"contentid=9317\")\nif (not table.valid(mirrorEntities)) then\n    self.used = true\n    return\nend\n\nif (data.arenaCenter == nil) then data.arenaCenter = { x = 100, y = 0, z = 100 } end\nlocal visibleMirrors = {}\nfor _, ent in pairs(mirrorEntities) do\n    local isVisible = Argus.isEntityVisible(ent.id)\n    local centerDistance = TensorCore.getDistance2d(data.arenaCenter, ent.pos)\n    if (isVisible and centerDistance > 19 and centerDistance < 25) then\n        table.insert(visibleMirrors, ent)\n    end\nend\n\nif (#visibleMirrors ~= 3) then\n    MuAiGuide.Reactions.log(\"[Set Mirrors] Visible mirror count wasn't 3! Was \" .. tostring(#visibleMirrors), 5)\n    return\nend\n\nlocal redPos1 = data.p2RedMirrorSpots[1]\nlocal redPos2 = data.p2RedMirrorSpots[2]\n\nfor mirrorIndex = 1, 3 do\n    local mirrorEnt = visibleMirrors[mirrorIndex]\n    local redDist1 = TensorCore.getDistance2d(mirrorEnt.pos, redPos1)\n    local redDist2 = TensorCore.getDistance2d(mirrorEnt.pos, redPos2)\n    if (redDist1 > 3 and redDist2 > 3) then\n        local h = TensorCore.getHeadingToTarget(data.arenaCenter, mirrorEnt.pos)\n        local fruMuai1 = TensorCore.getCachedDrawer(0x4DFF4F00, nil, 0x4DFF4F00, 0xFFFFFFFF, 2, 0, 256)\n        fruMuai1:setGradient(3, 0.15, 2)\n        fruMuai1:setHeightOffset(0.05)\n        fruMuai1:addTimedArrow(5000, 100, 0.05, 100, h, 10, 1, nil, nil, 0, false, 256) --Blue arrow towards mirror.\n        local fruMuai2 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n        fruMuai2:setGradient(3, 0.15, 2)\n        fruMuai2:setHeightOffset(0.05)\n        fruMuai2:addTimedArrow(5000, 100, 0.05, 100, h + math.pi, 10, 1, nil, nil, 0, false, 256) --Green arrow away from mirror.\n        break\n    end\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal mirrorEntities = TensorCore.entityList(\"contentid=9317\")\nif not table.valid(mirrorEntities) then\n    self.used = true\n    return\nend\n\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\nlocal visibleMirrors = {}\nfor _, entity in pairs(mirrorEntities) do\n    local isVisible = Argus.isEntityVisible(entity.id)\n    local centerDistance = TensorCore.getDistance2d(data.arenaCenter, entity.pos)\n    if isVisible and centerDistance > 19 and centerDistance < 25 then\n        table.insert(visibleMirrors, entity)\n    end\nend\n\nif #visibleMirrors ~= 3 then\n    MuAiGuide.Reactions.log(\"[FRU/镜子] 可见镜子数量不是3, 实际数量: \" .. tostring(#visibleMirrors), 5)\n    return\nend\n\nlocal redPos1 = data.p2RedMirrorSpots[1]\nlocal redPos2 = data.p2RedMirrorSpots[2]\n\nfor mirrorIndex = 1, 3 do\n    local mirrorEnt = visibleMirrors[mirrorIndex]\n    local redDist1 = TensorCore.getDistance2d(mirrorEnt.pos, redPos1)\n    local redDist2 = TensorCore.getDistance2d(mirrorEnt.pos, redPos2)\n    if redDist1 > 3 and redDist2 > 3 then\n        local heading = TensorCore.getHeadingToTarget(data.arenaCenter, mirrorEnt.pos)\n        local shapeDrawer1 = TensorCore.getCachedDrawer(0x4DFF4F00, nil, 0x4DFF4F00, 0xFFFFFFFF, 2, 0, 256)\n        shapeDrawer1:setGradient(3, 0.15, 2)\n        shapeDrawer1:setHeightOffset(0.05)\n        shapeDrawer1:addTimedArrow(5000, 100, 0.05, 100, heading, 10, 1, nil, nil, 0, false, 256) -- 朝向镜子。\n        local shapeDrawer2 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n        shapeDrawer2:setGradient(3, 0.15, 2)\n        shapeDrawer2:setHeightOffset(0.05)\n        shapeDrawer2:addTimedArrow(5000, 100, 0.05, 100, heading + math.pi, 10, 1, nil, nil, 0, false, 256) -- 远离镜子。\n        break\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -7252,7 +7252,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Mirror Arrows",
+							name = "显示镜子分组方向",
 							uuid = "e3cf01a7-fc8e-5a43-a022-6dbfbf037315",
 							version = 2.1,
 						},
@@ -7266,7 +7266,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p2RedMirrorSpots ~= nil and data.p2RedMirrorSpots[2] ~= nil",
-							name = "Red Mirrors Recorded",
+							name = "红镜位置完整",
 							uuid = "c34834e1-abf6-5cdb-9ab7-e996a9182eed",
 							version = 3,
 						},
@@ -7307,7 +7307,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal pos = data.p2BlueMirrorSpot\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedDonut((306.6 - TensorReactions_CurrentTimer) * 1000, pos.x, 0.05, pos.z, 4, 20, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal position = data.p2BlueMirrorSpot\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedDonut(\n    (306.6 - TensorReactions_CurrentTimer) * 1000,\n    position.x,\n    0.05,\n    position.z,\n    4,\n    20,\n    nil,\n    false,\n    nil,\n    256\n)\nself.used = true",
 							conditions = 
 							{
 								
@@ -7317,7 +7317,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Draw Reflected Scythe Kick",
+							name = "显示镜像月环",
 							uuid = "78093bfb-88b2-5025-9c78-95b231a0b218",
 							version = 2.1,
 						},
@@ -7332,7 +7332,7 @@ local tbl =
 							category = "Event",
 							eventArgType = 2,
 							eventSpellID = 40203,
-							name = "Scythe Kick ID",
+							name = "镰形回旋踢技能",
 							uuid = "5d7a9a95-9183-58f0-88a0-49d1db16f0cc",
 							version = 3,
 						},
@@ -7374,7 +7374,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal cache = data.StringFRU_BossMirrorDraw\nif cache == nil then\n    cache = {entities = {}, distances = {}}\n    cache.less = function(a, b)\n        return cache.distances[a.id] < cache.distances[b.id]\n    end\n    data.StringFRU_BossMirrorDraw = cache\nend\n\nlocal sortedEnts = cache.entities\nlocal count = 0\nfor _, ent in pairs(party) do\n    count = count + 1\n    sortedEnts[count] = ent\nend\nfor i = count + 1, #sortedEnts do\n    sortedEnts[i] = nil\nend\n\nif (sortedEnts[4] == nil) then\n    MuAiGuide.Reactions.log(\"[Draw Boss/Mirror Cones] No 4th ent found.\")\n    self.used = true\n    return\nend\n\nlocal bossPos = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal bluePos = data.p2BlueMirrorSpot\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal coneAngle = math.rad(30)\n\nfor i = 1, count do\n    local ent = sortedEnts[i]\n    cache.distances[ent.id] = TensorCore.getDistance2d(ent.pos, bossPos)\nend\ntable.sort(sortedEnts, cache.less)\n\nfor i = 1, 4 do\n    local h = TensorCore.getHeadingToTarget(bossPos, sortedEnts[i].pos)\n    drawer:addCone(bossPos.x, 0.05, bossPos.z, 40, coneAngle, h, false, 256)\nend\n\nfor i = 1, count do\n    local ent = sortedEnts[i]\n    cache.distances[ent.id] = TensorCore.getDistance2d(ent.pos, bluePos)\nend\ntable.sort(sortedEnts, cache.less)\n\nfor i = 1, 4 do\n    local h = TensorCore.getHeadingToTarget(bluePos, sortedEnts[i].pos)\n    drawer:addCone(bluePos.x, 0.05, bluePos.z, 40, coneAngle, h, false, 256)\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal cache = data.StringFRU_BossMirrorFrame\nif cache == nil then\n    cache = { entities = {}, distances = {}, positions = {} }\n    cache.less = function(a, b)\n        return cache.distances[a.id] < cache.distances[b.id]\n    end\n    data.StringFRU_BossMirrorFrame = cache\nend\n\nlocal sortedEntities = cache.entities\nlocal count = 0\nfor _, entity in pairs(party) do\n    count = count + 1\n    sortedEntities[count] = entity\n    cache.positions[entity.id] = entity.pos\nend\nfor i = count + 1, #sortedEntities do\n    sortedEntities[i] = nil\nend\n\nif sortedEntities[4] == nil then\n    MuAiGuide.Reactions.log(\"[FRU/镜子] 扇形目标不足4人。\")\n    self.used = true\n    return\nend\n\nlocal bossPos = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal bluePos = data.p2BlueMirrorSpot\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal coneAngle = math.rad(30)\n\nfor i = 1, count do\n    local entity = sortedEntities[i]\n    cache.distances[entity.id] = TensorCore.getDistance2d(cache.positions[entity.id], bossPos)\nend\ntable.sort(sortedEntities, cache.less)\n\nfor i = 1, 4 do\n    local heading = TensorCore.getHeadingToTarget(bossPos, cache.positions[sortedEntities[i].id])\n    drawer:addCone(bossPos.x, 0.05, bossPos.z, 40, coneAngle, heading, false, 256)\nend\n\nfor i = 1, count do\n    local entity = sortedEntities[i]\n    cache.distances[entity.id] = TensorCore.getDistance2d(cache.positions[entity.id], bluePos)\nend\ntable.sort(sortedEntities, cache.less)\n\nfor i = 1, 4 do\n    local heading = TensorCore.getHeadingToTarget(bluePos, cache.positions[sortedEntities[i].id])\n    drawer:addCone(bluePos.x, 0.05, bluePos.z, 40, coneAngle, heading, false, 256)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -7389,7 +7389,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Cones",
+							name = "显示扇形",
 							uuid = "8cbdf9e5-3471-5d0b-86b6-2ddcf0259835",
 							version = 2.1,
 						},
@@ -7403,7 +7403,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p2BlueMirrorSpot ~= nil",
-							name = "Mirrors Setup",
+							name = "镜子已初始化",
 							uuid = "84a1eb08-4071-5ddb-9863-ea528a615314",
 							version = 3,
 						},
@@ -7414,7 +7414,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Get Boss",
+							name = "选取首领",
 							uuid = "b29d6641-c3c6-5947-b5fd-c079d2ab6068",
 							version = 3,
 						},
@@ -7457,7 +7457,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal cache = data.StringFRU_RedMirrorDraw\nif cache == nil then\n    cache = {entities = {}, distances = {}}\n    cache.less = function(a, b)\n        return cache.distances[a.id] < cache.distances[b.id]\n    end\n    data.StringFRU_RedMirrorDraw = cache\nend\n\nlocal sortedEnts = cache.entities\nlocal count = 0\nfor _, ent in pairs(party) do\n    count = count + 1\n    sortedEnts[count] = ent\nend\nfor i = count + 1, #sortedEnts do\n    sortedEnts[i] = nil\nend\n\nif (sortedEnts[4] == nil) then\n    self.used = true\n    return\nend\n\nlocal redPos1 = data.p2RedMirrorSpots[1]\nlocal redPos2 = data.p2RedMirrorSpots[2]\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal coneAngle = math.rad(30)\n\nfor i = 1, count do\n    local ent = sortedEnts[i]\n    cache.distances[ent.id] = TensorCore.getDistance2d(ent.pos, redPos1)\nend\ntable.sort(sortedEnts, cache.less)\n\nfor i = 1, 4 do\n    local h = TensorCore.getHeadingToTarget(redPos1, sortedEnts[i].pos)\n    drawer:addCone(redPos1.x, 0.05, redPos1.z, 40, coneAngle, h, false, 256)\nend\n\nfor i = 1, count do\n    local ent = sortedEnts[i]\n    cache.distances[ent.id] = TensorCore.getDistance2d(ent.pos, redPos2)\nend\ntable.sort(sortedEnts, cache.less)\n\nfor i = 1, 4 do\n    local h = TensorCore.getHeadingToTarget(redPos2, sortedEnts[i].pos)\n    drawer:addCone(redPos2.x, 0.05, redPos2.z, 40, coneAngle, h, false, 256)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal cache = data.StringFRU_RedMirrorFrame\nif cache == nil then\n    cache = { entities = {}, distances = {}, positions = {} }\n    cache.less = function(a, b)\n        return cache.distances[a.id] < cache.distances[b.id]\n    end\n    data.StringFRU_RedMirrorFrame = cache\nend\n\nlocal sortedEntities = cache.entities\nlocal count = 0\nfor _, entity in pairs(party) do\n    count = count + 1\n    sortedEntities[count] = entity\n    cache.positions[entity.id] = entity.pos\nend\nfor i = count + 1, #sortedEntities do\n    sortedEntities[i] = nil\nend\n\nif sortedEntities[4] == nil then\n    self.used = true\n    return\nend\n\nlocal redPos1 = data.p2RedMirrorSpots[1]\nlocal redPos2 = data.p2RedMirrorSpots[2]\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal coneAngle = math.rad(30)\n\nfor i = 1, count do\n    local entity = sortedEntities[i]\n    cache.distances[entity.id] = TensorCore.getDistance2d(cache.positions[entity.id], redPos1)\nend\ntable.sort(sortedEntities, cache.less)\n\nfor i = 1, 4 do\n    local heading = TensorCore.getHeadingToTarget(redPos1, cache.positions[sortedEntities[i].id])\n    drawer:addCone(redPos1.x, 0.05, redPos1.z, 40, coneAngle, heading, false, 256)\nend\n\nfor i = 1, count do\n    local entity = sortedEntities[i]\n    cache.distances[entity.id] = TensorCore.getDistance2d(cache.positions[entity.id], redPos2)\nend\ntable.sort(sortedEntities, cache.less)\n\nfor i = 1, 4 do\n    local heading = TensorCore.getHeadingToTarget(redPos2, cache.positions[sortedEntities[i].id])\n    drawer:addCone(redPos2.x, 0.05, redPos2.z, 40, coneAngle, heading, false, 256)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -7467,7 +7467,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Cones",
+							name = "显示扇形",
 							uuid = "8cbdf9e5-3471-5d0b-86b6-2ddcf0259835",
 							version = 2.1,
 						},
@@ -7482,7 +7482,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p2RedMirrorSpots ~= nil",
 							dequeueIfLuaFalse = true,
-							name = "Mirrors Setup",
+							name = "镜子已初始化",
 							uuid = "84a1eb08-4071-5ddb-9863-ea528a615314",
 							version = 3,
 						},
@@ -7525,7 +7525,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal drawTime = (322.5 - TensorReactions_CurrentTimer) * 1000\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(drawTime, TensorCore.mGetPlayer().id, 5, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal durationMs = (322.5 - TensorReactions_CurrentTimer) * 1000\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(durationMs, TensorCore.mGetPlayer().id, 5, nil, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -7536,7 +7536,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Draw Share Radius",
+							name = "显示分摊范围",
 							uuid = "f74280c8-9a17-5158-b34d-b4f012228051",
 							version = 2.1,
 						},
@@ -7546,7 +7546,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal drawTime = (322.5 - TensorReactions_CurrentTimer) * 1000\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, ent in pairs(party) do\n    drawer:addTimedCircleOnEnt(drawTime, ent.id, 5, nil, false, nil, 256)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal durationMs = (322.5 - TensorReactions_CurrentTimer) * 1000\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, entity in pairs(party) do\n    drawer:addTimedCircleOnEnt(durationMs, entity.id, 5, nil, false, nil, 256)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -7557,7 +7557,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Draw Spreads",
+							name = "显示分散范围",
 							uuid = "bd953e50-6199-55ba-9382-729413ce4dc4",
 							version = 2.1,
 						},
@@ -7573,7 +7573,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40220,
-							name = "Partners",
+							name = "双人分摊",
 							uuid = "f0005060-f33c-5581-952d-55f07b1e74f3",
 							version = 3,
 						},
@@ -7586,7 +7586,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40221,
-							name = "Spread",
+							name = "分散",
 							uuid = "da684a7a-d9a8-5cfa-8021-83bcfcda3ce5",
 							version = 3,
 						},
@@ -7625,7 +7625,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRG3_CD",
-							name = "TTS Partners",
+							name = "播报双人分摊",
 							uuid = "f74280c8-9a17-5158-b34d-b4f012228051",
 							version = 2.1,
 						},
@@ -7646,7 +7646,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRG3_CD",
-							name = "TTS Spread",
+							name = "播报分散",
 							uuid = "bd953e50-6199-55ba-9382-729413ce4dc4",
 							version = 2.1,
 						},
@@ -7662,7 +7662,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40220,
-							name = "Partners",
+							name = "双人分摊",
 							uuid = "f0005060-f33c-5581-952d-55f07b1e74f3",
 							version = 3,
 						},
@@ -7675,7 +7675,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40221,
-							name = "Spread",
+							name = "分散",
 							uuid = "da684a7a-d9a8-5cfa-8021-83bcfcda3ce5",
 							version = 3,
 						},
@@ -7716,7 +7716,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if (data.p2LRTetherCount == nil) then\n    data.p2LRTetherCount = 0\n    data.p2LRTetherInfo = {}\nend\ndata.p2LRTetherCount = data.p2LRTetherCount + 1\n\ndata.p2LRTetherInfo[eventArgs.newTargetID] = eventArgs.sourceEntityID\ndata.p2LRTetherInfo[eventArgs.sourceEntityID] = eventArgs.newTargetID\nself.used = true",
+							actionLua = "if data.p2LRTetherCount == nil then\n    data.p2LRTetherCount = 0\n    data.p2LRTetherInfo = {}\nend\ndata.p2LRTetherCount = data.p2LRTetherCount + 1\n\ndata.p2LRTetherInfo[eventArgs.newTargetID] = eventArgs.sourceEntityID\ndata.p2LRTetherInfo[eventArgs.sourceEntityID] = eventArgs.newTargetID\nself.used = true",
 							conditions = 
 							{
 								
@@ -7726,7 +7726,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Tether",
+							name = "记录连线",
 							uuid = "e4802b45-0dbd-533e-af00-595283a966ce",
 							version = 2.1,
 						},
@@ -7744,7 +7744,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 5,
 							eventIntValue = 110,
-							name = "Tether ID",
+							name = "连线类型",
 							uuid = "4d7a2f3a-9876-5a8d-8ce4-2f4d80e40540",
 							version = 3,
 						},
@@ -7784,7 +7784,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal playerID = TensorCore.mGetPlayer().id\nif eventArgs.sourceEntityID == playerID or eventArgs.newTargetID == playerID then\n    local fruMuai1 = TensorCore.getCachedDrawer(0x4DEC86C7, nil, 0x4DEC86C7, 0xFFFFFFFF, 2, 0, 256)\n    fruMuai1:setGradient(3, 0.15, 2)\n    fruMuai1:setHeightOffset(0.05)\n    fruMuai1:addTimedRectOnEnt(8000, eventArgs.sourceEntityID, 5, 0.1, eventArgs.newTargetID, 0, false, false, nil, nil, nil, 256)\nelse\n    local fruMuai2 = TensorCore.getCachedDrawer(0x4DEC8687, nil, 0x4DEC8687, 0xFFFFFFFF, 2, 0, 256)\n    fruMuai2:setGradient(3, 0.15, 2)\n    fruMuai2:setHeightOffset(0.05)\n    fruMuai2:addTimedRectOnEnt(8000, eventArgs.sourceEntityID, 5, 0.1, eventArgs.newTargetID, 0, false, false, nil, nil, nil, 256)\nend\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal playerId = TensorCore.mGetPlayer().id\nif eventArgs.sourceEntityID == playerId or eventArgs.newTargetID == playerId then\n    local shapeDrawer1 = TensorCore.getCachedDrawer(0x4DEC86C7, nil, 0x4DEC86C7, 0xFFFFFFFF, 2, 0, 256)\n    shapeDrawer1:setGradient(3, 0.15, 2)\n    shapeDrawer1:setHeightOffset(0.05)\n    shapeDrawer1:addTimedRectOnEnt(\n        8000,\n        eventArgs.sourceEntityID,\n        5,\n        0.1,\n        eventArgs.newTargetID,\n        0,\n        false,\n        false,\n        nil,\n        nil,\n        nil,\n        256\n    )\nelse\n    local shapeDrawer2 = TensorCore.getCachedDrawer(0x4DEC8687, nil, 0x4DEC8687, 0xFFFFFFFF, 2, 0, 256)\n    shapeDrawer2:setGradient(3, 0.15, 2)\n    shapeDrawer2:setHeightOffset(0.05)\n    shapeDrawer2:addTimedRectOnEnt(\n        8000,\n        eventArgs.sourceEntityID,\n        5,\n        0.1,\n        eventArgs.newTargetID,\n        0,\n        false,\n        false,\n        nil,\n        nil,\n        nil,\n        256\n    )\nend\nself.used = true",
 							conditions = 
 							{
 								
@@ -7794,7 +7794,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Draw Tether Rectangle",
+							name = "显示连线范围",
 							uuid = "26b9cb2d-6e77-5021-99bd-d7357952e813",
 							version = 2.1,
 						},
@@ -7812,7 +7812,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 5,
 							eventIntValue = 110,
-							name = "Tether ID",
+							name = "连线类型",
 							uuid = "13120e9f-2c33-5f87-b46e-9d8c1b06ec2a",
 							version = 3,
 						},
@@ -7822,9 +7822,9 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "local playerID = TensorCore.mGetPlayer().id\nreturn eventArgs.sourceEntityID == playerID or eventArgs.newTargetID == playerID",
+							conditionLua = "local playerId = TensorCore.mGetPlayer().id\nreturn eventArgs.sourceEntityID == playerId or eventArgs.newTargetID == playerId",
 							dequeueIfLuaFalse = true,
-							name = "On Self",
+							name = "目标为本人",
 							uuid = "4412e7a6-ade0-586a-b54a-fbfd8ce94b69",
 							version = 3,
 						},
@@ -7855,7 +7855,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\n---@type GameObject[]\nlocal supports = {}\n---@type GameObject[]\nlocal dps = {}\n\nfor _, ent in pairs(party) do\n    if (data.p2LRTetherInfo[ent.id] ~= nil) then\n        if (MuAiGuide.Reactions.dpsJobs[ent.job]) then\n            table.insert(dps, ent)\n        else\n            table.insert(supports, ent)\n        end\n    end\nend\n\nlocal supportCount = #supports\nlocal dpsCount = #dps\n\nif ((supportCount + dpsCount) ~= 6) then\n    MuAiGuide.Reactions.log(\"[4-4 LR Helper] Support+DPS tethers didn't equal 6!\", 5)\n    self.used = true\n    return\nend\n\n-- Sort supports west-to-east.\ntable.sort(supports, function (entA, entB)\n    return entA.pos.x < entB.pos.x\nend)\n\n-- Sort dps east-to-west.\ntable.sort(dps, function (entA, entB)\n    return entA.pos.x > entB.pos.x\nend)\n\n---@type GameObject[]\nlocal finalLineup = {}\n\nif (supportCount == 3 and dpsCount == 3) then\n    for i = 1, 3 do\n        finalLineup[i] = supports[i]\n        finalLineup[i + 3] = dps[i]\n    end\nelse\n    if (supportCount == 2) then\n        finalLineup[1] = dps[4]\n        finalLineup[2] = supports[1]\n        finalLineup[3] = supports[2]\n        finalLineup[4] = dps[1]\n        finalLineup[5] = dps[2]\n        finalLineup[6] = dps[3]\n    else\n        for i = 1, 4 do\n            finalLineup[i] = supports[i]\n        end\n        finalLineup[5] = dps[1]\n        finalLineup[6] = dps[2]\n    end\nend\n\n---@type GameObject[]\nlocal crissCross = {}\ncrissCross[1] = finalLineup[3]\ncrissCross[2] = finalLineup[5]\ncrissCross[3] = finalLineup[1]\ncrissCross[4] = finalLineup[4]\ncrissCross[5] = finalLineup[2]\ncrissCross[6] = finalLineup[6]\n\n-- WorldText is here mainly for debug helping in case something wasn't coded right. Remove later once proved to be working reliably.\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"NW\", crissCross[1].id, nil, true, 1.5)\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"N\", crissCross[2].id, nil, true, 1.5)\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"NE\", crissCross[3].id, nil, true, 1.5)\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"SE\", crissCross[4].id, nil, true, 1.5)\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"S\", crissCross[5].id, nil, true, 1.5)\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"SW\", crissCross[6].id, nil, true, 1.5)\n\nlocal pi = math.pi\nlocal rad = math.rad(60)\nlocal arrowHeadings = {\n    [1] = pi + rad,\n    [2] = pi,\n    [3] = pi - rad,\n    [4] = rad,\n    [5] = 0,\n    [6] = -rad\n}\nlocal callStrings = {\n    [1] = \"NorthWest\",\n    [2] = \"North\",\n    [3] = \"NorthEast\",\n    [4] = \"SouthEast\",\n    [5] = \"South\",\n    [6] = \"SouthWest\"\n}\n\nlocal playerID = TensorCore.mGetPlayer().id\nfor i = 1, 6 do\n    if (crissCross[i].id == playerID) then\n        MuAiGuide.Reactions.Shotcall(callStrings[i], true)\n        local fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n        fruMuai1:setGradient(3, 0.15, 2)\n        fruMuai1:setHeightOffset(0.05)\n        fruMuai1:addTimedArrow(5000, 100, 0.05, 100, arrowHeadings[i], 10, 1, nil, nil, 0, false, 256)\n        break\n    end\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\n---@type GameObject[]\nlocal supports = {}\n---@type GameObject[]\nlocal dps = {}\n\nfor _, entity in pairs(party) do\n    if data.p2LRTetherInfo[entity.id] ~= nil then\n        if MuAiGuide.Reactions.dpsJobs[entity.job] then\n            table.insert(dps, entity)\n        else\n            table.insert(supports, entity)\n        end\n    end\nend\n\nlocal supportCount = #supports\nlocal dpsCount = #dps\n\nif (supportCount + dpsCount) ~= 6 then\n    MuAiGuide.Reactions.log(\"[FRU/光暴] 连线队员总数不是6。\", 5)\n    self.used = true\n    return\nend\n\n-- 坦克和治疗由西到东排序。\ntable.sort(supports, function(entA, entB)\n    return entA.pos.x < entB.pos.x\nend)\n\n-- 输出由东到西排序。\ntable.sort(dps, function(entA, entB)\n    return entA.pos.x > entB.pos.x\nend)\n\n---@type GameObject[]\nlocal finalLineup = {}\n\nif supportCount == 3 and dpsCount == 3 then\n    for i = 1, 3 do\n        finalLineup[i] = supports[i]\n        finalLineup[i + 3] = dps[i]\n    end\nelse\n    if supportCount == 2 then\n        finalLineup[1] = dps[4]\n        finalLineup[2] = supports[1]\n        finalLineup[3] = supports[2]\n        finalLineup[4] = dps[1]\n        finalLineup[5] = dps[2]\n        finalLineup[6] = dps[3]\n    else\n        for i = 1, 4 do\n            finalLineup[i] = supports[i]\n        end\n        finalLineup[5] = dps[1]\n        finalLineup[6] = dps[2]\n    end\nend\n\n---@type GameObject[]\nlocal crissCross = {}\ncrissCross[1] = finalLineup[3]\ncrissCross[2] = finalLineup[5]\ncrissCross[3] = finalLineup[1]\ncrissCross[4] = finalLineup[4]\ncrissCross[5] = finalLineup[2]\ncrissCross[6] = finalLineup[6]\n\n-- 保留六人实际分配的方位文字。\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"NW\", crissCross[1].id, nil, true, 1.5)\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"N\", crissCross[2].id, nil, true, 1.5)\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"NE\", crissCross[3].id, nil, true, 1.5)\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"SE\", crissCross[4].id, nil, true, 1.5)\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"S\", crissCross[5].id, nil, true, 1.5)\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"SW\", crissCross[6].id, nil, true, 1.5)\n\nlocal pi = math.pi\nlocal rad = math.rad(60)\nlocal arrowHeadings = {\n    [1] = pi + rad,\n    [2] = pi,\n    [3] = pi - rad,\n    [4] = rad,\n    [5] = 0,\n    [6] = -rad,\n}\nlocal callStrings = {\n    [1] = \"NorthWest\",\n    [2] = \"North\",\n    [3] = \"NorthEast\",\n    [4] = \"SouthEast\",\n    [5] = \"South\",\n    [6] = \"SouthWest\",\n}\n\nlocal playerId = TensorCore.mGetPlayer().id\nfor i = 1, 6 do\n    if crissCross[i].id == playerId then\n        MuAiGuide.Reactions.Shotcall(callStrings[i], true)\n        local shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n        shapeDrawer1:setGradient(3, 0.15, 2)\n        shapeDrawer1:setHeightOffset(0.05)\n        shapeDrawer1:addTimedArrow(5000, 100, 0.05, 100, arrowHeadings[i], 10, 1, nil, nil, 0, false, 256)\n        break\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -7871,7 +7871,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Run 4-4 Helper",
+							name = "计算四四分组",
 							uuid = "97d74f92-d7d9-56ac-b076-c7ea795dea72",
 							version = 2.1,
 						},
@@ -7886,7 +7886,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruP2LightRampant44Helper == true",
 							dequeueIfLuaFalse = true,
-							name = "Helper Enabled",
+							name = "分组指路已开启",
 							uuid = "3d344115-c2af-5097-9e24-b339f3f8bdc0",
 							version = 3,
 						},
@@ -7897,7 +7897,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p2LRTetherCount == 6",
-							name = "All Tethers Recorded",
+							name = "连线记录完整",
 							uuid = "56f0b628-fdff-54e5-89b8-3306bf87c2fd",
 							version = 3,
 						},
@@ -7925,7 +7925,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCircleOnEnt((345.9 - TensorReactions_CurrentTimer) * 1000, eventArgs.entityID2, 6, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCircleOnEnt((345.9 - TensorReactions_CurrentTimer) * 1000, eventArgs.entityID2, 6, nil, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -7935,7 +7935,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Puddle Radius",
+							name = "显示放圈范围",
 							uuid = "dfb5afac-9fae-5b9f-955f-b91fe06b7574",
 							version = 2.1,
 						},
@@ -7951,7 +7951,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventMarkerID = 375,
-							name = "Marker ID",
+							name = "标记类型",
 							uuid = "e090bb69-2c56-57c5-9233-51e275d0a885",
 							version = 3,
 						},
@@ -8040,7 +8040,7 @@ local tbl =
 							conditionType = 13,
 							dequeueIfLuaFalse = true,
 							jobValue = "VIPER",
-							name = "Is VPR",
+							name = "蝰蛇职业",
 							uuid = "0ff67ca6-bec1-5e4d-b9df-e582d79b24bb",
 							version = 3,
 						},
@@ -8083,7 +8083,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nif (data.p2LROrbCount == nil) then data.p2LROrbCount = 0 end\ndata.p2LROrbCount = data.p2LROrbCount + 1\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(2850, eventArgs.entityID, 11, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nif data.p2LROrbCount == nil then\n    data.p2LROrbCount = 0\nend\ndata.p2LROrbCount = data.p2LROrbCount + 1\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(2850, eventArgs.entityID, 11, nil, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -8098,7 +8098,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Predraw Big Orb",
+							name = "显示首轮光球",
 							uuid = "69e70f02-6cdd-59f4-a68c-97f20f17739c",
 							version = 2.1,
 						},
@@ -8114,7 +8114,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 9318,
-							name = "Content ID",
+							name = "实体类型ID",
 							uuid = "b60c316c-38ca-5380-ab91-020a4f56b2cb",
 							version = 3,
 						},
@@ -8126,7 +8126,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p2LROrbCount == nil or data.p2LROrbCount < 3",
 							dequeueIfLuaFalse = true,
-							name = "Count Check",
+							name = "数量有效",
 							uuid = "2e2082eb-2a19-55cb-9e76-5d66130b4de8",
 							version = 3,
 						},
@@ -8212,10 +8212,10 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal drawTime = (348.7 - TensorReactions_CurrentTimer) * 1000\nfor _, ent in pairs(party) do\n    if (TensorCore.hasBuff(ent.id, 4159)) then\n        drawer:addTimedCircleOnEnt(drawTime, ent.id, 5, nil, false, nil, 256)\n    end\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal durationMs = (348.7 - TensorReactions_CurrentTimer) * 1000\nfor _, entity in pairs(party) do\n    if TensorCore.hasBuff(entity.id, 4159) then\n        drawer:addTimedCircleOnEnt(durationMs, entity.id, 5, nil, false, nil, 256)\n    end\nend\n\nself.used = true",
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Stacks",
+							name = "显示分摊范围",
 							uuid = "eacb01b9-cc27-5d52-aaf5-bd8ff08a75ae",
 							version = 2.1,
 						},
@@ -8273,7 +8273,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Shotcall Take Tower",
+							name = "播报接塔",
 							uuid = "f0f46367-2876-5955-8c93-d5257528a875",
 							version = 2.1,
 						},
@@ -8288,7 +8288,7 @@ local tbl =
 							buffID = 2257,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Has Lightsteeped",
+							name = "持有过量光",
 							uuid = "4301ecff-6b59-5999-a46b-6737fa6d7136",
 							version = 3,
 						},
@@ -8300,7 +8300,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return TensorCore.hasBuff(TensorCore.mGetPlayer().id, 2257, nil, 2)",
 							dequeueIfLuaFalse = true,
-							name = "Stacks Check",
+							name = "过量光层数",
 							uuid = "5082d1d3-8145-5590-9cc7-004a7ea4ac0c",
 							version = 3,
 						},
@@ -8328,7 +8328,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircle((357.7 - TensorReactions_CurrentTimer) * 1000, 100, 0.05, 100, 4, 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircle((357.7 - TensorReactions_CurrentTimer) * 1000, 100, 0.05, 100, 4, 0, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -8344,7 +8344,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Tower Green",
+							name = "显示可接塔范围",
 							uuid = "f0f46367-2876-5955-8c93-d5257528a875",
 							version = 2.1,
 						},
@@ -8354,7 +8354,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D0000FF, nil, 0x4D0000FF, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircle((357.7 - TensorReactions_CurrentTimer) * 1000, 100, 0.05, 100, 4, 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D0000FF, nil, 0x4D0000FF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircle((357.7 - TensorReactions_CurrentTimer) * 1000, 100, 0.05, 100, 4, 0, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -8370,7 +8370,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Tower Red",
+							name = "显示避让塔范围",
 							uuid = "836aaa6b-ee63-5cc1-8040-cc17d536ada4",
 							version = 2.1,
 						},
@@ -8385,7 +8385,7 @@ local tbl =
 							buffID = 2257,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Has Lightsteeped",
+							name = "持有过量光",
 							uuid = "4301ecff-6b59-5999-a46b-6737fa6d7136",
 							version = 3,
 						},
@@ -8397,7 +8397,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return TensorCore.hasBuff(TensorCore.mGetPlayer().id, 2257, nil, 2)",
 							dequeueIfLuaFalse = true,
-							name = "Stacks Check",
+							name = "过量光层数",
 							uuid = "5082d1d3-8145-5590-9cc7-004a7ea4ac0c",
 							version = 3,
 						},
@@ -8438,7 +8438,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(5000, TensorCore.mGetPlayer().id, 5, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(5000, TensorCore.mGetPlayer().id, 5, nil, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -8449,7 +8449,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Draw Share Radius",
+							name = "显示分摊范围",
 							uuid = "f74280c8-9a17-5158-b34d-b4f012228051",
 							version = 2.1,
 						},
@@ -8459,7 +8459,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal playerID = TensorCore.mGetPlayer().id\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, ent in pairs(party) do\n    if (ent.id ~= playerID) then\n        drawer:addTimedCircleOnEnt(5000, ent.id, 5, nil, false, nil, 256)\n    end\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal playerId = TensorCore.mGetPlayer().id\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, entity in pairs(party) do\n    if entity.id ~= playerId then\n        drawer:addTimedCircleOnEnt(5000, entity.id, 5, nil, false, nil, 256)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -8470,7 +8470,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Draw Spreads",
+							name = "显示分散范围",
 							uuid = "bd953e50-6199-55ba-9382-729413ce4dc4",
 							version = 2.1,
 						},
@@ -8486,7 +8486,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40220,
-							name = "Partners",
+							name = "双人分摊",
 							uuid = "f0005060-f33c-5581-952d-55f07b1e74f3",
 							version = 3,
 						},
@@ -8499,7 +8499,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40221,
-							name = "Spread",
+							name = "分散",
 							uuid = "da684a7a-d9a8-5cfa-8021-83bcfcda3ce5",
 							version = 3,
 						},
@@ -8538,7 +8538,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRG3_CD",
-							name = "TTS Partners",
+							name = "播报双人分摊",
 							uuid = "f74280c8-9a17-5158-b34d-b4f012228051",
 							version = 2.1,
 						},
@@ -8559,7 +8559,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRG3_CD",
-							name = "TTS Spread",
+							name = "播报分散",
 							uuid = "bd953e50-6199-55ba-9382-729413ce4dc4",
 							version = 2.1,
 						},
@@ -8575,7 +8575,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40220,
-							name = "Partners",
+							name = "双人分摊",
 							uuid = "f0005060-f33c-5581-952d-55f07b1e74f3",
 							version = 3,
 						},
@@ -8588,7 +8588,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40221,
-							name = "Spread",
+							name = "分散",
 							uuid = "da684a7a-d9a8-5cfa-8021-83bcfcda3ce5",
 							version = 3,
 						},
@@ -8658,7 +8658,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Find Boss",
+							name = "选取首领",
 							uuid = "a1149ea4-b9fa-5022-812e-00f7807d7c70",
 							version = 3,
 						},
@@ -8670,7 +8670,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Current Target",
-							name = "Target Filter",
+							name = "选取目标",
 							uuid = "8dfc223a-a42b-5cce-945a-236d694de158",
 							version = 3,
 						},
@@ -8712,9 +8712,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMoogleDirect = TensorCore.getMoogleDrawer()\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal coneAngle = math.rad(60)\nlocal drawTime = (369.8 - TensorReactions_CurrentTimer) * 1000\nfor _, ent in pairs(party) do\n    Argus2.addTimedConeFilled(drawTime, 100, 0.05, 100, 25, coneAngle, 0, 15, (fruMoogleDirect.colorStart and fruMoogleDirect.colorStart % 0x1000000 + 0x4D000000), (fruMoogleDirect.colorEnd and fruMoogleDirect.colorEnd % 0x1000000 + 0x4D000000), (fruMoogleDirect.colorMid and fruMoogleDirect.colorMid % 0x1000000 + 0x4D000000), 0, nil, ent.id, 0xFFFFFFFF, 2, 3, 0.15, 2, false, nil, nil, nil, 256, nil, nil, nil, nil)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal moogleColors = TensorCore.getMoogleDrawer()\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal coneAngle = math.rad(60)\nlocal durationMs = (369.8 - TensorReactions_CurrentTimer) * 1000\nfor _, entity in pairs(party) do\n    Argus2.addTimedConeFilled(\n        durationMs,\n        100,\n        0.05,\n        100,\n        25,\n        coneAngle,\n        0,\n        15,\n        (moogleColors.colorStart and moogleColors.colorStart % 0x1000000 + 0x4D000000),\n        (moogleColors.colorEnd and moogleColors.colorEnd % 0x1000000 + 0x4D000000),\n        (moogleColors.colorMid and moogleColors.colorMid % 0x1000000 + 0x4D000000),\n        0,\n        nil,\n        entity.id,\n        0xFFFFFFFF,\n        2,\n        3,\n        0.15,\n        2,\n        false,\n        nil,\n        nil,\n        nil,\n        256,\n        nil,\n        nil,\n        nil,\n        nil\n    )\nend\n\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Cones",
+							name = "显示扇形",
 							uuid = "2ad85f3e-9ff8-50d0-b074-d32c0a616723",
 							version = 2.1,
 						},
@@ -8803,9 +8803,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n---@class LightCrystalInfo\n---@field id integer\n---@field pos ThreeDimensionalPos\n---@field isAlive boolean\n\n---@type LightCrystalInfo[]\ndata.addsCrystalInfoArray = {\n    [1] = {\n        id = -1,\n        pos = {x = 100, y = 0, z = 85},\n        isAlive = true,\n    },\n    [2] = {\n        id = -1,\n        pos = {x = 85, y = 0, z = 100},\n        isAlive = true,\n    },\n    [3] = {\n        id = -1,\n        pos = {x = 100, y = 0, z = 115},\n        isAlive = true,\n    },\n    [4] = {\n        id = -1,\n        pos = {x = 115, y = 0, z = 100},\n        isAlive = true,\n    },\n}\n\n-- tables are ref objects so we can do this for an easy 'looparound' for helping do line cleave shit\ndata.addsCrystalInfoArray[0] = data.addsCrystalInfoArray[4]\ndata.addsCrystalInfoArray[5] = data.addsCrystalInfoArray[1]\n\n---@type integer[]\ndata.addsCrystalIDArray = {\n    [0] = -1,\n    [1] = -1,\n    [2] = -1,\n    [3] = -1,\n    [4] = -1,\n    [5] = -1,\n}\n\n-- to have as a basic easy lua condition for fast checking\ndata.addsRecordedCrystalCount = 0\ndata.addsDeadCrystalCount = 0\n\nlocal player = TensorCore.mGetPlayer()\nlocal jobID = player.job\nlocal isMelee = MuAiGuide.Reactions.meleeJobs[jobID] == true\nlocal isTank = MuAiGuide.Reactions.tankJobs[jobID] == true\ndata.selfIsMeleeRange = isMelee or isTank\ndata.addsLastAutoTarget = Now()\ndata.addsRunAutoTarget = true\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n---@class FruLightCrystalInfo\n---@field id integer\n---@field pos ThreeDimensionalPos\n---@field isAlive boolean\n\n---@type FruLightCrystalInfo[]\ndata.addsCrystalInfoArray = {\n    [1] = {\n        id = -1,\n        pos = { x = 100, y = 0, z = 85 },\n        isAlive = true,\n    },\n    [2] = {\n        id = -1,\n        pos = { x = 85, y = 0, z = 100 },\n        isAlive = true,\n    },\n    [3] = {\n        id = -1,\n        pos = { x = 100, y = 0, z = 115 },\n        isAlive = true,\n    },\n    [4] = {\n        id = -1,\n        pos = { x = 115, y = 0, z = 100 },\n        isAlive = true,\n    },\n}\n\n-- 首尾复用同一水晶记录, 便于查询环形相邻位置。\ndata.addsCrystalInfoArray[0] = data.addsCrystalInfoArray[4]\ndata.addsCrystalInfoArray[5] = data.addsCrystalInfoArray[1]\n\n---@type integer[]\ndata.addsCrystalIDArray = {\n    [0] = -1,\n    [1] = -1,\n    [2] = -1,\n    [3] = -1,\n    [4] = -1,\n    [5] = -1,\n}\n\n-- 后续条件直接读取已记录数量。\ndata.addsRecordedCrystalCount = 0\ndata.addsDeadCrystalCount = 0\n\nlocal player = TensorCore.mGetPlayer()\nlocal jobId = player.job\nlocal isMelee = MuAiGuide.Reactions.meleeJobs[jobId] == true\nlocal isTank = MuAiGuide.Reactions.tankJobs[jobId] == true\ndata.selfIsMeleeRange = isMelee or isTank\ndata.addsLastAutoTarget = Now()\ndata.addsRunAutoTarget = true\nself.used = true",
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Run Adds Setup",
+							name = "初始化水晶阶段",
 							uuid = "0809bff5-1756-5105-9924-c8f378a95d66",
 							version = 2.1,
 						},
@@ -8844,7 +8844,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Set Ice ID",
+							name = "记录永久冰晶ID",
 							uuid = "c1280da2-2275-5bcb-b603-cdf2e8fb47b9",
 							version = 2.1,
 						},
@@ -8860,7 +8860,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 9358,
-							name = "Content ID",
+							name = "实体类型ID",
 							uuid = "aced7d43-ca5c-5f94-89fa-d4702878e35b",
 							version = 3,
 						},
@@ -8889,7 +8889,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal id = eventArgs.entityID\nlocal ent = TensorCore.mGetEntity(id)\nif (ent == nil) then\n    MuAiGuide.Reactions.log(\"[Light ID Record] Crystal ent added was nil!?\", 5)\n    self.used = true\n    return\nend\n\nlocal pos = ent.pos\nlocal x = pos.x\nlocal z = pos.z\n\nlocal crystalIndex = -1\nlocal infoArray = data.addsCrystalInfoArray\nfor i = 1, 4 do\n    local info = infoArray[i]\n    local cPos = info.pos\n    local dx = cPos.x - x\n    local dz = cPos.z - z\n    local sqDist = dx * dx + dz * dz\n    if (sqDist < 3) then\n        crystalIndex = i\n        info.id = id\n        break\n    end\nend\n\nif (crystalIndex <= 0) then\n    MuAiGuide.Reactions.log(\"Couldn't find crystal index for coordinates: \" .. tostring(x) .. \",\" .. tostring(z), 5)\n    self.used = true\n    return\nend\n\n--MuAiGuide.Reactions.addTimedWorldText(15000, tostring(crystalIndex), pos, nil, true, 1.5)\n--local debugString = string.format(\"[Light ID Record] Recorded %d (%.2f,%.2f) to index %d\", id, x, z, crystalIndex)\n--MuAiGuide.Reactions.log(debugString, 5)\n\nlocal idArray = data.addsCrystalIDArray\nidArray[crystalIndex] = id\n-- to account for loop-around\n-- we don't need to do this for the info array as it'll already be done by ref\nif (crystalIndex == 4) then\n    idArray[0] = id\nelseif (crystalIndex == 1) then\n    idArray[5] = id\nend\nlocal curCount = data.addsRecordedCrystalCount\ndata.addsRecordedCrystalCount = curCount + 1\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal id = eventArgs.entityID\nlocal entity = TensorCore.mGetEntity(id)\nif entity == nil then\n    MuAiGuide.Reactions.log(\"[FRU/水晶] 新出现的光水晶实体暂不可读。\", 5)\n    self.used = true\n    return\nend\n\nlocal position = entity.pos\nlocal x = position.x\nlocal z = position.z\n\nlocal crystalIndex = -1\nlocal infoArray = data.addsCrystalInfoArray\nfor i = 1, 4 do\n    local info = infoArray[i]\n    local cPos = info.pos\n    local dx = cPos.x - x\n    local dz = cPos.z - z\n    local sqDist = dx * dx + dz * dz\n    if sqDist < 3 then\n        crystalIndex = i\n        info.id = id\n        break\n    end\nend\n\nif crystalIndex <= 0 then\n    MuAiGuide.Reactions.log(\"[FRU/水晶] 坐标未匹配水晶编号: \" .. tostring(x) .. \",\" .. tostring(z), 5)\n    self.used = true\n    return\nend\n\nlocal idArray = data.addsCrystalIDArray\nidArray[crystalIndex] = id\n-- ID数组同步首尾索引; 位置记录本身通过表引用共享。\n\nif crystalIndex == 4 then\n    idArray[0] = id\nelseif crystalIndex == 1 then\n    idArray[5] = id\nend\nlocal currentCount = data.addsRecordedCrystalCount\ndata.addsRecordedCrystalCount = currentCount + 1\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -8904,7 +8904,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Record Light ID",
+							name = "记录光水晶ID",
 							uuid = "4107fc55-5271-5ca3-a96d-2ecd06bea545",
 							version = 2.1,
 						},
@@ -8920,7 +8920,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 13555,
-							name = "Content ID",
+							name = "实体类型ID",
 							uuid = "a60d80d3-0a4d-5819-9bbb-5192c1e45505",
 							version = 3,
 						},
@@ -8932,7 +8932,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return Argus.getEntityModel(eventArgs.entityID) == 17827",
 							dequeueIfLuaFalse = true,
-							name = "Model ID",
+							name = "模型ID",
 							uuid = "34bc1298-f229-5be3-b7cd-f06ac7f6f191",
 							version = 3,
 						},
@@ -8962,7 +8962,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal id = eventArgs.entityID\nlocal idArray = data.addsCrystalIDArray\nfor i = 1, 4 do\n    if (id == idArray[i]) then\n        data.addsCrystalInfoArray[i].isAlive = false\n        local newCount = data.addsDeadCrystalCount + 1\n        data.addsDeadCrystalCount = newCount\n        --local debugString = string.format(\"[Set Light Dead] ID %d, Index %d set as dead.\", id, i)\n        --MuAiGuide.Reactions.log(debugString, 5)\n        self.used = true\n        return\n    end\nend\n\nMuAiGuide.Reactions.log(\"Couldn't find crystal with ID of \" .. tostring(id), 5)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal id = eventArgs.entityID\nlocal idArray = data.addsCrystalIDArray\nfor i = 1, 4 do\n    if id == idArray[i] then\n        data.addsCrystalInfoArray[i].isAlive = false\n        local newCount = data.addsDeadCrystalCount + 1\n        data.addsDeadCrystalCount = newCount\n\n        self.used = true\n        return\n    end\nend\n\nMuAiGuide.Reactions.log(\"[FRU/水晶] 未找到对应记录, 实体ID: \" .. tostring(id), 5)\nself.used = true",
 							conditions = 
 							{
 								
@@ -8977,7 +8977,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Set Light Dead",
+							name = "记录光水晶死亡",
 							uuid = "189ea92a-d774-52c1-b422-447efaebeb03",
 							version = 2.1,
 						},
@@ -8994,7 +8994,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 13555,
-							name = "Content ID",
+							name = "实体类型ID",
 							uuid = "b44ca36f-7890-5c9f-9f63-34f587a78b1f",
 							version = 3,
 						},
@@ -9009,7 +9009,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 4,
 							eventIntValue = 72,
-							name = "New Anim ID",
+							name = "当前动画",
 							uuid = "d3b067ea-50ac-5dad-97e8-51c89e546d3c",
 							version = 3,
 						},
@@ -9049,9 +9049,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal enrageTime = 466.4\nlocal endDrawTime = enrageTime - 10\nlocal drawTime = (endDrawTime - TensorReactions_CurrentTimer) * 1000\nlocal drawer = TensorCore.getCachedDrawer(0x4DFF00BF, nil, 0x4DFF00BF, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\n\ndrawer:addTimedDonut(drawTime, 85, 0.05, 100, 4.9, 5, nil, false, nil, 256)\ndrawer:addTimedDonut(drawTime, 100, 0.05, 85, 4.9, 5, nil, false, nil, 256)\ndrawer:addTimedDonut(drawTime, 100, 0.05, 115, 4.9, 5, nil, false, nil, 256)\ndrawer:addTimedDonut(drawTime, 115, 0.05, 100, 4.9, 5, nil, false, nil, 256)\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal enrageTime = 466.4\nlocal endDrawTime = enrageTime - 10\nlocal durationMs = (endDrawTime - TensorReactions_CurrentTimer) * 1000\nlocal drawer = TensorCore.getCachedDrawer(0x4DFF00BF, nil, 0x4DFF00BF, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\n\ndrawer:addTimedDonut(durationMs, 85, 0.05, 100, 4.9, 5, nil, false, nil, 256)\ndrawer:addTimedDonut(durationMs, 100, 0.05, 85, 4.9, 5, nil, false, nil, 256)\ndrawer:addTimedDonut(durationMs, 100, 0.05, 115, 4.9, 5, nil, false, nil, 256)\ndrawer:addTimedDonut(durationMs, 115, 0.05, 100, 4.9, 5, nil, false, nil, 256)\n\nself.used = true",
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Draw Max Melee",
+							name = "显示近战距离",
 							uuid = "96d5dfff-d7ff-581d-bb97-a8c566f29095",
 							version = 2.1,
 						},
@@ -9080,9 +9080,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal infoArray = data.addsCrystalInfoArray\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal getH = TensorCore.getHeadingToTarget\nlocal posInDir = TensorCore.getPosInDirection\nfor i = 1, 4 do\n    local nb1 = infoArray[i-1].pos\n    local nb2 = infoArray[i+1].pos\n    local cur = infoArray[i].pos\n    local h1 = getH(cur, nb1)\n    local h2 = getH(cur, nb2)\n    local x1, _, z1 = posInDir(cur, h1, -2.5, true)\n    local x2, _, z2 = posInDir(cur, h2, -2.5, true)\n    drawer:addTimedLine(10000, x1, 0.05, z1, cur.x, 0.05, cur.z, 8)\n    drawer:addTimedLine(10000, x2, 0.05, z2, cur.x, 0.05, cur.z, 8)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal infoArray = data.addsCrystalInfoArray\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal headingTo = TensorCore.getHeadingToTarget\nlocal positionInDirection = TensorCore.getPosInDirection\nfor i = 1, 4 do\n    local nb1 = infoArray[i - 1].pos\n    local nb2 = infoArray[i + 1].pos\n    local cur = infoArray[i].pos\n    local h1 = headingTo(cur, nb1)\n    local h2 = headingTo(cur, nb2)\n    local x1, _, z1 = positionInDirection(cur, h1, -2.5, true)\n    local x2, _, z2 = positionInDirection(cur, h2, -2.5, true)\n    drawer:addTimedLine(10000, x1, 0.05, z1, cur.x, 0.05, cur.z, 8)\n    drawer:addTimedLine(10000, x2, 0.05, z2, cur.x, 0.05, cur.z, 8)\nend\n\nself.used = true",
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Draw Line Cleave Spots",
+							name = "显示水晶安全短线",
 							uuid = "fe3303c6-c25e-5ddd-868e-8536a44bd3fa",
 							version = 2.1,
 						},
@@ -9131,7 +9131,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local acr = TensorCore.API.TensorACR\nif acr.addBlacklistEntry ~= nil then\n    local dot = acr.addBlacklistEntry(13556, \"暗水晶\")\n    dot.enabled = true\n    dot.allowIfTarget = false\n    dot.allowSmartDoT = false\nend\n\nlocal aoe = acr.addAOEBlacklistEntry(13556, \"暗水晶\")\naoe.enabled = true\nself.used = true\n",
+							actionLua = "local acr = TensorCore.API.TensorACR\nif acr.addBlacklistEntry ~= nil then\n    local dot = acr.addBlacklistEntry(13556, \"暗水晶\")\n    dot.enabled = true\n    dot.allowIfTarget = false\n    dot.allowSmartDoT = false\nend\n\nlocal aoe = acr.addAOEBlacklistEntry(13556, \"暗水晶\")\naoe.enabled = true\nself.used = true",
 							name = "设置暗水晶DoT和AOE规则",
 							uuid = "a6ec0797-3d9a-1ca1-91d8-8212b743ea5f",
 							version = 2.1,
@@ -9468,7 +9468,7 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- checks if detection target is in max attack range\n-- setting first arg to nil will make function auto adjust to an action that fits current jobs max attack range\nreturn eventArgs.detectionTargetID ~= nil and MuAiGuide.Reactions.API.IsInRange(nil, eventArgs.detectionTargetID)",
+							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 检查检测目标是否处于当前职业最大攻击距离内。\n-- 首参nil沿用公共接口按当前职业选择技能的规则。\nreturn eventArgs.detectionTargetID ~= nil and MuAiGuide.Reactions.API.IsInRange(nil, eventArgs.detectionTargetID)",
 							name = "目标在最大攻击范围内",
 							uuid = "54df1e95-3feb-ce29-b1c4-44da06e43af3",
 							version = 3,
@@ -10080,7 +10080,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircle(9500, eventArgs.castPosX, 0.05, eventArgs.castPosZ, 4, 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircle(9500, eventArgs.castPosX, 0.05, eventArgs.castPosZ, 4, 0, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -10090,7 +10090,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Record Puddle Info",
+							name = "记录冰圈位置",
 							uuid = "0b10c611-3e44-5d4c-a4d8-9ef961542bb7",
 							version = 2.1,
 						},
@@ -10106,7 +10106,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40257,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "969ffe2d-2986-5430-9cdd-1a9b01c1a4d7",
 							version = 3,
 						},
@@ -10160,7 +10160,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Set Death Time",
+							name = "记录水晶阶段结束",
 							uuid = "c488e632-b10c-5f7b-8b8d-3816abed4d08",
 							version = 2.1,
 						},
@@ -10193,7 +10193,7 @@ local tbl =
 								},
 							},
 							dequeueIfLuaFalse = true,
-							name = "Valid Args",
+							name = "事件参数匹配",
 							partyTargetNumber = 0,
 							uuid = "84c3376b-f78b-50a2-a31d-0fe8e2cd895f",
 							version = 3,
@@ -10274,7 +10274,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if (data.arenaCenter == nil) then data.arenaCenter = { x = 100, y = 0, z = 100 } end\nself.used = true",
+							actionLua = "if data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
 							uuid = "e0cf84df-c305-56e9-8bf4-99077d3ad7e3",
 							version = 2.1,
@@ -10304,7 +10304,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- Roster-based FRU priority setup (Party Roster framework, issue #46).\n-- Ranks derive from the roster's conga order (T1 T2 H1 H2 M1 M2 R1 R2):\n-- supports rank T1>T2>H1>H2, DPS rank M1>M2>R1>R2, absolute rank 1..8 --\n-- identical to the legacy default TTHHMMRC priority list. Water swap and\n-- Darklit keep consuming the same derived tables (lower rank = higher prio).\nlocal LOG_PREFIX = \"[Priority Setup] \"\n\nlocal Roster = MuAiGuide.Reactions.Roster\nif (Roster == nil or Roster.current == nil or Roster.current() == nil) then\n    MuAiGuide.Reactions.log(LOG_PREFIX .. \"No Party Roster resolved! Failure state.\", 5)\n    self.used = true\n    return\nend\n\nlocal prio = Roster.prio(\"conga\")\nif (#prio.byRank ~= 8) then\n    MuAiGuide.Reactions.log(LOG_PREFIX .. \"Roster resolved \" .. tostring(#prio.byRank) .. \"/8 members! Failure state.\", 5)\n    self.used = true\n    return\nend\n\nlocal supports = Roster.order(\"supports\")\nlocal dps = Roster.order(\"dps\")\nif (#supports ~= 4 or #dps ~= 4) then\n    MuAiGuide.Reactions.log(LOG_PREFIX .. \"Support/DPS split was not 4/4! Failure state.\", 5)\n    self.used = true\n    return\nend\n\n---@type table<integer, 1|2|3|4>\ndata.supportPriority = {}\n---@type table<integer, 1|2|3|4>\ndata.dpsPriority = {}\nlocal priorityDictionary = {}\n\nfor i = 1, 4 do\n    data.supportPriority[supports[i].id] = i\n    data.dpsPriority[dps[i].id] = i\nend\nfor rank = 1, 8 do\n    priorityDictionary[prio.byRank[rank]] = rank\nend\n\ndata.priorityDictionary = priorityDictionary\ndata.hasSetupPriority = true\n\nMuAiGuide.Reactions.log(LOG_PREFIX .. \"Priorities derived from the Party Roster (conga order).\", 5)\nself.used = true\n",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 按当前队伍 conga 顺序建立优先级, 数字越小优先级越高。\n-- 顺序为T1、T2、H1、H2、M1、M2、R1、R2。\n\n-- 水分摊换组和龙诗继续使用相同的职责优先级表。\nlocal logPrefix = \"[FRU/优先级] \"\n\nlocal Roster = MuAiGuide.Reactions.Roster\nif Roster == nil or Roster.current == nil or Roster.current() == nil then\n    MuAiGuide.Reactions.log(logPrefix .. \"当前队伍职责未解析。\", 5)\n    self.used = true\n    return\nend\n\nlocal prio = Roster.prio(\"conga\")\nif #prio.byRank ~= 8 then\n    MuAiGuide.Reactions.log(\n        logPrefix .. \"已解析人数: \" .. tostring(#prio.byRank) .. \"/8, 本次初始化未完成。\",\n        5\n    )\n    self.used = true\n    return\nend\n\nlocal supports = Roster.order(\"supports\")\nlocal dps = Roster.order(\"dps\")\nif #supports ~= 4 or #dps ~= 4 then\n    MuAiGuide.Reactions.log(logPrefix .. \"辅助和输出人数不是4/4。\", 5)\n    self.used = true\n    return\nend\n\n---@type table<integer, 1|2|3|4>\ndata.supportPriority = {}\n---@type table<integer, 1|2|3|4>\ndata.dpsPriority = {}\nlocal priorityDictionary = {}\n\nfor i = 1, 4 do\n    data.supportPriority[supports[i].id] = i\n    data.dpsPriority[dps[i].id] = i\nend\nfor rank = 1, 8 do\n    priorityDictionary[prio.byRank[rank]] = rank\nend\n\ndata.priorityDictionary = priorityDictionary\ndata.hasSetupPriority = true\n\nMuAiGuide.Reactions.log(logPrefix .. \"已按队伍 conga 顺序建立优先级。\", 5)\nself.used = true",
 							conditions = 
 							{
 								
@@ -10314,7 +10314,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Set Priority Data",
+							name = "初始化职能优先级",
 							uuid = "b78a9d28-d185-5e06-aa08-7e21d30aec44",
 							version = 2.1,
 						},
@@ -10327,8 +10327,8 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Roster ~= nil and MuAiGuide.Reactions.Roster.current ~= nil and MuAiGuide.Reactions.Roster.current() ~= nil",
-							name = "Priority List Exists",
+							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Roster ~= nil\n    and MuAiGuide.Reactions.Roster.current ~= nil\n    and MuAiGuide.Reactions.Roster.current() ~= nil",
+							name = "队伍优先级可用",
 							uuid = "592f1872-77e5-56a8-88ed-b2250a40ee76",
 							version = 3,
 						},
@@ -10354,7 +10354,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local lbAction = ActionList:Get(5,3)\nreturn lbAction, eventArgs.detectionTargetID, true, true",
+							actionLua = "local lbAction = ActionList:Get(5, 3)\nreturn lbAction, eventArgs.detectionTargetID, true, true",
 							conditions = 
 							{
 								
@@ -10394,7 +10394,7 @@ local tbl =
 							category = "Self",
 							conditionType = 9,
 							dequeueIfLuaFalse = true,
-							name = "Is Melee",
+							name = "近战职业",
 							partyTargetType = "Melee DPS",
 							uuid = "fbfc8910-c6ae-593b-acb6-53bfb940be0e",
 							version = 3,
@@ -10407,7 +10407,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruP3MeleeLimitBreak == true",
 							dequeueIfLuaFalse = true,
-							name = "Option Enabled",
+							name = "功能已开启",
 							uuid = "8c03bbce-496c-56b7-a625-00072b85d53b",
 							version = 3,
 						},
@@ -10418,7 +10418,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Boss Targetable",
+							name = "首领可选中",
 							uuid = "abc095cb-4449-56f1-a4ce-52685ee53644",
 							version = 3,
 						},
@@ -10430,7 +10430,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "local currentLB, perBarLB = TensorCore.getLBGauge()\nreturn currentLB >= (perBarLB * 3)",
-							name = "Has LB3",
+							name = "三段极限槽已满",
 							uuid = "5820d2fb-b885-5c03-aa6b-9ba791cfac7d",
 							version = 3,
 						},
@@ -10487,7 +10487,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Find Boss",
+							name = "选取首领",
 							uuid = "a1149ea4-b9fa-5022-812e-00f7807d7c70",
 							version = 3,
 						},
@@ -10499,7 +10499,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Current Target",
-							name = "Target Filter",
+							name = "选取目标",
 							uuid = "8dfc223a-a42b-5cce-945a-236d694de158",
 							version = 3,
 						},
@@ -10528,9 +10528,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\n---@class ApocDrawInfo\n---@field Pos1 ThreeDimensionalPos\n---@field Pos2 ThreeDimensionalPos\n---@field Rot 16|64\n---@field Explosions ExplosionInfo[]\n\n---@class ExplosionInfo\n---@field Len integer\n---@field XVal number[]\n---@field ZVal number[]\n\n---@type ApocDrawInfo[]\ndata.p3ApocDrawInfo = {\n    {\n        Rot = 64,\n        Pos1 = { x = 90.101, y = 0, z = 109.899 },\n        Pos2 = { x = 109.899, y = 0, z = 90.101 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 90.101, 100, 100, 109.899 },\n                ZVal = { 109.899, 100, 100, 90.101 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 100, 100, 100, 100, 109.899 },\n                ZVal = { 109.899, 86, 100, 100, 114, 90.101 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n        }\n    },\n    {\n        Rot = 16,\n        Pos1 = { x = 90.101, y = 0, z = 109.899 },\n        Pos2 = { x = 109.899, y = 0, z = 90.101 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 90.101, 100, 100, 109.899 },\n                ZVal = { 109.899, 100, 100, 90.101 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 100, 100, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n        }\n    },\n    {\n        Rot = 64,\n        Pos1 = { x = 100, y = 0, z = 114 },\n        Pos2 = { x = 100, y = 0, z = 86 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 100, 100, 100, 100 },\n                ZVal = { 86, 100, 100, 114 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 100, 100, 100, 100, 109.899 },\n                ZVal = { 90.101, 86, 100, 100, 114, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n        }\n    },\n    {\n        Rot = 16,\n        Pos1 = { x = 100, y = 0, z = 114 },\n        Pos2 = { x = 100, y = 0, z = 86 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 100, 100, 100, 100 },\n                ZVal = { 86, 100, 100, 114 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 100, 100, 100, 100, 109.899 },\n                ZVal = { 109.899, 86, 100, 100, 114, 90.101 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n        }\n    },\n    {\n        Rot = 64,\n        Pos1 = { x = 109.899, y = 0, z = 109.899 },\n        Pos2 = { x = 90.101, y = 0, z = 90.101 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 90.101, 100, 100, 109.899 },\n                ZVal = { 90.101, 100, 100, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 100, 100, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n        }\n    },\n    {\n        Rot = 16,\n        Pos1 = { x = 109.899, y = 0, z = 109.899 },\n        Pos2 = { x = 90.101, y = 0, z = 90.101 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 90.101, 100, 100, 109.899 },\n                ZVal = { 90.101, 100, 100, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 100, 100, 100, 100, 109.899 },\n                ZVal = { 90.101, 86, 100, 100, 114, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n        }\n    },\n    {\n        Rot = 64,\n        Pos1 = { x = 114, y = 0, z = 100 },\n        Pos2 = { x = 86, y = 0, z = 100 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 86, 100, 100, 114 },\n                ZVal = { 100, 100, 100, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 100, 100, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n        }\n    },\n    {\n        Rot = 16,\n        Pos1 = { x = 114, y = 0, z = 100 },\n        Pos2 = { x = 86, y = 0, z = 100 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 86, 100, 100, 114 },\n                ZVal = { 100, 100, 100, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 100, 100, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n        }\n    },\n}\n\n---@type integer[]\ndata.p3ApocTimeInfo = {\n    11151,\n    13167,\n    15167,\n    17179,\n    19179,\n    21196,\n}\n\n---@param pos1 ThreeDimensionalPos\n---@param pos2 ThreeDimensionalPos\n---@param rotValue 16|64\n---@return ApocDrawInfo?\ndata.p3FindCorrectApocPattern = function (pos1, pos2, rotValue)\n    local apocInfoArray = data.p3ApocDrawInfo\n    local getDist = TensorCore.getDistance2d\n    for i = 1, 8 do\n        local apocInfo = apocInfoArray[i]\n        if (rotValue == apocInfo.Rot) then\n            local apocPos1 = apocInfo.Pos1\n            local apocPos2 = apocInfo.Pos2\n            local sameDist1 = getDist(apocPos1, pos1)\n            if (sameDist1 < 1) then\n                local sameDist2 = getDist(apocPos2, pos2)\n                if (sameDist2 < 1) then return apocInfo end\n            end\n\n            local oppDist1 = getDist(apocPos1, pos2)\n            if (oppDist1 < 1) then\n                local oppDist2 = getDist(apocPos2, pos1)\n                if (oppDist2 < 1) then return apocInfo end\n            end\n        end\n    end\n\n    return nil\nend\n\n---@param apocInfo ApocDrawInfo\ndata.p3DrawApocPattern = function (apocInfo)\n    local fruMoogle1 = TensorCore.getMoogleDrawer()\n    local drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    local timeValues = data.p3ApocTimeInfo\n    local explosionArray = apocInfo.Explosions\n    for i = 1, 6 do\n        local drawTime = i == 1 and 9000 or 2000\n        local delayTime = timeValues[i] - drawTime\n        local explosions = explosionArray[i]\n        for j = 1, explosions.Len do\n            local x = explosions.XVal[j]\n            local z = explosions.ZVal[j]\n            drawer:addTimedCircle(drawTime, x, 0.05, z, 9, delayTime, false, nil, 256)\n        end\n    end\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\n---@class FruApocDrawInfo\n---@field Pos1 ThreeDimensionalPos\n---@field Pos2 ThreeDimensionalPos\n---@field Rot 16|64\n---@field Explosions FruExplosionInfo[]\n\n---@class FruExplosionInfo\n---@field Len integer\n---@field XVal number[]\n---@field ZVal number[]\n\n---@type FruApocDrawInfo[]\ndata.p3ApocDrawInfo = {\n    {\n        Rot = 64,\n        Pos1 = { x = 90.101, y = 0, z = 109.899 },\n        Pos2 = { x = 109.899, y = 0, z = 90.101 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 90.101, 100, 100, 109.899 },\n                ZVal = { 109.899, 100, 100, 90.101 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 100, 100, 100, 100, 109.899 },\n                ZVal = { 109.899, 86, 100, 100, 114, 90.101 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n        },\n    },\n    {\n        Rot = 16,\n        Pos1 = { x = 90.101, y = 0, z = 109.899 },\n        Pos2 = { x = 109.899, y = 0, z = 90.101 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 90.101, 100, 100, 109.899 },\n                ZVal = { 109.899, 100, 100, 90.101 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 100, 100, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n        },\n    },\n    {\n        Rot = 64,\n        Pos1 = { x = 100, y = 0, z = 114 },\n        Pos2 = { x = 100, y = 0, z = 86 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 100, 100, 100, 100 },\n                ZVal = { 86, 100, 100, 114 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 100, 100, 100, 100, 109.899 },\n                ZVal = { 90.101, 86, 100, 100, 114, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n        },\n    },\n    {\n        Rot = 16,\n        Pos1 = { x = 100, y = 0, z = 114 },\n        Pos2 = { x = 100, y = 0, z = 86 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 100, 100, 100, 100 },\n                ZVal = { 86, 100, 100, 114 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 100, 100, 100, 100, 109.899 },\n                ZVal = { 109.899, 86, 100, 100, 114, 90.101 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n        },\n    },\n    {\n        Rot = 64,\n        Pos1 = { x = 109.899, y = 0, z = 109.899 },\n        Pos2 = { x = 90.101, y = 0, z = 90.101 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 90.101, 100, 100, 109.899 },\n                ZVal = { 90.101, 100, 100, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 100, 100, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n        },\n    },\n    {\n        Rot = 16,\n        Pos1 = { x = 109.899, y = 0, z = 109.899 },\n        Pos2 = { x = 90.101, y = 0, z = 90.101 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 90.101, 100, 100, 109.899 },\n                ZVal = { 90.101, 100, 100, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 100, 100, 100, 100, 109.899 },\n                ZVal = { 90.101, 86, 100, 100, 114, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n        },\n    },\n    {\n        Rot = 64,\n        Pos1 = { x = 114, y = 0, z = 100 },\n        Pos2 = { x = 86, y = 0, z = 100 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 86, 100, 100, 114 },\n                ZVal = { 100, 100, 100, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 100, 100, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n        },\n    },\n    {\n        Rot = 16,\n        Pos1 = { x = 114, y = 0, z = 100 },\n        Pos2 = { x = 86, y = 0, z = 100 },\n        Explosions = {\n            {\n                Len = 4,\n                XVal = { 86, 100, 100, 114 },\n                ZVal = { 100, 100, 100, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 100, 100, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 90.101, 86, 114, 109.899, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 90.101, 90.101, 100, 100, 109.899, 109.899 },\n                ZVal = { 90.101, 109.899, 86, 114, 90.101, 109.899 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 100, 100, 109.899, 114 },\n                ZVal = { 100, 109.899, 86, 114, 90.101, 100 },\n            },\n            {\n                Len = 6,\n                XVal = { 86, 90.101, 90.101, 109.899, 109.899, 114 },\n                ZVal = { 100, 90.101, 109.899, 90.101, 109.899, 100 },\n            },\n        },\n    },\n}\n\n---@type integer[]\ndata.p3ApocTimeInfo = {\n    11151,\n    13167,\n    15167,\n    17179,\n    19179,\n    21196,\n}\n\n---@param pos1 ThreeDimensionalPos\n---@param pos2 ThreeDimensionalPos\n---@param rotValue 16|64\n---@return FruApocDrawInfo?\ndata.p3FindCorrectApocPattern = function(pos1, pos2, rotValue)\n    local apocInfoArray = data.p3ApocDrawInfo\n    local getDist = TensorCore.getDistance2d\n    for i = 1, 8 do\n        local apocInfo = apocInfoArray[i]\n        if rotValue == apocInfo.Rot then\n            local apocPos1 = apocInfo.Pos1\n            local apocPos2 = apocInfo.Pos2\n            local sameDist1 = getDist(apocPos1, pos1)\n            if sameDist1 < 1 then\n                local sameDist2 = getDist(apocPos2, pos2)\n                if sameDist2 < 1 then\n                    return apocInfo\n                end\n            end\n\n            local oppDist1 = getDist(apocPos1, pos2)\n            if oppDist1 < 1 then\n                local oppDist2 = getDist(apocPos2, pos1)\n                if oppDist2 < 1 then\n                    return apocInfo\n                end\n            end\n        end\n    end\n\n    return nil\nend\n\n---@param apocInfo FruApocDrawInfo\ndata.p3DrawApocPattern = function(apocInfo)\n    local moogleColors1 = TensorCore.getMoogleDrawer()\n    local drawer = TensorCore.getCachedDrawer(\n        (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n        (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n        (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n        0xFFFFFFFF,\n        2,\n        0,\n        256\n    )\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    local timeValues = data.p3ApocTimeInfo\n    local explosionArray = apocInfo.Explosions\n    for i = 1, 6 do\n        local durationMs = i == 1 and 9000 or 2000\n        local delayMs = timeValues[i] - durationMs\n        local explosions = explosionArray[i]\n        for j = 1, explosions.Len do\n            local x = explosions.XVal[j]\n            local z = explosions.ZVal[j]\n            drawer:addTimedCircle(durationMs, x, 0.05, z, 9, delayMs, false, nil, 256)\n        end\n    end\nend\n\nself.used = true",
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Init Apoc Tables",
+							name = "初始化启示轨迹",
 							uuid = "c02dcde3-e0d1-555d-bf3c-b3afc53261a2",
 							version = 2.1,
 						},
@@ -10575,7 +10575,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if (data.p3URDarkTethers == nil) then\n    data.p3URDarkTethers = {}\nend\n\nif (data.p3URTetherCount == nil) then\n    data.p3URTetherCount = 1\nelse\n    data.p3URTetherCount = data.p3URTetherCount + 1\nend\n\ntable.insert(data.p3URDarkTethers, eventArgs.sourceEntityID)\nself.used = true",
+							actionLua = "if data.p3URDarkTethers == nil then\n    data.p3URDarkTethers = {}\nend\n\nif data.p3URTetherCount == nil then\n    data.p3URTetherCount = 1\nelse\n    data.p3URTetherCount = data.p3URTetherCount + 1\nend\n\ntable.insert(data.p3URDarkTethers, eventArgs.sourceEntityID)\nself.used = true",
 							conditions = 
 							{
 								
@@ -10585,7 +10585,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Dark Tether",
+							name = "记录暗连线",
 							uuid = "657fbc80-2870-591e-94fe-5c3f0343c178",
 							version = 2.1,
 						},
@@ -10596,7 +10596,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nif (data.p3URYellowTethers == nil) then\n    data.p3URYellowTethers = {}\nend\n\nif (data.p3URTetherCount == nil) then\n    data.p3URTetherCount = 1\nelse\n    data.p3URTetherCount = data.p3URTetherCount + 1\nend\n\ntable.insert(data.p3URYellowTethers, eventArgs.sourceEntityID)\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4DEC8687, nil, 0x4DEC8687, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedRectOnEnt(36000, eventArgs.sourceEntityID, 5, 0.1, eventArgs.newTargetID, 0, false, false, nil, nil, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nif data.p3URYellowTethers == nil then\n    data.p3URYellowTethers = {}\nend\n\nif data.p3URTetherCount == nil then\n    data.p3URTetherCount = 1\nelse\n    data.p3URTetherCount = data.p3URTetherCount + 1\nend\n\ntable.insert(data.p3URYellowTethers, eventArgs.sourceEntityID)\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4DEC8687, nil, 0x4DEC8687, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedRectOnEnt(\n    36000,\n    eventArgs.sourceEntityID,\n    5,\n    0.1,\n    eventArgs.newTargetID,\n    0,\n    false,\n    false,\n    nil,\n    nil,\n    nil,\n    256\n)\nself.used = true",
 							conditions = 
 							{
 								
@@ -10606,7 +10606,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Yellow Tether",
+							name = "记录黄连线",
 							uuid = "d940be52-6b55-5d9b-8b4d-0e3dd9f856a0",
 							version = 2.1,
 						},
@@ -10625,7 +10625,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 5,
 							eventIntValue = 133,
-							name = "Dark Tether",
+							name = "暗连线",
 							uuid = "dd157469-380e-547d-afff-c5811b759305",
 							version = 3,
 						},
@@ -10640,7 +10640,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 5,
 							eventIntValue = 134,
-							name = "Yellow Tether",
+							name = "黄连线",
 							uuid = "9a267607-e72d-5e62-b2c4-f51152c65635",
 							version = 3,
 						},
@@ -10669,7 +10669,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif (data.arenaCenter == nil) then data.arenaCenter = { x = 100, y = 0, z = 100 } end\n\nlocal darkHourglassEnt = TensorCore.mGetEntity(data.p3URDarkTethers[1])\nif (darkHourglassEnt == nil) then\n    MuAiGuide.Reactions.log(\"[UR Helper] Dark Hourglass Entity ID returned nil!\", 5)\n    self.used = true\n    return\nend\n\nlocal darkH = TensorCore.getHeadingToTarget(data.arenaCenter, darkHourglassEnt.pos)\nlocal halfPi = math.pi / 2\n\nlocal soloYellowEnt\n\nfor i = 1, 3 do\n    local ent = TensorCore.mGetEntity(data.p3URYellowTethers[i])\n    if (ent == nil) then\n        MuAiGuide.Reactions.log(\"[UR Helper] Yellow Hourglass at index \" .. i .. \" returned nil!\", 5)\n    else\n        local yellowH = TensorCore.getHeadingToTarget(data.arenaCenter, ent.pos)\n        local deltaH = yellowH - darkH\n        local normalizedDiff = TensorCore.restoreHeading(deltaH)\n        if (math.abs(normalizedDiff + halfPi) <= 0.2 or math.abs(normalizedDiff - halfPi) <= 0.2) then\n            soloYellowEnt = ent\n            break\n        end\n    end\nend\n\nif (soloYellowEnt == nil) then\n    MuAiGuide.Reactions.log(\"[UR Helper] Couldn't find relative south yellow hourglass!\", 5)\n    self.used = true\n    return\nend\n\ndata.p3URHelperSoloYellowH = TensorCore.restoreHeading(TensorCore.getHeadingToTarget(data.arenaCenter, soloYellowEnt.pos))\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\n\nlocal darkHourglassEnt = TensorCore.mGetEntity(data.p3URDarkTethers[1])\nif darkHourglassEnt == nil then\n    MuAiGuide.Reactions.log(\"[FRU/时间压缩] 暗沙漏实体暂不可读。\", 5)\n    self.used = true\n    return\nend\n\nlocal darkH = TensorCore.getHeadingToTarget(data.arenaCenter, darkHourglassEnt.pos)\nlocal halfPi = math.pi / 2\n\nlocal soloYellowEnt\n\nfor i = 1, 3 do\n    local entity = TensorCore.mGetEntity(data.p3URYellowTethers[i])\n    if entity == nil then\n        MuAiGuide.Reactions.log(\"[FRU/时间压缩] 黄沙漏编号\" .. i .. \"暂不可读。\", 5)\n    else\n        local yellowH = TensorCore.getHeadingToTarget(data.arenaCenter, entity.pos)\n        local deltaH = yellowH - darkH\n        local normalizedDiff = TensorCore.restoreHeading(deltaH)\n        if math.abs(normalizedDiff + halfPi) <= 0.2 or math.abs(normalizedDiff - halfPi) <= 0.2 then\n            soloYellowEnt = entity\n            break\n        end\n    end\nend\n\nif soloYellowEnt == nil then\n    MuAiGuide.Reactions.log(\"[FRU/时间压缩] 未定位相对南侧单黄沙漏。\", 5)\n    self.used = true\n    return\nend\n\ndata.p3URHelperSoloYellowH =\n    TensorCore.restoreHeading(TensorCore.getHeadingToTarget(data.arenaCenter, soloYellowEnt.pos))\nself.used = true",
 							conditions = 
 							{
 								
@@ -10679,7 +10679,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Set Relative South",
+							name = "定位单黄沙漏",
 							uuid = "c442f83d-7441-5e4a-8858-1744fafbf983",
 							version = 2.1,
 						},
@@ -10693,7 +10693,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p3URTetherCount == 5",
-							name = "Tether Count",
+							name = "连线数量",
 							uuid = "6f8a0508-f505-5349-9101-78b0e58c97e6",
 							version = 3,
 						},
@@ -10731,7 +10731,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal playerID = TensorCore.mGetPlayer().id\nlocal fireID = 2455\nfor _, ent in pairs(party) do\n    if (ent.id ~= playerID and MuAiGuide.Reactions.dpsJobs[ent.job]) then\n        local fireInfo = TensorCore.getBuff(ent.id, fireID)\n        if (fireInfo ~= nil and fireInfo.duration < 15) then\n            local str\n            if (MuAiGuide.Reactions.meleeJobs[ent.job]) then\n                str = \"(M)\"\n            else\n                str = \"(R)\"\n            end\n            MuAiGuide.Reactions.addTimedWorldTextOnEnt(7500, \"Fire \" .. str, ent.id, 4043309055, true, 2, 1.5)\n            break\n        end\n    end\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal playerId = TensorCore.mGetPlayer().id\nlocal fireID = 2455\nfor _, entity in pairs(party) do\n    if entity.id ~= playerId and MuAiGuide.Reactions.dpsJobs[entity.job] then\n        local fireInfo = TensorCore.getBuff(entity.id, fireID)\n        if fireInfo ~= nil and fireInfo.duration < 15 then\n            local str\n            if MuAiGuide.Reactions.meleeJobs[entity.job] then\n                str = \"(M)\"\n            else\n                str = \"(R)\"\n            end\n            MuAiGuide.Reactions.addTimedWorldTextOnEnt(7500, \"Fire \" .. str, entity.id, 4043309055, true, 2, 1.5)\n            break\n        end\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -10756,7 +10756,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Handle x2 DPS Short",
+							name = "标注同组短火输出",
 							uuid = "9a0fc638-1e69-5ae4-b20f-1c19260b82b2",
 							version = 2.1,
 						},
@@ -10766,7 +10766,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal playerID = TensorCore.mGetPlayer().id\nlocal fireID = 2455\nfor _, ent in pairs(party) do\n    if (ent.id ~= playerID and not MuAiGuide.Reactions.dpsJobs[ent.job]) then\n        local fireInfo = TensorCore.getBuff(ent.id, fireID)\n        if (fireInfo ~= nil and fireInfo.duration > 25) then\n            local str\n            if (MuAiGuide.Reactions.healJobs[ent.job]) then\n                str = \"(H)\"\n            else\n                str = \"(T)\"\n            end\n            MuAiGuide.Reactions.addTimedWorldTextOnEnt(12500, \"Fire \" .. str, ent.id, 4043309055, true, 2, 1.5)\n            break\n        end\n    end\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal playerId = TensorCore.mGetPlayer().id\nlocal fireID = 2455\nfor _, entity in pairs(party) do\n    if entity.id ~= playerId and not MuAiGuide.Reactions.dpsJobs[entity.job] then\n        local fireInfo = TensorCore.getBuff(entity.id, fireID)\n        if fireInfo ~= nil and fireInfo.duration > 25 then\n            local str\n            if MuAiGuide.Reactions.healJobs[entity.job] then\n                str = \"(H)\"\n            else\n                str = \"(T)\"\n            end\n            MuAiGuide.Reactions.addTimedWorldTextOnEnt(12500, \"Fire \" .. str, entity.id, 4043309055, true, 2, 1.5)\n            break\n        end\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -10791,7 +10791,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Handle x2 Support Long",
+							name = "标注同组长火辅助",
 							uuid = "2e589e06-50f0-5bc5-bc9a-18061b53b216",
 							version = 2.1,
 						},
@@ -10812,7 +10812,7 @@ local tbl =
 							category = "Party",
 							matchAnyBuff = true,
 							minTargetPercent = true,
-							name = "Buffs Exist",
+							name = "持有对应状态",
 							partyTargetNumber = 100,
 							partyTargetSubType = "Number",
 							uuid = "5ff634cb-27c8-54a3-a9e8-83d4322d877b",
@@ -10827,7 +10827,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruP3URHelper == true",
 							dequeueIfLuaFalse = true,
-							name = "Option Enabled",
+							name = "功能已开启",
 							uuid = "ebc79d72-a000-5167-8d84-126b352e4ce1",
 							version = 3,
 						},
@@ -10840,7 +10840,7 @@ local tbl =
 							category = "Self",
 							conditionType = 9,
 							dequeueIfLuaFalse = true,
-							name = "Is DPS",
+							name = "输出职业",
 							partyTargetType = "DPS",
 							uuid = "de40b492-725e-53b8-bbfb-622b70a88fbc",
 							version = 3,
@@ -10855,7 +10855,7 @@ local tbl =
 							buffID = 2455,
 							category = "Self",
 							comparator = 2,
-							name = "Short Fire",
+							name = "短火",
 							uuid = "5ba038eb-8682-5294-841d-e6b5f7a0bfa6",
 							version = 3,
 						},
@@ -10868,7 +10868,7 @@ local tbl =
 							buffDuration = 25,
 							buffID = 2455,
 							category = "Self",
-							name = "Long Fire",
+							name = "长火",
 							uuid = "8e24dd49-2344-5bc6-a34d-0a4b1f7f548d",
 							version = 3,
 						},
@@ -10897,9 +10897,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal stackDrawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nstackDrawer:setGradient(3, 0.15, 2)\nstackDrawer:setHeightOffset(0.05)\nlocal drawTime = 4000\n\nlocal fireID = 2455\nlocal iceID = 2462\nlocal stackID = 2454\n\nfor _, ent in pairs(party) do\n    local entID = ent.id\n    local fireBuff = TensorCore.getBuff(entID, fireID)\n    local isFire = fireBuff ~= nil\n    local iceBuff = TensorCore.getBuff(entID, iceID)\n    local isIce = iceBuff ~= nil\n    local stackBuff = TensorCore.getBuff(entID, stackID)\n    local isStack = stackBuff ~= nil\n\n    if (isFire) then\n        local delay = (fireBuff.duration * 1000) - drawTime\n        drawer:addTimedCircleOnEnt(drawTime, entID, 8, delay, false, nil, 256)\n    end\n    if (isIce) then\n        local delay = (iceBuff.duration * 1000) - drawTime\n        drawer:addTimedDonutOnEnt(drawTime, entID, 3, 12, delay, false, nil, 256)\n    end\n    if (isStack) then\n        local delay = (stackBuff.duration * 1000) - drawTime\n        stackDrawer:addTimedCircleOnEnt(drawTime, entID, 6, delay, false, nil, 256)\n    end\n\n    if (not isFire and not isIce and not isStack) then\n        MuAiGuide.Reactions.log(\"[UR Draws] \" .. ent.name .. \" had no relevant debuffs to draw!\", 5)\n    end\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal stackDrawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nstackDrawer:setGradient(3, 0.15, 2)\nstackDrawer:setHeightOffset(0.05)\nlocal durationMs = 4000\n\nlocal fireID = 2455\nlocal iceID = 2462\nlocal stackID = 2454\n\nfor _, ent in pairs(party) do\n    local entityId = ent.id\n    local fireBuff = TensorCore.getBuff(entityId, fireID)\n    local isFire = fireBuff ~= nil\n    local iceBuff = TensorCore.getBuff(entityId, iceID)\n    local isIce = iceBuff ~= nil\n    local stackBuff = TensorCore.getBuff(entityId, stackID)\n    local isStack = stackBuff ~= nil\n\n    if isFire then\n        local delay = (fireBuff.duration * 1000) - durationMs\n        drawer:addTimedCircleOnEnt(durationMs, entityId, 8, delay, false, nil, 256)\n    end\n    if isIce then\n        local delay = (iceBuff.duration * 1000) - durationMs\n        drawer:addTimedDonutOnEnt(durationMs, entityId, 3, 12, delay, false, nil, 256)\n    end\n    if isStack then\n        local delay = (stackBuff.duration * 1000) - durationMs\n        stackDrawer:addTimedCircleOnEnt(durationMs, entityId, 6, delay, false, nil, 256)\n    end\n\n    if not isFire and not isIce and not isStack then\n        MuAiGuide.Reactions.log(\"[FRU/时间压缩] \" .. ent.name .. \"无对应点名状态。\", 5)\n    end\nend\n\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Queue Debuff Draws",
+							name = "显示点名范围",
 							uuid = "626cfb5b-879a-590d-90e7-83d159096b5c",
 							version = 2.1,
 						},
@@ -10930,7 +10930,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif (data.arenaCenter == nil) then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\nlocal soloPos = TensorCore.getPosInDirection(data.arenaCenter, data.p3URHelperSoloYellowH, 10)\nsoloPos.y = 2.5\nMuAiGuide.Reactions.addTimedWorldText(36000, \"Solo\", soloPos, 4294967295, true, 3.25)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\nlocal soloPos = TensorCore.getPosInDirection(data.arenaCenter, data.p3URHelperSoloYellowH, 10)\nsoloPos.y = 2.5\nMuAiGuide.Reactions.addTimedWorldText(36000, \"Solo\", soloPos, 4294967295, true, 3.25)\nself.used = true",
 							conditions = 
 							{
 								
@@ -10940,7 +10940,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "WorldText Solo Yellow",
+							name = "标注单黄沙漏",
 							uuid = "c442f83d-7441-5e4a-8858-1744fafbf983",
 							version = 2.1,
 						},
@@ -10954,7 +10954,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p3URHelperSoloYellowH ~= nil",
-							name = "Solo Yellow Found",
+							name = "已定位单黄沙漏",
 							uuid = "81184794-b87c-587c-8088-5427d478a29f",
 							version = 3,
 						},
@@ -10983,7 +10983,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fireID = 2455\nlocal iceID = 2462\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = player.id\nlocal fireBuff = TensorCore.getBuff(playerID, fireID)\nlocal isFire = fireBuff ~= nil\nlocal isIce = TensorCore.hasBuff(playerID, iceID)\nlocal isDPS = MuAiGuide.Reactions.dpsJobs[player.job] == true\nlocal lengthType\n\nif (isIce) then\n    if (isDPS) then\n        lengthType = 2\n    else\n        lengthType = 0\n    end\nelseif (isFire) then\n    if (fireBuff.duration < 12) then\n        lengthType = 0\n    elseif (fireBuff.duration < 24) then\n        lengthType = 1\n    else\n        lengthType = 2\n    end\nend\n\nif (lengthType == nil) then\n    MuAiGuide.Reactions.log(\"[UR Helper Setup] Couldn't determine player buff type!\", 5)\n    self.used = true\n    return\nend\n\n---@type string[]\nlocal callArray\n---@type number[]\nlocal arrowHeadings\n---@type number[]\nlocal arrowLengths\n---@type string|nil\nlocal assignedRole = nil\n---@type boolean\nlocal isDoubleRole = false\n\nlocal pi = math.pi\nlocal halfPi = pi / 2\nlocal quarterPi = pi / 4\nlocal beamDistance = 8.1\nlocal fireDistance = 15\nlocal rewindDistance = 7.9\nlocal rewindMidDist = 0.15\nlocal relativeSouth = data.p3URHelperSoloYellowH\n\nif (isDPS) then\n    -- Handle DPS permutations.\n    if (lengthType == 0) then\n        -- Handle 10s DPS Fires.\n        callArray = {\n            \"Fire Out\",\n            \"Rewind Out (at traffic light)\",\n            \"Stack Mid\",\n            \"Bait Beam\",\n            \"Stack Mid\",\n            \"Wait\",\n        }\n        arrowHeadings = { relativeSouth + quarterPi, relativeSouth - quarterPi }\n        arrowLengths = {\n            fireDistance,\n            rewindDistance,\n            nil,\n            beamDistance,\n            nil,\n            nil,\n        }\n        assignedRole = \"Short DPS Fire\"\n        isDoubleRole = true\n    elseif (lengthType == 1) then\n        -- Handle 20s DPS Fire.\n        callArray = {\n            \"Stack Mid\",\n            \"Rewind Near Mid\",\n            \"Fire Out\",\n            \"Chill Mid\",\n            \"Stack Mid\",\n            \"Bait Beam\",\n        }\n        arrowHeadings = { relativeSouth + halfPi }\n        arrowLengths = {\n            nil,\n            rewindMidDist,\n            fireDistance,\n            nil,\n            nil,\n            beamDistance,\n        }\n        assignedRole = \"Medium DPS Fire\"\n    elseif (lengthType == 2) then\n        -- Handle 30s DPS, Fire or Ice.\n        callArray = {\n            \"Stack Mid\",\n            \"Bait Beam\",\n            \"Stack Mid\",\n            \"Rewind Near Mid\",\n            \"Fire Out\",\n            \"Wait\",\n        }\n        arrowHeadings = { relativeSouth }\n        arrowLengths = {\n            nil,\n            beamDistance,\n            nil,\n            rewindMidDist,\n            fireDistance,\n            nil,\n        }\n        if (isIce) then\n            -- DPS Ice only difference is turning dropping a fire out to stacking mid.\n            assignedRole = \"Long DPS Ice\"\n            callArray[5] = \"Stack Mid\"\n            arrowLengths[5] = nil\n        else\n            assignedRole = \"Long DPS Fire\"\n        end\n    end\nelse\n    -- Handle Support Permutations\n    if (lengthType == 0) then\n        -- Handle 10s Support, Fire or Ice.\n        callArray = {\n            \"Fire Out\",\n            \"Rewind Out (at traffic cone)\",\n            \"Stack Mid\",\n            \"Bait Beam\",\n            \"Stack Mid\",\n            \"Wait\",\n        }\n        arrowHeadings = { relativeSouth + pi }\n        arrowLengths = {\n            fireDistance,\n            rewindDistance,\n            nil,\n            beamDistance,\n            nil,\n            nil,\n        }\n        if (isIce) then\n            callArray[1] = \"Stack Mid\"\n            arrowLengths[1] = nil\n            assignedRole = \"Short Support Ice\"\n        else\n            assignedRole = \"Short Support Fire\"\n        end\n    elseif (lengthType == 1) then\n        -- Handle 20s Support Fire.\n        callArray = {\n            \"Stack Mid\",\n            \"Rewind Out (at traffic cone)\",\n            \"Fire Out\",\n            \"Chill Mid\",\n            \"Stack Mid\",\n            \"Bait Beam\",\n        }\n        arrowHeadings = { relativeSouth - halfPi }\n        arrowLengths = {\n            nil,\n            rewindDistance,\n            fireDistance,\n            nil,\n            nil,\n            beamDistance,\n        }\n        assignedRole = \"Medium Support Fire\"\n    elseif (lengthType == 2) then\n        -- Handle 30s Support Fires.\n        callArray = {\n            \"Stack Mid\",\n            \"Bait Beam\",\n            \"Stack Mid\",\n            \"Rewind Near Mid\",\n            \"Fire Out\",\n            \"Chill Mid\",\n        }\n        local relativeNorth = relativeSouth + pi\n        arrowHeadings = { relativeNorth - quarterPi, relativeNorth + quarterPi }\n        arrowLengths = {\n            nil,\n            beamDistance,\n            nil,\n            rewindMidDist,\n            fireDistance,\n            nil,\n        }\n        assignedRole = \"Long Support Fire\"\n        isDoubleRole = true\n    end\nend\n\nif (assignedRole == nil) then\n    MuAiGuide.Reactions.log(\"[UR Helper Setup] Player had no assigned role set! What went wrong?\", 5)\n    self.used = true\n    return\nend\n\nMuAiGuide.Reactions.log(\"[UR Helper Setup] Ran successfully. Player was assigned as \" .. assignedRole, 5)\n\ndata.p3URHelperArrowHeadings = arrowHeadings\ndata.p3URHelperShotcalls = callArray\ndata.p3URHelperArrowLengths = arrowLengths\ndata.p3URHelperCurrentStep = 0\ndata.p3URHelperDoubleRole = isDoubleRole\ndata.p3URHelperPerformNextStep = function()\n    local curStep = data.p3URHelperCurrentStep + 1\n    data.p3URHelperCurrentStep = curStep\n    local callString = data.p3URHelperShotcalls[curStep]\n    if (callString == nil) then\n        MuAiGuide.Reactions.log(\"[UR Helper] callString was nil for step \" .. curStep, 5)\n        return\n    end\n    MuAiGuide.Reactions.Shotcall(callString, true, 3)\n    local arrowLength = data.p3URHelperArrowLengths[curStep]\n    if (arrowLength == nil) then return end\n    local drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    drawer:addTimedArrow(3000, 100, 0.05, 100, data.p3URHelperArrowHeadings[1], arrowLength, 0.75, nil, nil, 0, false, 256)\n    if (data.p3URHelperArrowHeadings[2] ~= nil) then\n        drawer:addTimedArrow(3000, 100, 0.05, 100, data.p3URHelperArrowHeadings[2], arrowLength, 0.75, nil, nil, 0, false, 256)\n    end\nend\n\ndata.p3URHelperHasRun = true\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal fireID = 2455\nlocal iceID = 2462\nlocal player = TensorCore.mGetPlayer()\nlocal playerId = player.id\nlocal fireBuff = TensorCore.getBuff(playerId, fireID)\nlocal isFire = fireBuff ~= nil\nlocal isIce = TensorCore.hasBuff(playerId, iceID)\nlocal isDPS = MuAiGuide.Reactions.dpsJobs[player.job] == true\nlocal lengthType\n\nif isIce then\n    if isDPS then\n        lengthType = 2\n    else\n        lengthType = 0\n    end\nelseif isFire then\n    if fireBuff.duration < 12 then\n        lengthType = 0\n    elseif fireBuff.duration < 24 then\n        lengthType = 1\n    else\n        lengthType = 2\n    end\nend\n\nif lengthType == nil then\n    MuAiGuide.Reactions.log(\"[FRU/时间压缩] 无法确定本人的点名类型。\", 5)\n    self.used = true\n    return\nend\n\n---@type string[]\nlocal callArray\n---@type number[]\nlocal arrowHeadings\n---@type number[]\nlocal arrowLengths\n---@type string|nil\nlocal assignedRole = nil\n---@type boolean\nlocal isDoubleRole = false\n\nlocal pi = math.pi\nlocal halfPi = pi / 2\nlocal quarterPi = pi / 4\nlocal beamDistance = 8.1\nlocal fireDistance = 15\nlocal rewindDistance = 7.9\nlocal rewindMidDist = 0.15\nlocal relativeSouth = data.p3URHelperSoloYellowH\n\nif isDPS then\n    -- 输出职责分支。\n    if lengthType == 0 then\n        -- 输出短火。\n        callArray = {\n            \"Fire Out\",\n            \"Rewind Out (at traffic light)\",\n            \"Stack Mid\",\n            \"Bait Beam\",\n            \"Stack Mid\",\n            \"Wait\",\n        }\n        arrowHeadings = { relativeSouth + quarterPi, relativeSouth - quarterPi }\n        arrowLengths = {\n            fireDistance,\n            rewindDistance,\n            nil,\n            beamDistance,\n            nil,\n            nil,\n        }\n        assignedRole = \"Short DPS Fire\"\n        isDoubleRole = true\n    elseif lengthType == 1 then\n        -- 输出中火。\n        callArray = {\n            \"Stack Mid\",\n            \"Rewind Near Mid\",\n            \"Fire Out\",\n            \"Chill Mid\",\n            \"Stack Mid\",\n            \"Bait Beam\",\n        }\n        arrowHeadings = { relativeSouth + halfPi }\n        arrowLengths = {\n            nil,\n            rewindMidDist,\n            fireDistance,\n            nil,\n            nil,\n            beamDistance,\n        }\n        assignedRole = \"Medium DPS Fire\"\n    elseif lengthType == 2 then\n        -- 输出长火或冰。\n        callArray = {\n            \"Stack Mid\",\n            \"Bait Beam\",\n            \"Stack Mid\",\n            \"Rewind Near Mid\",\n            \"Fire Out\",\n            \"Wait\",\n        }\n        arrowHeadings = { relativeSouth }\n        arrowLengths = {\n            nil,\n            beamDistance,\n            nil,\n            rewindMidDist,\n            fireDistance,\n            nil,\n        }\n        if isIce then\n            -- 输出冰将第五步放火改为场中分摊。\n            assignedRole = \"Long DPS Ice\"\n            callArray[5] = \"Stack Mid\"\n            arrowLengths[5] = nil\n        else\n            assignedRole = \"Long DPS Fire\"\n        end\n    end\nelse\n    -- 坦克和治疗职责分支。\n    if lengthType == 0 then\n        -- 辅助短火或冰。\n        callArray = {\n            \"Fire Out\",\n            \"Rewind Out (at traffic cone)\",\n            \"Stack Mid\",\n            \"Bait Beam\",\n            \"Stack Mid\",\n            \"Wait\",\n        }\n        arrowHeadings = { relativeSouth + pi }\n        arrowLengths = {\n            fireDistance,\n            rewindDistance,\n            nil,\n            beamDistance,\n            nil,\n            nil,\n        }\n        if isIce then\n            callArray[1] = \"Stack Mid\"\n            arrowLengths[1] = nil\n            assignedRole = \"Short Support Ice\"\n        else\n            assignedRole = \"Short Support Fire\"\n        end\n    elseif lengthType == 1 then\n        -- 辅助中火。\n        callArray = {\n            \"Stack Mid\",\n            \"Rewind Out (at traffic cone)\",\n            \"Fire Out\",\n            \"Chill Mid\",\n            \"Stack Mid\",\n            \"Bait Beam\",\n        }\n        arrowHeadings = { relativeSouth - halfPi }\n        arrowLengths = {\n            nil,\n            rewindDistance,\n            fireDistance,\n            nil,\n            nil,\n            beamDistance,\n        }\n        assignedRole = \"Medium Support Fire\"\n    elseif lengthType == 2 then\n        -- 辅助长火。\n        callArray = {\n            \"Stack Mid\",\n            \"Bait Beam\",\n            \"Stack Mid\",\n            \"Rewind Near Mid\",\n            \"Fire Out\",\n            \"Chill Mid\",\n        }\n        local relativeNorth = relativeSouth + pi\n        arrowHeadings = { relativeNorth - quarterPi, relativeNorth + quarterPi }\n        arrowLengths = {\n            nil,\n            beamDistance,\n            nil,\n            rewindMidDist,\n            fireDistance,\n            nil,\n        }\n        assignedRole = \"Long Support Fire\"\n        isDoubleRole = true\n    end\nend\n\nif assignedRole == nil then\n    MuAiGuide.Reactions.log(\"[FRU/时间压缩] 本人职责未完成分配。\", 5)\n    self.used = true\n    return\nend\n\nMuAiGuide.Reactions.log(\"[FRU/时间压缩] 已分配职责: \" .. assignedRole, 5)\n\ndata.p3URHelperArrowHeadings = arrowHeadings\ndata.p3URHelperShotcalls = callArray\ndata.p3URHelperArrowLengths = arrowLengths\ndata.p3URHelperCurrentStep = 0\ndata.p3URHelperDoubleRole = isDoubleRole\ndata.p3URHelperPerformNextStep = function()\n    local curStep = data.p3URHelperCurrentStep + 1\n    data.p3URHelperCurrentStep = curStep\n    local callText = data.p3URHelperShotcalls[curStep]\n    if callText == nil then\n        MuAiGuide.Reactions.log(\"[FRU/时间压缩] 当前步骤无播报文本, 步骤: \" .. curStep, 5)\n        return\n    end\n    MuAiGuide.Reactions.Shotcall(callText, true, 3)\n    local arrowLength = data.p3URHelperArrowLengths[curStep]\n    if arrowLength == nil then\n        return\n    end\n    local drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    drawer:addTimedArrow(\n        3000,\n        100,\n        0.05,\n        100,\n        data.p3URHelperArrowHeadings[1],\n        arrowLength,\n        0.75,\n        nil,\n        nil,\n        0,\n        false,\n        256\n    )\n    if data.p3URHelperArrowHeadings[2] ~= nil then\n        drawer:addTimedArrow(\n            3000,\n            100,\n            0.05,\n            100,\n            data.p3URHelperArrowHeadings[2],\n            arrowLength,\n            0.75,\n            nil,\n            nil,\n            0,\n            false,\n            256\n        )\n    end\nend\n\ndata.p3URHelperHasRun = true\nself.used = true",
 							conditions = 
 							{
 								
@@ -10998,7 +10998,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Run Setup",
+							name = "初始化压缩指路",
 							uuid = "1d75a94f-bbf6-5f5f-8006-eb38c37a31b9",
 							version = 2.1,
 						},
@@ -11014,7 +11014,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruP3URHelper == true",
 							dequeueIfLuaFalse = true,
-							name = "Option Enabled",
+							name = "功能已开启",
 							uuid = "5033ec51-fbe8-5715-9458-2bdbf9bcfc23",
 							version = 3,
 						},
@@ -11026,7 +11026,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p3URHelperSoloYellowH ~= nil",
-							name = "Solo Yellow Found",
+							name = "已定位单黄沙漏",
 							uuid = "2139ec85-3138-5628-99cc-34d369ffe7db",
 							version = 3,
 						},
@@ -11064,7 +11064,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Run Next Step",
+							name = "推进当前步骤",
 							uuid = "5fb9b1a2-75a4-5481-90bf-281216817cb0",
 							version = 2.1,
 						},
@@ -11078,7 +11078,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p3URHelperHasRun == true",
-							name = "Helper Ran",
+							name = "压缩指路已初始化",
 							uuid = "da08351a-b2cd-541b-a913-e950016418ae",
 							version = 3,
 						},
@@ -11129,7 +11129,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Run Next Step",
+							name = "推进当前步骤",
 							uuid = "5fb9b1a2-75a4-5481-90bf-281216817cb0",
 							version = 2.1,
 						},
@@ -11143,7 +11143,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p3URHelperHasRun == true",
-							name = "Helper Ran",
+							name = "压缩指路已初始化",
 							uuid = "da08351a-b2cd-541b-a913-e950016418ae",
 							version = 3,
 						},
@@ -11183,7 +11183,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif (data.p3URHourglassRotations == nil) then\n    ---@type RecordedRotationInfo[]\n    data.p3URHourglassRotations = {}\nend\n\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then\n    MuAiGuide.Reactions.log(\"[UR Hourglass Rotation] Entity ID \" .. eventArgs.entityID .. \" returned nil ent!\", 5)\n    self.used = true\n    return\nend\n\n---@class RecordedRotationInfo\n---@field pos ThreeDimensionalPos\n---@field rotation integer\n\n---@type ThreeDimensionalPos\nlocal pos = { x = ent.pos.x, y = 0, z = ent.pos.z }\nlocal rotInfo = { pos = pos, rotation = eventArgs.newActiveAura1 }\ntable.insert(data.p3URHourglassRotations, rotInfo)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif data.p3URHourglassRotations == nil then\n    ---@type FruRecordedRotationInfo[]\n    data.p3URHourglassRotations = {}\nend\n\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    MuAiGuide.Reactions.log(\"[FRU/沙漏旋转] 实体ID\" .. eventArgs.entityID .. \"的实体暂不可读。\", 5)\n    self.used = true\n    return\nend\n\n---@class FruRecordedRotationInfo\n---@field pos ThreeDimensionalPos\n---@field rotation integer\n\n---@type ThreeDimensionalPos\nlocal pos = { x = entity.pos.x, y = 0, z = entity.pos.z }\nlocal rotInfo = { pos = pos, rotation = eventArgs.newActiveAura1 }\ntable.insert(data.p3URHourglassRotations, rotInfo)\nself.used = true",
 							conditions = 
 							{
 								
@@ -11198,7 +11198,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Rotation",
+							name = "记录旋转方向",
 							uuid = "6a5cc725-c871-524f-a6ef-67670c03e3e0",
 							version = 2.1,
 						},
@@ -11215,7 +11215,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 9825,
-							name = "Valid ContentID",
+							name = "实体类型匹配",
 							uuid = "75b72545-fb95-5ad4-a9c1-ce8f539ee62d",
 							version = 3,
 						},
@@ -11241,7 +11241,7 @@ local tbl =
 							},
 							dequeueIfLuaFalse = true,
 							matchAnyBuff = true,
-							name = "Valid Aura",
+							name = "光环类型匹配",
 							partyTargetNumber = 0,
 							uuid = "23a07897-0433-5264-950f-2455327cf360",
 							version = 3,
@@ -11300,7 +11300,7 @@ local tbl =
 							aType = "Lua",
 							actionLua = "data.p3URHourglassRotations = nil\nself.used = true",
 							gVar = "ACR_RikuWHM3_CD",
-							name = "Reset Beam Info",
+							name = "重置激光记录",
 							uuid = "1c3753b3-9da4-58db-8542-4bcfc360b4b1",
 							version = 2.1,
 						},
@@ -11339,7 +11339,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then\n    MuAiGuide.Reactions.log(\"[UR Hourglass Rotation] Entity ID \" .. eventArgs.entityID .. \" returned nil ent!\", 5)\n    self.used = true\n    return\nend\nif (data.arenaCenter == nil) then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\n\nlocal h = TensorCore.getHeadingToTarget(data.arenaCenter, ent.pos)\nlocal adjustH = math.rad(65)\nif (eventArgs.newActiveAura1 == 1032) then\n    adjustH = -adjustH\nend\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedArrow(5000, ent.pos.x, 0.05, ent.pos.z, h + adjustH, 3, 0.25, nil, nil, 0, false, 256)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    MuAiGuide.Reactions.log(\"[FRU/沙漏旋转] 实体ID\" .. eventArgs.entityID .. \"的实体暂不可读。\", 5)\n    self.used = true\n    return\nend\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\n\nlocal heading = TensorCore.getHeadingToTarget(data.arenaCenter, entity.pos)\nlocal headingOffset = math.rad(65)\nif eventArgs.newActiveAura1 == 1032 then\n    headingOffset = -headingOffset\nend\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedArrow(\n    5000,\n    entity.pos.x,\n    0.05,\n    entity.pos.z,\n    heading + headingOffset,\n    3,\n    0.25,\n    nil,\n    nil,\n    0,\n    false,\n    256\n)\nself.used = true",
 							conditions = 
 							{
 								
@@ -11354,7 +11354,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Bait Arrow",
+							name = "显示诱导方向",
 							uuid = "6a5cc725-c871-524f-a6ef-67670c03e3e0",
 							version = 2.1,
 						},
@@ -11371,7 +11371,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 9825,
-							name = "Valid ContentID",
+							name = "实体类型匹配",
 							uuid = "75b72545-fb95-5ad4-a9c1-ce8f539ee62d",
 							version = 3,
 						},
@@ -11397,7 +11397,7 @@ local tbl =
 							},
 							dequeueIfLuaFalse = true,
 							matchAnyBuff = true,
-							name = "Valid Aura",
+							name = "光环类型匹配",
 							partyTargetNumber = 0,
 							uuid = "23a07897-0433-5264-950f-2455327cf360",
 							version = 3,
@@ -11454,7 +11454,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal hourglassInfo = data.p3URHourglassRotations\nlocal partyIDs = data.partyIDArray\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal frameEntities\nfor hourglassIndex = 1, 3 do\n    local info = hourglassInfo[hourglassIndex]\n    if (info == nil) then break end -- Sometimes only two hourglasses are going at once.\n    if frameEntities == nil then\n        local scratch = data.StringFRU_MeltdownEntities\n        if scratch == nil then\n            scratch = {}\n            data.StringFRU_MeltdownEntities = scratch\n        end\n        for i = 1, 8 do\n            scratch[i] = TensorCore.mGetEntity(partyIDs[i])\n        end\n        frameEntities = scratch\n    end\n    ---@type ThreeDimensionalPos\n    local hourglassPos = info.pos\n    local bestDistance = 999\n    local bestID = nil\n    local bestPos = nil\n\n    for i = 1, 8 do\n        local ent = frameEntities[i]\n        if (ent ~= nil and ent.alive) then\n            local d = TensorCore.getDistance2d(ent.pos, hourglassPos)\n            if (d < bestDistance) then\n                bestDistance = d\n                bestID = partyIDs[i]\n                bestPos = ent.pos\n            end\n        end\n    end\n\n    if (bestID ~= nil) then\n        local h = TensorCore.getHeadingToTarget(hourglassPos, bestPos)\n        drawer:addRect(hourglassPos.x, 0.05, hourglassPos.z, 40, 5, h, false, 256)\n    end\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal hourglassInfo = data.p3URHourglassRotations\nlocal partyIDs = data.partyIDArray\nif partyIDs == nil then\n    -- 跳转或前置尚未完成时, 仅本次激光使用当前完整队伍, 不回写共享开场记录。\n    local fallback = data.StringFRU_MeltdownParty\n    if fallback == nil then\n        fallback = { ids = {}, seen = {}, options = { noAliveCheck = true } }\n        data.StringFRU_MeltdownParty = fallback\n    end\n    local party = TensorCore.getEntityGroupList(\"Party\", fallback.options)\n    local ids, seen = fallback.ids, fallback.seen\n    for id in pairs(seen) do\n        seen[id] = nil\n    end\n    local count = 0\n    if party then\n        for _, member in pairs(party) do\n            local id = type(member) == \"table\" and member.id or member\n            if type(id) == \"number\" and id > 0 and not seen[id] then\n                seen[id] = true\n                count = count + 1\n                ids[count] = id\n            end\n        end\n    end\n    for i = count + 1, #ids do\n        ids[i] = nil\n    end\n    if count ~= 8 then\n        self.used = true\n        return\n    end\n    table.sort(ids)\n    partyIDs = ids\nend\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal framePositions\nfor hourglassIndex = 1, 3 do\n    local info = hourglassInfo[hourglassIndex]\n    if info == nil then\n        break\n    end -- 部分轮次仅有两个沙漏。\n    if framePositions == nil then\n        local scratch = data.StringFRU_MeltdownPositions\n        if scratch == nil then\n            scratch = {}\n            data.StringFRU_MeltdownPositions = scratch\n        end\n        for i = 1, 8 do\n            local entity = TensorCore.mGetEntity(partyIDs[i])\n            scratch[i] = entity ~= nil and entity.alive and entity.pos or nil\n        end\n        framePositions = scratch\n    end\n    ---@type ThreeDimensionalPos\n    local hourglassPos = info.pos\n    local nearestDistance = 999\n    local nearestId = nil\n    local nearestPosition = nil\n\n    for i = 1, 8 do\n        local position = framePositions[i]\n        if position ~= nil then\n            local distance = TensorCore.getDistance2d(position, hourglassPos)\n            if distance < nearestDistance then\n                nearestDistance = distance\n                nearestId = partyIDs[i]\n                nearestPosition = position\n            end\n        end\n    end\n\n    if nearestId ~= nil then\n        local heading = TensorCore.getHeadingToTarget(hourglassPos, nearestPosition)\n        drawer:addRect(hourglassPos.x, 0.05, hourglassPos.z, 40, 5, heading, false, 256)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -11464,7 +11464,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuWHM3_CD",
-							name = "Draw Meltdown Baits",
+							name = "显示激光诱导范围",
 							uuid = "7099ec23-9444-500f-9c42-59949d4f4541",
 							version = 2.1,
 						},
@@ -11479,7 +11479,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p3URHourglassRotations ~= nil",
 							dequeueIfLuaFalse = true,
-							name = "Hourglasses Recorded",
+							name = "已记录沙漏",
 							uuid = "7576abdb-2c92-5853-a0cd-db0388b8f0a7",
 							version = 3,
 						},
@@ -11508,7 +11508,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nlocal entPos = ent.pos\nlocal recordedInfo = data.p3URHourglassRotations\nlocal closestRotation\nfor i = 1, 3 do\n    local info = recordedInfo[i]\n    if (info == nil) then break end\n    local d = TensorCore.getDistance2d(info.pos, entPos)\n    if (d < 3) then\n        closestRotation = info.rotation\n        break\n    end\nend\n\nif (closestRotation == nil) then\n    MuAiGuide.Reactions.log(\"[Draw Beam Rotations] Couldn't find closest rotation info for entity ID \" .. eventArgs.entityID, 5)\n    self.used = true\n    return\nend\n\nlocal angleIncrease = math.rad(15)\nif (closestRotation == 1233) then\n    angleIncrease = -angleIncrease\nend\n\nlocal drawTime = 2000\nlocal initH = eventArgs.heading + angleIncrease\nlocal x = entPos.x\nlocal z = entPos.z\n\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedRect(drawTime, x, 0.05, z, 40, 5, initH, nil, false, nil, 256)\nlocal baseMechTime = 2040\nlocal incrementTime = 1050\n\nfor i = 1, 8 do\n    local timeToMech = baseMechTime + (incrementTime * i)\n    local delayTime = timeToMech - drawTime\n    local h = initH + (angleIncrease * i)\n    drawer:addTimedRect(drawTime, x, 0.05, z, 40, 5, h, delayTime, false, nil, 256)\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nlocal entityPosition = ent.pos\nlocal recordedInfo = data.p3URHourglassRotations\nlocal closestRotation\nfor i = 1, 3 do\n    local info = recordedInfo[i]\n    if info == nil then\n        break\n    end\n    local distance = TensorCore.getDistance2d(info.pos, entityPosition)\n    if distance < 3 then\n        closestRotation = info.rotation\n        break\n    end\nend\n\nif closestRotation == nil then\n    MuAiGuide.Reactions.log(\n        \"[FRU/沙漏旋转] 未匹配旋转记录, 实体ID: \" .. eventArgs.entityID,\n        5\n    )\n    self.used = true\n    return\nend\n\nlocal angleIncrease = math.rad(15)\nif closestRotation == 1233 then\n    angleIncrease = -angleIncrease\nend\n\nlocal durationMs = 2000\nlocal initH = eventArgs.heading + angleIncrease\nlocal x = entityPosition.x\nlocal z = entityPosition.z\n\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedRect(durationMs, x, 0.05, z, 40, 5, initH, nil, false, nil, 256)\nlocal baseMechTime = 2040\nlocal incrementTime = 1050\n\nfor i = 1, 8 do\n    local timeToMech = baseMechTime + (incrementTime * i)\n    local delayMs = timeToMech - durationMs\n    local h = initH + (angleIncrease * i)\n    drawer:addTimedRect(durationMs, x, 0.05, z, 40, 5, h, delayMs, false, nil, 256)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -11523,7 +11523,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuWHM3_CD",
-							name = "Queue Rotations",
+							name = "显示旋转激光",
 							uuid = "1af54f95-5f52-5150-8d22-e3e90cb9f526",
 							version = 2.1,
 						},
@@ -11539,7 +11539,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40235,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "0c4d0110-5967-56ff-a4dd-1a3b849f8989",
 							version = 3,
 						},
@@ -11551,7 +11551,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p3URHourglassRotations ~= nil",
 							dequeueIfLuaFalse = true,
-							name = "Rotations Recorded",
+							name = "已记录旋转方向",
 							uuid = "9eee3cd5-4806-586f-9d45-d1ce352ffd49",
 							version = 3,
 						},
@@ -11591,7 +11591,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Run Next Step",
+							name = "推进当前步骤",
 							uuid = "5fb9b1a2-75a4-5481-90bf-281216817cb0",
 							version = 2.1,
 						},
@@ -11605,7 +11605,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p3URHelperHasRun == true",
-							name = "Helper Ran",
+							name = "压缩指路已初始化",
 							uuid = "da08351a-b2cd-541b-a913-e950016418ae",
 							version = 3,
 						},
@@ -11655,7 +11655,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Run Next Step",
+							name = "推进当前步骤",
 							uuid = "5fb9b1a2-75a4-5481-90bf-281216817cb0",
 							version = 2.1,
 						},
@@ -11669,7 +11669,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p3URHelperHasRun == true",
-							name = "Helper Ran",
+							name = "压缩指路已初始化",
 							uuid = "da08351a-b2cd-541b-a913-e950016418ae",
 							version = 3,
 						},
@@ -11709,7 +11709,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif (data.p3URHourglassRotations == nil) then\n    ---@type RecordedRotationInfo[]\n    data.p3URHourglassRotations = {}\nend\n\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then\n    MuAiGuide.Reactions.log(\"[UR Hourglass Rotation] Entity ID \" .. eventArgs.entityID .. \" returned nil ent!\", 5)\n    self.used = true\n    return\nend\n\n---@class RecordedRotationInfo\n---@field pos ThreeDimensionalPos\n---@field rotation integer\n\n---@type ThreeDimensionalPos\nlocal pos = { x = ent.pos.x, y = 0, z = ent.pos.z }\nlocal rotInfo = { pos = pos, rotation = eventArgs.newActiveAura1 }\ntable.insert(data.p3URHourglassRotations, rotInfo)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif data.p3URHourglassRotations == nil then\n    ---@type FruRecordedRotationInfo[]\n    data.p3URHourglassRotations = {}\nend\n\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    MuAiGuide.Reactions.log(\"[FRU/沙漏旋转] 实体ID\" .. eventArgs.entityID .. \"的实体暂不可读。\", 5)\n    self.used = true\n    return\nend\n\n---@class FruRecordedRotationInfo\n---@field pos ThreeDimensionalPos\n---@field rotation integer\n\n---@type ThreeDimensionalPos\nlocal pos = { x = entity.pos.x, y = 0, z = entity.pos.z }\nlocal rotInfo = { pos = pos, rotation = eventArgs.newActiveAura1 }\ntable.insert(data.p3URHourglassRotations, rotInfo)\nself.used = true",
 							conditions = 
 							{
 								
@@ -11724,7 +11724,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Rotation",
+							name = "记录旋转方向",
 							uuid = "6a5cc725-c871-524f-a6ef-67670c03e3e0",
 							version = 2.1,
 						},
@@ -11741,7 +11741,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 9825,
-							name = "Valid ContentID",
+							name = "实体类型匹配",
 							uuid = "75b72545-fb95-5ad4-a9c1-ce8f539ee62d",
 							version = 3,
 						},
@@ -11767,7 +11767,7 @@ local tbl =
 							},
 							dequeueIfLuaFalse = true,
 							matchAnyBuff = true,
-							name = "Valid Aura",
+							name = "光环类型匹配",
 							partyTargetNumber = 0,
 							uuid = "23a07897-0433-5264-950f-2455327cf360",
 							version = 3,
@@ -11826,7 +11826,7 @@ local tbl =
 							aType = "Lua",
 							actionLua = "data.p3URHourglassRotations = nil\nself.used = true",
 							gVar = "ACR_RikuWHM3_CD",
-							name = "Reset Beam Info",
+							name = "重置激光记录",
 							uuid = "1c3753b3-9da4-58db-8542-4bcfc360b4b1",
 							version = 2.1,
 						},
@@ -11865,7 +11865,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then\n    MuAiGuide.Reactions.log(\"[UR Hourglass Rotation] Entity ID \" .. eventArgs.entityID .. \" returned nil ent!\", 5)\n    self.used = true\n    return\nend\nif (data.arenaCenter == nil) then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\n\nlocal h = TensorCore.getHeadingToTarget(data.arenaCenter, ent.pos)\nlocal adjustH = math.rad(65)\nif (eventArgs.newActiveAura1 == 1032) then\n    adjustH = -adjustH\nend\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedArrow(5000, ent.pos.x, 0.05, ent.pos.z, h + adjustH, 3, 0.25, nil, nil, 0, false, 256)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    MuAiGuide.Reactions.log(\"[FRU/沙漏旋转] 实体ID\" .. eventArgs.entityID .. \"的实体暂不可读。\", 5)\n    self.used = true\n    return\nend\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\n\nlocal heading = TensorCore.getHeadingToTarget(data.arenaCenter, entity.pos)\nlocal headingOffset = math.rad(65)\nif eventArgs.newActiveAura1 == 1032 then\n    headingOffset = -headingOffset\nend\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedArrow(\n    5000,\n    entity.pos.x,\n    0.05,\n    entity.pos.z,\n    heading + headingOffset,\n    3,\n    0.25,\n    nil,\n    nil,\n    0,\n    false,\n    256\n)\nself.used = true",
 							conditions = 
 							{
 								
@@ -11880,7 +11880,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Bait Arrow",
+							name = "显示诱导方向",
 							uuid = "6a5cc725-c871-524f-a6ef-67670c03e3e0",
 							version = 2.1,
 						},
@@ -11897,7 +11897,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 9825,
-							name = "Valid ContentID",
+							name = "实体类型匹配",
 							uuid = "75b72545-fb95-5ad4-a9c1-ce8f539ee62d",
 							version = 3,
 						},
@@ -11923,7 +11923,7 @@ local tbl =
 							},
 							dequeueIfLuaFalse = true,
 							matchAnyBuff = true,
-							name = "Valid Aura",
+							name = "光环类型匹配",
 							partyTargetNumber = 0,
 							uuid = "23a07897-0433-5264-950f-2455327cf360",
 							version = 3,
@@ -11980,7 +11980,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal hourglassInfo = data.p3URHourglassRotations\nlocal partyIDs = data.partyIDArray\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal frameEntities\nfor hourglassIndex = 1, 3 do\n    local info = hourglassInfo[hourglassIndex]\n    if (info == nil) then break end -- Sometimes only two hourglasses are going at once.\n    if frameEntities == nil then\n        local scratch = data.StringFRU_MeltdownEntities\n        if scratch == nil then\n            scratch = {}\n            data.StringFRU_MeltdownEntities = scratch\n        end\n        for i = 1, 8 do\n            scratch[i] = TensorCore.mGetEntity(partyIDs[i])\n        end\n        frameEntities = scratch\n    end\n    ---@type ThreeDimensionalPos\n    local hourglassPos = info.pos\n    local bestDistance = 999\n    local bestID = nil\n    local bestPos = nil\n\n    for i = 1, 8 do\n        local ent = frameEntities[i]\n        if (ent ~= nil and ent.alive) then\n            local d = TensorCore.getDistance2d(ent.pos, hourglassPos)\n            if (d < bestDistance) then\n                bestDistance = d\n                bestID = partyIDs[i]\n                bestPos = ent.pos\n            end\n        end\n    end\n\n    if (bestID ~= nil) then\n        local h = TensorCore.getHeadingToTarget(hourglassPos, bestPos)\n        drawer:addRect(hourglassPos.x, 0.05, hourglassPos.z, 40, 5, h, false, 256)\n    end\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal hourglassInfo = data.p3URHourglassRotations\nlocal partyIDs = data.partyIDArray\nif partyIDs == nil then\n    -- 跳转或前置尚未完成时, 仅本次激光使用当前完整队伍, 不回写共享开场记录。\n    local fallback = data.StringFRU_MeltdownParty\n    if fallback == nil then\n        fallback = { ids = {}, seen = {}, options = { noAliveCheck = true } }\n        data.StringFRU_MeltdownParty = fallback\n    end\n    local party = TensorCore.getEntityGroupList(\"Party\", fallback.options)\n    local ids, seen = fallback.ids, fallback.seen\n    for id in pairs(seen) do\n        seen[id] = nil\n    end\n    local count = 0\n    if party then\n        for _, member in pairs(party) do\n            local id = type(member) == \"table\" and member.id or member\n            if type(id) == \"number\" and id > 0 and not seen[id] then\n                seen[id] = true\n                count = count + 1\n                ids[count] = id\n            end\n        end\n    end\n    for i = count + 1, #ids do\n        ids[i] = nil\n    end\n    if count ~= 8 then\n        self.used = true\n        return\n    end\n    table.sort(ids)\n    partyIDs = ids\nend\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal framePositions\nfor hourglassIndex = 1, 3 do\n    local info = hourglassInfo[hourglassIndex]\n    if info == nil then\n        break\n    end -- 部分轮次仅有两个沙漏。\n    if framePositions == nil then\n        local scratch = data.StringFRU_MeltdownPositions\n        if scratch == nil then\n            scratch = {}\n            data.StringFRU_MeltdownPositions = scratch\n        end\n        for i = 1, 8 do\n            local entity = TensorCore.mGetEntity(partyIDs[i])\n            scratch[i] = entity ~= nil and entity.alive and entity.pos or nil\n        end\n        framePositions = scratch\n    end\n    ---@type ThreeDimensionalPos\n    local hourglassPos = info.pos\n    local nearestDistance = 999\n    local nearestId = nil\n    local nearestPosition = nil\n\n    for i = 1, 8 do\n        local position = framePositions[i]\n        if position ~= nil then\n            local distance = TensorCore.getDistance2d(position, hourglassPos)\n            if distance < nearestDistance then\n                nearestDistance = distance\n                nearestId = partyIDs[i]\n                nearestPosition = position\n            end\n        end\n    end\n\n    if nearestId ~= nil then\n        local heading = TensorCore.getHeadingToTarget(hourglassPos, nearestPosition)\n        drawer:addRect(hourglassPos.x, 0.05, hourglassPos.z, 40, 5, heading, false, 256)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -11990,7 +11990,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuWHM3_CD",
-							name = "Draw Meltdown Baits",
+							name = "显示激光诱导范围",
 							uuid = "7099ec23-9444-500f-9c42-59949d4f4541",
 							version = 2.1,
 						},
@@ -12005,7 +12005,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p3URHourglassRotations ~= nil",
 							dequeueIfLuaFalse = true,
-							name = "Hourglasses Recorded",
+							name = "已记录沙漏",
 							uuid = "7576abdb-2c92-5853-a0cd-db0388b8f0a7",
 							version = 3,
 						},
@@ -12034,7 +12034,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nlocal entPos = ent.pos\nlocal recordedInfo = data.p3URHourglassRotations\nlocal closestRotation\nfor i = 1, 3 do\n    local info = recordedInfo[i]\n    if (info == nil) then break end\n    local d = TensorCore.getDistance2d(info.pos, entPos)\n    if (d < 3) then\n        closestRotation = info.rotation\n        break\n    end\nend\n\nif (closestRotation == nil) then\n    MuAiGuide.Reactions.log(\"[Draw Beam Rotations] Couldn't find closest rotation info for entity ID \" .. eventArgs.entityID, 5)\n    self.used = true\n    return\nend\n\nlocal angleIncrease = math.rad(15)\nif (closestRotation == 1233) then\n    angleIncrease = -angleIncrease\nend\n\nlocal drawTime = 2000\nlocal initH = eventArgs.heading + angleIncrease\nlocal x = entPos.x\nlocal z = entPos.z\n\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedRect(drawTime, x, 0.05, z, 40, 5, initH, nil, false, nil, 256)\nlocal baseMechTime = 2040\nlocal incrementTime = 1050\n\nfor i = 1, 8 do\n    local timeToMech = baseMechTime + (incrementTime * i)\n    local delayTime = timeToMech - drawTime\n    local h = initH + (angleIncrease * i)\n    drawer:addTimedRect(drawTime, x, 0.05, z, 40, 5, h, delayTime, false, nil, 256)\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nlocal entityPosition = ent.pos\nlocal recordedInfo = data.p3URHourglassRotations\nlocal closestRotation\nfor i = 1, 3 do\n    local info = recordedInfo[i]\n    if info == nil then\n        break\n    end\n    local distance = TensorCore.getDistance2d(info.pos, entityPosition)\n    if distance < 3 then\n        closestRotation = info.rotation\n        break\n    end\nend\n\nif closestRotation == nil then\n    MuAiGuide.Reactions.log(\n        \"[FRU/沙漏旋转] 未匹配旋转记录, 实体ID: \" .. eventArgs.entityID,\n        5\n    )\n    self.used = true\n    return\nend\n\nlocal angleIncrease = math.rad(15)\nif closestRotation == 1233 then\n    angleIncrease = -angleIncrease\nend\n\nlocal durationMs = 2000\nlocal initH = eventArgs.heading + angleIncrease\nlocal x = entityPosition.x\nlocal z = entityPosition.z\n\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedRect(durationMs, x, 0.05, z, 40, 5, initH, nil, false, nil, 256)\nlocal baseMechTime = 2040\nlocal incrementTime = 1050\n\nfor i = 1, 8 do\n    local timeToMech = baseMechTime + (incrementTime * i)\n    local delayMs = timeToMech - durationMs\n    local h = initH + (angleIncrease * i)\n    drawer:addTimedRect(durationMs, x, 0.05, z, 40, 5, h, delayMs, false, nil, 256)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -12049,7 +12049,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuWHM3_CD",
-							name = "Queue Rotations",
+							name = "显示旋转激光",
 							uuid = "1af54f95-5f52-5150-8d22-e3e90cb9f526",
 							version = 2.1,
 						},
@@ -12065,7 +12065,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40235,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "0c4d0110-5967-56ff-a4dd-1a3b849f8989",
 							version = 3,
 						},
@@ -12077,7 +12077,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p3URHourglassRotations ~= nil",
 							dequeueIfLuaFalse = true,
-							name = "Rotations Recorded",
+							name = "已记录旋转方向",
 							uuid = "9eee3cd5-4806-586f-9d45-d1ce352ffd49",
 							version = 3,
 						},
@@ -12117,7 +12117,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Run Next Step",
+							name = "推进当前步骤",
 							uuid = "5fb9b1a2-75a4-5481-90bf-281216817cb0",
 							version = 2.1,
 						},
@@ -12131,7 +12131,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p3URHelperHasRun == true",
-							name = "Helper Ran",
+							name = "压缩指路已初始化",
 							uuid = "da08351a-b2cd-541b-a913-e950016418ae",
 							version = 3,
 						},
@@ -12181,7 +12181,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Run Next Step",
+							name = "推进当前步骤",
 							uuid = "5fb9b1a2-75a4-5481-90bf-281216817cb0",
 							version = 2.1,
 						},
@@ -12195,7 +12195,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p3URHelperHasRun == true",
-							name = "Helper Ran",
+							name = "压缩指路已初始化",
 							uuid = "da08351a-b2cd-541b-a913-e950016418ae",
 							version = 3,
 						},
@@ -12235,7 +12235,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif (data.p3URHourglassRotations == nil) then\n    ---@type RecordedRotationInfo[]\n    data.p3URHourglassRotations = {}\nend\n\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then\n    MuAiGuide.Reactions.log(\"[UR Hourglass Rotation] Entity ID \" .. eventArgs.entityID .. \" returned nil ent!\", 5)\n    self.used = true\n    return\nend\n\n---@class RecordedRotationInfo\n---@field pos ThreeDimensionalPos\n---@field rotation integer\n\n---@type ThreeDimensionalPos\nlocal pos = { x = ent.pos.x, y = 0, z = ent.pos.z }\nlocal rotInfo = { pos = pos, rotation = eventArgs.newActiveAura1 }\ntable.insert(data.p3URHourglassRotations, rotInfo)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif data.p3URHourglassRotations == nil then\n    ---@type FruRecordedRotationInfo[]\n    data.p3URHourglassRotations = {}\nend\n\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    MuAiGuide.Reactions.log(\"[FRU/沙漏旋转] 实体ID\" .. eventArgs.entityID .. \"的实体暂不可读。\", 5)\n    self.used = true\n    return\nend\n\n---@class FruRecordedRotationInfo\n---@field pos ThreeDimensionalPos\n---@field rotation integer\n\n---@type ThreeDimensionalPos\nlocal pos = { x = entity.pos.x, y = 0, z = entity.pos.z }\nlocal rotInfo = { pos = pos, rotation = eventArgs.newActiveAura1 }\ntable.insert(data.p3URHourglassRotations, rotInfo)\nself.used = true",
 							conditions = 
 							{
 								
@@ -12250,7 +12250,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Rotation",
+							name = "记录旋转方向",
 							uuid = "6a5cc725-c871-524f-a6ef-67670c03e3e0",
 							version = 2.1,
 						},
@@ -12267,7 +12267,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 9825,
-							name = "Valid ContentID",
+							name = "实体类型匹配",
 							uuid = "75b72545-fb95-5ad4-a9c1-ce8f539ee62d",
 							version = 3,
 						},
@@ -12293,7 +12293,7 @@ local tbl =
 							},
 							dequeueIfLuaFalse = true,
 							matchAnyBuff = true,
-							name = "Valid Aura",
+							name = "光环类型匹配",
 							partyTargetNumber = 0,
 							uuid = "23a07897-0433-5264-950f-2455327cf360",
 							version = 3,
@@ -12352,7 +12352,7 @@ local tbl =
 							aType = "Lua",
 							actionLua = "data.p3URHourglassRotations = nil\nself.used = true",
 							gVar = "ACR_RikuWHM3_CD",
-							name = "Reset Beam Info",
+							name = "重置激光记录",
 							uuid = "1c3753b3-9da4-58db-8542-4bcfc360b4b1",
 							version = 2.1,
 						},
@@ -12391,7 +12391,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nif (ent == nil) then\n    MuAiGuide.Reactions.log(\"[UR Hourglass Rotation] Entity ID \" .. eventArgs.entityID .. \" returned nil ent!\", 5)\n    self.used = true\n    return\nend\nif (data.arenaCenter == nil) then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\n\nlocal h = TensorCore.getHeadingToTarget(data.arenaCenter, ent.pos)\nlocal adjustH = math.rad(65)\nif (eventArgs.newActiveAura1 == 1032) then\n    adjustH = -adjustH\nend\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedArrow(5000, ent.pos.x, 0.05, ent.pos.z, h + adjustH, 3, 0.25, nil, nil, 0, false, 256)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\nif entity == nil then\n    MuAiGuide.Reactions.log(\"[FRU/沙漏旋转] 实体ID\" .. eventArgs.entityID .. \"的实体暂不可读。\", 5)\n    self.used = true\n    return\nend\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\n\nlocal heading = TensorCore.getHeadingToTarget(data.arenaCenter, entity.pos)\nlocal headingOffset = math.rad(65)\nif eventArgs.newActiveAura1 == 1032 then\n    headingOffset = -headingOffset\nend\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedArrow(\n    5000,\n    entity.pos.x,\n    0.05,\n    entity.pos.z,\n    heading + headingOffset,\n    3,\n    0.25,\n    nil,\n    nil,\n    0,\n    false,\n    256\n)\nself.used = true",
 							conditions = 
 							{
 								
@@ -12406,7 +12406,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Bait Arrow",
+							name = "显示诱导方向",
 							uuid = "6a5cc725-c871-524f-a6ef-67670c03e3e0",
 							version = 2.1,
 						},
@@ -12423,7 +12423,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 9825,
-							name = "Valid ContentID",
+							name = "实体类型匹配",
 							uuid = "75b72545-fb95-5ad4-a9c1-ce8f539ee62d",
 							version = 3,
 						},
@@ -12449,7 +12449,7 @@ local tbl =
 							},
 							dequeueIfLuaFalse = true,
 							matchAnyBuff = true,
-							name = "Valid Aura",
+							name = "光环类型匹配",
 							partyTargetNumber = 0,
 							uuid = "23a07897-0433-5264-950f-2455327cf360",
 							version = 3,
@@ -12506,7 +12506,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal hourglassInfo = data.p3URHourglassRotations\nlocal partyIDs = data.partyIDArray\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal frameEntities\nfor hourglassIndex = 1, 3 do\n    local info = hourglassInfo[hourglassIndex]\n    if (info == nil) then break end -- Sometimes only two hourglasses are going at once.\n    if frameEntities == nil then\n        local scratch = data.StringFRU_MeltdownEntities\n        if scratch == nil then\n            scratch = {}\n            data.StringFRU_MeltdownEntities = scratch\n        end\n        for i = 1, 8 do\n            scratch[i] = TensorCore.mGetEntity(partyIDs[i])\n        end\n        frameEntities = scratch\n    end\n    ---@type ThreeDimensionalPos\n    local hourglassPos = info.pos\n    local bestDistance = 999\n    local bestID = nil\n    local bestPos = nil\n\n    for i = 1, 8 do\n        local ent = frameEntities[i]\n        if (ent ~= nil and ent.alive) then\n            local d = TensorCore.getDistance2d(ent.pos, hourglassPos)\n            if (d < bestDistance) then\n                bestDistance = d\n                bestID = partyIDs[i]\n                bestPos = ent.pos\n            end\n        end\n    end\n\n    if (bestID ~= nil) then\n        local h = TensorCore.getHeadingToTarget(hourglassPos, bestPos)\n        drawer:addRect(hourglassPos.x, 0.05, hourglassPos.z, 40, 5, h, false, 256)\n    end\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal hourglassInfo = data.p3URHourglassRotations\nlocal partyIDs = data.partyIDArray\nif partyIDs == nil then\n    -- 跳转或前置尚未完成时, 仅本次激光使用当前完整队伍, 不回写共享开场记录。\n    local fallback = data.StringFRU_MeltdownParty\n    if fallback == nil then\n        fallback = { ids = {}, seen = {}, options = { noAliveCheck = true } }\n        data.StringFRU_MeltdownParty = fallback\n    end\n    local party = TensorCore.getEntityGroupList(\"Party\", fallback.options)\n    local ids, seen = fallback.ids, fallback.seen\n    for id in pairs(seen) do\n        seen[id] = nil\n    end\n    local count = 0\n    if party then\n        for _, member in pairs(party) do\n            local id = type(member) == \"table\" and member.id or member\n            if type(id) == \"number\" and id > 0 and not seen[id] then\n                seen[id] = true\n                count = count + 1\n                ids[count] = id\n            end\n        end\n    end\n    for i = count + 1, #ids do\n        ids[i] = nil\n    end\n    if count ~= 8 then\n        self.used = true\n        return\n    end\n    table.sort(ids)\n    partyIDs = ids\nend\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal framePositions\nfor hourglassIndex = 1, 3 do\n    local info = hourglassInfo[hourglassIndex]\n    if info == nil then\n        break\n    end -- 部分轮次仅有两个沙漏。\n    if framePositions == nil then\n        local scratch = data.StringFRU_MeltdownPositions\n        if scratch == nil then\n            scratch = {}\n            data.StringFRU_MeltdownPositions = scratch\n        end\n        for i = 1, 8 do\n            local entity = TensorCore.mGetEntity(partyIDs[i])\n            scratch[i] = entity ~= nil and entity.alive and entity.pos or nil\n        end\n        framePositions = scratch\n    end\n    ---@type ThreeDimensionalPos\n    local hourglassPos = info.pos\n    local nearestDistance = 999\n    local nearestId = nil\n    local nearestPosition = nil\n\n    for i = 1, 8 do\n        local position = framePositions[i]\n        if position ~= nil then\n            local distance = TensorCore.getDistance2d(position, hourglassPos)\n            if distance < nearestDistance then\n                nearestDistance = distance\n                nearestId = partyIDs[i]\n                nearestPosition = position\n            end\n        end\n    end\n\n    if nearestId ~= nil then\n        local heading = TensorCore.getHeadingToTarget(hourglassPos, nearestPosition)\n        drawer:addRect(hourglassPos.x, 0.05, hourglassPos.z, 40, 5, heading, false, 256)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -12516,7 +12516,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuWHM3_CD",
-							name = "Draw Meltdown Baits",
+							name = "显示激光诱导范围",
 							uuid = "7099ec23-9444-500f-9c42-59949d4f4541",
 							version = 2.1,
 						},
@@ -12531,7 +12531,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p3URHourglassRotations ~= nil",
 							dequeueIfLuaFalse = true,
-							name = "Hourglasses Recorded",
+							name = "已记录沙漏",
 							uuid = "7576abdb-2c92-5853-a0cd-db0388b8f0a7",
 							version = 3,
 						},
@@ -12560,7 +12560,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nlocal entPos = ent.pos\nlocal recordedInfo = data.p3URHourglassRotations\nlocal closestRotation\nfor i = 1, 3 do\n    local info = recordedInfo[i]\n    if (info == nil) then break end\n    local d = TensorCore.getDistance2d(info.pos, entPos)\n    if (d < 3) then\n        closestRotation = info.rotation\n        break\n    end\nend\n\nif (closestRotation == nil) then\n    MuAiGuide.Reactions.log(\"[Draw Beam Rotations] Couldn't find closest rotation info for entity ID \" .. eventArgs.entityID, 5)\n    self.used = true\n    return\nend\n\nlocal angleIncrease = math.rad(15)\nif (closestRotation == 1233) then\n    angleIncrease = -angleIncrease\nend\n\nlocal drawTime = 2000\nlocal initH = eventArgs.heading + angleIncrease\nlocal x = entPos.x\nlocal z = entPos.z\n\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedRect(drawTime, x, 0.05, z, 40, 5, initH, nil, false, nil, 256)\nlocal baseMechTime = 2040\nlocal incrementTime = 1050\n\nfor i = 1, 8 do\n    local timeToMech = baseMechTime + (incrementTime * i)\n    local delayTime = timeToMech - drawTime\n    local h = initH + (angleIncrease * i)\n    drawer:addTimedRect(drawTime, x, 0.05, z, 40, 5, h, delayTime, false, nil, 256)\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\nlocal entityPosition = ent.pos\nlocal recordedInfo = data.p3URHourglassRotations\nlocal closestRotation\nfor i = 1, 3 do\n    local info = recordedInfo[i]\n    if info == nil then\n        break\n    end\n    local distance = TensorCore.getDistance2d(info.pos, entityPosition)\n    if distance < 3 then\n        closestRotation = info.rotation\n        break\n    end\nend\n\nif closestRotation == nil then\n    MuAiGuide.Reactions.log(\n        \"[FRU/沙漏旋转] 未匹配旋转记录, 实体ID: \" .. eventArgs.entityID,\n        5\n    )\n    self.used = true\n    return\nend\n\nlocal angleIncrease = math.rad(15)\nif closestRotation == 1233 then\n    angleIncrease = -angleIncrease\nend\n\nlocal durationMs = 2000\nlocal initH = eventArgs.heading + angleIncrease\nlocal x = entityPosition.x\nlocal z = entityPosition.z\n\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedRect(durationMs, x, 0.05, z, 40, 5, initH, nil, false, nil, 256)\nlocal baseMechTime = 2040\nlocal incrementTime = 1050\n\nfor i = 1, 8 do\n    local timeToMech = baseMechTime + (incrementTime * i)\n    local delayMs = timeToMech - durationMs\n    local h = initH + (angleIncrease * i)\n    drawer:addTimedRect(durationMs, x, 0.05, z, 40, 5, h, delayMs, false, nil, 256)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -12575,7 +12575,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuWHM3_CD",
-							name = "Queue Rotations",
+							name = "显示旋转激光",
 							uuid = "1af54f95-5f52-5150-8d22-e3e90cb9f526",
 							version = 2.1,
 						},
@@ -12591,7 +12591,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40235,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "0c4d0110-5967-56ff-a4dd-1a3b849f8989",
 							version = 3,
 						},
@@ -12603,7 +12603,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p3URHourglassRotations ~= nil",
 							dequeueIfLuaFalse = true,
-							name = "Rotations Recorded",
+							name = "已记录旋转方向",
 							uuid = "9eee3cd5-4806-586f-9d45-d1ce352ffd49",
 							version = 3,
 						},
@@ -12646,7 +12646,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local playerPos = TensorCore.mGetPlayer().pos\ndata.p3RewindPos = playerPos\nif (data.arenaCenter == nil) then data.arenaCenter = { x = 100, y = 0, z = 100 } end\ndata.p3RewindHeading = TensorCore.getHeadingToTarget(data.arenaCenter, playerPos)\nself.used = true",
+							actionLua = "local playerPos = TensorCore.mGetPlayer().pos\ndata.p3RewindPos = playerPos\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\ndata.p3RewindHeading = TensorCore.getHeadingToTarget(data.arenaCenter, playerPos)\nself.used = true",
 							conditions = 
 							{
 								
@@ -12657,7 +12657,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Set Rewind Spot",
+							name = "记录回返位置",
 							uuid = "51be74ac-a28f-5e0d-b188-2959a777729b",
 							version = 2.1,
 						},
@@ -12673,7 +12673,7 @@ local tbl =
 							buffID = 2452,
 							category = "Self",
 							comparator = 2,
-							name = "Has Return",
+							name = "持有回返",
 							uuid = "9bd282fe-736e-5a9e-b1fb-33633c088962",
 							version = 3,
 						},
@@ -12711,7 +12711,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Enable Lockface",
+							name = "开启锁定朝向",
 							uuid = "feff9ea1-de3e-5a49-ad2a-4ed43f1bfa11",
 							version = 2.1,
 						},
@@ -12729,7 +12729,7 @@ local tbl =
 							buffID = 2452,
 							category = "Self",
 							comparator = 2,
-							name = "Rewind Duration",
+							name = "回返剩余时间",
 							uuid = "baccb841-2a72-5509-9dfa-c6d8405f6bdc",
 							version = 3,
 						},
@@ -12767,7 +12767,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Force Lockface",
+							name = "保持锁定朝向",
 							uuid = "6ce26b84-5ce5-5a1c-8eb0-a5daa40f28a4",
 							version = 2.1,
 						},
@@ -12785,7 +12785,7 @@ local tbl =
 							buffID = 2452,
 							category = "Self",
 							comparator = 2,
-							name = "Short Rewind Duration",
+							name = "回返即将结算",
 							uuid = "7cb67de8-c7d1-5665-bd27-426e5944e267",
 							version = 3,
 						},
@@ -12815,7 +12815,7 @@ local tbl =
 							aType = "Lua",
 							actionLua = "TensorCore.API.TensorACR.toggleLockFace(false)\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Stop Lockface",
+							name = "关闭锁定朝向",
 							uuid = "27caf3f6-154d-5b96-9451-a3744aeac229",
 							version = 2.1,
 						},
@@ -12917,7 +12917,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Throttle",
+							name = "执行间隔",
 							uuid = "56c19fa9-e9f3-5b6d-8403-4d3a24e5a20e",
 							version = 2.1,
 						},
@@ -12928,7 +12928,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- Waters can appear on dead people, so we can't use grouplist func.\nlocal party = TensorCore.entityList(\"type=1\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal textTime = (651.2 - TensorReactions_CurrentTimer) * 1000\nlocal waterID = 2461\nlocal playerID = TensorCore.mGetPlayer().id\nlocal playerWater = TensorCore.getBuff(playerID, waterID)\nlocal playerDuration = 0\nif (playerWater ~= nil) then\n    playerDuration = playerWater.duration\nend\n\n---@param ent GameObject\n---@return boolean\nlocal function checkWater(ent)\n    if (ent.contentid ~= 0) then return false end\n    local entID = ent.id\n    if (entID == playerID) then return false end\n    local waterBuff = TensorCore.getBuff(entID, waterID)\n    local waterDuration = 0\n    if (waterBuff ~= nil) then\n        waterDuration = waterBuff.duration\n     end\n    local durDiff = math.abs(waterDuration - playerDuration)\n    if (durDiff > 3) then return false end\n    local jobID = ent.job\n    local roleString\n    if (MuAiGuide.Reactions.meleeJobs[jobID]) then\n        roleString = \"(M)\"\n    elseif (MuAiGuide.Reactions.rangedJobs[jobID]) then\n        roleString = \"(R)\"\n    elseif (MuAiGuide.Reactions.healJobs[jobID]) then\n        roleString = \"(H)\"\n    else\n        roleString = \"(T)\"\n    end\n    MuAiGuide.Reactions.addTimedWorldTextOnEnt(textTime, \"Water \" .. roleString, entID, 4176318006, true, 2, 1.5)\n    return true\nend\n\nfor _, ent in pairs(party) do\n    if (checkWater(ent)) then break end\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 水点名可能留在死亡玩家身上, 保留包含死亡实体的查询。\nlocal party = TensorCore.entityList(\"type=1\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal textDurationMs = (651.2 - TensorReactions_CurrentTimer) * 1000\nlocal waterID = 2461\nlocal playerId = TensorCore.mGetPlayer().id\nlocal playerWater = TensorCore.getBuff(playerId, waterID)\nlocal playerDuration = 0\nif playerWater ~= nil then\n    playerDuration = playerWater.duration\nend\n\n---@param ent GameObject\n---@return boolean\nlocal function checkWater(entity)\n    if entity.contentid ~= 0 then\n        return false\n    end\n    local entityId = entity.id\n    if entityId == playerId then\n        return false\n    end\n    local waterBuff = TensorCore.getBuff(entityId, waterID)\n    local waterDuration = 0\n    if waterBuff ~= nil then\n        waterDuration = waterBuff.duration\n    end\n    local durDiff = math.abs(waterDuration - playerDuration)\n    if durDiff > 3 then\n        return false\n    end\n    local jobId = entity.job\n    local roleString\n    if MuAiGuide.Reactions.meleeJobs[jobId] then\n        roleString = \"(M)\"\n    elseif MuAiGuide.Reactions.rangedJobs[jobId] then\n        roleString = \"(R)\"\n    elseif MuAiGuide.Reactions.healJobs[jobId] then\n        roleString = \"(H)\"\n    else\n        roleString = \"(T)\"\n    end\n    MuAiGuide.Reactions.addTimedWorldTextOnEnt(\n        textDurationMs,\n        \"Water \" .. roleString,\n        entityId,\n        4176318006,\n        true,\n        2,\n        1.5\n    )\n    return true\nend\n\nfor _, entity in pairs(party) do\n    if checkWater(entity) then\n        break\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -12944,7 +12944,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDNC3_CD",
-							name = "WorldText Other Water",
+							name = "标注同类水点名",
 							uuid = "0455639c-5f3c-5f01-bb87-32a900a18e37",
 							version = 2.1,
 						},
@@ -12958,7 +12958,7 @@ local tbl =
 						{
 							buffID = 2461,
 							category = "Party",
-							name = "Waters Exist In Party",
+							name = "队伍中存在水点名",
 							partyTargetNumber = 2,
 							partyTargetSubType = "Number",
 							uuid = "ce188fe9-e3cc-54d3-ab80-c496db9d5b65",
@@ -12972,7 +12972,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruApocWaterSwapLabel == 1",
 							dequeueIfLuaFalse = true,
-							name = "Check Settings",
+							name = "设置条件",
 							uuid = "7cf37c46-c6db-5880-a62c-7fb1a70b9084",
 							version = 3,
 						},
@@ -13016,7 +13016,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Throttle",
+							name = "执行间隔",
 							uuid = "56c19fa9-e9f3-5b6d-8403-4d3a24e5a20e",
 							version = 2.1,
 						},
@@ -13027,7 +13027,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- revamp\nlocal waterID = 2461\nlocal playerID = MuAiGuide.Reactions.playerID()\nlocal playerWater = TensorCore.getBuff(playerID, waterID)\nlocal playerDuration = 0\nif (playerWater ~= nil) then\n    playerDuration = playerWater.duration\nend\n\nlocal party = MuAiGuide.Reactions.partyInfo()\nfor i=1, #party do\n    local ent = party[i]\n    local waterBuff = TensorCore.getBuff(ent.id, waterID)\n    local waterDuration = waterBuff and waterBuff.duration or 0\n    local roleString\n    if MuAiGuide.Reactions.isSupport(ent.job) then roleString = \"(S)\" end\n    if MuAiGuide.Reactions.isDPS(ent.job) then roleString = \"(D)\" end\n\n    local timer = 7000\n\n    local durDiff = math.abs(waterDuration - playerDuration)\n    if playerID ~= ent.id and durDiff < 3 then\n        timer = waterDuration * 1000\n    end\n\n    if waterBuff == nil or waterDuration == 0 then\n        MuAiGuide.Reactions.addTimedWorldTextOnEnt(timer, \"None \" .. roleString, ent.id, 4294244596, true, 2, 1)\n    elseif waterDuration <= 11 then\n        MuAiGuide.Reactions.addTimedWorldTextOnEnt(timer, \"1st \" .. roleString, ent.id, 4281130284, true, 2, 1)\n    elseif waterDuration <= 31 then\n        MuAiGuide.Reactions.addTimedWorldTextOnEnt(timer, \"2nd \" .. roleString, ent.id, 4281414112, true, 2, 1)\n    elseif waterDuration <= 41 then\n        MuAiGuide.Reactions.addTimedWorldTextOnEnt(timer, \"3rd \" .. roleString, ent.id, 4279758051, true, 2, 1)\n    end\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal waterID = 2461\nlocal playerId = MuAiGuide.Reactions.playerID()\nlocal playerWater = TensorCore.getBuff(playerId, waterID)\nlocal playerDuration = 0\nif playerWater ~= nil then\n    playerDuration = playerWater.duration\nend\n\nlocal party = MuAiGuide.Reactions.partyInfo()\nfor i = 1, #party do\n    local entity = party[i]\n    local waterBuff = TensorCore.getBuff(entity.id, waterID)\n    local waterDuration = waterBuff and waterBuff.duration or 0\n    local roleString\n    if MuAiGuide.Reactions.isSupport(entity.job) then\n        roleString = \"(S)\"\n    end\n    if MuAiGuide.Reactions.isDPS(entity.job) then\n        roleString = \"(D)\"\n    end\n\n    local timer = 7000\n\n    local durDiff = math.abs(waterDuration - playerDuration)\n    if playerId ~= entity.id and durDiff < 3 then\n        timer = waterDuration * 1000\n    end\n\n    if waterBuff == nil or waterDuration == 0 then\n        MuAiGuide.Reactions.addTimedWorldTextOnEnt(timer, \"None \" .. roleString, entity.id, 4294244596, true, 2, 1)\n    elseif waterDuration <= 11 then\n        MuAiGuide.Reactions.addTimedWorldTextOnEnt(timer, \"1st \" .. roleString, entity.id, 4281130284, true, 2, 1)\n    elseif waterDuration <= 31 then\n        MuAiGuide.Reactions.addTimedWorldTextOnEnt(timer, \"2nd \" .. roleString, entity.id, 4281414112, true, 2, 1)\n    elseif waterDuration <= 41 then\n        MuAiGuide.Reactions.addTimedWorldTextOnEnt(timer, \"3rd \" .. roleString, entity.id, 4279758051, true, 2, 1)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -13043,7 +13043,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDNC3_CD",
-							name = "WorldText All Waters",
+							name = "标注水点名分组",
 							uuid = "0455639c-5f3c-5f01-bb87-32a900a18e37",
 							version = 2.1,
 						},
@@ -13057,7 +13057,7 @@ local tbl =
 						{
 							buffID = 2461,
 							category = "Party",
-							name = "Waters Exist In Party",
+							name = "队伍中存在水点名",
 							partyTargetNumber = 2,
 							partyTargetSubType = "Number",
 							uuid = "ce188fe9-e3cc-54d3-ab80-c496db9d5b65",
@@ -13071,7 +13071,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruApocWaterSwapLabel == 2",
 							dequeueIfLuaFalse = true,
-							name = "Check Settings",
+							name = "设置条件",
 							uuid = "b3f6d22e-10da-52c3-98b6-0fe3221d88bb",
 							version = 3,
 						},
@@ -13110,7 +13110,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Throttle",
+							name = "执行间隔",
 							uuid = "3a6bfbf8-36cb-5542-afb2-7833e5f8306a",
 							version = 2.1,
 						},
@@ -13121,7 +13121,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\n-- Waters can appear on dead people, so we can't use grouplist func.\nlocal party = TensorCore.entityList(\"type=1\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal playerID = TensorCore.mGetPlayer().id\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal drawTime = 3500\n\nlocal waterID = 2461\nfor _, ent in pairs(party) do\n    if (ent.id ~= playerID) then\n        local waterBuff = TensorCore.getBuff(ent.id, waterID)\n        if (waterBuff ~= nil) then\n            local durationMs = waterBuff.duration * 1000\n            local delayTime = durationMs - drawTime\n            local oldDraw = durationMs > 15000 and durationMs < 33000\n            drawer:addTimedCircleOnEnt(drawTime, ent.id, 6, delayTime, false, nil, 256)\n        end\n    end\nend\n\nlocal playerWater = TensorCore.getBuff(playerID, waterID)\nif (playerWater ~= nil) then\n    local drawer2 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    drawer2:setGradient(3, 0.15, 2)\n    drawer2:setHeightOffset(0.05)\n    local durationMs = playerWater.duration * 1000\n    local delayTime = durationMs - drawTime\n    local oldDraw = durationMs > 15000 and durationMs < 33000\n    drawer2:addTimedCircleOnEnt(drawTime, playerID, 6, delayTime, false, nil, 256)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\n-- 水点名可能留在死亡玩家身上, 保留包含死亡实体的查询。\nlocal party = TensorCore.entityList(\"type=1\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal playerId = TensorCore.mGetPlayer().id\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal drawTime = 3500\n\nlocal waterID = 2461\nfor _, entity in pairs(party) do\n    if entity.id ~= playerId then\n        local waterBuff = TensorCore.getBuff(entity.id, waterID)\n        if waterBuff ~= nil then\n            local durationMs = waterBuff.duration * 1000\n            local delayMs = durationMs - drawTime\n            drawer:addTimedCircleOnEnt(drawTime, entity.id, 6, delayMs, false, nil, 256)\n        end\n    end\nend\n\nlocal playerWater = TensorCore.getBuff(playerId, waterID)\nif playerWater ~= nil then\n    local drawer2 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    drawer2:setGradient(3, 0.15, 2)\n    drawer2:setHeightOffset(0.05)\n    local durationMs = playerWater.duration * 1000\n    local delayMs = durationMs - drawTime\n    drawer2:addTimedCircleOnEnt(drawTime, playerId, 6, delayMs, false, nil, 256)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -13132,7 +13132,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Queue Water Draws",
+							name = "显示水点名范围",
 							uuid = "58578f48-7f50-5103-b4af-60e453d04327",
 							version = 2.1,
 						},
@@ -13146,7 +13146,7 @@ local tbl =
 						{
 							buffID = 2461,
 							category = "Party",
-							name = "Waters Exist In Party",
+							name = "队伍中存在水点名",
 							partyTargetNumber = 2,
 							partyTargetSubType = "Number",
 							uuid = "24991982-31dd-502b-aeae-418523587bdc",
@@ -13197,7 +13197,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Throttle",
+							name = "执行间隔",
 							uuid = "0d01ac7c-1876-5cdb-b072-6a60f40376a1",
 							version = 2.1,
 						},
@@ -13208,7 +13208,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- Waters can appear on dead people, so we can't use grouplist func.\nlocal party = TensorCore.entityList(\"type=1\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal waterID = 2461\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = player.id\nlocal playerWater = TensorCore.getBuff(playerID, waterID)\nlocal playerDuration = 0\nif (playerWater ~= nil) then\n    playerDuration = playerWater.duration\nend\nlocal isPlayerDPS = MuAiGuide.Reactions.dpsJobs[player.job] == true\nlocal playerPriority\nif (isPlayerDPS) then\n    playerPriority = data.dpsPriority[playerID]\nelse\n    playerPriority = data.supportPriority[playerID]\nend\n\nif (playerPriority == nil) then\n    MuAiGuide.Reactions.log(\"[Water Swap] Player priority was nil!?\", 5)\n    self.used = true\n    return\nend\n\ndata.p3ApocSwapped = false\n---@param ent GameObject\n---@return boolean\nlocal function determineSwap(ent)\n    if (ent.contentid ~= 0) then return false end\n    local entID = ent.id\n\n    -- Ignore the player themselves, duh!\n    if (entID == playerID) then return false end\n\n    -- Get the entity's water buff.\n    local waterBuff = TensorCore.getBuff(entID, waterID)\n    local waterDuration = 0\n    if (waterBuff ~= nil) then\n        -- Assume no buff is duration 0, otherwise set to duration.\n        waterDuration = waterBuff.duration\n    end\n    local durDiff = math.abs(waterDuration - playerDuration)\n    -- We only want to look at the ent with the same duration as the player.\n    if (durDiff > 3) then return false end\n\n    local isDPS = MuAiGuide.Reactions.dpsJobs[ent.job] == true\n    -- If duration is the same, but our 'partner' is the opposite role, no swap necessary.\n    if (isDPS ~= isPlayerDPS) then\n        MuAiGuide.Reactions.Shotcall(\"Stay\", true)\n        return true\n    end\n\n    -- Otherwise, flex based on priority (lower integer value swaps)\n    local entPriority\n    if (isDPS) then\n        entPriority = data.dpsPriority[entID]\n    else\n        entPriority = data.supportPriority[entID]\n    end\n\n    if (entPriority == nil) then\n        MuAiGuide.Reactions.log(\"[Water Swap] Player's water partner priority returned nil!?\", 5)\n        return true\n    end\n\n    MuAiGuide.Reactions.log(string.format(\"[Water Swap] Player Priority is %d, partner priority is %d\", playerPriority, entPriority), 5)\n\n    if (playerPriority < entPriority) then\n        -- Swap if we have a lower numerical priority (higher on the list)\n        MuAiGuide.Reactions.Shotcall(\"Swap\", true)\n        data.p3ApocSwapped = true\n    else\n        MuAiGuide.Reactions.Shotcall(\"Stay\", true)\n    end\n    return true\nend\n\nfor _, ent in pairs(party) do\n    if (determineSwap(ent)) then break end\nend\n\nself.used = true\n",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 水点名可能留在死亡玩家身上, 保留包含死亡实体的查询。\nlocal party = TensorCore.entityList(\"type=1\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal waterID = 2461\nlocal player = TensorCore.mGetPlayer()\nlocal playerId = player.id\nlocal playerWater = TensorCore.getBuff(playerId, waterID)\nlocal playerDuration = 0\nif playerWater ~= nil then\n    playerDuration = playerWater.duration\nend\nlocal isPlayerDPS = MuAiGuide.Reactions.dpsJobs[player.job] == true\nlocal playerPriority\nif isPlayerDPS then\n    playerPriority = data.dpsPriority[playerId]\nelse\n    playerPriority = data.supportPriority[playerId]\nend\n\nif playerPriority == nil then\n    MuAiGuide.Reactions.log(\"[FRU/水分摊] 本人优先级缺失。\", 5)\n    self.used = true\n    return\nend\n\ndata.p3ApocSwapped = false\n---@param ent GameObject\n---@return boolean\nlocal function determineSwap(ent)\n    if ent.contentid ~= 0 then\n        return false\n    end\n    local entityId = ent.id\n\n    if entityId == playerId then\n        return false\n    end\n\n    local waterBuff = TensorCore.getBuff(entityId, waterID)\n    local waterDuration = 0\n    if waterBuff ~= nil then\n        -- 无水状态按剩余0秒参与原分组规则。\n        waterDuration = waterBuff.duration\n    end\n    local durDiff = math.abs(waterDuration - playerDuration)\n    -- 只比较与本人剩余时间同组的队员。\n    if durDiff > 3 then\n        return false\n    end\n\n    local isDPS = MuAiGuide.Reactions.dpsJobs[ent.job] == true\n    -- 同组队员职责不同则无需换组。\n    if isDPS ~= isPlayerDPS then\n        MuAiGuide.Reactions.Shotcall(\"Stay\", true)\n        return true\n    end\n\n    -- 同职责按优先级补位, 数字较小者换组。\n    local entPriority\n    if isDPS then\n        entPriority = data.dpsPriority[entityId]\n    else\n        entPriority = data.supportPriority[entityId]\n    end\n\n    if entPriority == nil then\n        MuAiGuide.Reactions.log(\"[FRU/水分摊] 同组队员优先级缺失。\", 5)\n        return true\n    end\n\n    MuAiGuide.Reactions.log(\n        string.format(\"[FRU/水分摊] 本人优先级%d, 同组优先级%d。\", playerPriority, entPriority),\n        5\n    )\n\n    if playerPriority < entPriority then\n        -- 本人优先级较高时换组。\n        MuAiGuide.Reactions.Shotcall(\"Swap\", true)\n        data.p3ApocSwapped = true\n    else\n        MuAiGuide.Reactions.Shotcall(\"Stay\", true)\n    end\n    return true\nend\n\nfor _, ent in pairs(party) do\n    if determineSwap(ent) then\n        break\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -13229,7 +13229,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorViper3_CD",
-							name = "Determine Swap",
+							name = "确定分摊换组",
 							uuid = "19d15311-32a6-514d-9943-6f4f77113fae",
 							version = 2.1,
 						},
@@ -13245,7 +13245,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruApocWaterSwap == true",
 							dequeueIfLuaFalse = true,
-							name = "Option Enabled",
+							name = "功能已开启",
 							uuid = "f97cb4c3-cdf3-5348-a597-5663a00ac73b",
 							version = 3,
 						},
@@ -13257,7 +13257,7 @@ local tbl =
 						{
 							buffID = 2461,
 							category = "Party",
-							name = "Waters Exist In Party",
+							name = "队伍中存在水点名",
 							partyTargetNumber = 2,
 							partyTargetSubType = "Number",
 							uuid = "20272eba-b512-5b0a-8aab-e5c4ee211cd9",
@@ -13272,7 +13272,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.hasSetupPriority == true",
 							dequeueIfLuaFalse = true,
-							name = "Priority Set",
+							name = "优先级已初始化",
 							uuid = "6e8be910-ebc0-5583-908b-e1d45a0d1570",
 							version = 3,
 						},
@@ -13344,7 +13344,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local curCount = data.p3ApocCount + 1\ndata.p3ApocCount = curCount\n\nif (curCount > 2) then\n    self.used = true\n    return\nend\n\nlocal entPos = TensorCore.mGetEntity(eventArgs.entityID).pos\n\n---@class ApocInfo\n---@field pos ThreeDimensionalPos\n---@field safeDir \"cw\"|\"ccw\"\n---@field rotValue 16|64\n\nif (data.p3Apoc1 == nil) then\n    ---@type ApocInfo\n    data.p3Apoc1 = {\n        pos = { x = entPos.x, y = 0, z = entPos.z },\n        safeDir = eventArgs.a3 == 16 and \"ccw\" or \"cw\",\n        rotValue = eventArgs.a3\n    }\nelseif (data.p3Apoc2 == nil) then\n    ---@type ApocInfo\n    data.p3Apoc2 = {\n        pos = { x = entPos.x, y = 0, z = entPos.z },\n        safeDir = eventArgs.a3 == 16 and \"ccw\" or \"cw\",\n        rotValue = eventArgs.a3\n    }\n    data.p3ApocBothRecorded = true\nend\n\nself.used = true",
+							actionLua = "local currentCount = data.p3ApocCount + 1\ndata.p3ApocCount = currentCount\n\nif currentCount > 2 then\n    self.used = true\n    return\nend\n\nlocal entityPosition = TensorCore.mGetEntity(eventArgs.entityID).pos\n\n---@class FruApocInfo\n---@field pos ThreeDimensionalPos\n---@field safeDir \"cw\"|\"ccw\"\n---@field rotValue 16|64\n\nif data.p3Apoc1 == nil then\n    ---@type FruApocInfo\n    data.p3Apoc1 = {\n        pos = { x = entityPosition.x, y = 0, z = entityPosition.z },\n        safeDir = eventArgs.a3 == 16 and \"ccw\" or \"cw\",\n        rotValue = eventArgs.a3,\n    }\nelseif data.p3Apoc2 == nil then\n    ---@type FruApocInfo\n    data.p3Apoc2 = {\n        pos = { x = entityPosition.x, y = 0, z = entityPosition.z },\n        safeDir = eventArgs.a3 == 16 and \"ccw\" or \"cw\",\n        rotValue = eventArgs.a3,\n    }\n    data.p3ApocBothRecorded = true\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -13369,7 +13369,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Record Init Apoc",
+							name = "记录启示起点",
 							uuid = "38c32a11-72a0-5aad-9735-7627ddd73891",
 							version = 2.1,
 						},
@@ -13386,7 +13386,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 2011391,
-							name = "Content ID",
+							name = "实体类型ID",
 							uuid = "309d496a-09b2-5218-a079-59736b2fd4e7",
 							version = 3,
 						},
@@ -13398,7 +13398,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p3ApocCount < 2",
 							dequeueIfLuaFalse = true,
-							name = "Count",
+							name = "数量条件",
 							uuid = "d8ebce35-303a-508d-b2b0-ba1052627a4b",
 							version = 3,
 						},
@@ -13425,7 +13425,7 @@ local tbl =
 							},
 							dequeueIfLuaFalse = true,
 							matchAnyBuff = true,
-							name = "Valid Rotation",
+							name = "旋转方向有效",
 							partyTargetNumber = 0,
 							uuid = "448f18f3-7823-5d1f-8db0-afacbd101450",
 							version = 3,
@@ -13439,7 +13439,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return TensorCore.getDistance2d(data.arenaCenter, TensorCore.mGetEntity(eventArgs.entityID).pos) > 3",
 							dequeueIfLuaFalse = true,
-							name = "Not Mid",
+							name = "不在场中",
 							uuid = "874ba835-8229-50e0-ac11-141bcf858f7c",
 							version = 3,
 						},
@@ -13505,7 +13505,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal firstInfo = data.p3Apoc1\nlocal secondInfo = data.p3Apoc2\n\nlocal adjustment = math.rad(45)\nif (firstInfo.safeDir == \"cw\") then\n    adjustment = -adjustment\nend\n\nlocal heading1 = TensorCore.getHeadingToTarget(data.arenaCenter, firstInfo.pos)\nlocal heading2 = TensorCore.getHeadingToTarget(data.arenaCenter, secondInfo.pos)\n\nlocal nmHeading1 = TensorCore.convertHeading(heading1)\nlocal nmHeading2 = TensorCore.convertHeading(heading2)\nlocal north = math.pi\n\nlocal d1 = TensorCore.convertHeading(nmHeading1 - north)\nlocal d2 = TensorCore.convertHeading(nmHeading2 - north)\n\nlocal dpsPos, supportPos\nif (d1 < d2) then\n    dpsPos = secondInfo.pos\n    supportPos = firstInfo.pos\nelse\n    dpsPos = firstInfo.pos\n    supportPos = secondInfo.pos\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal isPlayerDPS = MuAiGuide.Reactions.dpsJobs[player.job] == true\nif MuAiGuide.Reactions.Settings.Reactions.fruApocPermaSwap and data.p3ApocSwapped == true then\n    isPlayerDPS = not isPlayerDPS\nend\n\nlocal h\nif (isPlayerDPS) then\n    h = TensorCore.getHeadingToTarget(data.arenaCenter, dpsPos)\nelse\n    h = TensorCore.getHeadingToTarget(data.arenaCenter, supportPos)\nend\n\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedArrow(8000, 100, 0.05, 100, h + adjustment, 14, 0.75, nil, nil, 2000, false, 256)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal firstInfo = data.p3Apoc1\nlocal secondInfo = data.p3Apoc2\n\nlocal adjustment = math.rad(45)\nif firstInfo.safeDir == \"cw\" then\n    adjustment = -adjustment\nend\n\nlocal heading1 = TensorCore.getHeadingToTarget(data.arenaCenter, firstInfo.pos)\nlocal heading2 = TensorCore.getHeadingToTarget(data.arenaCenter, secondInfo.pos)\n\nlocal normalizedHeading1 = TensorCore.convertHeading(heading1)\nlocal normalizedHeading2 = TensorCore.convertHeading(heading2)\nlocal north = math.pi\n\nlocal d1 = TensorCore.convertHeading(normalizedHeading1 - north)\nlocal d2 = TensorCore.convertHeading(normalizedHeading2 - north)\n\nlocal dpsPos, supportPos\nif d1 < d2 then\n    dpsPos = secondInfo.pos\n    supportPos = firstInfo.pos\nelse\n    dpsPos = firstInfo.pos\n    supportPos = secondInfo.pos\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal isPlayerDPS = MuAiGuide.Reactions.dpsJobs[player.job] == true\nif MuAiGuide.Reactions.Settings.Reactions.fruApocPermaSwap and data.p3ApocSwapped == true then\n    isPlayerDPS = not isPlayerDPS\nend\n\nlocal heading\nif isPlayerDPS then\n    heading = TensorCore.getHeadingToTarget(data.arenaCenter, dpsPos)\nelse\n    heading = TensorCore.getHeadingToTarget(data.arenaCenter, supportPos)\nend\n\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedArrow(8000, 100, 0.05, 100, heading + adjustment, 14, 0.75, nil, nil, 2000, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -13521,7 +13521,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Static Apoc",
+							name = "显示固定启示方向",
 							uuid = "98266ca7-b449-5b06-8fac-b6679106fa41",
 							version = 2.1,
 						},
@@ -13536,7 +13536,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruApocStrat == 1",
 							dequeueIfLuaFalse = true,
-							name = "Option Enabled",
+							name = "功能已开启",
 							uuid = "15d28744-0dee-58ff-8d6f-23be778d0030",
 							version = 3,
 						},
@@ -13548,7 +13548,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p3ApocCount == 2",
-							name = "Apocs Recorded",
+							name = "已记录两组启示",
 							uuid = "ce8c9c04-279b-57fc-ac37-42b6d7805b25",
 							version = 3,
 						},
@@ -13575,7 +13575,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nif (data.p3ApocDrawCount == nil) then data.p3ApocDrawCount = 0 end\ndata.p3ApocDrawCount = data.p3ApocDrawCount + 1\n\nlocal entPos = TensorCore.mGetEntity(eventArgs.entityID).pos\nif (data.p3ApocDrawCount <= 12) then\n\tlocal fruMoogle1 = TensorCore.getMoogleDrawer()\n\tlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\n\tfruMuai1:setGradient(3, 0.15, 2)\n\tfruMuai1:setHeightOffset(0.05)\n\tfruMuai1:addTimedCircle(9000, entPos.x, 0.05, entPos.z, 9, 2126, false, nil, 256)\nelse\n\tlocal fruMoogle2 = TensorCore.getMoogleDrawer()\n\tlocal fruMuai2 = TensorCore.getCachedDrawer((fruMoogle2.colorStart and fruMoogle2.colorStart % 0x1000000 + 0x4D000000), (fruMoogle2.colorMid and fruMoogle2.colorMid % 0x1000000 + 0x4D000000), (fruMoogle2.colorEnd and fruMoogle2.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\n\tfruMuai2:setGradient(3, 0.15, 2)\n\tfruMuai2:setHeightOffset(0.05)\n\tfruMuai2:addTimedCircle(2000, entPos.x, 0.05, entPos.z, 9, 9126, false, nil, 256)\nend\n\nif data.p3ApocDrawCount >= 29 and TensorCore.getDistance2d(entPos, data.arenaCenter) > 3 then\n\tlocal num = -45\n\tif eventArgs.a3 == 16 then num = 45 end\n\tlocal projectedPos = TensorCore.rotatePosAroundPos(data.arenaCenter, entPos, math.rad(num))\n\tlocal fruMoogle3 = TensorCore.getMoogleDrawer()\n\tlocal fruMuai3 = TensorCore.getCachedDrawer((fruMoogle3.colorStart and fruMoogle3.colorStart % 0x1000000 + 0x4D000000), (fruMoogle3.colorMid and fruMoogle3.colorMid % 0x1000000 + 0x4D000000), (fruMoogle3.colorEnd and fruMoogle3.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\n\tfruMuai3:setGradient(3, 0.15, 2)\n\tfruMuai3:setHeightOffset(0.05)\n\tfruMuai3:addTimedCircle(2000, projectedPos.x, 0.05, projectedPos.z, 9, 9126+2016, false, nil, 256)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nif data.p3ApocDrawCount == nil then\n    data.p3ApocDrawCount = 0\nend\ndata.p3ApocDrawCount = data.p3ApocDrawCount + 1\n\nlocal entityPosition = TensorCore.mGetEntity(eventArgs.entityID).pos\nif data.p3ApocDrawCount <= 12 then\n    local moogleColors1 = TensorCore.getMoogleDrawer()\n    local shapeDrawer1 = TensorCore.getCachedDrawer(\n        (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n        (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n        (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n        0xFFFFFFFF,\n        2,\n        0,\n        256\n    )\n    shapeDrawer1:setGradient(3, 0.15, 2)\n    shapeDrawer1:setHeightOffset(0.05)\n    shapeDrawer1:addTimedCircle(9000, entityPosition.x, 0.05, entityPosition.z, 9, 2126, false, nil, 256)\nelse\n    local moogleColors2 = TensorCore.getMoogleDrawer()\n    local shapeDrawer2 = TensorCore.getCachedDrawer(\n        (moogleColors2.colorStart and moogleColors2.colorStart % 0x1000000 + 0x4D000000),\n        (moogleColors2.colorMid and moogleColors2.colorMid % 0x1000000 + 0x4D000000),\n        (moogleColors2.colorEnd and moogleColors2.colorEnd % 0x1000000 + 0x4D000000),\n        0xFFFFFFFF,\n        2,\n        0,\n        256\n    )\n    shapeDrawer2:setGradient(3, 0.15, 2)\n    shapeDrawer2:setHeightOffset(0.05)\n    shapeDrawer2:addTimedCircle(2000, entityPosition.x, 0.05, entityPosition.z, 9, 9126, false, nil, 256)\nend\n\nif data.p3ApocDrawCount >= 29 and TensorCore.getDistance2d(entityPosition, data.arenaCenter) > 3 then\n    local num = -45\n    if eventArgs.a3 == 16 then\n        num = 45\n    end\n    local projectedPos = TensorCore.rotatePosAroundPos(data.arenaCenter, entityPosition, math.rad(num))\n    local moogleColors3 = TensorCore.getMoogleDrawer()\n    local shapeDrawer3 = TensorCore.getCachedDrawer(\n        (moogleColors3.colorStart and moogleColors3.colorStart % 0x1000000 + 0x4D000000),\n        (moogleColors3.colorMid and moogleColors3.colorMid % 0x1000000 + 0x4D000000),\n        (moogleColors3.colorEnd and moogleColors3.colorEnd % 0x1000000 + 0x4D000000),\n        0xFFFFFFFF,\n        2,\n        0,\n        256\n    )\n    shapeDrawer3:setGradient(3, 0.15, 2)\n    shapeDrawer3:setHeightOffset(0.05)\n    shapeDrawer3:addTimedCircle(2000, projectedPos.x, 0.05, projectedPos.z, 9, 9126 + 2016, false, nil, 256)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -13585,7 +13585,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuMNK3_CD",
-							name = "Draw Explosion",
+							name = "显示启示范围",
 							uuid = "e7e52ed6-2fc4-5d4f-9fa5-0d3a4e0c366f",
 							version = 2.1,
 						},
@@ -13602,7 +13602,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 2011391,
-							name = "Content ID",
+							name = "实体类型ID",
 							uuid = "1ecc9a1b-e4c3-5fb8-97c4-f951471b1625",
 							version = 3,
 						},
@@ -13633,7 +13633,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal firstInfo = data.p3Apoc1\nlocal secondInfo = data.p3Apoc2\n\nlocal adjustment = math.rad(45)\nif (firstInfo.safeDir == \"cw\") then\n    adjustment = -adjustment\nend\n\nlocal heading1 = TensorCore.getHeadingToTarget(data.arenaCenter, firstInfo.pos)\nlocal heading2 = TensorCore.getHeadingToTarget(data.arenaCenter, secondInfo.pos)\n\nlocal nmHeading1 = TensorCore.convertHeading(heading1 + adjustment)\nlocal nmHeading2 = TensorCore.convertHeading(heading2 + adjustment)\nlocal north = math.pi\n\nlocal d1 = TensorCore.convertHeading(nmHeading1 - north)\nlocal d2 = TensorCore.convertHeading(nmHeading2 - north)\n\nlocal dpsPos, supportPos\nif (d1 < d2) then\n    dpsPos = secondInfo.pos\n    supportPos = firstInfo.pos\nelse\n    dpsPos = firstInfo.pos\n    supportPos = secondInfo.pos\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal isPlayerDPS = MuAiGuide.Reactions.dpsJobs[player.job] == true\nif MuAiGuide.Reactions.Settings.Reactions.fruApocPermaSwap and data.p3ApocSwapped == true then\n    isPlayerDPS = not isPlayerDPS\nend\n\nlocal h\nif (isPlayerDPS) then\n    h = TensorCore.getHeadingToTarget(data.arenaCenter, dpsPos)\nelse\n    h = TensorCore.getHeadingToTarget(data.arenaCenter, supportPos)\nend\n\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedArrow(8000, 100, 0.05, 100, h + adjustment, 14, 0.75, nil, nil, 2000, false, 256)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal firstInfo = data.p3Apoc1\nlocal secondInfo = data.p3Apoc2\n\nlocal adjustment = math.rad(45)\nif firstInfo.safeDir == \"cw\" then\n    adjustment = -adjustment\nend\n\nlocal heading1 = TensorCore.getHeadingToTarget(data.arenaCenter, firstInfo.pos)\nlocal heading2 = TensorCore.getHeadingToTarget(data.arenaCenter, secondInfo.pos)\n\nlocal normalizedHeading1 = TensorCore.convertHeading(heading1 + adjustment)\nlocal normalizedHeading2 = TensorCore.convertHeading(heading2 + adjustment)\nlocal north = math.pi\n\nlocal d1 = TensorCore.convertHeading(normalizedHeading1 - north)\nlocal d2 = TensorCore.convertHeading(normalizedHeading2 - north)\n\nlocal dpsPos, supportPos\nif d1 < d2 then\n    dpsPos = secondInfo.pos\n    supportPos = firstInfo.pos\nelse\n    dpsPos = firstInfo.pos\n    supportPos = secondInfo.pos\nend\n\nlocal player = TensorCore.mGetPlayer()\nlocal isPlayerDPS = MuAiGuide.Reactions.dpsJobs[player.job] == true\nif MuAiGuide.Reactions.Settings.Reactions.fruApocPermaSwap and data.p3ApocSwapped == true then\n    isPlayerDPS = not isPlayerDPS\nend\n\nlocal heading\nif isPlayerDPS then\n    heading = TensorCore.getHeadingToTarget(data.arenaCenter, dpsPos)\nelse\n    heading = TensorCore.getHeadingToTarget(data.arenaCenter, supportPos)\nend\n\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedArrow(8000, 100, 0.05, 100, heading + adjustment, 14, 0.75, nil, nil, 2000, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -13649,7 +13649,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Color Apoc",
+							name = "显示启示颜色方向",
 							uuid = "72d4308b-8a57-5de9-80de-5fd98974e8bc",
 							version = 2.1,
 						},
@@ -13664,7 +13664,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruApocStrat == 2",
 							dequeueIfLuaFalse = true,
-							name = "Option Enabled",
+							name = "功能已开启",
 							uuid = "0f239a2b-8893-57bb-9f20-cba432332dd0",
 							version = 3,
 						},
@@ -13676,7 +13676,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p3ApocCount == 2",
-							name = "Apocs Recorded",
+							name = "已记录两组启示",
 							uuid = "edc65520-38e0-5034-9ce5-f8d48a4c6921",
 							version = 3,
 						},
@@ -13703,7 +13703,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal firstInfo = data.p3Apoc1\nlocal secondInfo = data.p3Apoc2\n\nlocal heading1 = TensorCore.getHeadingToTarget(data.arenaCenter, firstInfo.pos)\nlocal heading2 = TensorCore.getHeadingToTarget(data.arenaCenter, secondInfo.pos)\n\nlocal adjustment = math.rad(45)\nif (firstInfo.safeDir == \"cw\") then\n    adjustment = -adjustment\nend\n\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedArrow(8000, 100, 0.05, 100, heading1 + adjustment, 14, 0.75, nil, nil, 2000, false, 256)\ndrawer:addTimedArrow(8000, 100, 0.05, 100, heading2 + adjustment, 14, 0.75, nil, nil, 2000, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal firstInfo = data.p3Apoc1\nlocal secondInfo = data.p3Apoc2\n\nlocal heading1 = TensorCore.getHeadingToTarget(data.arenaCenter, firstInfo.pos)\nlocal heading2 = TensorCore.getHeadingToTarget(data.arenaCenter, secondInfo.pos)\n\nlocal adjustment = math.rad(45)\nif firstInfo.safeDir == \"cw\" then\n    adjustment = -adjustment\nend\n\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedArrow(8000, 100, 0.05, 100, heading1 + adjustment, 14, 0.75, nil, nil, 2000, false, 256)\ndrawer:addTimedArrow(8000, 100, 0.05, 100, heading2 + adjustment, 14, 0.75, nil, nil, 2000, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -13718,7 +13718,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Both Safe Dir",
+							name = "显示两组安全方向",
 							uuid = "34462c2a-68ad-558a-aed9-52bc1ccf8412",
 							version = 2.1,
 						},
@@ -13731,9 +13731,9 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruApocStrat == nil or MuAiGuide.Reactions.Settings.Reactions.fruApocStrat == 0",
+							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruApocStrat == nil\n    or MuAiGuide.Reactions.Settings.Reactions.fruApocStrat == 0",
 							dequeueIfLuaFalse = true,
-							name = "Option Enabled",
+							name = "功能已开启",
 							uuid = "13ee90d2-bf5a-56c7-bf26-9bae116b52c7",
 							version = 3,
 						},
@@ -13745,7 +13745,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p3ApocCount == 2",
-							name = "Apocs Recorded",
+							name = "已记录两组启示",
 							uuid = "a75928f1-49e8-5136-8290-7a242b2a8273",
 							version = 3,
 						},
@@ -13772,7 +13772,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal apoc1 = data.p3Apoc1\nlocal apoc2 = data.p3Apoc2\n\nlocal matchingApocTable = data.p3FindCorrectApocPattern(apoc1.pos, apoc2.pos, apoc1.rotValue)\nif (matchingApocTable == nil) then\n    local pos1Str = string.format(\"(%.3f, %.3f)\", apoc1.pos.x, apoc1.pos.z)\n    local pos2Str = string.format(\"(%.3f, %.3f)\", apoc2.pos.x, apoc2.pos.z)\n    local str = string.format(\"[Apoc Draw] Couldn't find matching draws for %s %s %d\", pos1Str, pos2Str, apoc1.rotValue)\n    MuAiGuide.Reactions.log(str, 5)\n    self.used = true\n    return\nend\n\ndata.p3DrawApocPattern(matchingApocTable)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal apoc1 = data.p3Apoc1\nlocal apoc2 = data.p3Apoc2\n\nlocal matchingApocTable = data.p3FindCorrectApocPattern(apoc1.pos, apoc2.pos, apoc1.rotValue)\nif matchingApocTable == nil then\n    local pos1Str = string.format(\"(%.3f, %.3f)\", apoc1.pos.x, apoc1.pos.z)\n    local pos2Str = string.format(\"(%.3f, %.3f)\", apoc2.pos.x, apoc2.pos.z)\n    local message =\n        string.format(\"[FRU/启示] 未匹配轨迹, 起点%s %s, 旋转值%d\", pos1Str, pos2Str, apoc1.rotValue)\n    MuAiGuide.Reactions.log(message, 5)\n    self.used = true\n    return\nend\n\ndata.p3DrawApocPattern(matchingApocTable)\nself.used = true",
 							conditions = 
 							{
 								
@@ -13782,7 +13782,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Queue Apoc Draws",
+							name = "显示启示地火",
 							uuid = "87239574-bb1f-5a11-a122-df27b2e65985",
 							version = 2.1,
 						},
@@ -13796,7 +13796,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p3ApocBothRecorded == true",
-							name = "Both Starting Recorded",
+							name = "启示起点完整",
 							uuid = "431b66da-2f20-5c27-bf4a-897f984bba6f",
 							version = 3,
 						},
@@ -13837,7 +13837,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal timeToMech = 3450\nlocal drawTime = 2250\nlocal delayTime = timeToMech - drawTime\nlocal playerID = TensorCore.mGetPlayer().id\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, ent in pairs(party) do\n    if (ent.id ~= playerID) then\n        drawer:addTimedCircleOnEnt(drawTime, ent.id, 5, delayTime, false, nil, 256)\n    end\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal timeToMech = 3450\nlocal durationMs = 2250\nlocal delayMs = timeToMech - durationMs\nlocal playerId = TensorCore.mGetPlayer().id\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, entity in pairs(party) do\n    if entity.id ~= playerId then\n        drawer:addTimedCircleOnEnt(durationMs, entity.id, 5, delayMs, false, nil, 256)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -13847,7 +13847,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Draw Spread",
+							name = "显示分散范围",
 							uuid = "31053f03-075e-562e-a818-2832bcbe3626",
 							version = 2.1,
 						},
@@ -13863,7 +13863,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40288,
-							name = "Channel ID",
+							name = "读条技能",
 							uuid = "0c11f525-cbfa-51d0-aeaf-4aff55fdd91d",
 							version = 3,
 						},
@@ -13902,7 +13902,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Shotcall Spread",
+							name = "播报分散",
 							uuid = "031d1da0-0f8b-53cc-a63c-7891d40b293b",
 							version = 2.1,
 						},
@@ -13918,7 +13918,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40271,
-							name = "Water ID",
+							name = "水点名技能",
 							uuid = "6e6f7e93-06d3-541a-94a9-70de36b11252",
 							version = 3,
 						},
@@ -13970,7 +13970,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Shotcall Move In",
+							name = "播报靠近",
 							uuid = "92166915-05a5-5a66-be3a-42bb7087fec7",
 							version = 2.1,
 						},
@@ -13986,7 +13986,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40297,
-							name = "Apoc Cast ID",
+							name = "启示判定技能",
 							uuid = "f14ba209-2975-585b-b2e4-544665dcfa40",
 							version = 3,
 						},
@@ -14038,7 +14038,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Swap Shotcall",
+							name = "播报换组提醒",
 							uuid = "b4a14c66-3770-5f8f-a3fc-650c6149091f",
 							version = 2.1,
 						},
@@ -14053,7 +14053,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p3ApocSwapped == true",
 							dequeueIfLuaFalse = true,
-							name = "Has Swapped",
+							name = "已换组",
 							uuid = "9751af30-d923-59a0-b81d-a5192c673f6d",
 							version = 3,
 						},
@@ -14113,7 +14113,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorViper3_CD",
-							name = "DPS Swap Left",
+							name = "输出换组走左",
 							uuid = "9287b9d9-2f37-5a67-b900-6c228bc38a8c",
 							version = 2.1,
 						},
@@ -14144,7 +14144,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorViper3_CD",
-							name = "Support Swap Right",
+							name = "辅助换组走右",
 							uuid = "bdeb6c9d-c46c-54d2-ad66-6d1348ec3239",
 							version = 2.1,
 						},
@@ -14170,7 +14170,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorViper3_CD",
-							name = "DPS Default Right",
+							name = "输出默认走右",
 							uuid = "eccaef7b-5b82-53fc-8cf6-57e5119219fd",
 							version = 2.1,
 						},
@@ -14196,7 +14196,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorViper3_CD",
-							name = "Support Default Left",
+							name = "辅助默认走左",
 							uuid = "2b75dcc9-c460-510e-9757-276c55d836d7",
 							version = 2.1,
 						},
@@ -14211,7 +14211,7 @@ local tbl =
 							category = "Self",
 							conditionType = 9,
 							dequeueIfLuaFalse = true,
-							name = "Is DPS",
+							name = "输出职业",
 							partyTargetType = "DPS",
 							uuid = "fed4ab51-6d07-5a21-87f8-d6318520662f",
 							version = 3,
@@ -14225,7 +14225,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruApocWaterSwap == true",
 							dequeueIfLuaFalse = true,
-							name = "Option Enabled",
+							name = "功能已开启",
 							uuid = "58854707-0718-5f63-b8a8-3edc2faaee9f",
 							version = 3,
 						},
@@ -14238,7 +14238,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p3ApocSwapped == true",
 							dequeueIfLuaFalse = true,
-							name = "Has Swapped",
+							name = "已换组",
 							uuid = "ecea764f-9756-59f3-8a6c-21d2448a85f2",
 							version = 3,
 						},
@@ -14264,7 +14264,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal pos = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCircle(pos.x, 0.05, pos.z, 8, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal position = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCircle(position.x, 0.05, position.z, 8, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -14279,7 +14279,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw DD On Farthest",
+							name = "显示最远诱导范围",
 							uuid = "12d053d1-195f-5c47-93fe-cc4846c2966f",
 							version = 2.1,
 						},
@@ -14293,7 +14293,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Get Boss",
+							name = "选取首领",
 							uuid = "76cc44ca-9eff-5103-8e02-4050ec798eb0",
 							version = 3,
 						},
@@ -14307,7 +14307,7 @@ local tbl =
 							conditionType = 4,
 							filterTargetSubtype = "Furthest",
 							filterTargetType = "Party",
-							name = "Furthest From Prev",
+							name = "距前一目标最远",
 							partyTargetType = "Detection Target",
 							rangeCheckSourceType = "Detection Target",
 							subtypeRangeCheckSourceType = "Prev Detection Target",
@@ -14339,7 +14339,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal firstInfo = data.p3Apoc1\nlocal secondInfo = data.p3Apoc2\n\nlocal heading1 = TensorCore.getHeadingToTarget(data.arenaCenter, firstInfo.pos)\nlocal heading2 = TensorCore.getHeadingToTarget(data.arenaCenter, secondInfo.pos)\n\nlocal adjustment = math.rad(90)\n\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedArrow(5500, 100, 0.05, 100, heading1 + adjustment, 14, 0.75, nil, nil, 0, false, 256)\ndrawer:addTimedArrow(5500, 100, 0.05, 100, heading2 + adjustment, 14, 0.75, nil, nil, 0, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal firstInfo = data.p3Apoc1\nlocal secondInfo = data.p3Apoc2\n\nlocal heading1 = TensorCore.getHeadingToTarget(data.arenaCenter, firstInfo.pos)\nlocal heading2 = TensorCore.getHeadingToTarget(data.arenaCenter, secondInfo.pos)\n\nlocal adjustment = math.rad(90)\n\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedArrow(5500, 100, 0.05, 100, heading1 + adjustment, 14, 0.75, nil, nil, 0, false, 256)\ndrawer:addTimedArrow(5500, 100, 0.05, 100, heading2 + adjustment, 14, 0.75, nil, nil, 0, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -14349,7 +14349,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Draw Final Safe Corridors",
+							name = "显示末轮安全方向",
 							uuid = "2960cc2d-3a1e-5207-92d6-6c8f78526fe6",
 							version = 2.1,
 						},
@@ -14364,7 +14364,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p3ApocBothRecorded == true",
 							dequeueIfLuaFalse = true,
-							name = "Both Starting Recorded",
+							name = "启示起点完整",
 							uuid = "23386dc5-7b05-5450-964b-2aa3f72e968c",
 							version = 3,
 						},
@@ -14418,7 +14418,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuPLD3_CD",
-							name = "Throttle",
+							name = "执行间隔",
 							uuid = "43be01ca-b0db-5d1f-bebe-5e71fffc3969",
 							version = 2.1,
 						},
@@ -14445,7 +14445,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Toggle Dash",
+							name = "调整突进开关",
 							uuid = "78b5adca-f20a-5ec2-ae7b-2ced9d3df57b",
 							version = 2.1,
 						},
@@ -14461,7 +14461,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40183,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "f46a9edf-fa9f-5a4a-b8df-5eca97f7ab0c",
 							version = 3,
 						},
@@ -14473,7 +14473,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p3SomberDash ~= true",
 							dequeueIfLuaFalse = true,
-							name = "Not Dashed",
+							name = "尚未返场突进",
 							uuid = "c1e4ad69-5a57-519d-bbfe-0c4044f1247e",
 							version = 3,
 						},
@@ -14523,7 +14523,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_Hotbar_Slither",
-							name = "Toggle Dash",
+							name = "调整突进开关",
 							uuid = "8422a28a-152e-57d6-b418-737ccf9fe9a1",
 							variableTogglesType = 2,
 							version = 2.1,
@@ -14543,7 +14543,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 37964,
-							name = "On Player",
+							name = "目标为本人",
 							partyTargetType = "Event Entity",
 							uuid = "82bd98fd-fd79-5fd1-9f5c-bd522fa0c8a7",
 							version = 3,
@@ -14561,7 +14561,7 @@ local tbl =
 							eventArgType = 4,
 							eventIntValue = 200,
 							eventSpellID = 37964,
-							name = "Anim ID",
+							name = "动画匹配",
 							uuid = "ba6525f9-5681-5f29-aea9-84c698d9e2f0",
 							version = 3,
 						},
@@ -14573,7 +14573,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p3SomberDash ~= true",
 							dequeueIfLuaFalse = true,
-							name = "Not Dashed",
+							name = "尚未返场突进",
 							uuid = "2aa9b563-4452-5117-aead-fb3c54fb4def",
 							version = 3,
 						},
@@ -14612,7 +14612,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal bossEnt = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif (bossEnt == nil) then\n    self.used = true\n    return\nend\n\nlocal drawTime = (647.2 - TensorReactions_CurrentTimer) * 1000\nlocal playerID = TensorCore.mGetPlayer().id\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedArrowOnEnt(drawTime, bossEnt.id, 12, 0.5, nil, nil, playerID, 0, false, nil, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal bossEnt = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif bossEnt == nil then\n    self.used = true\n    return\nend\n\nlocal durationMs = (647.2 - TensorReactions_CurrentTimer) * 1000\nlocal playerId = TensorCore.mGetPlayer().id\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedArrowOnEnt(durationMs, bossEnt.id, 12, 0.5, nil, nil, playerId, 0, false, nil, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -14622,7 +14622,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Draw Arrow",
+							name = "显示站位方向",
 							uuid = "baac8dcc-a66b-5024-b748-4968ae42dec1",
 							version = 2.1,
 						},
@@ -14636,7 +14636,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Get Boss",
+							name = "选取首领",
 							uuid = "eb0a9232-accc-54f5-a689-6c4db5a4ab2c",
 							version = 3,
 						},
@@ -14704,7 +14704,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Find Boss",
+							name = "选取首领",
 							uuid = "a1149ea4-b9fa-5022-812e-00f7807d7c70",
 							version = 3,
 						},
@@ -14716,7 +14716,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Current Target",
-							name = "Target Filter",
+							name = "选取目标",
 							uuid = "8dfc223a-a42b-5cce-945a-236d694de158",
 							version = 3,
 						},
@@ -14745,9 +14745,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\ndata.p4DarklitSetupRan = false\n\nif (data.hasSetupPriority ~= true) then\n    MuAiGuide.Reactions.log(\"[Darklit Setup] Priority setup hasn't ran successfully!\")\n    self.used = true\n    return\nend\n\nlocal playerID = TensorCore.mGetPlayer().id\nlocal addWorldText = MuAiGuide.Reactions.addTimedWorldTextOnEnt\n\n---@param worldText \"N\"|\"S\"|\"NW\"|\"SW\"|\"NE\"|\"SE\"\nlocal function handlePlayer(worldText)\n    ---@type table<string, string>\n    local shotcallLUT = {\n        [\"N\"] = \"North\",\n        [\"S\"] = \"South\",\n        [\"NW\"] = \"NorthWest\",\n        [\"SW\"] = \"SouthWest\",\n        [\"NE\"] = \"NorthEast\",\n        [\"SE\"] = \"SouthEast\",\n    }\n    MuAiGuide.Reactions.Shotcall(shotcallLUT[worldText], true)\n    local pi = math.pi\n    local halfPi = pi / 2\n    local adjustH = math.rad(25)\n    ---@type table<string, number>\n    local headingLUT = {\n        [\"N\"] = pi,\n        [\"S\"] = 0,\n        [\"NW\"] = -halfPi-adjustH,\n        [\"SW\"] = -halfPi+adjustH,\n        [\"NE\"] = halfPi+adjustH,\n        [\"SE\"] = halfPi-adjustH,\n    }\n    local fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    fruMuai1:setGradient(3, 0.15, 2)\n    fruMuai1:setHeightOffset(0.05)\n    fruMuai1:addTimedArrow(8000, 100, 0.05, 100, headingLUT[worldText], 8, 1, nil, nil, 0, false, 256)\nend\n\n---@param worldText \"N\"|\"S\"|\"NW\"|\"SW\"|\"NE\"|\"SE\"\n---@param entID integer\nlocal function drawWorldText(worldText, entID)\n    if (playerID == entID) then\n        handlePlayer(worldText)\n    end\n\n    addWorldText(8000, worldText, entID, 3756906654, true, 2.15, 1.5)\nend\n\n---@param ent1 GameObject\n---@param ent2 GameObject\nlocal function recordTetherPair(ent1, ent2)\n    MuAiGuide.Reactions.log(\"[Darklit Recorder] Running recordTetherPair on \" .. ent1.name .. \" and \" .. ent2.name, 5)\n    local darklitData = data.p4DarklitData\n    local isTethered = darklitData.isTethered\n    local curCount = darklitData.tetherCount\n    if (not isTethered[ent1.id]) then\n        MuAiGuide.Reactions.log(\"[Darklit Recorder] Adding \" .. ent1.name .. \" to isTethered.\", 5)\n        isTethered[ent1.id] = true\n        curCount = curCount + 1\n    end\n    if (not isTethered[ent2.id]) then\n        MuAiGuide.Reactions.log(\"[Darklit Recorder] Adding \" .. ent2.name .. \" to isTethered.\", 5)\n        isTethered[ent2.id] = true\n        curCount = curCount + 1\n    end\n    darklitData.tetherCount = curCount\n    local isHealer = MuAiGuide.Reactions.healJobs\n    if (isHealer[ent1.job] or isHealer[ent2.job]) then\n        MuAiGuide.Reactions.log(\n            \"[Darklit Recorder] Registering \" .. ent1.name .. \" and \" .. ent2.name .. \" to isConnectedToHealer.\", 5)\n        local isConnectedToHealer = darklitData.isConnectedToHealer\n        isConnectedToHealer[ent1.id] = true\n        isConnectedToHealer[ent2.id] = true\n    end\n    darklitData.finishedTethers = curCount >= 4\n    darklitData.isValid = darklitData.finishedTethers and darklitData.finishedStacks\nend\n\n---@param id integer\nlocal function recordStack(id)\n    local darklitData = data.p4DarklitData\n    if (darklitData.isStack[id]) then return end\n    MuAiGuide.Reactions.log(\"[Darklit Recorder] Adding \" .. tostring(id) .. \" to isStack.\", 5)\n    darklitData.isStack[id] = true\n    local curCount = darklitData.stackCount + 1\n    darklitData.stackCount = curCount\n    darklitData.finishedStacks = curCount >= 2\n    darklitData.isValid = darklitData.finishedTethers and darklitData.finishedStacks\nend\n\n---Be sure to call solveTethers before solveStacks, as solveStacks relies on the tether stack side being set.\nlocal function solveTethers()\n    local darklitData = data.p4DarklitData\n    if (not darklitData.finishedTethers) then\n        MuAiGuide.Reactions.log(\"[Darklit Solver] SolveTethers called while tether count was invalid!\", 5)\n        return\n    end\n\n    local partyIDs = data.partyIDs\n    if (partyIDs == nil) then\n        MuAiGuide.Reactions.log(\"[Darklit Tether Solver] partyIDs was nil, using fallback.\", 5)\n        partyIDs = data.partyIDArray\n        if (partyIDs == nil) then\n            MuAiGuide.Reactions.log(\"[Darklit Tether Solver] Party ID array fallback was nil!\", 5)\n            return\n        end\n    end\n\n    local isTethered = darklitData.isTethered\n    local healerConnected = darklitData.isConnectedToHealer\n    local isStack = darklitData.isStack\n    local isHealer = MuAiGuide.Reactions.healJobs\n\n    for i = 1, 8 do\n        local id = partyIDs[i]\n        if (isTethered[id]) then\n            local ent = TensorCore.mGetEntity(id)\n            if (ent == nil) then\n                MuAiGuide.Reactions.log(\"[Darklit Tether Solver] GetEnt returned nil for ID: \" .. tostring(id), 5)\n            else\n                local side = nil\n                if (healerConnected[id] and not isHealer[ent.job]) then\n                    drawWorldText(\"S\", id)\n                    side = 2\n                else\n                    drawWorldText(\"N\", id)\n                    side = 1\n                end\n\n                if (isStack[id]) then\n                    darklitData.tetherStackSide = side\n                    MuAiGuide.Reactions.log(\"[Darklit Tether Solver] Tethered Stack side set to \" .. tostring(side), 5)\n                end\n            end\n        end\n    end\nend\n\nlocal function solveStacks()\n    local darklitData = data.p4DarklitData\n    if (not darklitData.finishedStacks) then\n        MuAiGuide.Reactions.log(\"[Darklit Stack Solver] SolveStacks called while stack count was invalid!\", 5)\n        return\n    end\n\n    local stackSide = darklitData.tetherStackSide\n    if (stackSide == nil) then\n        MuAiGuide.Reactions.log(\"[Darklit Stack Solver] SolveStacks called without tether stack side being set!\", 5)\n        return\n    end\n\n    ---@type table<integer, 1|2|3|4>\n    local dpsPriority = data.dpsPriority\n    if (dpsPriority == nil) then\n        MuAiGuide.Reactions.log(\n            \"[Darklit Stack Solver] SolveStacks called but priority hasn't been set up! Did something go wrong earlier in the fight?\",\n            5)\n        return\n    end\n\n    ---@type integer[]\n    local partyIDs = data.partyIDs\n    if (partyIDs == nil) then\n        MuAiGuide.Reactions.log(\"[Darklit Stack Solver] partyIDs was nil, using fallback.\", 5)\n        ---@type integer[]\n        partyIDs = data.partyIDArray\n        if (partyIDs == nil) then\n            MuAiGuide.Reactions.log(\"[Darklit Stack Solver] Party ID array fallback was nil!\", 5)\n            return\n        end\n    end\n\n    local isTethered = darklitData.isTethered\n    local isTank = MuAiGuide.Reactions.tankJobs\n    local isHealer = MuAiGuide.Reactions.healJobs\n    local tankID, healerID, dps1ID, dps2ID = 0, 0, 0, 0\n\n    for i = 1, 8 do\n        local id = partyIDs[i]\n        if (not isTethered[id]) then\n            local ent = TensorCore.mGetEntity(id)\n            if (ent == nil) then\n                MuAiGuide.Reactions.log(\"[Darklit Stack Solver] Ent returned nil! ID: \" .. tostring(id), 5)\n            else\n                local jobID = ent.job\n                if (isTank[jobID]) then\n                    tankID = id\n                elseif (isHealer[jobID]) then\n                    healerID = id\n                elseif (dps1ID == 0) then\n                    dps1ID = id\n                else\n                    dps2ID = id\n                    break\n                end\n            end\n        end\n    end\n\n    if (tankID == 0 or healerID == 0 or dps1ID == 0 or dps2ID == 0) then\n        MuAiGuide.Reactions.log(\"[Darklit Stack Solver] A non-tethered ID was left 0!\", 5)\n        return\n    end\n\n    local prio1, prio2 = dpsPriority[dps1ID], dpsPriority[dps2ID]\n    if (prio1 == nil or prio2 == nil) then\n        MuAiGuide.Reactions.log(\"[Darklit Stack Solver] Priority for one of the DPS roles returned nil!\", 5)\n        return\n    end\n    local nw, ne, sw, se = 0, 0, 0, 0\n    if (MuAiGuide.Reactions.Settings.Reactions.fruDarklitLPDU) then\n        nw = healerID\n        sw = tankID\n        if (prio1 < prio2) then\n            ne = dps1ID\n            se = dps2ID\n        else\n            ne = dps2ID\n            se = dps1ID\n        end\n    else\n        -- damn NA flexing logic kinda sucks dick compared to EU\n        nw = healerID\n        ne = tankID\n        local dps1Ranged = prio1 > 2\n        local dps2Ranged = prio2 > 2\n        if (dps1Ranged and dps2Ranged) then\n            -- handle ranged swap, lower value (higher on list) goes se\n            if (prio1 < prio2) then se, sw = dps1ID, dps2ID\n            else se, sw = dps2ID, dps1ID end\n        elseif (not dps1Ranged and not dps2Ranged) then\n            -- handle melee swap, lower value (higher on list) goes sw\n            if (prio1 < prio2) then sw, se = dps1ID, dps2ID\n            else sw, se = dps2ID, dps1ID end\n        else\n            -- ranged defaults SW, melee SE\n            if (dps1Ranged) then sw, se = dps1ID, dps2ID\n            else sw, se = dps2ID, dps1ID end\n        end\n    end\n\n    if (nw == 0 or ne == 0 or sw == 0 or se == 0) then\n        MuAiGuide.Reactions.log(\"[Darklit Stack Solver] One of the intercard directions was left 0!\", 5)\n        return\n    end\n\n    local isStack = darklitData.isStack\n    if (stackSide == 1) then\n        if (isStack[nw]) then\n            nw, sw = sw, nw\n        elseif (isStack[ne]) then\n            ne, se = se, ne\n        end\n    else\n        if (isStack[sw]) then\n            nw, sw = sw, nw\n        elseif (isStack[se]) then\n            ne, se = se, ne\n        end\n    end\n\n    drawWorldText(\"NW\", nw)\n    drawWorldText(\"NE\", ne)\n    drawWorldText(\"SW\", sw)\n    drawWorldText(\"SE\", se)\nend\n\n---@class DarklitData\n---@field isTethered table<integer, boolean>\n---@field isConnectedToHealer table<integer, boolean>\n---@field tetherCount integer\n---@field isStack table<integer, boolean>\n---@field stackCount integer\n---@field finishedTethers boolean\n---@field finishedStacks boolean\n---@field isValid boolean\n---@field recordTetherPair function\n---@field recordStack function\n---@field solveTethers function\n---@field solveStacks function\n---@field tetherStackSide nil|1|2\n\n---@type DarklitData\ndata.p4DarklitData = {\n    isTethered = {},\n    isConnectedToHealer = {},\n    tetherCount = 0,\n    isStack = {},\n    stackCount = 0,\n    finishedTethers = false,\n    finishedStacks = false,\n    isValid = false,\n    recordTetherPair = recordTetherPair,\n    recordStack = recordStack,\n    solveTethers = solveTethers,\n    solveStacks = solveStacks,\n}\n\nMuAiGuide.Reactions.log(\"Darklit Setup successfully ran.\", 5)\ndata.p4DarklitSetupRan = true\nself.used = true\n",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\ndata.p4DarklitSetupRan = false\n\nif data.hasSetupPriority ~= true then\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 优先级尚未完成初始化。\")\n    self.used = true\n    return\nend\n\nlocal playerId = TensorCore.mGetPlayer().id\nlocal addWorldText = MuAiGuide.Reactions.addTimedWorldTextOnEnt\n\n---@param worldText \"N\"|\"S\"|\"NW\"|\"SW\"|\"NE\"|\"SE\"\nlocal function handlePlayer(worldText)\n    ---@type table<string, string>\n    local callsByDirection = {\n        [\"N\"] = \"North\",\n        [\"S\"] = \"South\",\n        [\"NW\"] = \"NorthWest\",\n        [\"SW\"] = \"SouthWest\",\n        [\"NE\"] = \"NorthEast\",\n        [\"SE\"] = \"SouthEast\",\n    }\n    MuAiGuide.Reactions.Shotcall(callsByDirection[worldText], true)\n    local pi = math.pi\n    local halfPi = pi / 2\n    local headingOffset = math.rad(25)\n    ---@type table<string, number>\n    local headingsByDirection = {\n        [\"N\"] = pi,\n        [\"S\"] = 0,\n        [\"NW\"] = -halfPi - headingOffset,\n        [\"SW\"] = -halfPi + headingOffset,\n        [\"NE\"] = halfPi + headingOffset,\n        [\"SE\"] = halfPi - headingOffset,\n    }\n    local shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    shapeDrawer1:setGradient(3, 0.15, 2)\n    shapeDrawer1:setHeightOffset(0.05)\n    shapeDrawer1:addTimedArrow(8000, 100, 0.05, 100, headingsByDirection[worldText], 8, 1, nil, nil, 0, false, 256)\nend\n\n---@param worldText \"N\"|\"S\"|\"NW\"|\"SW\"|\"NE\"|\"SE\"\n---@param entID integer\nlocal function drawWorldText(worldText, entityId)\n    if playerId == entityId then\n        handlePlayer(worldText)\n    end\n\n    addWorldText(8000, worldText, entityId, 3756906654, true, 2.15, 1.5)\nend\n\n---@param ent1 GameObject\n---@param ent2 GameObject\nlocal function recordTetherPair(ent1, ent2)\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 记录连线双方: \" .. ent1.name .. \" 和 \" .. ent2.name, 5)\n    local darklitData = data.p4DarklitData\n    local isTethered = darklitData.isTethered\n    local currentCount = darklitData.tetherCount\n    if not isTethered[ent1.id] then\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 登记 \" .. ent1.name .. \" 为连线队员。\", 5)\n        isTethered[ent1.id] = true\n        currentCount = currentCount + 1\n    end\n    if not isTethered[ent2.id] then\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 登记 \" .. ent2.name .. \" 为连线队员。\", 5)\n        isTethered[ent2.id] = true\n        currentCount = currentCount + 1\n    end\n    darklitData.tetherCount = currentCount\n    local isHealer = MuAiGuide.Reactions.healJobs\n    if isHealer[ent1.job] or isHealer[ent2.job] then\n        MuAiGuide.Reactions.log(\n            \"[FRU/龙诗] 登记 \" .. ent1.name .. \" 和 \" .. ent2.name .. \" 为连接治疗的队员。\",\n            5\n        )\n        local isConnectedToHealer = darklitData.isConnectedToHealer\n        isConnectedToHealer[ent1.id] = true\n        isConnectedToHealer[ent2.id] = true\n    end\n    darklitData.finishedTethers = currentCount >= 4\n    darklitData.isValid = darklitData.finishedTethers and darklitData.finishedStacks\nend\n\n---@param id integer\nlocal function recordStack(id)\n    local darklitData = data.p4DarklitData\n    if darklitData.isStack[id] then\n        return\n    end\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 登记 \" .. tostring(id) .. \" 为水分摊队员。\", 5)\n    darklitData.isStack[id] = true\n    local currentCount = darklitData.stackCount + 1\n    darklitData.stackCount = currentCount\n    darklitData.finishedStacks = currentCount >= 2\n    darklitData.isValid = darklitData.finishedTethers and darklitData.finishedStacks\nend\n\n-- 先计算连线站位, 再用连线水分摊所在侧计算无连线分摊站位。\nlocal function solveTethers()\n    local darklitData = data.p4DarklitData\n    if not darklitData.finishedTethers then\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 连线输入不完整, 暂不分配。\", 5)\n        return\n    end\n\n    local partyIDs = data.partyIDs\n    if partyIDs == nil then\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 使用开场队伍ID记录计算连线站位。\", 5)\n        partyIDs = data.partyIDArray\n        if partyIDs == nil then\n            MuAiGuide.Reactions.log(\"[FRU/龙诗] 开场队伍ID记录也不可用。\", 5)\n            return\n        end\n    end\n\n    local isTethered = darklitData.isTethered\n    local healerConnected = darklitData.isConnectedToHealer\n    local isStack = darklitData.isStack\n    local isHealer = MuAiGuide.Reactions.healJobs\n\n    for i = 1, 8 do\n        local id = partyIDs[i]\n        if isTethered[id] then\n            local entity = TensorCore.mGetEntity(id)\n            if entity == nil then\n                MuAiGuide.Reactions.log(\"[FRU/龙诗] 连线队员实体暂不可读, ID: \" .. tostring(id), 5)\n            else\n                local side = nil\n                if healerConnected[id] and not isHealer[entity.job] then\n                    drawWorldText(\"S\", id)\n                    side = 2\n                else\n                    drawWorldText(\"N\", id)\n                    side = 1\n                end\n\n                if isStack[id] then\n                    darklitData.tetherStackSide = side\n                    MuAiGuide.Reactions.log(\"[FRU/龙诗] 已确定连线水分摊所在侧: \" .. tostring(side), 5)\n                end\n            end\n        end\n    end\nend\n\nlocal function solveStacks()\n    local darklitData = data.p4DarklitData\n    if not darklitData.finishedStacks then\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 分摊输入不完整, 暂不分配。\", 5)\n        return\n    end\n\n    local stackSide = darklitData.tetherStackSide\n    if stackSide == nil then\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 连线分摊所在侧尚未确定。\", 5)\n        return\n    end\n\n    ---@type table<integer, 1|2|3|4>\n    local dpsPriority = data.dpsPriority\n    if dpsPriority == nil then\n        MuAiGuide.Reactions.log(\n            \"[FRU/龙诗] 分摊优先级尚未初始化。\",\n            5\n        )\n        return\n    end\n\n    ---@type integer[]\n    local partyIDs = data.partyIDs\n    if partyIDs == nil then\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 使用开场队伍ID记录计算分摊站位。\", 5)\n        ---@type integer[]\n        partyIDs = data.partyIDArray\n        if partyIDs == nil then\n            MuAiGuide.Reactions.log(\"[FRU/龙诗] 开场队伍ID记录也不可用。\", 5)\n            return\n        end\n    end\n\n    local isTethered = darklitData.isTethered\n    local isTank = MuAiGuide.Reactions.tankJobs\n    local isHealer = MuAiGuide.Reactions.healJobs\n    local tankID, healerID, dps1ID, dps2ID = 0, 0, 0, 0\n\n    for i = 1, 8 do\n        local id = partyIDs[i]\n        if not isTethered[id] then\n            local entity = TensorCore.mGetEntity(id)\n            if entity == nil then\n                MuAiGuide.Reactions.log(\"[FRU/龙诗] 分摊队员实体暂不可读, ID: \" .. tostring(id), 5)\n            else\n                local jobId = entity.job\n                if isTank[jobId] then\n                    tankID = id\n                elseif isHealer[jobId] then\n                    healerID = id\n                elseif dps1ID == 0 then\n                    dps1ID = id\n                else\n                    dps2ID = id\n                    break\n                end\n            end\n        end\n    end\n\n    if tankID == 0 or healerID == 0 or dps1ID == 0 or dps2ID == 0 then\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 无连线队员ID不完整。\", 5)\n        return\n    end\n\n    local prio1, prio2 = dpsPriority[dps1ID], dpsPriority[dps2ID]\n    if prio1 == nil or prio2 == nil then\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 输出队员优先级缺失。\", 5)\n        return\n    end\n    local nw, ne, sw, se = 0, 0, 0, 0\n    if MuAiGuide.Reactions.Settings.Reactions.fruDarklitLPDU then\n        nw = healerID\n        sw = tankID\n        if prio1 < prio2 then\n            ne = dps1ID\n            se = dps2ID\n        else\n            ne = dps2ID\n            se = dps1ID\n        end\n    else\n        -- NAUR分支按近战和远程职责决定南侧补位。\n        nw = healerID\n        ne = tankID\n        local dps1Ranged = prio1 > 2\n        local dps2Ranged = prio2 > 2\n        if dps1Ranged and dps2Ranged then\n            -- 双远程时, 优先级较高者去东南。\n            if prio1 < prio2 then\n                se, sw = dps1ID, dps2ID\n            else\n                se, sw = dps2ID, dps1ID\n            end\n        elseif not dps1Ranged and not dps2Ranged then\n            -- 双近战时, 优先级较高者去西南。\n            if prio1 < prio2 then\n                sw, se = dps1ID, dps2ID\n            else\n                sw, se = dps2ID, dps1ID\n            end\n        else\n            -- 远程默认西南, 近战默认东南。\n            if dps1Ranged then\n                sw, se = dps1ID, dps2ID\n            else\n                sw, se = dps2ID, dps1ID\n            end\n        end\n    end\n\n    if nw == 0 or ne == 0 or sw == 0 or se == 0 then\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 四角职责尚未完整分配。\", 5)\n        return\n    end\n\n    local isStack = darklitData.isStack\n    if stackSide == 1 then\n        if isStack[nw] then\n            nw, sw = sw, nw\n        elseif isStack[ne] then\n            ne, se = se, ne\n        end\n    else\n        if isStack[sw] then\n            nw, sw = sw, nw\n        elseif isStack[se] then\n            ne, se = se, ne\n        end\n    end\n\n    drawWorldText(\"NW\", nw)\n    drawWorldText(\"NE\", ne)\n    drawWorldText(\"SW\", sw)\n    drawWorldText(\"SE\", se)\nend\n\n---@class FruDarklitData\n---@field isTethered table<integer, boolean>\n---@field isConnectedToHealer table<integer, boolean>\n---@field tetherCount integer\n---@field isStack table<integer, boolean>\n---@field stackCount integer\n---@field finishedTethers boolean\n---@field finishedStacks boolean\n---@field isValid boolean\n---@field recordTetherPair function\n---@field recordStack function\n---@field solveTethers function\n---@field solveStacks function\n---@field tetherStackSide nil|1|2\n\n---@type FruDarklitData\ndata.p4DarklitData = {\n    isTethered = {},\n    isConnectedToHealer = {},\n    tetherCount = 0,\n    isStack = {},\n    stackCount = 0,\n    finishedTethers = false,\n    finishedStacks = false,\n    isValid = false,\n    recordTetherPair = recordTetherPair,\n    recordStack = recordStack,\n    solveTethers = solveTethers,\n    solveStacks = solveStacks,\n}\n\nMuAiGuide.Reactions.log(\"[FRU/龙诗] 状态初始化完成。\", 5)\ndata.p4DarklitSetupRan = true\nself.used = true",
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Init Darklit Vars",
+							name = "初始化龙诗状态",
 							uuid = "76fab5eb-d383-5e63-b9ea-d8cf1788d495",
 							version = 2.1,
 						},
@@ -14799,7 +14799,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set Fragment Data",
+							name = "记录碎片范围",
 							uuid = "2085fd23-e7bf-522c-8fe2-299c3d5ad5f9",
 							version = 2.1,
 						},
@@ -14815,7 +14815,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 13559,
-							name = "Content ID",
+							name = "实体类型ID",
 							uuid = "14330d09-dbe6-525f-8f48-8b2f5c15f82e",
 							version = 3,
 						},
@@ -14882,7 +14882,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40237,
-							name = "Akh Rhai ID",
+							name = "碎灵一击技能",
 							uuid = "63fc7c11-1562-5eb1-b8c8-44b166b273a7",
 							version = 3,
 						},
@@ -14911,9 +14911,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(3500, data.p4FragmentID, data.p4FragmentHitRadius + 4, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(3500, data.p4FragmentID, data.p4FragmentHitRadius + 4, nil, false, nil, 256)\nself.used = true",
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Fragment Exclusion Zone",
+							name = "显示碎片避让范围",
 							uuid = "e232e77e-fb73-5178-b991-8ff88b8dd57e",
 							version = 2.1,
 						},
@@ -14965,7 +14965,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Record Usurper ID",
+							name = "记录光之巫女ID",
 							uuid = "f0479ef6-d784-5480-84b5-71069d147a9c",
 							version = 2.1,
 						},
@@ -14979,7 +14979,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "ContentID",
-							name = "Usurper Filter",
+							name = "选取巫女",
 							partyTargetContentID = 12809,
 							uuid = "63c13eb3-80dd-5c29-9f48-654a28261937",
 							version = 3,
@@ -15016,7 +15016,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Record Oracle ID",
+							name = "记录暗之巫女ID",
 							uuid = "5e16823e-fb9c-5033-8c43-df32d6250e77",
 							version = 2.1,
 						},
@@ -15030,7 +15030,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "ContentID",
-							name = "Oracle Filter",
+							name = "选取巫女",
 							partyTargetContentID = 9832,
 							uuid = "85cddbd1-198f-5e35-9c76-0da0f1be7d5e",
 							version = 3,
@@ -15070,9 +15070,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n---@class DarklitTetherInfo\n---@field healerID integer?\n---@field tankID integer?\n---@field dpsIDs integer[]\n---@field alreadyRecorded table<integer, boolean>\n---@field tetherPartners table<integer, table<integer, boolean>>\n\n---@type DarklitTetherInfo\ndata.p4DarklitTethers = {\n    healerID = nil,\n    tankID = nil,\n    dpsIDs = {},\n    alreadyRecorded = {},\n    tetherPartners = {},\n}\n\ndata.p4DarklitTethersCount = 0\n\ndata.p4DarklitTethersTryAddEnt = function(entID)\n    local tetherInfoTable = data.p4DarklitTethers\n    if (tetherInfoTable.alreadyRecorded[entID]) then\n        return\n    end\n    tetherInfoTable.alreadyRecorded[entID] = true\n    local ent = TensorCore.mGetEntity(entID)\n    if (MuAiGuide.Reactions.tankJobs[ent.job]) then\n        if (tetherInfoTable.tankID ~= nil) then return end\n        tetherInfoTable.tankID = ent.id\n        MuAiGuide.Reactions.log(\"[Darklit Tethers] Assigned \" .. ent.name .. \" as tank tether.\", 5)\n        return\n    end\n\n    if (MuAiGuide.Reactions.healJobs[ent.job]) then\n        if (tetherInfoTable.healerID ~= nil) then return end\n        tetherInfoTable.healerID = ent.id\n        MuAiGuide.Reactions.log(\"[Darklit Tethers] Assigned \" .. ent.name .. \" as healer tether.\", 5)\n        return\n    end\n\n    -- They have to be a DPS at this point, no need to check their job.\n    table.insert(tetherInfoTable.dpsIDs, ent.id)\n    MuAiGuide.Reactions.log(\"[Darklit Tethers] Added \" .. ent.name .. \" to dps tethers.\", 5)\nend\n\n---@param sourceID integer\n---@param targetID integer\ndata.p4DarklitTethersAssignPartners = function(sourceID, targetID)\n    local partnerInfos = data.p4DarklitTethers.tetherPartners\n\n    -- Ensure sourceID has a partner table\n    if (partnerInfos[sourceID] == nil) then\n        partnerInfos[sourceID] = {}\n    end\n    -- Ensure targetID has a partner table\n    if (partnerInfos[targetID] == nil) then\n        partnerInfos[targetID] = {}\n    end\n\n    partnerInfos[sourceID][targetID] = true\n    partnerInfos[targetID][sourceID] = true\nend\n\n---@param sourceID integer\n---@param targetID integer\n---@return boolean\ndata.p4DarklitTethersIsPartnered = function(sourceID, targetID)\n    local partnerSet = data.p4DarklitTethers.tetherPartners[sourceID]\n    if (partnerSet == nil) then\n        MuAiGuide.Reactions.log(\"[Darklit Tethers] Tether Partner Table for ID \" .. sourceID .. \" was nil!\", 5)\n        return false\n    end\n\n    return partnerSet[targetID] == true\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n---@class FruDarklitTetherInfo\n---@field healerID integer?\n---@field tankID integer?\n---@field dpsIDs integer[]\n---@field alreadyRecorded table<integer, boolean>\n---@field tetherPartners table<integer, table<integer, boolean>>\n\n---@type FruDarklitTetherInfo\ndata.p4DarklitTethers = {\n    healerID = nil,\n    tankID = nil,\n    dpsIDs = {},\n    alreadyRecorded = {},\n    tetherPartners = {},\n}\n\ndata.p4DarklitTethersCount = 0\n\ndata.p4DarklitTethersTryAddEnt = function(entityId)\n    local tetherInfoTable = data.p4DarklitTethers\n    if tetherInfoTable.alreadyRecorded[entityId] then\n        return\n    end\n    tetherInfoTable.alreadyRecorded[entityId] = true\n    local ent = TensorCore.mGetEntity(entityId)\n    if MuAiGuide.Reactions.tankJobs[ent.job] then\n        if tetherInfoTable.tankID ~= nil then\n            return\n        end\n        tetherInfoTable.tankID = ent.id\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 分配 \" .. ent.name .. \" 为坦克连线。\", 5)\n        return\n    end\n\n    if MuAiGuide.Reactions.healJobs[ent.job] then\n        if tetherInfoTable.healerID ~= nil then\n            return\n        end\n        tetherInfoTable.healerID = ent.id\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 分配 \" .. ent.name .. \" 为治疗连线。\", 5)\n        return\n    end\n\n    -- 排除坦克和治疗后的队员按输出职责记录。\n    table.insert(tetherInfoTable.dpsIDs, ent.id)\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 登记 \" .. ent.name .. \" 为输出连线。\", 5)\nend\n\n---@param sourceID integer\n---@param targetID integer\ndata.p4DarklitTethersAssignPartners = function(sourceID, targetId)\n    local partnerInfos = data.p4DarklitTethers.tetherPartners\n\n    -- 保存连线双方的对称关系。\n    if partnerInfos[sourceID] == nil then\n        partnerInfos[sourceID] = {}\n    end\n\n    if partnerInfos[targetId] == nil then\n        partnerInfos[targetId] = {}\n    end\n\n    partnerInfos[sourceID][targetId] = true\n    partnerInfos[targetId][sourceID] = true\nend\n\n---@param sourceID integer\n---@param targetID integer\n---@return boolean\ndata.p4DarklitTethersIsPartnered = function(sourceID, targetId)\n    local partnerSet = data.p4DarklitTethers.tetherPartners[sourceID]\n    if partnerSet == nil then\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 连线关系缺失, ID: \" .. sourceID .. \"的记录缺失。\", 5)\n        return false\n    end\n\n    return partnerSet[targetId] == true\nend\n\nself.used = true",
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Initialize Darklit Tethers",
+							name = "初始化连线关系",
 							uuid = "4f6be71f-2651-50f1-8cfe-d1c4a2119619",
 							version = 2.1,
 						},
@@ -15101,7 +15101,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local sourceID = eventArgs.sourceEntityID\nlocal targetID = eventArgs.newTargetID\ndata.p4DarklitTethersTryAddEnt(sourceID)\ndata.p4DarklitTethersTryAddEnt(targetID)\ndata.p4DarklitTethersAssignPartners(sourceID, targetID)\ndata.p4DarklitTethersCount = data.p4DarklitTethersCount + 1\nself.used = true",
+							actionLua = "local sourceID = eventArgs.sourceEntityID\nlocal targetId = eventArgs.newTargetID\ndata.p4DarklitTethersTryAddEnt(sourceID)\ndata.p4DarklitTethersTryAddEnt(targetId)\ndata.p4DarklitTethersAssignPartners(sourceID, targetId)\ndata.p4DarklitTethersCount = data.p4DarklitTethersCount + 1\nself.used = true",
 							conditions = 
 							{
 								
@@ -15111,7 +15111,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Record Tether",
+							name = "记录连线",
 							uuid = "ddba122c-bb05-5f21-b841-f1588894276d",
 							version = 2.1,
 						},
@@ -15129,7 +15129,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 5,
 							eventIntValue = 110,
-							name = "Tether ID",
+							name = "连线类型",
 							uuid = "4433b638-9d56-56ad-b8a9-29eea775f7ca",
 							version = 3,
 						},
@@ -15159,7 +15159,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal sourceEnt = TensorCore.mGetEntity(eventArgs.sourceEntityID)\nif (sourceEnt == nil) then\n    MuAiGuide.Reactions.log(\"[Record Tether] Source Ent returned nil!\", 5)\n    self.used = true\n    return\nend\nlocal targetEnt = TensorCore.mGetEntity(eventArgs.newTargetID)\nif (targetEnt == nil) then\n    MuAiGuide.Reactions.log(\"[Record Tether] Target Ent returned nil!\", 5)\n    self.used = true\n    return\nend\n\ndata.p4DarklitData.recordTetherPair(sourceEnt, targetEnt)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal sourceEnt = TensorCore.mGetEntity(eventArgs.sourceEntityID)\nif sourceEnt == nil then\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 连线来源实体暂不可读。\", 5)\n    self.used = true\n    return\nend\nlocal targetEnt = TensorCore.mGetEntity(eventArgs.newTargetID)\nif targetEnt == nil then\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 连线目标实体暂不可读。\", 5)\n    self.used = true\n    return\nend\n\ndata.p4DarklitData.recordTetherPair(sourceEnt, targetEnt)\nself.used = true",
 							conditions = 
 							{
 								
@@ -15174,7 +15174,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Record Tether",
+							name = "记录连线",
 							uuid = "20a79fb5-7bbd-5be1-af2c-61bf61a63708",
 							version = 2.1,
 						},
@@ -15189,7 +15189,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p4DarklitSetupRan == true",
 							dequeueIfLuaFalse = true,
-							name = "Setup Ran",
+							name = "龙诗状态已初始化",
 							uuid = "0e036050-936f-5ac5-b9f7-93a81694e1b1",
 							version = 3,
 						},
@@ -15205,7 +15205,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 5,
 							eventIntValue = 110,
-							name = "Tether ID",
+							name = "连线类型",
 							uuid = "b0b1a0fc-f19e-5bbb-a595-704a4c64ff02",
 							version = 3,
 						},
@@ -15250,7 +15250,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Record Water",
+							name = "记录水点名",
 							uuid = "016228a7-85ad-5ae0-ad53-6f3c14cb1e0a",
 							version = 2.1,
 						},
@@ -15265,7 +15265,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p4DarklitSetupRan == true",
 							dequeueIfLuaFalse = true,
-							name = "Setup Ran",
+							name = "龙诗状态已初始化",
 							uuid = "53b765b9-0ecd-5a6c-9079-2df3efd8d9bf",
 							version = 3,
 						},
@@ -15279,7 +15279,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventMarkerID = 62,
-							name = "Marker ID",
+							name = "标记类型",
 							uuid = "293307df-e7b9-56a0-9b8c-7bab2a68148e",
 							version = 3,
 						},
@@ -15318,7 +15318,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal playerID = TensorCore.mGetPlayer().id\nif eventArgs.sourceEntityID == playerID or eventArgs.newTargetID == playerID then\n    local fruMuai1 = TensorCore.getCachedDrawer(0x4DEC86C7, nil, 0x4DEC86C7, 0xFFFFFFFF, 2, 0, 256)\n    fruMuai1:setGradient(3, 0.15, 2)\n    fruMuai1:setHeightOffset(0.05)\n    fruMuai1:addTimedRectOnEnt(6000, eventArgs.sourceEntityID, 5, 0.1, eventArgs.newTargetID, 0, false, false, nil, nil, nil, 256)\nelse\n    local fruMuai2 = TensorCore.getCachedDrawer(0x4DEC8687, nil, 0x4DEC8687, 0xFFFFFFFF, 2, 0, 256)\n    fruMuai2:setGradient(3, 0.15, 2)\n    fruMuai2:setHeightOffset(0.05)\n    fruMuai2:addTimedRectOnEnt(6000, eventArgs.sourceEntityID, 5, 0.1, eventArgs.newTargetID, 0, false, false, nil, nil, nil, 256)\nend\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal playerId = TensorCore.mGetPlayer().id\nif eventArgs.sourceEntityID == playerId or eventArgs.newTargetID == playerId then\n    local shapeDrawer1 = TensorCore.getCachedDrawer(0x4DEC86C7, nil, 0x4DEC86C7, 0xFFFFFFFF, 2, 0, 256)\n    shapeDrawer1:setGradient(3, 0.15, 2)\n    shapeDrawer1:setHeightOffset(0.05)\n    shapeDrawer1:addTimedRectOnEnt(\n        6000,\n        eventArgs.sourceEntityID,\n        5,\n        0.1,\n        eventArgs.newTargetID,\n        0,\n        false,\n        false,\n        nil,\n        nil,\n        nil,\n        256\n    )\nelse\n    local shapeDrawer2 = TensorCore.getCachedDrawer(0x4DEC8687, nil, 0x4DEC8687, 0xFFFFFFFF, 2, 0, 256)\n    shapeDrawer2:setGradient(3, 0.15, 2)\n    shapeDrawer2:setHeightOffset(0.05)\n    shapeDrawer2:addTimedRectOnEnt(\n        6000,\n        eventArgs.sourceEntityID,\n        5,\n        0.1,\n        eventArgs.newTargetID,\n        0,\n        false,\n        false,\n        nil,\n        nil,\n        nil,\n        256\n    )\nend\nself.used = true",
 							conditions = 
 							{
 								
@@ -15328,7 +15328,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Draw Tether Rectangle",
+							name = "显示连线范围",
 							uuid = "26b9cb2d-6e77-5021-99bd-d7357952e813",
 							version = 2.1,
 						},
@@ -15346,7 +15346,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 5,
 							eventIntValue = 110,
-							name = "Tether ID",
+							name = "连线类型",
 							uuid = "13120e9f-2c33-5f87-b46e-9d8c1b06ec2a",
 							version = 3,
 						},
@@ -15376,7 +15376,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal darklitTethers = data.p4DarklitTethers\n\nif (darklitTethers.healerID == nil) then\n    MuAiGuide.Reactions.log(\"[Darklit Tether Helper] No Healer ID was stored for tethers!\", 5)\n    self.used = true\n    return\nend\n\nif (darklitTethers.tankID == nil) then\n    MuAiGuide.Reactions.log(\"[Darklit Tether Helper] No Tank ID was stored for tethers!\", 5)\n    self.used = true\n    return\nend\n\nif (table.size(darklitTethers.dpsIDs) ~= 2) then\n    MuAiGuide.Reactions.log(\"[Darklit Tether Helper] DPS IDs did not have a count of 2 for tethers!\", 5)\n    self.used = true\n    return\nend\n\nlocal healerEnt = TensorCore.mGetEntity(darklitTethers.healerID)\n\nif (healerEnt == nil or not healerEnt.alive) then\n    MuAiGuide.Reactions.log(\"[Darklit Tether Helper] Healer entity returned nil or wasn't alive!\", 5)\n    self.used = true\n    return\nend\n\nlocal tankEnt = TensorCore.mGetEntity(darklitTethers.tankID)\n\nif (tankEnt == nil or not tankEnt.alive) then\n    MuAiGuide.Reactions.log(\"[Darklit Tether Helper] Tank entity returned nil or wasn't alive!\", 5)\n    self.used = true\n    return\nend\n\nlocal dps1 = TensorCore.mGetEntity(darklitTethers.dpsIDs[1])\nlocal dps2 = TensorCore.mGetEntity(darklitTethers.dpsIDs[2])\n\nif (dps1 == nil or not dps1.alive or dps2 == nil or not dps2.alive) then\n    MuAiGuide.Reactions.log(\"[Darklit Tether Helper] A DPS entity returned nil or wasn't alive!\", 5)\n    self.used = true\n    return\nend\n\n---@type GameObject\nlocal northWestEnt = healerEnt\n---@type GameObject\nlocal northEastEnt = tankEnt\n---@type GameObject\nlocal southWestEnt = nil\n---@type GameObject\nlocal southEastEnt = nil\n\n-- Barring another priority list GUI for this, we'll just have to use the actual entity positions and hope people are in their proper spots according to the strat.\n-- However, if two DPS on the same side are tethered, we can still use P3's priority setup, with the lower numerical value swapping first, as they should be 'G1'\n\nlocal isWest1 = dps1.pos.x < 100\nlocal isWest2 = dps2.pos.x < 100\n\nif (isWest1 == isWest2) then\n    -- If both DPS are same side, we need to figure out who's swapping.\n    local prio1 = data.dpsPriority[dps1.id]\n    local prio2 = data.dpsPriority[dps2.id]\n    if (prio1 == nil or prio2 == nil) then\n        MuAiGuide.Reactions.log(\"[Darklit Tether Helper] Couldn't determine priority for one of the DPS entities!\", 5)\n        self.used = true\n        return\n    end\n\n    local swapEnt, stayEnt = nil, nil\n    -- Higher priority (lower numerical value) swaps first.\n    if (prio1 < prio2) then\n        swapEnt = dps1\n        stayEnt = dps2\n    else\n        swapEnt = dps2\n        stayEnt = dps1\n    end\n\n    if (isWest1) then\n        southWestEnt = stayEnt\n        southEastEnt = swapEnt\n    else\n        southWestEnt = swapEnt\n        southEastEnt = stayEnt\n    end\nelse\n    -- If DPS are opposite sides, we can just assign immediately.\n    if (isWest1) then\n        southWestEnt = dps1\n        southEastEnt = dps2\n    else\n        southEastEnt = dps1\n        southWestEnt = dps2\n    end\nend\n\nif (southWestEnt == nil) then\n    MuAiGuide.Reactions.log(\"[Darklit Tether Helper] SouthWest DPS failed to be assigned!\", 5)\n    self.used = true\n    return\nend\n\nif (southEastEnt == nil) then\n    MuAiGuide.Reactions.log(\"[Darklit Tether Helper] SouthEast DPS failed to be assigned!\", 5)\n    self.used = true\n    return\nend\n\nlocal isPartnered = data.p4DarklitTethersIsPartnered\nlocal nwID = northWestEnt.id\nlocal neID = northEastEnt.id\nlocal swID = southWestEnt.id\nlocal seID = southEastEnt.id\n\nlocal nwToSe = isPartnered(nwID, seID)\nlocal neToSw = isPartnered(neID, swID)\nlocal nwToSw = isPartnered(nwID, swID)\nlocal neToSe = isPartnered(neID, seID)\nlocal nwToNe = isPartnered(nwID, neID)\nlocal swToSe = isPartnered(swID, seID)\n\n---@enum QuadrantEnum\nlocal QuadrantEnum = {\n    NW = 1,\n    NE = 2,\n    SW = 3,\n    SE = 4,\n}\n\n---@type table<QuadrantEnum, integer?>\nlocal resultArray = {\n    [1] = nil,\n    [2] = nil,\n    [3] = nil,\n    [4] = nil,\n}\n\n---@type table<QuadrantEnum, \"N\"|\"S\"?>\nlocal stringArray = {\n    [1] = nil,\n    [2] = nil,\n    [3] = nil,\n    [4] = nil,\n}\n\nif (nwToNe and swToSe) then\n    -- Potentially either hourglass or box.\n    if (nwToSw) then\n        -- Box, east side swaps north-south.\n        resultArray[QuadrantEnum.NW] = nwID -- NW stays.\n        resultArray[QuadrantEnum.NE] = seID -- NE is assigned SE.\n        resultArray[QuadrantEnum.SW] = swID -- SW stays.\n        resultArray[QuadrantEnum.SE] = neID -- SE is assigned NE.\n    else\n        -- Hourglass, NE and SW swap.\n        resultArray[QuadrantEnum.NW] = nwID -- NW stays.\n        resultArray[QuadrantEnum.NE] = swID -- NE is assigned SW.\n        resultArray[QuadrantEnum.SW] = neID -- SW is assigned NE.\n        resultArray[QuadrantEnum.SE] = seID -- SE stays.\n    end\nelseif (nwToSw and nwToSe and neToSe and neToSw) then\n    -- Bowtie pattern. Everyone stays.\n    resultArray[QuadrantEnum.NW] = nwID\n    resultArray[QuadrantEnum.NE] = neID\n    resultArray[QuadrantEnum.SW] = swID\n    resultArray[QuadrantEnum.SE] = seID\nelse\n    -- Unknown pattern.\n    local boolStr = string.format(\n    \"[Darklit Tether Helper] Unknown pattern! Connections were NW-SE: %s, NE-SW: %s, NW-SW: %s, NE-SE: %s, NW-NE: %s, SW-SE: %s\"\n    , tostring(nwToSe), tostring(neToSw), tostring(nwToSw), tostring(neToSe), tostring(nwToNe), tostring(swToSe))\n    MuAiGuide.Reactions.log(boolStr, 5)\n    self.used = true\n    return\nend\n\nlocal northColor = 4115595212\nlocal southColor = 4125294414\nlocal southStr = \"S\"\nlocal northStr = \"N\"\nlocal playerID = TensorCore.mGetPlayer().id\nfor i = 1, 4 do\n    local entID = resultArray[i]\n    if (entID == nil) then\n        MuAiGuide.Reactions.log(\"[Darklit Tether Helper] Ent ID for quadrant \" .. i .. \" was nil!\", 5)\n    else\n        ---@type string\n        local sideStr = nil\n        ---@type integer\n        local sideColor = nil\n        if (i < 3) then\n            sideStr = northStr\n            sideColor = northColor\n        else\n            sideStr = southStr\n            sideColor = southColor\n        end\n        ---@type number\n        local textSize = 1.5\n        if (entID == playerID) then\n            textSize = 2.25\n            if (sideStr == northStr) then\n                MuAiGuide.Reactions.Shotcall(\"North\", true)\n            else\n                MuAiGuide.Reactions.Shotcall(\"South\", true)\n            end\n        end\n        MuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, sideStr, entID, sideColor, true, textSize, 1.5)\n    end\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal darklitTethers = data.p4DarklitTethers\n\nif darklitTethers.healerID == nil then\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 治疗连线ID缺失。\", 5)\n    self.used = true\n    return\nend\n\nif darklitTethers.tankID == nil then\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 坦克连线ID缺失。\", 5)\n    self.used = true\n    return\nend\n\nif table.size(darklitTethers.dpsIDs) ~= 2 then\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 输出连线人数不是2。\", 5)\n    self.used = true\n    return\nend\n\nlocal healerEnt = TensorCore.mGetEntity(darklitTethers.healerID)\n\nif healerEnt == nil or not healerEnt.alive then\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 治疗实体缺失或已死亡。\", 5)\n    self.used = true\n    return\nend\n\nlocal tankEnt = TensorCore.mGetEntity(darklitTethers.tankID)\n\nif tankEnt == nil or not tankEnt.alive then\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 坦克实体缺失或已死亡。\", 5)\n    self.used = true\n    return\nend\n\nlocal dps1 = TensorCore.mGetEntity(darklitTethers.dpsIDs[1])\nlocal dps2 = TensorCore.mGetEntity(darklitTethers.dpsIDs[2])\n\nif dps1 == nil or not dps1.alive or dps2 == nil or not dps2.alive then\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 输出实体缺失或已死亡。\", 5)\n    self.used = true\n    return\nend\n\n---@type GameObject\nlocal northWestEnt = healerEnt\n---@type GameObject\nlocal northEastEnt = tankEnt\n---@type GameObject\nlocal southWestEnt = nil\n---@type GameObject\nlocal southEastEnt = nil\n\n-- 先按实际东西站位分组; 同侧双输出再按既有优先级补位。\n\nlocal isWest1 = dps1.pos.x < 100\nlocal isWest2 = dps2.pos.x < 100\n\nif isWest1 == isWest2 then\n    local prio1 = data.dpsPriority[dps1.id]\n    local prio2 = data.dpsPriority[dps2.id]\n    if prio1 == nil or prio2 == nil then\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 输出优先级不可用。\", 5)\n        self.used = true\n        return\n    end\n\n    local swapEnt, stayEnt = nil, nil\n    -- 优先级数字较小者换边。\n    if prio1 < prio2 then\n        swapEnt = dps1\n        stayEnt = dps2\n    else\n        swapEnt = dps2\n        stayEnt = dps1\n    end\n\n    if isWest1 then\n        southWestEnt = stayEnt\n        southEastEnt = swapEnt\n    else\n        southWestEnt = swapEnt\n        southEastEnt = stayEnt\n    end\nelse\n    -- 两名输出已在不同侧时保留当前分组。\n    if isWest1 then\n        southWestEnt = dps1\n        southEastEnt = dps2\n    else\n        southEastEnt = dps1\n        southWestEnt = dps2\n    end\nend\n\nif southWestEnt == nil then\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 西南输出职责未分配。\", 5)\n    self.used = true\n    return\nend\n\nif southEastEnt == nil then\n    MuAiGuide.Reactions.log(\"[FRU/龙诗] 东南输出职责未分配。\", 5)\n    self.used = true\n    return\nend\n\nlocal isPartnered = data.p4DarklitTethersIsPartnered\nlocal nwID = northWestEnt.id\nlocal neID = northEastEnt.id\nlocal swID = southWestEnt.id\nlocal seID = southEastEnt.id\n\nlocal nwToSe = isPartnered(nwID, seID)\nlocal neToSw = isPartnered(neID, swID)\nlocal nwToSw = isPartnered(nwID, swID)\nlocal neToSe = isPartnered(neID, seID)\nlocal nwToNe = isPartnered(nwID, neID)\nlocal swToSe = isPartnered(swID, seID)\n\n---@enum FruQuadrantEnum\nlocal quadrants = {\n    NW = 1,\n    NE = 2,\n    SW = 3,\n    SE = 4,\n}\n\n---@type table<FruQuadrantEnum, integer?>\nlocal resultArray = {\n    [1] = nil,\n    [2] = nil,\n    [3] = nil,\n    [4] = nil,\n}\n\n---@type table<FruQuadrantEnum, \"N\"|\"S\"?>\nlocal stringArray = {\n    [1] = nil,\n    [2] = nil,\n    [3] = nil,\n    [4] = nil,\n}\n\nif nwToNe and swToSe then\n    -- 区分沙漏形和方框形连线。\n    if nwToSw then\n        -- 方框形: 东侧南北交换。\n        resultArray[quadrants.NW] = nwID\n        resultArray[quadrants.NE] = seID\n        resultArray[quadrants.SW] = swID\n        resultArray[quadrants.SE] = neID\n    else\n        -- 沙漏形: 东北与西南交换。\n        resultArray[quadrants.NW] = nwID\n        resultArray[quadrants.NE] = swID\n        resultArray[quadrants.SW] = neID\n        resultArray[quadrants.SE] = seID\n    end\nelseif nwToSw and nwToSe and neToSe and neToSw then\n    -- 蝴蝶结形: 保留原分配。\n    resultArray[quadrants.NW] = nwID\n    resultArray[quadrants.NE] = neID\n    resultArray[quadrants.SW] = swID\n    resultArray[quadrants.SE] = seID\nelse\n    -- 关系不匹配时记录输入并结束本次求解。\n    local boolStr = string.format(\n        \"[FRU/龙诗] 未匹配连线图形, 西北-东南:%s, 东北-西南:%s, 西北-西南:%s, 东北-东南:%s, 西北-东北:%s, 西南-东南:%s\",\n        tostring(nwToSe),\n        tostring(neToSw),\n        tostring(nwToSw),\n        tostring(neToSe),\n        tostring(nwToNe),\n        tostring(swToSe)\n    )\n    MuAiGuide.Reactions.log(boolStr, 5)\n    self.used = true\n    return\nend\n\nlocal northColor = 4115595212\nlocal southColor = 4125294414\nlocal southStr = \"S\"\nlocal northStr = \"N\"\nlocal playerId = TensorCore.mGetPlayer().id\nfor i = 1, 4 do\n    local entityId = resultArray[i]\n    if entityId == nil then\n        MuAiGuide.Reactions.log(\"[FRU/龙诗] 象限编号\" .. i .. \"的记录缺失。\", 5)\n    else\n        ---@type string\n        local sideStr = nil\n        ---@type integer\n        local sideColor = nil\n        if i < 3 then\n            sideStr = northStr\n            sideColor = northColor\n        else\n            sideStr = southStr\n            sideColor = southColor\n        end\n        ---@type number\n        local textSize = 1.5\n        if entityId == playerId then\n            textSize = 2.25\n            if sideStr == northStr then\n                MuAiGuide.Reactions.Shotcall(\"North\", true)\n            else\n                MuAiGuide.Reactions.Shotcall(\"South\", true)\n            end\n        end\n        MuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, sideStr, entityId, sideColor, true, textSize, 1.5)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -15396,7 +15396,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Run NAUR Tether Helper",
+							name = "计算龙诗连线站位",
 							uuid = "b88f1606-1884-5b98-ab21-b48bac0f5fed",
 							version = 2.1,
 						},
@@ -15411,7 +15411,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.hasSetupPriority == true",
 							dequeueIfLuaFalse = true,
-							name = "Priority Set",
+							name = "优先级已初始化",
 							uuid = "b96b8efa-88a7-5f02-8cac-1593985e1f6d",
 							version = 3,
 						},
@@ -15424,7 +15424,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruDarklitTetherNAUR == true",
 							dequeueIfLuaFalse = true,
-							name = "Option Enabled",
+							name = "功能已开启",
 							uuid = "7a520954-8252-5ed1-8a8d-45a37b935bbd",
 							version = 3,
 						},
@@ -15435,7 +15435,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p4DarklitTethersCount == 4",
-							name = "Tether Count",
+							name = "连线数量",
 							uuid = "4d3c29d8-6e78-5227-8cab-5c6fa6fa98f5",
 							version = 3,
 						},
@@ -15463,7 +15463,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\n-- We use GroupList func here because I don't know if waters can appear on dead people in Darklit?\n-- And, if people are dead, it's almost certainly a wipe anyways.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\n\nlocal waterID = 2461\nfor _, ent in pairs(party) do\n    local entID = ent.id\n    local waterBuff = TensorCore.getBuff(entID, waterID)\n    if (waterBuff ~= nil) then\n        local buffTimeMs = waterBuff.duration * 1000\n        drawer:addTimedCircleOnEnt(3000, ent.id, 6, buffTimeMs - 3000, false, nil, 256)\n    end\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\n-- 保留当前队伍查询范围; 死亡玩家水点名覆盖仍需实战核验。\n\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\n\nlocal waterID = 2461\nfor _, entity in pairs(party) do\n    local entityId = entity.id\n    local waterBuff = TensorCore.getBuff(entityId, waterID)\n    if waterBuff ~= nil then\n        local buffTimeMs = waterBuff.duration * 1000\n        drawer:addTimedCircleOnEnt(3000, entity.id, 6, buffTimeMs - 3000, false, nil, 256)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -15474,7 +15474,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Queue Water Draws",
+							name = "显示水点名范围",
 							uuid = "58578f48-7f50-5103-b4af-60e453d04327",
 							version = 2.1,
 						},
@@ -15488,7 +15488,7 @@ local tbl =
 						{
 							buffID = 2461,
 							category = "Party",
-							name = "Waters Exist",
+							name = "存在水点名",
 							partyTargetNumber = 2,
 							partyTargetSubType = "Number",
 							uuid = "8a2707f9-1ba6-5076-b4dc-c86b860ba40a",
@@ -15519,7 +15519,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- We use GroupList func here because I don't know if waters can appear on dead people in Darklit?\n-- And, if people are dead, it's almost certainly a wipe anyways.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal isTethered = data.p4DarklitTethers.alreadyRecorded\nlocal waterID = 2461\n\nfor _, ent in pairs(party) do\n    if (TensorCore.hasBuff(ent.id, waterID)) then\n        if (isTethered[ent.id]) then\n            MuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"Water-T\", ent.id, 4227849038, true, 2, 0)\n        else\n            MuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"Water\", ent.id, 4227849038, true, 2, 0)\n        end\n    end\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 保留当前队伍查询范围; 死亡玩家水点名覆盖仍需实战核验。\n\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal isTethered = data.p4DarklitTethers.alreadyRecorded\nlocal waterID = 2461\n\nfor _, entity in pairs(party) do\n    if TensorCore.hasBuff(entity.id, waterID) then\n        if isTethered[entity.id] then\n            MuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"Water-T\", entity.id, 4227849038, true, 2, 0)\n        else\n            MuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, \"Water\", entity.id, 4227849038, true, 2, 0)\n        end\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -15539,7 +15539,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "WorldText Waters",
+							name = "标注水点名",
 							uuid = "da18a662-c05d-5310-a5b1-84127f0ffeb1",
 							version = 2.1,
 						},
@@ -15553,7 +15553,7 @@ local tbl =
 						{
 							buffID = 2461,
 							category = "Party",
-							name = "Waters Exist",
+							name = "存在水点名",
 							partyTargetNumber = 2,
 							partyTargetSubType = "Number",
 							uuid = "d263abd1-6b41-5e41-a8cf-5094e14caeff",
@@ -15567,7 +15567,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p4DarklitTethersCount == 4",
-							name = "Tether Count",
+							name = "连线数量",
 							uuid = "973c81c5-4a1f-5694-ba52-2ba45ac7fa93",
 							version = 3,
 						},
@@ -15578,7 +15578,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p4DarklitTethers ~= nil and data.p4DarklitTethers.alreadyRecorded[TensorCore.mGetPlayer().id] ~= true",
-							name = "Player Not Tethered",
+							name = "本人无连线",
 							uuid = "75bbf071-1104-5044-8f2a-c15193ae2038",
 							version = 3,
 						},
@@ -15606,7 +15606,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal role = \"Support\"\nif MuAiGuide.Reactions.isDPS(eventArgs.entityID) then\n    role = \"DPS\"\nend\n\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, tostring(role)..\" Stack\", eventArgs.entityID, nil, true, 2)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal role = \"Support\"\nif MuAiGuide.Reactions.isDPS(eventArgs.entityID) then\n    role = \"DPS\"\nend\n\nMuAiGuide.Reactions.addTimedWorldTextOnEnt(5000, tostring(role) .. \" Stack\", eventArgs.entityID, nil, true, 2)\nself.used = true",
 							conditions = 
 							{
 								
@@ -15679,7 +15679,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Solve Tethers",
+							name = "计算连线站位",
 							uuid = "a1fe52ce-02f5-592d-9f32-ff7c9255f89b",
 							version = 2.1,
 						},
@@ -15709,7 +15709,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Solve Stacks",
+							name = "计算分摊站位",
 							uuid = "b7d35310-60b8-5a75-842d-140b384f32ab",
 							version = 2.1,
 						},
@@ -15724,7 +15724,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p4DarklitSetupRan == true",
 							dequeueIfLuaFalse = true,
-							name = "Setup Ran",
+							name = "龙诗状态已初始化",
 							uuid = "e6b3ed95-cde5-59b7-aeb6-f8a0a03a4513",
 							version = 3,
 						},
@@ -15737,7 +15737,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruDarklitTetherNAUR == true",
 							dequeueIfLuaFalse = true,
-							name = "Option Enabled",
+							name = "功能已开启",
 							uuid = "abe2d454-87d5-5d2b-914a-3375463138bc",
 							version = 3,
 						},
@@ -15749,7 +15749,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p4DarklitData.isValid == true",
-							name = "Finished Recording",
+							name = "机制记录完整",
 							uuid = "1821d9d7-5392-523f-b2f3-defbe873a33c",
 							version = 3,
 						},
@@ -15791,9 +15791,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal center = data.arenaCenter\nlocal id1, id2, id3, id4 = 0, 0, 0, 0\nlocal pos1, pos2, pos3, pos4\nlocal dist1, dist2, dist3, dist4 = 9999, 9999, 9999, 9999\n\n---@type integer[]\nlocal partyIDs = data.partyIDArray\n\nfor i = 1, 8 do\n    local id = partyIDs[i]\n    local ent = TensorCore.mGetEntity(id)\n    if ent ~= nil and ent.alive then\n    local pos = ent.pos\n    -- Calculate distance manually to avoid the sqrt operation from getDistance2d & lua-to-C call overhead\n    local dx = pos.x - center.x\n    local dz = pos.z - center.z\n    local sqDist = dx * dx + dz * dz\n\n    if (sqDist < dist1) then\n        -- Shift others down\n        id4, dist4, pos4 = id3, dist3, pos3\n        id3, dist3, pos3 = id2, dist2, pos2\n        id2, dist2, pos2 = id1, dist1, pos1\n        id1, dist1, pos1 = id, sqDist, pos\n    elseif (sqDist < dist2) then\n        id4, dist4, pos4 = id3, dist3, pos3\n        id3, dist3, pos3 = id2, dist2, pos2\n        id2, dist2, pos2 = id, sqDist, pos\n    elseif (sqDist < dist3) then\n        id4, dist4, pos4 = id3, dist3, pos3\n        id3, dist3, pos3 = id, sqDist, pos\n    elseif (sqDist < dist4) then\n        id4, dist4, pos4 = id, sqDist, pos\n    end\n    end\nend\n\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nif (id1 > 0) then\n    drawer:addCone(100, 0.05, 100, 30, 1.0471975, TensorCore.getHeadingToTarget(center, pos1), false, 256)\nend\nif (id2 > 0) then\n    drawer:addCone(100, 0.05, 100, 30, 1.0471975, TensorCore.getHeadingToTarget(center, pos2), false, 256)\nend\nif (id3 > 0) then\n    drawer:addCone(100, 0.05, 100, 30, 1.0471975, TensorCore.getHeadingToTarget(center, pos3), false, 256)\nend\nif (id4 > 0) then\n    drawer:addCone(100, 0.05, 100, 30, 1.0471975, TensorCore.getHeadingToTarget(center, pos4), false, 256)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal center = data.arenaCenter\nlocal id1, id2, id3, id4 = 0, 0, 0, 0\nlocal pos1, pos2, pos3, pos4\nlocal dist1, dist2, dist3, dist4 = 9999, 9999, 9999, 9999\n\n---@type integer[]\nlocal partyIDs = data.partyIDArray\n\nfor i = 1, 8 do\n    local id = partyIDs[i]\n    local entity = TensorCore.mGetEntity(id)\n    if entity ~= nil and entity.alive then\n        local position = entity.pos\n        -- 按平方距离排序, 保留同距时的队伍遍历顺序。\n        local dx = position.x - center.x\n        local dz = position.z - center.z\n        local sqDist = dx * dx + dz * dz\n\n        if sqDist < dist1 then\n            id4, dist4, pos4 = id3, dist3, pos3\n            id3, dist3, pos3 = id2, dist2, pos2\n            id2, dist2, pos2 = id1, dist1, pos1\n            id1, dist1, pos1 = id, sqDist, position\n        elseif sqDist < dist2 then\n            id4, dist4, pos4 = id3, dist3, pos3\n            id3, dist3, pos3 = id2, dist2, pos2\n            id2, dist2, pos2 = id, sqDist, position\n        elseif sqDist < dist3 then\n            id4, dist4, pos4 = id3, dist3, pos3\n            id3, dist3, pos3 = id, sqDist, position\n        elseif sqDist < dist4 then\n            id4, dist4, pos4 = id, sqDist, position\n        end\n    end\nend\n\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nif id1 > 0 then\n    drawer:addCone(100, 0.05, 100, 30, 1.0471975, TensorCore.getHeadingToTarget(center, pos1), false, 256)\nend\nif id2 > 0 then\n    drawer:addCone(100, 0.05, 100, 30, 1.0471975, TensorCore.getHeadingToTarget(center, pos2), false, 256)\nend\nif id3 > 0 then\n    drawer:addCone(100, 0.05, 100, 30, 1.0471975, TensorCore.getHeadingToTarget(center, pos3), false, 256)\nend\nif id4 > 0 then\n    drawer:addCone(100, 0.05, 100, 30, 1.0471975, TensorCore.getHeadingToTarget(center, pos4), false, 256)\nend\n\nself.used = true",
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw 4 Closest",
+							name = "显示最近四人扇形",
 							uuid = "8de6c8d1-c6f7-5b96-9a70-2a4b44fb80a1",
 							version = 2.1,
 						},
@@ -16074,7 +16074,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal timeToMech = 3100\nlocal drawTime = 2000\nlocal delayTime = timeToMech - drawTime\nlocal playerID = TensorCore.mGetPlayer().id\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, ent in pairs(party) do\n    if (ent.id ~= playerID) then\n        drawer:addTimedCircleOnEnt(drawTime, ent.id, 5, delayTime, false, nil, 256)\n    end\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal timeToMech = 3100\nlocal durationMs = 2000\nlocal delayMs = timeToMech - durationMs\nlocal playerId = TensorCore.mGetPlayer().id\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, entity in pairs(party) do\n    if entity.id ~= playerId then\n        drawer:addTimedCircleOnEnt(durationMs, entity.id, 5, delayMs, false, nil, 256)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -16084,7 +16084,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Draw Spread",
+							name = "显示分散范围",
 							uuid = "31053f03-075e-562e-a818-2832bcbe3626",
 							version = 2.1,
 						},
@@ -16100,7 +16100,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40288,
-							name = "Channel ID",
+							name = "读条技能",
 							uuid = "0c11f525-cbfa-51d0-aeaf-4aff55fdd91d",
 							version = 3,
 						},
@@ -16131,7 +16131,7 @@ local tbl =
 							aType = "Lua",
 							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nMuAiGuide.Reactions.Shotcall(\"Spread, Then Water Stack\", true)\nself.used = true",
 							gVar = "ACR_TensorViper3_CD",
-							name = "Shotcall Next Mechs",
+							name = "播报后续机制",
 							uuid = "7535591d-8e19-527d-bf19-2ff362b7719b",
 							version = 2.1,
 						},
@@ -16160,9 +16160,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(3500, data.p4FragmentID, data.p4FragmentHitRadius + 5, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(3500, data.p4FragmentID, data.p4FragmentHitRadius + 5, nil, false, nil, 256)\nself.used = true",
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Fragment Exclusion Zone",
+							name = "显示碎片避让范围",
 							uuid = "e232e77e-fb73-5178-b991-8ff88b8dd57e",
 							version = 2.1,
 						},
@@ -16204,7 +16204,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(3500, data.p4FragmentID, data.p4FragmentHitRadius + 6, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(3500, data.p4FragmentID, data.p4FragmentHitRadius + 6, nil, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -16214,7 +16214,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Fragment Exclusion Zone",
+							name = "显示碎片避让范围",
 							uuid = "e232e77e-fb73-5178-b991-8ff88b8dd57e",
 							version = 2.1,
 						},
@@ -16229,7 +16229,7 @@ local tbl =
 							buffID = 2461,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Has Water",
+							name = "持有水点名",
 							uuid = "fb3eb0d8-4b1d-588e-93dc-ec0ea951a1e8",
 							version = 3,
 						},
@@ -16268,7 +16268,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal entPos = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCircle(entPos.x, 0.05, entPos.z, 8, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal entityPosition = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCircle(entityPosition.x, 0.05, entityPosition.z, 8, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -16283,7 +16283,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Circle",
+							name = "显示目标范围",
 							uuid = "d0315945-b287-559e-a899-cdfe86f1a915",
 							version = 2.1,
 						},
@@ -16297,7 +16297,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "ContentID",
-							name = "Oracle Filter",
+							name = "选取巫女",
 							partyTargetContentID = 9832,
 							uuid = "4c90ae35-ac57-5b91-9d2f-d36b70160e04",
 							version = 3,
@@ -16310,7 +16310,7 @@ local tbl =
 							category = "Filter",
 							filterTargetSubtype = "Furthest",
 							filterTargetType = "Party",
-							name = "Furthest From Prev",
+							name = "距前一目标最远",
 							subtypeRangeCheckSourceType = "Prev Detection Target",
 							uuid = "700884fb-83ae-599f-b0a1-3279c96e0374",
 							version = 3,
@@ -16353,7 +16353,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal entPos = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCircle(entPos.x, 0.05, entPos.z, 8, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal entityPosition = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCircle(entityPosition.x, 0.05, entityPosition.z, 8, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -16368,7 +16368,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Circle",
+							name = "显示目标范围",
 							uuid = "d0315945-b287-559e-a899-cdfe86f1a915",
 							version = 2.1,
 						},
@@ -16382,7 +16382,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "ContentID",
-							name = "Oracle Filter",
+							name = "选取巫女",
 							partyTargetContentID = 9832,
 							uuid = "4c90ae35-ac57-5b91-9d2f-d36b70160e04",
 							version = 3,
@@ -16394,7 +16394,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Party",
-							name = "Nearest To Prev",
+							name = "距前一目标最近",
 							subtypeRangeCheckSourceType = "Prev Detection Target",
 							uuid = "99d7ce29-51c8-52b2-b25d-7a114deb43ba",
 							version = 3,
@@ -16424,7 +16424,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(6850, data.p4FragmentID, data.p4FragmentHitRadius + 8, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(6850, data.p4FragmentID, data.p4FragmentHitRadius + 8, nil, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -16434,7 +16434,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Fragment Exclusion Zone",
+							name = "显示碎片避让范围",
 							uuid = "e232e77e-fb73-5178-b991-8ff88b8dd57e",
 							version = 2.1,
 						},
@@ -16449,7 +16449,7 @@ local tbl =
 							category = "Self",
 							conditionType = 9,
 							dequeueIfLuaFalse = true,
-							name = "Is Tank",
+							name = "坦克职业",
 							partyTargetType = "Tank",
 							uuid = "cc93b220-1e55-554e-b1fa-bdd675ae3ddb",
 							version = 3,
@@ -16489,7 +16489,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 光巫女死亡轮回: 每次 OnFrame 更新读取对应首领当前目标, 不固定画在本人.\nlocal remaining = (777.8 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUTankStacks\nif rounds == nil then\n    rounds = {}\n    data.StringFRUTankStacks = rounds\nend\nlocal state = rounds[\"175_p4UsurperID\"]\nif state == nil then state = {}; rounds[\"175_p4UsurperID\"] = state end\nif remaining <= 0 then\n    if state.draw then Argus.deleteTimedShape(state.draw) end\n    state.draw = nil\n    self.used = true\n    return\nend\n\nlocal bossID = data.p4UsurperID\nif bossID == nil then self.used = true; return end\nlocal boss = TensorCore.mGetEntity(bossID)\nif boss == nil then self.used = true; return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\n-- 自身读条时目标可能暂时为首领/未可读; 只保留本轮最后有效的玩家附着.\nif target == nil or target.contentid ~= 0 then self.used = true; return end\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nif state.draw and state.targetID ~= target.id then\n    if not drawer:updateTimedCircleOnEnt(state.draw, nil, target.id) then state.draw = nil end\nend\nif state.draw == nil then\n    state.draw = drawer:addTimedCircleOnEnt(remaining, target.id, 4, 0, false, true, 256)\nend\nif state.draw then state.targetID = target.id end\nself.used = true\n",
+							actionLua = "-- FRU 光巫女死亡轮回: 每次 OnFrame 更新读取对应首领当前目标, 不固定画在本人.\nlocal remaining = (777.8 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUTankStacks\nif rounds == nil then\n    rounds = {}\n    data.StringFRUTankStacks = rounds\nend\nlocal state = rounds[\"175_p4UsurperID\"]\nif state == nil then\n    state = {}\n    rounds[\"175_p4UsurperID\"] = state\nend\nif remaining <= 0 then\n    if state.draw then\n        Argus.deleteTimedShape(state.draw)\n    end\n    state.draw = nil\n    self.used = true\n    return\nend\n\nlocal bossId = data.p4UsurperID\nif bossId == nil then\n    self.used = true\n    return\nend\nlocal boss = TensorCore.mGetEntity(bossId)\nif boss == nil then\n    self.used = true\n    return\nend\nlocal target = TensorCore.mGetEntity(boss.targetid)\n-- 自身读条时目标可能暂时为首领/未可读; 只保留本轮最后有效的玩家附着.\nif target == nil or target.contentid ~= 0 then\n    self.used = true\n    return\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nif state.draw and state.targetID ~= target.id then\n    if not drawer:updateTimedCircleOnEnt(state.draw, nil, target.id) then\n        state.draw = nil\n    end\nend\nif state.draw == nil then\n    state.draw = drawer:addTimedCircleOnEnt(remaining, target.id, 4, 0, false, true, 256)\nend\nif state.draw then\n    state.targetID = target.id\nend\nself.used = true",
 							gVar = "ACR_TensorViper3_CD",
 							name = "跟随首领当前分摊目标",
 							uuid = "01824758-6523-5e1e-8cc6-d11b00256d2e",
@@ -16523,7 +16523,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 暗巫女死亡轮回: 每次 OnFrame 更新读取对应首领当前目标, 不固定画在本人.\nlocal remaining = (777.8 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUTankStacks\nif rounds == nil then\n    rounds = {}\n    data.StringFRUTankStacks = rounds\nend\nlocal state = rounds[\"175_p4OracleID\"]\nif state == nil then state = {}; rounds[\"175_p4OracleID\"] = state end\nif remaining <= 0 then\n    if state.draw then Argus.deleteTimedShape(state.draw) end\n    state.draw = nil\n    self.used = true\n    return\nend\n\nlocal bossID = data.p4OracleID\nif bossID == nil then self.used = true; return end\nlocal boss = TensorCore.mGetEntity(bossID)\nif boss == nil then self.used = true; return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\n-- 自身读条时目标可能暂时为首领/未可读; 只保留本轮最后有效的玩家附着.\nif target == nil or target.contentid ~= 0 then self.used = true; return end\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nif state.draw and state.targetID ~= target.id then\n    if not drawer:updateTimedCircleOnEnt(state.draw, nil, target.id) then state.draw = nil end\nend\nif state.draw == nil then\n    state.draw = drawer:addTimedCircleOnEnt(remaining, target.id, 4, 0, false, true, 256)\nend\nif state.draw then state.targetID = target.id end\nself.used = true\n",
+							actionLua = "-- FRU 暗巫女死亡轮回: 每次 OnFrame 更新读取对应首领当前目标, 不固定画在本人.\nlocal remaining = (777.8 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUTankStacks\nif rounds == nil then\n    rounds = {}\n    data.StringFRUTankStacks = rounds\nend\nlocal state = rounds[\"175_p4OracleID\"]\nif state == nil then\n    state = {}\n    rounds[\"175_p4OracleID\"] = state\nend\nif remaining <= 0 then\n    if state.draw then\n        Argus.deleteTimedShape(state.draw)\n    end\n    state.draw = nil\n    self.used = true\n    return\nend\n\nlocal bossId = data.p4OracleID\nif bossId == nil then\n    self.used = true\n    return\nend\nlocal boss = TensorCore.mGetEntity(bossId)\nif boss == nil then\n    self.used = true\n    return\nend\nlocal target = TensorCore.mGetEntity(boss.targetid)\n-- 自身读条时目标可能暂时为首领/未可读; 只保留本轮最后有效的玩家附着.\nif target == nil or target.contentid ~= 0 then\n    self.used = true\n    return\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nif state.draw and state.targetID ~= target.id then\n    if not drawer:updateTimedCircleOnEnt(state.draw, nil, target.id) then\n        state.draw = nil\n    end\nend\nif state.draw == nil then\n    state.draw = drawer:addTimedCircleOnEnt(remaining, target.id, 4, 0, false, true, 256)\nend\nif state.draw then\n    state.targetID = target.id\nend\nself.used = true",
 							gVar = "ACR_TensorViper3_CD",
 							name = "跟随首领当前分摊目标",
 							uuid = "01824758-6523-5e1e-8cc6-d11b00256d2e",
@@ -16557,9 +16557,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(3500, data.p4FragmentID, data.p4FragmentHitRadius + 4, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(3500, data.p4FragmentID, data.p4FragmentHitRadius + 4, nil, false, nil, 256)\nself.used = true",
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Fragment Exclusion Zone",
+							name = "显示碎片避让范围",
 							uuid = "e232e77e-fb73-5178-b991-8ff88b8dd57e",
 							version = 2.1,
 						},
@@ -16601,7 +16601,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 无尽顿悟分摊: 每次 OnFrame 更新读取对应首领当前目标, 不固定画在本人.\nlocal remaining = (784.4 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUTankStacks\nif rounds == nil then\n    rounds = {}\n    data.StringFRUTankStacks = rounds\nend\nlocal state = rounds[\"176_p4UsurperID\"]\nif state == nil then state = {}; rounds[\"176_p4UsurperID\"] = state end\nif remaining <= 0 then\n    if state.draw then Argus.deleteTimedShape(state.draw) end\n    state.draw = nil\n    self.used = true\n    return\nend\n\nlocal bossID = data.p4UsurperID\nif bossID == nil then self.used = true; return end\nlocal boss = TensorCore.mGetEntity(bossID)\nif boss == nil then self.used = true; return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\n-- 自身读条时目标可能暂时为首领/未可读; 只保留本轮最后有效的玩家附着.\nif target == nil or target.contentid ~= 0 then self.used = true; return end\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nif state.draw and state.targetID ~= target.id then\n    if not drawer:updateTimedCircleOnEnt(state.draw, nil, target.id) then state.draw = nil end\nend\nif state.draw == nil then\n    state.draw = drawer:addTimedCircleOnEnt(remaining, target.id, 4, 0, false, true, 256)\nend\nif state.draw then state.targetID = target.id end\nself.used = true\n",
+							actionLua = "-- FRU 无尽顿悟分摊: 每次 OnFrame 更新读取对应首领当前目标, 不固定画在本人.\nlocal remaining = (784.4 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUTankStacks\nif rounds == nil then\n    rounds = {}\n    data.StringFRUTankStacks = rounds\nend\nlocal state = rounds[\"176_p4UsurperID\"]\nif state == nil then\n    state = {}\n    rounds[\"176_p4UsurperID\"] = state\nend\nif remaining <= 0 then\n    if state.draw then\n        Argus.deleteTimedShape(state.draw)\n    end\n    state.draw = nil\n    self.used = true\n    return\nend\n\nlocal bossId = data.p4UsurperID\nif bossId == nil then\n    self.used = true\n    return\nend\nlocal boss = TensorCore.mGetEntity(bossId)\nif boss == nil then\n    self.used = true\n    return\nend\nlocal target = TensorCore.mGetEntity(boss.targetid)\n-- 自身读条时目标可能暂时为首领/未可读; 只保留本轮最后有效的玩家附着.\nif target == nil or target.contentid ~= 0 then\n    self.used = true\n    return\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nif state.draw and state.targetID ~= target.id then\n    if not drawer:updateTimedCircleOnEnt(state.draw, nil, target.id) then\n        state.draw = nil\n    end\nend\nif state.draw == nil then\n    state.draw = drawer:addTimedCircleOnEnt(remaining, target.id, 4, 0, false, true, 256)\nend\nif state.draw then\n    state.targetID = target.id\nend\nself.used = true",
 							gVar = "ACR_RikuDNC3_CD",
 							name = "跟随首领当前分摊目标",
 							uuid = "aac198ce-9893-5ce5-938d-4c9015009161",
@@ -16680,9 +16680,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "---@class CTHourglassInfo\n---@field hourglassIDs integer[]\n---@field yellowTethers table<integer, boolean>\n---@field purpleTethers table<integer, boolean>\n---@field tetherCount integer\n---@field northPurpleID integer?\n---@field northPurpleIsWest boolean?\n\n---@type CTHourglassInfo\ndata.p4CTHourglassInfo = {\n    hourglassIDs = {},\n    yellowTethers = {},\n    purpleTethers = {},\n    tetherCount = 0,\n}\n\nself.used = true",
+							actionLua = "---@class FruCTHourglassInfo\n---@field hourglassIDs integer[]\n---@field yellowTethers table<integer, boolean>\n---@field purpleTethers table<integer, boolean>\n---@field tetherCount integer\n---@field northPurpleID integer?\n---@field northPurpleIsWest boolean?\n\n---@type FruCTHourglassInfo\ndata.p4CTHourglassInfo = {\n    hourglassIDs = {},\n    yellowTethers = {},\n    purpleTethers = {},\n    tetherCount = 0,\n}\n\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Initialize CT Vars",
+							name = "初始化结晶状态",
 							uuid = "34873c2b-f1fc-53b5-bf3d-8da5a23753ff",
 							version = 2.1,
 						},
@@ -16721,7 +16721,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Hourglass Ent",
+							name = "记录沙漏ID",
 							uuid = "ae784a0c-674f-5a1e-88aa-7ce21d445f8a",
 							version = 2.1,
 						},
@@ -16737,7 +16737,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 9823,
-							name = "Content ID",
+							name = "实体类型ID",
 							uuid = "dabf2f31-93d8-566e-abed-c1267f40c209",
 							version = 3,
 						},
@@ -16790,7 +16790,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Yellow Tether",
+							name = "记录黄连线",
 							uuid = "649282d8-bf47-554e-b4c3-a6c615d267a4",
 							version = 2.1,
 						},
@@ -16800,7 +16800,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal info = data.p4CTHourglassInfo\ninfo.tetherCount = info.tetherCount + 1\nlocal entID = eventArgs.sourceEntityID\ninfo.purpleTethers[entID] = true\nlocal ent = TensorCore.mGetEntity(entID)\nif (ent == nil) then\n    MuAiGuide.Reactions.log(\"[Record Purple Tether] Ent of ID \" .. entID .. \" returned nil!\", 5)\n    self.used = true\n    return\nend\nif (ent.pos.z < 100) then\n    MuAiGuide.Reactions.log(\"[Record Purple Tether] North purple tether set as ID \" .. entID, 5)\n    info.northPurpleID = entID\n    info.northPurpleIsWest = ent.pos.x < 100\nend\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal info = data.p4CTHourglassInfo\ninfo.tetherCount = info.tetherCount + 1\nlocal entID = eventArgs.sourceEntityID\ninfo.purpleTethers[entID] = true\nlocal entity = TensorCore.mGetEntity(entID)\nif entity == nil then\n    MuAiGuide.Reactions.log(\"[FRU/时间结晶] 紫连线实体ID\" .. entID .. \"暂不可读。\", 5)\n    self.used = true\n    return\nend\nif entity.pos.z < 100 then\n    MuAiGuide.Reactions.log(\"[FRU/时间结晶] 北紫沙漏ID: \" .. entID, 5)\n    info.northPurpleID = entID\n    info.northPurpleIsWest = entity.pos.x < 100\nend\nself.used = true",
 							conditions = 
 							{
 								
@@ -16810,7 +16810,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Purple Tether",
+							name = "记录紫连线",
 							uuid = "4adaed80-eb51-50f6-983f-db1774c642cf",
 							version = 2.1,
 						},
@@ -16828,7 +16828,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 5,
 							eventIntValue = 134,
-							name = "Yellow Tether",
+							name = "黄连线",
 							uuid = "5484aa9b-f4c2-5d6f-820d-14738c4a534a",
 							version = 3,
 						},
@@ -16843,7 +16843,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 5,
 							eventIntValue = 133,
-							name = "Purple Tether",
+							name = "紫连线",
 							uuid = "9ec1ca7e-26c8-5aa5-b2c0-8a2d233582d7",
 							version = 3,
 						},
@@ -16873,7 +16873,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if (data.p4DragonHeadID1 == nil) then\n    data.p4DragonHeadID1 = eventArgs.entityID\nelse\n    data.p4DragonHeadID2 = eventArgs.entityID\nend\n\nself.used = true",
+							actionLua = "if data.p4DragonHeadID1 == nil then\n    data.p4DragonHeadID1 = eventArgs.entityID\nelse\n    data.p4DragonHeadID2 = eventArgs.entityID\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -16883,7 +16883,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set Dragon Head ID",
+							name = "记录龙头ID",
 							uuid = "3a31625c-f214-59ca-96d9-374cc55d6bda",
 							version = 2.1,
 						},
@@ -16899,7 +16899,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 9323,
-							name = "Content ID",
+							name = "实体类型ID",
 							uuid = "1ac91637-bef9-5290-9f72-6cd9cdb90aea",
 							version = 3,
 						},
@@ -16945,7 +16945,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set Player Red",
+							name = "记录本人红色状态",
 							uuid = "af010e5c-5b07-5528-b06c-952bac9d200e",
 							version = 2.1,
 						},
@@ -16966,7 +16966,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set Player Blue",
+							name = "记录本人蓝色状态",
 							uuid = "880521bc-bf6b-5d73-8173-9ae8087622b9",
 							version = 2.1,
 						},
@@ -16981,7 +16981,7 @@ local tbl =
 							buffID = 3263,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Is Red",
+							name = "红色状态",
 							uuid = "b7f4abe1-0d77-5e81-806f-0a61f7218c9d",
 							version = 3,
 						},
@@ -16993,7 +16993,7 @@ local tbl =
 							buffID = 3264,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Is Blue",
+							name = "蓝色状态",
 							uuid = "af194f26-e135-5462-a8d6-5583e2ca09fc",
 							version = 3,
 						},
@@ -17033,7 +17033,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set Player Eruption",
+							name = "记录本人喷发",
 							uuid = "5d9e4795-f7b0-5959-a0d0-d71395769951",
 							version = 2.1,
 						},
@@ -17054,7 +17054,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set Player Water",
+							name = "记录本人水点名",
 							uuid = "d43931d1-1bd9-5b37-bebe-56e3da2ca7f2",
 							version = 2.1,
 						},
@@ -17075,7 +17075,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set Player Ice",
+							name = "记录本人冰点名",
 							uuid = "e9b5fab6-f608-5bde-92f1-48d6cee62139",
 							version = 2.1,
 						},
@@ -17096,7 +17096,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set Player Aero",
+							name = "记录本人风点名",
 							uuid = "de8700ae-abf8-5bb2-a014-2b0858f12cfe",
 							version = 2.1,
 						},
@@ -17117,7 +17117,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Set Player Stack",
+							name = "记录本人暗神圣",
 							uuid = "d35a820a-cc7e-5697-912f-6c2b0cb0e00a",
 							version = 2.1,
 						},
@@ -17132,7 +17132,7 @@ local tbl =
 							buffID = 2461,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Is Water",
+							name = "水点名",
 							uuid = "3c680326-a1ed-58bd-bb15-2728ebac8f96",
 							version = 3,
 						},
@@ -17144,7 +17144,7 @@ local tbl =
 							buffID = 2463,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Is Aero",
+							name = "风点名",
 							uuid = "3be30bce-6eb2-56c4-a1c3-afc34830ff91",
 							version = 3,
 						},
@@ -17156,7 +17156,7 @@ local tbl =
 							buffID = 2460,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Is Eruption",
+							name = "喷发点名",
 							uuid = "4e6c8f13-6ea1-5e9a-ae2b-b8d9e83d61ec",
 							version = 3,
 						},
@@ -17169,7 +17169,7 @@ local tbl =
 							buffID = 2462,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Is Ice",
+							name = "冰点名",
 							uuid = "5049d232-1dba-5ec4-96fa-248963d36da4",
 							version = 3,
 						},
@@ -17182,7 +17182,7 @@ local tbl =
 							buffID = 2454,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Is Stack",
+							name = "暗神圣点名",
 							uuid = "18509c99-6557-5769-b241-fad3655bec2d",
 							version = 3,
 						},
@@ -17222,7 +17222,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal waterBuffID = 2461\nlocal blueBuffID = 3264\nlocal redBuffID = 3263\nlocal stackBuffID = 2454\nlocal aeroBuffID = 2463\nlocal iceBuffID = 2462\nlocal eruptionBuffID = 2460\n\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = player.id\n\nlocal function drawArrow(arrowH)\n    local drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256) -- G255 A87\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    drawer:addTimedArrow(5000, 100, 0.05, 100, arrowH, 12, 1, nil, nil, 0, false, 256)\nend\n\nlocal function handleRed()\n    -- Handle red things.\n    local matchingBuffID = 0\n    local isAero = false\n    if (TensorCore.hasBuff(playerID, aeroBuffID)) then\n        matchingBuffID = aeroBuffID\n        isAero = true\n    elseif (TensorCore.hasBuff(playerID, iceBuffID)) then\n        matchingBuffID = iceBuffID\n    else\n        MuAiGuide.Reactions.log(\"[CT Helper] Player was red, but had neither aero or ice!\", 5)\n        return\n    end\n\n    local sameBuffEntID = 0\n    local partyIDs = data.partyIDArray\n    for i = 1, 8 do\n        local id = partyIDs[i]\n        if (id ~= playerID and TensorCore.hasBuff(id, redBuffID) and TensorCore.hasBuff(id, matchingBuffID)) then\n            sameBuffEntID = id\n            break\n        end\n    end\n\n    if (sameBuffEntID == 0) then\n        MuAiGuide.Reactions.log(\"[CT Helper] Was unable to find an ent matching player buff of \" .. matchingBuffID, 5)\n        return\n    end\n\n    local sameBuffEnt = TensorCore.mGetEntity(sameBuffEntID)\n    if (sameBuffEnt == nil) then\n        MuAiGuide.Reactions.log(\"[CT] Helper] Ent matching player buff returned nil!\", 5)\n        return\n    end\n\n    local isPlayerDPS = MuAiGuide.Reactions.dpsJobs[player.job] == true\n    local isPartnerDPS = MuAiGuide.Reactions.dpsJobs[sameBuffEnt.job] == true\n    ---@type boolean?\n    local playerGoesWest = nil\n    if (isPlayerDPS ~= isPartnerDPS) then\n        playerGoesWest = not isPlayerDPS\n    else\n        local playerPriority = data.priorityDictionary[playerID]\n        local partnerPriority = data.priorityDictionary[sameBuffEntID]\n        if (playerPriority == nil or partnerPriority == nil) then\n            MuAiGuide.Reactions.log(\"[CT Helper] Player or Partner priority lookup returned nil!\", 5)\n            return\n        end\n\n        -- Lower numerical value swaps.\n        if (isPlayerDPS) then\n            -- DPS default east, so between two DPS the lower numerical value goes west.\n            playerGoesWest = playerPriority < partnerPriority\n        else\n            -- Supports default west, so between two supports the lower numerical value goes east.\n            playerGoesWest = playerPriority > partnerPriority\n        end\n\n        -- reversed swap order for JP strat (H1 goes west, H2 east instead of vice-versa, etc.)\n        if (MuAiGuide.Reactions.Settings.Reactions.fruJPCTOrder == 2) then\n            playerGoesWest = not playerGoesWest\n        end\n    end\n\n    local arrowH\n    local callStr\n    local shotcallTime = 5\n    if (isAero) then\n        callStr = playerGoesWest and \"SouthWest\" or \"SouthEast\"\n        arrowH = math.rad(45)\n    else\n        shotcallTime = 12\n        callStr = playerGoesWest and \"West\" or \"East\"\n        arrowH = math.rad(90)\n        local stackIsWest = data.p4CTHourglassInfo.northPurpleIsWest\n        if (playerGoesWest == stackIsWest) then\n            callStr = callStr .. \", Then Stack North\"\n        else\n            callStr = callStr .. \", Then Dodge South\"\n        end\n    end\n\n    if (playerGoesWest) then\n        arrowH = -arrowH\n    end\n\n    MuAiGuide.Reactions.Shotcall(callStr, true, shotcallTime)\n    drawArrow(arrowH)\nend\n\nlocal function handleBlue()\n    local northPurpleIsWest = data.p4CTHourglassInfo.northPurpleIsWest\n    if (northPurpleIsWest == nil) then\n        MuAiGuide.Reactions.log(\"[CT Helper] North Purple Is West remained unset!\", 5)\n        return\n    end\n\n    if (TensorCore.hasBuff(playerID, eruptionBuffID)) then\n        MuAiGuide.Reactions.Shotcall(\"North Purple\", true)\n        local arrowH = math.pi - math.rad(45)\n        -- arrowH starts pointing NE because negative rotation is clockwise and pi is north.\n        -- if north purple is west, we can mirror the heading by flipping its sign. Yay [-pi,pi]!\n        if (northPurpleIsWest) then arrowH = -arrowH end\n        drawArrow(arrowH)\n        return\n    end\n\n    --If player isn't eruption, all the other buffs go the same direction.\n    MuAiGuide.Reactions.Shotcall(\"South Purple\", true)\n    local arrowH = 0 - math.rad(45)\n    -- arrowH startings pointing SW.\n    -- if north purple is west, south must be east, so we mirror.\n    if (northPurpleIsWest) then arrowH = -arrowH end\n    drawArrow(arrowH)\nend\n\nif (TensorCore.hasBuff(playerID, redBuffID)) then\n    handleRed()\nelseif (TensorCore.hasBuff(playerID, blueBuffID)) then\n    handleBlue()\nelse\n    MuAiGuide.Reactions.log(\"[CT Helper] Player was neither red or blue!\", 5)\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal waterBuffID = 2461\nlocal blueBuffID = 3264\nlocal redBuffID = 3263\nlocal stackBuffID = 2454\nlocal aeroBuffID = 2463\nlocal iceBuffID = 2462\nlocal eruptionBuffID = 2460\n\nlocal player = TensorCore.mGetPlayer()\nlocal playerId = player.id\n\nlocal function drawArrow(arrowHeading)\n    local drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    drawer:addTimedArrow(5000, 100, 0.05, 100, arrowHeading, 12, 1, nil, nil, 0, false, 256)\nend\n\nlocal function handleRed()\n    local matchingBuffID = 0\n    local isAero = false\n    if TensorCore.hasBuff(playerId, aeroBuffID) then\n        matchingBuffID = aeroBuffID\n        isAero = true\n    elseif TensorCore.hasBuff(playerId, iceBuffID) then\n        matchingBuffID = iceBuffID\n    else\n        MuAiGuide.Reactions.log(\"[FRU/时间结晶] 本人为红色, 但未检测到风或冰。\", 5)\n        return\n    end\n\n    local sameBuffEntID = 0\n    local partyIDs = data.partyIDArray\n    for i = 1, 8 do\n        local id = partyIDs[i]\n        if id ~= playerId and TensorCore.hasBuff(id, redBuffID) and TensorCore.hasBuff(id, matchingBuffID) then\n            sameBuffEntID = id\n            break\n        end\n    end\n\n    if sameBuffEntID == 0 then\n        MuAiGuide.Reactions.log(\"[FRU/时间结晶] 未找到相同点名队员, 状态ID: \" .. matchingBuffID, 5)\n        return\n    end\n\n    local sameBuffEnt = TensorCore.mGetEntity(sameBuffEntID)\n    if sameBuffEnt == nil then\n        MuAiGuide.Reactions.log(\"[FRU/时间结晶] 同点名队员实体暂不可读。\", 5)\n        return\n    end\n\n    local isPlayerDPS = MuAiGuide.Reactions.dpsJobs[player.job] == true\n    local isPartnerDPS = MuAiGuide.Reactions.dpsJobs[sameBuffEnt.job] == true\n    ---@type boolean?\n    local playerGoesWest = nil\n    if isPlayerDPS ~= isPartnerDPS then\n        playerGoesWest = not isPlayerDPS\n    else\n        local playerPriority = data.priorityDictionary[playerId]\n        local partnerPriority = data.priorityDictionary[sameBuffEntID]\n        if playerPriority == nil or partnerPriority == nil then\n            MuAiGuide.Reactions.log(\"[FRU/时间结晶] 本人或搭档优先级缺失。\", 5)\n            return\n        end\n\n        if isPlayerDPS then\n            -- 输出默认东侧, 双输出时优先级较高者去西。\n            playerGoesWest = playerPriority < partnerPriority\n        else\n            -- 辅助默认西侧, 双辅助时优先级较高者去东。\n            playerGoesWest = playerPriority > partnerPriority\n        end\n\n        -- 日式顺序反转同职责换边优先级。\n        if MuAiGuide.Reactions.Settings.Reactions.fruJPCTOrder == 2 then\n            playerGoesWest = not playerGoesWest\n        end\n    end\n\n    local arrowHeading\n    local callText\n    local shotcallTime = 5\n    if isAero then\n        callText = playerGoesWest and \"SouthWest\" or \"SouthEast\"\n        arrowHeading = math.rad(45)\n    else\n        shotcallTime = 12\n        callText = playerGoesWest and \"West\" or \"East\"\n        arrowHeading = math.rad(90)\n        local stackIsWest = data.p4CTHourglassInfo.northPurpleIsWest\n        if playerGoesWest == stackIsWest then\n            callText = callText .. \", Then Stack North\"\n        else\n            callText = callText .. \", Then Dodge South\"\n        end\n    end\n\n    if playerGoesWest then\n        arrowHeading = -arrowHeading\n    end\n\n    MuAiGuide.Reactions.Shotcall(callText, true, shotcallTime)\n    drawArrow(arrowHeading)\nend\n\nlocal function handleBlue()\n    local northPurpleIsWest = data.p4CTHourglassInfo.northPurpleIsWest\n    if northPurpleIsWest == nil then\n        MuAiGuide.Reactions.log(\"[FRU/时间结晶] 北紫沙漏方向尚未确定。\", 5)\n        return\n    end\n\n    if TensorCore.hasBuff(playerId, eruptionBuffID) then\n        MuAiGuide.Reactions.Shotcall(\"North Purple\", true)\n        local arrowHeading = math.pi - math.rad(45)\n        -- 默认东北方向, 北紫在西时镜像到西北。\n\n        if northPurpleIsWest then\n            arrowHeading = -arrowHeading\n        end\n        drawArrow(arrowHeading)\n        return\n    end\n\n    -- 非喷发蓝色状态统一去南侧紫沙漏。\n    MuAiGuide.Reactions.Shotcall(\"South Purple\", true)\n    local arrowHeading = 0 - math.rad(45)\n    -- 默认西南方向, 北紫在西时镜像到东南。\n\n    if northPurpleIsWest then\n        arrowHeading = -arrowHeading\n    end\n    drawArrow(arrowHeading)\nend\n\nif TensorCore.hasBuff(playerId, redBuffID) then\n    handleRed()\nelseif TensorCore.hasBuff(playerId, blueBuffID) then\n    handleBlue()\nelse\n    MuAiGuide.Reactions.log(\"[FRU/时间结晶] 本人无红蓝状态。\", 5)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -17237,7 +17237,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Arrow Starting Direction",
+							name = "显示结晶起步方向",
 							uuid = "a38a448e-d3e0-59f9-867f-d8e2576d088e",
 							version = 2.1,
 						},
@@ -17252,7 +17252,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruCTHelper == true",
 							dequeueIfLuaFalse = true,
-							name = "Option Enabled",
+							name = "功能已开启",
 							uuid = "03292367-87c8-5360-a17d-62ecf88f01e6",
 							version = 3,
 						},
@@ -17264,7 +17264,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p4CTHourglassInfo ~= nil and data.p4CTHourglassInfo.tetherCount == 4",
-							name = "Four Tethers",
+							name = "已记录四条连线",
 							uuid = "c7f575b6-d916-5e32-a53f-64b10e0ebc09",
 							version = 3,
 						},
@@ -17305,9 +17305,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal aoeRadius = 12\nlocal firstDuration = 7166  -- Time until first explosion\nlocal secondDuration = 5355 -- Time for second set\nlocal thirdDuration = 4810  -- Time for third set\n\nlocal hourglasses = TensorCore.entityList(\"contentid=9823\")\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\n\n-- Group tracking \nlocal yellowGroup = {}\nlocal purpleGroup = {}\nlocal noTetherGroup = {}\n\n-- Sort hourglasses into groups\nfor id,glass in pairs(hourglasses) do\n    local tethers = Argus.getTethersOnEnt(id)\n    if table.valid(tethers) then\n        if tethers[1].type == 134 then\n            table.insert(yellowGroup, glass)\n        elseif tethers[1].type == 133 then\n            table.insert(purpleGroup, glass)\n        end\n    else\n        table.insert(noTetherGroup, glass)\n    end\nend\n\n-- Draw all in each group with appropriate timings\nif table.valid(yellowGroup) then\n    for _,glass in pairs(yellowGroup) do\n        drawer:addTimedCircle(firstDuration, glass.pos.x, 0.05, glass.pos.z, aoeRadius, nil, false, nil, 256)\n        \n    end\n    \n    -- Only draw subsequent groups if we found the first\n    for _,glass in pairs(noTetherGroup) do\n        drawer:addTimedCircle(secondDuration, glass.pos.x, 0.05, glass.pos.z, aoeRadius, firstDuration, false, nil, 256)\n    end\n    \n    for _,glass in pairs(purpleGroup) do\n        drawer:addTimedCircle(thirdDuration, glass.pos.x, 0.05, glass.pos.z, aoeRadius, firstDuration + secondDuration, false, nil, 256)\n    end\n    \n    self.used = true\nend\n",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal aoeRadius = 12\nlocal firstDuration = 7166 -- 距第一轮判定的毫秒数。\nlocal secondDuration = 5355 -- 第二轮持续毫秒数。\nlocal thirdDuration = 4810 -- 第三轮持续毫秒数。\n\nlocal hourglasses = TensorCore.entityList(\"contentid=9823\")\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\n\nlocal yellowGroup = {}\nlocal purpleGroup = {}\nlocal noTetherGroup = {}\n\n-- 按黄、无连线、紫三组记录沙漏。\nfor id, glass in pairs(hourglasses) do\n    local tethers = Argus.getTethersOnEnt(id)\n    if table.valid(tethers) then\n        if tethers[1].type == 134 then\n            table.insert(yellowGroup, glass)\n        elseif tethers[1].type == 133 then\n            table.insert(purpleGroup, glass)\n        end\n    else\n        table.insert(noTetherGroup, glass)\n    end\nend\n\nif table.valid(yellowGroup) then\n    for _, glass in pairs(yellowGroup) do\n        drawer:addTimedCircle(firstDuration, glass.pos.x, 0.05, glass.pos.z, aoeRadius, nil, false, nil, 256)\n    end\n\n    -- 找到首轮黄沙漏后, 按原偏移绘制后两轮。\n    for _, glass in pairs(noTetherGroup) do\n        drawer:addTimedCircle(secondDuration, glass.pos.x, 0.05, glass.pos.z, aoeRadius, firstDuration, false, nil, 256)\n    end\n\n    for _, glass in pairs(purpleGroup) do\n        drawer:addTimedCircle(\n            thirdDuration,\n            glass.pos.x,\n            0.05,\n            glass.pos.z,\n            aoeRadius,\n            firstDuration + secondDuration,\n            false,\n            nil,\n            256\n        )\n    end\n\n    self.used = true\nend",
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Queue Maelstroms",
+							name = "显示三轮风圈",
 							uuid = "e175e92e-335b-5a87-9082-6c9cc301e923",
 							version = 2.1,
 						},
@@ -17348,7 +17348,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Throttle",
+							name = "执行间隔",
 							uuid = "dd61ef35-56bf-57a4-96d1-5b516143a30d",
 							version = 2.1,
 						},
@@ -17359,7 +17359,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = MuAiGuide.Reactions.API.getAgnosticPartyList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal waterBuffID = 2461\nlocal stackBuffID = 2454\nlocal aeroBuffID = 2463\nlocal iceBuffID = 2462\nlocal eruptionBuffID = 2460\n\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal moogleDrawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nmoogleDrawer:setGradient(3, 0.15, 2)\nmoogleDrawer:setHeightOffset(0.05)\nlocal fruMoogle2 = TensorCore.getMoogleDrawer()\nlocal aeroDrawer = TensorCore.getCachedDrawer((fruMoogle2.colorStart and fruMoogle2.colorStart % 0x1000000 + 0x4D000000), (fruMoogle2.colorMid and fruMoogle2.colorMid % 0x1000000 + 0x4D000000), (fruMoogle2.colorEnd and fruMoogle2.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\naeroDrawer:setGradient(3, 0.15, 2)\naeroDrawer:setHeightOffset(0.05)\nlocal stackDrawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nstackDrawer:setGradient(3, 0.15, 2)\nstackDrawer:setHeightOffset(0.05)\nlocal drawTime = 5000\n\nlocal function handleBuffDraw(entID)\n    local aeroBuff = TensorCore.getBuff(entID, aeroBuffID)\n    if (aeroBuff ~= nil) then\n        local buffInfo = aeroBuff\n        local delayTime = (buffInfo.duration * 1000) - drawTime\n        aeroDrawer:addTimedCircleOnEnt(5000, entID, 15, delayTime, false, nil, 256)\n        return\n    end\n\n    local iceBuff = TensorCore.getBuff(entID, iceBuffID)\n    if (iceBuff ~= nil) then\n        local buffInfo = iceBuff\n        local delayTime = (buffInfo.duration * 1000) - drawTime\n        moogleDrawer:addTimedDonutOnEnt(5000, entID, 3, 12, delayTime, false, nil, 256)\n        return\n    end\n\n    local eruptionBuff = TensorCore.getBuff(entID, eruptionBuffID)\n    if (eruptionBuff ~= nil) then\n        local buffInfo = eruptionBuff\n        local delayTime = (buffInfo.duration * 1000) - drawTime\n        moogleDrawer:addTimedCircleOnEnt(5000, entID, 6, delayTime, false, nil, 256)\n        return\n    end\n\n    local waterBuff = TensorCore.getBuff(entID, waterBuffID)\n    if (waterBuff ~= nil) then\n        local buffInfo = waterBuff\n        local delayTime = (buffInfo.duration * 1000) - drawTime\n        stackDrawer:addTimedCircleOnEnt(5000, entID, 6, delayTime, false, nil, 256)\n        return\n    end\n\n    local stackBuff = TensorCore.getBuff(entID, stackBuffID)\n    if (stackBuff ~= nil) then\n        local buffInfo = stackBuff\n        local delayTime = (buffInfo.duration * 1000) - drawTime\n        stackDrawer:addTimedCircleOnEnt(5000, entID, 6, delayTime, false, nil, 256)\n        return\n    end\nend\n\n---@diagnostic disable-next-line: param-type-mismatch\nfor _, ent in pairs(party) do\n    handleBuffDraw(ent.id)\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = MuAiGuide.Reactions.API.getAgnosticPartyList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal waterBuffID = 2461\nlocal stackBuffID = 2454\nlocal aeroBuffID = 2463\nlocal iceBuffID = 2462\nlocal eruptionBuffID = 2460\n\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal moogleDrawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nmoogleDrawer:setGradient(3, 0.15, 2)\nmoogleDrawer:setHeightOffset(0.05)\nlocal moogleColors2 = TensorCore.getMoogleDrawer()\nlocal aeroDrawer = TensorCore.getCachedDrawer(\n    (moogleColors2.colorStart and moogleColors2.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors2.colorMid and moogleColors2.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors2.colorEnd and moogleColors2.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\naeroDrawer:setGradient(3, 0.15, 2)\naeroDrawer:setHeightOffset(0.05)\nlocal stackDrawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nstackDrawer:setGradient(3, 0.15, 2)\nstackDrawer:setHeightOffset(0.05)\nlocal durationMs = 5000\n\nlocal function handleBuffDraw(entityId)\n    local aeroBuff = TensorCore.getBuff(entityId, aeroBuffID)\n    if aeroBuff ~= nil then\n        local buffInfo = aeroBuff\n        local delayMs = (buffInfo.duration * 1000) - durationMs\n        aeroDrawer:addTimedCircleOnEnt(5000, entityId, 15, delayMs, false, nil, 256)\n        return\n    end\n\n    local iceBuff = TensorCore.getBuff(entityId, iceBuffID)\n    if iceBuff ~= nil then\n        local buffInfo = iceBuff\n        local delayMs = (buffInfo.duration * 1000) - durationMs\n        moogleDrawer:addTimedDonutOnEnt(5000, entityId, 3, 12, delayMs, false, nil, 256)\n        return\n    end\n\n    local eruptionBuff = TensorCore.getBuff(entityId, eruptionBuffID)\n    if eruptionBuff ~= nil then\n        local buffInfo = eruptionBuff\n        local delayMs = (buffInfo.duration * 1000) - durationMs\n        moogleDrawer:addTimedCircleOnEnt(5000, entityId, 6, delayMs, false, nil, 256)\n        return\n    end\n\n    local waterBuff = TensorCore.getBuff(entityId, waterBuffID)\n    if waterBuff ~= nil then\n        local buffInfo = waterBuff\n        local delayMs = (buffInfo.duration * 1000) - durationMs\n        stackDrawer:addTimedCircleOnEnt(5000, entityId, 6, delayMs, false, nil, 256)\n        return\n    end\n\n    local stackBuff = TensorCore.getBuff(entityId, stackBuffID)\n    if stackBuff ~= nil then\n        local buffInfo = stackBuff\n        local delayMs = (buffInfo.duration * 1000) - durationMs\n        stackDrawer:addTimedCircleOnEnt(5000, entityId, 6, delayMs, false, nil, 256)\n        return\n    end\nend\n\n---@diagnostic disable-next-line: param-type-mismatch\nfor _, entity in pairs(party) do\n    handleBuffDraw(entity.id)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -17370,7 +17370,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Queue Debuff Draws",
+							name = "显示点名范围",
 							uuid = "04f850fe-6750-56c0-8a74-9bf14ae378ae",
 							version = 2.1,
 						},
@@ -17384,7 +17384,7 @@ local tbl =
 						{
 							buffID = 4208,
 							category = "Self",
-							name = "Have Rewind",
+							name = "持有回返",
 							uuid = "79b71a54-3348-561c-8fee-ea2ef0a30232",
 							version = 3,
 						},
@@ -17413,7 +17413,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D15B0DD, nil, 0x4D15B0DD, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedArrowOnEnt(25000, eventArgs.entityID, 3.25, 2, 2, 0, nil, 2500, false, nil, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D15B0DD, nil, 0x4D15B0DD, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedArrowOnEnt(25000, eventArgs.entityID, 3.25, 2, 2, 0, nil, 2500, false, nil, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -17423,7 +17423,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Dragon Heading",
+							name = "显示龙头方向",
 							uuid = "32a4a79e-62ad-5d3d-a420-5ea935f5c43b",
 							version = 2.1,
 						},
@@ -17439,7 +17439,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 2,
 							eventEntityContentID = 9323,
-							name = "Content ID",
+							name = "实体类型ID",
 							uuid = "10c2d31c-b135-5a06-81cd-37a11a461358",
 							version = 3,
 						},
@@ -17469,7 +17469,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal ent1 = TensorCore.mGetEntity(data.p4DragonHeadID1)\nlocal ent2 = TensorCore.mGetEntity(data.p4DragonHeadID2)\n\nlocal anyStillVisible = false\nlocal playerPos = TensorCore.mGetPlayer().pos\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\n\nif (ent1 ~= nil and Argus.isEntityVisible(ent1.id)) then\n    local pos = ent1.pos\n    local dist = TensorCore.getDistance2d(playerPos, pos)\n    if (dist < 16) then\n        drawer:addCircle(pos.x, 0.05, pos.z, 12.5, false, 256)\n    end\n    anyStillVisible = true\nend\n\nif (ent2 ~= nil and Argus.isEntityVisible(ent2.id)) then\n    local pos = ent2.pos\n    local dist = TensorCore.getDistance2d(playerPos, pos)\n    if (dist < 16) then\n        drawer:addCircle(pos.x, 0.05, pos.z, 12.5, false, 256)\n    end\n    anyStillVisible = true\nend\n\n-- 短暂无可见龙头不永久停画; 原窗口内每帧继续查询.\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal firstEntity = TensorCore.mGetEntity(data.p4DragonHeadID1)\nlocal secondEntity = TensorCore.mGetEntity(data.p4DragonHeadID2)\nlocal playerPos = TensorCore.mGetPlayer().pos\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\n\nif firstEntity ~= nil and Argus.isEntityVisible(firstEntity.id) then\n    local position = firstEntity.pos\n    local dist = TensorCore.getDistance2d(playerPos, position)\n    if dist < 16 then\n        drawer:addCircle(position.x, 0.05, position.z, 12.5, false, 256)\n    end\nend\n\nif secondEntity ~= nil and Argus.isEntityVisible(secondEntity.id) then\n    local position = secondEntity.pos\n    local dist = TensorCore.getDistance2d(playerPos, position)\n    if dist < 16 then\n        drawer:addCircle(position.x, 0.05, position.z, 12.5, false, 256)\n    end\nend\n\n-- 短暂无可见龙头不永久停画; 原窗口内每帧继续查询.\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -17484,7 +17484,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw LotL Radius On Nearest",
+							name = "显示光之海浪范围",
 							uuid = "2b4c6279-8cb6-5559-a2a6-257d97a04d18",
 							version = 2.1,
 						},
@@ -17499,7 +17499,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p4CancelDragonDraw ~= true",
 							dequeueIfLuaFalse = true,
-							name = "Don't Cancel",
+							name = "范围未被取消",
 							uuid = "328051bd-2f62-571d-8dcc-d20fd2e58fca",
 							version = 3,
 						},
@@ -17513,7 +17513,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p4CTPlayerRed == false",
 							dequeueIfLuaFalse = true,
-							name = "Not Red",
+							name = "无红色状态",
 							uuid = "da306222-0857-5d6e-b335-64386b48ac44",
 							version = 3,
 						},
@@ -17542,7 +17542,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal buffInfo = TensorCore.getBuff(TensorCore.mGetPlayer().id, 2461)\nlocal drawTime = 3000\nlocal drawDelay = (buffInfo.duration * 1000) - drawTime\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(drawTime, data.p4FragmentID, data.p4FragmentHitRadius + 6, drawDelay, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal buffInfo = TensorCore.getBuff(TensorCore.mGetPlayer().id, 2461)\nlocal durationMs = 3000\nlocal delayMs = (buffInfo.duration * 1000) - durationMs\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(durationMs, data.p4FragmentID, data.p4FragmentHitRadius + 6, delayMs, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -17552,7 +17552,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Water Exclusion Zone",
+							name = "水点名碎片避让",
 							uuid = "e232e77e-fb73-5178-b991-8ff88b8dd57e",
 							version = 2.1,
 						},
@@ -17562,7 +17562,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal buffInfo = TensorCore.getBuff(TensorCore.mGetPlayer().id, 2454)\nlocal drawTime = 3000\nlocal drawDelay = (buffInfo.duration * 1000) - drawTime\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(drawTime, data.p4FragmentID, data.p4FragmentHitRadius + 6, drawDelay, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal buffInfo = TensorCore.getBuff(TensorCore.mGetPlayer().id, 2454)\nlocal durationMs = 3000\nlocal delayMs = (buffInfo.duration * 1000) - durationMs\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(durationMs, data.p4FragmentID, data.p4FragmentHitRadius + 6, delayMs, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -17572,7 +17572,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Stack Exclusion Zone",
+							name = "暗神圣碎片避让",
 							uuid = "4d1cb7b2-0f6a-562b-8e80-a88b0658be86",
 							version = 2.1,
 						},
@@ -17582,7 +17582,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal buffInfo = TensorCore.getBuff(TensorCore.mGetPlayer().id, 2462)\nlocal drawTime = 3000\nlocal drawDelay = (buffInfo.duration * 1000) - drawTime\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(drawTime, data.p4FragmentID, data.p4FragmentHitRadius + 12, drawDelay, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal buffInfo = TensorCore.getBuff(TensorCore.mGetPlayer().id, 2462)\nlocal durationMs = 3000\nlocal delayMs = (buffInfo.duration * 1000) - durationMs\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(durationMs, data.p4FragmentID, data.p4FragmentHitRadius + 12, delayMs, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -17592,7 +17592,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Ice Exclusion Zone",
+							name = "冰点名碎片避让",
 							uuid = "125eee2b-b916-504b-a2bf-577d82e449a0",
 							version = 2.1,
 						},
@@ -17602,7 +17602,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal buffInfo = TensorCore.getBuff(TensorCore.mGetPlayer().id, 2460)\nlocal drawTime = 3000\nlocal drawDelay = (buffInfo.duration * 1000) - drawTime\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(drawTime, data.p4FragmentID, data.p4FragmentHitRadius + 6, drawDelay, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal buffInfo = TensorCore.getBuff(TensorCore.mGetPlayer().id, 2460)\nlocal durationMs = 3000\nlocal delayMs = (buffInfo.duration * 1000) - durationMs\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(durationMs, data.p4FragmentID, data.p4FragmentHitRadius + 6, delayMs, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -17612,7 +17612,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Eruption Exclusion Zone",
+							name = "喷发碎片避让",
 							uuid = "a1519dcf-338c-55ef-8d88-335d2ef599fa",
 							version = 2.1,
 						},
@@ -17627,7 +17627,7 @@ local tbl =
 							buffID = 2461,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Has Water",
+							name = "持有水点名",
 							uuid = "de7d7d1b-6dac-58d4-aa4b-f2183bd970d7",
 							version = 3,
 						},
@@ -17639,7 +17639,7 @@ local tbl =
 							buffID = 2454,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Has Stack",
+							name = "持有暗神圣",
 							uuid = "9cd7c0f9-830f-5fa0-8b96-a69f712d6d63",
 							version = 3,
 						},
@@ -17651,7 +17651,7 @@ local tbl =
 							buffID = 2462,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Has Ice",
+							name = "持有冰点名",
 							uuid = "f6ca056c-4ae1-5d10-bf29-09e6d20fe4cb",
 							version = 3,
 						},
@@ -17663,7 +17663,7 @@ local tbl =
 							buffID = 2460,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Has Eruption",
+							name = "持有喷发",
 							uuid = "e1efc307-fbff-5081-b8d0-45c69271f9bc",
 							version = 3,
 						},
@@ -17705,7 +17705,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal player = TensorCore.mGetPlayer()\nlocal party = MuAiGuide.Reactions.API.getAgnosticPartyList(\"Party\")\nif not player or not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal targetEnt = nil\nfor _, ent in pairs(party) do\n    if ent.id ~= player.id and TensorCore.hasBuff(ent, 2460) then\n        if (player.pos.x > 100 and ent.pos.x > 100) or (player.pos.x < 100 and ent.pos.x < 100) then\n            targetEnt = ent\n            break\n        end\n    end\nend\n\nif targetEnt then\n    local drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    drawer:addTimedArrowOnEnt(5000, player.id, 3, 0.4, nil, nil, targetEnt.id, 0, false, nil, nil, 256)\n    MuAiGuide.Reactions.Shotcall(\"Stack after dragon\", true)\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal player = TensorCore.mGetPlayer()\nlocal party = MuAiGuide.Reactions.API.getAgnosticPartyList(\"Party\")\nif not player or not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal targetEnt = nil\nfor _, entity in pairs(party) do\n    if entity.id ~= player.id and TensorCore.hasBuff(entity, 2460) then\n        if (player.pos.x > 100 and entity.pos.x > 100) or (player.pos.x < 100 and entity.pos.x < 100) then\n            targetEnt = entity\n            break\n        end\n    end\nend\n\nif targetEnt then\n    local drawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    drawer:addTimedArrowOnEnt(5000, player.id, 3, 0.4, nil, nil, targetEnt.id, 0, false, nil, nil, 256)\n    MuAiGuide.Reactions.Shotcall(\"Stack after dragon\", true)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -17728,7 +17728,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p4CTPlayerRed == true",
-							name = "isRedIce",
+							name = "红色冰点名",
 							uuid = "f98e9943-a9df-5fec-927f-e4355ec4f002",
 							version = 3,
 						},
@@ -17766,9 +17766,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "---@type integer[]\nlocal partyIDs = data.partyIDArray\nfor i = 1, 8 do\n    local id = partyIDs[i]\n    if (TensorCore.hasBuff(id, 2463)) then\n        if (data.p4AeroID1 == nil) then\n            data.p4AeroID1 = id\n        else\n            data.p4AeroID2 = id\n            break\n        end\n    end\nend\n\nself.used = true",
+							actionLua = "---@type integer[]\nlocal partyIDs = data.partyIDArray\nfor i = 1, 8 do\n    local id = partyIDs[i]\n    if TensorCore.hasBuff(id, 2463) then\n        if data.p4AeroID1 == nil then\n            data.p4AeroID1 = id\n        else\n            data.p4AeroID2 = id\n            break\n        end\n    end\nend\n\nself.used = true",
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Aeros",
+							name = "记录风点名目标",
 							uuid = "e93f5c6e-21b5-5542-9476-45cfa0e29218",
 							version = 2.1,
 						},
@@ -17797,7 +17797,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if (data.p4LongingPositions == nil) then\n    ---@type ThreeDimensionalPos[]\n    data.p4LongingPositions = {}\n    data.p4LongingCount = 0\nend\nlocal count = data.p4LongingCount + 1\ndata.p4LongingCount = count\n\nlocal pos = { x = eventArgs.castPosX, y = 0, z = eventArgs.castPosZ }\ntable.insert(data.p4LongingPositions, pos)\n\nself.used = true",
+							actionLua = "if data.p4LongingPositions == nil then\n    ---@type ThreeDimensionalPos[]\n    data.p4LongingPositions = {}\n    data.p4LongingCount = 0\nend\nlocal count = data.p4LongingCount + 1\ndata.p4LongingCount = count\n\nlocal position = { x = eventArgs.castPosX, y = 0, z = eventArgs.castPosZ }\ntable.insert(data.p4LongingPositions, position)\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -17807,7 +17807,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record LotL Pos",
+							name = "记录光之海浪落点",
 							uuid = "bb6e6e6f-03aa-5247-b96a-a13d5c85ff41",
 							version = 2.1,
 						},
@@ -17823,7 +17823,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40241,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "b5bc1c3d-fb60-51d1-858d-6135458383e2",
 							version = 3,
 						},
@@ -17863,7 +17863,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal drawTime = (835.3 - TensorReactions_CurrentTimer) * 1000\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D0000FF, nil, 0x4D0000FF, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircle(drawTime, eventArgs.castPosX, 0.05, eventArgs.castPosZ, 1, 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal durationMs = (835.3 - TensorReactions_CurrentTimer) * 1000\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D0000FF, nil, 0x4D0000FF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircle(durationMs, eventArgs.castPosX, 0.05, eventArgs.castPosZ, 1, 0, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -17873,7 +17873,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Draw Puddle Zone",
+							name = "显示放圈范围",
 							uuid = "71cc1477-1eab-52ca-af67-465b04b1e494",
 							version = 2.1,
 						},
@@ -17889,7 +17889,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40241,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "62f6bc69-93e8-5642-8776-55f0fb5f34d1",
 							version = 3,
 						},
@@ -17919,7 +17919,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nif (data.p4LongingHelperPuddleCount == nil) then\n    data.p4LongingHelperPuddleCount = 0\n    data.p4CleanseDraws = {}\nend\n\nlocal count = data.p4LongingHelperPuddleCount + 1\ndata.p4LongingHelperPuddleCount = count\nlocal xPos = eventArgs.castPosX\nlocal zPos = eventArgs.castPosZ\nlocal drawTime = (835.3 - TensorReactions_CurrentTimer) * 1000\nlocal isWest = xPos < 100\nlocal firstTwo = count <= 2\n-- Low count means west/east.\n-- Eruption grabs west, Stack grabs east.\nlocal drawForEruption = firstTwo and isWest and data.p4CTPlayerEruption\nlocal drawForStack = firstTwo and not isWest and data.p4CTPlayerStack\n-- High count means sw/se.\n-- Ice grabs SW, water grabs SE.\nlocal drawForIce = not firstTwo and isWest and data.p4CTPlayerIce\nlocal drawForWater = not firstTwo and not isWest and data.p4CTPlayerWater\n\nif (drawForEruption or drawForStack or drawForIce or drawForWater) then\n    local fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    fruMuai1:setGradient(3, 0.15, 2)\n    fruMuai1:setHeightOffset(0.05)\n    local uuid1 = fruMuai1:addTimedCircle(drawTime, xPos, 0.05, zPos, 1, 0, false, nil, 256)\n    table.insert(data.p4CleanseDraws, uuid1)\n    local fruMuai2 = TensorCore.getCachedDrawer(0x4DFF00FF, nil, 0x4DFF00FF, 0xFFFFFFFF, 2, 0, 256)\n    fruMuai2:setGradient(3, 0.15, 2)\n    fruMuai2:setHeightOffset(0.05)\n    local uuid2 = fruMuai2:addTimedCircle(drawTime, xPos, 0.05, zPos, 0.25, 9, false, nil, 256)\n    table.insert(data.p4CleanseDraws, uuid2)\n    local lineColor = 2667642624 --G255 A159\n    local playerID = TensorCore.mGetPlayer().id\n    local uuid3 = Argus2.addTimedRectFilled(drawTime, xPos, 0.05, zPos, 20, 0.225, 0, (lineColor % 0x1000000 + 0x4D000000), (lineColor % 0x1000000 + 0x4D000000), nil, 0, nil, playerID, false, 0xFFFFFFFF, 2, 3, 0.15, 2, false, nil, nil, nil, 256, nil, nil, nil, nil)\n    table.insert(data.p4CleanseDraws, uuid3)\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nif data.p4LongingHelperPuddleCount == nil then\n    data.p4LongingHelperPuddleCount = 0\n    data.p4CleanseDraws = {}\nend\n\nlocal count = data.p4LongingHelperPuddleCount + 1\ndata.p4LongingHelperPuddleCount = count\nlocal xPos = eventArgs.castPosX\nlocal zPos = eventArgs.castPosZ\nlocal durationMs = (835.3 - TensorReactions_CurrentTimer) * 1000\nlocal isWest = xPos < 100\nlocal firstTwo = count <= 2\n\n-- 前两圈: 喷发接西圈, 暗神圣接东圈。\nlocal drawForEruption = firstTwo and isWest and data.p4CTPlayerEruption\nlocal drawForStack = firstTwo and not isWest and data.p4CTPlayerStack\n\n-- 后两圈: 冰接西南圈, 水接东南圈。\nlocal drawForIce = not firstTwo and isWest and data.p4CTPlayerIce\nlocal drawForWater = not firstTwo and not isWest and data.p4CTPlayerWater\n\nif drawForEruption or drawForStack or drawForIce or drawForWater then\n    local shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\n    shapeDrawer1:setGradient(3, 0.15, 2)\n    shapeDrawer1:setHeightOffset(0.05)\n    local uuid1 = shapeDrawer1:addTimedCircle(durationMs, xPos, 0.05, zPos, 1, 0, false, nil, 256)\n    table.insert(data.p4CleanseDraws, uuid1)\n    local shapeDrawer2 = TensorCore.getCachedDrawer(0x4DFF00FF, nil, 0x4DFF00FF, 0xFFFFFFFF, 2, 0, 256)\n    shapeDrawer2:setGradient(3, 0.15, 2)\n    shapeDrawer2:setHeightOffset(0.05)\n    local uuid2 = shapeDrawer2:addTimedCircle(durationMs, xPos, 0.05, zPos, 0.25, 9, false, nil, 256)\n    table.insert(data.p4CleanseDraws, uuid2)\n    local lineColor = 2667642624\n    local playerId = TensorCore.mGetPlayer().id\n    local uuid3 = Argus2.addTimedRectFilled(\n        durationMs,\n        xPos,\n        0.05,\n        zPos,\n        20,\n        0.225,\n        0,\n        (lineColor % 0x1000000 + 0x4D000000),\n        (lineColor % 0x1000000 + 0x4D000000),\n        nil,\n        0,\n        nil,\n        playerId,\n        false,\n        0xFFFFFFFF,\n        2,\n        3,\n        0.15,\n        2,\n        false,\n        nil,\n        nil,\n        nil,\n        256,\n        nil,\n        nil,\n        nil,\n        nil\n    )\n    table.insert(data.p4CleanseDraws, uuid3)\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -17939,7 +17939,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Try Highlight Puddle",
+							name = "显示本人接圈位置",
 							uuid = "aad3ef18-2fc1-52c7-b901-5da4adebcc68",
 							version = 2.1,
 						},
@@ -17955,7 +17955,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40241,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "115a9690-3cfa-5b14-8059-f676ac6f380f",
 							version = 3,
 						},
@@ -17967,7 +17967,7 @@ local tbl =
 							buffID = 3264,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Is Blue",
+							name = "蓝色状态",
 							uuid = "296d6473-2441-554d-a1b5-8b4329866a60",
 							version = 3,
 						},
@@ -17979,7 +17979,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nreturn MuAiGuide.Reactions.Settings.Reactions.fruCTHelper == true",
 							dequeueIfLuaFalse = true,
-							name = "Option Enabled",
+							name = "功能已开启",
 							uuid = "f5f85b34-3e16-59c9-87bc-11813950cfc4",
 							version = 3,
 						},
@@ -18010,7 +18010,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local uuidArray = data.p4CleanseDraws\nif (data.p4CleanseDraws == nil) then\n    self.used = true\n    return\nend\nlocal arrayCount = #data.p4CleanseDraws\nfor i = 1, arrayCount do\n    local uuid = uuidArray[i]\n    if (uuid ~= nil) then\n        Argus.deleteTimedShape(uuid)\n    end\nend\n\nself.used = true",
+							actionLua = "local uuidArray = data.p4CleanseDraws\nif data.p4CleanseDraws == nil then\n    self.used = true\n    return\nend\nlocal arrayCount = #data.p4CleanseDraws\nfor i = 1, arrayCount do\n    local uuid = uuidArray[i]\n    if uuid ~= nil then\n        Argus.deleteTimedShape(uuid)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -18030,7 +18030,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Remove Puddle Draws",
+							name = "清除接圈预兆",
 							uuid = "1e9246b9-9951-5b6d-913f-dabdab1091f8",
 							version = 2.1,
 						},
@@ -18056,7 +18056,7 @@ local tbl =
 									true,
 								},
 							},
-							name = "Cleansed",
+							name = "已完成净化",
 							partyTargetNumber = 0,
 							uuid = "49ed262a-cf20-53ec-ad5d-2abb68e9a3b8",
 							version = 3,
@@ -18069,7 +18069,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p4CTPlayerBlue == true",
-							name = "Was Blue",
+							name = "此前为蓝色状态",
 							uuid = "300477a8-cbf1-5a73-adad-d56f5c9e5a8b",
 							version = 3,
 						},
@@ -18082,7 +18082,7 @@ local tbl =
 							buffCheckType = 2,
 							buffID = 3264,
 							category = "Self",
-							name = "No Blue",
+							name = "当前无蓝色状态",
 							uuid = "d265e564-52f9-542f-aee1-34077af72743",
 							version = 3,
 						},
@@ -18110,7 +18110,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- 暴风半径 15 米, 击退 30 米: 从风点名位置到本人的方向投影.\nlocal wind1 = data.p4AeroID1 and TensorCore.mGetEntity(data.p4AeroID1)\nlocal wind2 = data.p4AeroID2 and TensorCore.mGetEntity(data.p4AeroID2)\nlocal playerPos = TensorCore.mGetPlayer().pos\n        local fruMuai1 = TensorCore.getCachedDrawer(0x4D0000FF, nil, 0x4D0000FF, 0xFFFFFFFF, 2, 0, 256)\n        fruMuai1:setGradient(3, 0.15, 2)\n        fruMuai1:setHeightOffset(0.05)\n        local fruMuai2 = TensorCore.getCachedDrawer(0x4D00DD00, nil, 0x4D00DD00, 0xFFFFFFFF, 2, 0, 256)\n        fruMuai2:setGradient(3, 0.15, 2)\n        fruMuai2:setHeightOffset(0.05)\n        local fruMuai3 = TensorCore.getCachedDrawer(0x4D0000FF, nil, 0x4D0000FF, 0xFFFFFFFF, 2, 0, 256)\n        fruMuai3:setGradient(3, 0.15, 2)\n        fruMuai3:setHeightOffset(0.05)\n        local fruMuai4 = TensorCore.getCachedDrawer(0x4D00DD00, nil, 0x4D00DD00, 0xFFFFFFFF, 2, 0, 256)\n        fruMuai4:setGradient(3, 0.15, 2)\n        fruMuai4:setHeightOffset(0.05)\nif wind1 then\n    local pos = wind1.pos\n    local distance = TensorCore.getDistance2d(pos, playerPos)\n    if distance <= 15 then\n        local heading = TensorCore.getHeadingToTarget(pos, playerPos)\n        local length = distance + 30\n        local x, _, z = TensorCore.getPosInDirection(pos, heading, length, true)\n        local dx, dz = x - 100, z - 100\n        if dx * dx + dz * dz >= 395 then\n            fruMuai1:addArrow(pos.x, 0.05, pos.z, heading, length - 2, 0.25, 2, nil, false, 256)\n        else\n            fruMuai2:addArrow(pos.x, 0.05, pos.z, heading, length - 2, 0.25, 2, nil, false, 256)\n        end\n    end\nend\nif wind2 then\n    local pos = wind2.pos\n    local distance = TensorCore.getDistance2d(pos, playerPos)\n    if distance <= 15 then\n        local heading = TensorCore.getHeadingToTarget(pos, playerPos)\n        local length = distance + 30\n        local x, _, z = TensorCore.getPosInDirection(pos, heading, length, true)\n        local dx, dz = x - 100, z - 100\n        if dx * dx + dz * dz >= 395 then\n            fruMuai3:addArrow(pos.x, 0.05, pos.z, heading, length - 2, 0.25, 2, nil, false, 256)\n        else\n            fruMuai4:addArrow(pos.x, 0.05, pos.z, heading, length - 2, 0.25, 2, nil, false, 256)\n        end\n    end\nend\nself.used = true\n",
+							actionLua = "-- 暴风半径 15 米, 击退 30 米: 从风点名位置到本人的方向投影.\nlocal wind1 = data.p4AeroID1 and TensorCore.mGetEntity(data.p4AeroID1)\nlocal wind2 = data.p4AeroID2 and TensorCore.mGetEntity(data.p4AeroID2)\nlocal playerPos = TensorCore.mGetPlayer().pos\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D0000FF, nil, 0x4D0000FF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nlocal shapeDrawer2 = TensorCore.getCachedDrawer(0x4D00DD00, nil, 0x4D00DD00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer2:setGradient(3, 0.15, 2)\nshapeDrawer2:setHeightOffset(0.05)\nlocal shapeDrawer3 = TensorCore.getCachedDrawer(0x4D0000FF, nil, 0x4D0000FF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer3:setGradient(3, 0.15, 2)\nshapeDrawer3:setHeightOffset(0.05)\nlocal shapeDrawer4 = TensorCore.getCachedDrawer(0x4D00DD00, nil, 0x4D00DD00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer4:setGradient(3, 0.15, 2)\nshapeDrawer4:setHeightOffset(0.05)\nif wind1 then\n    local position = wind1.pos\n    local distance = TensorCore.getDistance2d(position, playerPos)\n    if distance <= 15 then\n        local heading = TensorCore.getHeadingToTarget(position, playerPos)\n        local length = distance + 30\n        local x, _, z = TensorCore.getPosInDirection(position, heading, length, true)\n        local dx, dz = x - 100, z - 100\n        if dx * dx + dz * dz >= 395 then\n            shapeDrawer1:addArrow(position.x, 0.05, position.z, heading, length - 2, 0.25, 2, nil, false, 256)\n        else\n            shapeDrawer2:addArrow(position.x, 0.05, position.z, heading, length - 2, 0.25, 2, nil, false, 256)\n        end\n    end\nend\nif wind2 then\n    local position = wind2.pos\n    local distance = TensorCore.getDistance2d(position, playerPos)\n    if distance <= 15 then\n        local heading = TensorCore.getHeadingToTarget(position, playerPos)\n        local length = distance + 30\n        local x, _, z = TensorCore.getPosInDirection(position, heading, length, true)\n        local dx, dz = x - 100, z - 100\n        if dx * dx + dz * dz >= 395 then\n            shapeDrawer3:addArrow(position.x, 0.05, position.z, heading, length - 2, 0.25, 2, nil, false, 256)\n        else\n            shapeDrawer4:addArrow(position.x, 0.05, position.z, heading, length - 2, 0.25, 2, nil, false, 256)\n        end\n    end\nend\nself.used = true",
 							conditions = 
 							{
 								
@@ -18120,7 +18120,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Draw Aero KB",
+							name = "显示风击退终点",
 							uuid = "f8983444-f8f3-5082-b1f8-d88dda6ccd78",
 							version = 2.1,
 						},
@@ -18136,7 +18136,7 @@ local tbl =
 							buffID = 2463,
 							category = "Self",
 							dequeueIfLuaFalse = true,
-							name = "Not Aero",
+							name = "无风点名",
 							uuid = "7e99a2f8-8a17-5960-83ab-9abea0b404ef",
 							version = 3,
 						},
@@ -18178,7 +18178,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if (data.p4WingPositions == nil) then\n    ---@type ThreeDimensionalPos[]\n    data.p4WingPositions = {}\n    data.p4WingCount = 0\nend\n\ndata.p4WingCount = data.p4WingCount + 1\n---@type ThreeDimensionalPos\nlocal pos = { x = eventArgs.castPosX, y = 0, z = eventArgs.castPosZ }\ntable.insert(data.p4WingPositions, pos)\nself.used = true",
+							actionLua = "if data.p4WingPositions == nil then\n    ---@type ThreeDimensionalPos[]\n    data.p4WingPositions = {}\n    data.p4WingCount = 0\nend\n\ndata.p4WingCount = data.p4WingCount + 1\n---@type ThreeDimensionalPos\nlocal position = { x = eventArgs.castPosX, y = 0, z = eventArgs.castPosZ }\ntable.insert(data.p4WingPositions, position)\nself.used = true",
 							conditions = 
 							{
 								
@@ -18188,7 +18188,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "Record Wing Direction",
+							name = "记录神圣之翼方向",
 							uuid = "b82b458a-3f9b-52a7-8d13-539738f185c0",
 							version = 2.1,
 						},
@@ -18204,7 +18204,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40175,
-							name = "Cast ID",
+							name = "判定技能",
 							uuid = "61d2859f-6edb-5205-934a-a1e033906bad",
 							version = 3,
 						},
@@ -18244,7 +18244,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif (data.arenaCenter == nil) then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\n\nlocal wingPosArray = data.p4WingPositions\nlocal center = data.arenaCenter\nlocal betweenH = TensorCore.Avoidance.getHeadingBetweenPos(center, wingPosArray[1], wingPosArray[2])\nlocal adjustRad = math.rad(12.5)\nlocal mainPos = TensorCore.getPosInDirection(center, betweenH, 20)\nlocal g1Pos = TensorCore.getPosInDirection(center, betweenH + adjustRad, 16.5)\nlocal g2Pos = TensorCore.getPosInDirection(center, betweenH - adjustRad, 16.5)\nMuAiGuide.Reactions.addTimedWorldText(20000, \"Rewinds\", mainPos, 4294836136, true, 3)\nMuAiGuide.Reactions.addTimedWorldText(20000, \"G1\", g1Pos, 4294836136, true, 2)\nMuAiGuide.Reactions.addTimedWorldText(20000, \"G2\", g2Pos, 4294836136, true, 2)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\n\nlocal wingPosArray = data.p4WingPositions\nlocal center = data.arenaCenter\nlocal middleHeading = TensorCore.Avoidance.getHeadingBetweenPos(center, wingPosArray[1], wingPosArray[2])\nlocal angleOffset = math.rad(12.5)\nlocal mainPos = TensorCore.getPosInDirection(center, middleHeading, 20)\nlocal g1Pos = TensorCore.getPosInDirection(center, middleHeading + angleOffset, 16.5)\nlocal g2Pos = TensorCore.getPosInDirection(center, middleHeading - angleOffset, 16.5)\nMuAiGuide.Reactions.addTimedWorldText(20000, \"Rewinds\", mainPos, 4294836136, true, 3)\nMuAiGuide.Reactions.addTimedWorldText(20000, \"G1\", g1Pos, 4294836136, true, 2)\nMuAiGuide.Reactions.addTimedWorldText(20000, \"G2\", g2Pos, 4294836136, true, 2)\nself.used = true",
 							conditions = 
 							{
 								
@@ -18254,7 +18254,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuNIN3_CD",
-							name = "WorldText Rewind Corner",
+							name = "标注回返角落",
 							uuid = "d914fcfd-8723-52cb-8604-a4e0878f2215",
 							version = 2.1,
 						},
@@ -18268,7 +18268,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p4WingCount == 2",
-							name = "Wings Recorded",
+							name = "神圣之翼位置完整",
 							uuid = "822a1fb3-c18d-5543-958c-20f9f5829ce7",
 							version = 3,
 						},
@@ -18297,7 +18297,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nif (data.arenaCenter == nil) then data.arenaCenter = {x=100,y=0,z=100} end\nlocal drawTime = 11500\nlocal cen = data.arenaCenter\nlocal wingArr = data.p4WingPositions\nlocal pos1 = wingArr[1]\nlocal pos2 = wingArr[2]\nlocal h1 = TensorCore.getHeadingToTarget(cen, pos1)\nlocal h2 = TensorCore.getHeadingToTarget(cen, pos2)\nlocal truePos1 = TensorCore.getPosInDirection(cen, h1, 20)\nlocal truePos2 = TensorCore.getPosInDirection(cen, h2, 20)\nlocal betweenH = TensorCore.Avoidance.getHeadingBetweenPos(cen, truePos1, truePos2)\nlocal x, _, z = TensorCore.getPosInDirection(cen, betweenH, 14.1421, true)\nlocal drawer = TensorCore.getCachedDrawer(0x4D00F400, nil, 0x4D00F400, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCenteredRect(drawTime, x, 0.05, z, 10.25, 10.25, betweenH, nil, false, nil, 256)\ndrawer:addTimedArrow(drawTime, 100, 0.05, 100, betweenH, 13, 0.5, 1.1421, nil, 0, false, 256)\n-- reset to original values\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nif data.arenaCenter == nil then\n    data.arenaCenter = { x = 100, y = 0, z = 100 }\nend\nlocal durationMs = 11500\nlocal center = data.arenaCenter\nlocal wingPositions = data.p4WingPositions\nlocal pos1 = wingPositions[1]\nlocal pos2 = wingPositions[2]\nlocal h1 = TensorCore.getHeadingToTarget(center, pos1)\nlocal h2 = TensorCore.getHeadingToTarget(center, pos2)\nlocal truePos1 = TensorCore.getPosInDirection(center, h1, 20)\nlocal truePos2 = TensorCore.getPosInDirection(center, h2, 20)\nlocal middleHeading = TensorCore.Avoidance.getHeadingBetweenPos(center, truePos1, truePos2)\nlocal x, _, z = TensorCore.getPosInDirection(center, middleHeading, 14.1421, true)\nlocal drawer = TensorCore.getCachedDrawer(0x4D00F400, nil, 0x4D00F400, 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedCenteredRect(durationMs, x, 0.05, z, 10.25, 10.25, middleHeading, nil, false, nil, 256)\ndrawer:addTimedArrow(durationMs, 100, 0.05, 100, middleHeading, 13, 0.5, 1.1421, nil, 0, false, 256)\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -18307,7 +18307,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Wing Overlap",
+							name = "显示神圣之翼重叠区",
 							uuid = "609716ae-a2b2-5f97-a58c-0ad92943aa43",
 							version = 2.1,
 						},
@@ -18321,7 +18321,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p4WingCount == 2",
-							name = "Wings Recorded",
+							name = "神圣之翼位置完整",
 							uuid = "483d0125-d470-5552-905a-5cdc89fb0505",
 							version = 3,
 						},
@@ -18373,7 +18373,7 @@ local tbl =
 						{
 							buffID = 3263,
 							category = "Self",
-							name = "Has Red",
+							name = "持有红色状态",
 							uuid = "c57f4fcc-8b0b-5357-854e-f6cf2f670ae2",
 							version = 3,
 						},
@@ -18475,7 +18475,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif (not table.valid(party)) then\n    self.used = true\n    return\nend\n\nlocal timeToMech = 3375\nlocal drawTime = 3000\nlocal delayTime = timeToMech - drawTime\nlocal playerID = TensorCore.mGetPlayer().id\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, ent in pairs(party) do\n    if (ent.id ~= playerID) then\n        drawer:addTimedCircleOnEnt(drawTime, ent.id, 5, delayTime, false, nil, 256)\n    end\nend\n\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\n\nlocal timeToMech = 3375\nlocal durationMs = 3000\nlocal delayMs = timeToMech - durationMs\nlocal playerId = TensorCore.mGetPlayer().id\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nfor _, entity in pairs(party) do\n    if entity.id ~= playerId then\n        drawer:addTimedCircleOnEnt(durationMs, entity.id, 5, delayMs, false, nil, 256)\n    end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -18485,7 +18485,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDNC3_CD",
-							name = "Draw Spread",
+							name = "显示分散范围",
 							uuid = "31053f03-075e-562e-a818-2832bcbe3626",
 							version = 2.1,
 						},
@@ -18501,7 +18501,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40288,
-							name = "Channel ID",
+							name = "读条技能",
 							uuid = "0c11f525-cbfa-51d0-aeaf-4aff55fdd91d",
 							version = 3,
 						},
@@ -18530,9 +18530,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircleOnEnt(4000, data.p4FragmentID, data.p4FragmentHitRadius + 5, nil, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircleOnEnt(4000, data.p4FragmentID, data.p4FragmentHitRadius + 5, nil, false, nil, 256)\nself.used = true",
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Fragment Exclusion Zone",
+							name = "显示碎片避让范围",
 							uuid = "e232e77e-fb73-5178-b991-8ff88b8dd57e",
 							version = 2.1,
 						},
@@ -18603,7 +18603,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Find Boss",
+							name = "选取首领",
 							uuid = "a1149ea4-b9fa-5022-812e-00f7807d7c70",
 							version = 3,
 						},
@@ -18615,7 +18615,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Current Target",
-							name = "Target Filter",
+							name = "选取目标",
 							uuid = "8dfc223a-a42b-5cce-945a-236d694de158",
 							version = 3,
 						},
@@ -18892,7 +18892,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 光巫女死亡轮回: 每次 OnFrame 更新读取对应首领当前目标, 不固定画在本人.\nlocal remaining = (859.2 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUTankStacks\nif rounds == nil then\n    rounds = {}\n    data.StringFRUTankStacks = rounds\nend\nlocal state = rounds[\"202_p4UsurperID\"]\nif state == nil then state = {}; rounds[\"202_p4UsurperID\"] = state end\nif remaining <= 0 then\n    if state.draw then Argus.deleteTimedShape(state.draw) end\n    state.draw = nil\n    self.used = true\n    return\nend\n\nlocal bossID = data.p4UsurperID\nif bossID == nil then self.used = true; return end\nlocal boss = TensorCore.mGetEntity(bossID)\nif boss == nil then self.used = true; return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\n-- 自身读条时目标可能暂时为首领/未可读; 只保留本轮最后有效的玩家附着.\nif target == nil or target.contentid ~= 0 then self.used = true; return end\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nif state.draw and state.targetID ~= target.id then\n    if not drawer:updateTimedCircleOnEnt(state.draw, nil, target.id) then state.draw = nil end\nend\nif state.draw == nil then\n    state.draw = drawer:addTimedCircleOnEnt(remaining, target.id, 4, 0, false, true, 256)\nend\nif state.draw then state.targetID = target.id end\nself.used = true\n",
+							actionLua = "-- FRU 光巫女死亡轮回: 每次 OnFrame 更新读取对应首领当前目标, 不固定画在本人.\nlocal remaining = (859.2 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUTankStacks\nif rounds == nil then\n    rounds = {}\n    data.StringFRUTankStacks = rounds\nend\nlocal state = rounds[\"202_p4UsurperID\"]\nif state == nil then\n    state = {}\n    rounds[\"202_p4UsurperID\"] = state\nend\nif remaining <= 0 then\n    if state.draw then\n        Argus.deleteTimedShape(state.draw)\n    end\n    state.draw = nil\n    self.used = true\n    return\nend\n\nlocal bossId = data.p4UsurperID\nif bossId == nil then\n    self.used = true\n    return\nend\nlocal boss = TensorCore.mGetEntity(bossId)\nif boss == nil then\n    self.used = true\n    return\nend\nlocal target = TensorCore.mGetEntity(boss.targetid)\n-- 自身读条时目标可能暂时为首领/未可读; 只保留本轮最后有效的玩家附着.\nif target == nil or target.contentid ~= 0 then\n    self.used = true\n    return\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nif state.draw and state.targetID ~= target.id then\n    if not drawer:updateTimedCircleOnEnt(state.draw, nil, target.id) then\n        state.draw = nil\n    end\nend\nif state.draw == nil then\n    state.draw = drawer:addTimedCircleOnEnt(remaining, target.id, 4, 0, false, true, 256)\nend\nif state.draw then\n    state.targetID = target.id\nend\nself.used = true",
 							gVar = "ACR_TensorViper3_CD",
 							name = "跟随首领当前分摊目标",
 							uuid = "01824758-6523-5e1e-8cc6-d11b00256d2e",
@@ -18926,7 +18926,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 暗巫女死亡轮回: 每次 OnFrame 更新读取对应首领当前目标, 不固定画在本人.\nlocal remaining = (859.2 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUTankStacks\nif rounds == nil then\n    rounds = {}\n    data.StringFRUTankStacks = rounds\nend\nlocal state = rounds[\"202_p4OracleID\"]\nif state == nil then state = {}; rounds[\"202_p4OracleID\"] = state end\nif remaining <= 0 then\n    if state.draw then Argus.deleteTimedShape(state.draw) end\n    state.draw = nil\n    self.used = true\n    return\nend\n\nlocal bossID = data.p4OracleID\nif bossID == nil then self.used = true; return end\nlocal boss = TensorCore.mGetEntity(bossID)\nif boss == nil then self.used = true; return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\n-- 自身读条时目标可能暂时为首领/未可读; 只保留本轮最后有效的玩家附着.\nif target == nil or target.contentid ~= 0 then self.used = true; return end\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nif state.draw and state.targetID ~= target.id then\n    if not drawer:updateTimedCircleOnEnt(state.draw, nil, target.id) then state.draw = nil end\nend\nif state.draw == nil then\n    state.draw = drawer:addTimedCircleOnEnt(remaining, target.id, 4, 0, false, true, 256)\nend\nif state.draw then state.targetID = target.id end\nself.used = true\n",
+							actionLua = "-- FRU 暗巫女死亡轮回: 每次 OnFrame 更新读取对应首领当前目标, 不固定画在本人.\nlocal remaining = (859.2 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUTankStacks\nif rounds == nil then\n    rounds = {}\n    data.StringFRUTankStacks = rounds\nend\nlocal state = rounds[\"202_p4OracleID\"]\nif state == nil then\n    state = {}\n    rounds[\"202_p4OracleID\"] = state\nend\nif remaining <= 0 then\n    if state.draw then\n        Argus.deleteTimedShape(state.draw)\n    end\n    state.draw = nil\n    self.used = true\n    return\nend\n\nlocal bossId = data.p4OracleID\nif bossId == nil then\n    self.used = true\n    return\nend\nlocal boss = TensorCore.mGetEntity(bossId)\nif boss == nil then\n    self.used = true\n    return\nend\nlocal target = TensorCore.mGetEntity(boss.targetid)\n-- 自身读条时目标可能暂时为首领/未可读; 只保留本轮最后有效的玩家附着.\nif target == nil or target.contentid ~= 0 then\n    self.used = true\n    return\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nif state.draw and state.targetID ~= target.id then\n    if not drawer:updateTimedCircleOnEnt(state.draw, nil, target.id) then\n        state.draw = nil\n    end\nend\nif state.draw == nil then\n    state.draw = drawer:addTimedCircleOnEnt(remaining, target.id, 4, 0, false, true, 256)\nend\nif state.draw then\n    state.targetID = target.id\nend\nself.used = true",
 							gVar = "ACR_TensorViper3_CD",
 							name = "跟随首领当前分摊目标",
 							uuid = "01824758-6523-5e1e-8cc6-d11b00256d2e",
@@ -18973,7 +18973,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 无尽顿悟分摊: 每次 OnFrame 更新读取对应首领当前目标, 不固定画在本人.\nlocal remaining = (865.8 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUTankStacks\nif rounds == nil then\n    rounds = {}\n    data.StringFRUTankStacks = rounds\nend\nlocal state = rounds[\"204_p4UsurperID\"]\nif state == nil then state = {}; rounds[\"204_p4UsurperID\"] = state end\nif remaining <= 0 then\n    if state.draw then Argus.deleteTimedShape(state.draw) end\n    state.draw = nil\n    self.used = true\n    return\nend\n\nlocal bossID = data.p4UsurperID\nif bossID == nil then self.used = true; return end\nlocal boss = TensorCore.mGetEntity(bossID)\nif boss == nil then self.used = true; return end\nlocal target = TensorCore.mGetEntity(boss.targetid)\n-- 自身读条时目标可能暂时为首领/未可读; 只保留本轮最后有效的玩家附着.\nif target == nil or target.contentid ~= 0 then self.used = true; return end\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nif state.draw and state.targetID ~= target.id then\n    if not drawer:updateTimedCircleOnEnt(state.draw, nil, target.id) then state.draw = nil end\nend\nif state.draw == nil then\n    state.draw = drawer:addTimedCircleOnEnt(remaining, target.id, 4, 0, false, true, 256)\nend\nif state.draw then state.targetID = target.id end\nself.used = true\n",
+							actionLua = "-- FRU 无尽顿悟分摊: 每次 OnFrame 更新读取对应首领当前目标, 不固定画在本人.\nlocal remaining = (865.8 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUTankStacks\nif rounds == nil then\n    rounds = {}\n    data.StringFRUTankStacks = rounds\nend\nlocal state = rounds[\"204_p4UsurperID\"]\nif state == nil then\n    state = {}\n    rounds[\"204_p4UsurperID\"] = state\nend\nif remaining <= 0 then\n    if state.draw then\n        Argus.deleteTimedShape(state.draw)\n    end\n    state.draw = nil\n    self.used = true\n    return\nend\n\nlocal bossId = data.p4UsurperID\nif bossId == nil then\n    self.used = true\n    return\nend\nlocal boss = TensorCore.mGetEntity(bossId)\nif boss == nil then\n    self.used = true\n    return\nend\nlocal target = TensorCore.mGetEntity(boss.targetid)\n-- 自身读条时目标可能暂时为首领/未可读; 只保留本轮最后有效的玩家附着.\nif target == nil or target.contentid ~= 0 then\n    self.used = true\n    return\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\nif state.draw and state.targetID ~= target.id then\n    if not drawer:updateTimedCircleOnEnt(state.draw, nil, target.id) then\n        state.draw = nil\n    end\nend\nif state.draw == nil then\n    state.draw = drawer:addTimedCircleOnEnt(remaining, target.id, 4, 0, false, true, 256)\nend\nif state.draw then\n    state.targetID = target.id\nend\nself.used = true",
 							gVar = "ACR_RikuDNC3_CD",
 							name = "跟随首领当前分摊目标",
 							uuid = "aac198ce-9893-5ce5-938d-4c9015009161",
@@ -19050,7 +19050,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Find Boss",
+							name = "选取首领",
 							uuid = "a1149ea4-b9fa-5022-812e-00f7807d7c70",
 							version = 3,
 						},
@@ -19064,7 +19064,7 @@ local tbl =
 							filterTargetType = "Current Target",
 							hpType = 2,
 							hpValue = 2,
-							name = "Target Exists",
+							name = "目标存在",
 							uuid = "8dfc223a-a42b-5cce-945a-236d694de158",
 							version = 3,
 						},
@@ -19094,9 +19094,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal tanks = TensorCore.getEntityGroupList(\"Tank\")\nif (tanks == nil or not table.valid(tanks)) then\n    MuAiGuide.Reactions.log(\"[P5 Invuln Order] Tanks returned invalid table!\", 5)\n    self.used = true\n    return\nend\n\nlocal tank1, tank2 = nil, nil\nfor _, ent in pairs(tanks) do\n    if (tank1 == nil) then\n        tank1 = ent\n    elseif (tank2 == nil) then\n        tank2 = ent\n    else\n        MuAiGuide.Reactions.log(\"[P5 Invuln Order] More than two tanks? Huh!?\", 5)\n    end\nend\n\nif (tank1 == nil or tank2 == nil) then\n    MuAiGuide.Reactions.log(\"[P5 Invuln Order] A tank was left nil!\", 5)\n    self.used = true\n    return\nend\n\nlocal invulnPriority = {\n    [21] = 1, -- WAR\n    [19] = 2, -- PLD\n    [37] = 3, -- GNB\n    [32] = 4, -- DRK\n}\n\nlocal p1 = invulnPriority[tank1.job]\nlocal p2 = invulnPriority[tank2.job]\n\n---@type GameObject\nlocal invuln1 = nil\n---@type GameObject\nlocal invuln2 = nil\n\nif p1 < p2 then\n    invuln1, invuln2 = tank1, tank2\nelse\n    invuln1, invuln2 = tank2, tank1\nend\n\ndata.p5Invuln1 = invuln1.id\ndata.p5Invuln2 = invuln2.id\ndata.selfTankLB = false\n\nlocal player = TensorCore.mGetPlayer()\nif (MuAiGuide.Reactions.tankJobs[player.job]) then\n    local limitBreakPriority = {\n        [21] = 1, -- WAR\n        [32] = 2, -- DRK\n        [19] = 3, -- PLD\n        [37] = 4, -- GNB\n    }\n    local lbPrio1 = limitBreakPriority[tank1.job]\n    local lbPrio2 = limitBreakPriority[tank2.job]\n    ---@type GameObject\n    local lbEnt = nil\n\n    if (lbPrio1 < lbPrio2) then\n        lbEnt = tank1\n    else\n        lbEnt = tank2\n    end\n\n    local playerID = player.id\n    if (data.p5Invuln1 == playerID) then\n        data.p5SelfInvuln = 1\n    elseif (data.p5Invuln2 == playerID) then\n        data.p5SelfInvuln = 2\n    else\n        MuAiGuide.Reactions.log(\"[P5 Invuln Order] Player was a tank, but didn't match either invuln ent!?\", 5)\n    end\n\n    if (lbEnt.id == playerID) then\n        data.selfTankLB = true\n    end\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\nlocal tanks = TensorCore.getEntityGroupList(\"Tank\")\nif tanks == nil or not table.valid(tanks) then\n    MuAiGuide.Reactions.log(\"[FRU/双坦顺序] 坦克集合不可用。\", 5)\n    self.used = true\n    return\nend\n\nlocal tank1, tank2 = nil, nil\nfor _, entity in pairs(tanks) do\n    if tank1 == nil then\n        tank1 = entity\n    elseif tank2 == nil then\n        tank2 = entity\n    else\n        MuAiGuide.Reactions.log(\"[FRU/双坦顺序] 读取到超过2名坦克。\", 5)\n    end\nend\n\nif tank1 == nil or tank2 == nil then\n    MuAiGuide.Reactions.log(\"[FRU/双坦顺序] 未完整读取两名坦克。\", 5)\n    self.used = true\n    return\nend\n\nlocal invulnPriority = {\n    [21] = 1, -- WAR\n    [19] = 2, -- PLD\n    [37] = 3, -- GNB\n    [32] = 4, -- DRK\n}\n\nlocal p1 = invulnPriority[tank1.job]\nlocal p2 = invulnPriority[tank2.job]\n\n---@type GameObject\nlocal invuln1 = nil\n---@type GameObject\nlocal invuln2 = nil\n\nif p1 < p2 then\n    invuln1, invuln2 = tank1, tank2\nelse\n    invuln1, invuln2 = tank2, tank1\nend\n\ndata.p5Invuln1 = invuln1.id\ndata.p5Invuln2 = invuln2.id\ndata.selfTankLB = false\n\nlocal player = TensorCore.mGetPlayer()\nif MuAiGuide.Reactions.tankJobs[player.job] then\n    local limitBreakPriority = {\n        [21] = 1, -- WAR\n        [32] = 2, -- DRK\n        [19] = 3, -- PLD\n        [37] = 4, -- GNB\n    }\n    local lbPrio1 = limitBreakPriority[tank1.job]\n    local lbPrio2 = limitBreakPriority[tank2.job]\n    ---@type GameObject\n    local lbEnt = nil\n\n    if lbPrio1 < lbPrio2 then\n        lbEnt = tank1\n    else\n        lbEnt = tank2\n    end\n\n    local playerId = player.id\n    if data.p5Invuln1 == playerId then\n        data.p5SelfInvuln = 1\n    elseif data.p5Invuln2 == playerId then\n        data.p5SelfInvuln = 2\n    else\n        MuAiGuide.Reactions.log(\"[FRU/双坦顺序] 本人为坦克, 但未匹配已记录的双坦ID。\", 5)\n    end\n\n    if lbEnt.id == playerId then\n        data.selfTankLB = true\n    end\nend\n\nself.used = true",
 							gVar = "ACR_RikuGNB3_CD",
-							name = "Store Tank Order",
+							name = "记录无敌与极限技顺序",
 							uuid = "527f6be6-17af-50e3-8593-266c171235d8",
 							version = 2.1,
 						},
@@ -19127,7 +19127,7 @@ local tbl =
 							aType = "Lua",
 							actionLua = "data.p5FulgentFirstSet = false\n\ndata.p5FulgentTimings = {\n    [1] = 6975,\n    [2] = 9080,\n    [3] = 11129,\n    [4] = 13181,\n    [5] = 15237,\n    [6] = 17296,\n    [7] = 19353,\n    [8] = 21401,\n}\n\nself.used = true",
 							gVar = "ACR_RikuWAR3_CD",
-							name = "Init Variables",
+							name = "初始化光尘时序",
 							uuid = "501e2354-ed39-53fd-9e32-83c7d9df82ca",
 							version = 2.1,
 						},
@@ -19169,7 +19169,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\n\nlocal channelTime = eventArgs.channelTimeMax*1000\nlocal ProjectedPosition = TensorCore.getPosInDirection(ent.pos, ent.pos.h, 5)\nif data.firstsetdrawnTime == nil or TimeSince(data.firstsetdrawnTime) > 35000 then\n    drawer:addTimedRect(channelTime, ProjectedPosition.x, 0.05, ProjectedPosition.z, 5, 80, ent.pos.h, 2000, false, nil, 256)\n    data.firstsetdrawnTime = Now()\nelse\n    drawer:addTimedRect(2000, ProjectedPosition.x, 0.05, ProjectedPosition.z, 5, 80, ent.pos.h, channelTime, false, nil, 256)\nend\n\nfor i=1,7 do\n    ProjectedPosition = TensorCore.getPosInDirection(ProjectedPosition, ent.pos.h, 5)\n    drawer:addTimedRect(2000, ProjectedPosition.x, 0.05, ProjectedPosition.z, 5, 80, ent.pos.h, channelTime+(2000*i), false, nil, 256)\nend\n\nself.used = true\n",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\n\nlocal channelTime = eventArgs.channelTimeMax * 1000\nlocal projectedPosition = TensorCore.getPosInDirection(entity.pos, entity.pos.h, 5)\nif data.firstsetdrawnTime == nil or TimeSince(data.firstsetdrawnTime) > 35000 then\n    drawer:addTimedRect(\n        channelTime,\n        projectedPosition.x,\n        0.05,\n        projectedPosition.z,\n        5,\n        80,\n        entity.pos.h,\n        2000,\n        false,\n        nil,\n        256\n    )\n    data.firstsetdrawnTime = Now()\nelse\n    drawer:addTimedRect(\n        2000,\n        projectedPosition.x,\n        0.05,\n        projectedPosition.z,\n        5,\n        80,\n        entity.pos.h,\n        channelTime,\n        false,\n        nil,\n        256\n    )\nend\n\nfor i = 1, 7 do\n    projectedPosition = TensorCore.getPosInDirection(projectedPosition, entity.pos.h, 5)\n    drawer:addTimedRect(\n        2000,\n        projectedPosition.x,\n        0.05,\n        projectedPosition.z,\n        5,\n        80,\n        entity.pos.h,\n        channelTime + (2000 * i),\n        false,\n        nil,\n        256\n    )\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -19230,7 +19230,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal oldDraw = MuAiGuide.Reactions.Settings.Reactions.fruExasArgusPlus == true\nlocal entPos = TensorCore.mGetEntity(eventArgs.entityID).pos\nlocal entH = TensorCore.restoreHeading(entPos.h)\nlocal pX, pZ = entPos.x, entPos.z\nlocal timings = data.p5FulgentTimings\nlocal drawTime = 2000\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedRect(drawTime, pX, 0.05, pZ, 5, 80, entH, timings[1] - drawTime, false, nil, 256)\nlocal storedSin, storedCos = 5 * math.sin(entH), 5 * math.cos(entH)\nfor i = 2, 8 do\n    pX = pX + storedSin\n    pZ = pZ + storedCos\n    local dx = pX - 100\n    local dz = pZ - 100\n    local sqDist = dx * dx + dz * dz\n    if (sqDist > 448) then break end\n    drawer:addTimedRect(drawTime, pX, 0.05, pZ, 5, 80, entH, timings[i] - drawTime, false, nil, 256)\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal oldDraw = MuAiGuide.Reactions.Settings.Reactions.fruExasArgusPlus == true\nlocal entityPosition = TensorCore.mGetEntity(eventArgs.entityID).pos\nlocal entityHeading = TensorCore.restoreHeading(entityPosition.h)\nlocal positionX, positionZ = entityPosition.x, entityPosition.z\nlocal timings = data.p5FulgentTimings\nlocal durationMs = 2000\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedRect(\n    durationMs,\n    positionX,\n    0.05,\n    positionZ,\n    5,\n    80,\n    entityHeading,\n    timings[1] - durationMs,\n    false,\n    nil,\n    256\n)\nlocal storedSin, storedCos = 5 * math.sin(entityHeading), 5 * math.cos(entityHeading)\nfor i = 2, 8 do\n    positionX = positionX + storedSin\n    positionZ = positionZ + storedCos\n    local dx = positionX - 100\n    local dz = positionZ - 100\n    local sqDist = dx * dx + dz * dz\n    if sqDist > 448 then\n        break\n    end\n    drawer:addTimedRect(\n        durationMs,\n        positionX,\n        0.05,\n        positionZ,\n        5,\n        80,\n        entityHeading,\n        timings[i] - durationMs,\n        false,\n        nil,\n        256\n    )\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -19240,7 +19240,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Queue Exalines",
+							name = "显示光尘之剑",
 							uuid = "8f8a1295-65d7-566d-9f87-a07f623b3103",
 							version = 2.1,
 						},
@@ -19257,7 +19257,7 @@ local tbl =
 							eventArgOptionType = 3,
 							eventArgType = 2,
 							eventSpellID = 31651,
-							name = "Channel IDs",
+							name = "读条技能集合",
 							spellIDList = 
 							{
 								40307,
@@ -19378,7 +19378,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 死亡轮回左右分摊: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1011.4 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[215]\nif state == nil then\n    state = {bossSelector = {contentid = 13561, subgroup = \"Highest HP\"}}\n    rounds[215] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then self.used = true; return end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, ent in pairs(party) do\n    local dx, dz = ent.pos.x - pos.x, ent.pos.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or ent.id < leftID)) then\n            leftDist, leftID = distance, ent.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or ent.id < rightID)) then\n        rightDist, rightID = distance, ent.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedCircleOnEnt(state.leftDraw, nil, leftID) then state.leftDraw = nil end\n    if state.leftDraw == nil then state.leftDraw = drawer:addTimedCircleOnEnt(remaining, leftID, 4, 0, false, true, 256) end\n    if state.leftDraw then state.leftID = leftID end\nend\nif rightID == nil then\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedCircleOnEnt(state.rightDraw, nil, rightID) then state.rightDraw = nil end\n    if state.rightDraw == nil then state.rightDraw = rightDrawer:addTimedCircleOnEnt(remaining, rightID, 4, 0, false, true, 256) end\n    if state.rightDraw then state.rightID = rightID end\nend\n\nlocal line = state.lineDrawer\nif line == nil then\n    line = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    line:setGradient(3, 0.15, 2)\n    state.lineDrawer = line\nend\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 20, 0.05, 0.4, 0.2, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h + math.pi, 20, 0.05, 0, 0, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 12, 0.05, 0.4, 0.2, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 4, 0.05, 0.4, 0.2, false, 256)\n\nself.used = true\n",
+							actionLua = "-- FRU 死亡轮回左右分摊: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1011.4 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[215]\nif state == nil then\n    state = { bossSelector = { contentid = 13561, subgroup = \"Highest HP\" } }\n    rounds[215] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then\n        self.used = true\n        return\n    end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, entity in pairs(party) do\n    local position = entity.pos\n    local dx, dz = position.x - pos.x, position.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or entity.id < leftID)) then\n            leftDist, leftID = distance, entity.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or entity.id < rightID)) then\n        rightDist, rightID = distance, entity.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedCircleOnEnt(state.leftDraw, nil, leftID) then\n        state.leftDraw = nil\n    end\n    if state.leftDraw == nil then\n        state.leftDraw = drawer:addTimedCircleOnEnt(remaining, leftID, 4, 0, false, true, 256)\n    end\n    if state.leftDraw then\n        state.leftID = leftID\n    end\nend\nif rightID == nil then\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedCircleOnEnt(state.rightDraw, nil, rightID) then\n        state.rightDraw = nil\n    end\n    if state.rightDraw == nil then\n        state.rightDraw = rightDrawer:addTimedCircleOnEnt(remaining, rightID, 4, 0, false, true, 256)\n    end\n    if state.rightDraw then\n        state.rightID = rightID\n    end\nend\n\nlocal line = state.lineDrawer\nif line == nil then\n    line = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    line:setGradient(3, 0.15, 2)\n    state.lineDrawer = line\nend\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 20, 0.05, 0.4, 0.2, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h + math.pi, 20, 0.05, 0, 0, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 12, 0.05, 0.4, 0.2, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 4, 0.05, 0.4, 0.2, false, 256)\n\nself.used = true",
 							name = "左右各选最近一人",
 							uuid = "32663363-b574-5e71-b8a3-d2aacfb4fe97",
 							version = 2.1,
@@ -19434,7 +19434,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorViper3_CD",
-							name = "Set Dark First",
+							name = "记录先暗",
 							uuid = "efbef75c-20ef-529a-ab53-53245ca4f989",
 							version = 2.1,
 						},
@@ -19455,7 +19455,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorViper3_CD",
-							name = "Set Light First",
+							name = "记录先光",
 							uuid = "21e3c0f5-67b6-5ddf-8463-ea5e5369eaa2",
 							version = 2.1,
 						},
@@ -19471,7 +19471,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40233,
-							name = "Dark First",
+							name = "首轮暗属性",
 							uuid = "e0121194-2fed-5394-a6fc-2ffc4dcce179",
 							version = 3,
 						},
@@ -19484,7 +19484,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40313,
-							name = "Light First",
+							name = "首轮光属性",
 							uuid = "9c5fc87d-7e07-58f7-9780-028ca07db27a",
 							version = 3,
 						},
@@ -19529,7 +19529,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorViper3_CD",
-							name = "Record Pandora Target",
+							name = "记录孤翼主坦",
 							uuid = "09e9e650-bac5-59dd-aeed-e5247d66388a",
 							version = 2.1,
 						},
@@ -19545,7 +19545,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 3,
 							eventArgType = 2,
-							name = "Wings IDs",
+							name = "孤翼技能集合",
 							spellIDList = 
 							{
 								40233,
@@ -19561,7 +19561,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Get Boss",
+							name = "选取首领",
 							uuid = "0f054e8c-0a72-5a23-b8f4-064481feca46",
 							version = 3,
 						},
@@ -19616,7 +19616,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Store NW Pos",
+							name = "记录西北塔位",
 							uuid = "da5e14f8-c873-50fd-91a0-bfa48329cba6",
 							version = 2.1,
 						},
@@ -19652,7 +19652,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Store NE Pos",
+							name = "记录东北塔位",
 							uuid = "9fa28c98-a7db-59ef-8586-381fdf5a8e61",
 							version = 2.1,
 						},
@@ -19688,7 +19688,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Store NW Pos",
+							name = "记录南塔位",
 							uuid = "3014fc76-d69e-5da4-b4e2-ad02e6b72cd0",
 							version = 2.1,
 						},
@@ -19706,7 +19706,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventIntValue = 1,
-							name = "Arg2",
+							name = "事件参数a2",
 							uuid = "0dcb86c3-7b79-5ad6-9966-25fa0ce63714",
 							version = 3,
 						},
@@ -19721,7 +19721,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 3,
 							eventIntValue = 2,
-							name = "Arg3",
+							name = "事件参数a3",
 							uuid = "32ba57e6-5d9c-50d5-9ac5-f178ddf54d52",
 							version = 3,
 						},
@@ -19735,7 +19735,7 @@ local tbl =
 							conditionLua = "return eventArgs.a1 == 51",
 							dequeueIfLuaFalse = true,
 							eventIntValue = 51,
-							name = "NW Tower",
+							name = "西北塔",
 							uuid = "8e16184e-0853-5d57-b22e-0bb102f655e2",
 							version = 3,
 						},
@@ -19749,7 +19749,7 @@ local tbl =
 							conditionLua = "return eventArgs.a1 == 52",
 							dequeueIfLuaFalse = true,
 							eventIntValue = 52,
-							name = "NE Tower",
+							name = "东北塔",
 							uuid = "691d032c-aaeb-5c13-9cfe-9bf9b63213d5",
 							version = 3,
 						},
@@ -19763,7 +19763,7 @@ local tbl =
 							conditionLua = "return eventArgs.a1 == 53",
 							dequeueIfLuaFalse = true,
 							eventIntValue = 53,
-							name = "S Tower",
+							name = "南塔",
 							uuid = "d159448b-a75f-5ec1-bc66-8d19cd026065",
 							version = 3,
 						},
@@ -19775,7 +19775,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5FirstTowerPos == nil",
 							dequeueIfLuaFalse = true,
-							name = "Tower Not Recorded",
+							name = "尚未记录首塔",
 							uuid = "b9268385-93af-5f2a-abe9-95022edcd049",
 							version = 3,
 						},
@@ -19824,7 +19824,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "TTS Dark First",
+							name = "播报先暗",
 							uuid = "e6f06481-b114-569d-b903-f0875d3acc3e",
 							version = 2.1,
 						},
@@ -19844,7 +19844,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "TTS Light First",
+							name = "播报先光",
 							uuid = "9b1080c4-b132-5ce1-8de4-9ca31aa42c13",
 							version = 2.1,
 						},
@@ -19860,7 +19860,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40233,
-							name = "Dark First",
+							name = "首轮暗属性",
 							uuid = "f64aa173-1fd9-5ad9-9098-0073a30203d4",
 							version = 3,
 						},
@@ -19873,7 +19873,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40313,
-							name = "Light First",
+							name = "首轮光属性",
 							uuid = "762fdaf4-ce81-5533-a4ae-80b3c6e18c8b",
 							version = 3,
 						},
@@ -19902,7 +19902,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircle(9500, 93.938, 0.05, 96.5, 3, 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircle(9500, 93.938, 0.05, 96.5, 3, 0, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -19923,7 +19923,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Draw NW Tower",
+							name = "显示西北塔",
 							uuid = "c667cea5-dcb0-5664-baf8-2baff71322a1",
 							version = 2.1,
 						},
@@ -19933,7 +19933,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircle(9500, 106.062, 0.05, 96.5, 3, 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircle(9500, 106.062, 0.05, 96.5, 3, 0, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -19954,7 +19954,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Draw NE Tower",
+							name = "显示东北塔",
 							uuid = "4868d2b7-26a9-56e6-b7bb-00d3b02e62af",
 							version = 2.1,
 						},
@@ -19964,7 +19964,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircle(9500, 100, 0.05, 107, 3, 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircle(9500, 100, 0.05, 107, 3, 0, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -19985,7 +19985,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Draw NW Tower",
+							name = "显示南塔",
 							uuid = "ac71cbdc-4d64-51d0-a68e-43930eb9cfd9",
 							version = 2.1,
 						},
@@ -20003,7 +20003,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventIntValue = 1,
-							name = "Arg2",
+							name = "事件参数a2",
 							uuid = "e84ac56d-7ab0-5b03-b2aa-e476940be8ac",
 							version = 3,
 						},
@@ -20018,7 +20018,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 3,
 							eventIntValue = 2,
-							name = "Arg3",
+							name = "事件参数a3",
 							uuid = "5191a760-87a4-5c6d-8d3d-3bc55213ac73",
 							version = 3,
 						},
@@ -20032,7 +20032,7 @@ local tbl =
 							conditionLua = "return eventArgs.a1 == 51",
 							dequeueIfLuaFalse = true,
 							eventIntValue = 51,
-							name = "NW Tower",
+							name = "西北塔",
 							uuid = "8d9238fa-af50-52f2-a94c-e5bbbab90909",
 							version = 3,
 						},
@@ -20046,7 +20046,7 @@ local tbl =
 							conditionLua = "return eventArgs.a1 == 52",
 							dequeueIfLuaFalse = true,
 							eventIntValue = 52,
-							name = "NE Tower",
+							name = "东北塔",
 							uuid = "01b95ad3-693d-5123-beb7-9158fcbbf5f8",
 							version = 3,
 						},
@@ -20060,7 +20060,7 @@ local tbl =
 							conditionLua = "return eventArgs.a1 == 53",
 							dequeueIfLuaFalse = true,
 							eventIntValue = 53,
-							name = "S Tower",
+							name = "南塔",
 							uuid = "5f128c04-3fd9-546b-9e38-51c9d1c6c495",
 							version = 3,
 						},
@@ -20089,7 +20089,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal startPos = data.p5FirstTowerPos\nlocal center = { x = 100, y = 0, z = 100 }\nlocal isDarkFirst = data.p5WingsDarkFirst\nlocal adjustAngle = (math.pi * 2) / 3\nif (isDarkFirst) then adjustAngle = -adjustAngle end\nlocal firstBaitPos = TensorCore.rotatePosAroundPos(center, startPos, adjustAngle)\nlocal firstH = TensorCore.getHeadingToTarget(center, firstBaitPos)\nlocal secondBaitPos = TensorCore.rotatePosAroundPos(center, startPos, adjustAngle / 2)\nlocal secondH = TensorCore.getHeadingToTarget(center, secondBaitPos)\nlocal firstDrawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256) --green\nfirstDrawer:setGradient(3, 0.15, 2)\nfirstDrawer:setHeightOffset(0.05)\nlocal secondDrawer = TensorCore.getCachedDrawer(0x4DFF8525, nil, 0x4DFF8525, 0xFFFFFFFF, 2, 0, 256) --blue\nsecondDrawer:setGradient(3, 0.15, 2)\nsecondDrawer:setHeightOffset(0.05)\nfirstDrawer:addTimedArrow(7000, 100, 0.05, 100, firstH, 6, 0.375, nil, nil, 0, false, 256)\nMuAiGuide.Reactions.addTimedWorldText(7000, \"MT\", firstBaitPos, 4026597120, true, 2)\nsecondDrawer:addTimedArrow(10000, 100, 0.05, 100, secondH, 6, 0.375, nil, nil, 0, false, 256)\nMuAiGuide.Reactions.addTimedWorldText(10000, \"OT\", secondBaitPos, 3959391525, true, 2)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal startPos = data.p5FirstTowerPos\nlocal center = { x = 100, y = 0, z = 100 }\nlocal isDarkFirst = data.p5WingsDarkFirst\nlocal adjustAngle = (math.pi * 2) / 3\nif isDarkFirst then\n    adjustAngle = -adjustAngle\nend\nlocal firstBaitPos = TensorCore.rotatePosAroundPos(center, startPos, adjustAngle)\nlocal firstHeading = TensorCore.getHeadingToTarget(center, firstBaitPos)\nlocal secondBaitPos = TensorCore.rotatePosAroundPos(center, startPos, adjustAngle / 2)\nlocal secondHeading = TensorCore.getHeadingToTarget(center, secondBaitPos)\nlocal firstDrawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfirstDrawer:setGradient(3, 0.15, 2)\nfirstDrawer:setHeightOffset(0.05)\nlocal secondDrawer = TensorCore.getCachedDrawer(0x4DFF8525, nil, 0x4DFF8525, 0xFFFFFFFF, 2, 0, 256)\nsecondDrawer:setGradient(3, 0.15, 2)\nsecondDrawer:setHeightOffset(0.05)\nfirstDrawer:addTimedArrow(7000, 100, 0.05, 100, firstHeading, 6, 0.375, nil, nil, 0, false, 256)\nMuAiGuide.Reactions.addTimedWorldText(7000, \"MT\", firstBaitPos, 4026597120, true, 2)\nsecondDrawer:addTimedArrow(10000, 100, 0.05, 100, secondHeading, 6, 0.375, nil, nil, 0, false, 256)\nMuAiGuide.Reactions.addTimedWorldText(10000, \"OT\", secondBaitPos, 3959391525, true, 2)\nself.used = true",
 							conditions = 
 							{
 								
@@ -20109,7 +20109,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Draw Tank Bait Arrows",
+							name = "显示双坦引导方向",
 							uuid = "1e112033-d8a7-5ceb-ab30-8de607e8f3af",
 							version = 2.1,
 						},
@@ -20124,7 +20124,7 @@ local tbl =
 							category = "Self",
 							conditionType = 9,
 							dequeueIfLuaFalse = true,
-							name = "Self Is Tank",
+							name = "本人为坦克",
 							partyTargetType = "Tank",
 							uuid = "027743bf-0683-5358-b833-cce7b752729f",
 							version = 3,
@@ -20136,7 +20136,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p5FirstTowerPos ~= nil",
-							name = "Tower Pos Stored",
+							name = "已记录塔位",
 							uuid = "71526642-9cee-5a96-8cca-0b0897034a56",
 							version = 3,
 						},
@@ -20147,7 +20147,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst ~= nil",
-							name = "First Wing Stored",
+							name = "已记录首刀属性",
 							uuid = "fbb74ec1-0b2b-5070-b3b4-cfc0242a1f74",
 							version = 3,
 						},
@@ -20188,7 +20188,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal target = TensorCore.mGetEntity(data.p5WingsTargetID)\nif (target == nil) then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, target.pos)\nlocal adjustedHeading = directHeading - cleaveAdjust\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal target = TensorCore.mGetEntity(data.p5WingsTargetID)\nif target == nil then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, target.pos)\nlocal adjustedHeading = directHeading - cleaveAdjust\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -20198,7 +20198,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Dark Cleave",
+							name = "显示暗属性扇形",
 							uuid = "26dbf9fe-7a5a-51b6-a116-bfe3c3f900db",
 							version = 2.1,
 						},
@@ -20208,7 +20208,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal target = TensorCore.mGetEntity(data.p5WingsTargetID)\nif (target == nil) then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, target.pos)\nlocal adjustedHeading = directHeading + cleaveAdjust\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal target = TensorCore.mGetEntity(data.p5WingsTargetID)\nif target == nil then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, target.pos)\nlocal adjustedHeading = directHeading + cleaveAdjust\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -20218,7 +20218,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Light Cleave",
+							name = "显示光属性扇形",
 							uuid = "700eb501-943a-5e3a-83fe-cd3820bb1e77",
 							version = 2.1,
 						},
@@ -20233,7 +20233,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == true",
 							dequeueIfLuaFalse = true,
-							name = "Dark First",
+							name = "首轮暗属性",
 							uuid = "59872bc0-d63d-5686-969f-f745b5471530",
 							version = 3,
 						},
@@ -20245,7 +20245,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == false",
 							dequeueIfLuaFalse = true,
-							name = "Light First",
+							name = "首轮光属性",
 							uuid = "59391df7-9e77-50b9-b9f0-cd4edab74148",
 							version = 3,
 						},
@@ -20273,7 +20273,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[219] then self.used = true; return end\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal pos = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCircle(pos.x, 0.05, pos.z, 4, false, 256)\nself.used = true",
+							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[219] then\n    self.used = true\n    return\nend\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal position = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCircle(position.x, 0.05, position.z, 4, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -20293,7 +20293,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Nearest",
+							name = "显示最近目标范围",
 							uuid = "ea4120e0-b89e-50e2-a63d-cd75aeb16d68",
 							version = 2.1,
 						},
@@ -20303,7 +20303,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[219] then self.used = true; return end\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal pos = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCircle(pos.x, 0.05, pos.z, 4, false, 256)\nself.used = true",
+							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[219] then\n    self.used = true\n    return\nend\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal position = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCircle(position.x, 0.05, position.z, 4, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -20323,7 +20323,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Farthest",
+							name = "显示最远目标范围",
 							uuid = "57585c0b-5ab3-5f0d-93a5-81aa76435f0d",
 							version = 2.1,
 						},
@@ -20338,7 +20338,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == true",
 							dequeueIfLuaFalse = true,
-							name = "Dark First",
+							name = "首轮暗属性",
 							uuid = "cd97f148-5595-5e10-b4b2-a039cb296336",
 							version = 3,
 						},
@@ -20350,7 +20350,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == false",
 							dequeueIfLuaFalse = true,
-							name = "Light First",
+							name = "首轮光属性",
 							uuid = "70ec6c8f-7720-5f16-9925-f9542bfb8fd0",
 							version = 3,
 						},
@@ -20361,7 +20361,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Get Boss",
+							name = "选取首领",
 							uuid = "e0329bcf-84e7-5b6e-9e27-1565e8ba8d8d",
 							version = 3,
 						},
@@ -20372,7 +20372,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Party",
-							name = "Get Nearest to Prev",
+							name = "选取距前一目标最近者",
 							subtypeRangeCheckSourceType = "Prev Detection Target",
 							uuid = "a2990a30-1bf9-5859-ba0b-0f02124c83bf",
 							version = 3,
@@ -20385,7 +20385,7 @@ local tbl =
 							category = "Filter",
 							filterTargetSubtype = "Furthest",
 							filterTargetType = "Party",
-							name = "Get Furthest from Prev",
+							name = "选取距前一目标最远者",
 							subtypeRangeCheckSourceType = "Prev Detection Target",
 							uuid = "017fc6c0-1031-55d3-a2b5-e44b83dc9b70",
 							version = 3,
@@ -20487,7 +20487,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif (boss == nil) then\n    self.used = true\n    return\nend\n\nlocal bossTarget = TensorCore.mGetEntity(boss.targetid)\nif (bossTarget == nil) then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, bossTarget.pos)\nlocal adjustedHeading = directHeading - cleaveAdjust\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif boss == nil then\n    self.used = true\n    return\nend\n\nlocal bossTarget = TensorCore.mGetEntity(boss.targetid)\nif bossTarget == nil then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, bossTarget.pos)\nlocal adjustedHeading = directHeading - cleaveAdjust\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -20502,7 +20502,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Dark Cleave",
+							name = "显示暗属性扇形",
 							uuid = "26dbf9fe-7a5a-51b6-a116-bfe3c3f900db",
 							version = 2.1,
 						},
@@ -20512,7 +20512,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif (boss == nil) then\n    self.used = true\n    return\nend\n\nlocal bossTarget = TensorCore.mGetEntity(boss.targetid)\nif (bossTarget == nil) then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, bossTarget.pos)\nlocal adjustedHeading = directHeading + cleaveAdjust\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif boss == nil then\n    self.used = true\n    return\nend\n\nlocal bossTarget = TensorCore.mGetEntity(boss.targetid)\nif bossTarget == nil then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, bossTarget.pos)\nlocal adjustedHeading = directHeading + cleaveAdjust\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -20527,7 +20527,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Light Cleave",
+							name = "显示光属性扇形",
 							uuid = "700eb501-943a-5e3a-83fe-cd3820bb1e77",
 							version = 2.1,
 						},
@@ -20542,7 +20542,7 @@ local tbl =
 							category = "Filter",
 							conditionType = 4,
 							filterTargetType = "Enemy",
-							name = "Get Boss",
+							name = "选取首领",
 							uuid = "c19c4833-553d-5577-a751-d20006a5d5c0",
 							version = 3,
 						},
@@ -20555,7 +20555,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == false",
 							dequeueIfLuaFalse = true,
-							name = "Dark Second",
+							name = "次轮暗属性",
 							uuid = "59872bc0-d63d-5686-969f-f745b5471530",
 							version = 3,
 						},
@@ -20567,7 +20567,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == true",
 							dequeueIfLuaFalse = true,
-							name = "Light Second",
+							name = "次轮光属性",
 							uuid = "59391df7-9e77-50b9-b9f0-cd4edab74148",
 							version = 3,
 						},
@@ -20596,7 +20596,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[222] then self.used = true; return end\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal pos = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCircle(pos.x, 0.05, pos.z, 4, false, 256)\nself.used = true",
+							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[222] then\n    self.used = true\n    return\nend\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal position = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCircle(position.x, 0.05, position.z, 4, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -20616,7 +20616,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Nearest",
+							name = "显示最近目标范围",
 							uuid = "ea4120e0-b89e-50e2-a63d-cd75aeb16d68",
 							version = 2.1,
 						},
@@ -20626,7 +20626,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[222] then self.used = true; return end\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal pos = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCircle(pos.x, 0.05, pos.z, 4, false, 256)\nself.used = true",
+							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[222] then\n    self.used = true\n    return\nend\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal position = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCircle(position.x, 0.05, position.z, 4, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -20646,7 +20646,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Farthest",
+							name = "显示最远目标范围",
 							uuid = "57585c0b-5ab3-5f0d-93a5-81aa76435f0d",
 							version = 2.1,
 						},
@@ -20661,7 +20661,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == false",
 							dequeueIfLuaFalse = true,
-							name = "Dark Second",
+							name = "次轮暗属性",
 							uuid = "449a8894-e1f6-55db-9832-bbd8b31eb079",
 							version = 3,
 						},
@@ -20674,7 +20674,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == true",
 							dequeueIfLuaFalse = true,
-							name = "Light Second",
+							name = "次轮光属性",
 							uuid = "ee8e47e8-dcb0-5a15-83b2-ac3b5645ba09",
 							version = 3,
 						},
@@ -20686,7 +20686,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Get Boss",
+							name = "选取首领",
 							uuid = "e0329bcf-84e7-5b6e-9e27-1565e8ba8d8d",
 							version = 3,
 						},
@@ -20697,7 +20697,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Party",
-							name = "Get Nearest to Prev",
+							name = "选取距前一目标最近者",
 							subtypeRangeCheckSourceType = "Prev Detection Target",
 							uuid = "a2990a30-1bf9-5859-ba0b-0f02124c83bf",
 							version = 3,
@@ -20710,7 +20710,7 @@ local tbl =
 							category = "Filter",
 							filterTargetSubtype = "Furthest",
 							filterTargetType = "Party",
-							name = "Get Furthest from Prev",
+							name = "选取距前一目标最远者",
 							subtypeRangeCheckSourceType = "Prev Detection Target",
 							uuid = "017fc6c0-1031-55d3-a2b5-e44b83dc9b70",
 							version = 3,
@@ -20814,7 +20814,7 @@ local tbl =
 							aType = "Lua",
 							actionLua = "data.p5WingsDarkFirst = nil\ndata.p5WingsTargetID = nil\ndata.p5FirstTowerPos = nil\nself.used = true",
 							gVar = "ACR_TensorViper3_CD",
-							name = "Reset Wing Data",
+							name = "重置孤翼状态",
 							uuid = "4bb957bc-79dc-5424-a940-57f6633c66b4",
 							version = 2.1,
 						},
@@ -20957,7 +20957,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1051.5 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[227]\nif state == nil then\n    state = {bossSelector = {contentid = 13561, subgroup = \"Highest HP\"}}\n    rounds[227] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then self.used = true; return end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, ent in pairs(party) do\n    local dx, dz = ent.pos.x - pos.x, ent.pos.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or ent.id < leftID)) then\n            leftDist, leftID = distance, ent.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or ent.id < rightID)) then\n        rightDist, rightID = distance, ent.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then state.leftDraw = nil end\n    if state.leftDraw == nil then state.leftDraw = drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256) end\n    if state.leftDraw then state.leftID = leftID end\nend\nif rightID == nil then\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then state.rightDraw = nil end\n    if state.rightDraw == nil then state.rightDraw = rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256) end\n    if state.rightDraw then state.rightID = rightID end\nend\n\nself.used = true\n",
+							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1051.5 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[227]\nif state == nil then\n    state = { bossSelector = { contentid = 13561, subgroup = \"Highest HP\" } }\n    rounds[227] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then\n        self.used = true\n        return\n    end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, entity in pairs(party) do\n    local position = entity.pos\n    local dx, dz = position.x - pos.x, position.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or entity.id < leftID)) then\n            leftDist, leftID = distance, entity.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or entity.id < rightID)) then\n        rightDist, rightID = distance, entity.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then\n        state.leftDraw = nil\n    end\n    if state.leftDraw == nil then\n        state.leftDraw =\n            drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.leftDraw then\n        state.leftID = leftID\n    end\nend\nif rightID == nil then\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then\n        state.rightDraw = nil\n    end\n    if state.rightDraw == nil then\n        state.rightDraw =\n            rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.rightDraw then\n        state.rightID = rightID\n    end\nend\n\nself.used = true",
 							name = "左右各选最近一人",
 							uuid = "efae8691-b8dd-0869-90b8-65a2167fb015",
 							version = 2.1,
@@ -21169,7 +21169,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1056.1 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[229]\nif state == nil then\n    state = {bossSelector = {contentid = 13561, subgroup = \"Highest HP\"}}\n    rounds[229] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then self.used = true; return end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, ent in pairs(party) do\n    local dx, dz = ent.pos.x - pos.x, ent.pos.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or ent.id < leftID)) then\n            leftDist, leftID = distance, ent.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or ent.id < rightID)) then\n        rightDist, rightID = distance, ent.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then state.leftDraw = nil end\n    if state.leftDraw == nil then state.leftDraw = drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256) end\n    if state.leftDraw then state.leftID = leftID end\nend\nif rightID == nil then\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then state.rightDraw = nil end\n    if state.rightDraw == nil then state.rightDraw = rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256) end\n    if state.rightDraw then state.rightID = rightID end\nend\n\nself.used = true\n",
+							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1056.1 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[229]\nif state == nil then\n    state = { bossSelector = { contentid = 13561, subgroup = \"Highest HP\" } }\n    rounds[229] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then\n        self.used = true\n        return\n    end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, entity in pairs(party) do\n    local position = entity.pos\n    local dx, dz = position.x - pos.x, position.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or entity.id < leftID)) then\n            leftDist, leftID = distance, entity.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or entity.id < rightID)) then\n        rightDist, rightID = distance, entity.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then\n        state.leftDraw = nil\n    end\n    if state.leftDraw == nil then\n        state.leftDraw =\n            drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.leftDraw then\n        state.leftID = leftID\n    end\nend\nif rightID == nil then\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then\n        state.rightDraw = nil\n    end\n    if state.rightDraw == nil then\n        state.rightDraw =\n            rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.rightDraw then\n        state.rightID = rightID\n    end\nend\n\nself.used = true",
 							name = "左右各选最近一人",
 							uuid = "e9ad31a9-48ef-ac55-a8bc-cc73a52dd786",
 							version = 2.1,
@@ -21381,7 +21381,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1060.7 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[231]\nif state == nil then\n    state = {bossSelector = {contentid = 13561, subgroup = \"Highest HP\"}}\n    rounds[231] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then self.used = true; return end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, ent in pairs(party) do\n    local dx, dz = ent.pos.x - pos.x, ent.pos.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or ent.id < leftID)) then\n            leftDist, leftID = distance, ent.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or ent.id < rightID)) then\n        rightDist, rightID = distance, ent.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then state.leftDraw = nil end\n    if state.leftDraw == nil then state.leftDraw = drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256) end\n    if state.leftDraw then state.leftID = leftID end\nend\nif rightID == nil then\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then state.rightDraw = nil end\n    if state.rightDraw == nil then state.rightDraw = rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256) end\n    if state.rightDraw then state.rightID = rightID end\nend\n\nself.used = true\n",
+							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1060.7 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[231]\nif state == nil then\n    state = { bossSelector = { contentid = 13561, subgroup = \"Highest HP\" } }\n    rounds[231] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then\n        self.used = true\n        return\n    end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, entity in pairs(party) do\n    local position = entity.pos\n    local dx, dz = position.x - pos.x, position.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or entity.id < leftID)) then\n            leftDist, leftID = distance, entity.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or entity.id < rightID)) then\n        rightDist, rightID = distance, entity.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then\n        state.leftDraw = nil\n    end\n    if state.leftDraw == nil then\n        state.leftDraw =\n            drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.leftDraw then\n        state.leftID = leftID\n    end\nend\nif rightID == nil then\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then\n        state.rightDraw = nil\n    end\n    if state.rightDraw == nil then\n        state.rightDraw =\n            rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.rightDraw then\n        state.rightID = rightID\n    end\nend\n\nself.used = true",
 							name = "左右各选最近一人",
 							uuid = "3179abe0-b5fc-6eeb-89f5-98550e5e3a5b",
 							version = 2.1,
@@ -21593,7 +21593,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1065.3 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[233]\nif state == nil then\n    state = {bossSelector = {contentid = 13561, subgroup = \"Highest HP\"}}\n    rounds[233] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then self.used = true; return end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, ent in pairs(party) do\n    local dx, dz = ent.pos.x - pos.x, ent.pos.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or ent.id < leftID)) then\n            leftDist, leftID = distance, ent.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or ent.id < rightID)) then\n        rightDist, rightID = distance, ent.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then state.leftDraw = nil end\n    if state.leftDraw == nil then state.leftDraw = drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256) end\n    if state.leftDraw then state.leftID = leftID end\nend\nif rightID == nil then\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then state.rightDraw = nil end\n    if state.rightDraw == nil then state.rightDraw = rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256) end\n    if state.rightDraw then state.rightID = rightID end\nend\n\nself.used = true\n",
+							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1065.3 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[233]\nif state == nil then\n    state = { bossSelector = { contentid = 13561, subgroup = \"Highest HP\" } }\n    rounds[233] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then\n        self.used = true\n        return\n    end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, entity in pairs(party) do\n    local position = entity.pos\n    local dx, dz = position.x - pos.x, position.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or entity.id < leftID)) then\n            leftDist, leftID = distance, entity.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or entity.id < rightID)) then\n        rightDist, rightID = distance, entity.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then\n        state.leftDraw = nil\n    end\n    if state.leftDraw == nil then\n        state.leftDraw =\n            drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.leftDraw then\n        state.leftID = leftID\n    end\nend\nif rightID == nil then\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then\n        state.rightDraw = nil\n    end\n    if state.rightDraw == nil then\n        state.rightDraw =\n            rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.rightDraw then\n        state.rightID = rightID\n    end\nend\n\nself.used = true",
 							name = "左右各选最近一人",
 							uuid = "1f4bc9d7-75ab-180c-bc18-494c14c3387b",
 							version = 2.1,
@@ -21639,7 +21639,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\n\nlocal channelTime = eventArgs.channelTimeMax*1000\nlocal ProjectedPosition = TensorCore.getPosInDirection(ent.pos, ent.pos.h, 5)\nif data.firstsetdrawnTime == nil or TimeSince(data.firstsetdrawnTime) > 35000 then\n    drawer:addTimedRect(channelTime, ProjectedPosition.x, 0.05, ProjectedPosition.z, 5, 80, ent.pos.h, 2000, false, nil, 256)\n    data.firstsetdrawnTime = Now()\nelse\n    drawer:addTimedRect(2000, ProjectedPosition.x, 0.05, ProjectedPosition.z, 5, 80, ent.pos.h, channelTime, false, nil, 256)\nend\n\nfor i=1,7 do\n    ProjectedPosition = TensorCore.getPosInDirection(ProjectedPosition, ent.pos.h, 5)\n    drawer:addTimedRect(2000, ProjectedPosition.x, 0.05, ProjectedPosition.z, 5, 80, ent.pos.h, channelTime+(2000*i), false, nil, 256)\nend\n\nself.used = true\n",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\n\nlocal channelTime = eventArgs.channelTimeMax * 1000\nlocal projectedPosition = TensorCore.getPosInDirection(entity.pos, entity.pos.h, 5)\nif data.firstsetdrawnTime == nil or TimeSince(data.firstsetdrawnTime) > 35000 then\n    drawer:addTimedRect(\n        channelTime,\n        projectedPosition.x,\n        0.05,\n        projectedPosition.z,\n        5,\n        80,\n        entity.pos.h,\n        2000,\n        false,\n        nil,\n        256\n    )\n    data.firstsetdrawnTime = Now()\nelse\n    drawer:addTimedRect(\n        2000,\n        projectedPosition.x,\n        0.05,\n        projectedPosition.z,\n        5,\n        80,\n        entity.pos.h,\n        channelTime,\n        false,\n        nil,\n        256\n    )\nend\n\nfor i = 1, 7 do\n    projectedPosition = TensorCore.getPosInDirection(projectedPosition, entity.pos.h, 5)\n    drawer:addTimedRect(\n        2000,\n        projectedPosition.x,\n        0.05,\n        projectedPosition.z,\n        5,\n        80,\n        entity.pos.h,\n        channelTime + (2000 * i),\n        false,\n        nil,\n        256\n    )\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -21700,7 +21700,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal oldDraw = MuAiGuide.Reactions.Settings.Reactions.fruExasArgusPlus == true\nlocal entPos = TensorCore.mGetEntity(eventArgs.entityID).pos\nlocal entH = TensorCore.restoreHeading(entPos.h)\nlocal pX, pZ = entPos.x, entPos.z\nlocal timings = data.p5FulgentTimings\nlocal drawTime = 2000\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedRect(drawTime, pX, 0.05, pZ, 5, 80, entH, timings[1] - drawTime, false, nil, 256)\nlocal storedSin, storedCos = 5 * math.sin(entH), 5 * math.cos(entH)\nfor i = 2, 8 do\n    pX = pX + storedSin\n    pZ = pZ + storedCos\n    local dx = pX - 100\n    local dz = pZ - 100\n    local sqDist = dx * dx + dz * dz\n    if (sqDist > 448) then break end\n    drawer:addTimedRect(drawTime, pX, 0.05, pZ, 5, 80, entH, timings[i] - drawTime, false, nil, 256)\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal oldDraw = MuAiGuide.Reactions.Settings.Reactions.fruExasArgusPlus == true\nlocal entityPosition = TensorCore.mGetEntity(eventArgs.entityID).pos\nlocal entityHeading = TensorCore.restoreHeading(entityPosition.h)\nlocal positionX, positionZ = entityPosition.x, entityPosition.z\nlocal timings = data.p5FulgentTimings\nlocal durationMs = 2000\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedRect(\n    durationMs,\n    positionX,\n    0.05,\n    positionZ,\n    5,\n    80,\n    entityHeading,\n    timings[1] - durationMs,\n    false,\n    nil,\n    256\n)\nlocal storedSin, storedCos = 5 * math.sin(entityHeading), 5 * math.cos(entityHeading)\nfor i = 2, 8 do\n    positionX = positionX + storedSin\n    positionZ = positionZ + storedCos\n    local dx = positionX - 100\n    local dz = positionZ - 100\n    local sqDist = dx * dx + dz * dz\n    if sqDist > 448 then\n        break\n    end\n    drawer:addTimedRect(\n        durationMs,\n        positionX,\n        0.05,\n        positionZ,\n        5,\n        80,\n        entityHeading,\n        timings[i] - durationMs,\n        false,\n        nil,\n        256\n    )\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -21710,7 +21710,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Queue Exalines",
+							name = "显示光尘之剑",
 							uuid = "8f8a1295-65d7-566d-9f87-a07f623b3103",
 							version = 2.1,
 						},
@@ -21727,7 +21727,7 @@ local tbl =
 							eventArgOptionType = 3,
 							eventArgType = 2,
 							eventSpellID = 31651,
-							name = "Channel IDs",
+							name = "读条技能集合",
 							spellIDList = 
 							{
 								40307,
@@ -21848,7 +21848,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 死亡轮回左右分摊: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1124.0 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[243]\nif state == nil then\n    state = {bossSelector = {contentid = 13561, subgroup = \"Highest HP\"}}\n    rounds[243] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then self.used = true; return end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, ent in pairs(party) do\n    local dx, dz = ent.pos.x - pos.x, ent.pos.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or ent.id < leftID)) then\n            leftDist, leftID = distance, ent.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or ent.id < rightID)) then\n        rightDist, rightID = distance, ent.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedCircleOnEnt(state.leftDraw, nil, leftID) then state.leftDraw = nil end\n    if state.leftDraw == nil then state.leftDraw = drawer:addTimedCircleOnEnt(remaining, leftID, 4, 0, false, true, 256) end\n    if state.leftDraw then state.leftID = leftID end\nend\nif rightID == nil then\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedCircleOnEnt(state.rightDraw, nil, rightID) then state.rightDraw = nil end\n    if state.rightDraw == nil then state.rightDraw = rightDrawer:addTimedCircleOnEnt(remaining, rightID, 4, 0, false, true, 256) end\n    if state.rightDraw then state.rightID = rightID end\nend\n\nlocal line = state.lineDrawer\nif line == nil then\n    line = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    line:setGradient(3, 0.15, 2)\n    state.lineDrawer = line\nend\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 20, 0.05, 0.4, 0.2, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h + math.pi, 20, 0.05, 0, 0, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 12, 0.05, 0.4, 0.2, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 4, 0.05, 0.4, 0.2, false, 256)\n\nself.used = true\n",
+							actionLua = "-- FRU 死亡轮回左右分摊: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1124.0 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[243]\nif state == nil then\n    state = { bossSelector = { contentid = 13561, subgroup = \"Highest HP\" } }\n    rounds[243] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then\n        self.used = true\n        return\n    end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, entity in pairs(party) do\n    local position = entity.pos\n    local dx, dz = position.x - pos.x, position.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or entity.id < leftID)) then\n            leftDist, leftID = distance, entity.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or entity.id < rightID)) then\n        rightDist, rightID = distance, entity.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedCircleOnEnt(state.leftDraw, nil, leftID) then\n        state.leftDraw = nil\n    end\n    if state.leftDraw == nil then\n        state.leftDraw = drawer:addTimedCircleOnEnt(remaining, leftID, 4, 0, false, true, 256)\n    end\n    if state.leftDraw then\n        state.leftID = leftID\n    end\nend\nif rightID == nil then\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedCircleOnEnt(state.rightDraw, nil, rightID) then\n        state.rightDraw = nil\n    end\n    if state.rightDraw == nil then\n        state.rightDraw = rightDrawer:addTimedCircleOnEnt(remaining, rightID, 4, 0, false, true, 256)\n    end\n    if state.rightDraw then\n        state.rightID = rightID\n    end\nend\n\nlocal line = state.lineDrawer\nif line == nil then\n    line = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    line:setGradient(3, 0.15, 2)\n    state.lineDrawer = line\nend\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 20, 0.05, 0.4, 0.2, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h + math.pi, 20, 0.05, 0, 0, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 12, 0.05, 0.4, 0.2, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 4, 0.05, 0.4, 0.2, false, 256)\n\nself.used = true",
 							name = "左右各选最近一人",
 							uuid = "b8458baa-a303-d476-8e7b-1dab64ff60e1",
 							version = 2.1,
@@ -21904,7 +21904,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorViper3_CD",
-							name = "Set Dark First",
+							name = "记录先暗",
 							uuid = "efbef75c-20ef-529a-ab53-53245ca4f989",
 							version = 2.1,
 						},
@@ -21925,7 +21925,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorViper3_CD",
-							name = "Set Light First",
+							name = "记录先光",
 							uuid = "21e3c0f5-67b6-5ddf-8463-ea5e5369eaa2",
 							version = 2.1,
 						},
@@ -21941,7 +21941,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40233,
-							name = "Dark First",
+							name = "首轮暗属性",
 							uuid = "e0121194-2fed-5394-a6fc-2ffc4dcce179",
 							version = 3,
 						},
@@ -21954,7 +21954,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40313,
-							name = "Light First",
+							name = "首轮光属性",
 							uuid = "9c5fc87d-7e07-58f7-9780-028ca07db27a",
 							version = 3,
 						},
@@ -21999,7 +21999,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_TensorViper3_CD",
-							name = "Record Pandora Target",
+							name = "记录孤翼主坦",
 							uuid = "09e9e650-bac5-59dd-aeed-e5247d66388a",
 							version = 2.1,
 						},
@@ -22015,7 +22015,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgOptionType = 3,
 							eventArgType = 2,
-							name = "Wings IDs",
+							name = "孤翼技能集合",
 							spellIDList = 
 							{
 								40233,
@@ -22031,7 +22031,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Get Boss",
+							name = "选取首领",
 							uuid = "0f054e8c-0a72-5a23-b8f4-064481feca46",
 							version = 3,
 						},
@@ -22086,7 +22086,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Store NW Pos",
+							name = "记录西北塔位",
 							uuid = "da5e14f8-c873-50fd-91a0-bfa48329cba6",
 							version = 2.1,
 						},
@@ -22122,7 +22122,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Store NE Pos",
+							name = "记录东北塔位",
 							uuid = "9fa28c98-a7db-59ef-8586-381fdf5a8e61",
 							version = 2.1,
 						},
@@ -22158,7 +22158,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Store NW Pos",
+							name = "记录南塔位",
 							uuid = "3014fc76-d69e-5da4-b4e2-ad02e6b72cd0",
 							version = 2.1,
 						},
@@ -22176,7 +22176,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventIntValue = 1,
-							name = "Arg2",
+							name = "事件参数a2",
 							uuid = "0dcb86c3-7b79-5ad6-9966-25fa0ce63714",
 							version = 3,
 						},
@@ -22191,7 +22191,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 3,
 							eventIntValue = 2,
-							name = "Arg3",
+							name = "事件参数a3",
 							uuid = "32ba57e6-5d9c-50d5-9ac5-f178ddf54d52",
 							version = 3,
 						},
@@ -22205,7 +22205,7 @@ local tbl =
 							conditionLua = "return eventArgs.a1 == 51",
 							dequeueIfLuaFalse = true,
 							eventIntValue = 51,
-							name = "NW Tower",
+							name = "西北塔",
 							uuid = "8e16184e-0853-5d57-b22e-0bb102f655e2",
 							version = 3,
 						},
@@ -22219,7 +22219,7 @@ local tbl =
 							conditionLua = "return eventArgs.a1 == 52",
 							dequeueIfLuaFalse = true,
 							eventIntValue = 52,
-							name = "NE Tower",
+							name = "东北塔",
 							uuid = "691d032c-aaeb-5c13-9cfe-9bf9b63213d5",
 							version = 3,
 						},
@@ -22233,7 +22233,7 @@ local tbl =
 							conditionLua = "return eventArgs.a1 == 53",
 							dequeueIfLuaFalse = true,
 							eventIntValue = 53,
-							name = "S Tower",
+							name = "南塔",
 							uuid = "d159448b-a75f-5ec1-bc66-8d19cd026065",
 							version = 3,
 						},
@@ -22245,7 +22245,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5FirstTowerPos == nil",
 							dequeueIfLuaFalse = true,
-							name = "Tower Not Recorded",
+							name = "尚未记录首塔",
 							uuid = "b9268385-93af-5f2a-abe9-95022edcd049",
 							version = 3,
 						},
@@ -22294,7 +22294,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "TTS Dark First",
+							name = "播报先暗",
 							uuid = "e6f06481-b114-569d-b903-f0875d3acc3e",
 							version = 2.1,
 						},
@@ -22314,7 +22314,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "TTS Light First",
+							name = "播报先光",
 							uuid = "9b1080c4-b132-5ce1-8de4-9ca31aa42c13",
 							version = 2.1,
 						},
@@ -22330,7 +22330,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40233,
-							name = "Dark First",
+							name = "首轮暗属性",
 							uuid = "f64aa173-1fd9-5ad9-9098-0073a30203d4",
 							version = 3,
 						},
@@ -22343,7 +22343,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventSpellID = 40313,
-							name = "Light First",
+							name = "首轮光属性",
 							uuid = "762fdaf4-ce81-5533-a4ae-80b3c6e18c8b",
 							version = 3,
 						},
@@ -22372,7 +22372,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircle(9500, 93.938, 0.05, 96.5, 3, 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircle(9500, 93.938, 0.05, 96.5, 3, 0, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -22393,7 +22393,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Draw NW Tower",
+							name = "显示西北塔",
 							uuid = "c667cea5-dcb0-5664-baf8-2baff71322a1",
 							version = 2.1,
 						},
@@ -22403,7 +22403,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircle(9500, 106.062, 0.05, 96.5, 3, 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircle(9500, 106.062, 0.05, 96.5, 3, 0, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -22424,7 +22424,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Draw NE Tower",
+							name = "显示东北塔",
 							uuid = "4868d2b7-26a9-56e6-b7bb-00d3b02e62af",
 							version = 2.1,
 						},
@@ -22434,7 +22434,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addTimedCircle(9500, 100, 0.05, 107, 3, 0, false, nil, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addTimedCircle(9500, 100, 0.05, 107, 3, 0, false, nil, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -22455,7 +22455,7 @@ local tbl =
 							},
 							endIfUsed = true,
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Draw NW Tower",
+							name = "显示南塔",
 							uuid = "ac71cbdc-4d64-51d0-a68e-43930eb9cfd9",
 							version = 2.1,
 						},
@@ -22473,7 +22473,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 2,
 							eventIntValue = 1,
-							name = "Arg2",
+							name = "事件参数a2",
 							uuid = "e84ac56d-7ab0-5b03-b2aa-e476940be8ac",
 							version = 3,
 						},
@@ -22488,7 +22488,7 @@ local tbl =
 							dequeueIfLuaFalse = true,
 							eventArgType = 3,
 							eventIntValue = 2,
-							name = "Arg3",
+							name = "事件参数a3",
 							uuid = "5191a760-87a4-5c6d-8d3d-3bc55213ac73",
 							version = 3,
 						},
@@ -22502,7 +22502,7 @@ local tbl =
 							conditionLua = "return eventArgs.a1 == 51",
 							dequeueIfLuaFalse = true,
 							eventIntValue = 51,
-							name = "NW Tower",
+							name = "西北塔",
 							uuid = "8d9238fa-af50-52f2-a94c-e5bbbab90909",
 							version = 3,
 						},
@@ -22516,7 +22516,7 @@ local tbl =
 							conditionLua = "return eventArgs.a1 == 52",
 							dequeueIfLuaFalse = true,
 							eventIntValue = 52,
-							name = "NE Tower",
+							name = "东北塔",
 							uuid = "01b95ad3-693d-5123-beb7-9158fcbbf5f8",
 							version = 3,
 						},
@@ -22530,7 +22530,7 @@ local tbl =
 							conditionLua = "return eventArgs.a1 == 53",
 							dequeueIfLuaFalse = true,
 							eventIntValue = 53,
-							name = "S Tower",
+							name = "南塔",
 							uuid = "5f128c04-3fd9-546b-9e38-51c9d1c6c495",
 							version = 3,
 						},
@@ -22559,7 +22559,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal startPos = data.p5FirstTowerPos\nlocal center = { x = 100, y = 0, z = 100 }\nlocal isDarkFirst = data.p5WingsDarkFirst\nlocal adjustAngle = (math.pi * 2) / 3\nif (isDarkFirst) then adjustAngle = -adjustAngle end\nlocal firstBaitPos = TensorCore.rotatePosAroundPos(center, startPos, adjustAngle)\nlocal firstH = TensorCore.getHeadingToTarget(center, firstBaitPos)\nlocal secondBaitPos = TensorCore.rotatePosAroundPos(center, startPos, adjustAngle / 2)\nlocal secondH = TensorCore.getHeadingToTarget(center, secondBaitPos)\nlocal firstDrawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256) --green\nfirstDrawer:setGradient(3, 0.15, 2)\nfirstDrawer:setHeightOffset(0.05)\nlocal secondDrawer = TensorCore.getCachedDrawer(0x4DFF8525, nil, 0x4DFF8525, 0xFFFFFFFF, 2, 0, 256) --blue\nsecondDrawer:setGradient(3, 0.15, 2)\nsecondDrawer:setHeightOffset(0.05)\nfirstDrawer:addTimedArrow(7000, 100, 0.05, 100, firstH, 6, 0.375, nil, nil, 0, false, 256)\nMuAiGuide.Reactions.addTimedWorldText(7000, \"MT\", firstBaitPos, 4026597120, true, 2)\nsecondDrawer:addTimedArrow(10000, 100, 0.05, 100, secondH, 6, 0.375, nil, nil, 0, false, 256)\nMuAiGuide.Reactions.addTimedWorldText(10000, \"OT\", secondBaitPos, 3959391525, true, 2)\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal startPos = data.p5FirstTowerPos\nlocal center = { x = 100, y = 0, z = 100 }\nlocal isDarkFirst = data.p5WingsDarkFirst\nlocal adjustAngle = (math.pi * 2) / 3\nif isDarkFirst then\n    adjustAngle = -adjustAngle\nend\nlocal firstBaitPos = TensorCore.rotatePosAroundPos(center, startPos, adjustAngle)\nlocal firstHeading = TensorCore.getHeadingToTarget(center, firstBaitPos)\nlocal secondBaitPos = TensorCore.rotatePosAroundPos(center, startPos, adjustAngle / 2)\nlocal secondHeading = TensorCore.getHeadingToTarget(center, secondBaitPos)\nlocal firstDrawer = TensorCore.getCachedDrawer(0x4D00FF00, nil, 0x4D00FF00, 0xFFFFFFFF, 2, 0, 256)\nfirstDrawer:setGradient(3, 0.15, 2)\nfirstDrawer:setHeightOffset(0.05)\nlocal secondDrawer = TensorCore.getCachedDrawer(0x4DFF8525, nil, 0x4DFF8525, 0xFFFFFFFF, 2, 0, 256)\nsecondDrawer:setGradient(3, 0.15, 2)\nsecondDrawer:setHeightOffset(0.05)\nfirstDrawer:addTimedArrow(7000, 100, 0.05, 100, firstHeading, 6, 0.375, nil, nil, 0, false, 256)\nMuAiGuide.Reactions.addTimedWorldText(7000, \"MT\", firstBaitPos, 4026597120, true, 2)\nsecondDrawer:addTimedArrow(10000, 100, 0.05, 100, secondHeading, 6, 0.375, nil, nil, 0, false, 256)\nMuAiGuide.Reactions.addTimedWorldText(10000, \"OT\", secondBaitPos, 3959391525, true, 2)\nself.used = true",
 							conditions = 
 							{
 								
@@ -22579,7 +22579,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRK3_CD",
-							name = "Draw Tank Bait Arrows",
+							name = "显示双坦引导方向",
 							uuid = "1e112033-d8a7-5ceb-ab30-8de607e8f3af",
 							version = 2.1,
 						},
@@ -22594,7 +22594,7 @@ local tbl =
 							category = "Self",
 							conditionType = 9,
 							dequeueIfLuaFalse = true,
-							name = "Self Is Tank",
+							name = "本人为坦克",
 							partyTargetType = "Tank",
 							uuid = "027743bf-0683-5358-b833-cce7b752729f",
 							version = 3,
@@ -22606,7 +22606,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p5FirstTowerPos ~= nil",
-							name = "Tower Pos Stored",
+							name = "已记录塔位",
 							uuid = "71526642-9cee-5a96-8cca-0b0897034a56",
 							version = 3,
 						},
@@ -22617,7 +22617,7 @@ local tbl =
 						{
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst ~= nil",
-							name = "First Wing Stored",
+							name = "已记录首刀属性",
 							uuid = "fbb74ec1-0b2b-5070-b3b4-cfc0242a1f74",
 							version = 3,
 						},
@@ -22658,7 +22658,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal target = TensorCore.mGetEntity(data.p5WingsTargetID)\nif (target == nil) then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, target.pos)\nlocal adjustedHeading = directHeading - cleaveAdjust\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal target = TensorCore.mGetEntity(data.p5WingsTargetID)\nif target == nil then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, target.pos)\nlocal adjustedHeading = directHeading - cleaveAdjust\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -22668,7 +22668,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Dark Cleave",
+							name = "显示暗属性扇形",
 							uuid = "26dbf9fe-7a5a-51b6-a116-bfe3c3f900db",
 							version = 2.1,
 						},
@@ -22678,7 +22678,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal target = TensorCore.mGetEntity(data.p5WingsTargetID)\nif (target == nil) then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, target.pos)\nlocal adjustedHeading = directHeading + cleaveAdjust\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal target = TensorCore.mGetEntity(data.p5WingsTargetID)\nif target == nil then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, target.pos)\nlocal adjustedHeading = directHeading + cleaveAdjust\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -22688,7 +22688,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Light Cleave",
+							name = "显示光属性扇形",
 							uuid = "700eb501-943a-5e3a-83fe-cd3820bb1e77",
 							version = 2.1,
 						},
@@ -22703,7 +22703,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == true",
 							dequeueIfLuaFalse = true,
-							name = "Dark First",
+							name = "首轮暗属性",
 							uuid = "59872bc0-d63d-5686-969f-f745b5471530",
 							version = 3,
 						},
@@ -22715,7 +22715,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == false",
 							dequeueIfLuaFalse = true,
-							name = "Light First",
+							name = "首轮光属性",
 							uuid = "59391df7-9e77-50b9-b9f0-cd4edab74148",
 							version = 3,
 						},
@@ -22744,7 +22744,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[249] then self.used = true; return end\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal pos = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCircle(pos.x, 0.05, pos.z, 4, false, 256)\nself.used = true",
+							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[249] then\n    self.used = true\n    return\nend\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal position = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCircle(position.x, 0.05, position.z, 4, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -22764,7 +22764,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Nearest",
+							name = "显示最近目标范围",
 							uuid = "ea4120e0-b89e-50e2-a63d-cd75aeb16d68",
 							version = 2.1,
 						},
@@ -22774,7 +22774,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[249] then self.used = true; return end\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal pos = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCircle(pos.x, 0.05, pos.z, 4, false, 256)\nself.used = true",
+							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[249] then\n    self.used = true\n    return\nend\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal position = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCircle(position.x, 0.05, position.z, 4, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -22794,7 +22794,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Farthest",
+							name = "显示最远目标范围",
 							uuid = "57585c0b-5ab3-5f0d-93a5-81aa76435f0d",
 							version = 2.1,
 						},
@@ -22809,7 +22809,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == true",
 							dequeueIfLuaFalse = true,
-							name = "Dark First",
+							name = "首轮暗属性",
 							uuid = "cd97f148-5595-5e10-b4b2-a039cb296336",
 							version = 3,
 						},
@@ -22821,7 +22821,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == false",
 							dequeueIfLuaFalse = true,
-							name = "Light First",
+							name = "首轮光属性",
 							uuid = "70ec6c8f-7720-5f16-9925-f9542bfb8fd0",
 							version = 3,
 						},
@@ -22832,7 +22832,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Get Boss",
+							name = "选取首领",
 							uuid = "e0329bcf-84e7-5b6e-9e27-1565e8ba8d8d",
 							version = 3,
 						},
@@ -22843,7 +22843,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Party",
-							name = "Get Nearest to Prev",
+							name = "选取距前一目标最近者",
 							subtypeRangeCheckSourceType = "Prev Detection Target",
 							uuid = "a2990a30-1bf9-5859-ba0b-0f02124c83bf",
 							version = 3,
@@ -22856,7 +22856,7 @@ local tbl =
 							category = "Filter",
 							filterTargetSubtype = "Furthest",
 							filterTargetType = "Party",
-							name = "Get Furthest from Prev",
+							name = "选取距前一目标最远者",
 							subtypeRangeCheckSourceType = "Prev Detection Target",
 							uuid = "017fc6c0-1031-55d3-a2b5-e44b83dc9b70",
 							version = 3,
@@ -22958,7 +22958,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif (boss == nil) then\n    self.used = true\n    return\nend\n\nlocal bossTarget = TensorCore.mGetEntity(boss.targetid)\nif (bossTarget == nil) then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, bossTarget.pos)\nlocal adjustedHeading = directHeading - cleaveAdjust\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif boss == nil then\n    self.used = true\n    return\nend\n\nlocal bossTarget = TensorCore.mGetEntity(boss.targetid)\nif bossTarget == nil then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, bossTarget.pos)\nlocal adjustedHeading = directHeading - cleaveAdjust\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -22973,7 +22973,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Dark Cleave",
+							name = "显示暗属性扇形",
 							uuid = "26dbf9fe-7a5a-51b6-a116-bfe3c3f900db",
 							version = 2.1,
 						},
@@ -22983,7 +22983,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif (boss == nil) then\n    self.used = true\n    return\nend\n\nlocal bossTarget = TensorCore.mGetEntity(boss.targetid)\nif (bossTarget == nil) then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, bossTarget.pos)\nlocal adjustedHeading = directHeading + cleaveAdjust\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal boss = TensorCore.mGetEntity(eventArgs.detectionTargetID)\nif boss == nil then\n    self.used = true\n    return\nend\n\nlocal bossTarget = TensorCore.mGetEntity(boss.targetid)\nif bossTarget == nil then\n    self.used = true\n    return\nend\n\nlocal cleaveAdjust = math.rad(67.5)\nlocal cleaveAngle = math.rad(225)\nlocal directHeading = TensorCore.getHeadingToTarget(data.arenaCenter, bossTarget.pos)\nlocal adjustedHeading = directHeading + cleaveAdjust\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCone(100, 0.05, 100, 30, cleaveAngle, adjustedHeading, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -22998,7 +22998,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Light Cleave",
+							name = "显示光属性扇形",
 							uuid = "700eb501-943a-5e3a-83fe-cd3820bb1e77",
 							version = 2.1,
 						},
@@ -23013,7 +23013,7 @@ local tbl =
 							category = "Filter",
 							conditionType = 4,
 							filterTargetType = "Enemy",
-							name = "Get Boss",
+							name = "选取首领",
 							uuid = "c19c4833-553d-5577-a751-d20006a5d5c0",
 							version = 3,
 						},
@@ -23026,7 +23026,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == false",
 							dequeueIfLuaFalse = true,
-							name = "Dark Second",
+							name = "次轮暗属性",
 							uuid = "59872bc0-d63d-5686-969f-f745b5471530",
 							version = 3,
 						},
@@ -23038,7 +23038,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == true",
 							dequeueIfLuaFalse = true,
-							name = "Light Second",
+							name = "次轮光属性",
 							uuid = "59391df7-9e77-50b9-b9f0-cd4edab74148",
 							version = 3,
 						},
@@ -23067,7 +23067,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[250] then self.used = true; return end\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal pos = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCircle(pos.x, 0.05, pos.z, 4, false, 256)\nself.used = true",
+							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[250] then\n    self.used = true\n    return\nend\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal position = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCircle(position.x, 0.05, position.z, 4, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -23087,7 +23087,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Nearest",
+							name = "显示最近目标范围",
 							uuid = "ea4120e0-b89e-50e2-a63d-cd75aeb16d68",
 							version = 2.1,
 						},
@@ -23097,7 +23097,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[250] then self.used = true; return end\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal pos = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal fruMuai1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nfruMuai1:setGradient(3, 0.15, 2)\nfruMuai1:setHeightOffset(0.05)\nfruMuai1:addCircle(pos.x, 0.05, pos.z, 4, false, 256)\nself.used = true",
+							actionLua = "if data.StringFRUDrawHits and data.StringFRUDrawHits[250] then\n    self.used = true\n    return\nend\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal position = TensorCore.mGetEntity(eventArgs.detectionTargetID).pos\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal shapeDrawer1 = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\nshapeDrawer1:setGradient(3, 0.15, 2)\nshapeDrawer1:setHeightOffset(0.05)\nshapeDrawer1:addCircle(position.x, 0.05, position.z, 4, false, 256)\nself.used = true",
 							conditions = 
 							{
 								
@@ -23117,7 +23117,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_TensorViper3_CD",
-							name = "Draw Farthest",
+							name = "显示最远目标范围",
 							uuid = "57585c0b-5ab3-5f0d-93a5-81aa76435f0d",
 							version = 2.1,
 						},
@@ -23132,7 +23132,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == false",
 							dequeueIfLuaFalse = true,
-							name = "Dark Second",
+							name = "次轮暗属性",
 							uuid = "449a8894-e1f6-55db-9832-bbd8b31eb079",
 							version = 3,
 						},
@@ -23145,7 +23145,7 @@ local tbl =
 							category = "Lua",
 							conditionLua = "return data.p5WingsDarkFirst == true",
 							dequeueIfLuaFalse = true,
-							name = "Light Second",
+							name = "次轮光属性",
 							uuid = "ee8e47e8-dcb0-5a15-83b2-ac3b5645ba09",
 							version = 3,
 						},
@@ -23157,7 +23157,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Enemy",
-							name = "Get Boss",
+							name = "选取首领",
 							uuid = "e0329bcf-84e7-5b6e-9e27-1565e8ba8d8d",
 							version = 3,
 						},
@@ -23168,7 +23168,7 @@ local tbl =
 						{
 							category = "Filter",
 							filterTargetType = "Party",
-							name = "Get Nearest to Prev",
+							name = "选取距前一目标最近者",
 							subtypeRangeCheckSourceType = "Prev Detection Target",
 							uuid = "a2990a30-1bf9-5859-ba0b-0f02124c83bf",
 							version = 3,
@@ -23181,7 +23181,7 @@ local tbl =
 							category = "Filter",
 							filterTargetSubtype = "Furthest",
 							filterTargetType = "Party",
-							name = "Get Furthest from Prev",
+							name = "选取距前一目标最远者",
 							subtypeRangeCheckSourceType = "Prev Detection Target",
 							uuid = "017fc6c0-1031-55d3-a2b5-e44b83dc9b70",
 							version = 3,
@@ -23384,7 +23384,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1162.9 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[254]\nif state == nil then\n    state = {bossSelector = {contentid = 13561, subgroup = \"Highest HP\"}}\n    rounds[254] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then self.used = true; return end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, ent in pairs(party) do\n    local dx, dz = ent.pos.x - pos.x, ent.pos.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or ent.id < leftID)) then\n            leftDist, leftID = distance, ent.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or ent.id < rightID)) then\n        rightDist, rightID = distance, ent.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then state.leftDraw = nil end\n    if state.leftDraw == nil then state.leftDraw = drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256) end\n    if state.leftDraw then state.leftID = leftID end\nend\nif rightID == nil then\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then state.rightDraw = nil end\n    if state.rightDraw == nil then state.rightDraw = rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256) end\n    if state.rightDraw then state.rightID = rightID end\nend\n\nself.used = true\n",
+							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1162.9 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[254]\nif state == nil then\n    state = { bossSelector = { contentid = 13561, subgroup = \"Highest HP\" } }\n    rounds[254] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then\n        self.used = true\n        return\n    end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, entity in pairs(party) do\n    local position = entity.pos\n    local dx, dz = position.x - pos.x, position.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or entity.id < leftID)) then\n            leftDist, leftID = distance, entity.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or entity.id < rightID)) then\n        rightDist, rightID = distance, entity.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then\n        state.leftDraw = nil\n    end\n    if state.leftDraw == nil then\n        state.leftDraw =\n            drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.leftDraw then\n        state.leftID = leftID\n    end\nend\nif rightID == nil then\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then\n        state.rightDraw = nil\n    end\n    if state.rightDraw == nil then\n        state.rightDraw =\n            rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.rightDraw then\n        state.rightID = rightID\n    end\nend\n\nself.used = true",
 							name = "左右各选最近一人",
 							uuid = "f2ae70b2-c6ee-a8af-8d0c-a2207d7518cd",
 							version = 2.1,
@@ -23596,7 +23596,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1167.5 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[256]\nif state == nil then\n    state = {bossSelector = {contentid = 13561, subgroup = \"Highest HP\"}}\n    rounds[256] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then self.used = true; return end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, ent in pairs(party) do\n    local dx, dz = ent.pos.x - pos.x, ent.pos.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or ent.id < leftID)) then\n            leftDist, leftID = distance, ent.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or ent.id < rightID)) then\n        rightDist, rightID = distance, ent.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then state.leftDraw = nil end\n    if state.leftDraw == nil then state.leftDraw = drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256) end\n    if state.leftDraw then state.leftID = leftID end\nend\nif rightID == nil then\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then state.rightDraw = nil end\n    if state.rightDraw == nil then state.rightDraw = rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256) end\n    if state.rightDraw then state.rightID = rightID end\nend\n\nself.used = true\n",
+							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1167.5 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[256]\nif state == nil then\n    state = { bossSelector = { contentid = 13561, subgroup = \"Highest HP\" } }\n    rounds[256] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then\n        self.used = true\n        return\n    end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, entity in pairs(party) do\n    local position = entity.pos\n    local dx, dz = position.x - pos.x, position.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or entity.id < leftID)) then\n            leftDist, leftID = distance, entity.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or entity.id < rightID)) then\n        rightDist, rightID = distance, entity.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then\n        state.leftDraw = nil\n    end\n    if state.leftDraw == nil then\n        state.leftDraw =\n            drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.leftDraw then\n        state.leftID = leftID\n    end\nend\nif rightID == nil then\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then\n        state.rightDraw = nil\n    end\n    if state.rightDraw == nil then\n        state.rightDraw =\n            rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.rightDraw then\n        state.rightID = rightID\n    end\nend\n\nself.used = true",
 							name = "左右各选最近一人",
 							uuid = "0d75f853-1487-e639-a149-da584074c341",
 							version = 2.1,
@@ -23808,7 +23808,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1172.1 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[258]\nif state == nil then\n    state = {bossSelector = {contentid = 13561, subgroup = \"Highest HP\"}}\n    rounds[258] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then self.used = true; return end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, ent in pairs(party) do\n    local dx, dz = ent.pos.x - pos.x, ent.pos.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or ent.id < leftID)) then\n            leftDist, leftID = distance, ent.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or ent.id < rightID)) then\n        rightDist, rightID = distance, ent.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then state.leftDraw = nil end\n    if state.leftDraw == nil then state.leftDraw = drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256) end\n    if state.leftDraw then state.leftID = leftID end\nend\nif rightID == nil then\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then state.rightDraw = nil end\n    if state.rightDraw == nil then state.rightDraw = rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256) end\n    if state.rightDraw then state.rightID = rightID end\nend\n\nself.used = true\n",
+							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1172.1 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[258]\nif state == nil then\n    state = { bossSelector = { contentid = 13561, subgroup = \"Highest HP\" } }\n    rounds[258] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then\n        self.used = true\n        return\n    end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, entity in pairs(party) do\n    local position = entity.pos\n    local dx, dz = position.x - pos.x, position.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or entity.id < leftID)) then\n            leftDist, leftID = distance, entity.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or entity.id < rightID)) then\n        rightDist, rightID = distance, entity.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then\n        state.leftDraw = nil\n    end\n    if state.leftDraw == nil then\n        state.leftDraw =\n            drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.leftDraw then\n        state.leftID = leftID\n    end\nend\nif rightID == nil then\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then\n        state.rightDraw = nil\n    end\n    if state.rightDraw == nil then\n        state.rightDraw =\n            rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.rightDraw then\n        state.rightID = rightID\n    end\nend\n\nself.used = true",
 							name = "左右各选最近一人",
 							uuid = "960b1d0e-ef9b-3bd4-8b4b-8d2f4a3d4cc4",
 							version = 2.1,
@@ -24020,7 +24020,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1176.7 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[260]\nif state == nil then\n    state = {bossSelector = {contentid = 13561, subgroup = \"Highest HP\"}}\n    rounds[260] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then self.used = true; return end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, ent in pairs(party) do\n    local dx, dz = ent.pos.x - pos.x, ent.pos.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or ent.id < leftID)) then\n            leftDist, leftID = distance, ent.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or ent.id < rightID)) then\n        rightDist, rightID = distance, ent.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then state.leftDraw = nil end\n    if state.leftDraw == nil then state.leftDraw = drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256) end\n    if state.leftDraw then state.leftID = leftID end\nend\nif rightID == nil then\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then state.rightDraw = nil end\n    if state.rightDraw == nil then state.rightDraw = rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256) end\n    if state.rightDraw then state.rightID = rightID end\nend\n\nself.used = true\n",
+							actionLua = "-- FRU 星灵之剑左右挡枪: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1176.7 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[260]\nif state == nil then\n    state = { bossSelector = { contentid = 13561, subgroup = \"Highest HP\" } }\n    rounds[260] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then\n        self.used = true\n        return\n    end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, entity in pairs(party) do\n    local position = entity.pos\n    local dx, dz = position.x - pos.x, position.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or entity.id < leftID)) then\n            leftDist, leftID = distance, entity.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or entity.id < rightID)) then\n        rightDist, rightID = distance, entity.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedRectOnEnt(state.leftDraw, nil, nil, nil, nil, leftID) then\n        state.leftDraw = nil\n    end\n    if state.leftDraw == nil then\n        state.leftDraw =\n            drawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, leftID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.leftDraw then\n        state.leftID = leftID\n    end\nend\nif rightID == nil then\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedRectOnEnt(state.rightDraw, nil, nil, nil, nil, rightID) then\n        state.rightDraw = nil\n    end\n    if state.rightDraw == nil then\n        state.rightDraw =\n            rightDrawer:addTimedRectOnEnt(remaining, boss.id, 100, 6, rightID, 0, true, false, true, nil, nil, 256)\n    end\n    if state.rightDraw then\n        state.rightID = rightID\n    end\nend\n\nself.used = true",
 							name = "左右各选最近一人",
 							uuid = "f5b6172b-b8a8-ed3b-8f64-7430a25d064b",
 							version = 2.1,
@@ -24066,7 +24066,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal ent = TensorCore.mGetEntity(eventArgs.entityID)\n\nlocal channelTime = eventArgs.channelTimeMax*1000\nlocal ProjectedPosition = TensorCore.getPosInDirection(ent.pos, ent.pos.h, 5)\nif data.firstsetdrawnTime == nil or TimeSince(data.firstsetdrawnTime) > 35000 or TimeSince(data.firstsetdrawnTime) < 1000 then\n    drawer:addTimedRect(channelTime, ProjectedPosition.x, 0.05, ProjectedPosition.z, 5, 80, ent.pos.h, 2000, false, nil, 256)\n    data.firstsetdrawnTime = Now()\nelse\n    drawer:addTimedRect(2000, ProjectedPosition.x, 0.05, ProjectedPosition.z, 5, 80, ent.pos.h, channelTime, false, nil, 256)\nend\n\nfor i=1,7 do\n    ProjectedPosition = TensorCore.getPosInDirection(ProjectedPosition, ent.pos.h, 5)\n    drawer:addTimedRect(2000, ProjectedPosition.x, 0.05, ProjectedPosition.z, 5, 80, ent.pos.h, channelTime+(2000*i), false, nil, 256)\nend\n\nself.used = true\n",
+							actionLua = "-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\nlocal entity = TensorCore.mGetEntity(eventArgs.entityID)\n\nlocal channelTime = eventArgs.channelTimeMax * 1000\nlocal projectedPosition = TensorCore.getPosInDirection(entity.pos, entity.pos.h, 5)\nif\n    data.firstsetdrawnTime == nil\n    or TimeSince(data.firstsetdrawnTime) > 35000\n    or TimeSince(data.firstsetdrawnTime) < 1000\nthen\n    drawer:addTimedRect(\n        channelTime,\n        projectedPosition.x,\n        0.05,\n        projectedPosition.z,\n        5,\n        80,\n        entity.pos.h,\n        2000,\n        false,\n        nil,\n        256\n    )\n    data.firstsetdrawnTime = Now()\nelse\n    drawer:addTimedRect(\n        2000,\n        projectedPosition.x,\n        0.05,\n        projectedPosition.z,\n        5,\n        80,\n        entity.pos.h,\n        channelTime,\n        false,\n        nil,\n        256\n    )\nend\n\nfor i = 1, 7 do\n    projectedPosition = TensorCore.getPosInDirection(projectedPosition, entity.pos.h, 5)\n    drawer:addTimedRect(\n        2000,\n        projectedPosition.x,\n        0.05,\n        projectedPosition.z,\n        5,\n        80,\n        entity.pos.h,\n        channelTime + (2000 * i),\n        false,\n        nil,\n        256\n    )\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -24127,7 +24127,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- FRU Muai: alpha 0x4D, white 2px, gradient 3/0.15/2, flat floor +0.05.\nlocal oldDraw = MuAiGuide.Reactions.Settings.Reactions.fruExasArgusPlus == true\nlocal entPos = TensorCore.mGetEntity(eventArgs.entityID).pos\nlocal entH = TensorCore.restoreHeading(entPos.h)\nlocal pX, pZ = entPos.x, entPos.z\nlocal timings = data.p5FulgentTimings\nlocal drawTime = 2000\nlocal fruMoogle1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer((fruMoogle1.colorStart and fruMoogle1.colorStart % 0x1000000 + 0x4D000000), (fruMoogle1.colorMid and fruMoogle1.colorMid % 0x1000000 + 0x4D000000), (fruMoogle1.colorEnd and fruMoogle1.colorEnd % 0x1000000 + 0x4D000000), 0xFFFFFFFF, 2, 0, 256)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedRect(drawTime, pX, 0.05, pZ, 5, 80, entH, timings[1] - drawTime, false, nil, 256)\nlocal storedSin, storedCos = 5 * math.sin(entH), 5 * math.cos(entH)\nfor i = 2, 8 do\n    pX = pX + storedSin\n    pZ = pZ + storedCos\n    local dx = pX - 100\n    local dz = pZ - 100\n    local sqDist = dx * dx + dz * dz\n    if (sqDist > 448) then break end\n    drawer:addTimedRect(drawTime, pX, 0.05, pZ, 5, 80, entH, timings[i] - drawTime, false, nil, 256)\nend\n\nself.used = true",
+							actionLua = "if not (MuAiGuide and MuAiGuide.Reactions and MuAiGuide.Reactions.ready) then\n    error(\"[MuAiCore] 时间轴公共模块尚未就绪\")\nend\n\n-- 范围样式: 莫古力时间渐变, 0x4D透明度, 白色2px轮廓, 地面偏移0.05。\nlocal oldDraw = MuAiGuide.Reactions.Settings.Reactions.fruExasArgusPlus == true\nlocal entityPosition = TensorCore.mGetEntity(eventArgs.entityID).pos\nlocal entityHeading = TensorCore.restoreHeading(entityPosition.h)\nlocal positionX, positionZ = entityPosition.x, entityPosition.z\nlocal timings = data.p5FulgentTimings\nlocal durationMs = 2000\nlocal moogleColors1 = TensorCore.getMoogleDrawer()\nlocal drawer = TensorCore.getCachedDrawer(\n    (moogleColors1.colorStart and moogleColors1.colorStart % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorMid and moogleColors1.colorMid % 0x1000000 + 0x4D000000),\n    (moogleColors1.colorEnd and moogleColors1.colorEnd % 0x1000000 + 0x4D000000),\n    0xFFFFFFFF,\n    2,\n    0,\n    256\n)\ndrawer:setGradient(3, 0.15, 2)\ndrawer:setHeightOffset(0.05)\ndrawer:addTimedRect(\n    durationMs,\n    positionX,\n    0.05,\n    positionZ,\n    5,\n    80,\n    entityHeading,\n    timings[1] - durationMs,\n    false,\n    nil,\n    256\n)\nlocal storedSin, storedCos = 5 * math.sin(entityHeading), 5 * math.cos(entityHeading)\nfor i = 2, 8 do\n    positionX = positionX + storedSin\n    positionZ = positionZ + storedCos\n    local dx = positionX - 100\n    local dz = positionZ - 100\n    local sqDist = dx * dx + dz * dz\n    if sqDist > 448 then\n        break\n    end\n    drawer:addTimedRect(\n        durationMs,\n        positionX,\n        0.05,\n        positionZ,\n        5,\n        80,\n        entityHeading,\n        timings[i] - durationMs,\n        false,\n        nil,\n        256\n    )\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -24137,7 +24137,7 @@ local tbl =
 								},
 							},
 							gVar = "ACR_RikuDRG3_CD",
-							name = "Queue Exalines",
+							name = "显示光尘之剑",
 							uuid = "8f8a1295-65d7-566d-9f87-a07f623b3103",
 							version = 2.1,
 						},
@@ -24154,7 +24154,7 @@ local tbl =
 							eventArgOptionType = 3,
 							eventArgType = 2,
 							eventSpellID = 31651,
-							name = "Channel IDs",
+							name = "读条技能集合",
 							spellIDList = 
 							{
 								40307,
@@ -24275,7 +24275,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- FRU 死亡轮回左右分摊: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1214.2 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[268]\nif state == nil then\n    state = {bossSelector = {contentid = 13561, subgroup = \"Highest HP\"}}\n    rounds[268] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then self.used = true; return end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then self.used = true; return end\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, ent in pairs(party) do\n    local dx, dz = ent.pos.x - pos.x, ent.pos.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or ent.id < leftID)) then\n            leftDist, leftID = distance, ent.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or ent.id < rightID)) then\n        rightDist, rightID = distance, ent.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then Argus.deleteTimedShape(state.leftDraw) end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedCircleOnEnt(state.leftDraw, nil, leftID) then state.leftDraw = nil end\n    if state.leftDraw == nil then state.leftDraw = drawer:addTimedCircleOnEnt(remaining, leftID, 4, 0, false, true, 256) end\n    if state.leftDraw then state.leftID = leftID end\nend\nif rightID == nil then\n    if state.rightDraw then Argus.deleteTimedShape(state.rightDraw) end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedCircleOnEnt(state.rightDraw, nil, rightID) then state.rightDraw = nil end\n    if state.rightDraw == nil then state.rightDraw = rightDrawer:addTimedCircleOnEnt(remaining, rightID, 4, 0, false, true, 256) end\n    if state.rightDraw then state.rightID = rightID end\nend\n\nlocal line = state.lineDrawer\nif line == nil then\n    line = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    line:setGradient(3, 0.15, 2)\n    state.lineDrawer = line\nend\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 20, 0.05, 0.4, 0.2, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h + math.pi, 20, 0.05, 0, 0, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 12, 0.05, 0.4, 0.2, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 4, 0.05, 0.4, 0.2, false, 256)\n\nself.used = true\n",
+							actionLua = "-- FRU 死亡轮回左右分摊: 每次 OnFrame 更新重选首领左右各自最近一人.\n-- 同一目标由原生实体附着持续跟随; 仅换人时更新 UUID, 不降低选人频率.\nlocal remaining = (1214.2 - TensorReactions_CurrentTimer) * 1000\nlocal rounds = data.StringFRUSideDraws\nif rounds == nil then\n    rounds = {}\n    data.StringFRUSideDraws = rounds\nend\nlocal state = rounds[268]\nif state == nil then\n    state = { bossSelector = { contentid = 13561, subgroup = \"Highest HP\" } }\n    rounds[268] = state\nend\nif remaining <= 0 then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.leftDraw, state.rightDraw = nil, nil\n    self.used = true\n    return\nend\n\nlocal boss = state.bossID and TensorCore.mGetEntity(state.bossID)\nif boss == nil then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", state.bossSelector)\n    if boss == nil then\n        self.used = true\n        return\n    end\n    state.bossID = boss.id\nend\nlocal party = TensorCore.getEntityGroupList(\"Party\")\nif not table.valid(party) then\n    self.used = true\n    return\nend\nlocal pos = boss.pos\nlocal cosH, sinH = math.cos(pos.h), math.sin(pos.h)\nlocal leftID, rightID\nlocal leftDist, rightDist = math.huge, math.huge\nfor _, entity in pairs(party) do\n    local position = entity.pos\n    local dx, dz = position.x - pos.x, position.z - pos.z\n    local distance = dx * dx + dz * dz\n    if dx * cosH - dz * sinH > 0 then\n        if distance < leftDist or (distance == leftDist and (leftID == nil or entity.id < leftID)) then\n            leftDist, leftID = distance, entity.id\n        end\n    elseif distance < rightDist or (distance == rightDist and (rightID == nil or entity.id < rightID)) then\n        rightDist, rightID = distance, entity.id\n    end\nend\n\nlocal drawer = state.drawer\nif drawer == nil then\n    drawer = TensorCore.getCachedDrawer(0x4D00FFFF, nil, 0x4D00FFFF, 0xFFFFFFFF, 2, 0, 256)\n    drawer:setGradient(3, 0.15, 2)\n    drawer:setHeightOffset(0.05)\n    state.drawer = drawer\nend\n\nlocal rightDrawer = state.rightDrawer\nif rightDrawer == nil then\n    rightDrawer = TensorCore.getCachedDrawer(0x4DFF66B3, nil, 0x4DFF66B3, 0xFFFFFFFF, 2, 0, 256)\n    rightDrawer:setGradient(3, 0.15, 2)\n    rightDrawer:setHeightOffset(0.05)\n    state.rightDrawer = rightDrawer\nend\n\nif leftID == nil then\n    if state.leftDraw then\n        Argus.deleteTimedShape(state.leftDraw)\n    end\n    state.leftDraw, state.leftID = nil, nil\nelseif state.leftDraw == nil or state.leftID ~= leftID then\n    if state.leftDraw and not drawer:updateTimedCircleOnEnt(state.leftDraw, nil, leftID) then\n        state.leftDraw = nil\n    end\n    if state.leftDraw == nil then\n        state.leftDraw = drawer:addTimedCircleOnEnt(remaining, leftID, 4, 0, false, true, 256)\n    end\n    if state.leftDraw then\n        state.leftID = leftID\n    end\nend\nif rightID == nil then\n    if state.rightDraw then\n        Argus.deleteTimedShape(state.rightDraw)\n    end\n    state.rightDraw, state.rightID = nil, nil\nelseif state.rightDraw == nil or state.rightID ~= rightID then\n    if state.rightDraw and not rightDrawer:updateTimedCircleOnEnt(state.rightDraw, nil, rightID) then\n        state.rightDraw = nil\n    end\n    if state.rightDraw == nil then\n        state.rightDraw = rightDrawer:addTimedCircleOnEnt(remaining, rightID, 4, 0, false, true, 256)\n    end\n    if state.rightDraw then\n        state.rightID = rightID\n    end\nend\n\nlocal line = state.lineDrawer\nif line == nil then\n    line = TensorCore.getCachedDrawer(0x4DFFFFFF, nil, 0x4DFFFFFF, 0xFFFFFFFF, 2, 0, 256)\n    line:setGradient(3, 0.15, 2)\n    state.lineDrawer = line\nend\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 20, 0.05, 0.4, 0.2, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h + math.pi, 20, 0.05, 0, 0, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 12, 0.05, 0.4, 0.2, false, 256)\nline:addArrow(pos.x, pos.y + 0.05, pos.z, pos.h, 4, 0.05, 0.4, 0.2, false, 256)\n\nself.used = true",
 							name = "左右各选最近一人",
 							uuid = "5715eb22-984f-2668-bf04-31aaa942829b",
 							version = 2.1,
