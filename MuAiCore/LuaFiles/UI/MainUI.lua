@@ -159,191 +159,194 @@ local drawJobTab = function(M)
             { info = M.Party.D4, label = 'D4' }
         }
     end
-    GUI:ListBoxHeader('##Jobs', 310, listHeight)
-    for i, member in ipairs(partyMembers) do
-        local ptMember = partyMembers[i]
-        if ptMember.label == M.SelfPos then
-            GUI:Dummy(0, 5)
-            local selectPath = GetLuaModsPath() .. 'MuAiCore\\Image\\mark.png'
-            GUI:SameLine(297)
-            GUI:Image(selectPath, 15, 25)
-            GUI:SameLine(-1)
-            GUI:Image(selectPath, 15, 25, 1, 0, 0, 1)
-            if M.MultiGuide.enable then
-                GUI:SameLine(12)
-            else
-                GUI:SameLine(20)
-            end
-        else
-            if M.MultiGuide.enable then
+    -- 只有列表成功开始时才绘制内容并结束，避免裁剪时破坏 ImGui 栈。
+    if GUI:ListBoxHeader('##Jobs', 310, listHeight) then
+        for i, member in ipairs(partyMembers) do
+            local ptMember = partyMembers[i]
+            if ptMember.label == M.SelfPos then
                 GUI:Dummy(0, 5)
+                local selectPath = GetLuaModsPath() .. 'MuAiCore\\Image\\mark.png'
+                GUI:SameLine(297)
+                GUI:Image(selectPath, 15, 25)
+                GUI:SameLine(-1)
+                GUI:Image(selectPath, 15, 25, 1, 0, 0, 1)
+                if M.MultiGuide.enable then
+                    GUI:SameLine(12)
+                else
+                    GUI:SameLine(20)
+                end
             else
-                GUI:Dummy(8, 5)
+                if M.MultiGuide.enable then
+                    GUI:Dummy(0, 5)
+                else
+                    GUI:Dummy(8, 5)
+                end
+                GUI:SameLine()
             end
-            GUI:SameLine()
-        end
-        GUI:AlignFirstTextHeightToWidgets()
-        GUI:SetWindowFontSize(1.3)
-        if M.GetPartyCnt() == 4 then
-            if i == 1 then
-                GUI:TextColored(0, 0.3, 1, 1, ptMember.label)
-            elseif i == 2 then
-                GUI:TextColored(0, 1, 0, 1, ptMember.label)
+            GUI:AlignFirstTextHeightToWidgets()
+            GUI:SetWindowFontSize(1.3)
+            if M.GetPartyCnt() == 4 then
+                if i == 1 then
+                    GUI:TextColored(0, 0.3, 1, 1, ptMember.label)
+                elseif i == 2 then
+                    GUI:TextColored(0, 1, 0, 1, ptMember.label)
+                else
+                    GUI:TextColored(1, 0, 0, 1, ptMember.label)
+                end
             else
-                GUI:TextColored(1, 0, 0, 1, ptMember.label)
+                if i == 1 or i == 2 then
+                    GUI:TextColored(0, 0.3, 1, 1, ptMember.label)
+                elseif i == 3 or i == 4 then
+                    GUI:TextColored(0, 1, 0, 1, ptMember.label)
+                else
+                    GUI:TextColored(1, 0, 0, 1, ptMember.label)
+                end
             end
-        else
-            if i == 1 or i == 2 then
-                GUI:TextColored(0, 0.3, 1, 1, ptMember.label)
-            elseif i == 3 or i == 4 then
-                GUI:TextColored(0, 1, 0, 1, ptMember.label)
-            else
-                GUI:TextColored(1, 0, 0, 1, ptMember.label)
-            end
-        end
-        GUI:SetWindowFontSize(1)
-        if M.MultiGuide.enable then
-            GUI:SameLine(46)
-        else
-            GUI:SameLine(70)
-        end
-        if ptMember.info ~= nil and ptMember.info.job ~= nil and ptMember.info.name ~= nil then
-            local path = GetLuaModsPath() .. 'MuAiCore\\Image\\JobIcon\\' .. tostring(ptMember.info.job) .. '.png'
-            GUI:Image(path, 25, 25)
+            GUI:SetWindowFontSize(1)
             if M.MultiGuide.enable then
-                local checkText = '##multiGuide_' .. ptMember.label
-                local curIsOpen
-                if ptMember.label == M.SelfPos then
-                    curIsOpen = false
-                else
-                    curIsOpen = M.MultiGuide.isPlayerInGuide(ptMember.info.id)
-                end
-                GUI:SameLine(90)
-                local curUIColor = nil
-                local style = GUI.GetStyle()
-                for _, color in pairs(style.colors) do
-                    if color[5] == 'FrameBg' then
-                        curUIColor = color
-                        break
-                    end
-                end
-                local tJobSelect, tJobChanged
-                if curUIColor then
-                    GUI:PushStyleColor(GUI.Col_FrameBg, curUIColor[1] / 2 * 3, curUIColor[2] / 2 * 3, curUIColor[3] / 2 * 3, curUIColor[4])
-                    tJobSelect, tJobChanged = GUI:Checkbox(checkText, curIsOpen)
-                    GUI:PopStyleColor()
-                else
-                    tJobSelect, tJobChanged = GUI:Checkbox(checkText, curIsOpen)
-                end
-
-                if tJobChanged then
-                    if ptMember.label == M.SelfPos then
-                        M.ShowMsgUI(3, { '无法修改自己是否在指导列表！' })
-                    else
-                        if tJobSelect then
-                            M.MultiGuide.addPlayer(ptMember.label)
-                        else
-                            M.MultiGuide.removePlayer(ptMember.label)
-                        end
-                    end
-                end
-
-                GUI:SameLine(122)
-                local curColor, colorChange, cR, cG, cB, cA
-                if ptMember.label == M.SelfPos then
-                    curColor = M.Config.Main.GuideColor
-                    cR, cG, cB, cA, colorChange = GUI:ColorEdit4('##guideToolColor_' .. ptMember.label, curColor.r, curColor.g, curColor.b, curColor.a,
-                            GUI.ColorEditMode_NoInputs + GUI.ColorEditMode_NoTooltip)
-                    if GUI:IsItemHovered() then
-                        GUI:SetTooltip("你无法修改自己的指路颜色，请到基本设置修改！")
-                    end
-                else
-                    curColor = M.Config.Main.MultiColor[ptMember.label]
-
-                    cR, cG, cB, cA, colorChange = GUI:ColorEdit4('##guideToolColor_' .. ptMember.label, curColor.r, curColor.g, curColor.b, curColor.a,
-                            GUI.ColorEditMode_NoInputs)
-                end
-
-                if colorChange then
-                    M.Config.Main.MultiColor[ptMember.label] = { r = cR, g = cG, b = cB, a = cA }
-                end
-            end
-            GUI:SameLine(0, 25)
-            local text = ptMember.info.name
-            if ptMember.label == M.SelfPos and M.IsVideo() then
-                text = M.GetJobFullNameById(M.Party[M.SelfPos].job)
-            end
-            local itemW = GUI:GetContentRegionAvailWidth()
-            local textW = GUI:CalcTextSize(text)
-            local offsetX = (itemW - textW) * 0.5
-            GUI:Selectable(
-                    string.rep(" ", offsetX / GUI:CalcTextSize(" ")) .. text,
-                    IsSelected(member),
-                    GUI.SelectableFlags_DontClosePopups,
-                    0,
-                    24
-            )
-        else
-            local path = GetLuaModsPath() .. 'MuAiCore\\Image\\JobIcon\\00.png'
-            if i <= 2 then
-                path = GetLuaModsPath() .. 'MuAiCore\\Image\\JobIcon\\TankRole.png'
-            elseif i <= 4 then
-                path = GetLuaModsPath() .. 'MuAiCore\\Image\\JobIcon\\HealerRole.png'
+                GUI:SameLine(46)
             else
-                path = GetLuaModsPath() .. 'MuAiCore\\Image\\JobIcon\\DPSRole.png'
+                GUI:SameLine(70)
             end
-            GUI:Image(path, 25, 25)
-            GUI:SameLine(0, 25)
-            GUI:Selectable('        未知玩家' .. i, IsSelected(member), GUI.SelectableFlags_DontClosePopups, 0, 24)
-        end
-        if M.GetPartyCnt() > 0 and GUI:IsItemHovered(GUI.HoveredFlags_AllowWhenBlockedByPopup + GUI.HoveredFlags_AllowWhenBlockedByActiveItem + GUI.HoveredFlags_AllowWhenOverlapped) then
-            if GUI:IsMouseDown(0) then
-                if M.MainUI.mousePosition == nil then
-                    if M.MainUI.mousePosition ~= ptMember.label then
-                        M.MainUI.mousePosition = ptMember.label
+            if ptMember.info ~= nil and ptMember.info.job ~= nil and ptMember.info.name ~= nil then
+                local path = GetLuaModsPath() .. 'MuAiCore\\Image\\JobIcon\\' .. tostring(ptMember.info.job) .. '.png'
+                GUI:Image(path, 25, 25)
+                if M.MultiGuide.enable then
+                    local checkText = '##multiGuide_' .. ptMember.label
+                    local curIsOpen
+                    if ptMember.label == M.SelfPos then
+                        curIsOpen = false
+                    else
+                        curIsOpen = M.MultiGuide.isPlayerInGuide(ptMember.info.id)
                     end
-                    if M.MainUI.selected ~= ptMember.label then
-                        M.MainUI.selected = ptMember.label
-                    end
-                elseif M.MainUI.mousePosition ~= ptMember.label then
-                    M.Debug('站位交换：' .. M.MainUI.mousePosition .. '<==>' .. ptMember.label)
-                    local temp = M.Party[M.MainUI.mousePosition]
-                    M.Party[M.MainUI.mousePosition] = M.Party[ptMember.label]
-                    M.Party[ptMember.label] = temp
-                    if M.Party ~= nil and M.Party[M.MainUI.mousePosition] ~= nil then
-                        -- 职能调整
-                        if M.Party[M.MainUI.mousePosition].id == M.GetPlayer().id then
-                            M.SelfPos = M.MainUI.mousePosition;
-                        elseif M.Party[ptMember.label].id == M.GetPlayer().id then
-                            M.SelfPos = ptMember.label;
+                    GUI:SameLine(90)
+                    local curUIColor = nil
+                    local style = GUI.GetStyle()
+                    for _, color in pairs(style.colors) do
+                        if color[5] == 'FrameBg' then
+                            curUIColor = color
+                            break
                         end
-                        M.MainUI.mousePosition = ptMember.label
+                    end
+                    local tJobSelect, tJobChanged
+                    if curUIColor then
+                        GUI:PushStyleColor(GUI.Col_FrameBg, curUIColor[1] / 2 * 3, curUIColor[2] / 2 * 3, curUIColor[3] / 2 * 3, curUIColor[4])
+                        tJobSelect, tJobChanged = GUI:Checkbox(checkText, curIsOpen)
+                        GUI:PopStyleColor()
+                    else
+                        tJobSelect, tJobChanged = GUI:Checkbox(checkText, curIsOpen)
+                    end
+
+                    if tJobChanged then
+                        if ptMember.label == M.SelfPos then
+                            M.ShowMsgUI(3, { '无法修改自己是否在指导列表！' })
+                        else
+                            if tJobSelect then
+                                M.MultiGuide.addPlayer(ptMember.label)
+                            else
+                                M.MultiGuide.removePlayer(ptMember.label)
+                            end
+                        end
+                    end
+
+                    GUI:SameLine(122)
+                    local curColor, colorChange, cR, cG, cB, cA
+                    if ptMember.label == M.SelfPos then
+                        curColor = M.Config.Main.GuideColor
+                        cR, cG, cB, cA, colorChange = GUI:ColorEdit4('##guideToolColor_' .. ptMember.label, curColor.r, curColor.g, curColor.b, curColor.a,
+                                GUI.ColorEditMode_NoInputs + GUI.ColorEditMode_NoTooltip)
+                        if GUI:IsItemHovered() then
+                            GUI:SetTooltip("你无法修改自己的指路颜色，请到基本设置修改！")
+                        end
+                    else
+                        curColor = M.Config.Main.MultiColor[ptMember.label]
+
+                        cR, cG, cB, cA, colorChange = GUI:ColorEdit4('##guideToolColor_' .. ptMember.label, curColor.r, curColor.g, curColor.b, curColor.a,
+                                GUI.ColorEditMode_NoInputs)
+                    end
+
+                    if colorChange then
+                        M.Config.Main.MultiColor[ptMember.label] = { r = cR, g = cG, b = cB, a = cA }
+                    end
+                end
+                GUI:SameLine(0, 25)
+                local text = ptMember.info.name
+                if ptMember.label == M.SelfPos and M.IsVideo() then
+                    text = M.GetJobFullNameById(M.Party[M.SelfPos].job)
+                end
+                local itemW = GUI:GetContentRegionAvailWidth()
+                local textW = GUI:CalcTextSize(text)
+                local offsetX = (itemW - textW) * 0.5
+                GUI:Selectable(
+                        string.rep(" ", offsetX / GUI:CalcTextSize(" ")) .. text,
+                        IsSelected(member),
+                        GUI.SelectableFlags_DontClosePopups,
+                        0,
+                        24
+                )
+            else
+                local path = GetLuaModsPath() .. 'MuAiCore\\Image\\JobIcon\\00.png'
+                if i <= 2 then
+                    path = GetLuaModsPath() .. 'MuAiCore\\Image\\JobIcon\\TankRole.png'
+                elseif i <= 4 then
+                    path = GetLuaModsPath() .. 'MuAiCore\\Image\\JobIcon\\HealerRole.png'
+                else
+                    path = GetLuaModsPath() .. 'MuAiCore\\Image\\JobIcon\\DPSRole.png'
+                end
+                GUI:Image(path, 25, 25)
+                GUI:SameLine(0, 25)
+                GUI:Selectable('        未知玩家' .. i, IsSelected(member), GUI.SelectableFlags_DontClosePopups, 0, 24)
+            end
+            if M.GetPartyCnt() > 0 and GUI:IsItemHovered(GUI.HoveredFlags_AllowWhenBlockedByPopup + GUI.HoveredFlags_AllowWhenBlockedByActiveItem + GUI.HoveredFlags_AllowWhenOverlapped) then
+                if GUI:IsMouseDown(0) then
+                    if M.MainUI.mousePosition == nil then
+                        if M.MainUI.mousePosition ~= ptMember.label then
+                            M.MainUI.mousePosition = ptMember.label
+                        end
                         if M.MainUI.selected ~= ptMember.label then
                             M.MainUI.selected = ptMember.label
                         end
+                    elseif M.MainUI.mousePosition ~= ptMember.label then
+                        M.Debug('站位交换：' .. M.MainUI.mousePosition .. '<==>' .. ptMember.label)
+                        local temp = M.Party[M.MainUI.mousePosition]
+                        M.Party[M.MainUI.mousePosition] = M.Party[ptMember.label]
+                        M.Party[ptMember.label] = temp
+                        if M.Party ~= nil and M.Party[M.MainUI.mousePosition] ~= nil then
+                            -- 职能调整
+                            if M.Party[M.MainUI.mousePosition].id == M.GetPlayer().id then
+                                M.SelfPos = M.MainUI.mousePosition;
+                            elseif M.Party[ptMember.label].id == M.GetPlayer().id then
+                                M.SelfPos = ptMember.label;
+                            end
+                            M.MainUI.mousePosition = ptMember.label
+                            if M.MainUI.selected ~= ptMember.label then
+                                M.MainUI.selected = ptMember.label
+                            end
+                        end
+                        M.MultiGuide.RefreshDic()
                     end
-                    M.MultiGuide.RefreshDic()
                 end
             end
-        end
-        if M.MainUI.mousePosition ~= nil and (GUI:IsMouseReleased(0) or not GUI:IsMouseDown(0)) then
-            M.MainUI.mousePosition = nil
-        end
-        if M.MainUI.selected ~= nil and (GUI:IsMouseReleased(0) or not GUI:IsMouseDown(0)) then
-            M.MainUI.selected = nil
-        end
+            if M.MainUI.mousePosition ~= nil and (GUI:IsMouseReleased(0) or not GUI:IsMouseDown(0)) then
+                M.MainUI.mousePosition = nil
+            end
+            if M.MainUI.selected ~= nil and (GUI:IsMouseReleased(0) or not GUI:IsMouseDown(0)) then
+                M.MainUI.selected = nil
+            end
 
-        local size
-        if M.Party ~= nil and (M.GetPartyCnt() == 4 or M.GetPartyCnt() == 8) then
-            size = M.GetPartyCnt()
-        else
-            size = 8
+            local size
+            if M.Party ~= nil and (M.GetPartyCnt() == 4 or M.GetPartyCnt() == 8) then
+                size = M.GetPartyCnt()
+            else
+                size = 8
+            end
+            if i < size then
+                GUI:Separator()
+            end
         end
-        if i < size then
-            GUI:Separator()
-        end
+        GUI:ListBoxFooter()
     end
-    GUI:ListBoxFooter()
+    GUI:PopItemWidth()
     if M.MainUI.mousePosition ~= nil and
             not GUI:IsItemHovered(GUI.HoveredFlags_AllowWhenBlockedByPopup + GUI.HoveredFlags_AllowWhenBlockedByActiveItem + GUI.HoveredFlags_AllowWhenOverlapped)
     then
