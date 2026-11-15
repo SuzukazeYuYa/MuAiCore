@@ -11,8 +11,11 @@
 )
 
 $ErrorActionPreference = 'Stop'
+# 事务版本独立于发布版本；切换渠道时不退回旧的批量改名安装器。
+$installerTransactionVersion = 2
 $backupRoot = Join-Path $WorkRoot 'Rollback'
 $createdFiles = [System.Collections.Generic.List[string]]::new()
+$changedFiles = [System.Collections.Generic.List[object]]::new()
 $patchedFiles = @{}
 $skipInstaller = $false
 $transactionStarted = $false
@@ -52,8 +55,7 @@ function Add-ChannelHook {
 
 function Prepare-UpdateChannels {
     $incomingChannels = Test-Path -LiteralPath (Join-Path $SourceRoot $channelsRelative) -PathType Leaf
-    # Packages without the extension keep the installed module and installer. A String
-    # package containing both assets can update them together in the same transaction.
+    # 不带渠道扩展的包保留已安装模块；带扩展的包可以更新模块及兼容安装器。
     $assetRoot = if ($incomingChannels) { $SourceRoot } else { $TargetRoot }
     foreach ($relative in @($channelsRelative, $installerRelative)) {
         if (-not (Test-Path -LiteralPath (Join-Path $assetRoot $relative) -PathType Leaf)) {
@@ -61,8 +63,7 @@ function Prepare-UpdateChannels {
         }
     }
     $channelsText = [System.IO.File]::ReadAllText((Join-Path $assetRoot $channelsRelative))
-    # Async update checks must retain their transport alongside the channel module.
-    # Older packages without this dependency can still be installed normally.
+    # 异步检查需要同时保留传输模块；旧包未引用该依赖时仍可正常安装。
     if ($channelsText.Contains('AsyncHttp.lua')) {
         $httpNames = @('AsyncHttp.lua')
         $httpText = [IO.File]::ReadAllText((Join-Path $assetRoot ('MuAiCore\LuaFiles\MuAiGuideSubs\AsyncHttp.lua')))
@@ -81,6 +82,13 @@ function Prepare-UpdateChannels {
         throw 'Persistent update assets are incompatible; installation was not started.'
     }
     $script:skipInstaller = -not $incomingChannels
+    if ($incomingChannels) {
+        $incomingVersion = [regex]::Match($installerText, '(?m)^\$installerTransactionVersion = ([0-9]+)\s*$')
+        # 旧包仍更新业务源码；首次安装或从外部运行时，也部署当前已修复的安装器。
+        if (-not $incomingVersion.Success -or [long]$incomingVersion.Groups[1].Value -lt $installerTransactionVersion) {
+            $script:patchedFiles[$installerRelative] = $PSCommandPath
+        }
+    }
 
     $bootstrapHook = @'
     -- MUAI_UPDATE_CHANNELS_BOOTSTRAP_BEGIN
@@ -173,53 +181,43 @@ function Copy-VerifiedFile {
     $sourceHash = (Get-FileHash -LiteralPath $Source -Algorithm SHA256).Hash
     if ((Test-Path -LiteralPath $Destination -PathType Leaf) -and
         (Get-FileHash -LiteralPath $Destination -Algorithm SHA256).Hash -eq $sourceHash) {
-        return
+        return $sourceHash
     }
     $destinationDirectory = Split-Path -Parent $Destination
     [System.IO.Directory]::CreateDirectory($destinationDirectory) | Out-Null
 
-    $temporaryDestination = $Destination + '.muai-new'
-    Remove-Item -LiteralPath $temporaryDestination -Force -ErrorAction SilentlyContinue
-    Copy-Item -LiteralPath $Source -Destination $temporaryDestination -Force
-
-    $sourceHash = (Get-FileHash -LiteralPath $Source -Algorithm SHA256).Hash
-    $temporaryHash = (Get-FileHash -LiteralPath $temporaryDestination -Algorithm SHA256).Hash
-    if ($sourceHash -ne $temporaryHash) {
-        throw "Staged file hash mismatch: $Source"
+    # 旧内容已在 WorkRoot 中校验备份；直接复制，避免为每个文件重复改名。
+    # 写入失败或目标哈希不符时，由外层事务恢复，成功前必须读回目标文件。
+    [System.IO.File]::Copy($Source, $Destination, $true)
+    if ((Get-FileHash -LiteralPath $Destination -Algorithm SHA256).Hash -ne $sourceHash) {
+        throw "Copied file hash mismatch: $Destination"
     }
-
-    if (Test-Path -LiteralPath $Destination -PathType Leaf) {
-        $replaceBackup = $Destination + '.muai-old'
-        Remove-Item -LiteralPath $replaceBackup -Force -ErrorAction SilentlyContinue
-        [System.IO.File]::Replace($temporaryDestination, $Destination, $replaceBackup)
-        Remove-Item -LiteralPath $replaceBackup -Force -ErrorAction SilentlyContinue
-    }
-    else {
-        [System.IO.File]::Move($temporaryDestination, $Destination)
-    }
+    return $sourceHash
 }
 
 function Restore-Backup {
-    if (Test-Path -LiteralPath $backupRoot -PathType Container) {
-        Get-ChildItem -LiteralPath $backupRoot -File -Recurse | ForEach-Object {
-            $relativePath = Get-RelativePath -Root $backupRoot -Path $_.FullName
-            $destination = Join-Path $TargetRoot $relativePath
-            $destinationDirectory = Split-Path -Parent $destination
-            [System.IO.Directory]::CreateDirectory($destinationDirectory) | Out-Null
-            Copy-VerifiedFile -Source $_.FullName -Destination $destination
+    $restoreErrors = [System.Collections.Generic.List[string]]::new()
+    # 只恢复本轮已校验、随后尝试修改的文件；不使用失败或不完整的备份。
+    for ($index = $changedFiles.Count - 1; $index -ge 0; $index--) {
+        $entry = $changedFiles[$index]
+        try {
+            if ((Get-FileHash -LiteralPath $entry.Backup -Algorithm SHA256).Hash -ne $entry.Hash) {
+                throw "Rollback backup hash mismatch: $($entry.Backup)"
+            }
+            Copy-VerifiedFile -Source $entry.Backup -Destination $entry.Destination | Out-Null
         }
+        catch { $restoreErrors.Add("$($entry.Destination): $($_.Exception.Message)") }
     }
 
     for ($index = $createdFiles.Count - 1; $index -ge 0; $index--) {
-        if (Test-Path -LiteralPath $createdFiles[$index]) {
-            Remove-Item -LiteralPath $createdFiles[$index] -Force -ErrorAction Stop
+        try {
+            if (Test-Path -LiteralPath $createdFiles[$index]) {
+                Remove-Item -LiteralPath $createdFiles[$index] -Force -ErrorAction Stop
+            }
         }
+        catch { $restoreErrors.Add("$($createdFiles[$index]): $($_.Exception.Message)") }
     }
-
-    Get-ChildItem -LiteralPath $TargetRoot -Filter '*.muai-new' -File -Recurse -ErrorAction SilentlyContinue |
-        Remove-Item -Force -ErrorAction Stop
-    Get-ChildItem -LiteralPath $TargetRoot -Filter '*.muai-old' -File -Recurse -ErrorAction SilentlyContinue |
-        Remove-Item -Force -ErrorAction Stop
+    if ($restoreErrors.Count -gt 0) { throw ($restoreErrors -join '; ') }
 }
 
 try {
@@ -298,7 +296,9 @@ try {
     foreach ($relative in $removedFiles) {
         $destination = Join-Path $TargetRoot $relative
         if (Test-Path -LiteralPath $destination -PathType Leaf) {
-            Copy-VerifiedFile -Source $destination -Destination (Join-Path $backupRoot $relative)
+            $backupFile = Join-Path $backupRoot $relative
+            $backupHash = Copy-VerifiedFile -Source $destination -Destination $backupFile
+            $changedFiles.Add(@{ Backup = $backupFile; Destination = $destination; Hash = $backupHash })
             Remove-Item -LiteralPath $destination -Force -ErrorAction Stop
         }
     }
@@ -328,13 +328,14 @@ try {
                 $backupFile = Join-Path $backupRoot $relativePath
                 $backupDirectory = Split-Path -Parent $backupFile
                 [System.IO.Directory]::CreateDirectory($backupDirectory) | Out-Null
-                Copy-VerifiedFile -Source $destination -Destination $backupFile
+                $backupHash = Copy-VerifiedFile -Source $destination -Destination $backupFile
+                $changedFiles.Add(@{ Backup = $backupFile; Destination = $destination; Hash = $backupHash })
             }
             else {
                 $createdFiles.Add($destination)
             }
 
-            Copy-VerifiedFile -Source $copySource -Destination $destination
+            Copy-VerifiedFile -Source $copySource -Destination $destination | Out-Null
         }
     }
 }
@@ -350,12 +351,13 @@ catch {
     }
     catch {
         Write-Output '__MUAI_ROLLBACK_INCOMPLETE__'
-        Write-Error "Update failed and rollback was incomplete: $($_.Exception.Message)" -ErrorAction Continue
+        Write-Error "Update failed ($updateError) and rollback was incomplete: $($_.Exception.Message). Backups: $backupRoot" -ErrorAction Continue
         exit 2
     }
     Write-Error "Update failed; previous files were restored: $updateError" -ErrorAction Continue
     exit 1
 }
 
-Remove-Item -LiteralPath $backupRoot -Recurse -Force -ErrorAction SilentlyContinue
+try { Remove-Item -LiteralPath $backupRoot -Recurse -Force -ErrorAction Stop }
+catch { Write-Warning "Update completed; rollback backup cleanup failed: $backupRoot : $($_.Exception.Message)" }
 exit 0
