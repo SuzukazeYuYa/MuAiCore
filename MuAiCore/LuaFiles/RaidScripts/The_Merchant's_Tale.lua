@@ -767,9 +767,19 @@ local boss3FireDance2 = function(nextState, curWave)
             return
         end
         if getCfg().MerchantDraw then
+            -- 仅复用本次排序内的距离，下一帧仍按实时位置重新计算。
+            local distances = {}
             table.sort(curPlayers, function(a, b)
-                local disA = TensorCore.getDistance2d(a.pos, boss.pos)
-                local disB = TensorCore.getDistance2d(b.pos, boss.pos)
+                local disA = distances[a]
+                if disA == nil then
+                    disA = TensorCore.getDistance2d(a.pos, boss.pos)
+                    distances[a] = disA
+                end
+                local disB = distances[b]
+                if disB == nil then
+                    disB = TensorCore.getDistance2d(b.pos, boss.pos)
+                    distances[b] = disB
+                end
                 return disA < disB
             end)
             local nearest = curPlayers[1]

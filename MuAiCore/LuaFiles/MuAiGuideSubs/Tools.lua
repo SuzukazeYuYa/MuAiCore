@@ -6,6 +6,7 @@ local Tools = {}
 ]]
 ---@param M MuAiGuide
 Tools.init = function(M)
+    local defaultClockCenter = { x = 100, z = 100 }
     --- 输出消息到聊天栏
     --- @param msg string
     --M.InfoNoLog = function(msg, ttsOn)
@@ -145,10 +146,11 @@ Tools.init = function(M)
     --- 判断点A到B的顺逆
     --- @return boolean true 顺时针，false 逆时针
     M.GetClock = function(posA, posB, O)
-        O = O or { x = 100, z = 100 }
-        local OA = { x = posA.x - O.x, z = posA.z - O.z }
-        local OB = { x = posB.x - O.x, z = posB.z - O.z }
-        local crossProduct = OA.x * OB.z - OA.z * OB.x
+        O = O or defaultClockCenter
+        -- 保持减法、乘法和叉乘的原顺序，省去每次比较的临时向量表。
+        local OAx, OAz = posA.x - O.x, posA.z - O.z
+        local OBx, OBz = posB.x - O.x, posB.z - O.z
+        local crossProduct = OAx * OBz - OAz * OBx
         -- 非标准坐标系，叉乘结果要反着来
         if crossProduct > 0 then
             return true

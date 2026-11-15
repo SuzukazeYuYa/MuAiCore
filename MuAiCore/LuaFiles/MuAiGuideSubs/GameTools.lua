@@ -1,11 +1,14 @@
 local GameTools = {}
 ---@param M MuAiGuide
 GameTools.init = function(M)
-    local TankJobs = { 19, 21, 32, 37 }
-    local HealerJobs = { 24, 28, 33, 40 }
-    local MeleeJob = { 20, 22, 30, 34, 39, 41 }
-    local RangeJob = { 31, 23, 38 }
-    local MagicJob = { 25, 27, 35, 42 }
+    -- 私有职能表固定不变，直接按 ID 查询；公开的 JobIds 仍保留原顺序和修改语义。
+    local jobRoles = {
+        [19] = 'tank', [21] = 'tank', [32] = 'tank', [37] = 'tank',
+        [24] = 'healer', [28] = 'healer', [33] = 'healer', [40] = 'healer',
+        [20] = 'melee', [22] = 'melee', [30] = 'melee', [34] = 'melee', [39] = 'melee', [41] = 'melee',
+        [31] = 'range', [23] = 'range', [38] = 'range',
+        [25] = 'magic', [27] = 'magic', [35] = 'magic', [42] = 'magic',
+    }
     M.JobIds = {
         19, 21, 32, 37,
         24, 33, 40, 28,
@@ -67,29 +70,28 @@ GameTools.init = function(M)
 
     --- 当前职业ID是否是坦克
     M.IsTank = function(job)
-        return table.contains(TankJobs, job)
+        return jobRoles[job] == 'tank'
     end
     --- 当前职业ID是否是治疗
     M.IsHealer = function(job)
-        return table.contains(HealerJobs, job)
+        return jobRoles[job] == 'healer'
     end
     --- 当前职业ID是否是近战
     M.IsMelee = function(job)
-        return table.contains(MeleeJob, job)
+        return jobRoles[job] == 'melee'
     end
     --- 当前职业ID是否是远敏
     M.IsRange = function(job)
-        return table.contains(RangeJob, job)
+        return jobRoles[job] == 'range'
     end
     --- 当前职业ID是否是法师职业
     M.IsMagic = function(job)
-        return table.contains(MagicJob, job)
+        return jobRoles[job] == 'magic'
     end
     --- 当前职业ID是否是DPS职业
     M.IsDps = function(job)
-        return table.contains(MeleeJob, job)
-                or table.contains(RangeJob, job)
-                or table.contains(MagicJob, job)
+        local role = jobRoles[job]
+        return role == 'melee' or role == 'range' or role == 'magic'
     end
 
     --- 当前物体是否是玩家

@@ -154,6 +154,9 @@ function R.partyInfo()
     return result
 end
 function R.playerID() local p=TensorCore.mGetPlayer(); return p and p.id end
+local function compareDistance(a,b)
+    return a.distance==b.distance and a.id<b.id or a.distance<b.distance
+end
 local function distances(pos, party)
     if not pos or pos.x==nil or pos.z==nil then return nil end
     local result = {}
@@ -161,15 +164,18 @@ local function distances(pos, party)
         local e = entity(value)
         if e and e.pos then result[#result+1]={id=e.id, distance=TensorCore.getDistance2d(e.pos,pos)} end
     end
-    table.sort(result,function(a,b) return a.distance==b.distance and a.id<b.id or a.distance<b.distance end)
+    table.sort(result,compareDistance)
     return result
 end
 local function nearest(pos, count, party, farthest, exclude)
-    local rows = distances(pos,party) or {}; local filtered, result = {}, {}
-    for _, row in ipairs(rows) do if row.id~=exclude then filtered[#filtered+1]=row.id end end
-    local first=farthest and math.max(1,#filtered-math.max(0,count)+1) or 1
-    local last=farthest and #filtered or math.min(#filtered,count)
-    for i=first,last do result[#result+1]=filtered[i] end
+    local rows = distances(pos,party) or {}; local length, result = 0, {}
+    -- 排序结束后原地收紧为 ID 列表，保持原排序、排除和数量边界。
+    for _, row in ipairs(rows) do
+        if row.id~=exclude then length=length+1; rows[length]=row.id end
+    end
+    local first=farthest and math.max(1,length-math.max(0,count)+1) or 1
+    local last=farthest and length or math.min(length,count)
+    for i=first,last do result[#result+1]=rows[i] end
     return result
 end
 function R.API.getNearestNumToPos(pos,count,party) return nearest(pos,count,party) end
