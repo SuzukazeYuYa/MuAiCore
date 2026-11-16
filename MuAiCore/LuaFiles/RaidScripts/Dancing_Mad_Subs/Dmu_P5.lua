@@ -228,17 +228,17 @@ local groundFireGuidePos = {
 
 local groundFireGuideRoles = { 'MT', 'ST', 'H1', 'H2', 'D1', 'D2', 'D3', 'D4' }
 
-local newGroundFireGuide = function(job)
+local newGroundFireGuide = function(job, hits, seen)
     local pos = groundFireGuidePos[job]
     return {
         left = pos.left,
         right = pos.right,
         x = pos.x,
         z = pos.z,
-        Seen = {},
+        Seen = seen,
         Rels = {},
         Points = {},
-        Hits = {},
+        Hits = hits,
         PointTriggers = {},
         CurrentPointIndex = nil,
     }
@@ -246,8 +246,10 @@ end
 
 local newGroundFireGuides = function()
     local guides = {}
+    -- 八职能面对同一批爆炸，共享固定几何和结算状态，各自保留路线及当前落点。
+    local hits, seen = {}, {}
     for _, job in ipairs(groundFireGuideRoles) do
-        guides[job] = newGroundFireGuide(job)
+        guides[job] = newGroundFireGuide(job, hits, seen)
     end
     return guides
 end
@@ -335,7 +337,6 @@ local groundFirePointInHit = function(point, hit)
 end
 
 local updateGroundFirePointTriggers = function(state)
-    if MG.NativeCore and MG.NativeCore.groundfire(state) then return end
     -- 路线点只有在覆盖它的最后一枚地火结算后才前移，避免仅按固定时间提前换点。
     local nextOrder
     state.PointTriggers = {}
@@ -386,16 +387,12 @@ end
 
 local setGroundFireGuideRoute = function(state, points)
     state.Points = points
-    updateGroundFirePointTriggers(state)
-    updateGroundFireCurrentPoint(state)
 end
 
 local appendGroundFireGuideRoute = function(state, points)
     for _, point in ipairs(points) do
         table.insert(state.Points, point)
     end
-    updateGroundFirePointTriggers(state)
-    updateGroundFireCurrentPoint(state)
 end
 
 local tryBuildGroundFireRoute = function(state)
@@ -444,26 +441,7 @@ local tryBuildGroundFireRoute = function(state)
     end
 end
 
-local recordGroundFireGuideLineForState = function(state, line)
-    if state.Seen[line.id] then
-        return
-    end
-    state.Seen[line.id] = true
-    for step = 0, 6 do
-        local pos = line.pos[step + 1]
-        table.insert(state.Hits, {
-            lineID = line.id,
-            step = step,
-            order = line.group * 10 + step,
-            x = pos.x,
-            z = pos.z,
-            radius = line.radius,
-            resolved = false,
-        })
-    end
-    updateGroundFirePointTriggers(state)
-    updateGroundFireCurrentPoint(state)
-
+local recordGroundFireGuideRelation = function(state, line)
     -- 每组两条平行线只取靠 3x3 小格一侧的一条做 14/25/36 判定；另一条仍参与真实范围计算。
     local col = (math.floor(((line.pos[1].x - 70) / 5) + 0.5) % 7) + 1
     if col > 3 then
@@ -478,8 +456,27 @@ local recordGroundFireGuideLine = function(line)
     if not groundFireGuideActive() then
         return
     end
+    local guides = groundFireState().Guides
+    local shared = guides[groundFireGuideRoles[1]]
+    if shared.Seen[line.id] then return end
+    shared.Seen[line.id] = true
+    for step = 0, 6 do
+        local pos = line.pos[step + 1]
+        table.insert(shared.Hits, {
+            lineID = line.id, step = step, order = line.group * 10 + step,
+            x = pos.x, z = pos.z, radius = line.radius, resolved = false,
+        })
+    end
     for _, job in ipairs(groundFireGuideRoles) do
-        recordGroundFireGuideLineForState(groundFireGuideState(job), line)
+        recordGroundFireGuideRelation(guides[job], line)
+    end
+    -- 同一事件中先完成全部路线变化，再一次求解；不延迟到下一帧。
+    local solved = MG.NativeCore and MG.NativeCore.groundfireBatch
+            and MG.NativeCore.groundfireBatch(guides, groundFireGuideRoles)
+    for _, job in ipairs(groundFireGuideRoles) do
+        local state = guides[job]
+        if not solved then updateGroundFirePointTriggers(state) end
+        updateGroundFireCurrentPoint(state)
     end
 end
 
@@ -563,22 +560,19 @@ local findGroundFireLineForStep = function(pos)
     return bestLine, bestIndex
 end
 
-local markGroundFireGuideResolvedForState = function(state, line, resolvedIndex)
-    for _, hit in ipairs(state.Hits) do
-        if hit.lineID == line.id and hit.step <= resolvedIndex - 1 then
-            hit.resolved = true
-        end
-    end
-    updateGroundFirePointTriggers(state)
-    updateGroundFireCurrentPoint(state)
-end
-
 local markGroundFireGuideResolved = function(line, resolvedIndex)
     if not groundFireGuideActive() then
         return
     end
+    local guides = groundFireState().Guides
+    for _, hit in ipairs(guides[groundFireGuideRoles[1]].Hits) do
+        if hit.lineID == line.id and hit.step <= resolvedIndex - 1 then
+            hit.resolved = true
+        end
+    end
+    -- resolved 不参与触发顺序求解；结算只推进各自的当前落点。
     for _, job in ipairs(groundFireGuideRoles) do
-        markGroundFireGuideResolvedForState(groundFireGuideState(job), line, resolvedIndex)
+        updateGroundFireCurrentPoint(guides[job])
     end
 end
 
@@ -689,6 +683,16 @@ Dmu_P5.Init = function(dm, m)
     frameDrawers = {}
     DM = dm
     MG = m
+    -- 副本热重载保留机制进度；旧实例的八份记录值相同，交接时统一共享，保留各自路线和落点。
+    local data = Data()
+    local guides = data and data.GroundFire and data.GroundFire.Guides
+    if guides ~= nil then
+        local shared = guides[groundFireGuideRoles[1]]
+        for _, job in ipairs(groundFireGuideRoles) do
+            guides[job].Hits = shared.Hits
+            guides[job].Seen = shared.Seen
+        end
+    end
 end
 
 Dmu_P5.OnEntityChannel = function(entityID, spellID, _)

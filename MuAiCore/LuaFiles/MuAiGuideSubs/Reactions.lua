@@ -122,28 +122,64 @@ end
 local function entity(value)
     return type(value)=="table" and value or value and TensorCore.mGetEntity(value)
 end
+local function entityQuery()
+    local resolved = {}
+    return function(id)
+        local value = resolved[id]
+        if value == nil then
+            value = TensorCore.mGetEntity(id)
+            if id ~= nil and value then resolved[id] = value end
+        end
+        return value
+    end
+end
+local queryTag = {}
 function R.API.getAgnosticPartyList(kind)
     kind = kind or "Party"
     local roles = {Tank=R.tankJobs,Tanks=R.tankJobs,Healer=R.healJobs,Healers=R.healJobs,DPS=R.dpsJobs,Support=R.supportJobs,Melee=R.meleeJobs,Ranged=R.rangedJobs,["Melee DPS"]=R.meleeJobs,["Ranged DPS"]=R.rangedJobs,["Ranged Physical DPS"]=R.rdpsJobs,["Ranged Caster DPS"]=R.cdpsJobs}
     local set = roles[kind]
     if kind ~= "Party" and not set then error("[MuAiCore.Reactions] 未知队伍分组: " .. tostring(kind)) end
     local result = {}
-    for _, value in ipairs(R.partyInfo()) do
-        local e = TensorCore.mGetEntity(value.id)
-        if not e and value.id==R.playerID() then e=TensorCore.mGetPlayer() end
-        if e and e.id and e.job and type(e.name)=="string" and e.name~="" and (not set or set[e.job]) then result[e.id] = e end
+    local query = { tag = queryTag }
+    local members = R.partyInfo(query)
+    local resolve = query.resolve or TensorCore.mGetEntity
+    for _, value in ipairs(members) do
+        local id = value.id
+        local e = resolve(id)
+        if not e and id==R.playerID() then e=TensorCore.mGetPlayer() end
+        if e then
+            local entityId = e.id
+            local jobId = entityId and e.job
+            if jobId then
+                local name = e.name
+                if type(name)=="string" and name~="" and (not set or set[jobId]) then result[entityId] = e end
+            end
+        end
     end
     return result
 end
-function R.partyInfo()
+function R.partyInfo(query)
     if Duty:GetActiveDutyInfo()==nil and not InInstance() then return {} end
+    -- 数字实体和后续职能过滤共用本次解析；普通调用仍返回独立的队伍数组。
+    if type(query) ~= 'table' or query.tag ~= queryTag then query = nil end
+    local resolve
     local members,guids,identities={},{},{}
     local function add(e)
-        if type(e)=="number" then e=TensorCore.mGetEntity(e) end
-        if not e or not e.id or not e.job or type(e.name)~="string" or e.name=="" or e.chartype~=4 or members[e.id] then return end
-        local identity=e.name.."|"..tostring(e.homeworld)
-        if e.guid and guids[e.guid] or identities[identity] then return end
-        members[e.id]=e;identities[identity]=true;if e.guid then guids[e.guid]=true end
+        if type(e)=="number" then
+            if resolve == nil then resolve = entityQuery(); if query then query.resolve = resolve end end
+            e=resolve(e)
+        end
+        if not e then return end
+        local id=e.id
+        if not id or members[id] then return end
+        local jobId=e.job
+        if not jobId then return end
+        local name=e.name
+        if type(name)~="string" or name=="" or e.chartype~=4 then return end
+        local identity=name.."|"..tostring(e.homeworld)
+        local guid=e.guid
+        if guid and guids[guid] or identities[identity] then return end
+        members[id]=e;identities[identity]=true;if guid then guids[guid]=true end
     end
     for _,e in pairs(TensorCore.getEntityGroupList("Party",{noAliveCheck=true}) or {}) do add(e) end
     local fallback=EntityList and EntityList.myparty
@@ -160,9 +196,15 @@ end
 local function distances(pos, party)
     if not pos or pos.x==nil or pos.z==nil then return nil end
     local result = {}
+    local resolve
     for _, value in pairs(party or TensorCore.getEntityGroupList("Party") or {}) do
-        local e = entity(value)
-        if e and e.pos then result[#result+1]={id=e.id, distance=TensorCore.getDistance2d(e.pos,pos)} end
+        local e = value
+        if type(value) ~= 'table' and value then
+            resolve = resolve or entityQuery()
+            e = resolve(value)
+        end
+        local position=e and e.pos
+        if position then result[#result+1]={id=e.id, distance=TensorCore.getDistance2d(position,pos)} end
     end
     table.sort(result,compareDistance)
     return result

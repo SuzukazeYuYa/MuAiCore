@@ -637,17 +637,27 @@ GameTools.init = function(M)
     --- 获取刷新所有数据后的小队列表
     --- @param divTable table 可空，非空时表示拆分依据
     M.getCurParty = function(divTable)
+        -- 只复用本次查询已成功解析的实体；不跨调用缓存，也不缓存暂时缺失的结果。
+        local entities = {}
+        local function current(id)
+            local value = entities[id]
+            if value == nil then
+                value = TensorCore.mGetEntity(id)
+                if id ~= nil and value then entities[id] = value end
+            end
+            return value
+        end
         if divTable == nil then
             local member = {}
             for job, oldMember in pairs(M.Party) do
-                member[job] = TensorCore.mGetEntity(oldMember.id)
+                member[job] = current(oldMember.id)
             end
             return member
         end
         local include = {}
         local out = {}
         for job, oldMember in pairs(M.Party) do
-            local member = TensorCore.mGetEntity(oldMember.id)
+            local member = current(oldMember.id)
             if table.contains(divTable, job) then
                 include[job] = member
             else

@@ -7,6 +7,7 @@ function Module.init(M, moduleRoot)
     local previousNative = type(MuAiGuide) == 'table' and MuAiGuide.NativeCore or nil
     local attempts, retryAt = 0, nil
     local cache = setmetatable({}, { __mode = 'k' })
+    local batchCache = setmetatable({}, { __mode = 'k' })
     local function diagnose(level, message, detail)
         if type(M.Diagnostic) == 'function' then
             M.Diagnostic(level, 'NativeCore', message, detail, 'native_' .. N.State)
@@ -29,6 +30,7 @@ function Module.init(M, moduleRoot)
         entry = nil
         if pending then pending.cancelled = true end
         cache = setmetatable({}, { __mode = 'k' })
+        batchCache = setmetatable({}, { __mode = 'k' })
         N.State = 'closed'
         -- __gc 由原生闭包持有的私有 userdata 触发；旧引用仍在时不会物理卸载。
     end
@@ -109,7 +111,7 @@ function Module.init(M, moduleRoot)
         if type(FileDelete) == 'function' and FileDelete(request.receipt) ~= true then
             diagnose('WARN', '无法删除已读取的原生加载回执', { path = request.receipt })
         end
-        if not text:match('|OK 2%s*$') then
+        if not text:match('|OK 4%s*$') then
             if text:match('|ERROR arm_11%s*$') and not request.cancelled and attempts < 3 then
                 N.State, N.Reason, retryAt = 'retrying', 'previous_native_generation_finishing', PerfClock() + 250
                 return
@@ -124,7 +126,7 @@ function Module.init(M, moduleRoot)
         mt.__gc = fn
         if request.cancelled then pcall(fn, -1); N.State = request.expired and 'lua' or 'closed'; return end
         local ok, abi = pcall(fn)
-        if not ok or abi ~= 2 then pcall(fn, -1); fail('native_abi_mismatch'); return end
+        if not ok or abi ~= 4 then pcall(fn, -1); fail('native_abi_mismatch'); return end
         entry = fn
         N.State, N.Reason, N.LoadMs = 'native', nil, PerfClock() - request.started
         diagnose('INFO', '原生求解后端已加载', { abi = abi, launchMs = N.LaunchMs, loadMs = N.LoadMs })
@@ -171,6 +173,68 @@ function Module.init(M, moduleRoot)
         local output = {}
         for i = 1, #points do output[i] = inputs.output[i] end
         state.PointTriggers = output
+        N.Calls = N.Calls + 1
+        return true
+    end
+    function N.groundfireBatch(guides, roles)
+        if not entry or #roles < 1 or #roles > 8 then return false end
+        local hits = guides[roles[1]].Hits
+        if #hits > 256 then return false end
+        local total = 0
+        for i = 1, #roles do
+            local state = guides[roles[i]]
+            if state.Hits ~= hits or #state.Points > 8 then return false end
+            total = total + #state.Points
+        end
+        if total * #hits < 84 then return false end
+        local inputs = batchCache[hits]
+        if not inputs or inputs.count > #hits then
+            inputs = { count = 0, hits = {}, points = {}, counts = {}, output = {} }
+            batchCache[hits] = inputs
+        end
+        -- 仅追加新几何，整批调用只向 C++ 传入一份 Hits；原生不持有这些 Lua 表。
+        for i = inputs.count + 1, #hits do
+            local hit, offset = hits[i], (i - 1) * 4
+            inputs.hits[offset + 1], inputs.hits[offset + 2] = hit.x, hit.z
+            inputs.hits[offset + 3], inputs.hits[offset + 4] = hit.radius, hit.order
+        end
+        inputs.count = #hits
+        local offset = 0
+        for i = 1, #roles do
+            local points = guides[roles[i]].Points
+            inputs.counts[i] = #points
+            for j = 1, #points do
+                inputs.points[offset * 2 + 1], inputs.points[offset * 2 + 2] = points[j].x, points[j].z
+                offset = offset + 1
+                inputs.output[offset] = 0
+            end
+        end
+        local ok, code = pcall(entry, inputs.points, inputs.hits, inputs.counts, #roles, #hits, inputs.output, 3)
+        if not ok or code ~= 0 then
+            N.Fallbacks = N.Fallbacks + 1
+            diagnose('WARN', '本次原生批量求解失败，使用原Lua计算', { code = code })
+            return false
+        end
+        offset = 0
+        for i = 1, #roles do
+            local output = {}
+            for j = 1, inputs.counts[i] do
+                offset = offset + 1
+                output[j] = inputs.output[offset]
+            end
+            guides[roles[i]].PointTriggers = output
+        end
+        N.Calls = N.Calls + 1
+        return true
+    end
+    function N.geometryBatch(input, count, output, operation)
+        if not entry then return false end
+        local ok, code = pcall(entry, input, count, output, operation)
+        if not ok or code ~= 0 then
+            N.Fallbacks = N.Fallbacks + 1
+            diagnose('WARN', '本次公共几何求解失败，使用原Lua计算', { code = code, operation = operation })
+            return false
+        end
         N.Calls = N.Calls + 1
         return true
     end
