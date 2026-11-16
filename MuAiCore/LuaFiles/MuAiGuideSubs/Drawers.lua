@@ -25,6 +25,7 @@ Drawers.init = function(M)
     local singleTakeLineDrawer
     local multiTakeLineDrawers = {}
     local defaultTakeLineColor = { r = 1, g = 0, b = 0 }
+    local targetPosDrawer, targetPosR, targetPosG, targetPosB, targetPosA
 
     local optionalNumber = function(value, defaultValue, caller, name)
         if value == nil then
@@ -314,9 +315,10 @@ Drawers.init = function(M)
         return drawIds
     end
 
-    local commonFrameDirect = function(x, z, playerPos, color, size, distance, heading)
+    local commonFrameDirect = function(x, z, playerPos, color, size, mapId)
         local drawY
-        if table.contains(ZeroYMap, Player.localmapid) then
+        if mapId == nil then mapId = Player.localmapid end
+        if table.contains(ZeroYMap, mapId) then
             drawY = 0
         else
             drawY = M.GlobalGuideY or playerPos.y
@@ -345,12 +347,12 @@ Drawers.init = function(M)
             newDraw = TensorCore.getCachedDrawer(drawer1Color, drawer1Color, drawer1Color, w_1, 2)
             newDraw2 = TensorCore.getCachedDrawer(drawer2Color, drawer2Color, drawer2Color, drawer2Color, 2)
         end
-        if distance == nil then
-            distance = TensorCore.getDistance2d(playerPos, { x = x, y = 0, z = z })
-            heading = TensorCore.getHeadingToTarget(playerPos, { x = x, y = 0, z = z })
-        end
+        -- 直接传入坐标，避免为距离、朝向分别创建位置表或整理原生批次数组。
+        local px, pz = playerPos.x, playerPos.z
+        local distance = TensorCore.getDistance2d2(px, 0, pz, x, 0, z)
+        local heading = TensorCore.getHeadingToTarget2(px, 0, pz, x, 0, z)
         newDraw:addCircle(x, drawY, z, size, true)
-        newDraw2:addRect(playerPos.x, drawY, playerPos.z, distance, 0.05, heading, true)
+        newDraw2:addRect(px, drawY, pz, distance, 0.05, heading, true)
         frameDirectCenterDrawer:addCircle(x, drawY, z, 0.03, true)
     end
 
@@ -361,38 +363,14 @@ Drawers.init = function(M)
         end
         if positions and positions[entityId] then return positions[entityId] end
         local entity = TensorCore.mGetEntity(entityId)
-        if entity == nil or entity.pos == nil then
+        local position = entity and entity.pos
+        if position == nil then
             M.LogOnce('Drawers', caller .. '_missing_entity_' .. tostring(entityId),
                     '绘图跳过：当前帧实体不可用', { id = entityId })
             return nil
         end
-        if positions then positions[entityId] = entity.pos end
-        return entity.pos
-    end
-
-    local hasNativeGeometry = function(count)
-        return count >= 2 and count <= 256 and M.NativeCore ~= nil
-                and M.NativeCore.State == 'native' and type(M.NativeCore.geometryBatch) == 'function'
-    end
-
-    local drawFrameBatch = function(items, count, size)
-        local output
-        if hasNativeGeometry(count) then
-            local input, result = {}, {}
-            for i = 1, count do
-                local k, j = (i - 1) * 3, (i - 1) * 4
-                local pos, playerPos = items[k + 1], items[k + 2]
-                input[j + 1], input[j + 2], input[j + 3], input[j + 4] = playerPos.x, playerPos.z, pos.x, pos.z
-                result[i * 2 - 1], result[i * 2] = 0, 0
-            end
-            if M.NativeCore.geometryBatch(input, count, result, 4) then output = result end
-        end
-        for i = 1, count do
-            local k = (i - 1) * 3
-            local pos = items[k + 1]
-            commonFrameDirect(pos.x, pos.z, items[k + 2], items[k + 3], size,
-                    output and output[i * 2 - 1], output and output[i * 2])
-        end
+        if positions then positions[entityId] = position end
+        return position
     end
 
     local getMultiGuideEntityId = function(multiData, caller)
@@ -434,7 +412,7 @@ Drawers.init = function(M)
             return false
         end
         local curColor = color or M.Config.Main.GuideColor
-        commonFrameDirect(x, z, playerPos, curColor, size)
+        commonFrameDirect(x, z, playerPos, curColor, size, curPlayer.localmapid)
         return true
     end
 
@@ -447,12 +425,9 @@ Drawers.init = function(M)
                     '多人帧指路跳过：职能坐标数据不是表', { dataType = type(data) })
             return false
         end
-        local players = M.MultiGuide.players or {}
-        local first = next(players)
-        local useBatch = hasNativeGeometry(2) and first ~= nil and next(players, first) ~= nil
         local hasDrawn = false
         local selfDrawn = false
-        local items, positions, count = useBatch and {} or nil, useBatch and {} or nil, 0
+        local positions = {}
         local curPlayer = M.GetPlayer() or Player
         local curPlayerId = curPlayer ~= nil and curPlayer.id or nil
         local multiPlayers = M.MultiGuide.players or {}
@@ -466,19 +441,13 @@ Drawers.init = function(M)
                         type(pos) == 'table' and pos.z or nil, 0, caller)
                 local playerPos = validPos and entityId ~= nil and getLiveEntityPos(entityId, caller, positions) or nil
                 if playerPos ~= nil then
-                    if items then
-                        local k = count * 3
-                        items[k + 1], items[k + 2], items[k + 3] = pos, playerPos, multiData.color
-                        count = count + 1
-                    else
-                        commonFrameDirect(pos.x, pos.z, playerPos, multiData.color, size)
-                    end
+                    commonFrameDirect(pos.x, pos.z, playerPos, multiData.color, size,
+                            curPlayer ~= nil and curPlayer.localmapid or nil)
                     hasDrawn = true
                     selfDrawn = selfDrawn or isCurrentPlayer
                 end
             end
         end
-        if items then drawFrameBatch(items, count, size) end
         if not selfDrawn and data[M.SelfPos] ~= nil then
             local pos = data[M.SelfPos]
             local fallbackDrawn = M.FrameDirect(type(pos) == 'table' and pos.x or nil,
@@ -501,7 +470,8 @@ Drawers.init = function(M)
     ---@param B table 线段终点坐标 {x, z} 物体
     ---@param P table 待测点坐标 {x, z}  接线人坐标
     ---@return boolean isOnSegment 投影垂足是否落在线段 AB 上
-    ---@return table point 线段上距离 P 最近的点坐标
+    ---@return number x 线段上距离 P 最近的点坐标
+    ---@return number z
     ---@return boolean 如果在延长线上，近端是否为A
     local getLinePos = function(A, B, P)
         -- 向量 AB、向量 AP
@@ -512,7 +482,7 @@ Drawers.init = function(M)
         local abLenSq = ABx * ABx + ABz * ABz
         -- 起止点重合，直接返回 A 点
         if abLenSq == 0 then
-            return false, { x = A.x, z = A.z }
+            return false, A.x, A.z
         end
 
         -- 投影系数 t：0 对应 A 点，1 对应 B 点
@@ -520,23 +490,16 @@ Drawers.init = function(M)
         -- 判断垂足是否在线段区间内
         local isOnSegment = t >= 0 and t <= 1
 
-        local point = {}
-        local isA
         if t < 0 then
             -- 投影在 A 侧延长线，取端点 A
-            point = { x = A.x, z = A.z }
-            isA = true
+            return isOnSegment, A.x, A.z, true
         elseif t > 1 then
             -- 投影在 B 侧延长线，取端点 B
-            point = { x = B.x, z = B.z }
-            isA = false
+            return isOnSegment, B.x, B.z, false
         else
             -- 投影在线段内部，计算垂足坐标
-            point = { x = A.x + ABx * t, z = A.z + ABz * t }
-            isA = nil
+            return isOnSegment, A.x + ABx * t, A.z + ABz * t
         end
-
-        return isOnSegment, point, isA
     end
 
     --- 帧指路接线
@@ -557,53 +520,41 @@ Drawers.init = function(M)
         end
         local drawer = singleTakeLineDrawer
         drawer:addLine(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z, size, 0)
-        local isInLine, nearestPos = getLinePos(pos2, pos1, playerPos)
+        local isInLine, x, z = getLinePos(pos2, pos1, playerPos)
         if isInLine then
-            M.FrameDirect(nearestPos.x, nearestPos.z)
+            M.FrameDirect(x, z)
         else
-            local heading = TensorCore.getHeadingToTarget(pos2, pos1)
-            local guidePos = TensorCore.getPosInDirection(pos2, heading, 1)
-            M.FrameDirect(guidePos.x, guidePos.z)
+            local heading = TensorCore.getHeadingToTarget2(pos2.x, 0, pos2.z, pos1.x, 0, pos1.z)
+            local gx, _, gz = TensorCore.getPosInDirection(pos2, heading, 1, true)
+            M.FrameDirect(gx, gz)
         end
     end
     local takeLineGuide = function(data, playerPos)
-        local isInLine, nearestPos, isClosePlayer = getLinePos(data.posPlayer, data.posObj, playerPos)
-        local guidePos
+        local a, b = data.posPlayer, data.posObj
+        local isInLine, x, z, isClosePlayer = getLinePos(a, b, playerPos)
         local disPlayer = data.disPlayer or 2
         local disObj = data.disObj or 2
         if isInLine then
             -- nearestPos 进行修正
-            if TensorCore.getDistance2d(nearestPos, data.posObj) < disObj then
+            if TensorCore.getDistance2d2(x, 0, z, b.x, 0, b.z) < disObj then
                 --可能处在危险区
-                local dir = TensorCore.getHeadingToTarget(data.posObj, data.posPlayer)
-                guidePos = TensorCore.getPosInDirection(data.posObj, dir, disObj)
-            else
-                guidePos = nearestPos
+                local dir = TensorCore.getHeadingToTarget2(b.x, 0, b.z, a.x, 0, a.z)
+                local gx, _, gz = TensorCore.getPosInDirection(b, dir, disObj, true)
+                return gx, gz
             end
+            return x, z
         else
-            local heading
-            local length = TensorCore.getDistance2d(data.posPlayer, data.posObj)
-            if isClosePlayer then
-                --计算出的位置是否更贴近玩家
-                if length < disPlayer then
-                    guidePos = M.GetMidPos(data.posPlayer, data.posObj)
-                else
-                    heading = TensorCore.getHeadingToTarget(data.posPlayer, data.posObj)
-                    guidePos = TensorCore.getPosInDirection(data.posPlayer, heading, disPlayer)
-                end
-            else
-                if length < disObj then
-                    guidePos = M.GetMidPos(data.posPlayer, data.posObj)
-                else
-                    heading = TensorCore.getHeadingToTarget(data.posObj, data.posPlayer)
-                    guidePos = TensorCore.getPosInDirection(data.posObj, heading, disObj)
-                end
-            end
+            local length = TensorCore.getDistance2d2(a.x, 0, a.z, b.x, 0, b.z)
+            local distance = isClosePlayer and disPlayer or disObj
+            if length < distance then return (a.x + b.x) / 2, (a.z + b.z) / 2 end
+            local start, target = isClosePlayer and a or b, isClosePlayer and b or a
+            local heading = TensorCore.getHeadingToTarget2(start.x, 0, start.z, target.x, 0, target.z)
+            local gx, _, gz = TensorCore.getPosInDirection(start, heading, distance, true)
+            return gx, gz
         end
-        return guidePos
     end
 
-    local drawTakeLineItem = function(job, i, data, playerPos, guideColor, size, x, z, distance, heading)
+    local drawTakeLineItem = function(job, i, data, playerPos, guideColor, size)
         local color = data.color or defaultTakeLineColor
         local playerDrawers = multiTakeLineDrawers[job]
         if playerDrawers == nil then playerDrawers = {}; multiTakeLineDrawers[job] = playerDrawers end
@@ -618,31 +569,13 @@ Drawers.init = function(M)
         end
         local drawer = cached.drawer
         drawer:addLine(data.posPlayer.x, data.posPlayer.y, data.posPlayer.z, data.posObj.x, data.posObj.y, data.posObj.z, 4, 0)
-        if x == nil then
-            local guidePos = takeLineGuide(data, playerPos)
-            x, z = guidePos.x, guidePos.z
-        end
-        commonFrameDirect(x, z, playerPos, guideColor, size, distance, heading)
+        local x, z = takeLineGuide(data, playerPos)
+        commonFrameDirect(x, z, playerPos, guideColor, size)
     end
 
-    --- 多重指路拉线；同次调用共享实体读取，数值计算成批完成，仍逐条提交原图元。
+    --- 多重指路拉线；本次调用复用成功解析的位置，数值接口直接返回引导点。
     M.MultiTakeLine = function(guideData, size)
-        local players = M.MultiGuide.players
-        local first = next(players)
-        local single = first == nil or next(players, first) == nil and type(guideData[first]) == 'table' and #guideData[first] < 2
-        if not hasNativeGeometry(2) or single then
-            for job, multiData in pairs(players) do
-                local curJobData = guideData[job]
-                local caller = 'multi_take_line_' .. tostring(job)
-                local entityId = getMultiGuideEntityId(multiData, caller)
-                local playerPos = entityId ~= nil and getLiveEntityPos(entityId, caller) or nil
-                if playerPos ~= nil and curJobData ~= nil and table.size(curJobData) > 0 then
-                    for i = 1, #curJobData do drawTakeLineItem(job, i, curJobData[i], playerPos, multiData.color, size) end
-                end
-            end
-            return
-        end
-        local items, positions, count = {}, {}, 0
+        local positions = {}
         for job, multiData in pairs(M.MultiGuide.players) do
             local curJobData = guideData[job]
             local caller = 'multi_take_line_' .. tostring(job)
@@ -650,47 +583,32 @@ Drawers.init = function(M)
             local playerPos = entityId ~= nil and getLiveEntityPos(entityId, caller, positions) or nil
             if playerPos ~= nil and curJobData ~= nil and table.size(curJobData) > 0 then
                 for i = 1, #curJobData do
-                    local k = count * 5
-                    items[k + 1], items[k + 2], items[k + 3] = job, i, curJobData[i]
-                    items[k + 4], items[k + 5] = playerPos, multiData.color
-                    count = count + 1
+                    drawTakeLineItem(job, i, curJobData[i], playerPos, multiData.color, size)
                 end
             end
-        end
-        local output
-        if hasNativeGeometry(count) then
-            local input, result, complete = {}, {}, true
-            for i = 1, count do
-                local k, j = (i - 1) * 5, (i - 1) * 8
-                local data, playerPos = items[k + 3], items[k + 4]
-                if type(data) ~= 'table' or data.posPlayer == nil or data.posObj == nil then complete = false; break end
-                local a, b = data.posPlayer, data.posObj
-                input[j + 1], input[j + 2], input[j + 3], input[j + 4] = a.x, a.z, b.x, b.z
-                input[j + 5], input[j + 6], input[j + 7], input[j + 8] = playerPos.x, playerPos.z, data.disPlayer or 2, data.disObj or 2
-                for n = 1, 4 do result[(i - 1) * 4 + n] = 0 end
-            end
-            if complete and M.NativeCore.geometryBatch(input, count, result, 5) then output = result end
-        end
-        for i = 1, count do
-            local k, j = (i - 1) * 5, (i - 1) * 4
-            drawTakeLineItem(items[k + 1], items[k + 2], items[k + 3], items[k + 4], items[k + 5], size,
-                    output and output[j + 1], output and output[j + 2], output and output[j + 3], output and output[j + 4])
         end
     end
     M.DrawTargetPos = function()
         if not M.Config.Main.ShowTargetPos then
             return
         end
-        local target = TensorCore.mGetTarget()
+        local player = TensorCore.mGetPlayer()
+        if player == nil or player.targetid == nil or player.targetid == 0 then return end
+        local target = TensorCore.mGetEntity(player.targetid)
         if target == nil
                 or not target.attackable
-                or (M.IsTank(TensorCore.mGetPlayer().job) and not M.Config.Main.ShowTargetPosTank)
+                or (M.IsTank(player.job) and not M.Config.Main.ShowTargetPosTank)
         then
             return
         end
         local color = M.Config.Main.TargetPosColor
-        local drawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a), 1)
-        drawer:addCircle(target.pos.x, target.pos.y, target.pos.z, 0.01 * M.Config.Main.TargetPosSize, true)
+        -- 只复用样式；改色立即重建，当前位置和尺寸仍逐帧提交。
+        if targetPosDrawer == nil or targetPosR ~= color.r or targetPosG ~= color.g
+                or targetPosB ~= color.b or targetPosA ~= color.a then
+            targetPosDrawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a), 1)
+            targetPosR, targetPosG, targetPosB, targetPosA = color.r, color.g, color.b, color.a
+        end
+        targetPosDrawer:addCircle(target.pos.x, target.pos.y, target.pos.z, 0.01 * M.Config.Main.TargetPosSize, true)
     end
 
     M.DrawGuidePreView = function()

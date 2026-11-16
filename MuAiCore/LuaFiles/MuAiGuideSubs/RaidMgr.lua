@@ -136,8 +136,9 @@ RaidMgr.init = function(M)
         end
         return allLoaded
     end
-    M.RaidMapCheck = function()
-        local nextScript = raidScript and raidScript[Player.localmapid] or nil
+    M.RaidMapCheck = function(mapId)
+        if mapId == nil then mapId = Player.localmapid end
+        local nextScript = raidScript and raidScript[mapId] or nil
         if M.CurRaidScript == nextScript then
             return
         end
@@ -147,10 +148,11 @@ RaidMgr.init = function(M)
         end
     end
 
-    M.OnRaidUpdate = function()
-        local currentScript = raidScript and raidScript[Player.localmapid] or nil
+    M.OnRaidUpdate = function(mapId)
+        if mapId == nil then mapId = Player.localmapid end
+        local currentScript = raidScript and raidScript[mapId] or nil
         if M.CurRaidScript ~= currentScript then
-            M.RaidMapCheck()
+            M.RaidMapCheck(mapId)
         end
         if M.CurRaidScript ~= nil and type(M.CurRaidScript.Update) == 'function' then
             M.CurRaidScript.Update()

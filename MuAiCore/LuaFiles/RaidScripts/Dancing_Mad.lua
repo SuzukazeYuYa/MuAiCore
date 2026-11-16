@@ -7,6 +7,7 @@ DM.SubScripts = nil
 ---@type MuAiGuide
 local MG
 local subEventErrors = {}
+local commonGuidePoints = {}
 local errorLogInterval = 10000
 
 local function resetSubEventErrors()
@@ -751,6 +752,7 @@ DM.IceType = {
 }
 --- 初始化
 DM.Init = function(M)
+    commonGuidePoints = {}
     DM.State = {}
     -- 绑定阶段序号
     for i = 1, #DM.StateNames do
@@ -1020,7 +1022,17 @@ DM.CommonGuide = function()
     if ((DM.OverState('P1Start', true) and DM.BeLowState('P1End') and MG.Config.DmuCfg.P1.guide)
             or (DM.OverState('P4Start', true) and DM.BeLowState('P4End') and MG.Config.DmuCfg.P4.guide))
             and MG.DancingMad.IceType ~= nil and MG.DancingMad.ThunderType ~= nil then
-        local near, far, _, same = DM.CalcMixPoint(MG.DancingMad.ThunderType, MG.DancingMad.IceType)
+        local thunder, ice = MG.DancingMad.ThunderType, MG.DancingMad.IceType
+        local points = commonGuidePoints[thunder]
+        if points == nil then points = {}; commonGuidePoints[thunder] = points end
+        local pair = points[ice]
+        if pair == nil then
+            local near, far, _, same = DM.CalcMixPoint(thunder, ice)
+            pair = { near = near, far = far, same = same }
+            points[ice] = pair
+        end
+        -- 固定落点仅供本函数读取；玩家距离仍在每帧重新判断。
+        local near, far, same = pair.near, pair.far, pair.same
         local player = MG.GetPlayer()
         local guidePos
         --近战且2个坐标不等

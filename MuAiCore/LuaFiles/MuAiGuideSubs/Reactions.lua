@@ -122,30 +122,30 @@ end
 local function entity(value)
     return type(value)=="table" and value or value and TensorCore.mGetEntity(value)
 end
-local function entityQuery()
-    local resolved = {}
-    return function(id)
-        local value = resolved[id]
-        if value == nil then
-            value = TensorCore.mGetEntity(id)
-            if id ~= nil and value then resolved[id] = value end
-        end
-        return value
+local function queryEntity(resolved, id)
+    local value = resolved[id]
+    if value == nil then
+        value = TensorCore.mGetEntity(id)
+        if id ~= nil and value then resolved[id] = value end
     end
+    return value
 end
 local queryTag = {}
+-- 只保存职能表的字段名；调用时仍读取当前表，保留外部替换职能定义的行为。
+local partyRoleKeys = {Tank='tankJobs',Tanks='tankJobs',Healer='healJobs',Healers='healJobs',DPS='dpsJobs',Support='supportJobs',Melee='meleeJobs',Ranged='rangedJobs',['Melee DPS']='meleeJobs',['Ranged DPS']='rangedJobs',['Ranged Physical DPS']='rdpsJobs',['Ranged Caster DPS']='cdpsJobs'}
 function R.API.getAgnosticPartyList(kind)
     kind = kind or "Party"
-    local roles = {Tank=R.tankJobs,Tanks=R.tankJobs,Healer=R.healJobs,Healers=R.healJobs,DPS=R.dpsJobs,Support=R.supportJobs,Melee=R.meleeJobs,Ranged=R.rangedJobs,["Melee DPS"]=R.meleeJobs,["Ranged DPS"]=R.rangedJobs,["Ranged Physical DPS"]=R.rdpsJobs,["Ranged Caster DPS"]=R.cdpsJobs}
-    local set = roles[kind]
+    local roleKey = partyRoleKeys[kind]
+    local set = roleKey and R[roleKey]
     if kind ~= "Party" and not set then error("[MuAiCore.Reactions] 未知队伍分组: " .. tostring(kind)) end
     local result = {}
     local query = { tag = queryTag }
     local members = R.partyInfo(query)
-    local resolve = query.resolve or TensorCore.mGetEntity
+    local resolved = query.resolved
     for _, value in ipairs(members) do
         local id = value.id
-        local e = resolve(id)
+        local e
+        if resolved then e = queryEntity(resolved, id) else e = TensorCore.mGetEntity(id) end
         if not e and id==R.playerID() then e=TensorCore.mGetPlayer() end
         if e then
             local entityId = e.id
@@ -162,12 +162,12 @@ function R.partyInfo(query)
     if Duty:GetActiveDutyInfo()==nil and not InInstance() then return {} end
     -- 数字实体和后续职能过滤共用本次解析；普通调用仍返回独立的队伍数组。
     if type(query) ~= 'table' or query.tag ~= queryTag then query = nil end
-    local resolve
+    local resolved
     local members,guids,identities={},{},{}
     local function add(e)
         if type(e)=="number" then
-            if resolve == nil then resolve = entityQuery(); if query then query.resolve = resolve end end
-            e=resolve(e)
+            if resolved == nil then resolved = {}; if query then query.resolved = resolved end end
+            e=queryEntity(resolved, e)
         end
         if not e then return end
         local id=e.id
@@ -196,12 +196,12 @@ end
 local function distances(pos, party)
     if not pos or pos.x==nil or pos.z==nil then return nil end
     local result = {}
-    local resolve
+    local resolved
     for _, value in pairs(party or TensorCore.getEntityGroupList("Party") or {}) do
         local e = value
         if type(value) ~= 'table' and value then
-            resolve = resolve or entityQuery()
-            e = resolve(value)
+            resolved = resolved or {}
+            e = queryEntity(resolved, value)
         end
         local position=e and e.pos
         if position then result[#result+1]={id=e.id, distance=TensorCore.getDistance2d(position,pos)} end

@@ -361,6 +361,8 @@ local drawJobTab = function(M)
 end
 ---@param M MuAiGuide
 local drawBaseSettingTab = function(M)
+    -- 同次绘制复用当前玩家快照，避免逐项读取宿主属性时反复等待实体锁。
+    local Player = TensorCore.mGetPlayer() or _G.Player
     -- MUAI_UPDATE_CHANNELS_SETTINGS_BEGIN
     M.DrawUpdateBranchSettings()
     -- MUAI_UPDATE_CHANNELS_SETTINGS_END
@@ -630,6 +632,7 @@ local drawBaseSettingTab = function(M)
 end
 ---@param M MuAiGuide
 local drawRaidSettingTab = function(M)
+    local Player = TensorCore.mGetPlayer() or _G.Player
     GUI:TextColored(1, 1, 0, 1, ' 使用说明:')
     GUI:TextColored(1, 0, 0, 1, '  部分副本采用时间轴开发, 需要继承对应时间!')
     GUI:TextColored(0, 1, 1, 1, '  具体对应关系如下:')

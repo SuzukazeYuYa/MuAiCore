@@ -7,6 +7,22 @@ local DM
 ---@type MuAiGuide
 local MG
 local frameDrawers = {}
+-- 仅复用本帧排序的容器，不跨帧复用实体或距离结果。
+local elementPlayers, elementDistances = {}, {}
+local elementOrigin
+local function elementDistance(entity)
+    local distance = elementDistances[entity]
+    if distance == nil then
+        distance = TensorCore.getDistance2d(elementOrigin, entity.pos)
+        elementDistances[entity] = distance
+    end
+    return distance
+end
+local function elementCloser(a, b)
+    if a.alive and not b.alive then return true end
+    if not a.alive and b.alive then return false end
+    return elementDistance(a) < elementDistance(b)
+end
 
 -- OnEntityChannel 到实际结算存在帧级抖动，按实战日志上界保留余量。
 local damningEdictDrawDuration = 5200
@@ -146,7 +162,10 @@ local drawFireWater = function(buffId)
         end
         if anyHasBuff or Data().Elements.BuffEndTimer[buffId] ~= 0
                 and TimeSince(Data().Elements.BuffEndTimer[buffId]) < 2000 then
-            local curFramePlayer = {}
+            local curFramePlayer = elementPlayers
+            for i = #curFramePlayer, 1, -1 do curFramePlayer[i] = nil end
+            for entity in pairs(elementDistances) do elementDistances[entity] = nil end
+            elementOrigin = object.pos
             for job, member in pairs(MG.Party) do
                 local curMember = TensorCore.mGetEntity(member.id)
                 if curMember == nil or curMember.pos == nil then
@@ -157,24 +176,7 @@ local drawFireWater = function(buffId)
                 end
                 table.insert(curFramePlayer, curMember)
             end
-            local distances = {}
-            local function distanceTo(entity)
-                local distance = distances[entity]
-                if distance == nil then
-                    distance = TensorCore.getDistance2d(object.pos, entity.pos)
-                    distances[entity] = distance
-                end
-                return distance
-            end
-            table.sort(curFramePlayer, function(a, b)
-                if a.alive and not b.alive then
-                    return true
-                elseif not a.alive and b.alive then
-                    return false
-                else
-                    return distanceTo(a) < distanceTo(b)
-                end
-            end)
+            table.sort(curFramePlayer, elementCloser)
             if buffId == 1600 then
                 drawer:addDonut(curFramePlayer[1].pos.x, MG.drawerY, curFramePlayer[1].pos.z, 4, 10)
                 drawer:addDonut(curFramePlayer[2].pos.x, MG.drawerY, curFramePlayer[2].pos.z, 4, 10)
@@ -1010,6 +1012,7 @@ end
 --- @param m MuAiGuide
 Dmu_P3.Init = function(dm, m)
     frameDrawers = {}
+    elementPlayers, elementDistances, elementOrigin = {}, {}, nil
     DM = dm
     MG = m
     catchMarkMap = {

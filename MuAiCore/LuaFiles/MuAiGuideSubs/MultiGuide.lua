@@ -67,7 +67,8 @@ MultiGuide.init = function(M)
 
     --- 判断当前玩家是否在可指导地图
     M.MultiGuide.onMap = function()
-        return table.contains(mapsIds, Player.localmapid)
+        local player = TensorCore.mGetPlayer() or Player
+        return player ~= nil and table.contains(mapsIds, player.localmapid)
     end
 
     M.MultiGuide.onMapChange = function() 

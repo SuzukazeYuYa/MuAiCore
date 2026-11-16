@@ -188,10 +188,12 @@ local attackRangeReMake = function()
 end
 
 local attackRangeHackHelper = function()
-    if Player == nil or Player.hitradius == nil or (not MG.Config.Main.AttackRangeHelper) then
+    if not MG.Config.Main.AttackRangeHelper or Player == nil then
         return
     end
-    local addRange = Player.hitradius - 0.5
+    local hitRadius = Player.hitradius
+    if hitRadius == nil then return end
+    local addRange = hitRadius - 0.5
     if math.abs(addRange) <= 0.001 then
         return
     end
@@ -285,18 +287,23 @@ local onPlayerChangeJob = function()
 end
 
 local onMapChangeCheck = function()
-    if Player.localmapid ~= 0 and lastMap ~= Player.localmapid then
+    local mapId = Player.localmapid
+    if mapId ~= 0 and lastMap ~= mapId then
         onMapChange()
         lastMap = Player.localmapid
+        return lastMap
     end
+    return mapId
 end
 
-local onJobChangeCheck = function()
-    if Player == nil or Player.job == nil then
+local onJobChangeCheck = function(player)
+    if player == nil then
         return
     end
+    local job = player.job
+    if job == nil then return end
     -- 仅在战斗职业下才需要进行该处理
-    if lastJob ~= Player.job and table.contains(MG.JobIds, Player.job) then
+    if lastJob ~= job and table.contains(MG.JobIds, job) then
         onPlayerChangeJob()
         if lastJob ~= nil and lastJob > 0 then
             MG.Debug('职业切换' .. MG.GetJobFullNameById(lastJob) .. ' -> ' .. MG.GetJobFullNameById(Player.job))
@@ -331,10 +338,12 @@ Events.init = function(M)
         MG.CheckMenuMember()
         MG.CheckArgusRegister()
         checkHotKeyPress()
-        onMapChangeCheck()
+        -- 地图保留宿主的直接观察；本次调度复用结果，职业从当前玩家快照读取。
+        local mapId = onMapChangeCheck()
         retryPartyLoad()
-        onJobChangeCheck()
-        MG.OnRaidUpdate()
+        local player = TensorCore.mGetPlayer() or Player
+        onJobChangeCheck(player)
+        MG.OnRaidUpdate(mapId)
         attackRangeHackHelper()
         attackRangeReMake()
         onWipeCheck()
