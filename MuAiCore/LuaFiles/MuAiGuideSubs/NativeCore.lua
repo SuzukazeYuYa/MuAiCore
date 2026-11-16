@@ -111,7 +111,7 @@ function Module.init(M, moduleRoot)
         if type(FileDelete) == 'function' and FileDelete(request.receipt) ~= true then
             diagnose('WARN', '无法删除已读取的原生加载回执', { path = request.receipt })
         end
-        if not text:match('|OK 4%s*$') then
+        if not text:match('|OK 5%s*$') then
             if text:match('|ERROR arm_11%s*$') and not request.cancelled and attempts < 3 then
                 N.State, N.Reason, retryAt = 'retrying', 'previous_native_generation_finishing', PerfClock() + 250
                 return
@@ -126,7 +126,7 @@ function Module.init(M, moduleRoot)
         mt.__gc = fn
         if request.cancelled then pcall(fn, -1); N.State = request.expired and 'lua' or 'closed'; return end
         local ok, abi = pcall(fn)
-        if not ok or abi ~= 4 then pcall(fn, -1); fail('native_abi_mismatch'); return end
+        if not ok or abi ~= 5 then pcall(fn, -1); fail('native_abi_mismatch'); return end
         entry = fn
         N.State, N.Reason, N.LoadMs = 'native', nil, PerfClock() - request.started
         diagnose('INFO', '原生求解后端已加载', { abi = abi, launchMs = N.LaunchMs, loadMs = N.LoadMs })
@@ -176,6 +176,13 @@ function Module.init(M, moduleRoot)
         N.Calls = N.Calls + 1
         return true
     end
+    local function releaseBatchContext(handle)
+        if not handle or handle == 0 then return end
+        local ok, code = pcall(entry, handle, 7)
+        if not ok or code ~= 0 then
+            diagnose('WARN', '本轮地火上下文释放回执异常', { code = code })
+        end
+    end
     function N.groundfireBatch(guides, roles)
         if not entry or #roles < 1 or #roles > 8 then return false end
         local hits = guides[roles[1]].Hits
@@ -189,10 +196,12 @@ function Module.init(M, moduleRoot)
         if total * #hits < 84 then return false end
         local inputs = batchCache[hits]
         if not inputs or inputs.count > #hits then
-            inputs = { count = 0, hits = {}, points = {}, counts = {}, output = {} }
+            if inputs then releaseBatchContext(inputs.handle) end
+            inputs = { count = 0, acknowledged = 0, handle = 0, hits = {}, delta = {}, points = {}, counts = {}, output = {} }
+            for i = 1, 64 do inputs.output[i] = 0 end
             batchCache[hits] = inputs
         end
-        -- 仅追加新几何，整批调用只向 C++ 传入一份 Hits；原生不持有这些 Lua 表。
+        -- 固定几何只在追加时展开。原生保存本轮副本，通常只传新增部分；Lua 保留完整值供失效后重建。
         for i = inputs.count + 1, #hits do
             local hit, offset = hits[i], (i - 1) * 4
             inputs.hits[offset + 1], inputs.hits[offset + 2] = hit.x, hit.z
@@ -206,23 +215,42 @@ function Module.init(M, moduleRoot)
             for j = 1, #points do
                 inputs.points[offset * 2 + 1], inputs.points[offset * 2 + 2] = points[j].x, points[j].z
                 offset = offset + 1
-                inputs.output[offset] = 0
             end
         end
-        local ok, code = pcall(entry, inputs.points, inputs.hits, inputs.counts, #roles, #hits, inputs.output, 3)
+        local previous = inputs.acknowledged
+        local added = #hits - previous
+        -- 首次传完整缓存本身，避免把同一批固定几何再复制到 delta。
+        local delta = previous == 0 and inputs.hits or inputs.delta
+        if previous > 0 then
+            for i = 1, added * 4 do delta[i] = inputs.hits[previous * 4 + i] end
+        end
+        local ok, code, handle = pcall(entry, inputs.handle, previous, inputs.points, inputs.counts, #roles, delta, added, inputs.output, 6)
+        -- 原生明确拒绝过期或不同步的上下文时没有执行求解，可在本次调用重新提交完整快照。
+        if ok and (code == -6 or code == -7) then
+            releaseBatchContext(inputs.handle)
+            ok, code, handle = pcall(entry, 0, 0, inputs.points, inputs.counts, #roles, inputs.hits, #hits, inputs.output, 6)
+        end
         if not ok or code ~= 0 then
             N.Fallbacks = N.Fallbacks + 1
-            diagnose('WARN', '本次原生批量求解失败，使用原Lua计算', { code = code })
+            releaseBatchContext(inputs.handle)
+            batchCache[hits] = nil
+            diagnose('WARN', '本次原生驻留求解失败，使用原Lua计算', { code = code })
             return false
         end
-        offset = 0
+        inputs.handle, inputs.acknowledged = handle, #hits
         for i = 1, #roles do
-            local output = {}
-            for j = 1, inputs.counts[i] do
-                offset = offset + 1
-                output[j] = inputs.output[offset]
+            local state, count = guides[roles[i]], inputs.counts[i]
+            local output = state.PointTriggers
+            local same = type(output) == 'table' and getmetatable(output) == nil and #output == count
+            for j = 1, count do
+                if not same or output[j] ~= inputs.output[(i - 1) * 8 + j] then same = false; break end
             end
-            guides[roles[i]].PointTriggers = output
+            -- 变化时建立新结果表；不修改其他调用者可能仍持有的旧结果。
+            if not same then
+                output = {}
+                for j = 1, count do output[j] = inputs.output[(i - 1) * 8 + j] end
+                state.PointTriggers = output
+            end
         end
         N.Calls = N.Calls + 1
         return true
