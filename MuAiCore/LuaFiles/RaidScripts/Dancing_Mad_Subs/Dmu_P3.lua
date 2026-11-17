@@ -591,7 +591,23 @@ local getFarestFromChaos = function()
     return farest
 end
 
-local getEntTethers = function(contentId, tetherType)
+-- 实战四轮黑洞均为 ContentID 8343、ModelID 19512，同轮生成间隔不足 0.1 秒。
+local function currentBlackHoles(ids)
+    local holes, count = {}, 0
+    for _, entity in pairs(TensorCore.entityList('contentid=8343') or {}) do
+        local id, pos = entity.id, entity.pos
+        if ids[id] and entity.contentid == 8343 and entity.alive and pos
+                and type(pos.x) == 'number' and math.abs(pos.x) < math.huge
+                and type(pos.z) == 'number' and math.abs(pos.z) < math.huge
+                and (pos.x ~= 0 or pos.z ~= 0)
+                and Argus.getEntityModel(id) == 19512 and not holes[id] then
+            holes[id], count = entity, count + 1
+        end
+    end
+    return holes, count
+end
+
+local getEntTethers = function(holes, tetherType)
     local allTethers = Argus.getCurrentTethers()
     if allTethers == nil or table.size(allTethers) == 0 then
         return nil
@@ -600,8 +616,7 @@ local getEntTethers = function(contentId, tetherType)
     for sourceId, tethers in pairs(allTethers) do
         for _, tether in pairs(tethers) do
             if tetherType == tether.type then
-                local object = TensorCore.mGetEntity(sourceId)
-                if object ~= nil and object.contentid == contentId then
+                if holes[sourceId] then
                     table.insert(result, {
                         sourceid = sourceId,
                         targetid = tether.targetid,
@@ -630,19 +645,16 @@ local drawBlackHole = function()
     local startState = 'P3BlackHoleAppear' .. tostring(curWave)
     local endState = 'P3BlackHole' .. tostring(curWave) .. '_' .. tostring(endCnt)
     if DM.OverState(startState, true) and DM.BeLowState(endState, true) then
-        for _, obj in pairs(Data().BlackHolds.Object[curWave]) do
-            local curObj = TensorCore.mGetEntity(obj.id)
-            if curObj ~= nil then
-                MG.GetFrameDrawer(frameDrawers, 'drawBlackHole.1', 1, 0, 0, 0.4, 1):addCircle(curObj.pos.x, MG.drawerY, curObj.pos.z, 2)
-            end
-
+        local holes = currentBlackHoles(Data().BlackHolds.Object[curWave])
+        for _, hole in pairs(holes) do
+            MG.GetFrameDrawer(frameDrawers, 'drawBlackHole.1', 1, 0, 0, 0.4, 1):addCircle(hole.pos.x, MG.drawerY, hole.pos.z, 2)
         end
-        local tethers = getEntTethers(8343, 84)
+        local tethers = getEntTethers(holes, 84)
         if tethers == nil or table.size(tethers) == 0 then
             return
         end
         for _, tether in pairs(tethers) do
-            local object = getLiveEntity(tether.sourceid, 'P3BlackHole', 'source')
+            local object = holes[tether.sourceid]
             local target = getLiveEntity(tether.targetid, 'P3BlackHole', 'target')
             if object ~= nil and target ~= nil then
                 local dir = TensorCore.getHeadingToTarget(object.pos, target.pos)
@@ -744,7 +756,12 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
     local curState = MG.DancingMad.CurrentState
     if data.sourceObject[curState] == nil or table.size(data.sourceObject[curState]) < curCnt then
         --获取场上所有连线
-        local tethers = getEntTethers(8343, 84)
+        local wave = tonumber((DM.StateNames[curState]:match('^P3BlackHoleAppear(%d)') or
+                DM.StateNames[curState]:match('^P3BlackHole(%d)_')))
+        local ids = data.Object[wave]
+        if not ids then return end
+        local holes = currentBlackHoles(ids)
+        local tethers = getEntTethers(holes, 84)
         if tethers ~= nil and table.size(tethers) >= curCnt then
             --当前场内线数量保证充足
             --初始化表格
@@ -762,7 +779,7 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                 local curDir = MG.SetHeading2Pi(dir - (i - 1) * math.pi / 4)
                 -- 分析场内线情况并且将其按照12点排序，且将线出发点的黑洞缓存下来
                 for _, tether in pairs(tethers) do
-                    local fromObj = TensorCore.mGetEntity(tether.sourceid)
+                    local fromObj = holes[tether.sourceid]
                     if fromObj ~= nil and fromObj.pos ~= nil then
                         local teDir = TensorCore.getHeadingToTarget(DM.Center, fromObj.pos)
                         if MG.IsSameDirection(MG.SetHeading2Pi(teDir), curDir, 0.1) then
@@ -1015,6 +1032,11 @@ Dmu_P3.Init = function(dm, m)
     elementPlayers, elementDistances, elementOrigin = {}, {}, nil
     DM = dm
     MG = m
+    local holes = Data() and Data().BlackHolds
+    if holes and not holes.seen then
+        holes.seen, holes.closed, holes.Object, holes.wave, holes.temp = {}, {}, {}, 0, nil
+        holes.sourceObject, holes.guideData = {}, {}
+    end
     catchMarkMap = {
         [MG.HeadMark.Bind1] = MG.HeadMark.Attack1,
         [MG.HeadMark.Bind2] = MG.HeadMark.Attack2,
@@ -1388,28 +1410,50 @@ Dmu_P3.OnMarkerAdd = function(entityID, markerID)
     end
 end
 
-Dmu_P3.OnEntityAdd = function(entityID, entityName)
-    local obj = TensorCore.mGetEntity(entityID)
-    if obj == nil or obj.contentid == nil or obj.contentid ~= 8343 then
-        return
-    end
+-- 由上一轮激光的结算阶段区分轮次，即使漏掉整轮也不会错用下一轮实体。
+local blackHoleWave = {
+    P3BlackHoleStart = 1, P3BlackHole1_2 = 2,
+    P3BlackHole2_3 = 3, P3BlackHole3_3 = 4,
+}
+
+Dmu_P3.OnEntityAdd = function(entityID, _, contentID)
+    if contentID ~= 8343 or type(entityID) ~= 'number' or entityID <= 0 then return end
     local data = Data().BlackHolds
-    table.insert(data.temp, obj)
-    if table.size(data.temp) == 11 then
-        data.wave = data.wave + 1
-        if data.Object[data.wave] == nil then
-            data.Object[data.wave] = data.temp
-        end
-        MG.Info('第' .. data.wave .. '轮黑洞')
-        local goState = 'P3BlackHoleAppear' .. tostring(data.wave)
-        if DM.BeLowState(goState) then
-            DM.ChangeState(goState)
-        end
-        data.temp = {}
+    if data.seen[entityID] then return end
+    data.seen[entityID] = true
+    local wave = blackHoleWave[DM.StateNames[MG.DancingMad.CurrentState]]
+    if not wave or data.closed[wave] then return end
+    local batch = data.pending
+    if not batch or batch.wave ~= wave then
+        batch = { wave = wave, start = Now(), ids = {}, count = 0 }
+        data.pending = batch
+    end
+    batch.ids[entityID] = true
+    batch.count = batch.count + 1
+end
+
+local function resolveBlackHoles()
+    local data = Data().BlackHolds
+    local batch = data.pending
+    if not batch then return end
+    local wave = batch.wave
+    if TimeSince(batch.start) > 1500 or batch.count > 11
+            or blackHoleWave[DM.StateNames[MG.DancingMad.CurrentState]] ~= wave then
+        data.pending, data.closed[wave] = nil, true
+        MG.LogOnce('P3BlackHole', 'incomplete_' .. wave, '本轮黑洞未能确认，已清除待解析实体',
+                { wave = wave, events = batch.count })
+    elseif batch.count == 11 then
+        local _, count = currentBlackHoles(batch.ids)
+        if count ~= 11 then return end
+        data.pending, data.closed[wave] = nil, true
+        data.wave, data.Object[wave] = wave, batch.ids
+        MG.Info('第' .. wave .. '轮黑洞')
+        DM.ChangeState('P3BlackHoleAppear' .. wave)
     end
 end
 
 Dmu_P3.Update = function()
+    resolveBlackHoles()
     getBoss()
     lockFaceCheck()
     loadMarkPlayer()

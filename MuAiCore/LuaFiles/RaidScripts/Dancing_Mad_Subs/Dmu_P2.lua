@@ -853,14 +853,26 @@ local drawWingsOfDestroy = function()
     end
 end
 
-local getDrawablePartyPlayers = function()
-    local drawablePlayers = {}
+local function byCenterDistance(a, b)
+    if a.distance == b.distance then return a.id < b.id end
+    return a.distance < b.distance
+end
+
+local function getSortedPartyPositions()
+    local positions = {}
     for _, member in pairs(MG.GetPartyPlayers()) do
-        if member ~= nil and member.pos ~= nil then
-            table.insert(drawablePlayers, member)
+        local pos, id = member.pos, member.id
+        local x, z = pos and pos.x, pos and pos.z
+        if type(id) == 'number' and type(x) == 'number' and type(z) == 'number' then
+            local dx, dz = x - DM.Center.x, z - DM.Center.z
+            local distance = dx * dx + dz * dz
+            if distance < math.huge then
+                positions[#positions + 1] = { id = id, x = x, z = z, distance = distance }
+            end
         end
     end
-    return drawablePlayers
+    table.sort(positions, byCenterDistance)
+    return positions
 end
 
 local drawFarNearDeath = function()
@@ -869,15 +881,10 @@ local drawFarNearDeath = function()
             and Data().FarNearDeath.Timer > 0
     then
         if TimeSince(Data().FarNearDeath.Timer) < farNearDeathDrawDuration then
-            local curParty = getDrawablePartyPlayers()
+            local curParty = getSortedPartyPositions()
             if #curParty == 8 then
-                table.sort(curParty, function(a, b)
-                    local disA = TensorCore.getDistance2d(DM.Center, a.pos)
-                    local disB = TensorCore.getDistance2d(DM.Center, b.pos)
-                    return disA < disB
-                end)
-                DM.purpleDrawer:addCircle(curParty[1].pos.x, MG.drawerY, curParty[1].pos.z, 6)
-                DM.purpleDrawer:addCircle(curParty[8].pos.x, MG.drawerY, curParty[8].pos.z, 6)
+                DM.purpleDrawer:addCircle(curParty[1].x, MG.drawerY, curParty[1].z, 6)
+                DM.purpleDrawer:addCircle(curParty[8].x, MG.drawerY, curParty[8].z, 6)
             else
                 MG.LogOnce('P2FarNearDeath', 'incomplete_party',
                         '远近死刑绘制跳过：当前队员实体不完整', {
@@ -1187,13 +1194,10 @@ Dmu_P2.Update = function()
                 end
             end
             if wave % 2 == 0 then
-                local curParty = getDrawablePartyPlayers()
+                local curParty = getSortedPartyPositions()
                 if #curParty >= 4 then
-                    table.sort(curParty, function(a, b)
-                        return TensorCore.getDistance2d(a.pos, DM.Center) < TensorCore.getDistance2d(b.pos, DM.Center)
-                    end)
                     for i = 1, 4 do
-                        DM.purpleDrawer:addCircle(curParty[i].pos.x, MG.drawerY, curParty[i].pos.z, 5)
+                        DM.purpleDrawer:addCircle(curParty[i].x, MG.drawerY, curParty[i].z, 5)
                     end
                 else
                     MG.LogOnce('P2Tower', 'incomplete_party_wave_' .. tostring(wave),

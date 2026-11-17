@@ -738,7 +738,21 @@ local drawerB2P4Blade = function(index)
     end
 end
 
-local boss3FireDance2 = function(nextState, curWave)
+local function fireDancePositions()
+    local positions = {}
+    for _, member in pairs(MuAiGuide.Party or {}) do
+        local entity = TensorCore.mGetEntity(member.id)
+        local pos = entity and entity.pos
+        if not pos then return end
+        local x, y, z = pos.x, pos.y, pos.z
+        if type(x) ~= 'number' or type(y) ~= 'number' or type(z) ~= 'number'
+                or not (math.abs(x) < math.huge and math.abs(y) < math.huge and math.abs(z) < math.huge) then return end
+        positions[#positions + 1] = { id = member.id, x = x, y = y, z = z }
+    end
+    if #positions == 4 then return positions end
+end
+
+local boss3FireDance2 = function(nextState, curWave, positions)
     local mmd = MuAiGuide.Merchant
     local hasChange = false
     if mmd.B3P2FireDance.Timer == 0 or TimeSince(mmd.B3P2FireDance.Timer) > 2100 then
@@ -758,38 +772,26 @@ local boss3FireDance2 = function(nextState, curWave)
         if curAura == nil or curMark == nil then
             return
         end
-        local curPlayers = {}
-        for _, ent in pairs(MuAiGuide.Party) do
-            table.insert(curPlayers, TensorCore.mGetEntity(ent.id))
-        end
         local boss = getCurBoss()
-        if boss == nil then
-            return
-        end
+        local bossPos = boss and boss.pos
+        if not bossPos then return end
         if getCfg().MerchantDraw then
-            -- 仅复用本次排序内的距离，下一帧仍按实时位置重新计算。
-            local distances = {}
-            table.sort(curPlayers, function(a, b)
-                local disA = distances[a]
-                if disA == nil then
-                    disA = TensorCore.getDistance2d(a.pos, boss.pos)
-                    distances[a] = disA
-                end
-                local disB = distances[b]
-                if disB == nil then
-                    disB = TensorCore.getDistance2d(b.pos, boss.pos)
-                    distances[b] = disB
-                end
-                return disA < disB
+            positions = positions or fireDancePositions()
+            if not positions then return end
+            for _, pos in ipairs(positions) do
+                pos.distance = TensorCore.getDistance2d(pos, bossPos)
+            end
+            table.sort(positions, function(a, b)
+                if a.distance == b.distance then return a.id < b.id end
+                return a.distance < b.distance
             end)
-            local nearest = curPlayers[1]
-            local farest = curPlayers[4]
+            local nearest, farest = positions[1], positions[4]
             if curAura == 2751 then
-                _greenDrawer:addCircle(farest.pos.x, farest.pos.y, farest.pos.z, 3.5)
-                _purpleDrawer:addCircle(nearest.pos.x, nearest.pos.y, nearest.pos.z, 3.5)
+                _greenDrawer:addCircle(farest.x, farest.y, farest.z, 3.5)
+                _purpleDrawer:addCircle(nearest.x, nearest.y, nearest.z, 3.5)
             elseif curAura == 2752 then
-                _greenDrawer:addCircle(nearest.pos.x, nearest.pos.y, nearest.pos.z, 3.5)
-                _purpleDrawer:addCircle(farest.pos.x, farest.pos.y, farest.pos.z, 3.5)
+                _greenDrawer:addCircle(nearest.x, nearest.y, nearest.z, 3.5)
+                _purpleDrawer:addCircle(farest.x, farest.y, farest.z, 3.5)
             end
             local heading
             if curMark == 645 or curMark == 625 then
@@ -2397,12 +2399,13 @@ local Boss_14274_Update = function()
                 changeState(mmd.State.Boss3_P2_GetBuff)
             end
         elseif mmd.CurrentState == mmd.State.Boss3_P2_GetBuff then
+            local positions = fireDancePositions()
+            if not positions then return end
             if MuAiGuide.IsSameDirection(mmd.B3P2FireDance.aoeInfo.heading, math.pi / 2) then
                 local bCnt = 0
                 local dCnt = 0
-                for _, ent in pairs(MuAiGuide.Party) do
-                    local curPlayer = TensorCore.mGetEntity(ent.id)
-                    if curPlayer.pos.x > _boss3Center.x then
+                for _, pos in ipairs(positions) do
+                    if pos.x > _boss3Center.x then
                         bCnt = bCnt + 1
                     else
                         dCnt = dCnt + 1
@@ -2416,7 +2419,7 @@ local Boss_14274_Update = function()
                     mmd.B3P2FireDance.guideDir = math.pi * 3 / 2
                 end
             end
-            boss3FireDance2(mmd.State.Boss3_P2_Turn1, 1)
+            boss3FireDance2(mmd.State.Boss3_P2_Turn1, 1, positions)
         elseif mmd.CurrentState == mmd.State.Boss3_P2_Turn1 then
             boss3FireDance2(mmd.State.Boss3_P2_Turn2, 2)
         elseif mmd.CurrentState == mmd.State.Boss3_P2_Turn2 then

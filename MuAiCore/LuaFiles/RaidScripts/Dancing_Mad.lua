@@ -357,9 +357,9 @@ local dataInit = function()
                 },
             },
             BlackHolds = {
-                temp = {},
+                seen = {},
+                closed = {},
                 wave = 0,
-                tempCnt = 0,
                 Object = {},
                 JumpTimer = 0,
                 CastCnt = 0,
@@ -1167,8 +1167,8 @@ DM.OnTetherChange = function(sourceEntityID, oldTetherID, oldTetherFlags, oldTar
     doSubEvents('OnTetherChange', sourceEntityID, oldTetherID, oldTetherFlags, oldTargetID, newTetherID, newTetherFlags, newTargetID)
 end
 
-DM.OnEntityAdd = function(entityID, entityName)
-    doSubEvents('OnEntityAdd', entityID, entityName)
+DM.OnEntityAdd = function(entityID, entityName, contentID)
+    doSubEvents('OnEntityAdd', entityID, entityName, contentID)
 end
 
 -------------------------- MuAiGuide Events --------------------------
