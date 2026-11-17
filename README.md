@@ -19,7 +19,7 @@
 <br>$${\color{red}更新过程会短暂卡屏，属于正常现象，如果无法更新，请手动覆盖}$$
 <br>$${\color{red}本仓库提交记录即为更新日志，查看方式如下，请根据日志内容判断当前版本！}$$
 <img width="912" height="309" alt="image" src="https://github.com/user-attachments/assets/a0340bcd-8d44-400e-b142-feb900975a93" />
-<br>$${\color{red}3.勾选自动更新（注意此功能对网络要求比较严格，github下载速度慢的慎用），勾选后会在mini注入时候自动检查并更新。}$$
+<br>3.注入 Minion 并加载 MuAiCore 后，插件会检查所选分支的版本。主分支有新版时，点击“点击此处进行更新”。String 分支点击“更新 String 分支”。如果出现更新确认窗口，确认后开始安装。安装成功后插件会触发 Reload。
 
 ### 更新分支（String 分支新增）
 

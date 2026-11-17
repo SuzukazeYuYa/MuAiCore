@@ -12,7 +12,7 @@
 
 $ErrorActionPreference = 'Stop'
 # 事务版本独立于发布版本；切换渠道时不退回旧的批量改名安装器。
-$installerTransactionVersion = 2
+$installerTransactionVersion = 3
 $backupRoot = Join-Path $WorkRoot 'Rollback'
 $createdFiles = [System.Collections.Generic.List[string]]::new()
 $changedFiles = [System.Collections.Generic.List[object]]::new()
@@ -28,6 +28,26 @@ function Test-WithinPath {
 
     return $Path.Equals($Root, [System.StringComparison]::OrdinalIgnoreCase) -or
         $Path.StartsWith($Root + '\', [System.StringComparison]::OrdinalIgnoreCase)
+}
+
+# 安装和回滚只允许写目标根内的普通文件。已有父目录和文件都要检查。
+function Assert-InstallDestination([string]$Destination) {
+    if (-not (Test-WithinPath $Destination $TargetRoot) -or $Destination -eq $TargetRoot) {
+        throw "Invalid installation target: $Destination"
+    }
+    $path = $Destination
+    while ($true) {
+        try { $attributes = [IO.File]::GetAttributes($path) }
+        catch [IO.FileNotFoundException] { $attributes = $null }
+        catch [IO.DirectoryNotFoundException] { $attributes = $null }
+        if ($null -ne $attributes) {
+            if ($attributes -band [IO.FileAttributes]::ReparsePoint) { throw "Linked installation path: $path" }
+            $isDirectory = [bool]($attributes -band [IO.FileAttributes]::Directory)
+            if ($isDirectory -eq ($path -eq $Destination)) { throw "Unexpected installation path type: $path" }
+        }
+        if ($path -eq $TargetRoot) { break }
+        $path = [IO.Path]::GetDirectoryName($path)
+    }
 }
 
 function Replace-RequiredText {
@@ -87,6 +107,8 @@ function Prepare-UpdateChannels {
         # 旧包仍更新业务源码；首次安装或从外部运行时，也部署当前已修复的安装器。
         if (-not $incomingVersion.Success -or [long]$incomingVersion.Groups[1].Value -lt $installerTransactionVersion) {
             $script:patchedFiles[$installerRelative] = $PSCommandPath
+            # 渠道模块与安装器共用事务回执，切回旧包时成对保留。
+            $script:patchedFiles[$channelsRelative] = Join-Path $PSScriptRoot 'UpdateChannels.lua'
         }
     }
 
@@ -201,6 +223,7 @@ function Restore-Backup {
     for ($index = $changedFiles.Count - 1; $index -ge 0; $index--) {
         $entry = $changedFiles[$index]
         try {
+            Assert-InstallDestination $entry.Destination
             if ((Get-FileHash -LiteralPath $entry.Backup -Algorithm SHA256).Hash -ne $entry.Hash) {
                 throw "Rollback backup hash mismatch: $($entry.Backup)"
             }
@@ -211,6 +234,7 @@ function Restore-Backup {
 
     for ($index = $createdFiles.Count - 1; $index -ge 0; $index--) {
         try {
+            Assert-InstallDestination $createdFiles[$index]
             if (Test-Path -LiteralPath $createdFiles[$index]) {
                 Remove-Item -LiteralPath $createdFiles[$index] -Force -ErrorAction Stop
             }
@@ -267,42 +291,12 @@ try {
                 (Test-Path -LiteralPath (Join-Path $SourceRoot $relative))) {
                 throw "Conflicting removed-file entry: $relative"
             }
-            $parent = Split-Path -Parent $destination
-            while (Test-WithinPath $parent $TargetRoot) {
-                if ((Test-Path -LiteralPath $parent) -and
-                    ((Get-Item -LiteralPath $parent -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
-                    throw "Removed-file path crosses a linked directory: $relative"
-                }
-                if ($parent -eq $TargetRoot) { break }
-                $parent = Split-Path -Parent $parent
-            }
-            if (Test-Path -LiteralPath $destination) {
-                $item = Get-Item -LiteralPath $destination -Force
-                if ($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
-                    throw "Removed-file path is not a regular file: $relative"
-                }
-            }
+            Assert-InstallDestination $destination
             if (-not $removedFiles.Contains($relative)) { $removedFiles.Add($relative) }
         }
     }
 
-    if (Test-Path -LiteralPath $backupRoot) {
-        Remove-Item -LiteralPath $backupRoot -Recurse -Force -ErrorAction Stop
-    }
-    [System.IO.Directory]::CreateDirectory($backupRoot) | Out-Null
-    $transactionStarted = $true
-
-    # 与覆盖文件共用回滚目录；后续任一安装步骤失败时，旧文件也能恢复。
-    foreach ($relative in $removedFiles) {
-        $destination = Join-Path $TargetRoot $relative
-        if (Test-Path -LiteralPath $destination -PathType Leaf) {
-            $backupFile = Join-Path $backupRoot $relative
-            $backupHash = Copy-VerifiedFile -Source $destination -Destination $backupFile
-            $changedFiles.Add(@{ Backup = $backupFile; Destination = $destination; Hash = $backupHash })
-            Remove-Item -LiteralPath $destination -Force -ErrorAction Stop
-        }
-    }
-
+    $installFiles = [System.Collections.Generic.List[object]]::new()
     foreach ($topLevel in @('MuAiCore', 'TensorReactions')) {
         $sourceDirectory = Join-Path $SourceRoot $topLevel
         Get-ChildItem -LiteralPath $sourceDirectory -File -Recurse | ForEach-Object {
@@ -315,28 +309,50 @@ try {
             }
 
             $destination = Join-Path $TargetRoot $relativePath
-            if ((Test-Path -LiteralPath $destination) -and -not (Test-Path -LiteralPath $destination -PathType Leaf)) {
-                throw "Update file path is occupied by a directory: $relativePath"
-            }
+            Assert-InstallDestination $destination
             $copySource = if ($patchedFiles.ContainsKey($relativePath)) { $patchedFiles[$relativePath] } else { $_.FullName }
-            if ((Test-Path -LiteralPath $destination -PathType Leaf) -and
-                (Get-FileHash -LiteralPath $copySource -Algorithm SHA256).Hash -eq
-                (Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash) {
-                return
-            }
-            if (Test-Path -LiteralPath $destination -PathType Leaf) {
-                $backupFile = Join-Path $backupRoot $relativePath
-                $backupDirectory = Split-Path -Parent $backupFile
-                [System.IO.Directory]::CreateDirectory($backupDirectory) | Out-Null
-                $backupHash = Copy-VerifiedFile -Source $destination -Destination $backupFile
-                $changedFiles.Add(@{ Backup = $backupFile; Destination = $destination; Hash = $backupHash })
-            }
-            else {
-                $createdFiles.Add($destination)
-            }
-
-            Copy-VerifiedFile -Source $copySource -Destination $destination | Out-Null
+            $installFiles.Add(@{ Relative = $relativePath; Destination = $destination; Source = $copySource })
         }
+    }
+
+    if (Test-Path -LiteralPath $backupRoot) {
+        throw "Previous rollback directory exists. Use a new work directory: $backupRoot"
+    }
+    [System.IO.Directory]::CreateDirectory($backupRoot) | Out-Null
+    $transactionStarted = $true
+
+    # 与覆盖文件共用回滚目录；后续任一安装步骤失败时，旧文件也能恢复。
+    foreach ($relative in $removedFiles) {
+        $destination = Join-Path $TargetRoot $relative
+        Assert-InstallDestination $destination
+        if (Test-Path -LiteralPath $destination -PathType Leaf) {
+            $backupFile = Join-Path $backupRoot $relative
+            $backupHash = Copy-VerifiedFile -Source $destination -Destination $backupFile
+            $changedFiles.Add(@{ Backup = $backupFile; Destination = $destination; Hash = $backupHash })
+            Remove-Item -LiteralPath $destination -Force -ErrorAction Stop
+        }
+    }
+
+    foreach ($file in $installFiles) {
+        $destination, $relativePath, $copySource = $file.Destination, $file.Relative, $file.Source
+        Assert-InstallDestination $destination
+        if ((Test-Path -LiteralPath $destination -PathType Leaf) -and
+            (Get-FileHash -LiteralPath $copySource -Algorithm SHA256).Hash -eq
+            (Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash) {
+            continue
+        }
+        if (Test-Path -LiteralPath $destination -PathType Leaf) {
+            $backupFile = Join-Path $backupRoot $relativePath
+            $backupDirectory = Split-Path -Parent $backupFile
+            [System.IO.Directory]::CreateDirectory($backupDirectory) | Out-Null
+            $backupHash = Copy-VerifiedFile -Source $destination -Destination $backupFile
+            $changedFiles.Add(@{ Backup = $backupFile; Destination = $destination; Hash = $backupHash })
+        }
+        else {
+            $createdFiles.Add($destination)
+        }
+
+        Copy-VerifiedFile -Source $copySource -Destination $destination | Out-Null
     }
 }
 catch {
@@ -354,10 +370,12 @@ catch {
         Write-Error "Update failed ($updateError) and rollback was incomplete: $($_.Exception.Message). Backups: $backupRoot" -ErrorAction Continue
         exit 2
     }
+    Write-Output '__MUAI_ROLLBACK_COMPLETE__'
     Write-Error "Update failed; previous files were restored: $updateError" -ErrorAction Continue
     exit 1
 }
 
 try { Remove-Item -LiteralPath $backupRoot -Recurse -Force -ErrorAction Stop }
 catch { Write-Warning "Update completed; rollback backup cleanup failed: $backupRoot : $($_.Exception.Message)" }
+Write-Output '__MUAI_UPDATE_INSTALLED__'
 exit 0

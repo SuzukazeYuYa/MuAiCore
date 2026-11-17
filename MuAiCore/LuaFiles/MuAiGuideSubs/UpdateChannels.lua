@@ -1,5 +1,6 @@
 local UpdateChannels = {}
 -- 更新渠道独立于作者源码；安装 main 时由 InstallUpdate.ps1 保留并重新接入。
+local workSequence = 0
 local updateTime
 local updateNeedReLoad = false
 
@@ -233,7 +234,12 @@ UpdateChannels.init = function(M)
         end
 
         -- Minion 的 Lua 沙箱不提供 os.getenv，更新工作目录固定放在 LuaMods 之外。
-        local tempPath = GetStartupPath() .. "\\MuAiCoreUpdater_" .. tostring(os.time())
+        local prefix = GetStartupPath() .. "\\MuAiCoreUpdater_" .. tostring(os.time()) .. "_"
+        local tempPath
+        repeat
+            workSequence = workSequence + 1
+            tempPath = prefix .. workSequence
+        until not FolderExists(tempPath) and not FileExists(tempPath)
         local replacePath = GetStartupPath() .. "\\LuaMods"
         local zipFilePath = tempPath .. "\\repository.zip"
         local extractPath = tempPath .. "\\Extracted"
@@ -317,12 +323,7 @@ UpdateChannels.init = function(M)
 
         updateTime = nil
         updateNeedReLoad = false
-        -- 每次更新使用独立临时目录，失败路径统一清理，不在 LuaMods 内留下半成品。
-        local cleanupOk, cleanupError = deleteTempFolder()
-        if cleanupOk == false then
-            failUpdate('更新失败：无法清理临时目录。', cleanupError, true)
-            return
-        end
+        -- 使用新目录，保留此前中断更新留下的恢复资料。
         FolderCreate(tempPath)
         if not FolderExists(tempPath) then
             failUpdate('更新失败：无法创建临时目录。', tempPath, true)
@@ -364,19 +365,25 @@ UpdateChannels.init = function(M)
                 .. installerPath .. '" -SourceRoot "' .. exPath .. '" -TargetRoot "'
                 .. replacePath .. '" -WorkRoot "' .. tempPath .. '" -PreserveUpdateChannels -UpdateBranch "' .. branch .. '"'
         local installOk, installOutput = runCommand(installCommand)
-        if not installOk then
-            if installOutput:find('__MUAI_ROLLBACK_INCOMPLETE__', 1, true) then
-                failUpdate('更新失败且回滚未完成，请查看诊断日志。', installOutput, true)
-            elseif installOutput:find('__MUAI_UPDATE_PREFLIGHT_FAILED__', 1, true) then
+        local receipt = '\n' .. installOutput:gsub('\r', '') .. '\n'
+        local function received(token)
+            return receipt:find('\n' .. token .. '\n', 1, true) ~= nil
+        end
+        if not installOk or not received('__MUAI_UPDATE_INSTALLED__') then
+            if received('__MUAI_ROLLBACK_INCOMPLETE__') then
+                failUpdate('更新失败且回滚未完成，恢复目录：' .. tempPath, installOutput, true)
+            elseif received('__MUAI_UPDATE_PREFLIGHT_FAILED__') then
                 failUpdate('更新准备失败，当前安装未被修改，请查看诊断日志。', installOutput)
-            else
+            elseif received('__MUAI_ROLLBACK_COMPLETE__') then
                 failUpdate('更新失败：已回滚到更新前文件。', installOutput)
+            else
+                failUpdate('更新结果未知，已保留恢复目录：' .. tempPath, installOutput, true)
             end
             return
         end
 
         -- 安装成功后再删除工作目录，并延迟到下一帧触发 Reload。
-        cleanupOk, cleanupError = deleteTempFolder()
+        local cleanupOk, cleanupError = deleteTempFolder()
         if cleanupOk == false then
             M.LogError('Update', '更新完成但临时目录清理失败', {
                 path = tempPath,
