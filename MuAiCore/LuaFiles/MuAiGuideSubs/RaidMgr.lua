@@ -66,6 +66,7 @@ RaidMgr.init = function(M)
             currentMapID = currentMapId,
             files = table.size(list),
         }, isReload and 'reload_start' or 'initial_start')
+        local failedFiles = {}
         local cnter = 0
         for _, fileName in pairs(list) do
             M.Debug('   加载副本脚本：' .. fileName)
@@ -74,6 +75,7 @@ RaidMgr.init = function(M)
                 return FileLoad(filePath)
             end, { file = fileName, path = filePath })
             if not loadOk or type(script) ~= 'table' or script.MapId == nil then
+                failedFiles[#failedFiles + 1] = fileName
                 M.Debug('   加载副本脚本：' .. fileName .. '加载失败，获取到内容如下：')
                 M.Debug('-----------------------')
                 d(script)
@@ -105,6 +107,8 @@ RaidMgr.init = function(M)
                     loadedScripts[script.MapId] = script
                     M.Debug('   加载副本脚本：' .. fileName .. '成功')
                     cnter = cnter + 1
+                else
+                    failedFiles[#failedFiles + 1] = fileName
                 end
             end
         end
@@ -120,7 +124,9 @@ RaidMgr.init = function(M)
             end
         end
         raidScript = loadedScripts
-        local allLoaded = cnter == table.size(list)
+        table.sort(failedFiles)
+        M.RaidLoadFailures = failedFiles
+        local allLoaded = #failedFiles == 0
         M.Diagnostic(allLoaded and 'INFO' or 'ERROR', 'RaidLoader',
                 isReload and '副本脚本热重载完成' or '副本脚本加载完成', {
                     failed = table.size(list) - cnter,
@@ -134,7 +140,7 @@ RaidMgr.init = function(M)
                 M.InfoNoLog('重载副本脚本失败，部分脚本未能正确加载。')
             end
         end
-        return allLoaded
+        return allLoaded, failedFiles
     end
     M.RaidMapCheck = function(mapId)
         if mapId == nil then mapId = Player.localmapid end

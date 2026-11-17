@@ -950,12 +950,13 @@ local drawToolsTab = function(M)
     GUI:SameLine(0, 25)
     local AttackRangeReplace = GUI:Checkbox('接管攻击距离显示', M.Config.Main.AttackRangeReplace)
     if AttackRangeReplace ~= M.Config.Main.AttackRangeReplace then
-        M.Config.Main.AttackRangeReplace = AttackRangeReplace
-        MoogleTelegraphs.Settings.DrawAttackRange = not M.Config.Main.AttackRangeReplace
-        if AttackRangeReplace == true then
-            M.InfoNoLog('已接管攻击范围显示，[MoogleTelegraphs]的攻击范围显示已关闭。')
+        local settings = MoogleTelegraphs and MoogleTelegraphs.Settings
+        if AttackRangeReplace and not settings then
+            M.InfoNoLog('接管攻击距离显示需要先加载 MoogleTelegraphs。')
         else
-            M.InfoNoLog('已取消攻击范围显示接管，[MoogleTelegraphs]的攻击范围显示已开启。')
+            M.Config.Main.AttackRangeReplace = AttackRangeReplace
+            if settings then settings.DrawAttackRange = not AttackRangeReplace end
+            M.InfoNoLog(AttackRangeReplace and '已接管攻击范围显示。' or '已取消接管攻击范围显示。')
         end
     end
     if M.Config.Main.AttackRangeHelper then
@@ -1012,7 +1013,7 @@ local drawDeveloperTab = function(M)
                 else
                     M.Develop.JobView = true
                     M.GetSelfPos()
-                    M.InfoNoLog('进入视角调试模式, 当前视角：' .. M.SelfPos)
+                    M.InfoNoLog('进入视角调试模式, 当前视角：' .. (M.SelfPos or '等待玩家'))
                 end
             else
                 M.ShowMsgUI(3, { '当前没有加入小队！' })
@@ -1025,7 +1026,7 @@ local drawDeveloperTab = function(M)
         if GUI:IsItemClicked(0) then
             M.Develop.JobView = false
             M.GetSelfPos()
-            M.InfoNoLog('退出视角调试, 视角还原到：' .. M.SelfPos)
+            M.InfoNoLog('退出视角调试, 视角还原到：' .. (M.SelfPos or '等待玩家'))
         end
     end
     GUI:Separator()
@@ -1323,6 +1324,10 @@ MainUI.draw = function()
         GUI:SameLine()
         local tabindex, _ = GUI_DrawTabs(M.MainUI.tabs)
         GUI:Dummy(0, 3)
+        if M.RaidLoadFailures and #M.RaidLoadFailures > 0 then
+            GUI:TextWrapped('副本脚本加载失败：' .. table.concat(M.RaidLoadFailures, '、'))
+            if GUI:Button('重新加载副本脚本') then M.LoadRaidScripts(true) end
+        end
         if tabindex == 1 then
             drawJobTab(M)
         elseif tabindex == 2 then

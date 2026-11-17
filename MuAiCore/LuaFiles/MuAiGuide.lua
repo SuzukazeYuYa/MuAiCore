@@ -8,7 +8,7 @@ M.VERSION = 356
 M.GlobalGuideY = nil
 M.IsInit = false;
 -- String 修订号独立保存，避免 353.10 被当作浮点数 353.1。
-M.STRING_REVISION = 11
+M.STRING_REVISION = 12
 --- 输出信息到控制台 
 --- @param msg string
 M.Debug = function(msg)
@@ -130,8 +130,8 @@ end
 
 M.Debug('基础模块加载完成')
 M.Debug("加载副本脚本")
-local raidLoadOk = M.LoadRaidScripts()
-if raidLoadOk ~= true then
+local raidLoadOk, failedFiles = M.LoadRaidScripts()
+if not raidLoadOk and not failedFiles then
     M.Diagnostic('ERROR', 'RaidLoader', '副本脚本初始化未完成', nil, 'initial_raid_load')
     return M
 end

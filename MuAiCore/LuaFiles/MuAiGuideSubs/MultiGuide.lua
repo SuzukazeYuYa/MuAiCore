@@ -31,15 +31,16 @@ MultiGuide.init = function(M)
 
     --- Multiplayer初始化玩家列表定义
     M.MultiGuide.initList = function()
-        if M.Party ~= nil and (M.GetPartyCnt() == 4 or M.GetPartyCnt() == 8) and M.SelfPos ~= nil then
-            local player = M.GetPlayer()
-            playerData = {
-                [player.id] = { obj = M.Party[M.SelfPos], color = M.Config.Main.GuideColor}
-            }
-        else
-            playerData = {}
+        playerData = {}
+        local member = M.Party and M.Party[M.SelfPos]
+        if member then
+            local count, player = M.GetPartyCnt(), M.GetPlayer()
+            if (count == 4 or count == 8) and player and player.id == member.id then
+                playerData[player.id] = { obj = member, color = M.Config.Main.GuideColor }
+            end
         end
         M.MultiGuide.RefreshDic()
+        return next(playerData) ~= nil
     end
 
     M.MultiGuide.isPlayerInGuide = function(id)
@@ -49,8 +50,10 @@ MultiGuide.init = function(M)
     --- Multiplayer添加制定职能玩家到列表
     --- @param playerJob string 玩家职能
     M.MultiGuide.addPlayer = function(playerJob)
+        if not next(playerData) and not M.MultiGuide.initList() then return end
         local colorCfg = M.Config.Main.MultiColor[playerJob]
-        local player = M.Party[playerJob]
+        local player = M.Party and M.Party[playerJob]
+        if not player then return end
         playerData[player.id] = { obj = M.Party[playerJob], color = colorCfg }
         M.InfoNoLog(string.format('已经将[%s]加入到指导列表。', player.name))
         M.MultiGuide.RefreshDic()
@@ -59,7 +62,8 @@ MultiGuide.init = function(M)
     --- Multiplayer移除玩家
     --- @param playerJob string 玩家职能
     M.MultiGuide.removePlayer = function(playerJob)
-        local player = M.Party[playerJob]
+        local player = M.Party and M.Party[playerJob]
+        if not player then return end
         playerData[player.id] = nil
         M.InfoNoLog(string.format('已经将[%s]从指导列表中移除。', player.name))
         M.MultiGuide.RefreshDic()

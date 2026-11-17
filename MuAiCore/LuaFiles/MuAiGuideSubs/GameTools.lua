@@ -123,15 +123,15 @@ GameTools.init = function(M)
 
     --- 读取小队列表
     M.GetPartyPlayers = function()
-        local curPt = TensorCore.getEntityGroupList('Party')
+        local curPt = TensorCore.getEntityGroupList('Party') or {}
         local members = {}
         local checker = {}
         -- 回放模式或者其他情况
         if #curPt == 1 then
             table.insert(members, curPt[1])
             table.insert(checker, curPt[1].id)
-            curPt = TensorCore.entityList('Party')
-        elseif #curPt == 3 or #curPt == 7 then
+            curPt = TensorCore.entityList('Party') or {}
+        elseif (#curPt == 3 or #curPt == 7) and Player then
             local hasSelf = false
             for _, ent in pairs(curPt) do
                 if ent.id == Player.id then
@@ -258,7 +258,9 @@ GameTools.init = function(M)
         M.Party = restored
         M.SelfPos = nil
         M.GetSelfPos()
-        if M.MultiGuide ~= nil and M.MultiGuide.RefreshDic ~= nil then
+        if M.SelfPos == nil or M.MultiGuide.Count() == 0 then
+            M.MultiGuide.onPartyChange()
+        else
             M.MultiGuide.RefreshDic()
         end
         M.Debug('复用小队列表记忆：队员和职业未变化')
@@ -272,7 +274,7 @@ GameTools.init = function(M)
         if forceReset ~= true and tryRestoreRememberedParty(members) then
             return
         end
-        M.Party = {}
+        M.Party, M.SelfPos = {}, nil
         table.sort(members, function(p1, p2)
             return M.IndexOf(jobOrder, p1.job) < M.IndexOf(jobOrder, p2.job)
         end)
@@ -306,9 +308,11 @@ GameTools.init = function(M)
             end
             M.GetSelfPos()
             M.RememberParty('load')
+            M.MultiGuide.onPartyChange()
             return
         end
         if members == nil or (table.size(members) < 8 and table.size(members) ~= 4) then
+            M.MultiGuide.onPartyChange()
             M.InfoNoLog('当前没有组队。')
             return
         end
@@ -406,14 +410,13 @@ GameTools.init = function(M)
 
     --- 计算自己当前的职能
     M.GetSelfPos = function()
-        -- 设置自己的职能
-        if not M.Party then
-            return
-        end
+        M.SelfPos = nil
+        local player = M.Party and M.GetPlayer()
+        if not player or not player.id then return end
         for jobPos, ent in pairs(M.Party) do
-            if ent.id == M.GetPlayer().id then
+            if ent.id == player.id then
                 M.SelfPos = jobPos
-                break
+                return jobPos
             end
         end
     end
