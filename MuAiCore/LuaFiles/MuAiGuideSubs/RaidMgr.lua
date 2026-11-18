@@ -170,7 +170,7 @@ RaidMgr.init = function(M)
     end
 
     M.OnWipe = function()
-        local currentScript = raidScript and raidScript[Player.localmapid] or nil
+        local currentScript = raidScript and Player and raidScript[Player.localmapid] or nil
         if currentScript ~= nil and currentScript == M.CurRaidScript then
             if type(currentScript.OnWipe) == 'function' then
                 currentScript.OnWipe()

@@ -1086,40 +1086,42 @@ Dmu_P1.Update = function()
     end
     -- 真假火结束，准备激光
     if DM.OverState('P1TrueFalse1End', true) and DM.BeLowState('P1BeamEnd') then
-        if Cfg().draw then
-            -- 画激光
-            local point = { x = 100, y = 0, z = 70 }
-            for _, member in pairs(MuAiGuide.Party) do
-                local curMember = TensorCore.mGetEntity(member.id)
-                if curMember ~= nil then
-                    local dir = TensorCore.getHeadingToTarget(point, curMember.pos)
-                    MG.GetFrameDrawer(frameDrawers, 'Dmu_P1.Update.2', 0, 1, 1, 0.3, 2, 1)
-                      :addRect(point.x, MG.drawerY, point.z, 60, 6, dir, false)
+        local draw, guide = Cfg().draw, Cfg().guide
+        if (draw or guide) and MG.Party then
+            local origin = draw and { x = 100, y = 0, z = 70 }
+            local xByRole = guide and {}
+            for role, member in pairs(MG.Party) do
+                local entity = TensorCore.mGetEntity(member.id)
+                local pos = entity and entity.pos
+                if pos and type(pos.x) == 'number' and math.abs(pos.x) < math.huge
+                        and type(pos.z) == 'number' and math.abs(pos.z) < math.huge then
+                    if guide then xByRole[role] = pos.x end
+                    if draw then
+                        local heading = TensorCore.getHeadingToTarget(origin, pos)
+                        MG.GetFrameDrawer(frameDrawers, 'Dmu_P1.Update.2', 0, 1, 1, 0.3, 2, 1)
+                          :addRect(origin.x, MG.drawerY, origin.z, 60, 6, heading, false)
+                    end
                 end
             end
-        end
-        if Cfg().guide then
-            --这里可能涉及计算
-            if Data().Beam.Order == nil then
-                Data().Beam.Order = Cfg().BeamOrder
+            if guide then
+                local order = Data().Beam.Order or Cfg().BeamOrder
+                Data().Beam.Order = order
+                -- 缺员时继续画已有激光，站位等下一帧重新计算。
+                local ready = true
+                for i = 1, 8 do
+                    if xByRole[order[i]] == nil then ready = false; break end
+                end
+                if ready then
+                    local way = {
+                        [order[1]] = { x = 80.5, z = 100 },
+                        [order[8]] = { x = 119.5, z = 100 },
+                    }
+                    for i = 2, 7 do
+                        way[order[i]] = { x = (xByRole[order[i - 1]] + xByRole[order[i + 1]]) / 2, z = 100 }
+                    end
+                    MG.FrameMultiD(way)
+                end
             end
-            local curParty = {}
-            for job, member in pairs(MG.Party) do
-                curParty[job] = TensorCore.mGetEntity(member.id)
-            end
-
-            -- 一字横排法
-            local beamWay = {
-                [Data().Beam.Order[1]] = { x = 80.5, z = 100 },
-                [Data().Beam.Order[8]] = { x = 119.5, z = 100 },
-            }
-            for i = 2, 7 do
-                local curJob = Data().Beam.Order[i]
-                local leftPlayer = curParty[Data().Beam.Order[i - 1]]
-                local rightPlayer = curParty[Data().Beam.Order[i + 1]]
-                beamWay[curJob] = { x = (leftPlayer.pos.x + rightPlayer.pos.x) / 2, z = 100 }
-            end
-            MG.FrameMultiD(beamWay)
         end
 
         if TimeSince(Data().Fire1.Time) > 1500 and MG.IsAnyMemberHasBuff(2941) then

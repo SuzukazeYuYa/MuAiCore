@@ -592,7 +592,9 @@ local getFarestFromChaos = function()
 end
 
 -- 实战四轮黑洞均为 ContentID 8343、ModelID 19512，同轮生成间隔不足 0.1 秒。
-local function currentBlackHoles(ids)
+-- 只在同一次 Update、同一轮 ID 集合内复用核验结果。
+local function currentBlackHoles(ids, frame)
+    if frame and frame.ids == ids then return frame end
     local holes, count = {}, 0
     for _, entity in pairs(TensorCore.entityList('contentid=8343') or {}) do
         local id, pos = entity.id, entity.pos
@@ -604,26 +606,24 @@ local function currentBlackHoles(ids)
             holes[id], count = entity, count + 1
         end
     end
-    return holes, count
+    return { ids = ids, holes = holes, count = count }
 end
 
-local getEntTethers = function(holes, tetherType)
-    local allTethers = Argus.getCurrentTethers()
-    if allTethers == nil or table.size(allTethers) == 0 then
-        return nil
-    end
+local function blackHoleTethers(frame)
+    if frame.tethers then return frame.tethers end
     local result = {}
+    frame.tethers = result
+    local allTethers = Argus.getCurrentTethers()
+    if allTethers == nil then return result end
     for sourceId, tethers in pairs(allTethers) do
         for _, tether in pairs(tethers) do
-            if tetherType == tether.type then
-                if holes[sourceId] then
-                    table.insert(result, {
-                        sourceid = sourceId,
-                        targetid = tether.targetid,
-                        type = tether.type,
-                        flags = tether.flags
-                    })
-                end
+            if tether.type == 84 and frame.holes[sourceId] then
+                table.insert(result, {
+                    sourceid = sourceId,
+                    targetid = tether.targetid,
+                    type = tether.type,
+                    flags = tether.flags
+                })
             end
         end
     end
@@ -631,10 +631,10 @@ local getEntTethers = function(holes, tetherType)
 end
 
 -- 绘制黑洞（防撞）
-local drawBlackHole = function()
+local drawBlackHole = function(frame)
     local curWave = Data().BlackHolds.wave
     if not Cfg().draw or curWave == 0 then
-        return
+        return frame
     end
     local endCnt
     if curWave == 1 or curWave == 4 then
@@ -645,14 +645,12 @@ local drawBlackHole = function()
     local startState = 'P3BlackHoleAppear' .. tostring(curWave)
     local endState = 'P3BlackHole' .. tostring(curWave) .. '_' .. tostring(endCnt)
     if DM.OverState(startState, true) and DM.BeLowState(endState, true) then
-        local holes = currentBlackHoles(Data().BlackHolds.Object[curWave])
+        frame = currentBlackHoles(Data().BlackHolds.Object[curWave], frame)
+        local holes = frame.holes
         for _, hole in pairs(holes) do
             MG.GetFrameDrawer(frameDrawers, 'drawBlackHole.1', 1, 0, 0, 0.4, 1):addCircle(hole.pos.x, MG.drawerY, hole.pos.z, 2)
         end
-        local tethers = getEntTethers(holes, 84)
-        if tethers == nil or table.size(tethers) == 0 then
-            return
-        end
+        local tethers = blackHoleTethers(frame)
         for _, tether in pairs(tethers) do
             local object = holes[tether.sourceid]
             local target = getLiveEntity(tether.targetid, 'P3BlackHole', 'target')
@@ -663,6 +661,7 @@ local drawBlackHole = function()
             end
         end
     end
+    return frame
 end
 
 local isMarkAllRight = function(markTable)
@@ -750,7 +749,7 @@ local loadMarkPlayer = function()
         end
     end
 end
-local guideTakeLine = function(curStateGuide, curCnt, isDouble)
+local guideTakeLine = function(frame, curStateGuide, curCnt, isDouble)
     local data = Data().BlackHolds
     -- 当前阶段ID
     local curState = MG.DancingMad.CurrentState
@@ -760,9 +759,10 @@ local guideTakeLine = function(curStateGuide, curCnt, isDouble)
                 DM.StateNames[curState]:match('^P3BlackHole(%d)_')))
         local ids = data.Object[wave]
         if not ids then return end
-        local holes = currentBlackHoles(ids)
-        local tethers = getEntTethers(holes, 84)
-        if tethers ~= nil and table.size(tethers) >= curCnt then
+        frame = currentBlackHoles(ids, frame)
+        local holes = frame.holes
+        local tethers = blackHoleTethers(frame)
+        if #tethers >= curCnt then
             --当前场内线数量保证充足
             --初始化表格
             data.sourceObject[curState] = {}
@@ -1443,17 +1443,18 @@ local function resolveBlackHoles()
         MG.LogOnce('P3BlackHole', 'incomplete_' .. wave, '本轮黑洞未能确认，已清除待解析实体',
                 { wave = wave, events = batch.count })
     elseif batch.count == 11 then
-        local _, count = currentBlackHoles(batch.ids)
-        if count ~= 11 then return end
+        local frame = currentBlackHoles(batch.ids)
+        if frame.count ~= 11 then return end
         data.pending, data.closed[wave] = nil, true
         data.wave, data.Object[wave] = wave, batch.ids
         MG.Info('第' .. wave .. '轮黑洞')
         DM.ChangeState('P3BlackHoleAppear' .. wave)
+        return frame
     end
 end
 
 Dmu_P3.Update = function()
-    resolveBlackHoles()
+    local blackHoles = resolveBlackHoles()
     getBoss()
     lockFaceCheck()
     loadMarkPlayer()
@@ -1461,7 +1462,7 @@ Dmu_P3.Update = function()
     drawSlapHappy()
     drawLookUponMe()
     drawDamningEdict()
-    drawBlackHole()
+    blackHoles = drawBlackHole(blackHoles)
     drawImplosion()
     drawTowerHeading()
     drawTowerGather()
@@ -1874,57 +1875,57 @@ Dmu_P3.Update = function()
         --第一轮黑洞
         if Cfg().takeLineAttack12 then
             if DM.InState('P3BlackHoleAppear1') then
-                guideTakeLine({ MG.HeadMark.Attack2 }, 1)
+                guideTakeLine(blackHoles, { MG.HeadMark.Attack2 }, 1)
             end
             if DM.InState('P3BlackHole1_1') then
-                guideTakeLine({ MG.HeadMark.Attack1, MG.HeadMark.Attack1 }, 2, true)
+                guideTakeLine(blackHoles, { MG.HeadMark.Attack1, MG.HeadMark.Attack1 }, 2, true)
             end
         else
             if DM.InState('P3BlackHoleAppear1') then
-                guideTakeLine({ MG.HeadMark.Attack1 }, 1)
+                guideTakeLine(blackHoles, { MG.HeadMark.Attack1 }, 1)
             end
             if DM.InState('P3BlackHole1_1') then
-                guideTakeLine({ MG.HeadMark.Attack1, MG.HeadMark.Attack2 }, 2)
+                guideTakeLine(blackHoles, { MG.HeadMark.Attack1, MG.HeadMark.Attack2 }, 2)
             end
         end
 
         --第二轮黑洞
         if DM.InState('P3BlackHoleAppear2') then
-            guideTakeLine({ MG.HeadMark.Attack1, MG.HeadMark.Attack2, MG.HeadMark.Attack3 }, 3)
+            guideTakeLine(blackHoles, { MG.HeadMark.Attack1, MG.HeadMark.Attack2, MG.HeadMark.Attack3 }, 3)
         end
         if DM.InState('P3BlackHole2_1') then
-            guideTakeLine({ MG.HeadMark.Bind1, MG.HeadMark.Attack2, MG.HeadMark.Attack3 }, 3)
+            guideTakeLine(blackHoles, { MG.HeadMark.Bind1, MG.HeadMark.Attack2, MG.HeadMark.Attack3 }, 3)
         end
         if DM.InState('P3BlackHole2_2') then
-            guideTakeLine({ MG.HeadMark.Bind1, MG.HeadMark.Bind2, MG.HeadMark.Attack3 }, 3)
+            guideTakeLine(blackHoles, { MG.HeadMark.Bind1, MG.HeadMark.Bind2, MG.HeadMark.Attack3 }, 3)
         end
 
         --第三轮黑洞
         if DM.InState('P3BlackHoleAppear3') then
-            guideTakeLine({ MG.HeadMark.Bind1, MG.HeadMark.Bind2, MG.HeadMark.Bind3 }, 3)
+            guideTakeLine(blackHoles, { MG.HeadMark.Bind1, MG.HeadMark.Bind2, MG.HeadMark.Bind3 }, 3)
         end
         if DM.InState('P3BlackHole3_1') then
-            guideTakeLine({ MG.HeadMark.Stop1, MG.HeadMark.Bind2, MG.HeadMark.Bind3 }, 3)
+            guideTakeLine(blackHoles, { MG.HeadMark.Stop1, MG.HeadMark.Bind2, MG.HeadMark.Bind3 }, 3)
         end
         if DM.InState('P3BlackHole3_2') then
-            guideTakeLine({ MG.HeadMark.Stop1, MG.HeadMark.Stop2, MG.HeadMark.Bind3 }, 3)
+            guideTakeLine(blackHoles, { MG.HeadMark.Stop1, MG.HeadMark.Stop2, MG.HeadMark.Bind3 }, 3)
         end
 
         if Cfg().takeLineStop22 then
             --第四轮黑洞
             if DM.InState('P3BlackHoleAppear4') then
-                guideTakeLine({ MG.HeadMark.Stop2, MG.HeadMark.Stop2 }, 2, true)
+                guideTakeLine(blackHoles, { MG.HeadMark.Stop2, MG.HeadMark.Stop2 }, 2, true)
             end
             if DM.InState('P3BlackHole4_1') then
-                guideTakeLine({ MG.HeadMark.Stop1 }, 1)
+                guideTakeLine(blackHoles, { MG.HeadMark.Stop1 }, 1)
             end
         else
             --第四轮黑洞
             if DM.InState('P3BlackHoleAppear4') then
-                guideTakeLine({ MG.HeadMark.Stop1, MG.HeadMark.Stop2 }, 2)
+                guideTakeLine(blackHoles, { MG.HeadMark.Stop1, MG.HeadMark.Stop2 }, 2)
             end
             if DM.InState('P3BlackHole4_1') then
-                guideTakeLine({ MG.HeadMark.Stop2 }, 1)
+                guideTakeLine(blackHoles, { MG.HeadMark.Stop2 }, 1)
             end
         end
         -- 第二轮放圈后，开始踩塔逻辑

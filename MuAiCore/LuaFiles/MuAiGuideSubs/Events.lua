@@ -33,12 +33,12 @@ local loadParty = function()
     }
 end
 
-local retryPartyLoad = function()
+local retryPartyLoad = function(mapId)
     local retry = partyLoadRetry
     if retry == nil then
         return
     end
-    if Player.localmapid ~= retry.mapId or not table.contains(autoPopMap, Player.localmapid) then
+    if mapId ~= retry.mapId or not table.contains(autoPopMap, mapId) then
         partyLoadRetry = nil
         return
     end
@@ -286,14 +286,22 @@ local onPlayerChangeJob = function()
     MG.DumCfgJobChange()
 end
 
-local onMapChangeCheck = function()
-    local mapId = Player.localmapid
-    if mapId ~= 0 and lastMap ~= mapId then
-        onMapChange()
-        lastMap = Player.localmapid
-        return lastMap
+local onMapChangeCheck = function(player)
+    if not Player then return 0 end
+    -- 稳定帧复用当前快照，切图边界和只有宿主代理的环境走直接观察。
+    if player and player ~= Player and type(IsLoading) == 'function' then
+        local snapshotMap = player.localmapid
+        if snapshotMap and snapshotMap ~= 0 and snapshotMap == lastMap and not IsLoading() then
+            return snapshotMap
+        end
     end
-    return mapId
+    local mapId = Player.localmapid
+    if mapId and mapId ~= 0 and lastMap ~= mapId then
+        onMapChange()
+        lastMap = Player and Player.localmapid
+        return lastMap or 0, true
+    end
+    return mapId or 0
 end
 
 local onJobChangeCheck = function(player)
@@ -338,11 +346,11 @@ Events.init = function(M)
         MG.CheckMenuMember()
         MG.CheckArgusRegister()
         checkHotKeyPress()
-        -- 地图保留宿主的直接观察；本次调度复用结果，职业从当前玩家快照读取。
-        local mapId = onMapChangeCheck()
-        retryPartyLoad()
-        local player = TensorCore.mGetPlayer() or Player
-        onJobChangeCheck(player)
+        local player = TensorCore.mGetPlayer()
+        local mapId, changed = onMapChangeCheck(player)
+        retryPartyLoad(mapId)
+        if changed then player = TensorCore.mGetPlayer() end
+        onJobChangeCheck(Player and (player or Player))
         MG.OnRaidUpdate(mapId)
         attackRangeHackHelper()
         attackRangeReMake()

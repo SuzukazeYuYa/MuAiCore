@@ -26,6 +26,12 @@ Drawers.init = function(M)
     local multiTakeLineDrawers = {}
     local defaultTakeLineColor = { r = 1, g = 0, b = 0 }
     local targetPosDrawer, targetPosR, targetPosG, targetPosB, targetPosA
+    -- 圆点只需要可攻击标志和位置，可直接按当前目标 ID 读取。旧宿主沿用 TensorCore。
+    local directTarget = EntityList and type(EntityList.Get) == 'function'
+    local function getDotTarget(id)
+        if directTarget then return EntityList:Get(id) end
+        return TensorCore.mGetEntity(id)
+    end
 
     local optionalNumber = function(value, defaultValue, caller, name)
         if value == nil then
@@ -593,14 +599,17 @@ Drawers.init = function(M)
             return
         end
         local player = TensorCore.mGetPlayer()
-        if player == nil or player.targetid == nil or player.targetid == 0 then return end
-        local target = TensorCore.mGetEntity(player.targetid)
-        if target == nil
-                or not target.attackable
-                or (M.IsTank(player.job) and not M.Config.Main.ShowTargetPosTank)
-        then
+        local targetId = player and player.targetid
+        if not targetId or targetId == 0 then return end
+        if not M.Config.Main.ShowTargetPosTank and M.IsTank(player.job) then return end
+        local target = getDotTarget(targetId)
+        if target == nil or not target.attackable then
             return
         end
+        local pos = target.pos
+        if not pos then return end
+        local x, y, z = pos.x, pos.y, pos.z
+        if not x or not y or not z then return end
         local color = M.Config.Main.TargetPosColor
         -- 只复用样式；改色立即重建，当前位置和尺寸仍逐帧提交。
         if targetPosDrawer == nil or targetPosR ~= color.r or targetPosG ~= color.g
@@ -608,7 +617,7 @@ Drawers.init = function(M)
             targetPosDrawer = TensorCore.getStaticDrawer(GUI:ColorConvertFloat4ToU32(color.r, color.g, color.b, color.a), 1)
             targetPosR, targetPosG, targetPosB, targetPosA = color.r, color.g, color.b, color.a
         end
-        targetPosDrawer:addCircle(target.pos.x, target.pos.y, target.pos.z, 0.01 * M.Config.Main.TargetPosSize, true)
+        targetPosDrawer:addCircle(x, y, z, 0.01 * M.Config.Main.TargetPosSize, true)
     end
 
     M.DrawGuidePreView = function()
