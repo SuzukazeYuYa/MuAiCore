@@ -291,11 +291,7 @@ local groundFireGuideActive = function()
         state.GuideEnabled = enabled
         state.Guides = newGroundFireGuides()
     end
-    return enabled
-end
-
-local groundFireGuideState = function(job)
-    return groundFireState().Guides[job]
+    return enabled, state.Guides
 end
 
 local groundFireDirFromPair = function(a, b)
@@ -355,16 +351,37 @@ local updateGroundFirePointTriggers = function(state)
     end
 end
 
-local groundFireTriggerResolved = function(state, pointIndex)
+-- 每条线连续追加七枚地火。旧版保留的战斗状态也从已有 Hits 建立同一份索引。
+local function groundFireHitIndex(shared)
+    local hits = shared.Hits
+    local index = shared.HitIndex
+    if not index or index.hits ~= hits or index.count > #hits then
+        index = { hits = hits, count = 0, byOrder = {}, firstByLine = {} }
+        shared.HitIndex = index
+    end
+    for i = index.count + 1, #hits do
+        local hit = hits[i]
+        local group = index.byOrder[hit.order]
+        if not group then group = {}; index.byOrder[hit.order] = group end
+        group[#group + 1] = hit
+        if hit.step == 0 then index.firstByLine[hit.lineID] = i end
+    end
+    index.count = #hits
+    return index
+end
+
+local groundFireTriggerResolved = function(state, pointIndex, byOrder)
     local triggerOrder = state.PointTriggers[pointIndex]
     if triggerOrder == nil then
         return false
     elseif triggerOrder == 0 then
         return true
     end
+    local candidates = byOrder[triggerOrder]
+    if not candidates then return false end
     local found = false
-    for _, hit in ipairs(state.Hits) do
-        if hit.order == triggerOrder and groundFirePointInHit(state.Points[pointIndex], hit) then
+    for _, hit in ipairs(candidates) do
+        if groundFirePointInHit(state.Points[pointIndex], hit) then
             found = true
             if not hit.resolved then
                 return false
@@ -374,10 +391,10 @@ local groundFireTriggerResolved = function(state, pointIndex)
     return found
 end
 
-local updateGroundFireCurrentPoint = function(state)
+local updateGroundFireCurrentPoint = function(state, byOrder)
     local pointIndex
     for i = 1, #state.Points do
-        if not groundFireTriggerResolved(state, i) then
+        if not groundFireTriggerResolved(state, i, byOrder) then
             break
         end
         pointIndex = i
@@ -453,10 +470,10 @@ local recordGroundFireGuideRelation = function(state, line)
 end
 
 local recordGroundFireGuideLine = function(line)
-    if not groundFireGuideActive() then
+    local enabled, guides = groundFireGuideActive()
+    if not enabled then
         return
     end
-    local guides = groundFireState().Guides
     local shared = guides[groundFireGuideRoles[1]]
     if shared.Seen[line.id] then return end
     shared.Seen[line.id] = true
@@ -473,10 +490,11 @@ local recordGroundFireGuideLine = function(line)
     -- 同一事件中先完成全部路线变化，再一次求解；不延迟到下一帧。
     local solved = MG.NativeCore and MG.NativeCore.groundfireBatch
             and MG.NativeCore.groundfireBatch(guides, groundFireGuideRoles)
+    local byOrder = groundFireHitIndex(shared).byOrder
     for _, job in ipairs(groundFireGuideRoles) do
         local state = guides[job]
         if not solved then updateGroundFirePointTriggers(state) end
-        updateGroundFireCurrentPoint(state)
+        updateGroundFireCurrentPoint(state, byOrder)
     end
 end
 
@@ -561,18 +579,18 @@ local findGroundFireLineForStep = function(pos)
 end
 
 local markGroundFireGuideResolved = function(line, resolvedIndex)
-    if not groundFireGuideActive() then
+    local enabled, guides = groundFireGuideActive()
+    if not enabled then
         return
     end
-    local guides = groundFireState().Guides
-    for _, hit in ipairs(guides[groundFireGuideRoles[1]].Hits) do
-        if hit.lineID == line.id and hit.step <= resolvedIndex - 1 then
-            hit.resolved = true
-        end
+    local index = groundFireHitIndex(guides[groundFireGuideRoles[1]])
+    local first = index.firstByLine[line.id]
+    if first then
+        for i = first, first + resolvedIndex - 1 do index.hits[i].resolved = true end
     end
     -- resolved 不参与触发顺序求解；结算只推进各自的当前落点。
     for _, job in ipairs(groundFireGuideRoles) do
-        updateGroundFireCurrentPoint(guides[job])
+        updateGroundFireCurrentPoint(guides[job], index.byOrder)
     end
 end
 
@@ -598,13 +616,14 @@ local castGroundFire = function(entityID, spellID, castPos)
 end
 
 local drawingGroundFireGuide = function()
-    if not groundFireGuideActive() then
+    local enabled, guides = groundFireGuideActive()
+    if not enabled then
         return
     end
     -- FrameMultiD 按当前玩家职能取点，因此指导者模式与本人模式使用同一份机制状态。
     local guideData = {}
     for _, job in ipairs(groundFireGuideRoles) do
-        local state = groundFireGuideState(job)
+        local state = guides[job]
         local pointIndex = state.CurrentPointIndex
         local point = pointIndex ~= nil and state.Points[pointIndex] or nil
         if point ~= nil then

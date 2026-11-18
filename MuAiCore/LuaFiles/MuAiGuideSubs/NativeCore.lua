@@ -5,6 +5,10 @@ function Module.init(M, moduleRoot)
     local entry, pending
     local automaticActivation = true
     local previousNative = type(MuAiGuide) == 'table' and MuAiGuide.NativeCore or nil
+    local p5Worker
+    -- 已确认该宿主打不开游戏进程时，热重载直接建立独立的 P5 数值会话。
+    N.UseP5Worker = previousNative and (previousNative.UseP5Worker == true
+            or tostring(previousNative.Reason):match('|ERROR process_open_failed%s*$') ~= nil) or false
     local attempts, retryAt = 0, nil
     local cache = setmetatable({}, { __mode = 'k' })
     local batchCache = setmetatable({}, { __mode = 'k' })
@@ -23,6 +27,7 @@ function Module.init(M, moduleRoot)
     end
     function N.close()
         automaticActivation, previousNative = false, nil
+        if p5Worker then p5Worker:close(); p5Worker = nil end
         if entry then
             local ok, code = pcall(entry, -1)
             if not ok or (code ~= 0 and code ~= -9) then diagnose('WARN', '原生后端停用回执异常', { code = code }) end
@@ -52,6 +57,16 @@ function Module.init(M, moduleRoot)
             return false
         end
         if inCombat() then N.State = 'waiting'; return false end
+        if N.UseP5Worker then
+            if p5Worker then return p5Worker.state == 'ready' end
+            local root = moduleRoot or (GetLuaModsPath() .. 'MuAiCore\\')
+            local chunk, loadError = loadfile(root .. 'LuaFiles\\MuAiGuideSubs\\P5NativeWorker.lua')
+            if not chunk then return fail(loadError or 'p5_worker_module_missing') end
+            local ok, worker, reason = pcall(function() return chunk().start(root) end)
+            if not ok or not worker then return fail(reason or worker or 'p5_worker_start_failed') end
+            p5Worker, N.State, N.Reason = worker, 'loading', nil
+            return false
+        end
         if type(newproxy) ~= 'function' or type(GetCurrentPID) ~= 'function' or type(io.popen) ~= 'function' then
             return fail('host_loading_api_unavailable')
         end
@@ -91,6 +106,20 @@ function Module.init(M, moduleRoot)
         end
         if N.State == 'retrying' and PerfClock() >= retryAt and not inCombat() then N.activate() end
         if N.State == 'waiting' and not inCombat() then N.activate() end
+        if p5Worker then
+            if p5Worker.state == 'ready' and N.State == 'native' then return end
+            p5Worker:poll()
+            if p5Worker.state == 'ready' then
+                N.State, N.Reason, N.LoadMs = 'native', nil, PerfClock() - p5Worker.start
+                diagnose('INFO', 'P5 独立原生求解器已就绪', { protocol = 1, workerPid = p5Worker.pid, loadMs = N.LoadMs })
+            elseif p5Worker.state == 'failed' then
+                local wasReady, reason = N.State == 'native', p5Worker.reason
+                p5Worker:close(); p5Worker = nil
+                fail(reason)
+                if wasReady then N.State = 'waiting' end
+            end
+            return
+        end
         if not pending or PerfClock() < pending.nextPoll then return end
         pending.nextPoll = PerfClock() + 100
         local file = io.open(pending.receipt, 'rb')
@@ -112,6 +141,12 @@ function Module.init(M, moduleRoot)
             diagnose('WARN', '无法删除已读取的原生加载回执', { path = request.receipt })
         end
         if not text:match('|OK 5%s*$') then
+            if not request.cancelled and text:match('|ERROR process_open_failed%s*$') then
+                N.UseP5Worker = true
+                diagnose('INFO', '收到 process_open_failed，转用 P5 独立数值求解', nil)
+                N.activate()
+                return
+            end
             if text:match('|ERROR arm_11%s*$') and not request.cancelled and attempts < 3 then
                 N.State, N.Reason, retryAt = 'retrying', 'previous_native_generation_finishing', PerfClock() + 250
                 return
@@ -137,12 +172,22 @@ function Module.init(M, moduleRoot)
         return N.activate()
     end
     function N.status()
+        if p5Worker then
+            return { state = N.State, reason = N.Reason, backend = 'p5-worker', protocol = 1,
+                workerPid = p5Worker.pid, session = p5Worker.session, calls = p5Worker.completed,
+                cacheHits = p5Worker.cached, smallBatches = p5Worker.smallBatches, sent = p5Worker.sent, timeouts = p5Worker.timeouts,
+                late = p5Worker.late, lastSolveError = p5Worker.lastError, fallback = N.Fallbacks, loadMs = N.LoadMs }
+        end
         local abi, epoch, hook, calls
         if entry then abi, epoch, hook, calls = entry() end
         return { state = N.State, reason = N.Reason, abi = abi, epoch = epoch, bootstrap = hook,
             calls = calls, fallback = N.Fallbacks, launchMs = N.LaunchMs, loadMs = N.LoadMs }
     end
     function N.groundfire(state)
+        if p5Worker then
+            if #state.Points < 2 then return false end
+            return N.groundfireBatch({state}, {1})
+        end
         if not entry then return false end
         local points, hits = state.Points, state.Hits
         if #points == 0 then state.PointTriggers = {}; return true end
@@ -184,7 +229,7 @@ function Module.init(M, moduleRoot)
         end
     end
     function N.groundfireBatch(guides, roles)
-        if not entry or #roles < 1 or #roles > 8 then return false end
+        if (not entry and not p5Worker) or #roles < 1 or #roles > 8 then return false end
         local hits = guides[roles[1]].Hits
         if #hits > 256 then return false end
         local total = 0
@@ -194,6 +239,16 @@ function Module.init(M, moduleRoot)
             total = total + #state.Points
         end
         if total * #hits < 84 then return false end
+        if p5Worker then
+            if p5Worker.state ~= 'ready' then return false end
+            local solved, reason = p5Worker:solve(guides, roles, hits, total)
+            if not solved then
+                if reason ~= 'small_batch' then N.Fallbacks = N.Fallbacks + 1 end
+                return false
+            end
+            N.Calls = N.Calls + 1
+            return true
+        end
         local inputs = batchCache[hits]
         if not inputs or inputs.count > #hits then
             if inputs then releaseBatchContext(inputs.handle) end
