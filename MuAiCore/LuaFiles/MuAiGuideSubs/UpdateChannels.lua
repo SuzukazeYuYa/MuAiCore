@@ -2,6 +2,7 @@ local UpdateChannels = {}
 -- 更新渠道独立于作者源码；安装 main 时由 InstallUpdate.ps1 保留并重新接入。
 local workSequence = 0
 local updateTime
+local nextReloadCheck = 0
 local updateNeedReLoad = false
 
 local function formatVersion(base, revision)
@@ -23,10 +24,6 @@ local function parseIntegerField(source, field)
     local value = digits and tonumber(digits)
     if value and value <= 2147483647 then return value end
     return nil
-end
-
-local function powerShellLiteral(value)
-    return "'" .. tostring(value):gsub("'", "''") .. "'"
 end
 
 ---@param M MuAiGuide
@@ -126,7 +123,7 @@ UpdateChannels.init = function(M)
                     '此分支有时是测试版本，可能出现 bug，',
                     '但可以提前体验最新功能。',
                     '版本号相同也可能有新提交，更新将下载分支最新内容。',
-                    '如进行更新，过程中会短暂卡屏，请耐心等待。',
+                    '更新在后台完成，安装成功后会重新加载。',
                 }
             end
             if not isAuto then
@@ -153,7 +150,7 @@ UpdateChannels.init = function(M)
                 end
                 table.insert(infoTable, "")
                 table.insert(infoTable, "是否立刻进行更新？")
-                table.insert(infoTable, "如进行更新，过程中会短暂卡屏，请耐心等待。")
+                table.insert(infoTable, "更新在后台完成，安装成功后会重新加载。")
                 M.LogInfo = infoTable
             end
         end
@@ -205,194 +202,190 @@ UpdateChannels.init = function(M)
         return accepted
     end
 
-    --- 检查更新是否需要重新加载
-    M.CheckNeedReload = function()
-        if M.PollWebRequests ~= nil then M.PollWebRequests() end
-        if not updateNeedReLoad
-                or updateTime == nil or updateTime == 0
-                or TimeSince(updateTime) < 3000
-        then
+    local startup = type(GetStartupPath) == 'function' and GetStartupPath()
+    startup = type(startup) == 'string' and startup ~= '' and startup:gsub('[\\/]+$', '')
+    local pid = type(GetCurrentPID) == 'function' and GetCurrentPID()
+    local pendingFile = startup and pid and (startup .. '\\MuAiCoreUpdatePending_' .. pid .. '.txt')
+    local job
+    local function readText(path, size)
+        local f, err = io.open(path, 'rb')
+        if not f then return nil, err end
+        local value, readError = f:read(size)
+        f:close()
+        return value, readError
+    end
+    local function writeText(path, value)
+        local f, err = io.open(path, 'wb')
+        if not f then return false, err end
+        local wrote, writeError = f:write(value)
+        local closed, closeError = f:close()
+        return wrote and closed, writeError or closeError
+    end
+    local function cleanWork(path)
+        if type(FolderDelete) ~= 'function' then
+            -- 部分宿主的 DeleteFolder 兼容层会同步等待 PowerShell。只交给后台删除已处理的回执。
+            local token = path:match('\\(MuAiCoreUpdater_%d+_%d+_%d+)$')
+            if token and path == startup .. '\\' .. token and not startup:find('[%%!"\r\n]') then
+                local command = 'start "" /b /d "' .. startup .. '" powershell.exe -NoLogo -NoProfile -NonInteractive -WindowStyle Hidden '
+                        .. '-ExecutionPolicy Bypass -File LuaMods\\MuAiCore\\LuaFiles\\MuAiGuideSubs\\InstallUpdate.ps1 '
+                        .. '-Cleanup -TargetRoot LuaMods -WorkRoot ' .. token .. ' <nul >nul 2>&1'
+                local pipe = io.popen(command, 'r')
+                if pipe then pipe:close(); return end
+            end
+            M.LogError('Update', '无法启动后台回执清理', { path = path }, true)
             return
         end
-        M.CloseAllUI()
-        Reload()
+        local ok, result, detail = pcall(M.DeleteFolder, path)
+        if FolderExists(path) or FileExists(path) then
+            M.LogError('Update', '更新临时目录清理失败', { path = path, detail = tostring(detail or result or ok) }, true)
+        end
+    end
+    local function watch(token)
+        job = { token = token, path = startup .. '\\' .. token, phase = 'queued', since = Now(), nextPoll = 0 }
+    end
+    if pendingFile and FileExists(pendingFile) then
+        local token = readText(pendingFile, 128)
+        if token and token:match('^MuAiCoreUpdater_' .. pid .. '_%d+_%d+$') then
+            if readText(startup .. '\\' .. token .. '\\ack', 128) == token then
+                FileDelete(pendingFile)
+            else
+                watch(token)
+            end
+        else
+            M.LogError('Update', '后台更新任务记录无法读取或格式无效', { path = pendingFile }, true)
+        end
     end
 
-    ---强制更新所有脚本
-    M.ForceUpdate = function()
-        local branch = M.GetUpdateBranch()
-        local gitZipUrl
-        if branch == 'String' or M.Config.Main.DownLoadSource == 1 then
-            gitZipUrl = 'https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/' .. branch
-        elseif M.Config.Main.DownLoadSource == 2 then
-            gitZipUrl = "https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/MuAiCore-main.zip"
-        end
-        if gitZipUrl == nil then
-            M.LogError('Update', '更新失败：下载源设置无效。', { source = M.Config.Main.DownLoadSource }, true)
-            M.ShowMsgUI(3, { '更新失败：下载源设置无效，请在基本设置中重新选择。' })
+    local progress = { queued = '正在启动更新', downloading = '正在下载更新', extracting = '正在解压更新', installing = '正在安装更新' }
+    local failures = {
+        preflight = '更新准备失败，当前安装未被修改。',
+        rolledback = '更新失败，已回滚到更新前文件。',
+        incomplete = '更新失败且回滚未完成。',
+        busy = '另一个实例正在更新，当前任务未安装文件。',
+        unknown = '更新结果未知。',
+    }
+    M.UpdateFilesBusy = function()
+        return updateNeedReLoad or (job ~= nil and not job.stalled)
+                or (startup and FileExists(startup .. '\\MuAiCoreUpdate.lock')) or false
+    end
+    local function pollInstall()
+        if not job then return end
+        local now = Now()
+        if now < job.nextPoll then return end
+        job.nextPoll = now + 350
+        local path = job.path
+        if not FileExists(path .. '\\worker.exit') then
+            local phase = FileExists(path .. '\\installing') and 'installing'
+                    or FileExists(path .. '\\extracting') and 'extracting'
+                    or FileExists(path .. '\\downloading') and 'downloading' or 'queued'
+            if phase ~= job.phase then
+                job.phase, job.since, job.stalled = phase, now, false
+            elseif not job.stalled and now - job.since > (phase == 'queued' and 30000 or 300000) then
+                job.stalled = true
+                M.LogError('Update', '尚未收到后台更新结果，继续等待回执', { path = path, phase = phase }, true)
+                M.ShowMsgUI(3, { '后台更新未返回，请查看恢复目录：' .. path, '仍在检查结果，未再次安装。' })
+            end
             return
         end
-
-        -- Minion 的 Lua 沙箱不提供 os.getenv，更新工作目录固定放在 LuaMods 之外。
-        local prefix = GetStartupPath() .. "\\MuAiCoreUpdater_" .. tostring(os.time()) .. "_"
-        local tempPath
+        local response, readError = readText(path .. '\\result', 8192)
+        local state, disposition, detail
+        if response then state, disposition, detail = response:match('^(%a+)\n(%a+)\n(.*)$') end
+        if not state or (state ~= 'installed' and not failures[state])
+                or (disposition ~= 'clean' and disposition ~= 'keep') then
+            state, disposition, detail = 'unknown', 'keep', readError or '后台没有返回有效的事务结果'
+        end
+        if state == 'incomplete' or state == 'unknown' then disposition = 'keep' end
+        local handled = true
+        if FileExists(pendingFile) then
+            -- 删除记录失败时留下已处理标记，避免重载后再次消费同一张回执。
+            local token = readText(pendingFile, 128)
+            if token == job.token then FileDelete(pendingFile) end
+            if not token or (token == job.token and FileExists(pendingFile)) then
+                handled = writeText(path .. '\\ack', job.token)
+                disposition = 'keep'
+                M.LogError('Update', '无法清理已结束的任务记录', { path = pendingFile, acknowledged = handled }, true)
+            end
+        end
+        job = nil
+        if state ~= 'installed' then
+            local message = failures[state] .. (disposition == 'keep' and (' 恢复目录：' .. path) or '')
+            M.LogError('Update', message, { path = path, detail = detail }, true)
+            M.ShowMsgUI(3, { message })
+        elseif handled then
+            updateNeedReLoad, updateTime = true, now
+            d('[MuAiCore]更新已完成，脱战并结束切图后重新加载。')
+        else
+            M.ShowMsgUI(3, { '安装已完成，任务回执无法确认。请手动重载。', path })
+        end
+        if disposition == 'clean' then
+            cleanWork(path)
+        elseif state == 'installed' then
+            M.LogError('Update', '更新完成，临时目录需要清理', { path = path, detail = detail }, true)
+        end
+    end
+    M.CheckNeedReload = function()
+        if M.PollWebRequests then M.PollWebRequests() end
+        if job then pollInstall() end
+        if updateNeedReLoad and TimeSince(updateTime) >= 3000 and Now() >= nextReloadCheck then
+            nextReloadCheck = Now() + 350
+            if (type(IsLoading) == 'function' and IsLoading()) or (Player and Player.incombat)
+                    or (type(TensorReactions_CurrentCombatTimer) == 'number' and TensorReactions_CurrentCombatTimer > 0)
+                    or FileExists(startup .. '\\MuAiCoreUpdate.lock') then return end
+            updateNeedReLoad = false
+            M.CloseAllUI()
+            Reload()
+        end
+    end
+    M.ForceUpdate = function()
+        if job and M.UpdateFilesBusy() then
+            M.ShowMsgUI(3, { progress[job.phase] })
+            return
+        end
+        if updateNeedReLoad then return end
+        local branch = M.GetUpdateBranch()
+        local configured = M.Config.Main.DownLoadSource
+        local source = (branch == 'String' or configured == 1) and 'GitHub' or configured == 2 and 'Mirror'
+        if not source or not pendingFile or startup:find('[%%!"\r\n]') then
+            M.ShowMsgUI(3, { '更新失败，请检查下载源及安装路径。' })
+            M.LogError('Update', '下载源或更新目录不可用', { source = configured, path = startup }, true)
+            return
+        end
+        local token, path
         repeat
             workSequence = workSequence + 1
-            tempPath = prefix .. workSequence
-        until not FolderExists(tempPath) and not FileExists(tempPath)
-        local replacePath = GetStartupPath() .. "\\LuaMods"
-        local zipFilePath = tempPath .. "\\repository.zip"
-        local extractPath = tempPath .. "\\Extracted"
-        local exPath = extractPath .. '\\MuAiCore-' .. branch
-        local installerPath = MuAiGuideRoot .. "MuAiGuideSubs\\InstallUpdate.ps1"
-        local successToken = '__MUAI_COMMAND_OK__'
-
-        -- Lua 5.1 的 io.popen 不能稳定提供退出码，用成功标记区分命令输出与执行结果。
-        local function runCommand(cmd)
-            local handle = io.popen(cmd .. ' 2>&1 && echo ' .. successToken)
-            if handle == nil then
-                return false, 'failed to start command'
-            end
-            local result = handle:read("*a")
-            handle:close()
-            local success = result:find(successToken, 1, true) ~= nil
-            result = result:gsub(successToken, '')
-            return success, result
-        end
-
-        local function downloadFile(url, destination)
-            d("[MuAiCore]正在下载文件...")
-            d('当前源' .. gitZipUrl)
-            local cmd = 'curl.exe --fail --silent --show-error --location --connect-timeout 5 --max-time 90 --output "'
-                    .. destination .. '" "' .. url .. '"'
-            local ok, output = runCommand(cmd)
-            if ok then
-                d("[MuAiCore]文件下载完成: " .. destination)
-            end
-            return ok, output
-        end
-
-        local function fileSize(path)
-            local file = io.open(path, 'rb')
-            if file == nil then
-                return nil
-            end
-            local size = file:seek('end')
-            file:close()
-            return size
-        end
-
-        local function deleteTempFolder()
-            if type(M.DeleteFolder) ~= 'function' then
-                return false, 'MuAiGuide.DeleteFolder is unavailable'
-            end
-            if not FolderExists(tempPath) then
-                if FileExists(tempPath) then
-                    return false, 'Update work directory path is occupied by a file: ' .. tempPath
-                end
-                return true
-            end
-            local callOk, deleted, deleteError = pcall(M.DeleteFolder, tempPath)
-            if not callOk then
-                return false, 'DeleteFolder raised an error: ' .. tostring(deleted)
-            end
-            if not FolderExists(tempPath) and not FileExists(tempPath) then
-                return true
-            end
-            return false, deleteError or ('Update work directory still exists: ' .. tempPath
-                    .. '; DeleteFolder returned ' .. tostring(deleted))
-        end
-
-        local function failUpdate(message, detail, skipCleanup)
-            d('[MuAiCore]' .. message)
-            if detail ~= nil and detail ~= '' then
-                d(detail)
-            end
-            M.LogError('Update', message, { path = tempPath, detail = detail }, true)
-            if skipCleanup ~= true then
-                local cleanupOk, cleanupError = deleteTempFolder()
-                if cleanupOk == false then
-                    M.LogError('Update', '更新临时目录清理失败', {
-                        path = tempPath,
-                        detail = cleanupError,
-                    }, true)
-                end
-            end
-            M.ShowMsgUI(3, { message })
-        end
-
-        updateTime = nil
-        updateNeedReLoad = false
-        -- 使用新目录，保留此前中断更新留下的恢复资料。
-        FolderCreate(tempPath)
-        if not FolderExists(tempPath) then
-            failUpdate('更新失败：无法创建临时目录。', tempPath, true)
+            token = 'MuAiCoreUpdater_' .. pid .. '_' .. os.time() .. '_' .. workSequence
+            path = startup .. '\\' .. token
+        until not FolderExists(path) and not FileExists(path)
+        FolderCreate(path)
+        if not FolderExists(path) then
+            M.ShowMsgUI(3, { '更新失败：无法创建临时目录。' })
+            M.LogError('Update', '无法创建临时目录', { path = path }, true)
             return
         end
-
-        -- 下载完成后先校验文件存在及合理大小，再进入解压阶段。
-        local downloadOk, downloadOutput = downloadFile(gitZipUrl, zipFilePath)
-        local zipSize = fileSize(zipFilePath)
-        if not downloadOk or zipSize == nil or zipSize < 1024 or zipSize > 209715200 then
-            failUpdate('更新失败：下载文件无效。', downloadOutput)
+        local wrote, err = writeText(pendingFile, token)
+        if not wrote then
+            cleanWork(path)
+            M.LogError('Update', '无法记录后台更新任务', { path = pendingFile, detail = err }, true)
+            M.ShowMsgUI(3, { '无法记录后台更新任务，安装未启动。' })
             return
         end
-
-        -- Expand-Archive 同时承担 ZIP 完整性检查，解压失败不会触碰当前安装。
-        FolderCreate(extractPath)
-        local expandCommand = 'powershell.exe -NoProfile -NonInteractive -Command "try { Expand-Archive -LiteralPath '
-                .. powerShellLiteral(zipFilePath) .. ' -DestinationPath ' .. powerShellLiteral(extractPath)
-                .. ' -Force -ErrorAction Stop; exit 0 } catch { Write-Error $_; exit 1 }"'
-        local expandOk, expandOutput = runCommand(expandCommand)
-        if not expandOk then
-            failUpdate('更新失败：ZIP 解压或完整性检查失败。', expandOutput)
+        watch(token)
+        -- 只等启动命令返回。后台命令在 PowerShell 退出后写结束标记，崩溃也能识别。
+        local command = 'start "" /b /d "' .. path .. '" cmd.exe /d /v:off /s /c "powershell.exe -NoLogo -NoProfile '
+                .. '-NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File ..\\LuaMods\\MuAiCore\\LuaFiles\\MuAiGuideSubs\\InstallUpdate.ps1 '
+                .. '-Download -TargetRoot ..\\LuaMods -WorkRoot . -UpdateBranch ' .. branch .. ' -DownloadSource ' .. source
+                .. ' >worker.log 2>&1 & echo done>worker.exit" <nul >nul 2>&1'
+        local pipe, launchError = io.popen(command, 'r')
+        if not pipe then
+            job = nil
+            FileDelete(pendingFile)
+            cleanWork(path)
+            M.LogError('Update', '无法启动后台更新', { path = path, detail = launchError }, true)
+            M.ShowMsgUI(3, { '无法启动后台更新，请查看诊断日志。' })
             return
         end
-
-        -- 只接受完整的 MuAiCore 发布目录，避免错误压缩包覆盖现有 runtime。
-        if not FileExists(exPath .. "\\MuAiCore\\MuAiCore.lua")
-                or not FileExists(exPath .. "\\MuAiCore\\module.def")
-                or not FolderExists(exPath .. "\\TensorReactions")
-                or not FileExists(installerPath)
-        then
-            failUpdate('更新失败：压缩包目录结构不完整。')
-            return
-        end
-
-        d("[MuAiCore]解压和结构校验完成，开始替换更新文件...")
-        -- 文件替换、备份和失败回滚由事务安装脚本一次完成。
-        local installCommand = 'powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "'
-                .. installerPath .. '" -SourceRoot "' .. exPath .. '" -TargetRoot "'
-                .. replacePath .. '" -WorkRoot "' .. tempPath .. '" -PreserveUpdateChannels -UpdateBranch "' .. branch .. '"'
-        local installOk, installOutput = runCommand(installCommand)
-        local receipt = '\n' .. installOutput:gsub('\r', '') .. '\n'
-        local function received(token)
-            return receipt:find('\n' .. token .. '\n', 1, true) ~= nil
-        end
-        if not installOk or not received('__MUAI_UPDATE_INSTALLED__') then
-            if received('__MUAI_ROLLBACK_INCOMPLETE__') then
-                failUpdate('更新失败且回滚未完成，恢复目录：' .. tempPath, installOutput, true)
-            elseif received('__MUAI_UPDATE_PREFLIGHT_FAILED__') then
-                failUpdate('更新准备失败，当前安装未被修改，请查看诊断日志。', installOutput)
-            elseif received('__MUAI_ROLLBACK_COMPLETE__') then
-                failUpdate('更新失败：已回滚到更新前文件。', installOutput)
-            else
-                failUpdate('更新结果未知，已保留恢复目录：' .. tempPath, installOutput, true)
-            end
-            return
-        end
-
-        -- 安装成功后再删除工作目录，并延迟到下一帧触发 Reload。
-        local cleanupOk, cleanupError = deleteTempFolder()
-        if cleanupOk == false then
-            M.LogError('Update', '更新完成但临时目录清理失败', {
-                path = tempPath,
-                detail = cleanupError,
-            }, true)
-        end
-        d('[MuAiCore]更新文件替换完成。')
-        updateTime = Now()
-        updateNeedReLoad = true
+        pipe:close()
+        d('[MuAiCore]已开始后台更新。')
     end
 
     M.DrawUpdateBranchSettings = function()
@@ -429,6 +422,15 @@ UpdateChannels.init = function(M)
     end
 
     M.DrawUpdateBranchStatus = function()
+        if updateNeedReLoad then GUI:TextWrapped('更新已完成，脱战并结束切图后重新加载。'); return end
+        if job then
+            GUI:TextWrapped(job.stalled and '等待后台更新回执' or progress[job.phase])
+            if job.stalled then
+                GUI:Button('重新请求更新', 165, 25)
+                if GUI:IsItemClicked(0) then M.ForceUpdate() end
+            end
+            return
+        end
         if M.GetUpdateBranch() == 'String' then
             GUI:Text('   来源：String 分支')
             GUI:Text('   当前版本：ver.' .. M.GetVersionLabel())

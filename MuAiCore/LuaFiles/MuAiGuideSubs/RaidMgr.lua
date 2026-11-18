@@ -42,6 +42,10 @@ RaidMgr.init = function(M)
 
     --- 读取副本脚本
     M.LoadRaidScripts = function(isReload)
+        if isReload and M.UpdateFilesBusy and M.UpdateFilesBusy() then
+            M.ShowMsgUI(3, { '更新进行中，完成后再重载副本脚本。' })
+            return false
+        end
         local previousCurrent = M.CurRaidScript
         local currentMapId = Player ~= nil and Player.localmapid or nil
         local preserveCurrentState = isReload

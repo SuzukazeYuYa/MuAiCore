@@ -30,6 +30,10 @@ core.InitMuAiGuide = function()
     MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
     local guidePath = MuAiGuideRoot .. 'MuAiGuide.lua'
     local previous = MuAiGuide
+    if type(previous) == 'table' and previous.UpdateFilesBusy and previous.UpdateFilesBusy() then
+        diagnose(previous, 'INFO', '后台更新进行中，暂缓读取插件文件', nil, 'guide_update_busy')
+        return false
+    end
     diagnose(previous, 'INFO', '开始加载MuAiGuide', { path = guidePath }, 'guide_load_start')
     local candidate
     local loaded, loadError = xpcall(function()

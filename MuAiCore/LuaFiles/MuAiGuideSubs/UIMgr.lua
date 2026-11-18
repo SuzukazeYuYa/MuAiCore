@@ -22,6 +22,8 @@ UIMgr.init = function(M)
         end
     end
     M.LoadUI = function(isReload)
+        -- 开发页可以逐帧刷新。更新期间继续绘制已加载的界面。
+        if isReload and M.UpdateFilesBusy and M.UpdateFilesBusy() then return end
         M.UIMap = {}
         M.UINames = {}
         M.Debug('   加载UI模块')

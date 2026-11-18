@@ -16,7 +16,7 @@
 <br>2.游戏内通过本工具UI进行更新。
 <br>![image](https://github.com/user-attachments/assets/a817bf0b-e0f6-4bb7-ac60-3bae417ea936)
 <br>$${\color{red}如果你想使用游戏内更新，请勿随意更改文件路径}$$
-<br>$${\color{red}更新过程会短暂卡屏，属于正常现象，如果无法更新，请手动覆盖}$$
+<br>确认后会在后台下载、解压并安装。基本设置页会显示进度，安装成功后会在脱战且切图结束时自动重载。
 <br>$${\color{red}本仓库提交记录即为更新日志，查看方式如下，请根据日志内容判断当前版本！}$$
 <img width="912" height="309" alt="image" src="https://github.com/user-attachments/assets/a0340bcd-8d44-400e-b142-feb900975a93" />
 <br>3.注入 Minion 并加载 MuAiCore 后，插件会检查所选分支的版本。主分支有新版时，点击“点击此处进行更新”。String 分支点击“更新 String 分支”。如果出现更新确认窗口，确认后开始安装。安装成功后插件会触发 Reload。

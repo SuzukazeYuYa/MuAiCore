@@ -1,5 +1,6 @@
-﻿param(
-    [Parameter(Mandatory = $true)]
+﻿[CmdletBinding(DefaultParameterSetName = 'Install')]
+param(
+    [Parameter(Mandatory = $true, ParameterSetName = 'Install')]
     [string]$SourceRoot,
     [Parameter(Mandatory = $true)]
     [string]$TargetRoot,
@@ -7,12 +8,19 @@
     [string]$WorkRoot,
     [ValidateSet('main', 'String')]
     [string]$UpdateBranch = 'main',
-    [switch]$PreserveUpdateChannels
+    [switch]$PreserveUpdateChannels,
+    [Parameter(Mandatory = $true, ParameterSetName = 'Download')]
+    [switch]$Download,
+    [Parameter(Mandatory = $true, ParameterSetName = 'Download')]
+    [ValidateSet('GitHub','Mirror')]
+    [string]$DownloadSource,
+    [Parameter(Mandatory = $true, ParameterSetName = 'Cleanup')]
+    [switch]$Cleanup
 )
 
 $ErrorActionPreference = 'Stop'
 # 事务版本独立于发布版本；切换渠道时不退回旧的批量改名安装器。
-$installerTransactionVersion = 3
+$installerTransactionVersion = 4
 $backupRoot = Join-Path $WorkRoot 'Rollback'
 $createdFiles = [System.Collections.Generic.List[string]]::new()
 $changedFiles = [System.Collections.Generic.List[object]]::new()
@@ -22,6 +30,116 @@ $transactionStarted = $false
 $removedFiles = [System.Collections.Generic.List[string]]::new()
 $channelsRelative = 'MuAiCore\LuaFiles\MuAiGuideSubs\UpdateChannels.lua'
 $installerRelative = 'MuAiCore\LuaFiles\MuAiGuideSubs\InstallUpdate.ps1'
+
+function Get-UpdateWorkDirectory {
+    $work = (Resolve-Path -LiteralPath $WorkRoot).ProviderPath.TrimEnd('\')
+    $target = (Resolve-Path -LiteralPath $TargetRoot).ProviderPath.TrimEnd('\')
+    $parent = [IO.Path]::GetDirectoryName($work)
+    $token = [IO.Path]::GetFileName($work)
+    $name = [regex]::Match($token, '^MuAiCoreUpdater_([0-9]+)_[0-9]+_[0-9]+$')
+    if (-not $name.Success -or $target -ne (Join-Path $parent 'LuaMods') -or
+        ((Get-Item -LiteralPath $work).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+        throw 'Invalid update work directory.'
+    }
+    return $work
+}
+
+if ($Cleanup) {
+    $work = Get-UpdateWorkDirectory
+    try {
+        foreach ($file in @('downloading','extracting','installing','worker.log','installer.log','installer.err','result','worker.exit','ack')) {
+            [IO.File]::Delete((Join-Path $work $file))
+        }
+        [IO.Directory]::Delete($work, $false)
+    } catch {
+        [IO.File]::WriteAllText((Join-Path $work 'cleanup-error.txt'), $_.Exception.Message)
+        exit 1
+    }
+    exit 0
+}
+
+# 后台完成下载、解压、安装和大目录清理。Lua 只读取进度与最终回执。
+function Invoke-DownloadUpdate {
+    $work = Get-UpdateWorkDirectory
+    $target = (Resolve-Path -LiteralPath $TargetRoot).ProviderPath.TrimEnd('\')
+    $parent = [IO.Path]::GetDirectoryName($work)
+    $token = [IO.Path]::GetFileName($work)
+    $name = [regex]::Match($token, '^MuAiCoreUpdater_([0-9]+)_')
+    $pending = Join-Path $parent ('MuAiCoreUpdatePending_' + $name.Groups[1].Value + '.txt')
+    $lock = $null
+    $result = 'preflight'
+    $detail = ''
+    try {
+        try {
+            $lock = [IO.FileStream]::new((Join-Path $parent 'MuAiCoreUpdate.lock'), [IO.FileMode]::OpenOrCreate,
+                [IO.FileAccess]::ReadWrite, [IO.FileShare]::None, 4096, [IO.FileOptions]::DeleteOnClose)
+        } catch [IO.IOException] {
+            if (($_.Exception.GetBaseException().HResult -band 65535) -in @(32,33)) { $result = 'busy' }
+            throw
+        }
+        if ([IO.File]::ReadAllText($pending).Trim() -ne $token) { throw 'Update request was replaced.' }
+        [IO.File]::WriteAllText((Join-Path $work 'downloading'), '')
+        $zip = Join-Path $work 'repository.zip'
+        $url = if ($UpdateBranch -eq 'String' -or $DownloadSource -eq 'GitHub') {
+            "https://codeload.github.com/SuzukazeYuYa/MuAiCore/zip/refs/heads/$UpdateBranch"
+        } else { 'https://muai-guide-main-1435131442.cos.ap-shanghai.myqcloud.com/MuAiCore-main.zip' }
+        & curl.exe --fail --silent --show-error --location --connect-timeout 5 --max-time 90 --output $zip $url
+        if ($LASTEXITCODE -ne 0) { throw "Download failed ($LASTEXITCODE)." }
+        $size = (Get-Item -LiteralPath $zip).Length
+        if ($size -lt 1024 -or $size -gt 209715200) { throw "Invalid ZIP size: $size" }
+        [IO.File]::WriteAllText((Join-Path $work 'extracting'), '')
+        $unpacked = Join-Path $work 'Extracted'
+        Expand-Archive -LiteralPath $zip -DestinationPath $unpacked -ErrorAction Stop
+        $package = Join-Path $unpacked ('MuAiCore-' + $UpdateBranch)
+        if (-not (Test-Path -LiteralPath (Join-Path $package 'MuAiCore\MuAiCore.lua') -PathType Leaf) -or
+            -not (Test-Path -LiteralPath (Join-Path $package 'MuAiCore\module.def') -PathType Leaf) -or
+            -not (Test-Path -LiteralPath (Join-Path $package 'TensorReactions') -PathType Container)) {
+            throw 'Invalid archive layout.'
+        }
+        if ([IO.File]::ReadAllText($pending).Trim() -ne $token) { throw 'Update request was replaced.' }
+        [IO.File]::WriteAllText((Join-Path $work 'installing'), '')
+        $result = 'unknown'
+        $receipt = Join-Path $work 'installer.log'
+        $errors = Join-Path $work 'installer.err'
+        $arguments = @('-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
+            '-File', ('"' + $PSCommandPath + '"'), '-SourceRoot', ('"' + $package + '"'),
+            '-TargetRoot', ('"' + $target + '"'), '-WorkRoot', ('"' + $work + '"'),
+            '-PreserveUpdateChannels', '-UpdateBranch', $UpdateBranch)
+        $process = Start-Process -FilePath 'powershell.exe' -ArgumentList $arguments -WindowStyle Hidden -Wait -PassThru -RedirectStandardOutput $receipt -RedirectStandardError $errors
+        $installExit = $process.ExitCode
+        $lines = @(Get-Content -LiteralPath $receipt)
+        if ($installExit -eq 0 -and $lines -ccontains '__MUAI_UPDATE_INSTALLED__') { $result = 'installed' }
+        elseif ($installExit -ne 0 -and $lines -ccontains '__MUAI_ROLLBACK_INCOMPLETE__') { $result = 'incomplete' }
+        elseif ($installExit -ne 0 -and $lines -ccontains '__MUAI_ROLLBACK_COMPLETE__') { $result = 'rolledback' }
+        elseif ($installExit -ne 0 -and $lines -ccontains '__MUAI_UPDATE_PREFLIGHT_FAILED__') { $result = 'preflight' }
+        if ($result -ne 'installed') {
+            $reason = (Get-Content -LiteralPath $errors -TotalCount 12) -join ' '
+            $detail = "Installer exit $installExit. " + $reason.Substring(0, [Math]::Min($reason.Length, 1500))
+        }
+    } catch { $detail = $_.Exception.Message }
+    finally {
+        $retain = $result -in @('unknown','incomplete')
+        if (-not $retain) {
+            try {
+                foreach ($entry in @('repository.zip','Extracted','Patched','Rollback')) {
+                    $path = [IO.Path]::GetFullPath((Join-Path $work $entry))
+                    if ([IO.Path]::GetDirectoryName($path) -ne $work) { throw 'Invalid cleanup path.' }
+                    if (Test-Path -LiteralPath $path) { Remove-Item -LiteralPath $path -Recurse -Force -ErrorAction Stop }
+                }
+            } catch { $retain = $true; $detail += ' ' + $_.Exception.Message }
+        }
+        if ($lock) { $lock.Dispose() }
+        $keep = if ($retain) { 'keep' } else { 'clean' }
+        [IO.File]::WriteAllText((Join-Path $work 'result.tmp'), "$result`n$keep`n$detail", [Text.UTF8Encoding]::new($false))
+        [IO.File]::Move((Join-Path $work 'result.tmp'), (Join-Path $work 'result'))
+    }
+    return $result
+}
+
+if ($Download) {
+    if ((Invoke-DownloadUpdate) -eq 'installed') { exit 0 }
+    exit 1
+}
 
 function Test-WithinPath {
     param([string]$Path, [string]$Root)
@@ -196,13 +314,22 @@ function Get-RelativePath {
     return $Path.Substring($Root.Length).TrimStart([char[]]'\/')
 }
 
+function Get-FileDigest([string]$Path) {
+    $stream = [IO.File]::OpenRead($Path)
+    try {
+        $sha = [Security.Cryptography.SHA256]::Create()
+        try { return [BitConverter]::ToString($sha.ComputeHash($stream)).Replace('-', '') }
+        finally { $sha.Dispose() }
+    } finally { $stream.Dispose() }
+}
+
 function Copy-VerifiedFile {
     param([string]$Source, [string]$Destination)
 
     # 相同内容不重复替换文件；正常更新只写入实际发生变化的发布资产。
-    $sourceHash = (Get-FileHash -LiteralPath $Source -Algorithm SHA256).Hash
+    $sourceHash = Get-FileDigest $Source
     if ((Test-Path -LiteralPath $Destination -PathType Leaf) -and
-        (Get-FileHash -LiteralPath $Destination -Algorithm SHA256).Hash -eq $sourceHash) {
+        (Get-FileDigest $Destination) -eq $sourceHash) {
         return $sourceHash
     }
     $destinationDirectory = Split-Path -Parent $Destination
@@ -211,7 +338,7 @@ function Copy-VerifiedFile {
     # 旧内容已在 WorkRoot 中校验备份；直接复制，避免为每个文件重复改名。
     # 写入失败或目标哈希不符时，由外层事务恢复，成功前必须读回目标文件。
     [System.IO.File]::Copy($Source, $Destination, $true)
-    if ((Get-FileHash -LiteralPath $Destination -Algorithm SHA256).Hash -ne $sourceHash) {
+    if ((Get-FileDigest $Destination) -ne $sourceHash) {
         throw "Copied file hash mismatch: $Destination"
     }
     return $sourceHash
@@ -224,7 +351,7 @@ function Restore-Backup {
         $entry = $changedFiles[$index]
         try {
             Assert-InstallDestination $entry.Destination
-            if ((Get-FileHash -LiteralPath $entry.Backup -Algorithm SHA256).Hash -ne $entry.Hash) {
+            if ((Get-FileDigest $entry.Backup) -ne $entry.Hash) {
                 throw "Rollback backup hash mismatch: $($entry.Backup)"
             }
             Copy-VerifiedFile -Source $entry.Backup -Destination $entry.Destination | Out-Null
@@ -337,8 +464,7 @@ try {
         $destination, $relativePath, $copySource = $file.Destination, $file.Relative, $file.Source
         Assert-InstallDestination $destination
         if ((Test-Path -LiteralPath $destination -PathType Leaf) -and
-            (Get-FileHash -LiteralPath $copySource -Algorithm SHA256).Hash -eq
-            (Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash) {
+            (Get-FileDigest $copySource) -eq (Get-FileDigest $destination)) {
             continue
         }
         if (Test-Path -LiteralPath $destination -PathType Leaf) {

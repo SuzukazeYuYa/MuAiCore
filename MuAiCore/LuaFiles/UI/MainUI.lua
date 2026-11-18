@@ -1049,7 +1049,10 @@ local drawDeveloperTab = function(M)
     end
     GUI:SameLine(205, 0)
     GUI:Button('重载MuAiGuide', 120, 20)
-    if GUI:IsItemClicked(0) then
+    local reloadClicked = GUI:IsItemClicked(0)
+    if reloadClicked and M.UpdateFilesBusy and M.UpdateFilesBusy() then
+        M.ShowMsgUI(3, { '更新进行中，完成后再重载 MuAiGuide。' })
+    elseif reloadClicked then
         local reloadPath = MuAiGuideRoot .. 'MuAiGuide.lua'
         M.Diagnostic('INFO', 'Lifecycle', '开始手动热重载MuAiGuide', {
             path = reloadPath,
