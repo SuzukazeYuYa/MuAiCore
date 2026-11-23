@@ -4410,7 +4410,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nif type(state) == \"table\" then\n  state.isBlue = true\nend\nself.used = true",
+							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nif type(state) == \"table\" then\n  state.isBlue = true\n  local entityID = tonumber(eventArgs.entityID)\n  local player = TensorCore.mGetPlayer()\n  local pos = (player and player.pos)\n  if entityID and type(state.bluePositions) == \"table\" and not state.bluePositions[entityID]\n      and pos and type(pos.x) == \"number\" and type(pos.z) == \"number\" then\n    state.bluePositions[entityID] = {x = pos.x, z = pos.z}\n  end\nend\nself.used = true",
 							conditions = 
 							{
 								
@@ -4744,7 +4744,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "data.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal state = {\n  -- 本人点名窗口结束前，职责保持未知。\n  blueRangeDrawer = TensorCore.getCachedDrawer(\n    1207942497, 1207942497, 1207942497, 4205190917, 3\n  ),\n  redArrowColor = 2349665791,\n  greenArrowColor = 2350907156,\n  arrowOutlineColor = 4294967295\n}\n\ndata.string_dsr.p2Op15 = state\nself.used = true",
+							actionLua = "data.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal state = {\n  -- 本人点名窗口结束前，职责保持未知。\n  bluePositions = {},\n  blueRangeDrawer = TensorCore.getCachedDrawer(\n    1207942497, 1207942497, 1207942497, 4205190917, 3\n  ),\n  redArrowColor = 2349665791,\n  greenArrowColor = 2350907156,\n  arrowOutlineColor = 4294967295\n}\n\ndata.string_dsr.p2Op15 = state\nself.used = true",
 							name = "初始化1.5运状态与绘图参数",
 							uuid = "19068115-1baf-0b1c-ad28-8ec48fed67c4",
 							version = 2.1,
@@ -4772,7 +4772,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local entityID = tonumber(eventArgs.entityID)\nif entityID then\n  TensorCore.getCachedDrawer(\n    1207942497, 1207942497, 1207942497, 4205190917, 3\n  ):addTimedCircleOnEnt(9300, entityID, 24, 0, false, true)\nend\nself.used = true",
+							actionLua = "local entityID = tonumber(eventArgs.entityID)\nif entityID then\n  local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\n  local entity = TensorCore.mGetEntity(entityID)\n  if type(state) == \"table\" then\n    local pos = (entity and entity.pos)\n    if entityID and type(state.bluePositions) == \"table\" and not state.bluePositions[entityID]\n        and pos and type(pos.x) == \"number\" and type(pos.z) == \"number\" then\n      state.bluePositions[entityID] = {x = pos.x, z = pos.z}\n    end\n  end\n  TensorCore.getCachedDrawer(\n    1207942497, 1207942497, 1207942497, 4205190917, 3\n  ):addTimedCircleOnEnt(9300, entityID, 24, 0, false, true)\nend\nself.used = true",
 							conditions = 
 							{
 								
@@ -4986,7 +4986,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(state) ~= \"table\" or state.ready ~= true or not playerID\n    or type(MuAiGuide) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\" then\n  return\nend\n\nif not state.role then\n  local party = MuAiGuide.Party\n  if type(party) ~= \"table\" then\n    return\n  end\n  if tonumber(party.MT and party.MT.id) == playerID then state.role = \"MT\"\n  elseif tonumber(party.ST and party.ST.id) == playerID then state.role = \"ST\"\n  elseif tonumber(party.H1 and party.H1.id) == playerID then state.role = \"H1\"\n  elseif tonumber(party.H2 and party.H2.id) == playerID then state.role = \"H2\"\n  elseif tonumber(party.D1 and party.D1.id) == playerID then state.role = \"D1\"\n  elseif tonumber(party.D2 and party.D2.id) == playerID then state.role = \"D2\"\n  elseif tonumber(party.D3 and party.D3.id) == playerID then state.role = \"D3\"\n  elseif tonumber(party.D4 and party.D4.id) == playerID then state.role = \"D4\"\n  end\nend\nif not state.role then\n  return\nend\n\nif type(state.isBlue) ~= \"boolean\" then return end\n\nif state.role == \"MT\" or state.role == \"ST\" then\n  self.used = true\n  return\nend\n\nlocal targetX = nil\nlocal targetZ = nil\nif state.isBlue == true then\n  local pos = player.pos\n  if type(pos) ~= \"table\"\n      or type(pos.x) ~= \"number\"\n      or type(pos.z) ~= \"number\"\n      or type(state.blueLeftX) ~= \"number\"\n      or type(state.blueLeftZ) ~= \"number\"\n      or type(state.blueRightX) ~= \"number\"\n      or type(state.blueRightZ) ~= \"number\"\n      or type(state.blueBackX) ~= \"number\"\n      or type(state.blueBackZ) ~= \"number\" then\n    return\n  end\n\n  if not state.blueTargetX then\n    local leftD2 =\n      (pos.x - state.blueLeftX) ^ 2 + (pos.z - state.blueLeftZ) ^ 2\n    local rightD2 =\n      (pos.x - state.blueRightX) ^ 2 + (pos.z - state.blueRightZ) ^ 2\n    local backD2 =\n      (pos.x - state.blueBackX) ^ 2 + (pos.z - state.blueBackZ) ^ 2\n\n    state.blueTargetX = state.blueLeftX\n    state.blueTargetZ = state.blueLeftZ\n    local bestD2 = leftD2\n    if rightD2 < bestD2 then\n      bestD2 = rightD2\n      state.blueTargetX = state.blueRightX\n      state.blueTargetZ = state.blueRightZ\n    end\n    if backD2 < bestD2 then\n      state.blueTargetX = state.blueBackX\n      state.blueTargetZ = state.blueBackZ\n    end\n  end\n\n  targetX = state.blueTargetX\n  targetZ = state.blueTargetZ\nelse\n  if type(state.groupX) ~= \"number\"\n      or type(state.groupZ) ~= \"number\" then\n    return\n  end\n  targetX = state.groupX\n  targetZ = state.groupZ\nend\n\nif MuAiGuide.FrameDirect(targetX, targetZ, 0.5) then\n  self.used = true\nend",
+							actionLua = "local state = type(data.string_dsr) == \"table\" and data.string_dsr.p2Op15 or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(state) ~= \"table\" or state.ready ~= true or not playerID\n    or type(MuAiGuide) ~= \"table\"\n    or type(MuAiGuide.FrameDirect) ~= \"function\" then\n  return\nend\n\nif not state.role then\n  local party = MuAiGuide.Party\n  if type(party) ~= \"table\" then\n    return\n  end\n  if tonumber(party.MT and party.MT.id) == playerID then state.role = \"MT\"\n  elseif tonumber(party.ST and party.ST.id) == playerID then state.role = \"ST\"\n  elseif tonumber(party.H1 and party.H1.id) == playerID then state.role = \"H1\"\n  elseif tonumber(party.H2 and party.H2.id) == playerID then state.role = \"H2\"\n  elseif tonumber(party.D1 and party.D1.id) == playerID then state.role = \"D1\"\n  elseif tonumber(party.D2 and party.D2.id) == playerID then state.role = \"D2\"\n  elseif tonumber(party.D3 and party.D3.id) == playerID then state.role = \"D3\"\n  elseif tonumber(party.D4 and party.D4.id) == playerID then state.role = \"D4\"\n  end\nend\nif not state.role then\n  return\nend\n\nif type(state.isBlue) ~= \"boolean\" then return end\n\nif state.role == \"MT\" or state.role == \"ST\" then\n  self.used = true\n  return\nend\n\nlocal targetX = nil\nlocal targetZ = nil\nif state.isBlue == true then\n  if not state.blueTargetX then\n    local marked = state.bluePositions\n    if type(marked) ~= \"table\" or not marked[playerID]\n        or type(state.rx) ~= \"number\" or type(state.rz) ~= \"number\" then\n      return\n    end\n\n    local blue = {}\n    for id, pos in pairs(marked) do\n      blue[#blue + 1] = {id = id, lateral = (pos.x - 100) * state.rx + (pos.z - 100) * state.rz}\n    end\n    if #blue ~= 3 then return end\n    table.sort(blue, function(a, b)\n      if a.lateral == b.lateral then return a.id < b.id end\n      return a.lateral < b.lateral\n    end)\n\n    -- 三位点名按骑神视角排左右，横向居中的人走后方。\n    local slot = blue[1].id == playerID and \"Left\" or blue[3].id == playerID and \"Right\" or \"Back\"\n    state.blueTargetX = state[\"blue\" .. slot .. \"X\"]\n    state.blueTargetZ = state[\"blue\" .. slot .. \"Z\"]\n  end\n  if type(state.blueTargetX) ~= \"number\" or type(state.blueTargetZ) ~= \"number\" then return end\n\n  targetX = state.blueTargetX\n  targetZ = state.blueTargetZ\nelse\n  if type(state.groupX) ~= \"number\"\n      or type(state.groupZ) ~= \"number\" then\n    return\n  end\n  targetX = state.groupX\n  targetZ = state.groupZ\nend\n\nif MuAiGuide.FrameDirect(targetX, targetZ, 0.5) then\n  self.used = true\nend",
 							name = "MuAi 指向蓝圈安全点或人群分摊点",
 							uuid = "b4dd1a85-cd42-0474-b97d-8d3305a21b72",
 							version = 2.1,
@@ -6462,7 +6462,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = type(root) == \"table\" and root.p2Sanctity25 or nil\nlocal markerIDs = type(state) == \"table\" and state.markerIDs or nil\nlocal markerIDSet = type(state) == \"table\" and state.markerIDSet or nil\n\nif type(state) ~= \"table\"\n    or type(markerIDs) ~= \"table\"\n    or type(markerIDSet) ~= \"table\" then\n  self.used = true\n  return\nend\n\nif state.markersReady ~= true then\n  local id = tonumber(eventArgs.entityID)\n  if id and markerIDSet[id] ~= true and #markerIDs < 2 then\n    markerIDSet[id] = true\n    markerIDs[#markerIDs + 1] = id\n  end\n\n  if #markerIDs == 2 then\n    if markerIDs[1] > markerIDs[2] then\n      markerIDs[1], markerIDs[2] = markerIDs[2], markerIDs[1]\n    end\n\n    state.markersReady = true\n\n    local player = TensorCore.mGetPlayer()\n    root.cometsArmed = player ~= nil\n      and markerIDSet[tonumber(player.id)] == true\n  end\nend\n\nself.used = true",
+							actionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = type(root) == \"table\" and root.p2Sanctity25 or nil\nlocal markerIDs = type(state) == \"table\" and state.markerIDs or nil\nlocal markerIDSet = type(state) == \"table\" and state.markerIDSet or nil\n\nif type(state) ~= \"table\"\n    or type(markerIDs) ~= \"table\"\n    or type(markerIDSet) ~= \"table\" then\n  self.used = true\n  return\nend\n\nif state.markersReady ~= true then\n  local id = tonumber(eventArgs.entityID)\n  if id and markerIDSet[id] ~= true and #markerIDs < 2 then\n    markerIDSet[id] = true\n    markerIDs[#markerIDs + 1] = id\n  end\n\n  if #markerIDs == 2 then\n    if markerIDs[1] > markerIDs[2] then\n      markerIDs[1], markerIDs[2] = markerIDs[2], markerIDs[1]\n    end\n\n    state.markersReady = true\n\n  end\nend\n\nself.used = true",
 							conditions = 
 							{
 								
@@ -6504,6 +6504,78 @@ local tbl =
 				timerOffset = -7.4,
 				timerStartOffset = -8,
 				uuid = "0cd032c4-d693-3158-a8f5-1fe4d55e2c88",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local root = data.string_dsr\nif type(root) ~= \"table\" then\n    root = {}\n    data.string_dsr = root\nend\nroot.cometsArmed = true\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"2db3f85b-0296-a7f1-a399-0917e78c1f13",
+									true,
+								},
+								
+								{
+									"aac7d066-b6a9-6689-be0b-bdb2e4ffe291",
+									true,
+								},
+							},
+							name = "启用本人彗星落点",
+							uuid = "9f0fc65e-1c7c-0b6f-a4ab-fd9268ba0ac1",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgType = 2,
+							eventMarkerID = 285,
+							name = "Marker 285",
+							uuid = "2db3f85b-0296-a7f1-a399-0917e78c1f13",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Party",
+							conditionType = 10,
+							dequeueIfLuaFalse = true,
+							name = "本人点名",
+							partyTargetType = "Event Entity",
+							uuid = "aac7d066-b6a9-6689-be0b-bdb2e4ffe291",
+							version = 3,
+						},
+					},
+				},
+				eventType = 4,
+				loop = true,
+				mechanicTime = 417.2,
+				name = "[P2] 本人陨石点名",
+				timeRange = true,
+				timelineIndex = 70,
+				timerEndOffset = -6.8,
+				timerStartOffset = -8,
+				uuid = "4f7ecfbf-868e-9253-a6fa-faa150e3b032",
 				version = 2,
 			},
 		},
@@ -6579,7 +6651,7 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = type(root) == \"table\" and root.p2Sanctity25 or nil\nlocal markerIDs = type(state) == \"table\" and state.markerIDs or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = player and player.id or nil\nreturn type(state) == \"table\"\n  and state.markersReady == true\n  and type(markerIDs) == \"table\"\n  and #markerIDs == 2\n  and type(playerID) == \"number\"\n  and (markerIDs[1] == playerID or markerIDs[2] == playerID)",
+							conditionLua = "local root = data.string_dsr\nreturn type(root) == \"table\" and root.cometsArmed == true",
 							name = "自己是陨石点名",
 							uuid = "0660dd8f-fa52-e4f8-af66-b279cea6cc9a",
 							version = 3,
@@ -6769,7 +6841,7 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = type(root) == \"table\" and root.p2Sanctity25 or nil\nlocal markerIDs = type(state) == \"table\" and state.markerIDs or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = player and player.id or nil\nreturn type(state) == \"table\"\n  and state.markersReady == true\n  and type(markerIDs) == \"table\"\n  and #markerIDs == 2\n  and type(playerID) == \"number\"\n  and (markerIDs[1] == playerID or markerIDs[2] == playerID)",
+							conditionLua = "local root = data.string_dsr\nreturn type(root) == \"table\" and root.cometsArmed == true",
 							name = "自己是陨石点名",
 							uuid = "905e9cdf-05da-5bc6-9cad-850ecd60db9f",
 							version = 3,
@@ -6820,7 +6892,7 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = type(root) == \"table\" and root.p2Sanctity25 or nil\nlocal markerIDs = type(state) == \"table\" and state.markerIDs or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = player and player.id or nil\nreturn type(state) == \"table\"\n  and state.markersReady == true\n  and type(markerIDs) == \"table\"\n  and #markerIDs == 2\n  and type(playerID) == \"number\"\n  and (markerIDs[1] == playerID or markerIDs[2] == playerID)",
+							conditionLua = "local root = data.string_dsr\nreturn type(root) == \"table\" and root.cometsArmed == true",
 							name = "自己是陨石点名",
 							uuid = "c11403e6-d23c-24fa-aab4-657fd9e06799",
 							version = 3,
@@ -6871,7 +6943,7 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = type(root) == \"table\" and root.p2Sanctity25 or nil\nlocal markerIDs = type(state) == \"table\" and state.markerIDs or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = player and player.id or nil\nreturn type(state) == \"table\"\n  and state.markersReady == true\n  and type(markerIDs) == \"table\"\n  and #markerIDs == 2\n  and type(playerID) == \"number\"\n  and (markerIDs[1] == playerID or markerIDs[2] == playerID)",
+							conditionLua = "local root = data.string_dsr\nreturn type(root) == \"table\" and root.cometsArmed == true",
 							name = "自己是陨石点名",
 							uuid = "cf725d47-2910-54d1-bea9-9bb7a5d379e9",
 							version = 3,
@@ -6922,7 +6994,7 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = type(root) == \"table\" and root.p2Sanctity25 or nil\nlocal markerIDs = type(state) == \"table\" and state.markerIDs or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = player and player.id or nil\nreturn type(state) == \"table\"\n  and state.markersReady == true\n  and type(markerIDs) == \"table\"\n  and #markerIDs == 2\n  and type(playerID) == \"number\"\n  and (markerIDs[1] == playerID or markerIDs[2] == playerID)",
+							conditionLua = "local root = data.string_dsr\nreturn type(root) == \"table\" and root.cometsArmed == true",
 							name = "自己是陨石点名",
 							uuid = "23d077e6-339b-f6da-927b-4a5044c9b3c5",
 							version = 3,
@@ -6973,7 +7045,7 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = type(root) == \"table\" and root.p2Sanctity25 or nil\nlocal markerIDs = type(state) == \"table\" and state.markerIDs or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = player and player.id or nil\nreturn type(state) == \"table\"\n  and state.markersReady == true\n  and type(markerIDs) == \"table\"\n  and #markerIDs == 2\n  and type(playerID) == \"number\"\n  and (markerIDs[1] == playerID or markerIDs[2] == playerID)",
+							conditionLua = "local root = data.string_dsr\nreturn type(root) == \"table\" and root.cometsArmed == true",
 							name = "自己是陨石点名",
 							uuid = "f4969c05-11d1-ba81-941a-bcc7b24fc49d",
 							version = 3,
@@ -7024,7 +7096,7 @@ local tbl =
 						data = 
 						{
 							category = "Lua",
-							conditionLua = "local root = type(data.string_dsr) == \"table\" and data.string_dsr or nil\nlocal state = type(root) == \"table\" and root.p2Sanctity25 or nil\nlocal markerIDs = type(state) == \"table\" and state.markerIDs or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = player and player.id or nil\nreturn type(state) == \"table\"\n  and state.markersReady == true\n  and type(markerIDs) == \"table\"\n  and #markerIDs == 2\n  and type(playerID) == \"number\"\n  and (markerIDs[1] == playerID or markerIDs[2] == playerID)",
+							conditionLua = "local root = data.string_dsr\nreturn type(root) == \"table\" and root.cometsArmed == true",
 							name = "自己是陨石点名",
 							uuid = "2b6ef453-322f-5439-ab02-180e7dee0526",
 							version = 3,
@@ -9262,6 +9334,84 @@ local tbl =
 			},
 		},
 	},
+	[104] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local entityID = tonumber(eventArgs.entityID)\nlocal now = tonumber(TensorReactions_CurrentTimer)\nif not entityID or entityID <= 0 or not now then return end\n\ndata.string_dsr = data.string_dsr or {}\nlocal spears = data.string_dsr.p3SpearByRound or {}\ndata.string_dsr.p3SpearByRound = spears\nlocal entry = {entityID = entityID, soakedAt = now}\nspears[1] = entry\n\n-- 白圈表示从本人踩的塔朝场外的引枪方向。\nlocal clone = TensorCore.mGetEntity(entityID)\nlocal pos = clone and clone.pos\nif pos and type(pos.x) == \"number\" and type(pos.y) == \"number\" and type(pos.z) == \"number\" then\n  local dx, dz = pos.x - 100, pos.z - 100\n  local radius = math.sqrt(dx * dx + dz * dz)\n  if radius > 0 then\n    local x, z = pos.x + 4 * dx / radius, pos.z + 4 * dz / radius\n    local drawer = TensorCore.getCachedFlatDrawer(0, 0, 0, 0xFFFFFFFF, 2, 0, 0)\n    entry.reference = drawer:addTimedCircle(3500, x, pos.y + 0.05, z, 0.55, 0, false, true)\n  end\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"723a0b20-4948-0e65-ae47-0e68a1f25f13",
+									true,
+								},
+								
+								{
+									"043ee558-fb1d-a671-a93d-50f06a78c4da",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "武神枪外引白圈",
+							uuid = "868eb9de-6211-d3a8-8a79-47eedfd4657b",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 3,
+							eventArgType = 2,
+							name = "黑暗龙炎冲 26385",
+							spellIDList = 
+							{
+								26385,
+							},
+							uuid = "723a0b20-4948-0e65-ae47-0e68a1f25f13",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player = TensorCore.mGetPlayer()\nlocal hit = eventArgs.hitTargets\nreturn tonumber(eventArgs.entityContentID) == 3458 and player and player.id\n  and type(hit) == \"table\" and #hit == 1 and tonumber(hit[1]) == tonumber(player.id)",
+							dequeueIfLuaFalse = true,
+							name = "本人实际踩中的塔",
+							uuid = "043ee558-fb1d-a671-a93d-50f06a78c4da",
+							version = 3,
+						},
+					},
+				},
+				eventType = 2,
+				mechanicTime = 636.8,
+				name = "[P3] 第一轮踩塔后武神枪外引参考",
+				timeRange = true,
+				timelineIndex = 104,
+				timerEndOffset = 0.65,
+				timerStartOffset = -0.6,
+				uuid = "0297dbb7-acc4-a2a6-a0a4-8e350b66de30",
+				version = 2,
+			},
+		},
+	},
 	[106] = 
 	{
 		
@@ -9505,6 +9655,62 @@ local tbl =
 			},
 		},
 	},
+	[107] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local x, y, z = tonumber(eventArgs.x), tonumber(eventArgs.y), tonumber(eventArgs.z)\nlocal heading, duration = tonumber(eventArgs.heading), tonumber(eventArgs.duration)\nif not x or not y or not z or not heading or not duration or duration <= 0 then return end\n\nlocal timeout = duration * 1000\nlocal start = tonumber(eventArgs.startTime)\nif start and start > 0 then timeout = timeout - math.max(0, TimeSince(start)) end\nif timeout <= 0 then return end\n\nlocal spears = data.string_dsr and data.string_dsr.p3SpearByRound\nlocal entry = spears and spears[1]\nif not entry or entry.entityID ~= tonumber(eventArgs.entityID) then return end\nlocal dx, dz = x - 100, z - 100\nlocal radius = math.sqrt(dx * dx + dz * dz)\nif radius == 0 then return end\n\n-- 以真正的 AOE 起点为基准，白圈和橙点都在分身前 4 米。\nlocal lockX, _, lockZ = TensorCore.getPosInDirection({ x = x, y = y, z = z }, heading, 4, true)\nif not lockX or not lockZ then return end\nlocal markY = y + 0.05\nif type(entry.reference) == \"string\" and entry.reference ~= \"\" then\n  Argus.deleteTimedShape(entry.reference)\nend\nlocal reference = TensorCore.getCachedFlatDrawer(0, 0, 0, 0xFFFFFFFF, 2, 0, 0)\nreference:addTimedCircle(timeout, x + 4 * dx / radius, markY, z + 4 * dz / radius, 0.55, 0, false, true)\nlocal actual = TensorCore.getCachedFlatDrawer(0xF00B77FF, 0xF00B77FF, 0xF00B77FF, 0xFFFFFFFF, 1.5, 0, 0)\nactual:addTimedCircle(timeout, lockX, markY, lockZ, 0.32, 0, false, true)\nspears[1] = nil\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"47295fbb-8064-1458-909f-fd1ea1b834b5",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "武神枪锁定中心橙点",
+							uuid = "be60c737-24f0-6c1e-9989-d5a5777341d9",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if tonumber(eventArgs.aoeID) ~= 26378 or tonumber(eventArgs.contentID) ~= 3458 then return false end\nlocal state = data.string_dsr\nlocal spears = state and state.p3SpearByRound\nlocal entry = spears and spears[1]\nlocal now = tonumber(TensorReactions_CurrentTimer)\nreturn entry ~= nil and now ~= nil and now >= entry.soakedAt and now - entry.soakedAt <= 3.5\n  and tonumber(eventArgs.entityID) == entry.entityID",
+							dequeueIfLuaFalse = true,
+							name = "本人踩塔分身的武神枪",
+							uuid = "47295fbb-8064-1458-909f-fd1ea1b834b5",
+							version = 3,
+						},
+					},
+				},
+				eventType = 18,
+				mechanicTime = 643.9,
+				name = "[P3] 第一轮本人武神枪锁向中心点",
+				timeRange = true,
+				timelineIndex = 107,
+				timerEndOffset = -3.8,
+				timerStartOffset = -5.15,
+				uuid = "f844f862-f7c2-519b-8c49-d0671dc55e25",
+				version = 2,
+			},
+		},
+	},
 	[108] = 
 	{
 		
@@ -9536,6 +9742,81 @@ local tbl =
 				timelineIndex = 108,
 				timerEndOffset = 11,
 				uuid = "ac2c935d-c101-4abc-ac4b-33bac4d859a2",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local entityID = tonumber(eventArgs.entityID)\nlocal now = tonumber(TensorReactions_CurrentTimer)\nif not entityID or entityID <= 0 or not now then return end\n\ndata.string_dsr = data.string_dsr or {}\nlocal spears = data.string_dsr.p3SpearByRound or {}\ndata.string_dsr.p3SpearByRound = spears\nlocal entry = {entityID = entityID, soakedAt = now}\nspears[2] = entry\n\n-- 白圈表示从本人踩的塔朝场外的引枪方向。\nlocal clone = TensorCore.mGetEntity(entityID)\nlocal pos = clone and clone.pos\nif pos and type(pos.x) == \"number\" and type(pos.y) == \"number\" and type(pos.z) == \"number\" then\n  local dx, dz = pos.x - 100, pos.z - 100\n  local radius = math.sqrt(dx * dx + dz * dz)\n  if radius > 0 then\n    local x, z = pos.x + 4 * dx / radius, pos.z + 4 * dz / radius\n    local drawer = TensorCore.getCachedFlatDrawer(0, 0, 0, 0xFFFFFFFF, 2, 0, 0)\n    entry.reference = drawer:addTimedCircle(3500, x, pos.y + 0.05, z, 0.55, 0, false, true)\n  end\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"a5a6ef7d-1a9e-7cd2-8871-bae96e6deafc",
+									true,
+								},
+								
+								{
+									"986e5a4f-4946-8769-ab68-2659d478a134",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "武神枪外引白圈",
+							uuid = "77a39f10-88ad-0979-b7a0-0e4f254376ab",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 3,
+							eventArgType = 2,
+							name = "黑暗龙炎冲 26385",
+							spellIDList = 
+							{
+								26385,
+							},
+							uuid = "a5a6ef7d-1a9e-7cd2-8871-bae96e6deafc",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player = TensorCore.mGetPlayer()\nlocal hit = eventArgs.hitTargets\nreturn tonumber(eventArgs.entityContentID) == 3458 and player and player.id\n  and type(hit) == \"table\" and #hit == 1 and tonumber(hit[1]) == tonumber(player.id)",
+							dequeueIfLuaFalse = true,
+							name = "本人实际踩中的塔",
+							uuid = "986e5a4f-4946-8769-ab68-2659d478a134",
+							version = 3,
+						},
+					},
+				},
+				eventType = 2,
+				mechanicTime = 646.8,
+				name = "[P3] 第二轮踩塔后武神枪外引参考",
+				timeRange = true,
+				timelineIndex = 108,
+				timerEndOffset = 0.65,
+				timerStartOffset = -0.6,
+				uuid = "3b69a6f2-e150-8342-a739-fd89dc4cf4d5",
 				version = 2,
 			},
 		},
@@ -10309,7 +10590,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local p3Step, p3Round = \"second_outer\", 2\n-- The builder supplies p3Step and p3Round from this reaction's timeline node.\n-- Resolve number two in this render path from one complete live party snapshot.\nlocal p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nif not p3Player or not p3Player.pos then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3Player.id]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3Player.id] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3Player.id then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID) or nil\n  if not boss then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n    if boss then p3Cache.bossID = boss.id end\n  end\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel == 26386 or channel == 26387 then\n    if p3Round == 1 then p3Cache.firstSpell = channel\n    else p3Cache.secondSpell = channel end\n  end\n  local spell = p3Round == 1 and p3Cache.firstSpell or p3Cache.secondSpell\n  local side = p3Cache.side\n  local x, z\n  if p3Step == \"north_before\" then\n    -- Before the next cast starts, gather north inside the target circle.\n    x, z = 100, spell == 26386 and 90 or 93.2\n  elseif p3Step == \"first_outer\" then\n    if spell == 26386 then x, z = 100, 90\n    elseif spell == 26387 then x, z = 100, 93.2 end\n  elseif p3Step == \"first_inner\" then\n    if spell == 26386 then x, z = 100, 93.2\n    elseif spell == 26387 then x, z = 100, 90 end\n  elseif p3Step == \"place\" then\n    x, z = side < 0 and 90.666 or 109.333, 90.666\n    if p3Cache.type == 2756 or p3Cache.type == 2757 then\n      local heading = tonumber(p3Player.pos.h)\n      if heading then\n        if p3Cache.type == 2757 then heading = heading + math.pi end\n        local tx, ty, tz = TensorCore.getPosInDirection(p3Player.pos, heading, 14, true)\n        TensorCore.getStaticDrawer(520093951):addCircle(tx, ty, tz, 5)\n      end\n    end\n  elseif p3Step == \"second_outer\" then\n    if spell == 26386 then\n      x = 100 + side * 10\n      z = (side * (p3Player.pos.x - 100) < 9.5 and p3Player.pos.z < 97) and 90 or 100\n    elseif spell == 26387 then x, z = 100 + side * 7.5, 100 end\n  elseif p3Step == \"third_tower\" then\n    x, z = 100 + side * 7.5, 100\n  elseif p3Step == \"handoff\" then\n    if spell == 26386 then x, z = 100 + side * 7.5, 100\n    elseif spell == 26387 then x, z = 100 + side * 10, 100 end\n  elseif p3Step == \"bait\" then\n    x, z = 100 + side * 10, 100\n  elseif p3Step == \"dodge\" then\n    x, z = 100 + side * 6, 100\n  end\n  if x ~= nil and p3Guide and type(p3Guide.FrameDirect) == \"function\" then\n    p3Guide.FrameDirect(x, z, 0.5)\n  end\n  self.used = true\n  return\nend\n-- Legacy number-one/three paths below are for the actual player only.\nlocal p3Actual = TensorCore.mGetPlayer()\nif not p3Actual or p3Actual.id ~= p3Player.id then return end\n\nlocal state = data.string_dsr\nif type(state) ~= \"table\" or tonumber(state.towerMarker) ~= 2 then return end\nlocal base = state.towerTarget\nif type(base) ~= \"table\" or type(base.x) ~= \"number\"\n    or math.abs(base.x - 100) < 1 then return end\nif type(MuAiGuide) ~= \"table\" or type(MuAiGuide.FrameDirect) ~= \"function\" then return end\n-- 二麻原放塔西北 -> 西塔，东北 -> 东塔；不能沿原斜点延长。\nlocal side = base.x < 100 and -1 or 1\nlocal spellID = tonumber(state.p3WheelSecondSpellID)\nlocal timer = tonumber(TensorReactions_CurrentTimer)\nlocal stackAt = tonumber(state.p3SecondStackResolvedAt)\nlocal firstAt = tonumber(state.p3WheelSecondFirstResolvedAt)\nif not timer then return end\nlocal x, z\nif not stackAt or timer < stackAt then\n  if spellID == 26386 then x, z = 100, 90\n  elseif spellID == 26387 then x, z = 100, 93.2 end\nelseif spellID == 26386 then\n  if firstAt and timer >= firstAt then\n    x, z = 100 + side * 7.5, 100\n  else\n    local player = TensorCore.mGetPlayer()\n    local pos = player and player.pos\n    if type(pos) ~= \"table\" or type(pos.x) ~= \"number\" or type(pos.z) ~= \"number\" then return end\n    -- 钢铁先经外侧拐点，避免从正面直接斜穿目标圈。\n    x = 100 + side * 10\n    z = (side * (pos.x - 100) < 9.5 and pos.z < 97) and 90 or 100\n  end\nelseif spellID == 26387 then\n  x, z = 100 + side * 7.5, 100\nend\nif x then MuAiGuide.FrameDirect(x, z, 0.5) end\nself.used = true",
+							actionLua = "local p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nlocal p3PlayerID = tonumber(p3Player and p3Player.id)\nif not p3PlayerID or not p3Player.pos or type(p3Guide and p3Guide.FrameDirect) ~= \"function\" then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3PlayerID]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3PlayerID] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3PlayerID then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\nend\n\nlocal side = p3Cache.side\nif not side then\n  local actual = TensorCore.mGetPlayer()\n  local placement = p3Root.towerTarget\n  if not actual or tonumber(actual.id) ~= p3PlayerID or tonumber(p3Root.towerMarker) ~= 2\n      or type(placement) ~= \"table\" or type(placement.x) ~= \"number\"\n      or math.abs(placement.x - 100) < 1 then return end\n  side = placement.x < 100 and -1 or 1\nend\n\nlocal timer = tonumber(TensorReactions_CurrentTimer)\nlocal firstAt = tonumber(p3Root.p3WheelSecondFirstResolvedAt)\nif not timer then return end\n-- 第二次分摊完成后才离开北侧，首次连旋结算后由第三塔指路接管。\nif firstAt and timer >= firstAt then return end\nlocal spell = tonumber(p3Root.p3WheelSecondSpellID) or p3Cache.secondSpell\nif spell ~= 26386 and spell ~= 26387 then\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID)\n      or TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel ~= 26386 and channel ~= 26387 then return end\n  p3Cache.bossID, p3Cache.secondSpell = boss.id, channel\n  spell = channel\nend\n\nlocal stackAt = tonumber(p3Root.p3SecondStackResolvedAt)\nlocal x, z\nif not stackAt or timer < stackAt then\n  x, z = 100, spell == 26386 and 90 or 93.2\nelseif spell == 26386 then\n  -- 先到同侧外翼，避开半径 8 的钢铁，也离开刚才放塔的北侧斜点。\n  x, z = 100 + side * 11.5, 95.5\nelse\n  -- 月环先判定时，向同侧塔靠拢并保持在内圈。\n  x, z = 100 + side * 7.5, 100\nend\np3Guide.FrameDirect(x, z, 0.5)\nself.used = true",
 							name = "[P3] 2麻第二次分摊后去第三轮左右塔",
 							uuid = "2ee6d532-1e85-b79b-8b62-4b5101894111",
 							version = 2.1,
@@ -10324,8 +10605,64 @@ local tbl =
 				name = "[P3] 2麻第二次分摊后去第三轮左右塔",
 				timeRange = true,
 				timelineIndex = 111,
-				timerEndOffset = 3.39,
+				timerEndOffset = 3.85,
 				uuid = "6ab24d6e-cf73-7a1b-b661-5d05bb6254cc",
+				version = 2,
+			},
+		},
+	},
+	[112] = 
+	{
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local x, y, z = tonumber(eventArgs.x), tonumber(eventArgs.y), tonumber(eventArgs.z)\nlocal heading, duration = tonumber(eventArgs.heading), tonumber(eventArgs.duration)\nif not x or not y or not z or not heading or not duration or duration <= 0 then return end\n\nlocal timeout = duration * 1000\nlocal start = tonumber(eventArgs.startTime)\nif start and start > 0 then timeout = timeout - math.max(0, TimeSince(start)) end\nif timeout <= 0 then return end\n\nlocal spears = data.string_dsr and data.string_dsr.p3SpearByRound\nlocal entry = spears and spears[2]\nif not entry or entry.entityID ~= tonumber(eventArgs.entityID) then return end\nlocal dx, dz = x - 100, z - 100\nlocal radius = math.sqrt(dx * dx + dz * dz)\nif radius == 0 then return end\n\n-- 以真正的 AOE 起点为基准，白圈和橙点都在分身前 4 米。\nlocal lockX, _, lockZ = TensorCore.getPosInDirection({ x = x, y = y, z = z }, heading, 4, true)\nif not lockX or not lockZ then return end\nlocal markY = y + 0.05\nif type(entry.reference) == \"string\" and entry.reference ~= \"\" then\n  Argus.deleteTimedShape(entry.reference)\nend\nlocal reference = TensorCore.getCachedFlatDrawer(0, 0, 0, 0xFFFFFFFF, 2, 0, 0)\nreference:addTimedCircle(timeout, x + 4 * dx / radius, markY, z + 4 * dz / radius, 0.55, 0, false, true)\nlocal actual = TensorCore.getCachedFlatDrawer(0xF00B77FF, 0xF00B77FF, 0xF00B77FF, 0xFFFFFFFF, 1.5, 0, 0)\nactual:addTimedCircle(timeout, lockX, markY, lockZ, 0.32, 0, false, true)\nspears[2] = nil\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"6b17568c-9cb5-9951-bf18-ce0851b03863",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "武神枪锁定中心橙点",
+							uuid = "f0209cba-c3d3-c6e8-a32b-a027e9032348",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if tonumber(eventArgs.aoeID) ~= 26378 or tonumber(eventArgs.contentID) ~= 3458 then return false end\nlocal state = data.string_dsr\nlocal spears = state and state.p3SpearByRound\nlocal entry = spears and spears[2]\nlocal now = tonumber(TensorReactions_CurrentTimer)\nreturn entry ~= nil and now ~= nil and now >= entry.soakedAt and now - entry.soakedAt <= 3.5\n  and tonumber(eventArgs.entityID) == entry.entityID",
+							dequeueIfLuaFalse = true,
+							name = "本人踩塔分身的武神枪",
+							uuid = "6b17568c-9cb5-9951-bf18-ce0851b03863",
+							version = 3,
+						},
+					},
+				},
+				eventType = 18,
+				mechanicTime = 653.9,
+				name = "[P3] 第二轮本人武神枪锁向中心点",
+				timeRange = true,
+				timelineIndex = 112,
+				timerEndOffset = -3.8,
+				timerStartOffset = -5.15,
+				uuid = "59803362-1eb9-07d0-a3ec-6cd12eb556a5",
 				version = 2,
 			},
 		},
@@ -10402,7 +10739,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local p3Step, p3Round = \"third_tower\", 2\n-- The builder supplies p3Step and p3Round from this reaction's timeline node.\n-- Resolve number two in this render path from one complete live party snapshot.\nlocal p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nif not p3Player or not p3Player.pos then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3Player.id]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3Player.id] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3Player.id then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\n  local boss = p3Cache.bossID and TensorCore.mGetEntity(p3Cache.bossID) or nil\n  if not boss then\n    boss = TensorCore.getEntityByGroup(\"ContentID\", {contentid=3458, subgroup=\"Nearest\"})\n    if boss then p3Cache.bossID = boss.id end\n  end\n  if not boss then return end\n  local channel = tonumber(boss.castinginfo and boss.castinginfo.channelingid)\n  if channel == 26386 or channel == 26387 then\n    if p3Round == 1 then p3Cache.firstSpell = channel\n    else p3Cache.secondSpell = channel end\n  end\n  local spell = p3Round == 1 and p3Cache.firstSpell or p3Cache.secondSpell\n  local side = p3Cache.side\n  local x, z\n  if p3Step == \"north_before\" then\n    -- Before the next cast starts, gather north inside the target circle.\n    x, z = 100, spell == 26386 and 90 or 93.2\n  elseif p3Step == \"first_outer\" then\n    if spell == 26386 then x, z = 100, 90\n    elseif spell == 26387 then x, z = 100, 93.2 end\n  elseif p3Step == \"first_inner\" then\n    if spell == 26386 then x, z = 100, 93.2\n    elseif spell == 26387 then x, z = 100, 90 end\n  elseif p3Step == \"place\" then\n    x, z = side < 0 and 90.666 or 109.333, 90.666\n    if p3Cache.type == 2756 or p3Cache.type == 2757 then\n      local heading = tonumber(p3Player.pos.h)\n      if heading then\n        if p3Cache.type == 2757 then heading = heading + math.pi end\n        local tx, ty, tz = TensorCore.getPosInDirection(p3Player.pos, heading, 14, true)\n        TensorCore.getStaticDrawer(520093951):addCircle(tx, ty, tz, 5)\n      end\n    end\n  elseif p3Step == \"second_outer\" then\n    if spell == 26386 then\n      x = 100 + side * 10\n      z = (side * (p3Player.pos.x - 100) < 9.5 and p3Player.pos.z < 97) and 90 or 100\n    elseif spell == 26387 then x, z = 100 + side * 7.5, 100 end\n  elseif p3Step == \"third_tower\" then\n    x, z = 100 + side * 7.5, 100\n  elseif p3Step == \"handoff\" then\n    if spell == 26386 then x, z = 100 + side * 7.5, 100\n    elseif spell == 26387 then x, z = 100 + side * 10, 100 end\n  elseif p3Step == \"bait\" then\n    x, z = 100 + side * 10, 100\n  elseif p3Step == \"dodge\" then\n    x, z = 100 + side * 6, 100\n  end\n  if x ~= nil and p3Guide and type(p3Guide.FrameDirect) == \"function\" then\n    p3Guide.FrameDirect(x, z, 0.5)\n  end\n  self.used = true\n  return\nend\n-- Legacy number-one/three paths below are for the actual player only.\nlocal p3Actual = TensorCore.mGetPlayer()\nif not p3Actual or p3Actual.id ~= p3Player.id then return end\n",
+							actionLua = "local p3Guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal p3Player = p3Guide and type(p3Guide.GetPlayer) == \"function\"\n    and p3Guide.GetPlayer() or TensorCore.mGetPlayer()\nlocal p3PlayerID = tonumber(p3Player and p3Player.id)\nif not p3PlayerID or not p3Player.pos or type(p3Guide and p3Guide.FrameDirect) ~= \"function\" then return end\ndata.string_dsr = type(data.string_dsr) == \"table\" and data.string_dsr or {}\nlocal p3Root = data.string_dsr\nif type(p3Root.p3SecondNumberV2) ~= \"table\" then p3Root.p3SecondNumberV2 = {} end\nlocal p3Cache = p3Root.p3SecondNumberV2[p3PlayerID]\nif type(p3Cache) ~= \"table\" then\n  p3Cache = { seen = {} }\n  p3Root.p3SecondNumberV2[p3PlayerID] = p3Cache\nend\nlocal p3NumberBuff = TensorCore.getBuff(p3Player, 3005)\nlocal p3IsSecond = p3Cache.ready == true or p3NumberBuff ~= nil\nif p3IsSecond then\n  if not p3Cache.ready then\n    local peer, count, partyCount = nil, 0, 0\n    for key in pairs(p3Cache.seen) do p3Cache.seen[key] = nil end\n    for _, member in pairs(TensorCore.getEntityGroupList(\"Party\") or {}) do\n      local id = tonumber(member.id)\n      if not id or p3Cache.seen[id] then return end\n      p3Cache.seen[id] = true\n      partyCount = partyCount + 1\n      local number = TensorCore.getBuff(member, 3005)\n      if number ~= nil then\n        count = count + 1\n        if id ~= p3PlayerID then peer = member end\n      end\n    end\n    if partyCount ~= 8 or count ~= 2 or not peer or not peer.pos then return end\n    local ownType, peerType, ownCount, peerCount = nil, nil, 0, 0\n    for buffID = 2755, 2757 do\n      local ownBuff = TensorCore.getBuff(p3Player, buffID)\n      local peerBuff = TensorCore.getBuff(peer, buffID)\n      if ownBuff then\n        ownType, ownCount = buffID, ownCount + 1\n      end\n      if peerBuff then\n        peerType, peerCount = buffID, peerCount + 1\n      end\n    end\n    if ownCount ~= 1 or peerCount ~= 1 then return end\n    local side\n    if ownType == 2756 and peerType == 2757 then side = 1\n    elseif ownType == 2757 and peerType == 2756 then side = -1\n    elseif ownType == 2755 and peerType == 2755 then\n      local ownX, peerX = tonumber(p3Player.pos.x), tonumber(peer.pos.x)\n      if not ownX or not peerX or math.abs(ownX - peerX) < 0.1 then return end\n      side = ownX < peerX and -1 or 1\n    else return end\n    p3Cache.side = side\n    p3Cache.type = ownType\n    p3Cache.peerID = peer.id\n    p3Cache.ready = true\n  end\n\nend\n\nlocal side = p3Cache.side\nif not side then\n  local actual = TensorCore.mGetPlayer()\n  local placement = p3Root.towerTarget\n  if not actual or tonumber(actual.id) ~= p3PlayerID or tonumber(p3Root.towerMarker) ~= 2\n      or type(placement) ~= \"table\" or type(placement.x) ~= \"number\"\n      or math.abs(placement.x - 100) < 1 then return end\n  side = placement.x < 100 and -1 or 1\nend\n\nlocal timer = tonumber(TensorReactions_CurrentTimer)\nlocal firstAt = tonumber(p3Root.p3WheelSecondFirstResolvedAt)\nif not timer then return end\n-- 首次钢铁/月环实际判定后，用当轮三座 26385 的真实塔心。\nif not firstAt or timer < firstAt then return end\n\nif p3Cache.thirdTowerCycle ~= firstAt then\n  p3Cache.thirdTowerCycle = firstAt\n  p3Cache.thirdTowerX, p3Cache.thirdTowerZ = nil, nil\nend\nif not p3Cache.thirdTowerX and Argus and type(Argus.getCurrentAOEs) == \"function\" then\n  local west, east, south\n  local count = 0\n  for _, aoe in ipairs(Argus.getCurrentAOEs() or {}) do\n    if tonumber(aoe.aoeID) == 26385 and tonumber(aoe.contentID) == 3458\n        and type(aoe.x) == \"number\" and type(aoe.z) == \"number\" then\n      local dx, dz = aoe.x - 100, aoe.z - 100\n      count = count + 1\n      if math.abs(dx) > math.abs(dz) then\n        if dx < 0 then west = aoe else east = aoe end\n      elseif dz > 0 then\n        south = aoe\n      end\n    end\n  end\n  if count == 3 and west and east and south then\n    local tower = side < 0 and west or east\n    p3Cache.thirdTowerX, p3Cache.thirdTowerZ = tower.x, tower.z\n  end\nend\n\n-- 快照尚未齐全时，正西/正东的第三塔名义位置也在塔内。\np3Guide.FrameDirect(p3Cache.thirdTowerX or 100 + side * 7.5, p3Cache.thirdTowerZ or 100, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "[P3] 2麻第二轮钢铁月环后踩第三塔",
 							uuid = "7972c9e3-c86e-048e-a5e2-1d4854d56fdf",
@@ -10419,6 +10756,7 @@ local tbl =
 				timeRange = true,
 				timelineIndex = 113,
 				timerEndOffset = 2.49,
+				timerStartOffset = -0.5,
 				uuid = "6cb5219c-e634-8ab2-8a7a-5b818d9cd2d3",
 				version = 2,
 			},
@@ -10486,6 +10824,81 @@ local tbl =
 				timelineIndex = 114,
 				timerEndOffset = 0.59,
 				uuid = "b203842c-0e21-89a1-94f5-a98b80f6c9f1",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local entityID = tonumber(eventArgs.entityID)\nlocal now = tonumber(TensorReactions_CurrentTimer)\nif not entityID or entityID <= 0 or not now then return end\n\ndata.string_dsr = data.string_dsr or {}\nlocal spears = data.string_dsr.p3SpearByRound or {}\ndata.string_dsr.p3SpearByRound = spears\nlocal entry = {entityID = entityID, soakedAt = now}\nspears[3] = entry\n\n-- 白圈表示从本人踩的塔朝场外的引枪方向。\nlocal clone = TensorCore.mGetEntity(entityID)\nlocal pos = clone and clone.pos\nif pos and type(pos.x) == \"number\" and type(pos.y) == \"number\" and type(pos.z) == \"number\" then\n  local dx, dz = pos.x - 100, pos.z - 100\n  local radius = math.sqrt(dx * dx + dz * dz)\n  if radius > 0 then\n    local x, z = pos.x + 4 * dx / radius, pos.z + 4 * dz / radius\n    local drawer = TensorCore.getCachedFlatDrawer(0, 0, 0, 0xFFFFFFFF, 2, 0, 0)\n    entry.reference = drawer:addTimedCircle(3500, x, pos.y + 0.05, z, 0.55, 0, false, true)\n  end\nend\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"e938fe43-6dd7-25e5-811c-a7b6f13cc791",
+									true,
+								},
+								
+								{
+									"ca07fbac-50e9-dfcf-ada6-3ca6a0b64266",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "武神枪外引白圈",
+							uuid = "96bb9d6a-642c-6e1e-8d86-7ed71e2e8227",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Event",
+							dequeueIfLuaFalse = true,
+							eventArgOptionType = 3,
+							eventArgType = 2,
+							name = "黑暗龙炎冲 26385",
+							spellIDList = 
+							{
+								26385,
+							},
+							uuid = "e938fe43-6dd7-25e5-811c-a7b6f13cc791",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player = TensorCore.mGetPlayer()\nlocal hit = eventArgs.hitTargets\nreturn tonumber(eventArgs.entityContentID) == 3458 and player and player.id\n  and type(hit) == \"table\" and #hit == 1 and tonumber(hit[1]) == tonumber(player.id)",
+							dequeueIfLuaFalse = true,
+							name = "本人实际踩中的塔",
+							uuid = "ca07fbac-50e9-dfcf-ada6-3ca6a0b64266",
+							version = 3,
+						},
+					},
+				},
+				eventType = 2,
+				mechanicTime = 657.8,
+				name = "[P3] 第三轮踩塔后武神枪外引参考",
+				timeRange = true,
+				timelineIndex = 114,
+				timerEndOffset = 0.65,
+				timerStartOffset = -0.6,
+				uuid = "bfae469a-4bf1-9009-a89e-a8d76fafa0f8",
 				version = 2,
 			},
 		},
@@ -10618,6 +11031,59 @@ local tbl =
 				timelineIndex = 116,
 				timerStartOffset = -4.6,
 				uuid = "95674bf3-586f-3305-887f-eb7f7fd7cd64",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							aType = "Lua",
+							actionLua = "local x, y, z = tonumber(eventArgs.x), tonumber(eventArgs.y), tonumber(eventArgs.z)\nlocal heading, duration = tonumber(eventArgs.heading), tonumber(eventArgs.duration)\nif not x or not y or not z or not heading or not duration or duration <= 0 then return end\n\nlocal timeout = duration * 1000\nlocal start = tonumber(eventArgs.startTime)\nif start and start > 0 then timeout = timeout - math.max(0, TimeSince(start)) end\nif timeout <= 0 then return end\n\nlocal spears = data.string_dsr and data.string_dsr.p3SpearByRound\nlocal entry = spears and spears[3]\nif not entry or entry.entityID ~= tonumber(eventArgs.entityID) then return end\nlocal dx, dz = x - 100, z - 100\nlocal radius = math.sqrt(dx * dx + dz * dz)\nif radius == 0 then return end\n\n-- 以真正的 AOE 起点为基准，白圈和橙点都在分身前 4 米。\nlocal lockX, _, lockZ = TensorCore.getPosInDirection({ x = x, y = y, z = z }, heading, 4, true)\nif not lockX or not lockZ then return end\nlocal markY = y + 0.05\nif type(entry.reference) == \"string\" and entry.reference ~= \"\" then\n  Argus.deleteTimedShape(entry.reference)\nend\nlocal reference = TensorCore.getCachedFlatDrawer(0, 0, 0, 0xFFFFFFFF, 2, 0, 0)\nreference:addTimedCircle(timeout, x + 4 * dx / radius, markY, z + 4 * dz / radius, 0.55, 0, false, true)\nlocal actual = TensorCore.getCachedFlatDrawer(0xF00B77FF, 0xF00B77FF, 0xF00B77FF, 0xFFFFFFFF, 1.5, 0, 0)\nactual:addTimedCircle(timeout, lockX, markY, lockZ, 0.32, 0, false, true)\nspears[3] = nil\nself.used = true",
+							conditions = 
+							{
+								
+								{
+									"29e1ec96-eab0-19c3-b737-e816af32b56d",
+									true,
+								},
+							},
+							endIfUsed = true,
+							name = "武神枪锁定中心橙点",
+							uuid = "843c2c5e-9580-3c30-8f67-e2c710a155a5",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "if tonumber(eventArgs.aoeID) ~= 26378 or tonumber(eventArgs.contentID) ~= 3458 then return false end\nlocal state = data.string_dsr\nlocal spears = state and state.p3SpearByRound\nlocal entry = spears and spears[3]\nlocal now = tonumber(TensorReactions_CurrentTimer)\nreturn entry ~= nil and now ~= nil and now >= entry.soakedAt and now - entry.soakedAt <= 3.5\n  and tonumber(eventArgs.entityID) == entry.entityID",
+							dequeueIfLuaFalse = true,
+							name = "本人踩塔分身的武神枪",
+							uuid = "29e1ec96-eab0-19c3-b737-e816af32b56d",
+							version = 3,
+						},
+					},
+				},
+				eventType = 18,
+				mechanicTime = 664.9,
+				name = "[P3] 第三轮本人武神枪锁向中心点",
+				timeRange = true,
+				timelineIndex = 116,
+				timerEndOffset = -3.8,
+				timerStartOffset = -5.15,
+				uuid = "a3d0a19b-7ea5-59e5-9e8f-b08e48e44e5d",
 				version = 2,
 			},
 		},
@@ -11059,6 +11525,104 @@ local tbl =
 				timelineIndex = 127,
 				timerEndOffset = 16.799999237061,
 				uuid = "5390cf0f-7674-6c71-8ddf-7511952eaad3",
+				version = 2,
+			},
+		},
+		
+		{
+			data = 
+			{
+				actions = 
+				{
+					
+					{
+						data = 
+						{
+							actionID = 34646,
+							conditions = 
+							{
+								
+								{
+									"dd884029-f986-edf5-a110-61f7d74106b2",
+									true,
+								},
+								
+								{
+									"7d924b8f-9dc2-c45f-a39f-937e64d93f16",
+									true,
+								},
+								
+								{
+									"55adffb5-291c-34a9-8579-084280d30422",
+									true,
+								},
+								
+								{
+									"19e40a21-6fc2-9c91-afb2-72ca6bb79603",
+									true,
+								},
+							},
+							endIfUsed = true,
+							ignoreWeaveRules = true,
+							targetType = "Current Target",
+							uuid = "55fd75ed-615e-4e1d-900a-9a67d83d0768",
+							version = 2.1,
+						},
+					},
+				},
+				conditions = 
+				{
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 13,
+							jobValue = "VIPER",
+							uuid = "dd884029-f986-edf5-a110-61f7d74106b2",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 8,
+							localmapid = 968,
+							uuid = "7d924b8f-9dc2-c45f-a39f-937e64d93f16",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Self",
+							conditionType = 7,
+							uuid = "55adffb5-291c-34a9-8579-084280d30422",
+							version = 3,
+						},
+					},
+					
+					{
+						data = 
+						{
+							category = "Lua",
+							conditionLua = "local player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nlocal target = TensorCore.mGetTarget()\nlocal party = type(MuAiGuide) == \"table\" and MuAiGuide.Party or nil\nif not (playerID and player.alive and type(party) == \"table\" and target\n    and target.alive and target.attackable and target.targetable\n    and (target.contentid == 11317 or target.contentid == 11318)\n    and type(target.distance2d) == \"number\" and target.distance2d > 3 and target.distance2d <= 20) then\n    return false\nend\n\nlocal eyeByRole = { MT=11318, H1=11318, D1=11318, D2=11318, ST=11317, H2=11317, D3=11317, D4=11317 }\nlocal expectedEye\nfor role, eye in pairs(eyeByRole) do\n    local member = party[role]\n    if member and tonumber(member.id) == playerID then\n        if expectedEye then return false end\n        expectedEye = eye\n    end\nend\nreturn expectedEye == target.contentid",
+							name = "本组龙眼可攻击且在蛇行范围",
+							uuid = "19e40a21-6fc2-9c91-afb2-72ca6bb79603",
+							version = 3,
+						},
+					},
+				},
+				mechanicTime = 757,
+				name = "[P4] 双眼开场蛇行",
+				timeRange = true,
+				timelineIndex = 127,
+				timerEndOffset = 2.5,
+				timerStartOffset = -0.25,
+				uuid = "870fef71-5803-ef5c-b83d-e188abd61662",
 				version = 2,
 			},
 		},
@@ -17558,9 +18122,9 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local expectedPass = 0\n-- One queued instance waits within this node, then draws once until expiry.\nif self.used then return end\nif self.started == nil then self.started = Now() end\nif TimeSince(self.started) > 3000 then\n  self.used = true\n  return\nend\nif type(self.p6VowScan) ~= \"table\" then self.p6VowScan = {} end\nlocal cache = self.p6VowScan\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nlocal timeout = expectedPass == 0 and 4000 or math.floor(remaining * 1000)\nif timeout <= 0 then self.used = true; return end\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nif receiverID ~= nil then\n  local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n  local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n  local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n  safe:setGradient(0, 0.28, 0)\n  safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\nend\nself.used = true\n",
+							actionLua = "if self.used then return end\n\nlocal members = TensorCore.getEntityGroupList(\"Party\")\nif not members then return end\n\nlocal holderID\nfor _, member in pairs(members) do\n  if member.alive ~= false then\n    local vow = TensorCore.getBuff(member, 2896)\n    local duration = vow and tonumber(vow.duration)\n    if duration and duration > 0 then\n      if holderID and holderID ~= member.id then return end\n      holderID = member.id\n    end\n  end\nend\nif not holderID then return end\n\nlocal timeout = 4000\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nself.used = true\n",
 							endIfUsed = true,
-							name = "当前持毒者范围与接毒者标记",
+							name = "初始持毒者范围",
 							uuid = "e63342e0-4a50-09b0-bb01-b95708858104",
 							version = 2.1,
 						},
@@ -17896,7 +18460,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "-- MT使用中线站位；D1/D2使用近战最远站位。\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nlocal mtID = tonumber(party.MT and party.MT.id)\nlocal stID = tonumber(party.ST and party.ST.id)\nlocal d1ID = tonumber(party.D1 and party.D1.id)\nlocal d2ID = tonumber(party.D2 and party.D2.id)\nif mtID == nil or stID == nil or d1ID == nil or d2ID == nil\n    or mtID == stID or d1ID == d2ID\n    or mtID == d1ID or mtID == d2ID\n    or stID == d1ID or stID == d2ID then\n  return\nend\n\nlocal selfRole = \"PT\"\nif playerID == mtID then\n  selfRole = \"MT\"\nelseif playerID == stID then\n  selfRole = \"ST\"\nend\nlocal selfIsMelee = playerID == d1ID or playerID == d2ID\n\ndata.stringDsrP6Hallowed1 = data.stringDsrP6Hallowed1 or {}\nlocal state = data.stringDsrP6Hallowed1\nif state.hraesvelgrID == nil or state.nidhoggID == nil then\n  local hraesvelgr = TensorCore.getEntityByGroup(\n    \"ContentID\", { contentid = 4954, subgroup = \"Nearest\" })\n  local nidhogg = TensorCore.getEntityByGroup(\n    \"ContentID\", { contentid = 3458, subgroup = \"Nearest\" })\n  if not hraesvelgr or not nidhogg then\n    return\n  end\n  state.hraesvelgrID = tonumber(hraesvelgr.id)\n  state.nidhoggID = tonumber(nidhogg.id)\nend\n\nlocal hraesvelgr = TensorCore.mGetEntity(state.hraesvelgrID)\nlocal nidhogg = TensorCore.mGetEntity(state.nidhoggID)\nif not hraesvelgr or not nidhogg then\n  state.hraesvelgrID = nil\n  state.nidhoggID = nil\n  return\nend\n\nlocal hSpell = tonumber(\n  hraesvelgr.castinginfo and hraesvelgr.castinginfo.channelingid)\nlocal safeNorth\nlocal tanksNear\nif hSpell == 27939 then\n  safeNorth = true\n  tanksNear = true\nelseif hSpell == 27940 then\n  safeNorth = true\n  tanksNear = false\nelseif hSpell == 27942 then\n  safeNorth = false\n  tanksNear = true\nelseif hSpell == 27943 then\n  safeNorth = false\n  tanksNear = false\nelse\n  return\nend\n\nlocal nidhoggX = tonumber(nidhogg.pos and nidhogg.pos.x)\nif nidhoggX == nil or math.abs(nidhoggX - 100) < 1 then\n  return\nend\nlocal safeEast = nidhoggX < 100\n\nlocal targetX\nlocal targetZ\nif selfRole == \"PT\" then\n  if tanksNear then\n    if selfIsMelee then\n      targetX = safeEast and 103 or 100\n      if safeEast then\n        targetZ = safeNorth and 89 or 111\n      else\n        targetZ = safeNorth and 99 or 101\n      end\n    else\n      targetX = safeEast and 102 or 82\n      targetZ = safeNorth and 82 or 118\n    end\n  else\n    targetX = safeEast and 118 or 100\n    targetZ = safeNorth and 97 or 103\n  end\nelseif selfRole == \"MT\" then\n  if tanksNear then\n    if safeEast then\n      targetX = 120\n      targetZ = safeNorth and 98.5 or 101.5\n    else\n      targetX = 97.5\n      targetZ = safeNorth and 97.5 or 102.5\n    end\n  else\n    targetX = safeEast and 102.5 or 80\n    targetZ = safeNorth and 97.5 or 102.5\n  end\nelse\n  if tanksNear then\n    targetX = safeEast and 120 or 97.5\n    if safeNorth then\n      targetZ = safeEast and 82.5 or 80\n    else\n      targetZ = safeEast and 117.5 or 120\n    end\n  else\n    targetX = safeEast and 102.5 or 80\n    targetZ = safeNorth and 80 or 120\n  end\nend\n\nguide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
+							actionLua = "-- 近点死刑时，双T靠近圣龙，其余六人统一去远点。\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nlocal player = TensorCore.mGetPlayer()\nlocal playerID = tonumber(player and player.id)\nif type(party) ~= \"table\"\n    or type(guide.FrameDirect) ~= \"function\"\n    or playerID == nil then\n  return\nend\n\nlocal mtID = tonumber(party.MT and party.MT.id)\nlocal stID = tonumber(party.ST and party.ST.id)\nif mtID == nil or stID == nil or mtID == stID then\n  return\nend\n\nlocal selfRole = \"PT\"\nif playerID == mtID then\n  selfRole = \"MT\"\nelseif playerID == stID then\n  selfRole = \"ST\"\nend\n\ndata.stringDsrP6Hallowed1 = data.stringDsrP6Hallowed1 or {}\nlocal state = data.stringDsrP6Hallowed1\nif state.hraesvelgrID == nil or state.nidhoggID == nil then\n  local hraesvelgr = TensorCore.getEntityByGroup(\n    \"ContentID\", { contentid = 4954, subgroup = \"Nearest\" })\n  local nidhogg = TensorCore.getEntityByGroup(\n    \"ContentID\", { contentid = 3458, subgroup = \"Nearest\" })\n  if not hraesvelgr or not nidhogg then\n    return\n  end\n  state.hraesvelgrID = tonumber(hraesvelgr.id)\n  state.nidhoggID = tonumber(nidhogg.id)\nend\n\nlocal hraesvelgr = TensorCore.mGetEntity(state.hraesvelgrID)\nlocal nidhogg = TensorCore.mGetEntity(state.nidhoggID)\nif not hraesvelgr or not nidhogg then\n  state.hraesvelgrID = nil\n  state.nidhoggID = nil\n  return\nend\n\nlocal hSpell = tonumber(\n  hraesvelgr.castinginfo and hraesvelgr.castinginfo.channelingid)\nlocal safeNorth\nlocal tanksNear\nif hSpell == 27939 then\n  safeNorth = true\n  tanksNear = true\nelseif hSpell == 27940 then\n  safeNorth = true\n  tanksNear = false\nelseif hSpell == 27942 then\n  safeNorth = false\n  tanksNear = true\nelseif hSpell == 27943 then\n  safeNorth = false\n  tanksNear = false\nelse\n  return\nend\n\nlocal nidhoggX = tonumber(nidhogg.pos and nidhogg.pos.x)\nif nidhoggX == nil or math.abs(nidhoggX - 100) < 1 then\n  return\nend\nlocal safeEast = nidhoggX < 100\n\nlocal targetX\nlocal targetZ\nif selfRole == \"PT\" then\n  if tanksNear then\n    targetX = safeEast and 102 or 82\n    targetZ = safeNorth and 82 or 118\n  else\n    targetX = safeEast and 118 or 100\n    targetZ = safeNorth and 97 or 103\n  end\nelseif selfRole == \"MT\" then\n  if tanksNear then\n    if safeEast then\n      targetX = 120\n      targetZ = safeNorth and 98.5 or 101.5\n    else\n      targetX = 97.5\n      targetZ = safeNorth and 97.5 or 102.5\n    end\n  else\n    targetX = safeEast and 102.5 or 80\n    targetZ = safeNorth and 97.5 or 102.5\n  end\nelse\n  if tanksNear then\n    targetX = safeEast and 120 or 97.5\n    if safeNorth then\n      targetZ = safeEast and 82.5 or 80\n    else\n      targetZ = safeEast and 117.5 or 120\n    end\n  else\n    targetX = safeEast and 102.5 or 80\n    targetZ = safeNorth and 80 or 120\n  end\nend\n\nguide.FrameDirect(targetX, targetZ, 0.5)\nself.used = true",
 							endIfUsed = true,
 							name = "按四分之一安全区与近远死刑动态指路",
 							uuid = "c7de7d7f-d6ed-29fa-ae19-9618d4b2de19",
@@ -17932,7 +18496,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local expectedPass = 1\n-- One queued instance waits within this node, then draws once until expiry.\nif self.used then return end\nif self.started == nil then self.started = Now() end\nif TimeSince(self.started) > 6000 then\n  self.used = true\n  return\nend\nif type(self.p6VowScan) ~= \"table\" then self.p6VowScan = {} end\nlocal cache = self.p6VowScan\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nlocal timeout = expectedPass == 0 and 4000 or math.floor(remaining * 1000)\nif timeout <= 0 then self.used = true; return end\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nif receiverID ~= nil then\n  local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n  local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n  local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n  safe:setGradient(0, 0.28, 0)\n  safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\nend\nself.used = true\n",
+							actionLua = "local pass = 1\nif self.used then return end\n\nlocal members = TensorCore.getEntityGroupList(\"Party\")\nif not members then return end\n\nlocal holderID, remaining\nfor _, member in pairs(members) do\n  if member.alive ~= false then\n    local vow = TensorCore.getBuff(member, 2896)\n    local duration = vow and tonumber(vow.duration)\n    if duration and duration > 0 then\n      if holderID and holderID ~= member.id then return end\n      holderID, remaining = member.id, duration\n    end\n  end\nend\nif not holderID or remaining > 4.1 then return end\n\nlocal timeout = math.floor(remaining * 1000)\nif timeout < 1 then return end\n\n-- The actual holder's ring does not depend on role assignments.\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nself.used = true\n\nlocal roles = type(MuAiGuide) == \"table\" and MuAiGuide.Party\nif type(roles) ~= \"table\" then return end\n\nlocal function roleID(role)\n  local member = roles[role]\n  return member and tonumber(member.id)\nend\n\nlocal function immunityTime(id)\n  local buff = TensorCore.getBuff(id, 2897)\n  return buff and tonumber(buff.duration) or 0\nend\n\nlocal receiverID\nif pass == 1 then\n  if holderID == roleID(\"D1\") or holderID == roleID(\"D2\")\n      or holderID == roleID(\"D3\") or holderID == roleID(\"D4\") then\n    receiverID = roleID(\"MT\")\n  end\nelseif pass == 2 and holderID == roleID(\"MT\") then\n  receiverID = roleID(\"ST\")\nelseif pass == 3 and holderID == roleID(\"ST\") then\n  local d1 = roleID(\"D1\")\n  if d1 then\n    -- Mortal Atonement must expire before the transfer hits.\n    receiverID = immunityTime(d1) < remaining and d1 or roleID(\"D2\")\n  end\nelseif pass == 4 then\n  if holderID == roleID(\"D1\") then\n    receiverID = roleID(\"D2\")\n  elseif holderID == roleID(\"D2\") then\n    receiverID = roleID(\"D1\")\n  end\nend\n\nif not receiverID or receiverID == holderID then return end\nfor _, member in pairs(members) do\n  if member.id == receiverID and member.alive ~= false and immunityTime(receiverID) < remaining then\n    local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n    local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n    local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n    safe:setGradient(0, 0.28, 0)\n    safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\n    break\n  end\nend\n",
 							endIfUsed = true,
 							name = "当前持毒者范围与接毒者标记",
 							uuid = "952c1d16-9ce8-2cf0-bea9-482da49f3b5e",
@@ -19134,7 +19698,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local expectedPass = 2\n-- One queued instance waits within this node, then draws once until expiry.\nif self.used then return end\nif self.started == nil then self.started = Now() end\nif TimeSince(self.started) > 6000 then\n  self.used = true\n  return\nend\nif type(self.p6VowScan) ~= \"table\" then self.p6VowScan = {} end\nlocal cache = self.p6VowScan\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nlocal timeout = expectedPass == 0 and 4000 or math.floor(remaining * 1000)\nif timeout <= 0 then self.used = true; return end\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nif receiverID ~= nil then\n  local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n  local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n  local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n  safe:setGradient(0, 0.28, 0)\n  safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\nend\nself.used = true\n",
+							actionLua = "local pass = 2\nif self.used then return end\n\nlocal members = TensorCore.getEntityGroupList(\"Party\")\nif not members then return end\n\nlocal holderID, remaining\nfor _, member in pairs(members) do\n  if member.alive ~= false then\n    local vow = TensorCore.getBuff(member, 2896)\n    local duration = vow and tonumber(vow.duration)\n    if duration and duration > 0 then\n      if holderID and holderID ~= member.id then return end\n      holderID, remaining = member.id, duration\n    end\n  end\nend\nif not holderID or remaining > 4.1 then return end\n\nlocal timeout = math.floor(remaining * 1000)\nif timeout < 1 then return end\n\n-- The actual holder's ring does not depend on role assignments.\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nself.used = true\n\nlocal roles = type(MuAiGuide) == \"table\" and MuAiGuide.Party\nif type(roles) ~= \"table\" then return end\n\nlocal function roleID(role)\n  local member = roles[role]\n  return member and tonumber(member.id)\nend\n\nlocal function immunityTime(id)\n  local buff = TensorCore.getBuff(id, 2897)\n  return buff and tonumber(buff.duration) or 0\nend\n\nlocal receiverID\nif pass == 1 then\n  if holderID == roleID(\"D1\") or holderID == roleID(\"D2\")\n      or holderID == roleID(\"D3\") or holderID == roleID(\"D4\") then\n    receiverID = roleID(\"MT\")\n  end\nelseif pass == 2 and holderID == roleID(\"MT\") then\n  receiverID = roleID(\"ST\")\nelseif pass == 3 and holderID == roleID(\"ST\") then\n  local d1 = roleID(\"D1\")\n  if d1 then\n    -- Mortal Atonement must expire before the transfer hits.\n    receiverID = immunityTime(d1) < remaining and d1 or roleID(\"D2\")\n  end\nelseif pass == 4 then\n  if holderID == roleID(\"D1\") then\n    receiverID = roleID(\"D2\")\n  elseif holderID == roleID(\"D2\") then\n    receiverID = roleID(\"D1\")\n  end\nend\n\nif not receiverID or receiverID == holderID then return end\nfor _, member in pairs(members) do\n  if member.id == receiverID and member.alive ~= false and immunityTime(receiverID) < remaining then\n    local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n    local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n    local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n    safe:setGradient(0, 0.28, 0)\n    safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\n    break\n  end\nend\n",
 							endIfUsed = true,
 							name = "当前持毒者范围与接毒者标记",
 							uuid = "0df8ab1a-9381-a656-a4f3-c2564a1e2193",
@@ -19614,7 +20178,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local expectedPass = 3\n-- One queued instance waits within this node, then draws once until expiry.\nif self.used then return end\nif self.started == nil then self.started = Now() end\nif TimeSince(self.started) > 6000 then\n  self.used = true\n  return\nend\nif type(self.p6VowScan) ~= \"table\" then self.p6VowScan = {} end\nlocal cache = self.p6VowScan\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nlocal timeout = expectedPass == 0 and 4000 or math.floor(remaining * 1000)\nif timeout <= 0 then self.used = true; return end\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nif receiverID ~= nil then\n  local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n  local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n  local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n  safe:setGradient(0, 0.28, 0)\n  safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\nend\nself.used = true\n",
+							actionLua = "local pass = 3\nif self.used then return end\n\nlocal members = TensorCore.getEntityGroupList(\"Party\")\nif not members then return end\n\nlocal holderID, remaining\nfor _, member in pairs(members) do\n  if member.alive ~= false then\n    local vow = TensorCore.getBuff(member, 2896)\n    local duration = vow and tonumber(vow.duration)\n    if duration and duration > 0 then\n      if holderID and holderID ~= member.id then return end\n      holderID, remaining = member.id, duration\n    end\n  end\nend\nif not holderID or remaining > 4.1 then return end\n\nlocal timeout = math.floor(remaining * 1000)\nif timeout < 1 then return end\n\n-- The actual holder's ring does not depend on role assignments.\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nself.used = true\n\nlocal roles = type(MuAiGuide) == \"table\" and MuAiGuide.Party\nif type(roles) ~= \"table\" then return end\n\nlocal function roleID(role)\n  local member = roles[role]\n  return member and tonumber(member.id)\nend\n\nlocal function immunityTime(id)\n  local buff = TensorCore.getBuff(id, 2897)\n  return buff and tonumber(buff.duration) or 0\nend\n\nlocal receiverID\nif pass == 1 then\n  if holderID == roleID(\"D1\") or holderID == roleID(\"D2\")\n      or holderID == roleID(\"D3\") or holderID == roleID(\"D4\") then\n    receiverID = roleID(\"MT\")\n  end\nelseif pass == 2 and holderID == roleID(\"MT\") then\n  receiverID = roleID(\"ST\")\nelseif pass == 3 and holderID == roleID(\"ST\") then\n  local d1 = roleID(\"D1\")\n  if d1 then\n    -- Mortal Atonement must expire before the transfer hits.\n    receiverID = immunityTime(d1) < remaining and d1 or roleID(\"D2\")\n  end\nelseif pass == 4 then\n  if holderID == roleID(\"D1\") then\n    receiverID = roleID(\"D2\")\n  elseif holderID == roleID(\"D2\") then\n    receiverID = roleID(\"D1\")\n  end\nend\n\nif not receiverID or receiverID == holderID then return end\nfor _, member in pairs(members) do\n  if member.id == receiverID and member.alive ~= false and immunityTime(receiverID) < remaining then\n    local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n    local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n    local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n    safe:setGradient(0, 0.28, 0)\n    safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\n    break\n  end\nend\n",
 							endIfUsed = true,
 							name = "当前持毒者范围与接毒者标记",
 							uuid = "f767c461-515d-2e96-8ac0-9c2b0b9a866f",
@@ -20227,7 +20791,7 @@ local tbl =
 						data = 
 						{
 							aType = "Lua",
-							actionLua = "local expectedPass = 4\n-- One queued instance waits within this node, then draws once until expiry.\nif self.used then return end\nif self.started == nil then self.started = Now() end\nif TimeSince(self.started) > 6000 then\n  self.used = true\n  return\nend\nif type(self.p6VowScan) ~= \"table\" then self.p6VowScan = {} end\nlocal cache = self.p6VowScan\n-- Prepended by build-p6-fix.py: expectedPass and cache.\n-- Read one complete party snapshot. Each timeline node owns its own pass.\nlocal guide = type(MuAiGuide) == \"table\" and MuAiGuide or nil\nlocal party = guide and guide.Party or nil\nif type(party) ~= \"table\" then return end\n\nif cache.roles == nil then\n  cache.roles = { \"MT\", \"ST\", \"H1\", \"H2\", \"D1\", \"D2\", \"D3\", \"D4\" }\n  cache.idByRole = {}\n  cache.seen = {}\nend\nfor id in pairs(cache.seen) do cache.seen[id] = nil end\n\nlocal holderID, holderRole, remaining\nfor _, role in ipairs(cache.roles) do\n  local id = tonumber(party[role] and party[role].id)\n  if id == nil or cache.seen[id] then return end\n  cache.seen[id] = true\n  cache.idByRole[role] = id\n  local entity = TensorCore.mGetEntity(id)\n  if entity == nil then return end\n  local buff = TensorCore.getBuff(entity, 2896)\n  local duration = tonumber(buff and buff.duration)\n  if duration ~= nil and duration > 0 then\n    if holderID ~= nil or entity.alive == false then return end\n    holderID, holderRole, remaining = id, role, duration\n  end\nend\nif holderID == nil then return end\nif expectedPass ~= 0 and remaining > 4.1 then return end\n\nlocal receiverRole\nif expectedPass == 0 or expectedPass == 1 then\n  if holderRole ~= \"D1\" and holderRole ~= \"D2\"\n      and holderRole ~= \"D3\" and holderRole ~= \"D4\" then return end\n  if expectedPass == 1 then receiverRole = \"MT\" end\nelseif expectedPass == 2 then\n  if holderRole ~= \"MT\" then return end\n  receiverRole = \"ST\"\nelseif expectedPass == 3 then\n  if holderRole ~= \"ST\" then return end\n  -- Mortal Atonement (2897) must expire before the transfer hits.\n  local immunity = TensorCore.getBuff(cache.idByRole.D1, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  receiverRole = immunityTime < remaining and \"D1\" or \"D2\"\nelseif expectedPass == 4 then\n  if holderRole == \"D1\" then receiverRole = \"D2\"\n  elseif holderRole == \"D2\" then receiverRole = \"D1\"\n  else return end\nend\n\nlocal receiverID = receiverRole and cache.idByRole[receiverRole] or nil\nif receiverID ~= nil then\n  local receiver = TensorCore.mGetEntity(receiverID)\n  local immunity = TensorCore.getBuff(receiverID, 2897)\n  local immunityTime = tonumber(immunity and immunity.duration) or 0\n  if receiver == nil or receiver.alive == false\n      or immunityTime >= remaining then receiverID = nil end\nend\n\nlocal timeout = expectedPass == 0 and 4000 or math.floor(remaining * 1000)\nif timeout <= 0 then self.used = true; return end\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nif receiverID ~= nil then\n  local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n  local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n  local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n  safe:setGradient(0, 0.28, 0)\n  safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\nend\nself.used = true\n",
+							actionLua = "local pass = 4\nif self.used then return end\n\nlocal members = TensorCore.getEntityGroupList(\"Party\")\nif not members then return end\n\nlocal holderID, remaining\nfor _, member in pairs(members) do\n  if member.alive ~= false then\n    local vow = TensorCore.getBuff(member, 2896)\n    local duration = vow and tonumber(vow.duration)\n    if duration and duration > 0 then\n      if holderID and holderID ~= member.id then return end\n      holderID, remaining = member.id, duration\n    end\n  end\nend\nif not holderID or remaining > 4.1 then return end\n\nlocal timeout = math.floor(remaining * 1000)\nif timeout < 1 then return end\n\n-- The actual holder's ring does not depend on role assignments.\nlocal pink = GUI:ColorConvertFloat4ToU32(1.00, 0.42, 0.64, 0.42)\nlocal pinkMid = GUI:ColorConvertFloat4ToU32(1.00, 0.70, 0.82, 0.30)\nlocal purple = GUI:ColorConvertFloat4ToU32(0.62, 0.16, 0.92, 0.98)\nlocal danger = TensorCore.getCachedDrawer(pink, pinkMid, pink, purple, 2)\ndanger:setGradient(2, 0.10, 1.8)\ndanger:addTimedCircleOnEnt(timeout, holderID, 5, 0, false, true)\nself.used = true\n\nlocal roles = type(MuAiGuide) == \"table\" and MuAiGuide.Party\nif type(roles) ~= \"table\" then return end\n\nlocal function roleID(role)\n  local member = roles[role]\n  return member and tonumber(member.id)\nend\n\nlocal function immunityTime(id)\n  local buff = TensorCore.getBuff(id, 2897)\n  return buff and tonumber(buff.duration) or 0\nend\n\nlocal receiverID\nif pass == 1 then\n  if holderID == roleID(\"D1\") or holderID == roleID(\"D2\")\n      or holderID == roleID(\"D3\") or holderID == roleID(\"D4\") then\n    receiverID = roleID(\"MT\")\n  end\nelseif pass == 2 and holderID == roleID(\"MT\") then\n  receiverID = roleID(\"ST\")\nelseif pass == 3 and holderID == roleID(\"ST\") then\n  local d1 = roleID(\"D1\")\n  if d1 then\n    -- Mortal Atonement must expire before the transfer hits.\n    receiverID = immunityTime(d1) < remaining and d1 or roleID(\"D2\")\n  end\nelseif pass == 4 then\n  if holderID == roleID(\"D1\") then\n    receiverID = roleID(\"D2\")\n  elseif holderID == roleID(\"D2\") then\n    receiverID = roleID(\"D1\")\n  end\nend\n\nif not receiverID or receiverID == holderID then return end\nfor _, member in pairs(members) do\n  if member.id == receiverID and member.alive ~= false and immunityTime(receiverID) < remaining then\n    local fill = GUI:ColorConvertFloat4ToU32(0.10, 1.00, 0.28, 0.28)\n    local outline = GUI:ColorConvertFloat4ToU32(0.20, 1.00, 0.36, 0.96)\n    local safe = TensorCore.getCachedDrawer(fill, nil, fill, outline, 2)\n    safe:setGradient(0, 0.28, 0)\n    safe:addTimedCircleOnEnt(timeout, receiverID, 1, 0, false, true)\n    break\n  end\nend\n",
 							endIfUsed = true,
 							name = "当前持毒者范围与接毒者标记",
 							uuid = "cc47623f-df9d-acc2-90e4-680c58b7b1b2",
