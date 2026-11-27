@@ -1,6 +1,7 @@
 local MuAiCore = {}
 local AddonName = "MuAiCore"
 local core = MuAiCore
+local waitingForArgus2 = false
 
 local function tracebackError(err)
     if debug ~= nil and type(debug.traceback) == 'function' then
@@ -26,7 +27,12 @@ local function isValidGuide(guide)
             and type(guide.LogSystemLeave) == 'function'
 end
 
-core.InitMuAiGuide = function()
+local function isArgusDrawingReady()
+    local drawer = Argus2 and Argus2.ShapeDrawer
+    return drawer and type(drawer.new) == 'function'
+end
+
+core.InitMuAiGuide = function(waitedForArgus2)
     MuAiGuideRoot = GetLuaModsPath() .. "MuAiCore\\LuaFiles\\"
     local guidePath = MuAiGuideRoot .. 'MuAiGuide.lua'
     local previous = MuAiGuide
@@ -71,6 +77,7 @@ core.InitMuAiGuide = function()
     diagnose(candidate, 'INFO', 'MuAiGuide实例已激活', {
         path = guidePath,
         version = candidate.VERSION,
+        waitedForArgus2 = waitedForArgus2 or nil,
     }, 'guide_activated')
 
     local downloadPath = GetLuaModsPath() .. "MuAiCore\\Temp\\Download\\"
@@ -87,7 +94,18 @@ core.InitMuAiGuide = function()
 end
 
 core.Initialize = function()
-    local initialized = core.InitMuAiGuide(true)
+    -- Argus 有时晚于 MuAiCore 就绪。先等到能创建画笔，再加载引导模块。
+    if not isArgusDrawingReady() then
+        if not waitingForArgus2 then
+            waitingForArgus2 = true
+            diagnose(MuAiGuide, 'INFO', '等待 Argus2.ShapeDrawer 就绪，暂缓初始化 MuAiGuide', nil, 'guide_wait_argus2')
+        end
+        return
+    end
+
+    local waitedForArgus2 = waitingForArgus2
+    waitingForArgus2 = false
+    local initialized = core.InitMuAiGuide(waitedForArgus2)
     if initialized ~= true and not isValidGuide(MuAiGuide) then
         return
     end
@@ -109,6 +127,10 @@ core.Initialize = function()
 end
 
 core.Update = function()
+    if waitingForArgus2 then
+        core.Initialize()
+        return
+    end
     if MuAiGuide and MuAiGuide.IsInit then
         if MuAiGuide.Reactions then MuAiGuide.Reactions.update() end
         MuAiGuide.Update()
@@ -116,7 +138,7 @@ core.Update = function()
 end
 
 core.Draw = function()
-    if MuAiGuide and MuAiGuide.IsInit then
+    if not waitingForArgus2 and MuAiGuide and MuAiGuide.IsInit then
         if MuAiGuide.Reactions then MuAiGuide.Reactions.draw() end
         MuAiGuide.DrawUIs()
     end
